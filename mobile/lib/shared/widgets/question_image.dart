@@ -9,7 +9,8 @@ import '../../core/constants/app_colors.dart';
 /// - Logs image load failures without interrupting the session
 class QuestionImage extends StatelessWidget {
   const QuestionImage({
-    required this.imageUrl, super.key,
+    super.key,
+    required this.imageUrl,
     this.altText = 'صورة السؤال',
   });
 
@@ -17,7 +18,8 @@ class QuestionImage extends StatelessWidget {
   final String altText;
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    return Semantics(
       label: altText,
       image: true,
       child: Container(
@@ -59,8 +61,10 @@ class QuestionImage extends StatelessWidget {
         ),
       ),
     );
+  }
 
-  Widget _buildPlaceholder(BuildContext context) => Container(
+  Widget _buildPlaceholder(BuildContext context) {
+    return Container(
       height: 80,
       color: AppColors.surfaceContainer,
       child: Row(
@@ -79,4 +83,5 @@ class QuestionImage extends StatelessWidget {
         ],
       ),
     );
+  }
 }

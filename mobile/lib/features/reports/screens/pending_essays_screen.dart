@@ -136,7 +136,7 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
             final studentName =
                 attempt['studentName'] as String? ?? 'طالب';
             context.push(
-              '${AppRoutes.teacherPendingEssays}/$attemptId',
+              '/teacher/pending-essays/$attemptId',
               extra: {'studentName': studentName},
             );
           },

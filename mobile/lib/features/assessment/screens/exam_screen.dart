@@ -30,7 +30,11 @@ _QuestionType _parseQuestionType(String? raw) {
 /// Requirements: 7.1–7.11
 class ExamScreen extends ConsumerStatefulWidget {
   const ExamScreen({
-    required this.assessmentId, required this.attemptId, required this.questionCount, required this.timeLimitMinutes, super.key,
+    super.key,
+    required this.assessmentId,
+    required this.attemptId,
+    required this.questionCount,
+    required this.timeLimitMinutes,
   });
 
   final String assessmentId;
@@ -256,11 +260,14 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
             child: Column(
               children: [
                 _buildHeader(),
+                _buildProgressBar(),
                 Expanded(
                   child: _isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : _buildQuestionBody(),
                 ),
+                if (!_isLoading && _currentQuestion != null)
+                  _buildNavigationBar(),
               ],
             ),
           ),
@@ -269,39 +276,42 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     );
   }
 
-  Widget _buildHeader() => Container(
+  Widget _buildHeader() {
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(
-            bottom: BorderSide(color: AppColors.outlineVariant)),
+          bottom: BorderSide(color: AppColors.outlineVariant),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Question counter
-          Text(
-            'سؤال $_questionNumber من ${widget.questionCount}',
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          // Timer (Req 7.2, 7.3)
-          Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          // Timer (Req 7.2, 7.3) — on the right in RTL
+          AnimatedContainer(
+            duration: AppConstants.shortAnimation,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: _isTimerWarning
                   ? AppColors.errorContainer
                   : AppColors.surfaceContainer,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: _isTimerWarning
+                    ? AppColors.error.withValues(alpha: 0.4)
+                    : AppColors.outlineVariant,
+              ),
             ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.timer_rounded,
-                    size: 16,
-                    color: _isTimerWarning
-                        ? AppColors.error
-                        : AppColors.onSurface),
-                const SizedBox(width: 4),
+                Icon(
+                  Icons.timer_rounded,
+                  size: 16,
+                  color: _isTimerWarning ? AppColors.error : AppColors.onSurfaceVariant,
+                ),
+                const SizedBox(width: 6),
                 Text(
                   _timerDisplay,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -310,14 +320,172 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                             : AppColors.onSurface,
                         fontWeight: FontWeight.w700,
                         fontFeatures: const [FontFeature.tabularFigures()],
+                        letterSpacing: 1.0,
                       ),
                 ),
               ],
             ),
           ),
+          // Question counter — on the left in RTL
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'السؤال $_questionNumber من ${widget.questionCount}',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  Widget _buildProgressBar() {
+    final progress = widget.questionCount > 0
+        ? _questionNumber / widget.questionCount
+        : 0.0;
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 6,
+              backgroundColor: AppColors.surfaceContainer,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                _isTimerWarning ? AppColors.error : AppColors.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavigationBar() {
+    final canGoNext = _selectedAnswer != null;
+    final isLastQuestion = _questionNumber >= widget.questionCount;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: AppColors.outlineVariant)),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Next / Submit button (primary action, on the right in RTL = left in Row)
+          Expanded(
+            flex: 2,
+            child: FilledButton(
+              onPressed: canGoNext && !_isSubmitting
+                  ? () {
+                      if (isLastQuestion) {
+                        _autoSubmit();
+                      } else {
+                        setState(() => _questionNumber++);
+                        _loadNextQuestion();
+                      }
+                    }
+                  : null,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                disabledBackgroundColor: AppColors.surfaceContainer,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppConstants.buttonBorderRadius),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    isLastQuestion ? 'تسليم الاختبار' : 'التالي',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: canGoNext ? Colors.white : AppColors.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                  ),
+                  if (!isLastQuestion) ...[
+                    const SizedBox(width: 6),
+                    Icon(
+                      Icons.arrow_back_rounded,
+                      size: 18,
+                      color: canGoNext ? Colors.white : AppColors.onSurfaceVariant,
+                    ),
+                  ] else ...[
+                    const SizedBox(width: 6),
+                    Icon(
+                      Icons.check_rounded,
+                      size: 18,
+                      color: canGoNext ? Colors.white : AppColors.onSurfaceVariant,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+          if (_questionNumber > 1) ...[
+            const SizedBox(width: 12),
+            // Previous button
+            Expanded(
+              child: OutlinedButton(
+                onPressed: _isSubmitting
+                    ? null
+                    : () {
+                        if (_questionNumber > 1) {
+                          setState(() => _questionNumber--);
+                          _loadNextQuestion();
+                        }
+                      },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.outlineVariant),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppConstants.buttonBorderRadius),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.arrow_forward_rounded, size: 18),
+                    const SizedBox(width: 6),
+                    Text(
+                      'السابق',
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 
   Widget _buildQuestionBody() {
     if (_currentQuestion == null) {
@@ -332,46 +500,92 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
             [];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Progress bar
-          LinearProgressIndicator(
-            value: (_questionNumber - 1) / widget.questionCount,
-            backgroundColor: AppColors.surfaceContainer,
-            color: AppColors.primary,
-          ),
-          const SizedBox(height: 24),
-
-          // Question text (disable selection — Req 7.10)
-          SelectionArea(
-            child: IgnorePointer(
-              child: Text(
-                _currentQuestion!['questionText'] as String? ?? '',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      height: 1.6,
+          // Question card
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
+              border: Border.all(color: AppColors.outlineVariant),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x05000000),
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Question type badge
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainer,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        _questionTypeName(qType),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: AppColors.onSurfaceVariant,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
                     ),
-              ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                // Question text (disable selection — Req 7.10)
+                IgnorePointer(
+                  child: Text(
+                    _currentQuestion!['questionText'] as String? ?? '',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          height: 1.7,
+                          fontSize: 17,
+                          color: AppColors.onSurface,
+                        ),
+                    textDirection: TextDirection.rtl,
+                  ),
+                ),
+              ],
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
+
+          // Answer section label
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text(
+              'اختر الإجابة الصحيحة:',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
+              textDirection: TextDirection.rtl,
+            ),
+          ),
 
           // Render the appropriate input widget based on question type
           if (qType == _QuestionType.fillBlank)
             _FillBlankInput(
               controller: _fillBlankController,
-              onSubmit: _selectAnswer,
+              onSubmit: (text) => _selectAnswer(text),
             )
           else if (qType == _QuestionType.essay)
             _EssayInput(
               controller: _essayController,
-              onSubmit: _selectAnswer,
+              onSubmit: (text) => _selectAnswer(text),
             )
           else if (qType == _QuestionType.trueFalse)
-            // True/False uses the same MCQ option widget with صح/خطأ options
             ...options.isNotEmpty
                 ? options.map((opt) {
                     final key = opt['key'] as String;
@@ -412,9 +626,26 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 onTap: () => _selectAnswer(key),
               );
             }),
+
+          const SizedBox(height: 8),
         ],
       ),
     );
+  }
+
+  String _questionTypeName(_QuestionType type) {
+    switch (type) {
+      case _QuestionType.mcq:
+        return 'اختيار من متعدد';
+      case _QuestionType.trueFalse:
+        return 'صح أو خطأ';
+      case _QuestionType.fillBlank:
+        return 'ملء الفراغ';
+      case _QuestionType.essay:
+        return 'مقالي';
+      case _QuestionType.unknown:
+        return 'سؤال';
+    }
   }
 }
 
@@ -441,75 +672,109 @@ class _McqOption extends StatelessWidget {
     Color borderColor;
     Color bgColor;
     double borderWidth;
-    double scale;
+    Color badgeBg;
+    Color badgeFg;
+    Widget? trailingIcon;
 
-    if (isCorrect ?? false) {
+    if (isCorrect == true) {
       borderColor = AppColors.optionCorrectBorder;
       bgColor = AppColors.optionCorrectBackground;
       borderWidth = 2;
-      scale = 1.0;
-    } else if (isIncorrect ?? false) {
+      badgeBg = AppColors.success;
+      badgeFg = Colors.white;
+      trailingIcon = const Icon(Icons.check_circle_rounded,
+          color: AppColors.success, size: 20);
+    } else if (isIncorrect == true) {
       borderColor = AppColors.optionIncorrectBorder;
       bgColor = AppColors.optionIncorrectBackground;
       borderWidth = 2;
-      scale = 1.0;
+      badgeBg = AppColors.error;
+      badgeFg = Colors.white;
+      trailingIcon = const Icon(Icons.cancel_rounded,
+          color: AppColors.error, size: 20);
     } else if (isSelected) {
       borderColor = AppColors.optionSelectedBorder;
       bgColor = AppColors.optionSelectedBackground;
       borderWidth = AppConstants.selectedOptionBorderWidth;
-      scale = 1.01;
+      badgeBg = AppColors.primary;
+      badgeFg = Colors.white;
+      trailingIcon = const Icon(Icons.radio_button_checked_rounded,
+          color: AppColors.primary, size: 20);
     } else {
       borderColor = AppColors.optionUnselectedBorder;
       bgColor = AppColors.optionUnselectedBackground;
       borderWidth = AppConstants.cardBorderWidth;
-      scale = 1.0;
+      badgeBg = AppColors.surfaceContainer;
+      badgeFg = AppColors.onSurfaceVariant;
+      trailingIcon = const Icon(Icons.radio_button_unchecked_rounded,
+          color: AppColors.outlineVariant, size: 20);
     }
 
-    return AnimatedScale(
-      scale: scale,
-      duration: AppConstants.shortAnimation,
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: AppConstants.shortAnimation,
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
-            border: Border.all(color: borderColor, width: borderWidth),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isSelected ? AppColors.primary : AppColors.surfaceContainer,
-                ),
-                child: Center(
-                  child: Text(
-                    optionKey,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : AppColors.onSurface,
-                      fontWeight: FontWeight.w700,
-                    ),
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: AppConstants.shortAnimation,
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
+          border: Border.all(color: borderColor, width: borderWidth),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
+        ),
+        child: Row(
+          children: [
+            // Option key badge (A, B, C, D)
+            AnimatedContainer(
+              duration: AppConstants.shortAnimation,
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: badgeBg,
+                border: isSelected || isCorrect == true || isIncorrect == true
+                    ? null
+                    : Border.all(color: AppColors.outlineVariant),
+              ),
+              child: Center(
+                child: Text(
+                  optionKey.toUpperCase(),
+                  style: TextStyle(
+                    color: badgeFg,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  value,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.normal,
-                      ),
-                ),
+            ),
+            const SizedBox(width: 14),
+            // Option text
+            Expanded(
+              child: Text(
+                value,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
+                      color: isSelected
+                          ? AppColors.onSurface
+                          : AppColors.onSurface,
+                      height: 1.5,
+                    ),
+                textDirection: TextDirection.rtl,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            // Trailing state icon
+            if (trailingIcon != null) trailingIcon,
+          ],
         ),
       ),
     );
@@ -556,7 +821,8 @@ class _FillBlankInputState extends State<_FillBlankInput> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Text input field
@@ -623,6 +889,7 @@ class _FillBlankInputState extends State<_FillBlankInput> {
         ),
       ],
     );
+  }
 }
 
 /// Essay question input widget (Requirement 18.4)
@@ -664,7 +931,8 @@ class _EssayInputState extends State<_EssayInput> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Informational banner about pending review
@@ -759,4 +1027,5 @@ class _EssayInputState extends State<_EssayInput> {
         ),
       ],
     );
+  }
 }

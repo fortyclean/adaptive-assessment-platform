@@ -3,9 +3,18 @@ class AppConstants {
   AppConstants._();
 
   // ─── API ──────────────────────────────────────────────────────────────────
-  static const String apiBaseUrl = 'http://10.0.2.2:3000/api/v1';
+  // URL is injected at build time via --dart-define=API_URL=...
+  // See AppConfig.apiBaseUrl for the resolved value.
+  static const String apiBaseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://10.0.2.2:3000/api/v1',
+  );
   static const Duration apiTimeout = Duration(seconds: 30);
   static const Duration connectTimeout = Duration(seconds: 10);
+
+  // ─── Demo / Offline Mode ──────────────────────────────────────────────────
+  /// Set to true to use mock data when the API is unavailable.
+  static const bool useMockData = true;
 
   // ─── Storage Keys ─────────────────────────────────────────────────────────
   static const String accessTokenKey = 'access_token';
@@ -13,6 +22,7 @@ class AppConstants {
   static const String userDataKey = 'user_data';
   static const String pendingAnswersBoxName = 'pending_answers';
   static const String sessionStateBoxName = 'session_state';
+  static const String onboardingSeenKey = 'onboarding_seen';
 
   // ─── Assessment ───────────────────────────────────────────────────────────
   static const int minQuestions = 5;
@@ -25,21 +35,21 @@ class AppConstants {
   static const int defaultPageSize = 20;
 
   // ─── Points ───────────────────────────────────────────────────────────────
-  static const double bonusScoreThreshold = 90;
+  static const double bonusScoreThreshold = 90.0;
   static const int bonusPoints = 50;
 
   // ─── Skill Classification ─────────────────────────────────────────────────
-  static const double strengthThreshold = 70;
+  static const double strengthThreshold = 70.0;
 
   // ─── Notifications ────────────────────────────────────────────────────────
   static const int maxNotificationsPerUser = 50;
 
   // ─── UI ───────────────────────────────────────────────────────────────────
-  static const double cardBorderRadius = 16;
-  static const double buttonBorderRadius = 12;
-  static const double inputBorderRadius = 8;
-  static const double cardBorderWidth = 1;
-  static const double selectedOptionBorderWidth = 2;
+  static const double cardBorderRadius = 16.0;
+  static const double buttonBorderRadius = 12.0;
+  static const double inputBorderRadius = 8.0;
+  static const double cardBorderWidth = 1.0;
+  static const double selectedOptionBorderWidth = 2.0;
 
   // ─── Animation ────────────────────────────────────────────────────────────
   static const Duration shortAnimation = Duration(milliseconds: 150);

@@ -21,13 +21,13 @@ class AppValidators {
     if (value.length < 8) {
       return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
     }
-    if (!value.contains(RegExp('[A-Z]'))) {
+    if (!value.contains(RegExp(r'[A-Z]'))) {
       return 'كلمة المرور يجب أن تحتوي على حرف كبير';
     }
-    if (!value.contains(RegExp('[a-z]'))) {
+    if (!value.contains(RegExp(r'[a-z]'))) {
       return 'كلمة المرور يجب أن تحتوي على حرف صغير';
     }
-    if (!value.contains(RegExp('[0-9]'))) {
+    if (!value.contains(RegExp(r'[0-9]'))) {
       return 'كلمة المرور يجب أن تحتوي على رقم';
     }
     return null;

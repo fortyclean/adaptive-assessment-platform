@@ -40,8 +40,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   String? _validateNewPassword(String? value) {
     if (value == null || value.isEmpty) return 'يرجى إدخال كلمة المرور الجديدة';
     if (value.length < 8) return 'يجب أن تكون 8 أحرف على الأقل';
-    if (!value.contains(RegExp('[A-Z]'))) return 'يجب أن تحتوي على حرف كبير';
-    if (!value.contains(RegExp('[0-9]'))) return 'يجب أن تحتوي على رقم';
+    if (!value.contains(RegExp(r'[A-Z]'))) return 'يجب أن تحتوي على حرف كبير';
+    if (!value.contains(RegExp(r'[0-9]'))) return 'يجب أن تحتوي على رقم';
     return null;
   }
 
@@ -73,7 +73,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: const Text('تغيير كلمة المرور'),
         leading: IconButton(
@@ -88,8 +89,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         ),
       ),
     );
+  }
 
-  Widget _buildFormView() => Form(
+  Widget _buildFormView() {
+    return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -195,6 +198,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         ],
       ),
     );
+  }
 
   Widget _buildPasswordField({
     required TextEditingController controller,
@@ -202,7 +206,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     required bool obscure,
     required VoidCallback onToggle,
     required String? Function(String?) validator,
-  }) => TextFormField(
+  }) {
+    return TextFormField(
       controller: controller,
       obscureText: obscure,
       textDirection: TextDirection.ltr,
@@ -217,8 +222,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       ),
       validator: validator,
     );
+  }
 
-  Widget _buildRequirement(String text) => Padding(
+  Widget _buildRequirement(String text) {
+    return Padding(
       padding: const EdgeInsets.only(top: 2),
       child: Row(
         children: [
@@ -235,8 +242,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         ],
       ),
     );
+  }
 
-  Widget _buildSuccessView() => Column(
+  Widget _buildSuccessView() {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -256,4 +265,5 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         ),
       ],
     );
+  }
 }

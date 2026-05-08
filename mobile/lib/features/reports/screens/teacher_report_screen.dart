@@ -7,7 +7,7 @@ import '../../assessment/repositories/teacher_repository.dart';
 /// Teacher Analytics Report Screen — Screen 9, 28, 22
 /// Requirements: 9.1–9.6
 class TeacherReportScreen extends ConsumerStatefulWidget {
-  const TeacherReportScreen({required this.assessmentId, super.key});
+  const TeacherReportScreen({super.key, required this.assessmentId});
   final String assessmentId;
 
   @override
@@ -44,16 +44,30 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('تقرير الاختبار'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        titleSpacing: 0,
+        title: const Text(
+          'تقرير الاختبار',
+          style: TextStyle(
+            color: AppColors.onSurface,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+          ),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          icon: const Icon(Icons.arrow_forward_ios_rounded,
+              color: AppColors.onSurface, size: 20),
           onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.download_rounded),
+            icon: const Icon(Icons.download_rounded, color: AppColors.primary),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('جاري تصدير CSV...')),
@@ -61,14 +75,61 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
             },
             tooltip: 'تصدير CSV',
           ),
+          const SizedBox(width: 4),
         ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, color: AppColors.outlineVariant),
+        ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primary))
           : _error != null
-              ? Center(child: Text(_error!))
+              ? _buildErrorState()
               : _buildContent(),
     );
+  }
+
+  Widget _buildErrorState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: AppColors.errorContainer,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Icon(Icons.error_outline_rounded,
+                color: AppColors.error, size: 32),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            _error!,
+            style: const TextStyle(
+              color: AppColors.onSurface,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _isLoading = true;
+                _error = null;
+              });
+              _loadReport();
+            },
+            child: const Text('إعادة المحاولة'),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildContent() {
     final r = _report!;
@@ -84,87 +145,184 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        // Summary stats
+        // ── Summary Stats ──────────────────────────────────────────────────
+        _buildSectionLabel('ملخص النتائج'),
+        const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
-                child: _StatCard(
-                    label: 'المتوسط',
-                    value: avg != null ? '${avg.round()}%' : '-',
-                    color: AppColors.primary)),
-            const SizedBox(width: 8),
+              child: _StatCard(
+                label: 'متوسط الصف',
+                value: avg != null ? '${avg.round()}%' : '-',
+                icon: Icons.bar_chart_rounded,
+                color: AppColors.primary,
+                bgColor: const Color(0xFFDDE1FF),
+              ),
+            ),
+            const SizedBox(width: 10),
             Expanded(
-                child: _StatCard(
-                    label: 'الأعلى',
-                    value: highest != null ? '${highest.round()}%' : '-',
-                    color: AppColors.success)),
-            const SizedBox(width: 8),
+              child: _StatCard(
+                label: 'أعلى درجة',
+                value: highest != null ? '${highest.round()}%' : '-',
+                icon: Icons.trending_up_rounded,
+                color: AppColors.success,
+                bgColor: AppColors.successContainer,
+              ),
+            ),
+            const SizedBox(width: 10),
             Expanded(
-                child: _StatCard(
-                    label: 'الأدنى',
-                    value: lowest != null ? '${lowest.round()}%' : '-',
-                    color: AppColors.error)),
+              child: _StatCard(
+                label: 'أدنى درجة',
+                value: lowest != null ? '${lowest.round()}%' : '-',
+                icon: Icons.trending_down_rounded,
+                color: AppColors.error,
+                bgColor: AppColors.errorContainer,
+              ),
+            ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 24),
 
-        // Score distribution
-        Text('توزيع الدرجات',
-            style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 12),
+        // ── Score Distribution ─────────────────────────────────────────────
+        _buildSectionLabel('توزيع الدرجات'),
+        const SizedBox(height: 10),
         _DistributionChart(distribution: dist),
-        const SizedBox(height: 20),
+        const SizedBox(height: 24),
 
-        // Skill heatmap
+        // ── Skill Heatmap ──────────────────────────────────────────────────
         if (heatmap.isNotEmpty) ...[
-          Text('خريطة المهارات',
-              style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 12),
-          ...heatmap.map((s) => _SkillHeatmapRow(skill: s)),
-          const SizedBox(height: 20),
+          _buildSectionLabel('مستويات إتقان المهارات'),
+          const SizedBox(height: 10),
+          _SkillHeatmapCard(heatmap: heatmap),
+          const SizedBox(height: 24),
         ],
 
-        // Student results table
-        Text('نتائج الطلاب',
-            style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 12),
+        // ── Student Results ────────────────────────────────────────────────
+        _buildSectionLabel('نتائج الطلاب'),
+        const SizedBox(height: 10),
         if (students.isEmpty)
-          const Text('لا توجد نتائج بعد')
+          _buildEmptyStudents()
         else
-          ...students.map((s) => _StudentResultTile(student: s)),
+          ...students.asMap().entries.map(
+                (e) => _StudentResultTile(
+                  student: e.value,
+                  rank: e.key + 1,
+                ),
+              ),
+        const SizedBox(height: 16),
       ],
+    );
+  }
+
+  Widget _buildSectionLabel(String label) {
+    return Text(
+      label,
+      style: const TextStyle(
+        color: AppColors.onSurface,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      ),
+      textDirection: TextDirection.rtl,
+    );
+  }
+
+  Widget _buildEmptyStudents() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant),
+      ),
+      child: const Column(
+        children: [
+          Icon(Icons.people_outline_rounded,
+              color: AppColors.outlineVariant, size: 40),
+          SizedBox(height: 12),
+          Text(
+            'لا توجد نتائج بعد',
+            style: TextStyle(
+              color: AppColors.onSurfaceVariant,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
+// ─── Stat Card ─────────────────────────────────────────────────────────────
+
 class _StatCard extends StatelessWidget {
-  const _StatCard(
-      {required this.label, required this.value, required this.color});
+  const _StatCard({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+    required this.bgColor,
+  });
+
   final String label;
   final String value;
+  final IconData icon;
   final Color color;
+  final Color bgColor;
 
   @override
-  Widget build(BuildContext context) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Text(value,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: color,
-                      fontWeight: FontWeight.w700,
-                    )),
-            Text(label,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall
-                    ?.copyWith(color: AppColors.onSurfaceVariant)),
-          ],
-        ),
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x05000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: color, size: 20),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            style: TextStyle(
+              color: color,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              height: 1.0,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.onSurfaceVariant,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
+  }
 }
+
+// ─── Distribution Chart ────────────────────────────────────────────────────
 
 class _DistributionChart extends StatelessWidget {
   const _DistributionChart({required this.distribution});
@@ -173,44 +331,183 @@ class _DistributionChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buckets = [
-      ('0-49%', distribution['0-49'] as int? ?? 0, AppColors.error),
-      ('50-69%', distribution['50-69'] as int? ?? 0, AppColors.warning),
-      ('70-89%', distribution['70-89'] as int? ?? 0, AppColors.primary),
-      ('90-100%', distribution['90-100'] as int? ?? 0, AppColors.success),
+      _Bucket('90-100%', distribution['90-100'] as int? ?? 0,
+          AppColors.success, const Color(0xFFD1FAE5)),
+      _Bucket('70-89%', distribution['70-89'] as int? ?? 0,
+          AppColors.primary, const Color(0xFFDDE1FF)),
+      _Bucket('50-69%', distribution['50-69'] as int? ?? 0,
+          AppColors.warning, AppColors.warningContainer),
+      _Bucket('0-49%', distribution['0-49'] as int? ?? 0,
+          AppColors.error, AppColors.errorContainer),
     ];
 
-    final maxCount = buckets.map((b) => b.$2).fold(0, (a, b) => a > b ? a : b);
+    final maxCount =
+        buckets.map((b) => b.count).fold(0, (a, b) => a > b ? a : b);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: buckets.map((b) {
-            final progress = maxCount > 0 ? b.$2 / maxCount : 0.0;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 60,
-                    child: Text(b.$1,
-                        style: Theme.of(context).textTheme.labelSmall),
-                  ),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      backgroundColor: AppColors.surfaceContainer,
-                      color: b.$3,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x05000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Chart bars
+          SizedBox(
+            height: 120,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: buckets.map((b) {
+                final barHeight =
+                    maxCount > 0 ? (b.count / maxCount) * 100.0 : 0.0;
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // Count label above bar
+                        Text(
+                          '${b.count}',
+                          style: TextStyle(
+                            color: b.color,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        // Bar
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.easeOut,
+                          height: barHeight,
+                          decoration: BoxDecoration(
+                            color: b.bgColor,
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(6),
+                            ),
+                            border: Border.all(color: b.color, width: 1.5),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Text('${b.$2}',
-                      style: Theme.of(context).textTheme.labelMedium),
-                ],
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Divider(height: 1, color: AppColors.outlineVariant),
+          const SizedBox(height: 8),
+          // Labels row
+          Row(
+            children: buckets.map((b) {
+              return Expanded(
+                child: Center(
+                  child: Text(
+                    b.label,
+                    style: const TextStyle(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Bucket {
+  const _Bucket(this.label, this.count, this.color, this.bgColor);
+  final String label;
+  final int count;
+  final Color color;
+  final Color bgColor;
+}
+
+// ─── Skill Heatmap Card ────────────────────────────────────────────────────
+
+class _SkillHeatmapCard extends StatelessWidget {
+  const _SkillHeatmapCard({required this.heatmap});
+  final List<Map<String, dynamic>> heatmap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x05000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF4F2FC),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              border: Border(
+                bottom: BorderSide(color: AppColors.outlineVariant),
               ),
-            );
-          }).toList(),
-        ),
+            ),
+            child: const Row(
+              children: [
+                Icon(Icons.psychology_rounded,
+                    color: AppColors.primary, size: 18),
+                SizedBox(width: 8),
+                Text(
+                  'تحليل مفصل للمفاهيم الأساسية',
+                  style: TextStyle(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Skills list
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: heatmap.asMap().entries.map((e) {
+                final isLast = e.key == heatmap.length - 1;
+                return Column(
+                  children: [
+                    _SkillHeatmapRow(skill: e.value),
+                    if (!isLast) ...[
+                      const SizedBox(height: 4),
+                      const Divider(
+                          height: 16, color: AppColors.outlineVariant),
+                    ],
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -223,64 +520,244 @@ class _SkillHeatmapRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pct = (skill['averagePercentage'] as num?)?.toDouble() ?? 0;
-    final color = pct >= 70 ? AppColors.success : AppColors.error;
+    final isStrong = pct >= 70;
+    final color = isStrong ? AppColors.success : AppColors.error;
+    final bgColor =
+        isStrong ? AppColors.successContainer : AppColors.errorContainer;
+    final label = isStrong ? 'إتقان جيد' : 'يحتاج تطوير';
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(skill['mainSkill'] as String? ?? '',
-                style: Theme.of(context).textTheme.bodyMedium),
-          ),
-          Expanded(
-            flex: 3,
-            child: LinearProgressIndicator(
-              value: pct / 100,
-              backgroundColor: AppColors.surfaceContainer,
-              color: color,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                skill['mainSkill'] as String? ?? '',
+                style: const TextStyle(
+                  color: AppColors.onSurface,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+                textDirection: TextDirection.rtl,
+              ),
             ),
+            const SizedBox(width: 12),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${pct.round()}%',
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: pct / 100,
+            minHeight: 8,
+            backgroundColor: AppColors.surfaceContainer,
+            valueColor: AlwaysStoppedAnimation<Color>(color),
           ),
-          const SizedBox(width: 8),
-          Text('${pct.round()}%',
-              style: TextStyle(
-                  color: color, fontWeight: FontWeight.w600, fontSize: 13)),
-        ],
-      ),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'الهدف: 80%',
+              style: const TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 10,
+              ),
+              textDirection: TextDirection.rtl,
+            ),
+            const SizedBox.shrink(),
+          ],
+        ),
+      ],
     );
   }
 }
 
+// ─── Student Result Tile ───────────────────────────────────────────────────
+
 class _StudentResultTile extends StatelessWidget {
-  const _StudentResultTile({required this.student});
+  const _StudentResultTile({required this.student, required this.rank});
   final Map<String, dynamic> student;
+  final int rank;
 
   @override
   Widget build(BuildContext context) {
     final score = student['scorePercentage'] as num?;
-    final scoreColor =
-        score != null && score >= 70 ? AppColors.success : AppColors.error;
+    final isPass = score != null && score >= 70;
+    final scoreColor = isPass ? AppColors.success : AppColors.error;
+    final scoreBg =
+        isPass ? AppColors.successContainer : AppColors.errorContainer;
+    final timeSecs = student['timeTakenSeconds'] as int?;
+    final timeStr = timeSecs != null
+        ? '${timeSecs ~/ 60} دقيقة ${timeSecs % 60} ثانية'
+        : null;
+    final isCompleted = student['status'] == 'completed';
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: score != null && score >= 70
-              ? AppColors.successContainer
-              : AppColors.errorContainer,
-          child: Text(
-            score != null ? '${score.round()}%' : '-',
-            style: TextStyle(
-                color: scoreColor,
-                fontSize: 11,
-                fontWeight: FontWeight.w700),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x04000000),
+            blurRadius: 6,
+            offset: Offset(0, 1),
           ),
-        ),
-        title: Text(student['fullName'] as String? ?? 'طالب'),
-        subtitle: Text(
-          '${student['timeTakenSeconds'] != null ? '${(student['timeTakenSeconds'] as int) ~/ 60} دقيقة' : ''} • ${student['status'] == 'completed' ? 'مكتمل' : 'منتهي الوقت'}',
-        ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Rank badge
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: rank <= 3
+                  ? const Color(0xFFFEF3C7)
+                  : AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                '#$rank',
+                style: TextStyle(
+                  color: rank <= 3
+                      ? const Color(0xFFD97706)
+                      : AppColors.onSurfaceVariant,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Student info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  student['fullName'] as String? ?? 'طالب',
+                  style: const TextStyle(
+                    color: AppColors.onSurface,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textDirection: TextDirection.rtl,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    // Status chip
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: isCompleted
+                            ? const Color(0xFFD1FAE5)
+                            : AppColors.warningContainer,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        isCompleted ? 'مكتمل' : 'انتهى الوقت',
+                        style: TextStyle(
+                          color: isCompleted
+                              ? AppColors.success
+                              : AppColors.warning,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    if (timeStr != null) ...[
+                      const SizedBox(width: 6),
+                      const Icon(Icons.schedule_rounded,
+                          size: 11, color: AppColors.onSurfaceVariant),
+                      const SizedBox(width: 2),
+                      Text(
+                        timeStr,
+                        style: const TextStyle(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Score badge
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: scoreBg,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: scoreColor.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  score != null ? '${score.round()}' : '-',
+                  style: TextStyle(
+                    color: scoreColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    height: 1.0,
+                  ),
+                ),
+                Text(
+                  '%',
+                  style: TextStyle(
+                    color: scoreColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

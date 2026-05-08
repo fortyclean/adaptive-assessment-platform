@@ -82,43 +82,26 @@ class TeacherRepository {
         response.data['classrooms'] as List);
   }
 
-  // ─── Essay Grading (Requirements 18.4, 18.5, 18.6) ───────────────────────
-
-  /// GET /api/v1/attempts?status=pending_review
-  /// Returns all student attempts that are pending essay review.
-  Future<List<Map<String, dynamic>>> getPendingEssayAttempts() async {
-    final response = await _apiService.dio.get(
-      '/attempts',
-      queryParameters: {'status': 'pending_review'},
-    );
-    return List<Map<String, dynamic>>.from(
-        response.data['attempts'] as List? ?? []);
-  }
-
-  /// GET /api/v1/attempts/:id/result
-  /// Returns the full attempt data including essay answers for grading.
+  /// GET /api/v1/attempts/:id — for essay grading
   Future<Map<String, dynamic>> getAttemptForGrading(String attemptId) async {
-    final response =
-        await _apiService.dio.get('/attempts/$attemptId/result');
+    final response = await _apiService.dio.get('/attempts/$attemptId');
     return response.data as Map<String, dynamic>;
   }
 
-  /// POST /api/v1/attempts/:id/grade-essays
-  /// Submits teacher scores for all essay questions in the attempt.
-  /// [grades] maps questionId → score (0 to maxMarks).
-  /// After all essays are graded the backend finalises the session result.
-  Future<void> submitEssayGrades({
-    required String attemptId,
-    required Map<String, int> grades,
-  }) async {
-    await _apiService.dio.post(
-      '/attempts/$attemptId/grade-essays',
-      data: {
-        'grades': grades.entries
-            .map((e) => {'questionId': e.key, 'score': e.value})
-            .toList(),
-      },
-    );
+  /// POST /api/v1/attempts/:id/grade — submit essay grades
+  Future<void> submitEssayGrades(
+      String attemptId, Map<String, int> scores) async {
+    await _apiService.dio.post('/attempts/$attemptId/grade', data: {
+      'scores': scores.map((k, v) => MapEntry(k, v)),
+    });
+  }
+
+  /// GET /api/v1/attempts?status=pending_review — pending essay attempts
+  Future<List<Map<String, dynamic>>> getPendingEssayAttempts() async {
+    final response = await _apiService.dio.get('/attempts',
+        queryParameters: {'status': 'pending_review'});
+    return List<Map<String, dynamic>>.from(
+        response.data['attempts'] as List? ?? []);
   }
 }
 

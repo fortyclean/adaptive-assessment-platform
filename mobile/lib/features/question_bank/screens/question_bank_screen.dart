@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
@@ -26,6 +25,9 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
   String? _filterSubject;
   String? _filterDifficulty;
   String? _filterUnit;
+
+  // Subject chips
+  final List<String> _subjectChips = ['الكل', 'رياضيات', 'علوم', 'لغة عربية', 'إنجليزي'];
 
   @override
   void initState() {
@@ -74,19 +76,21 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
     }
   }
 
-  void _showFilterSheet() {
+  void _showUnitFilterSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (ctx) => _FilterSheet(
-        subject: _filterSubject,
-        difficulty: _filterDifficulty,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => _UnitFilterSheet(
         unit: _filterUnit,
-        onApply: (subject, difficulty, unit) {
+        difficulty: _filterDifficulty,
+        onApply: (unit, difficulty) {
           setState(() {
-            _filterSubject = subject;
-            _filterDifficulty = difficulty;
             _filterUnit = unit;
+            _filterDifficulty = difficulty;
           });
           _loadQuestions(reset: true);
           Navigator.pop(ctx);
@@ -96,51 +100,66 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('بنك الأسئلة'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.black12,
+        surfaceTintColor: Colors.transparent,
+        title: const Text(
+          'بنك الأسئلة',
+          style: TextStyle(
+            color: AppColors.primaryContainer,
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+          ),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryContainer),
           onPressed: () => context.pop(),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_list_rounded),
-            onPressed: _showFilterSheet,
-            tooltip: 'تصفية',
-          ),
-          IconButton(
-            icon: const Icon(Icons.add_rounded),
-            onPressed: () => context.push(AppRoutes.teacherAddQuestion),
-            tooltip: 'إضافة سؤال',
-          ),
-        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: const Color(0xFFE2E8F0)),
+        ),
       ),
       body: Column(
         children: [
-          // Active filters
-          if (_filterSubject != null ||
-              _filterDifficulty != null ||
-              (_filterUnit != null && _filterUnit!.isNotEmpty))
-            _ActiveFilters(
-              subject: _filterSubject,
-              difficulty: _filterDifficulty,
-              unit: _filterUnit,
-              onClear: () {
-                setState(() {
-                  _filterSubject = null;
-                  _filterDifficulty = null;
-                  _filterUnit = null;
-                });
-                _loadQuestions(reset: true);
-              },
-            ),
+          // Filter chips row + unit filter button
+          _FilterBar(
+            selectedSubject: _filterSubject,
+            subjectChips: _subjectChips,
+            onSubjectSelected: (subject) {
+              setState(() {
+                _filterSubject = subject == 'الكل' ? null : subject;
+              });
+              _loadQuestions(reset: true);
+            },
+            onUnitFilterTap: _showUnitFilterSheet,
+            hasActiveFilters: _filterUnit != null || _filterDifficulty != null,
+          ),
 
+          // Action buttons row
+          _ActionBar(
+            onAddQuestion: () => context.push(AppRoutes.teacherAddQuestion),
+            onImportExcel: () {
+              // TODO: implement Excel import
+            },
+          ),
+
+          // Questions list
           Expanded(
             child: _isLoading && _questions.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryContainer,
+                    ),
+                  )
                 : _questions.isEmpty
-                    ? const Center(child: Text('لا توجد أسئلة'))
+                    ? _EmptyState()
                     : NotificationListener<ScrollNotification>(
                         onNotification: (n) {
                           if (n is ScrollEndNotification &&
@@ -154,19 +173,20 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
                           return false;
                         },
                         child: ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount:
-                              _questions.length + (_hasMore ? 1 : 0),
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                          itemCount: _questions.length + (_hasMore ? 1 : 0),
                           itemBuilder: (ctx, i) {
                             if (i == _questions.length) {
                               return const Center(
-                                  child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: CircularProgressIndicator(),
-                              ));
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.primaryContainer,
+                                  ),
+                                ),
+                              );
                             }
-                            return _QuestionCard(
-                                question: _questions[i]);
+                            return _QuestionCard(question: _questions[i]);
                           },
                         ),
                       ),
@@ -174,46 +194,263 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
         ],
       ),
     );
+  }
 }
 
-class _ActiveFilters extends StatelessWidget {
-  const _ActiveFilters({
-    required this.onClear, this.subject,
-    this.difficulty,
-    this.unit,
+// ─── Filter Bar ───────────────────────────────────────────────────────────────
+
+class _FilterBar extends StatelessWidget {
+  const _FilterBar({
+    required this.selectedSubject,
+    required this.subjectChips,
+    required this.onSubjectSelected,
+    required this.onUnitFilterTap,
+    required this.hasActiveFilters,
   });
-  final String? subject;
-  final String? difficulty;
-  final String? unit;
-  final VoidCallback onClear;
+
+  final String? selectedSubject;
+  final List<String> subjectChips;
+  final ValueChanged<String> onSubjectSelected;
+  final VoidCallback onUnitFilterTap;
+  final bool hasActiveFilters;
 
   @override
-  Widget build(BuildContext context) => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: AppColors.surfaceContainer,
-      child: Row(
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
         children: [
-          const Icon(Icons.filter_list_rounded,
-              size: 16, color: AppColors.onSurfaceVariant),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              [
-                if (subject != null) subject!,
-                if (difficulty != null) difficulty!,
-                if (unit != null && unit!.isNotEmpty) unit!,
-              ].join(' • '),
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium
-                  ?.copyWith(color: AppColors.onSurfaceVariant),
+          // Subject filter chips
+          SizedBox(
+            height: 36,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: subjectChips.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (ctx, i) {
+                final chip = subjectChips[i];
+                final isSelected = chip == 'الكل'
+                    ? selectedSubject == null
+                    : selectedSubject == chip;
+                return _SubjectChip(
+                  label: chip,
+                  isSelected: isSelected,
+                  onTap: () => onSubjectSelected(chip),
+                );
+              },
             ),
           ),
-          TextButton(onPressed: onClear, child: const Text('مسح')),
+          const SizedBox(height: 8),
+          // Unit/chapter dropdown filter
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: GestureDetector(
+              onTap: onUnitFilterTap,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: hasActiveFilters
+                        ? AppColors.primaryContainer
+                        : AppColors.outlineVariant,
+                    width: hasActiveFilters ? 1.5 : 1,
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x0A000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.filter_list_rounded,
+                      size: 18,
+                      color: hasActiveFilters
+                          ? AppColors.primaryContainer
+                          : AppColors.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        hasActiveFilters ? 'فلاتر نشطة' : 'الوحدة / الفصل',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: hasActiveFilters
+                              ? AppColors.primaryContainer
+                              : AppColors.onSurfaceVariant,
+                          fontWeight: hasActiveFilters
+                              ? FontWeight.w600
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.expand_more_rounded,
+                      size: 20,
+                      color: hasActiveFilters
+                          ? AppColors.primaryContainer
+                          : AppColors.outline,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
+  }
 }
+
+class _SubjectChip extends StatelessWidget {
+  const _SubjectChip({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primaryContainer : Colors.white,
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+            color: isSelected
+                ? AppColors.primaryContainer
+                : AppColors.outlineVariant,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Action Bar ───────────────────────────────────────────────────────────────
+
+class _ActionBar extends StatelessWidget {
+  const _ActionBar({
+    required this.onAddQuestion,
+    required this.onImportExcel,
+  });
+
+  final VoidCallback onAddQuestion;
+  final VoidCallback onImportExcel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: const Color(0xFFF8FAFC),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: _ActionButton(
+              icon: Icons.add_rounded,
+              label: 'إضافة سؤال',
+              isPrimary: true,
+              onTap: onAddQuestion,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _ActionButton(
+              icon: Icons.upload_file_rounded,
+              label: 'استيراد Excel',
+              isPrimary: false,
+              onTap: onImportExcel,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.isPrimary,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool isPrimary;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isPrimary ? AppColors.primaryContainer : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isPrimary
+                ? AppColors.primaryContainer
+                : AppColors.outlineVariant,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: isPrimary ? Colors.white : AppColors.primaryContainer,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: isPrimary ? Colors.white : AppColors.primaryContainer,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Question Card ────────────────────────────────────────────────────────────
 
 class _QuestionCard extends StatelessWidget {
   const _QuestionCard({required this.question});
@@ -230,6 +467,17 @@ class _QuestionCard extends StatelessWidget {
     }
   }
 
+  Color get _difficultyBgColor {
+    switch (question['difficulty']) {
+      case 'easy':
+        return AppColors.successContainer;
+      case 'hard':
+        return AppColors.errorContainer;
+      default:
+        return AppColors.warningContainer;
+    }
+  }
+
   String get _difficultyLabel {
     switch (question['difficulty']) {
       case 'easy':
@@ -242,76 +490,210 @@ class _QuestionCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Card(
-      margin: const EdgeInsets.only(bottom: 8),
+  Widget build(BuildContext context) {
+    final subject = question['subject'] as String? ?? '';
+    final mainSkill = question['mainSkill'] as String? ?? '';
+    final questionText = question['questionText'] as String? ?? '';
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Badges row + menu
             Row(
               children: [
+                // Subject badge
+                if (subject.isNotEmpty)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      subject,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primaryContainer,
+                      ),
+                    ),
+                  ),
+                if (subject.isNotEmpty) const SizedBox(width: 6),
+                // Difficulty badge
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: _difficultyColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: _difficultyColor),
+                    color: _difficultyBgColor,
+                    borderRadius: BorderRadius.circular(999),
                   ),
-                  child: Text(_difficultyLabel,
-                      style: TextStyle(
-                          color: _difficultyColor,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600)),
+                  child: Text(
+                    _difficultyLabel,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: _difficultyColor,
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  question['mainSkill'] as String? ?? '',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall
-                      ?.copyWith(color: AppColors.onSurfaceVariant),
+                const Spacer(),
+                // More menu button
+                SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: PopupMenuButton<String>(
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      size: 20,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    itemBuilder: (_) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit_rounded, size: 16),
+                            SizedBox(width: 8),
+                            Text('تعديل'),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete_outline_rounded,
+                                size: 16, color: AppColors.error),
+                            SizedBox(width: 8),
+                            Text('حذف',
+                                style: TextStyle(color: AppColors.error)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
+            // Question text
             Text(
-              question['questionText'] as String? ?? '',
+              questionText,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.onSurface,
+                height: 1.5,
+              ),
             ),
+            // Skill label
+            if (mainSkill.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                mainSkill,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+            ],
           ],
         ),
       ),
     );
+  }
 }
 
-class _FilterSheet extends StatefulWidget {
-  const _FilterSheet({
-    required this.onApply, this.subject,
-    this.difficulty,
+// ─── Empty State ──────────────────────────────────────────────────────────────
+
+class _EmptyState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFF6FF),
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: const Icon(
+              Icons.quiz_outlined,
+              size: 36,
+              color: AppColors.primaryContainer,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'لا توجد أسئلة',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.onSurface,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'ابدأ بإضافة أسئلة إلى بنك الأسئلة',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Unit Filter Sheet ────────────────────────────────────────────────────────
+
+class _UnitFilterSheet extends StatefulWidget {
+  const _UnitFilterSheet({
     this.unit,
+    this.difficulty,
+    required this.onApply,
   });
-  final String? subject;
-  final String? difficulty;
   final String? unit;
-  final void Function(String?, String?, String?) onApply;
+  final String? difficulty;
+  final void Function(String?, String?) onApply;
 
   @override
-  State<_FilterSheet> createState() => _FilterSheetState();
+  State<_UnitFilterSheet> createState() => _UnitFilterSheetState();
 }
 
-class _FilterSheetState extends State<_FilterSheet> {
-  String? _subject;
+class _UnitFilterSheetState extends State<_UnitFilterSheet> {
   String? _difficulty;
   final _unitController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _subject = widget.subject;
     _difficulty = widget.difficulty;
     _unitController.text = widget.unit ?? '';
   }
@@ -323,55 +705,179 @@ class _FilterSheetState extends State<_FilterSheet> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) {
+    return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
         left: 16,
         right: 16,
-        top: 16,
+        top: 20,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('تصفية الأسئلة',
-              style: Theme.of(context).textTheme.titleMedium),
+          // Handle
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.outlineVariant,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(labelText: 'المادة'),
-            initialValue: _subject,
-            items: [
-              const DropdownMenuItem(child: Text('الكل')),
-              ...AppConstants.subjects.map(
-                  (s) => DropdownMenuItem(value: s, child: Text(s))),
-            ],
-            onChanged: (v) => setState(() => _subject = v),
-          ),
-          const SizedBox(height: 12),
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(labelText: 'الصعوبة'),
-            initialValue: _difficulty,
-            items: const [
-              DropdownMenuItem(child: Text('الكل')),
-              DropdownMenuItem(value: 'easy', child: Text('سهل')),
-              DropdownMenuItem(value: 'medium', child: Text('متوسط')),
-              DropdownMenuItem(value: 'hard', child: Text('صعب')),
-            ],
-            onChanged: (v) => setState(() => _difficulty = v),
-          ),
-          const SizedBox(height: 12),
-          TextFormField(
-            controller: _unitController,
-            decoration: const InputDecoration(labelText: 'الوحدة'),
+          const Text(
+            'تصفية الأسئلة',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.onSurface,
+            ),
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => widget.onApply(
-                _subject, _difficulty, _unitController.text.trim()),
-            child: const Text('تطبيق'),
+          // Difficulty
+          const Text(
+            'مستوى الصعوبة',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _DifficultyChip(
+                label: 'الكل',
+                isSelected: _difficulty == null,
+                color: AppColors.primaryContainer,
+                onTap: () => setState(() => _difficulty = null),
+              ),
+              const SizedBox(width: 8),
+              _DifficultyChip(
+                label: 'سهل',
+                isSelected: _difficulty == 'easy',
+                color: AppColors.success,
+                onTap: () => setState(() => _difficulty = 'easy'),
+              ),
+              const SizedBox(width: 8),
+              _DifficultyChip(
+                label: 'متوسط',
+                isSelected: _difficulty == 'medium',
+                color: AppColors.warning,
+                onTap: () => setState(() => _difficulty = 'medium'),
+              ),
+              const SizedBox(width: 8),
+              _DifficultyChip(
+                label: 'صعب',
+                isSelected: _difficulty == 'hard',
+                color: AppColors.error,
+                onTap: () => setState(() => _difficulty = 'hard'),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
+          // Unit
+          const Text(
+            'الوحدة / الفصل',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _unitController,
+            decoration: InputDecoration(
+              hintText: 'اكتب اسم الوحدة...',
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                    color: AppColors.primaryContainer, width: 1.5),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () => widget.onApply(
+              _unitController.text.trim().isEmpty
+                  ? null
+                  : _unitController.text.trim(),
+              _difficulty,
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryContainer,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+            ),
+            child: const Text(
+              'تطبيق الفلاتر',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            ),
+          ),
         ],
       ),
     );
+  }
+}
+
+class _DifficultyChip extends StatelessWidget {
+  const _DifficultyChip({
+    required this.label,
+    required this.isSelected,
+    required this.color,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withValues(alpha: 0.12) : Colors.white,
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+            color: isSelected ? color : AppColors.outlineVariant,
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? color : AppColors.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
 }

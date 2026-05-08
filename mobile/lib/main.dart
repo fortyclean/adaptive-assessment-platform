@@ -10,6 +10,11 @@ import 'core/theme/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Global Flutter error handler — prevents crash dialogs from propagating
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+  };
+
   // Initialize Hive for offline storage
   await Hive.initFlutter();
   await Hive.openBox<dynamic>(AppConstants.pendingAnswersBoxName);

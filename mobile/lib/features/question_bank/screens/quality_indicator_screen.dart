@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
@@ -9,7 +10,10 @@ import '../../assessment/repositories/teacher_repository.dart';
 /// Requirements: 22.3, 22.4
 class QualityIndicatorScreen extends ConsumerStatefulWidget {
   const QualityIndicatorScreen({
-    required this.subject, required this.gradeLevel, required this.unit, super.key,
+    super.key,
+    required this.subject,
+    required this.gradeLevel,
+    required this.unit,
   });
   final String subject;
   final String gradeLevel;
@@ -48,7 +52,8 @@ class _QualityIndicatorScreenState
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: const Text('جودة بنك الأسئلة'),
         leading: IconButton(
@@ -62,6 +67,7 @@ class _QualityIndicatorScreenState
               ? const Center(child: Text('تعذر تحميل البيانات'))
               : _buildContent(),
     );
+  }
 
   Widget _buildContent() {
     final data = _qualityData!;
@@ -153,7 +159,8 @@ class _BentoCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Card(
+  Widget build(BuildContext context) {
+    return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -175,6 +182,7 @@ class _BentoCard extends StatelessWidget {
         ),
       ),
     );
+  }
 }
 
 class _DifficultyCard extends StatelessWidget {

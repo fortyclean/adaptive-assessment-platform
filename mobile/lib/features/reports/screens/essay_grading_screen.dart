@@ -158,8 +158,8 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
 
     try {
       await ref.read(teacherRepositoryProvider).submitEssayGrades(
-            attemptId: widget.attemptId,
-            grades: _scores,
+            widget.attemptId,
+            _scores,
           );
 
       if (mounted) {

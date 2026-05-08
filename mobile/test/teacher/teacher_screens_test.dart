@@ -1,5 +1,5 @@
-import 'package:adaptive_assessment/core/constants/app_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:adaptive_assessment/core/constants/app_constants.dart';
 
 /// Widget tests for Teacher Screens
 /// Requirements: 5.1, 5.4, 3.4, 4.1

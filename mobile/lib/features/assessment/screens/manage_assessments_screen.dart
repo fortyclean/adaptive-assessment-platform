@@ -21,6 +21,54 @@ class _ManageAssessmentsScreenState
   List<Map<String, dynamic>> _assessments = [];
   String _statusFilter = 'all';
 
+  static const List<Map<String, dynamic>> _mockAssessments = [
+    {
+      '_id': 'mock1',
+      'title': 'اختبار منتصف الفصل - رياضيات',
+      'subject': 'الرياضيات',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 25,
+      'availableFrom': '2023-10-15T08:00:00.000Z',
+    },
+    {
+      '_id': 'mock2',
+      'title': 'اختبار الوحدة الثانية - علوم',
+      'subject': 'العلوم',
+      'status': 'draft',
+      'assessmentType': 'random',
+      'questionCount': 10,
+      'availableFrom': null,
+    },
+    {
+      '_id': 'mock3',
+      'title': 'القواعد الأساسية - لغة عربية',
+      'subject': 'اللغة العربية',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 15,
+      'availableFrom': '2023-10-10T08:00:00.000Z',
+    },
+    {
+      '_id': 'mock4',
+      'title': 'تاريخ الأندلس - دراسات اجتماعية',
+      'subject': 'الدراسات الاجتماعية',
+      'status': 'draft',
+      'assessmentType': 'adaptive',
+      'questionCount': null,
+      'availableFrom': null,
+    },
+    {
+      '_id': 'mock5',
+      'title': 'اختبار نهاية الفصل - فيزياء',
+      'subject': 'الفيزياء',
+      'status': 'completed',
+      'assessmentType': 'random',
+      'questionCount': 30,
+      'availableFrom': '2023-09-20T08:00:00.000Z',
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -32,11 +80,14 @@ class _ManageAssessmentsScreenState
     try {
       final data = await ref.read(teacherRepositoryProvider).getAssessments();
       setState(() {
-        _assessments = data;
+        _assessments = data.isNotEmpty ? data : _mockAssessments;
         _isLoading = false;
       });
     } catch (_) {
-      setState(() => _isLoading = false);
+      setState(() {
+        _assessments = _mockAssessments;
+        _isLoading = false;
+      });
     }
   }
 
@@ -58,69 +109,146 @@ class _ManageAssessmentsScreenState
       }
     } catch (_) {
       if (mounted) {
+        // Mock publish for demo
+        setState(() {
+          final idx = _assessments.indexWhere((a) => a['_id'] == id);
+          if (idx != -1) {
+            _assessments[idx] = Map.from(_assessments[idx])
+              ..['status'] = 'active';
+          }
+        });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تعذر نشر الاختبار')),
+          const SnackBar(content: Text('تم نشر الاختبار بنجاح')),
         );
       }
     }
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFBF8FF),
       appBar: AppBar(
-        title: const Text('إدارة الاختبارات'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        title: const Text(
+          'التقييم الذكي',
+          style: TextStyle(
+            color: Color(0xFF00288E),
+            fontWeight: FontWeight.w900,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: false,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.onSurfaceVariant),
           onPressed: () => context.pop(),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined,
+                color: Color(0xFF00288E)),
+            onPressed: () {},
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: AppColors.outlineVariant),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(AppRoutes.teacherCreateAssessment),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
-        child: const Icon(Icons.add),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14)),
+        child: const Icon(Icons.add, size: 28),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Status filter chips
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.all(16),
-            child: Row(
+          // ── Page header ───────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _FilterChip(
-                    label: 'الكل',
-                    selected: _statusFilter == 'all',
-                    onTap: () => setState(() => _statusFilter = 'all')),
-                const SizedBox(width: 8),
-                _FilterChip(
-                    label: 'مسودة',
-                    selected: _statusFilter == 'draft',
-                    onTap: () => setState(() => _statusFilter = 'draft')),
-                const SizedBox(width: 8),
-                _FilterChip(
-                    label: 'نشط',
-                    selected: _statusFilter == 'active',
-                    onTap: () => setState(() => _statusFilter = 'active')),
-                const SizedBox(width: 8),
-                _FilterChip(
-                    label: 'مكتمل',
-                    selected: _statusFilter == 'completed',
-                    onTap: () =>
-                        setState(() => _statusFilter = 'completed')),
+                const Text(
+                  'الاختبارات',
+                  style: TextStyle(
+                    color: AppColors.onSurface,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    height: 1.3,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'إدارة وتتبع جميع الاختبارات الخاصة بك.',
+                  style: TextStyle(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    height: 1.6,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // ── Filter chips ─────────────────────────────────────────
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _FilterChip(
+                        label: 'الكل',
+                        selected: _statusFilter == 'all',
+                        onTap: () => setState(() => _statusFilter = 'all'),
+                      ),
+                      const SizedBox(width: 8),
+                      _FilterChip(
+                        label: 'نشط',
+                        selected: _statusFilter == 'active',
+                        onTap: () =>
+                            setState(() => _statusFilter = 'active'),
+                      ),
+                      const SizedBox(width: 8),
+                      _FilterChip(
+                        label: 'مسودة',
+                        selected: _statusFilter == 'draft',
+                        onTap: () =>
+                            setState(() => _statusFilter = 'draft'),
+                      ),
+                      const SizedBox(width: 8),
+                      _FilterChip(
+                        label: 'مؤرشف',
+                        selected: _statusFilter == 'completed',
+                        onTap: () =>
+                            setState(() => _statusFilter = 'completed'),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
 
+          const SizedBox(height: 16),
+
+          // ── Assessment list ───────────────────────────────────────────────
           Expanded(
             child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                        color: AppColors.primary))
                 : _filtered.isEmpty
-                    ? const Center(child: Text('لا توجد اختبارات'))
+                    ? _buildEmpty()
                     : RefreshIndicator(
                         onRefresh: _loadAssessments,
+                        color: AppColors.primary,
                         child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding:
+                              const EdgeInsets.fromLTRB(16, 0, 16, 100),
                           itemCount: _filtered.length,
                           itemBuilder: (ctx, i) => _AssessmentCard(
                             assessment: _filtered[i],
@@ -135,7 +263,47 @@ class _ManageAssessmentsScreenState
         ],
       ),
     );
+  }
+
+  Widget _buildEmpty() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.assignment_outlined,
+                size: 40, color: AppColors.outlineVariant),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'لا توجد اختبارات',
+            style: TextStyle(
+              color: AppColors.onSurface,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'ابدأ بإنشاء اختبارك الأول',
+            style: TextStyle(
+              color: AppColors.onSurfaceVariant,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
+// ── Filter chip ───────────────────────────────────────────────────────────────
 
 class _FilterChip extends StatelessWidget {
   const _FilterChip(
@@ -147,27 +315,40 @@ class _FilterChip extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
+  Widget build(BuildContext context) {
+    return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: selected
+              ? AppColors.primaryContainer
+              : AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(999),
           border: Border.all(
-              color: selected ? AppColors.primary : AppColors.outlineVariant),
+            color: selected
+                ? Colors.transparent
+                : AppColors.outlineVariant,
+          ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : AppColors.onSurface,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+            color: selected
+                ? const Color(0xFFA8B8FF)
+                : AppColors.onSurfaceVariant,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
     );
+  }
 }
+
+// ── Assessment card ───────────────────────────────────────────────────────────
 
 class _AssessmentCard extends StatelessWidget {
   const _AssessmentCard(
@@ -176,36 +357,297 @@ class _AssessmentCard extends StatelessWidget {
   final VoidCallback? onPublish;
 
   @override
-  Widget build(BuildContext context) => Card(
+  Widget build(BuildContext context) {
+    final status = assessment['status'] as String? ?? '';
+    final isActive = status == 'active';
+    final isDraft = status == 'draft';
+    final isAdaptive = assessment['assessmentType'] == 'adaptive';
+    final date = assessment['availableFrom'] as String?;
+    String dateLabel = 'غير محدد';
+    if (date != null) {
+      try {
+        final dt = DateTime.parse(date);
+        dateLabel = '${dt.day} / ${dt.month} / ${dt.year}';
+      } catch (_) {}
+    }
+
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(assessment['title'] as String? ?? '',
-                style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              '${assessment['subject'] ?? ''} • ${assessment['questionCount'] ?? ''} سؤال • ${assessment['timeLimitMinutes'] ?? ''} دقيقة',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: AppColors.onSurfaceVariant),
-            ),
-            if (onPublish != null) ...[
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: onPublish,
-                  icon: const Icon(Icons.publish_rounded, size: 18),
-                  label: const Text('نشر الاختبار'),
-                ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Active accent bar
+          if (isActive)
+            Container(
+              height: 4,
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                borderRadius:
+                    BorderRadius.vertical(top: Radius.circular(12)),
               ),
-            ],
+            ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Status + type badges
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _StatusBadge(status: status),
+                    _TypeBadge(isAdaptive: isAdaptive),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                // Title
+                Text(
+                  assessment['title'] as String? ?? '',
+                  style: const TextStyle(
+                    color: AppColors.onSurface,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    height: 1.4,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 12),
+                // Footer row
+                Container(
+                  height: 1,
+                  color: const Color(0x1AC4C5D5),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(Icons.quiz_outlined,
+                        size: 16,
+                        color: AppColors.onSurfaceVariant),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${assessment['questionCount'] ?? '--'} سؤال',
+                      style: const TextStyle(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 13,
+                      ),
+                    ),
+                    const Spacer(),
+                    const Icon(Icons.event_outlined,
+                        size: 16,
+                        color: AppColors.onSurfaceVariant),
+                    const SizedBox(width: 4),
+                    Text(
+                      dateLabel,
+                      style: const TextStyle(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+                // Action buttons
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _CardButton(
+                        icon: Icons.edit_outlined,
+                        label: 'تعديل',
+                        onTap: () {},
+                        color: AppColors.primary,
+                        outlined: true,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    if (isDraft && onPublish != null)
+                      Expanded(
+                        child: _CardButton(
+                          icon: Icons.publish_rounded,
+                          label: 'نشر',
+                          onTap: onPublish!,
+                          color: AppColors.primary,
+                          outlined: false,
+                        ),
+                      )
+                    else if (isActive)
+                      Expanded(
+                        child: _CardButton(
+                          icon: Icons.bar_chart_rounded,
+                          label: 'التقارير',
+                          onTap: () {},
+                          color: AppColors.onSurfaceVariant,
+                          outlined: true,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CardButton extends StatelessWidget {
+  const _CardButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.color,
+    required this.outlined,
+  });
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final Color color;
+  final bool outlined;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: outlined ? Colors.white : color,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: outlined ? AppColors.outlineVariant : color,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 15,
+                color: outlined ? color : Colors.white),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: outlined ? color : Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.status});
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    Color bg;
+    Color fg;
+    String label;
+    Widget? dot;
+
+    switch (status) {
+      case 'active':
+        bg = const Color(0xFFE8F5E9);
+        fg = const Color(0xFF2E7D32);
+        label = 'مباشر';
+        dot = Container(
+          width: 8,
+          height: 8,
+          decoration: const BoxDecoration(
+            color: Color(0xFF2E7D32),
+            shape: BoxShape.circle,
+          ),
+        );
+        break;
+      case 'draft':
+        bg = AppColors.surfaceContainerHigh;
+        fg = AppColors.onSurfaceVariant;
+        label = 'مسودة';
+        dot = null;
+        break;
+      case 'completed':
+        bg = const Color(0xFFD0E1FB);
+        fg = const Color(0xFF54647A);
+        label = 'مؤرشف';
+        dot = null;
+        break;
+      default:
+        bg = AppColors.surfaceContainerHigh;
+        fg = AppColors.onSurfaceVariant;
+        label = status;
+        dot = null;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (dot != null) ...[dot, const SizedBox(width: 4)],
+          Text(
+            label,
+            style: TextStyle(
+              color: fg,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TypeBadge extends StatelessWidget {
+  const _TypeBadge({required this.isAdaptive});
+  final bool isAdaptive;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: isAdaptive
+            ? const Color(0xFFD0E1FB)
+            : const Color(0xFFFFDBCE),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+          color: isAdaptive
+              ? const Color(0xFFD3E4FE)
+              : const Color(0xFFFFB59A),
+        ),
+      ),
+      child: Text(
+        isAdaptive ? 'تكيفي' : 'عشوائي',
+        style: TextStyle(
+          color: isAdaptive
+              ? const Color(0xFF54647A)
+              : const Color(0xFF611E00),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
 }

@@ -1,4 +1,4 @@
-package com.example.adaptive_assessment
+package com.adaptivemastery.app
 
 import io.flutter.embedding.android.FlutterActivity
 

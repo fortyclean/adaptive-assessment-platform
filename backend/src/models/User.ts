@@ -88,19 +88,18 @@ const userSchema = new Schema<IUserDocument>(
   },
   {
     timestamps: true,
+    toJSON: {
+      transform: (_doc, ret) => {
+        delete ret.passwordHash;
+        delete ret.failedLoginAttempts;
+        delete ret.lockedUntil;
+        delete ret.activeSessions;
+        delete ret.__v;
+        return ret;
+      },
+    },
   },
 );
-
-// toJSON transform
-userSchema.set('toJSON', {
-  transform: (_doc: any, ret: any) => {
-    delete ret.passwordHash;
-    delete ret.failedLoginAttempts;
-    delete ret.activeSessions;
-    delete ret.__v;
-    return ret;
-  },
-});
 
 // Indexes
 userSchema.index({ username: 1 }, { unique: true });

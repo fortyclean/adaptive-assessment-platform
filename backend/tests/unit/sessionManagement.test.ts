@@ -128,8 +128,8 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should mark incorrect answer as incorrect', () => {
-      const correctAnswer: string = 'B';
-      const selectedAnswer: string = 'A';
+      const correctAnswer = 'B';
+      const selectedAnswer = 'A';
 
       const isCorrect = correctAnswer === selectedAnswer;
 
@@ -137,8 +137,8 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should be case-sensitive in answer validation', () => {
-      const correctAnswer: string = 'B';
-      const selectedAnswer: string = 'b';
+      const correctAnswer = 'B';
+      const selectedAnswer = 'b';
 
       const isCorrect = correctAnswer === selectedAnswer;
 
@@ -191,7 +191,7 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should prevent further modifications after auto-submit', () => {
-      const status: string = 'completed';
+      const status = 'completed';
       const canModify = status === 'in_progress';
 
       expect(canModify).toBe(false);
@@ -269,7 +269,7 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should reject operations on completed session', () => {
-      const status: string = 'completed';
+      const status = 'completed';
       const canSubmitAnswer = status === 'in_progress';
 
       expect(canSubmitAnswer).toBe(false);

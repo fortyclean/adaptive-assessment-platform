@@ -173,8 +173,8 @@ describe('PBT — Property 2: Ascending Difficulty — Metamorphic (Req 6.2)', (
           }),
         ),
         // All-correct answer sequence of length 10
-        fc.constant(Array(10).fill(true) as boolean[]),
-        (questionBank, answers) => {
+        fc.constant(Array(10).fill(true)),
+        ([questionBank, answers]) => {
           const { difficultySequence } = simulateSession(questionBank, answers, 10);
 
           // Property: for each consecutive pair, rank must be non-decreasing
@@ -234,8 +234,8 @@ describe('PBT — Property 3: Descending Difficulty — Metamorphic (Req 6.3)', 
             return arbQuestion(`q${i}`, diff);
           }),
         ),
-        fc.constant(Array(10).fill(false) as boolean[]), // all incorrect
-        (questionBank, answers) => {
+        fc.constant(Array(10).fill(false)), // all incorrect
+        ([questionBank, answers]) => {
           const { difficultySequence } = simulateSession(questionBank, answers, 10);
 
           for (let i = 1; i < difficultySequence.length; i++) {

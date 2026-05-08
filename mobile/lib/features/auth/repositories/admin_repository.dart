@@ -131,6 +131,33 @@ class AdminRepository {
     return List<Map<String, dynamic>>.from(
         (data['skills'] ?? data['weakestSkills'] ?? data['data'] ?? []) as List);
   }
+
+  // ─── Report Schedules (Req 26.1) ──────────────────────────────────────────
+
+  /// GET /api/v1/report-schedules
+  Future<List<Map<String, dynamic>>> getReportSchedules() async {
+    final response = await _apiService.dio.get('/report-schedules');
+    return List<Map<String, dynamic>>.from(
+        response.data['schedules'] as List);
+  }
+
+  /// POST /api/v1/report-schedules
+  Future<Map<String, dynamic>> createReportSchedule(
+      Map<String, dynamic> data) async {
+    final response =
+        await _apiService.dio.post('/report-schedules', data: data);
+    return response.data['schedule'] as Map<String, dynamic>;
+  }
+
+  /// DELETE /api/v1/report-schedules/:id
+  Future<void> deleteReportSchedule(String id) async {
+    await _apiService.dio.delete('/report-schedules/$id');
+  }
+
+  /// PATCH /api/v1/report-schedules/:id/toggle
+  Future<void> toggleReportSchedule(String id) async {
+    await _apiService.dio.patch('/report-schedules/$id/toggle');
+  }
 }
 
 final adminRepositoryProvider = Provider<AdminRepository>(

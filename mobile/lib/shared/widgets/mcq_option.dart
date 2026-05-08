@@ -12,7 +12,11 @@ import '../../core/constants/app_constants.dart';
 ///   - Incorrect (post-session): #FEE2E2 background, #BA1A1A border
 class McqOption extends StatelessWidget {
   const McqOption({
-    required this.optionKey, required this.value, required this.isSelected, required this.onTap, super.key,
+    super.key,
+    required this.optionKey,
+    required this.value,
+    required this.isSelected,
+    required this.onTap,
     this.isCorrect,
     this.isIncorrect,
     this.isDisabled = false,
@@ -33,46 +37,47 @@ class McqOption extends StatelessWidget {
   final bool isDisabled;
 
   Color get _borderColor {
-    if (isCorrect ?? false) return AppColors.optionCorrectBorder;
-    if (isIncorrect ?? false) return AppColors.optionIncorrectBorder;
+    if (isCorrect == true) return AppColors.optionCorrectBorder;
+    if (isIncorrect == true) return AppColors.optionIncorrectBorder;
     if (isSelected) return AppColors.optionSelectedBorder;
     return AppColors.optionUnselectedBorder;
   }
 
   Color get _backgroundColor {
-    if (isCorrect ?? false) return AppColors.optionCorrectBackground;
-    if (isIncorrect ?? false) return AppColors.optionIncorrectBackground;
+    if (isCorrect == true) return AppColors.optionCorrectBackground;
+    if (isIncorrect == true) return AppColors.optionIncorrectBackground;
     if (isSelected) return AppColors.optionSelectedBackground;
     return AppColors.optionUnselectedBackground;
   }
 
   double get _borderWidth {
-    if ((isCorrect ?? false) || (isIncorrect ?? false)) return 2;
+    if (isCorrect == true || isIncorrect == true) return 2;
     if (isSelected) return AppConstants.selectedOptionBorderWidth;
     return AppConstants.cardBorderWidth;
   }
 
   double get _scale {
     if (isSelected && isCorrect == null && isIncorrect == null) return 1.01;
-    return 1;
+    return 1.0;
   }
 
   Color get _keyCircleColor {
-    if (isCorrect ?? false) return AppColors.success;
-    if (isIncorrect ?? false) return AppColors.error;
+    if (isCorrect == true) return AppColors.success;
+    if (isIncorrect == true) return AppColors.error;
     if (isSelected) return AppColors.primary;
     return AppColors.surfaceContainer;
   }
 
   Color get _keyTextColor {
-    if ((isCorrect ?? false) || (isIncorrect ?? false) || isSelected) {
+    if (isCorrect == true || isIncorrect == true || isSelected) {
       return Colors.white;
     }
     return AppColors.onSurface;
   }
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    return Semantics(
       label: 'الخيار $optionKey: $value',
       button: true,
       selected: isSelected,
@@ -128,10 +133,10 @@ class McqOption extends StatelessWidget {
                 ),
 
                 // Post-session indicator
-                if (isCorrect ?? false)
+                if (isCorrect == true)
                   const Icon(Icons.check_circle_rounded,
                       color: AppColors.success, size: 20)
-                else if (isIncorrect ?? false)
+                else if (isIncorrect == true)
                   const Icon(Icons.cancel_rounded,
                       color: AppColors.error, size: 20),
               ],
@@ -140,4 +145,5 @@ class McqOption extends StatelessWidget {
         ),
       ),
     );
+  }
 }

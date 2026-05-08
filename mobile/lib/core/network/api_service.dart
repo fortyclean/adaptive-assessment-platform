@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../constants/app_config.dart';
 import '../constants/app_constants.dart';
 
 /// Core Dio HTTP client with JWT interceptor and error handling.
@@ -10,7 +9,7 @@ class ApiService {
   ApiService._() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: AppConfig.apiBaseUrl,
+        baseUrl: AppConstants.apiBaseUrl,
         connectTimeout: AppConstants.connectTimeout,
         receiveTimeout: AppConstants.apiTimeout,
         headers: {
@@ -22,7 +21,9 @@ class ApiService {
 
     _dio.interceptors.add(_AuthInterceptor(_storage, _dio));
     _dio.interceptors.add(LogInterceptor(
-      
+      requestBody: false,
+      responseBody: false,
+      error: true,
     ));
   }
 

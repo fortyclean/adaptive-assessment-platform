@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_colors.dart';
 
 /// Accessible button wrapper that ensures WCAG 2.1 Level AA compliance.
 /// Requirements: 12.6
@@ -8,7 +9,9 @@ import 'package:flutter/material.dart';
 /// - Sufficient color contrast (primary #00288E on white = 8.59:1 ratio)
 class AccessibleButton extends StatelessWidget {
   const AccessibleButton({
-    required this.label, required this.onPressed, super.key,
+    super.key,
+    required this.label,
+    required this.onPressed,
     this.semanticLabel,
     this.icon,
     this.isLoading = false,
@@ -23,12 +26,14 @@ class AccessibleButton extends StatelessWidget {
   final AccessibleButtonVariant variant;
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    return Semantics(
       label: semanticLabel ?? label,
       button: true,
       enabled: onPressed != null && !isLoading,
       child: _buildButton(context),
     );
+  }
 
   Widget _buildButton(BuildContext context) {
     final child = isLoading
@@ -79,7 +84,10 @@ enum AccessibleButtonVariant { primary, outlined, text }
 /// Accessible icon button with minimum 44x44 touch target.
 class AccessibleIconButton extends StatelessWidget {
   const AccessibleIconButton({
-    required this.icon, required this.onPressed, required this.tooltip, super.key,
+    super.key,
+    required this.icon,
+    required this.onPressed,
+    required this.tooltip,
   });
 
   final IconData icon;
@@ -87,7 +95,8 @@ class AccessibleIconButton extends StatelessWidget {
   final String tooltip;
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    return Semantics(
       label: tooltip,
       button: true,
       child: SizedBox(
@@ -101,12 +110,14 @@ class AccessibleIconButton extends StatelessWidget {
         ),
       ),
     );
+  }
 }
 
 /// Accessible form field with proper labeling.
 class AccessibleTextField extends StatelessWidget {
   const AccessibleTextField({
-    required this.label, super.key,
+    super.key,
+    required this.label,
     this.hint,
     this.controller,
     this.validator,
@@ -132,7 +143,8 @@ class AccessibleTextField extends StatelessWidget {
   final TextDirection? textDirection;
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    return Semantics(
       label: label,
       textField: true,
       child: TextFormField(
@@ -151,4 +163,5 @@ class AccessibleTextField extends StatelessWidget {
         onSaved: onSaved,
       ),
     );
+  }
 }

@@ -51,7 +51,7 @@ const classroomSchema = new Schema<IClassroomDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (_doc: any, ret: any) => {
+      transform: (_doc, ret) => {
         delete ret.__v;
         return ret;
       },

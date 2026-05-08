@@ -28,7 +28,9 @@ class LoadingIndicator extends StatelessWidget {
 /// A full-screen loading overlay.
 class LoadingOverlay extends StatelessWidget {
   const LoadingOverlay({
-    required this.isLoading, required this.child, super.key,
+    super.key,
+    required this.isLoading,
+    required this.child,
   });
 
   final bool isLoading;

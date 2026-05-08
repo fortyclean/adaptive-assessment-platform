@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/network/api_service.dart';
 
 /// Excel Import Screen — Screen 24 & 25
 /// Requirements: 4.1–4.6
@@ -78,7 +79,8 @@ class _ImportExcelScreenState extends ConsumerState<ImportExcelScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: const Text('استيراد من Excel'),
         leading: IconButton(
@@ -108,7 +110,7 @@ class _ImportExcelScreenState extends ConsumerState<ImportExcelScreen> {
           if (_importResult != null) ...[
             _ImportResultCard(
               result: _importResult!,
-              onDownloadErrors: _importResult!['failed'] > 0
+              onDownloadErrors: ((_importResult!['failed'] as int?) ?? 0) > 0
                   ? _downloadErrorReport
                   : null,
             ),
@@ -125,6 +127,7 @@ class _ImportExcelScreenState extends ConsumerState<ImportExcelScreen> {
         ],
       ),
     );
+  }
 }
 
 class _UploadArea extends StatelessWidget {
@@ -133,7 +136,8 @@ class _UploadArea extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
+  Widget build(BuildContext context) {
+    return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -146,6 +150,7 @@ class _UploadArea extends StatelessWidget {
           border: Border.all(
             color: isUploading ? AppColors.outlineVariant : AppColors.primary,
             width: 2,
+            style: BorderStyle.solid,
           ),
         ),
         child: Center(
@@ -181,6 +186,7 @@ class _UploadArea extends StatelessWidget {
         ),
       ),
     );
+  }
 }
 
 class _ImportResultCard extends StatelessWidget {
@@ -279,7 +285,8 @@ class _ResultBadge extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Expanded(
+  Widget build(BuildContext context) {
+    return Expanded(
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -300,6 +307,7 @@ class _ResultBadge extends StatelessWidget {
         ),
       ),
     );
+  }
 }
 
 class _HistoryTile extends StatelessWidget {

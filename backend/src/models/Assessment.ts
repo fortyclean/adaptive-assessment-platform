@@ -100,7 +100,7 @@ const assessmentSchema = new Schema<IAssessmentDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (_doc: any, ret: any) => {
+      transform: (_doc, ret) => {
         delete ret.__v;
         return ret;
       },

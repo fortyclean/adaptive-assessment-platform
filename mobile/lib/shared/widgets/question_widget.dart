@@ -14,7 +14,10 @@ import 'question_image.dart';
 ///   - essay       → Multi-line text area (Req 18.4)
 class QuestionWidget extends StatelessWidget {
   const QuestionWidget({
-    required this.question, required this.selectedAnswer, required this.onAnswerSelected, super.key,
+    super.key,
+    required this.question,
+    required this.selectedAnswer,
+    required this.onAnswerSelected,
     this.isDisabled = false,
     this.showCorrectAnswer = false,
   });
@@ -31,7 +34,8 @@ class QuestionWidget extends StatelessWidget {
   String get _correctAnswer => question['correctAnswer'] as String? ?? '';
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Image (if present)
@@ -79,6 +83,7 @@ class QuestionWidget extends StatelessWidget {
         },
       ],
     );
+  }
 }
 
 // ─── MCQ Widget ───────────────────────────────────────────────────────────────
@@ -99,7 +104,8 @@ class _McqWidget extends StatelessWidget {
   final bool isDisabled;
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    return Column(
       children: options.map((opt) {
         final key = opt['key'] as String;
         final isSelected = selectedAnswer == key;
@@ -117,6 +123,7 @@ class _McqWidget extends StatelessWidget {
         );
       }).toList(),
     );
+  }
 }
 
 // ─── True/False Widget (Req 18.1) ─────────────────────────────────────────────
@@ -153,7 +160,8 @@ class _TrueFalseWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) {
+    return Row(
       children: [
         Expanded(child: _TFButton(
           label: 'صحيح',
@@ -174,6 +182,7 @@ class _TrueFalseWidget extends StatelessWidget {
         )),
       ],
     );
+  }
 }
 
 class _TFButton extends StatelessWidget {
@@ -194,7 +203,8 @@ class _TFButton extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    return Semantics(
       label: label,
       button: true,
       child: GestureDetector(
@@ -223,6 +233,7 @@ class _TFButton extends StatelessWidget {
         ),
       ),
     );
+  }
 }
 
 // ─── Fill-in-the-Blank Widget (Req 18.2, 18.3) ───────────────────────────────
@@ -258,7 +269,8 @@ class _FillBlankWidgetState extends State<_FillBlankWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    return Semantics(
       label: 'أدخل إجابتك',
       textField: true,
       child: TextField(
@@ -278,6 +290,7 @@ class _FillBlankWidgetState extends State<_FillBlankWidget> {
         textDirection: TextDirection.rtl,
       ),
     );
+  }
 }
 
 // ─── Essay Widget (Req 18.4) ──────────────────────────────────────────────────
@@ -313,7 +326,8 @@ class _EssayWidgetState extends State<_EssayWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
@@ -361,4 +375,5 @@ class _EssayWidgetState extends State<_EssayWidget> {
         ),
       ],
     );
+  }
 }
