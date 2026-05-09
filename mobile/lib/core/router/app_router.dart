@@ -184,9 +184,9 @@ class AppRoutes {
 }
 
 /// GoRouter configuration with role-based route guards.
+/// Uses a single stable GoRouter instance with refreshListenable
+/// so switching apps never triggers a re-login.
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
-
   // Check if onboarding has been seen (stored in Hive)
   bool onboardingSeen = false;
   try {
@@ -196,18 +196,25 @@ final routerProvider = Provider<GoRouter>((ref) {
     onboardingSeen = false;
   }
 
-  return GoRouter(
+  // Use a notifier so GoRouter refreshes only when auth actually changes
+  final authNotifier = _AuthChangeNotifier(ref);
+
+  final router = GoRouter(
     initialLocation: onboardingSeen ? AppRoutes.login : AppRoutes.onboarding,
+    refreshListenable: authNotifier,
     redirect: (context, state) {
+      final authState = ref.read(authProvider);
       final isAuthenticated = authState.isAuthenticated;
       final isOnboardingRoute = state.matchedLocation == AppRoutes.onboarding;
       final isLoginRoute = state.matchedLocation == AppRoutes.login ||
-          state.matchedLocation == AppRoutes.forgotPassword;
+          state.matchedLocation == AppRoutes.forgotPassword ||
+          state.matchedLocation == AppRoutes.signup;
 
-      // Always allow onboarding
+      // Always allow onboarding and auth routes
       if (isOnboardingRoute) return null;
+      if (!isAuthenticated && isLoginRoute) return null;
 
-      if (!isAuthenticated && !isLoginRoute) return AppRoutes.login;
+      if (!isAuthenticated) return AppRoutes.login;
       if (isAuthenticated && isLoginRoute) {
         return _getDashboardRoute(authState.user?.role);
       }
@@ -623,7 +630,34 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ),
   );
+
+  // Dispose notifier when provider is disposed
+  ref.onDispose(() => authNotifier.dispose());
+
+  return router;
 });
+
+/// ChangeNotifier that listens to auth state changes and notifies GoRouter.
+/// This ensures the router only refreshes on actual login/logout events,
+/// NOT when switching between apps.
+class _AuthChangeNotifier extends ChangeNotifier {
+  _AuthChangeNotifier(Ref ref) {
+    _subscription = ref.listen<AuthState>(authProvider, (previous, next) {
+      // Only notify if authentication status actually changed
+      if (previous?.isAuthenticated != next.isAuthenticated) {
+        notifyListeners();
+      }
+    });
+  }
+
+  late final ProviderSubscription<AuthState> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.close();
+    super.dispose();
+  }
+}
 
 String _getDashboardRoute(UserRole? role) {
   switch (role) {
