@@ -4,13 +4,15 @@ class AppConstants {
 
   // ─── API ──────────────────────────────────────────────────────────────────
   // URL is injected at build time via --dart-define=API_URL=...
-  // See AppConfig.apiBaseUrl for the resolved value.
+  // Production: flutter build apk --dart-define=API_URL=https://your-app.onrender.com/api/v1
+  // Development (Android emulator): http://10.0.2.2:3000/api/v1
+  // Development (physical device): http://YOUR_LOCAL_IP:3000/api/v1
   static const String apiBaseUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue: 'http://10.0.2.2:3000/api/v1',
+    defaultValue: 'https://eduassess-backend.onrender.com/api/v1',
   );
-  static const Duration apiTimeout = Duration(seconds: 10);
-  static const Duration connectTimeout = Duration(seconds: 5);
+  static const Duration apiTimeout = Duration(seconds: 15);
+  static const Duration connectTimeout = Duration(seconds: 10);
 
   // ─── Demo / Offline Mode ──────────────────────────────────────────────────
   /// Set to true to use mock data when the API is unavailable.

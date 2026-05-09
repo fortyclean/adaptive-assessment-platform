@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: eduassess-backend
+    env: node
+    region: frankfurt
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/app.js
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: REFRESH_TOKEN_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 8h
+      - key: REFRESH_TOKEN_EXPIRES_IN
+        value: 7d
+      - key: ENCRYPTION_KEY
+        value: EduAssess_Enc_Key_2024_32chars!!
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_MAX
+        value: 200
+      - key: CORS_ORIGIN
+        value: "*"
