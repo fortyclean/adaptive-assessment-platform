@@ -1,0 +1,44 @@
+name: Deploy Backend Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+  test-build:
+    name: Test Backend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: TypeScript build check
+        working-directory: backend
+        run: npm run build
+
+      - name: Verify dist output
+        working-directory: backend
+        run: |
+          ls -la dist/
+          echo "✅ Build successful"
+
+      - name: Notify success
+        run: |
+          echo "✅ Backend build verified - ready for Render deployment"
+          echo "🔗 Deploy URL: https://eduassess-backend.onrender.com"
+          echo "🔗 Health: https://eduassess-backend.onrender.com/api/v1/health"
