@@ -9,8 +9,8 @@ class AppConstants {
     'API_URL',
     defaultValue: 'http://10.0.2.2:3000/api/v1',
   );
-  static const Duration apiTimeout = Duration(seconds: 30);
-  static const Duration connectTimeout = Duration(seconds: 10);
+  static const Duration apiTimeout = Duration(seconds: 10);
+  static const Duration connectTimeout = Duration(seconds: 5);
 
   // ─── Demo / Offline Mode ──────────────────────────────────────────────────
   /// Set to true to use mock data when the API is unavailable.

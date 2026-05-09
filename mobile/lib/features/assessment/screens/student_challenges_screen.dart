@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
@@ -39,7 +40,35 @@ class _StudentChallengesScreenState
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.white,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+            builder: (ctx) => Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('إنشاء تحدي جديد', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 8),
+                  const Text('يمكنك تحدي زملائك في أي مادة دراسية.', textAlign: TextAlign.center, style: TextStyle(color: AppColors.onSurfaceVariant)),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('ميزة إنشاء التحديات قيد التطوير'), behavior: SnackBarBehavior.floating),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3755C3), foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 48)),
+                    child: const Text('إنشاء تحدي'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
         backgroundColor: const Color(0xFF3755C3),
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
@@ -78,7 +107,7 @@ class _StudentChallengesScreenState
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             color: const Color(0xFF475569),
-            onPressed: () {},
+            onPressed: () => context.push('/student/notifications'),
           ),
           // Logo + avatar (RTL: right)
           Row(
@@ -340,7 +369,42 @@ class _StudentChallengesScreenState
                 width: double.infinity,
                 child: isJoinable
                     ? ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              title: Text('الانضمام إلى: $title'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.rocket_launch_outlined, size: 48, color: Color(0xFF3755C3)),
+                                  const SizedBox(height: 12),
+                                  Text('ستحصل على $points عند إكمال التحدي بنجاح.'),
+                                  const SizedBox(height: 8),
+                                  Text('المشاركون: $participants', style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13)),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(ctx);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('تم الانضمام إلى تحدي: $title'),
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: const Color(0xFF3755C3),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3755C3), foregroundColor: Colors.white),
+                                  child: const Text('انضم الآن'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -359,7 +423,14 @@ class _StudentChallengesScreenState
                         ),
                       )
                     : OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('تم إضافتك لقائمة انتظار: $title'),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        },
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.primary,
                           side: const BorderSide(

@@ -510,6 +510,165 @@ class _StudentProgressScreenState
 
   // ─── Badges Section ──────────────────────────────────────────────────────
 
+  void _showAllBadges(BuildContext context) {
+    final allBadges = [
+      {
+        'icon': Icons.workspace_premium_rounded,
+        'label': 'المنضبط',
+        'earned': true,
+        'color': Colors.amber,
+        'desc': 'أكملت 7 أيام متتالية',
+      },
+      {
+        'icon': Icons.rocket_launch_rounded,
+        'label': 'المنطلق',
+        'earned': true,
+        'color': Colors.blue,
+        'desc': 'أنهيت أول اختبار',
+      },
+      {
+        'icon': Icons.psychology_rounded,
+        'label': 'المثابر',
+        'earned': false,
+        'color': Colors.grey,
+        'desc': 'أكمل 10 اختبارات',
+      },
+      {
+        'icon': Icons.star_rounded,
+        'label': 'النجم',
+        'earned': false,
+        'color': Colors.orange,
+        'desc': 'احصل على 90% في اختبار',
+      },
+      {
+        'icon': Icons.emoji_events_rounded,
+        'label': 'البطل',
+        'earned': false,
+        'color': Colors.purple,
+        'desc': 'تصدر لوحة المتصدرين',
+      },
+      {
+        'icon': Icons.local_fire_department_rounded,
+        'label': 'المتقد',
+        'earned': false,
+        'color': Colors.red,
+        'desc': 'أكمل 30 يوماً متتالية',
+      },
+      {
+        'icon': Icons.school_rounded,
+        'label': 'العالم',
+        'earned': false,
+        'color': Colors.green,
+        'desc': 'أكمل جميع المواد',
+      },
+      {
+        'icon': Icons.speed_rounded,
+        'label': 'السريع',
+        'earned': false,
+        'color': Colors.teal,
+        'desc': 'أجب على 10 أسئلة في دقيقة',
+      },
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        maxChildSize: 0.9,
+        minChildSize: 0.5,
+        builder: (_, controller) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              // Handle
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  'جميع الأوسمة',
+                  style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w700),
+                ),
+              ),
+              Expanded(
+                child: GridView.builder(
+                  controller: controller,
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.8,
+                  ),
+                  itemCount: allBadges.length,
+                  itemBuilder: (_, i) {
+                    final badge = allBadges[i];
+                    final earned = badge['earned'] as bool;
+                    final color = badge['color'] as Color;
+                    return Opacity(
+                      opacity: earned ? 1.0 : 0.4,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: earned
+                                  ? color.withOpacity(0.15)
+                                  : Colors.grey[100],
+                            ),
+                            child: Icon(
+                              earned
+                                  ? badge['icon'] as IconData
+                                  : Icons.lock_rounded,
+                              color: earned ? color : Colors.grey,
+                              size: 32,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            badge['label'] as String,
+                            style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            badge['desc'] as String,
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[600]),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBadgesSection() {
     final badges = [
       {'icon': Icons.workspace_premium_rounded, 'label': 'المنضبط', 'earned': true, 'color': Colors.amber},
@@ -524,7 +683,7 @@ class _StudentProgressScreenState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () => context.push('/student/points'),
+              onPressed: () => _showAllBadges(context),
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero,
                 minimumSize: Size.zero,

@@ -75,8 +75,35 @@ class _StudentAssessmentsScreenState
       if (mounted) {
         setState(() {
           _available = [
-            {'_id': '1', 'title': 'اختبار الرياضيات الدوري', 'subject': 'رياضيات', 'questionCount': 20, 'timeLimitMinutes': 45, 'status': 'active'},
-            {'_id': '2', 'title': 'اختبار قواعد اللغة العربية', 'subject': 'لغة عربية', 'questionCount': 15, 'timeLimitMinutes': 30, 'status': 'active'},
+            {'_id': 'demo-math', 'title': 'اختبار الرياضيات التجريبي', 'subject': 'الرياضيات', 'questionCount': 20, 'timeLimitMinutes': 45, 'status': 'active'},
+            {'_id': 'demo-arabic', 'title': 'اختبار اللغة العربية التجريبي', 'subject': 'اللغة العربية', 'questionCount': 20, 'timeLimitMinutes': 30, 'status': 'active'},
+            {'_id': 'demo-english', 'title': 'اختبار اللغة الإنجليزية التجريبي', 'subject': 'الإنجليزية', 'questionCount': 20, 'timeLimitMinutes': 30, 'status': 'active'},
+            {'_id': 'demo-biology', 'title': 'اختبار الأحياء التجريبي', 'subject': 'الأحياء', 'questionCount': 20, 'timeLimitMinutes': 35, 'status': 'active'},
+            {'_id': 'demo-history', 'title': 'اختبار التاريخ التجريبي', 'subject': 'التاريخ', 'questionCount': 20, 'timeLimitMinutes': 40, 'status': 'active'},
+            {'_id': 'demo-chemistry', 'title': 'اختبار الكيمياء التجريبي', 'subject': 'الكيمياء', 'questionCount': 20, 'timeLimitMinutes': 40, 'status': 'active'},
+          ];
+          _past = [
+            {
+              '_id': 'demo-attempt-1',
+              'assessmentId': {'title': 'اختبار الرياضيات الدوري', 'subject': 'رياضيات'},
+              'scorePercentage': 85.0,
+              'status': 'completed',
+              'submittedAt': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+            },
+            {
+              '_id': 'demo-attempt-2',
+              'assessmentId': {'title': 'اختبار قواعد اللغة العربية', 'subject': 'لغة عربية'},
+              'scorePercentage': 72.0,
+              'status': 'completed',
+              'submittedAt': DateTime.now().subtract(const Duration(days: 5)).toIso8601String(),
+            },
+            {
+              '_id': 'demo-attempt-3',
+              'assessmentId': {'title': 'اختبار الأحياء', 'subject': 'أحياء'},
+              'scorePercentage': 91.0,
+              'status': 'completed',
+              'submittedAt': DateTime.now().subtract(const Duration(days: 7)).toIso8601String(),
+            },
           ];
           _isLoading = false;
         });

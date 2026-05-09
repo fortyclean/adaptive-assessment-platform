@@ -126,7 +126,7 @@ class AppBottomNav extends StatelessWidget {
         case 2:
           context.go('/teacher/questions');
         case 3:
-          context.go('/teacher/reports/overview');
+          context.go('/teacher/report-schedules');
         case 4:
           context.go('/teacher/settings');
       }

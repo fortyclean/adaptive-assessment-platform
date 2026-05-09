@@ -126,7 +126,7 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             color: const Color(0xFF1E40AF),
-            onPressed: () {},
+            onPressed: () => context.push('/teacher/notifications'),
           ),
           // Logo + avatar (RTL: right)
           Row(
@@ -511,7 +511,14 @@ class _StudentCard extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('عرض ملف الطالب: ${student.name}'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryContainer,
                       foregroundColor: Colors.white,

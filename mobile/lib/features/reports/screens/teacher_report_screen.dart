@@ -27,6 +27,35 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
   }
 
   Future<void> _loadReport() async {
+    // Demo mode: if assessmentId starts with 'mock' or 'demo-', show mock report
+    if (widget.assessmentId.startsWith('mock') ||
+        widget.assessmentId.startsWith('demo-') ||
+        widget.assessmentId == '1' || widget.assessmentId == '2') {
+      await Future.delayed(const Duration(milliseconds: 600));
+      setState(() {
+        _report = {
+          'classAverage': 74.5,
+          'highestScore': 95.0,
+          'lowestScore': 45.0,
+          'scoreDistribution': {'90-100': 3, '70-89': 8, '50-69': 5, '0-49': 2},
+          'skillHeatmap': [
+            {'mainSkill': 'الفهم والاستيعاب', 'averagePercentage': 82.0},
+            {'mainSkill': 'التطبيق', 'averagePercentage': 68.0},
+            {'mainSkill': 'التحليل والتقييم', 'averagePercentage': 55.0},
+          ],
+          'studentResults': [
+            {'fullName': 'أحمد محمد', 'scorePercentage': 95.0, 'status': 'completed', 'timeTakenSeconds': 1800},
+            {'fullName': 'سارة علي', 'scorePercentage': 88.0, 'status': 'completed', 'timeTakenSeconds': 2100},
+            {'fullName': 'محمد خالد', 'scorePercentage': 76.0, 'status': 'completed', 'timeTakenSeconds': 2400},
+            {'fullName': 'فاطمة أحمد', 'scorePercentage': 65.0, 'status': 'completed', 'timeTakenSeconds': 2700},
+            {'fullName': 'عمر حسن', 'scorePercentage': 45.0, 'status': 'timeout', 'timeTakenSeconds': 2700},
+          ],
+        };
+        _isLoading = false;
+      });
+      return;
+    }
+
     try {
       final data = await ref
           .read(teacherRepositoryProvider)
@@ -41,6 +70,47 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  void _exportReport(BuildContext context) {
+    if (_report == null) return;
+
+    // Build CSV content
+    final students = (_report!['studentResults'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+    final csvLines = ['الاسم,النتيجة,الحالة,الوقت'];
+    for (final s in students) {
+      csvLines.add('${s['fullName']},${s['scorePercentage']}%,${s['status'] == 'completed' ? 'مكتمل' : 'انتهى الوقت'},${(s['timeTakenSeconds'] as int? ?? 0) ~/ 60} دقيقة');
+    }
+    final csvContent = csvLines.join('\n');
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('تصدير التقرير'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text('محتوى CSV:', style: TextStyle(fontWeight: FontWeight.w600)),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.outlineVariant),
+              ),
+              child: SelectableText(csvContent, style: const TextStyle(fontSize: 12, fontFamily: 'monospace')),
+            ),
+            const SizedBox(height: 8),
+            const Text('يمكنك نسخ هذا المحتوى ولصقه في Excel', style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant)),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
+        ],
+      ),
+    );
   }
 
   @override
@@ -68,11 +138,7 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.download_rounded, color: AppColors.primary),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('جاري تصدير CSV...')),
-              );
-            },
+            onPressed: () => _exportReport(context),
             tooltip: 'تصدير CSV',
           ),
           const SizedBox(width: 4),

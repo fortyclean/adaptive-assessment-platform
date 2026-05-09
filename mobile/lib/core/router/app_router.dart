@@ -17,6 +17,7 @@ import '../../features/auth/screens/signup_screen.dart';
 
 // Admin screens
 import '../../features/auth/screens/admin_dashboard_screen.dart';
+import '../../features/auth/screens/admin_dashboard_v2_screen.dart';
 import '../../features/auth/screens/user_management_screen.dart';
 import '../../features/auth/screens/classroom_management_screen.dart';
 import '../../features/reports/screens/school_reports_screen.dart';
@@ -91,6 +92,8 @@ class AppRoutes {
   static const String adminUsers = '/admin/users';
   static const String adminClassrooms = '/admin/classrooms';
   static const String adminReports = '/admin/reports';
+  // Admin Dashboard V2
+  static const String adminDashboardV2 = '/admin/dashboard-v2';
 
   // Teacher
   static const String teacherDashboard = '/teacher';
@@ -335,6 +338,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'reports',
             name: 'adminReports',
             builder: (_, __) => const SchoolReportsScreen(),
+          ),
+          GoRoute(
+            path: 'dashboard-v2',
+            name: 'adminDashboardV2',
+            builder: (_, __) => const AdminDashboardV2Screen(),
           ),
         ],
       ),

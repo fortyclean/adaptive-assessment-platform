@@ -25,7 +25,7 @@ class CertificatesScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildPageHeader(),
+              _buildPageHeader(context),
               const SizedBox(height: 16),
               _buildFilters(),
               const SizedBox(height: 16),
@@ -36,11 +36,17 @@ class CertificatesScreen extends StatelessWidget {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+        floatingActionButton: Builder(
+          builder: (ctx) => FloatingActionButton(
+          onPressed: () {
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              const SnackBar(content: Text('إنشاء شهادة جديدة'), behavior: SnackBarBehavior.floating),
+            );
+          },
           backgroundColor: const Color(0xFF1E40AF),
           shape: const CircleBorder(),
           child: const Icon(Icons.auto_awesome, color: Colors.white),
+        ),
         ),
         bottomNavigationBar: _buildBottomNav(),
       ),
@@ -76,7 +82,7 @@ class CertificatesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPageHeader() {
+  Widget _buildPageHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -85,7 +91,47 @@ class CertificatesScreen extends StatelessWidget {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xFF1A1B22)),
         ),
         ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                title: const Text('تصدير الشهادات'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text('اختر صيغة التصدير:'),
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('جاري تصدير الشهادات بصيغة PDF...'), behavior: SnackBarBehavior.floating),
+                        );
+                      },
+                      icon: const Icon(Icons.picture_as_pdf_outlined),
+                      label: const Text('PDF'),
+                    ),
+                    const SizedBox(height: 8),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('جاري تصدير البيانات بصيغة Excel...'), behavior: SnackBarBehavior.floating),
+                        );
+                      },
+                      icon: const Icon(Icons.table_chart_outlined),
+                      label: const Text('Excel'),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                ],
+              ),
+            );
+          },
           icon: const Icon(Icons.file_download_outlined, size: 18),
           label: const Text('تصدير الكل', style: TextStyle(fontSize: 13)),
           style: ElevatedButton.styleFrom(
@@ -210,9 +256,15 @@ class CertificatesScreen extends StatelessWidget {
                   style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13),
                 ),
                 const SizedBox(height: 12),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('تعديل القالب', style: TextStyle(color: AppColors.primary, decoration: TextDecoration.underline)),
+                Builder(
+                  builder: (ctx) => TextButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        const SnackBar(content: Text('محرر قالب الشهادة قيد التطوير'), behavior: SnackBarBehavior.floating),
+                      );
+                    },
+                    child: const Text('تعديل القالب', style: TextStyle(color: AppColors.primary, decoration: TextDecoration.underline)),
+                  ),
                 ),
               ],
             ),

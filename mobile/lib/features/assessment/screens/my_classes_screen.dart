@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
@@ -62,7 +63,7 @@ class MyClassesScreen extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.notifications_outlined),
                 color: const Color(0xFF475569),
-                onPressed: () {},
+                onPressed: () => context.push('/teacher/notifications'),
               ),
               // Logo + avatar (RTL: right)
               Row(
@@ -117,7 +118,7 @@ class MyClassesScreen extends StatelessWidget {
 
               // Text content
               const Text(
-                'No classes found yet',
+                'لا توجد فصول دراسية بعد',
                 style: TextStyle(
                   fontFamily: 'Lexend',
                   fontSize: 24,
@@ -128,7 +129,7 @@ class MyClassesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Start your journey by organizing your students into groups or subjects to begin assessments.',
+                'ابدأ رحلتك بتنظيم طلابك في مجموعات أو مواد لبدء التقييمات.',
                 style: TextStyle(
                   fontFamily: 'Lexend',
                   fontSize: 14,
@@ -145,10 +146,17 @@ class MyClassesScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('إضافة فصل جديد'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   icon: const Icon(Icons.add_circle_outline, size: 20),
                   label: const Text(
-                    'Add New Class',
+                    'إضافة فصل جديد',
                     style: TextStyle(
                       fontFamily: 'Lexend',
                       fontSize: 18,
@@ -173,7 +181,14 @@ class MyClassesScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 48,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('استيراد الفصول من ملف CSV'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFF505F76),
                     side: const BorderSide(color: Color(0xFF757684)),
@@ -182,7 +197,7 @@ class MyClassesScreen extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    'Import from CSV',
+                    'استيراد من CSV',
                     style: TextStyle(
                       fontFamily: 'Lexend',
                       fontSize: 14,
@@ -349,7 +364,7 @@ class MyClassesScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  'Quick Tip:',
+                  'نصيحة سريعة:',
                   style: TextStyle(
                     fontFamily: 'Lexend',
                     fontSize: 12,
@@ -359,7 +374,7 @@ class MyClassesScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'Classes help you track performance trends and automate grading across groups of students.',
+                  'تساعدك الفصول على تتبع اتجاهات الأداء وأتمتة التصحيح عبر مجموعات الطلاب.',
                   style: TextStyle(
                     fontFamily: 'Lexend',
                     fontSize: 12,

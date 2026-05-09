@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
@@ -21,9 +22,9 @@ class _AdvancedQuestionEditorScreenState
       TextEditingController(text: '500');
 
   final List<String> _units = const [
-    'Unit 4: Advanced Quantum Mechanics',
-    'Unit 5: Thermodynamics & Entropy',
-    'Unit 6: Particle Physics Basics',
+    'الوحدة 4: ميكانيكا الكم المتقدمة',
+    'الوحدة 5: الديناميكا الحرارية والإنتروبيا',
+    'الوحدة 6: أساسيات فيزياء الجسيمات',
   ];
 
   final List<_MatchingPair> _pairs = [
@@ -63,7 +64,7 @@ class _AdvancedQuestionEditorScreenState
                 children: [
                   // Page title
                   const Text(
-                    'Create Advanced Question',
+                    'إنشاء سؤال متقدم',
                     style: TextStyle(
                       fontFamily: 'Lexend',
                       fontSize: 24,
@@ -73,7 +74,7 @@ class _AdvancedQuestionEditorScreenState
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'Design complex assessment tasks with rich media and interactive elements.',
+                    'صمّم أسئلة تقييم متقدمة مع وسائط غنية وعناصر تفاعلية.',
                     style: TextStyle(
                       fontFamily: 'Lexend',
                       fontSize: 14,
@@ -175,7 +176,7 @@ class _AdvancedQuestionEditorScreenState
               IconButton(
                 icon: const Icon(Icons.notifications_outlined),
                 color: const Color(0xFF475569),
-                onPressed: () {},
+                onPressed: () => context.push('/teacher/notifications'),
               ),
             ],
           ),
@@ -215,7 +216,7 @@ class _AdvancedQuestionEditorScreenState
   }
 
   Widget _buildDifficultyCard() {
-    final labels = ['Easy', 'Mid', 'Hard'];
+    final labels = ['سهل', 'متوسط', 'صعب'];
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -234,7 +235,7 @@ class _AdvancedQuestionEditorScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Difficulty Level',
+            'مستوى الصعوبة',
             style: TextStyle(
               fontFamily: 'Lexend',
               fontSize: 12,
@@ -308,7 +309,7 @@ class _AdvancedQuestionEditorScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Unit Assignment',
+            'تعيين الوحدة',
             style: TextStyle(
               fontFamily: 'Lexend',
               fontSize: 12,
@@ -369,7 +370,7 @@ class _AdvancedQuestionEditorScreenState
             Icon(Icons.article_outlined, color: AppColors.primary, size: 22),
             SizedBox(width: 8),
             Text(
-              'Essay Question Editor',
+              'محرر السؤال المقالي',
               style: TextStyle(
                 fontFamily: 'Lexend',
                 fontSize: 20,
@@ -404,7 +405,7 @@ class _AdvancedQuestionEditorScreenState
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     const Text(
-                      'Question Prompt',
+                      'نص السؤال',
                       style: TextStyle(
                         fontFamily: 'Lexend',
                         fontSize: 12,
@@ -419,7 +420,7 @@ class _AdvancedQuestionEditorScreenState
                       textAlign: TextAlign.left,
                       decoration: const InputDecoration(
                         hintText:
-                            "Describe the implications of Heisenberg's Uncertainty Principle in modern computing systems...",
+                            'اكتب نص السؤال هنا...',
                         hintStyle: TextStyle(
                           fontFamily: 'Lexend',
                           fontSize: 16,
@@ -444,7 +445,7 @@ class _AdvancedQuestionEditorScreenState
                         Row(
                           children: [
                             const Text(
-                              'Word Limit:',
+                              'حد الكلمات:',
                               style: TextStyle(
                                 fontFamily: 'Lexend',
                                 fontSize: 12,
@@ -497,7 +498,7 @@ class _AdvancedQuestionEditorScreenState
                             ),
                             SizedBox(width: 6),
                             Text(
-                              'Auto-grading enabled',
+                              'التصحيح التلقائي مفعّل',
                               style: TextStyle(
                                 fontFamily: 'Lexend',
                                 fontSize: 12,
@@ -577,7 +578,7 @@ class _AdvancedQuestionEditorScreenState
             Icon(Icons.sync_alt, color: AppColors.primary, size: 22),
             SizedBox(width: 8),
             Text(
-              'Matching Question Interface',
+              'واجهة أسئلة المطابقة',
               style: TextStyle(
                 fontFamily: 'Lexend',
                 fontSize: 20,
@@ -624,7 +625,7 @@ class _AdvancedQuestionEditorScreenState
                 ),
                 SizedBox(width: 8),
                 Text(
-                  'Add Another Pair',
+                  'إضافة زوج آخر',
                   style: TextStyle(
                     fontFamily: 'Lexend',
                     fontSize: 18,
@@ -665,7 +666,7 @@ class _AdvancedQuestionEditorScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Item A',
+                  'العنصر أ',
                   style: TextStyle(
                     fontFamily: 'Lexend',
                     fontSize: 12,
@@ -724,7 +725,7 @@ class _AdvancedQuestionEditorScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Match B',
+                  'المطابق ب',
                   style: TextStyle(
                     fontFamily: 'Lexend',
                     fontSize: 12,
@@ -777,7 +778,15 @@ class _AdvancedQuestionEditorScreenState
       children: [
         Expanded(
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('تم حفظ السؤال كمسودة'),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: AppColors.primary,
+                ),
+              );
+            },
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
               side: const BorderSide(color: AppColors.primary, width: 2),
@@ -787,7 +796,7 @@ class _AdvancedQuestionEditorScreenState
               ),
             ),
             child: const Text(
-              'Save Draft',
+              'حفظ كمسودة',
               style: TextStyle(
                 fontFamily: 'Lexend',
                 fontSize: 18,
@@ -800,7 +809,43 @@ class _AdvancedQuestionEditorScreenState
         Expanded(
           flex: 2,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              if (_questionController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('يرجى كتابة نص السؤال أولاً'),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+                return;
+              }
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  title: const Text('نشر السؤال'),
+                  content: const Text('هل تريد نشر هذا السؤال في بنك الأسئلة؟'),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('تم نشر السؤال في بنك الأسئلة'),
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: Color(0xFF2E7D32),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                      child: const Text('نشر'),
+                    ),
+                  ],
+                ),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
@@ -812,7 +857,7 @@ class _AdvancedQuestionEditorScreenState
               ),
             ),
             child: const Text(
-              'Publish Question',
+              'نشر السؤال',
               style: TextStyle(
                 fontFamily: 'Lexend',
                 fontSize: 18,
@@ -829,7 +874,37 @@ class _AdvancedQuestionEditorScreenState
 
   Widget _buildAIFAB() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+          builder: (ctx) => Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.auto_awesome_rounded, color: Color(0xFF611E00), size: 40),
+                const SizedBox(height: 12),
+                const Text('مساعد الذكاء الاصطناعي', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 8),
+                const Text('يمكن للذكاء الاصطناعي مساعدتك في توليد أسئلة تلقائياً بناءً على الموضوع والمستوى.', textAlign: TextAlign.center, style: TextStyle(color: AppColors.onSurfaceVariant)),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('ميزة الذكاء الاصطناعي قيد التطوير'), behavior: SnackBarBehavior.floating),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF611E00), foregroundColor: Colors.white),
+                  child: const Text('توليد سؤال تلقائياً'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
       backgroundColor: const Color(0xFF611E00),
       foregroundColor: Colors.white,
       elevation: 6,

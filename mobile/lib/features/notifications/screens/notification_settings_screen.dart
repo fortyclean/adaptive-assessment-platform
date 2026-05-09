@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 
 /// Notification Settings Screen — Screen 35
@@ -123,7 +124,7 @@ class _NotificationSettingsScreenState
             Icons.notifications_outlined,
             color: Color(0xFF64748B),
           ),
-          onPressed: () {},
+          onPressed: () => context.pop(), // go back
         ),
       ],
     );

@@ -162,7 +162,11 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
           IconButton(
             icon: const Icon(Icons.menu_rounded),
             color: AppColors.primary,
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('خيارات الجدول'), behavior: SnackBarBehavior.floating),
+              );
+            },
           ),
         ],
       ),
@@ -492,7 +496,36 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
 
   Widget _buildFAB() {
     return FloatingActionButton.extended(
-      onPressed: () {},
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+          builder: (ctx) => Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text('إضافة حصة جديدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 8),
+                const Text('يمكنك إضافة حصة جديدة للجدول الدراسي.', style: TextStyle(color: AppColors.onSurfaceVariant)),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('ميزة إضافة الحصص قيد التطوير'), behavior: SnackBarBehavior.floating),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 48)),
+                  child: const Text('إضافة حصة'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
       backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
       elevation: 6,

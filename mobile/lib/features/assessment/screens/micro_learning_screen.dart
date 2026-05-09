@@ -76,7 +76,13 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
               children: [
                 // Save button (RTL: left)
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('تم حفظ التقدم'),
+                          behavior: SnackBarBehavior.floating),
+                    );
+                  },
                   child: Text(
                     'حفظ',
                     style: TextStyle(
@@ -90,7 +96,7 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
                 Row(
                   children: [
                     Text(
-                      'إضافة سؤال جديد',
+                      'التعلم المصغر',
                       style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -541,7 +547,15 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('جاري تحميل تحدي البطاقات الخاطفة...'),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.primaryContainer,
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryContainer,
                 foregroundColor: Colors.white,

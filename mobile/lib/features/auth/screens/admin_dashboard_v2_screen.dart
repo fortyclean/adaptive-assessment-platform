@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// Screen 68 — Admin Dashboard v2 (لوحة تحكم المشرف — نسخة محسّنة)
 /// Features subject performance chart, top teachers list, admin alerts, quick access.
 /// RTL Arabic layout matching _68/code.html design.
-class AdminDashboardV2Screen extends ConsumerWidget {
+class AdminDashboardV2Screen extends ConsumerStatefulWidget {
   const AdminDashboardV2Screen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AdminDashboardV2Screen> createState() =>
+      _AdminDashboardV2ScreenState();
+}
+
+class _AdminDashboardV2ScreenState
+    extends ConsumerState<AdminDashboardV2Screen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
       body: CustomScrollView(
@@ -34,7 +42,11 @@ class AdminDashboardV2Screen extends ConsumerWidget {
                         IconButton(
                           icon: const Icon(Icons.notifications_outlined),
                           color: AppColors.onSurfaceVariant,
-                          onPressed: () {},
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('لا توجد إشعارات جديدة'), behavior: SnackBarBehavior.floating),
+                            );
+                          },
                         ),
                         Positioned(
                           top: 8,
@@ -53,7 +65,11 @@ class AdminDashboardV2Screen extends ConsumerWidget {
                     IconButton(
                       icon: const Icon(Icons.search),
                       color: AppColors.onSurfaceVariant,
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('البحث قيد التطوير'), behavior: SnackBarBehavior.floating),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -123,7 +139,11 @@ class AdminDashboardV2Screen extends ConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('إضافة عنصر جديد'), behavior: SnackBarBehavior.floating),
+          );
+        },
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         shape: const CircleBorder(),
@@ -180,6 +200,7 @@ class AdminDashboardV2Screen extends ConsumerWidget {
           value: '1,284',
           badge: '+12%',
           badgeColor: Colors.green,
+          onTap: () => context.push('/admin/users'),
         ),
         _buildStatCard(
           icon: Icons.person_outline,
@@ -187,6 +208,7 @@ class AdminDashboardV2Screen extends ConsumerWidget {
           iconColor: const Color(0xFF611E00),
           label: 'المعلمون النشطون',
           value: '86',
+          onTap: () => context.push('/admin/users'),
         ),
         _buildStatCard(
           icon: Icons.trending_up,
@@ -196,6 +218,7 @@ class AdminDashboardV2Screen extends ConsumerWidget {
           value: '82%',
           showCircularProgress: true,
           progressValue: 0.82,
+          onTap: () => context.push('/admin/reports'),
         ),
         _buildStatCard(
           icon: Icons.timer,
@@ -203,6 +226,7 @@ class AdminDashboardV2Screen extends ConsumerWidget {
           iconColor: AppColors.error,
           label: 'اختبارات جارية',
           value: '14',
+          onTap: () => context.push('/admin/classrooms'),
         ),
       ],
     );
@@ -218,8 +242,11 @@ class AdminDashboardV2Screen extends ConsumerWidget {
     Color? badgeColor,
     bool showCircularProgress = false,
     double progressValue = 0,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -306,6 +333,7 @@ class AdminDashboardV2Screen extends ConsumerWidget {
             ],
           ),
         ],
+      ),
       ),
     );
   }
@@ -469,14 +497,23 @@ class AdminDashboardV2Screen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(
-            'المعلمون المتميزون (هذا الشهر)',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1B22),
-            ),
-            textAlign: TextAlign.right,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () => context.push('/admin/users'),
+                child: const Text('عرض الكل', style: TextStyle(color: AppColors.primary, fontSize: 13)),
+              ),
+              Text(
+                'المعلمون المتميزون (هذا الشهر)',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1B22),
+                ),
+                textAlign: TextAlign.right,
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           ...teachers.map((t) => _buildTeacherRow(t)),
@@ -642,38 +679,54 @@ class AdminDashboardV2Screen extends ConsumerWidget {
         titleColor = const Color(0xFF54647A);
     }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border(
-          right: BorderSide(color: borderColor, width: 4),
+    VoidCallback onTap;
+    final title = alert['title'] as String;
+    if (title == 'مراجعة مطلوبة') {
+      onTap = () => context.push('/admin/classrooms');
+    } else if (title == 'تقارير جاهزة') {
+      onTap = () => context.push('/admin/reports');
+    } else {
+      onTap = () => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تم تحديث الجداول'), behavior: SnackBarBehavior.floating),
+      );
+    }
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(8),
+          border: Border(
+            right: BorderSide(color: borderColor, width: 4),
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            alert['title'] as String,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: titleColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              alert['title'] as String,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: titleColor,
+              ),
+              textAlign: TextAlign.right,
             ),
-            textAlign: TextAlign.right,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            alert['body'] as String,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.onSurfaceVariant,
+            const SizedBox(height: 4),
+            Text(
+              alert['body'] as String,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.right,
             ),
-            textAlign: TextAlign.right,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -723,8 +776,23 @@ class AdminDashboardV2Screen extends ConsumerWidget {
             mainAxisSpacing: 12,
             childAspectRatio: 2,
             children: items.map((item) {
+              final label = item['label'] as String;
+              VoidCallback onTap;
+              if (label == 'الإعدادات') {
+                onTap = () => context.push('/admin/institution-settings');
+              } else if (label == 'الجداول') {
+                onTap = () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('الجداول قيد التطوير'), behavior: SnackBarBehavior.floating),
+                );
+              } else if (label == 'إضافة طالب') {
+                onTap = () => context.push('/admin/users');
+              } else if (label == 'التقارير') {
+                onTap = () => context.push('/admin/reports');
+              } else {
+                onTap = () {};
+              }
               return InkWell(
-                onTap: () {},
+                onTap: onTap,
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
                   padding: const EdgeInsets.all(16),
@@ -736,7 +804,7 @@ class AdminDashboardV2Screen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        item['label'] as String,
+                        label,
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,

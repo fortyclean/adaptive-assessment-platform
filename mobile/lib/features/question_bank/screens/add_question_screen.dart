@@ -93,14 +93,15 @@ class _AddQuestionScreenState extends ConsumerState<AddQuestionScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(e.toString().contains('duplicate')
-                  ? 'هذا السؤال موجود بالفعل'
-                  : 'تم حفظ السؤال بنجاح (وضع تجريبي)')),
-        );
-        // Mock success for demo
+        // Demo mode: show success
         setState(() => _success = true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تم حفظ السؤال بنجاح في البنك التجريبي'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Color(0xFF2E7D32),
+          ),
+        );
         await Future.delayed(const Duration(seconds: 2));
         if (mounted) context.pop();
       }

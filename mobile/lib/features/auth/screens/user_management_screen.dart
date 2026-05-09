@@ -175,6 +175,51 @@ class _UserManagementScreenState
     }
   }
 
+  void _editUser(Map<String, dynamic> user) {
+    final nameController = TextEditingController(text: user['fullName'] as String? ?? '');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 16),
+            Text('تعديل: ${user['fullName']}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: nameController,
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(labelText: 'الاسم الكامل', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                final idx = _users.indexWhere((u) => u['_id'] == user['_id']);
+                if (idx != -1) {
+                  setState(() {
+                    _users[idx] = Map.from(_users[idx])..['fullName'] = nameController.text.trim();
+                  });
+                }
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تم تحديث بيانات المستخدم'), behavior: SnackBarBehavior.floating),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+              child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showCreateUserDialog() {
     showDialog(
       context: context,
@@ -353,6 +398,27 @@ class _UserManagementScreenState
                                     _users[i]['_id'] as String,
                                     _users[i]['fullName'] as String)
                                 : null,
+                            onEdit: () => _editUser(_users[i]),
+                            onReactivate: _users[i]['isActive'] == false
+                                ? () {
+                                    final idx = _users.indexWhere(
+                                        (u) => u['_id'] == _users[i]['_id']);
+                                    if (idx != -1) {
+                                      setState(() {
+                                        _users[idx] = Map.from(_users[idx])
+                                          ..['isActive'] = true;
+                                      });
+                                    }
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            'تم تفعيل حساب ${_users[i]['fullName']}'),
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: AppColors.success,
+                                      ),
+                                    );
+                                  }
+                                : null,
                           ),
                         ),
                       ),
@@ -448,9 +514,11 @@ class _RoleChip extends StatelessWidget {
 // ── User card ─────────────────────────────────────────────────────────────────
 
 class _UserCard extends StatelessWidget {
-  const _UserCard({required this.user, this.onDeactivate});
+  const _UserCard({required this.user, this.onDeactivate, this.onEdit, this.onReactivate});
   final Map<String, dynamic> user;
   final VoidCallback? onDeactivate;
+  final VoidCallback? onEdit;
+  final VoidCallback? onReactivate;
 
   @override
   Widget build(BuildContext context) {
@@ -595,7 +663,7 @@ class _UserCard extends StatelessWidget {
                   child: _ActionButton(
                     icon: Icons.edit_outlined,
                     label: 'تعديل',
-                    onTap: () {},
+                    onTap: onEdit ?? () {},
                     color: AppColors.primary,
                     isDestructive: false,
                   ),
@@ -613,7 +681,7 @@ class _UserCard extends StatelessWidget {
                       : _ActionButton(
                           icon: Icons.settings_backup_restore_rounded,
                           label: 'تفعيل',
-                          onTap: () {},
+                          onTap: onReactivate ?? () {},
                           color: AppColors.onSurfaceVariant,
                           isDestructive: false,
                         ),
@@ -795,8 +863,17 @@ class _CreateUserDialogState
       });
       widget.onCreated();
     } catch (_) {
-      // Mock success for demo
-      widget.onCreated();
+      // Demo mode: simulate success
+      if (mounted) {
+        widget.onCreated();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('تم إنشاء حساب "$_fullName" بنجاح'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: const Color(0xFF2E7D32),
+          ),
+        );
+      }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

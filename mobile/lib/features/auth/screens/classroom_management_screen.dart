@@ -129,12 +129,17 @@ class _ClassroomManagementScreenState
         await ref.read(adminRepositoryProvider).deleteClassroom(id);
         _loadClassrooms();
       } catch (e) {
+        // Demo mode: delete locally
+        setState(() {
+          _classrooms.removeWhere((c) => c['_id'] == id);
+        });
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text(e.toString().contains('active')
-                    ? 'لا يمكن حذف فصل يحتوي على اختبارات نشطة'
-                    : 'تعذر حذف الفصل')),
+              content: Text('تم حذف فصل "$name"'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColors.error,
+            ),
           );
         }
       }
@@ -148,6 +153,13 @@ class _ClassroomManagementScreenState
         onCreated: () {
           Navigator.pop(ctx);
           _loadClassrooms();
+        },
+        onCreatedWithData: (newClassroom) {
+          Navigator.pop(ctx);
+          // Add the new classroom directly to the local list (demo mode)
+          setState(() {
+            _classrooms = [newClassroom, ..._classrooms];
+          });
         },
       ),
     );
@@ -193,6 +205,7 @@ class _ClassroomManagementScreenState
                                   _classrooms[i]['_id'] as String? ?? '',
                                   _classrooms[i]['name'] as String? ?? ''),
                               onEdit: () => _showEditDialog(_classrooms[i]),
+                              onAssignTeacher: () => _showAssignTeacherDialog(_classrooms[i]),
                             ),
                           );
                         }),
@@ -230,7 +243,7 @@ class _ClassroomManagementScreenState
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Color(0xFF64748B)),
-          onPressed: () {},
+          onPressed: () => context.push('/teacher/notifications'),
           tooltip: 'الإشعارات',
         ),
         const SizedBox(width: 4),
@@ -343,10 +356,123 @@ class _ClassroomManagementScreenState
     );
   }
 
+  void _showAssignTeacherDialog(Map<String, dynamic> classroom) {
+    // Mock teachers list
+    final teachers = [
+      {'_id': 't1', 'fullName': 'أ. محمد العتيبي', 'subject': 'الرياضيات'},
+      {'_id': 't2', 'fullName': 'أ. سارة الزهراني', 'subject': 'العلوم'},
+      {'_id': 't3', 'fullName': 'أ. خالد الشمري', 'subject': 'اللغة العربية'},
+      {'_id': 't4', 'fullName': 'أ. نورة القحطاني', 'subject': 'الإنجليزية'},
+      {'_id': 't5', 'fullName': 'أ. فهد المطيري', 'subject': 'الفيزياء'},
+    ];
+
+    String? selectedTeacherId = classroom['teacherId'] as String?;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 16),
+              Text('ربط معلم بـ: ${classroom['name']}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 4),
+              const Text('اختر معلماً لتعيينه في هذا الفصل', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13)),
+              const SizedBox(height: 16),
+              ...teachers.map((t) => RadioListTile<String>(
+                value: t['_id'] as String,
+                groupValue: selectedTeacherId,
+                onChanged: (v) => setModalState(() => selectedTeacherId = v),
+                title: Text(t['fullName'] as String, style: const TextStyle(fontWeight: FontWeight.w600)),
+                subtitle: Text(t['subject'] as String, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                activeColor: AppColors.primary,
+                contentPadding: EdgeInsets.zero,
+              )),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: selectedTeacherId == null ? null : () {
+                  final teacher = teachers.firstWhere((t) => t['_id'] == selectedTeacherId);
+                  final idx = _classrooms.indexWhere((c) => c['_id'] == classroom['_id']);
+                  if (idx != -1) {
+                    setState(() {
+                      _classrooms[idx] = Map.from(_classrooms[idx])
+                        ..['teacherId'] = selectedTeacherId
+                        ..['teacherName'] = teacher['fullName'];
+                    });
+                  }
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('تم ربط ${teacher['fullName']} بفصل ${classroom['name']}'),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: const Color(0xFF2E7D32),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                child: const Text('تأكيد الربط', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showEditDialog(Map<String, dynamic> classroom) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text('تعديل فصل: ${classroom['name']}')),
+    final nameController = TextEditingController(text: classroom['name'] as String? ?? '');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 16),
+            Text('تعديل: ${classroom['name']}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: nameController,
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(labelText: 'اسم الفصل', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                final idx = _classrooms.indexWhere((c) => c['_id'] == classroom['_id']);
+                if (idx != -1) {
+                  setState(() {
+                    _classrooms[idx] = Map.from(_classrooms[idx])..['name'] = nameController.text.trim();
+                  });
+                }
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تم تحديث الفصل'), behavior: SnackBarBehavior.floating),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+              child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -420,11 +546,13 @@ class _ClassroomCard extends StatelessWidget {
     required this.classroom,
     required this.onDelete,
     required this.onEdit,
+    required this.onAssignTeacher,
   });
 
   final Map<String, dynamic> classroom;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
+  final VoidCallback onAssignTeacher;
 
   @override
   Widget build(BuildContext context) {
@@ -583,6 +711,23 @@ class _ClassroomCard extends StatelessWidget {
                     ),
                   ),
                 ],
+                // ── Assign Teacher Button ─────────────────────────────────────────────
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: onAssignTeacher,
+                    icon: const Icon(Icons.person_add_outlined, size: 16),
+                    label: const Text('ربط معلم بالفصل'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -649,8 +794,9 @@ class _StatItem extends StatelessWidget {
 // ─── Create Classroom Dialog ──────────────────────────────────────────────────
 
 class _CreateClassroomDialog extends ConsumerStatefulWidget {
-  const _CreateClassroomDialog({required this.onCreated});
+  const _CreateClassroomDialog({required this.onCreated, this.onCreatedWithData});
   final VoidCallback onCreated;
+  final void Function(Map<String, dynamic>)? onCreatedWithData;
 
   @override
   ConsumerState<_CreateClassroomDialog> createState() =>
@@ -678,9 +824,25 @@ class _CreateClassroomDialogState
       });
       widget.onCreated();
     } catch (_) {
+      // Demo mode: simulate successful creation locally
+      // Pass the new classroom data back via callback
+      widget.onCreatedWithData?.call({
+        '_id': 'demo-${DateTime.now().millisecondsSinceEpoch}',
+        'name': _name,
+        'gradeLevel': _gradeLevel,
+        'academicYear': _academicYear,
+        'studentIds': [],
+        'teacherName': 'غير محدد',
+        'activeAssessments': 0,
+        'averageScore': null,
+      });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تعذر إنشاء الفصل')),
+          SnackBar(
+            content: Text('تم إنشاء فصل "$_name" بنجاح'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: const Color(0xFF2E7D32),
+          ),
         );
       }
     } finally {

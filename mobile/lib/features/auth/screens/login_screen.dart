@@ -22,6 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
+  bool _rememberMe = false;
   String? _errorMessage;
 
   @override
@@ -103,12 +104,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           context.go(AppRoutes.studentDashboard);
       }
     } on DioException {
-      // API unavailable — fall back to demo mode based on username
+      // API unavailable — fall back to demo mode based on username or email
       if (!mounted) return;
       final username = _usernameController.text.trim().toLowerCase();
-      if (username.startsWith('admin') || username == 'مشرف') {
+      if (username.startsWith('admin') || username.contains('admin') || username == 'مشرف') {
         _demoLogin(UserRole.admin);
-      } else if (username.startsWith('teacher') || username == 'معلم') {
+      } else if (username.startsWith('teacher') || username.contains('teacher') || username == 'معلم') {
         _demoLogin(UserRole.teacher);
       } else {
         _demoLogin(UserRole.student);
@@ -167,29 +168,98 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             _buildErrorBanner(),
                           ],
                           const SizedBox(height: 8),
-                          Align(
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: TextButton(
-                              onPressed: () =>
-                                  context.push(AppRoutes.forgotPassword),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: const Text(
-                                'نسيت كلمة المرور؟',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.primary,
-                                  fontFamily: 'Almarai',
+                          // ── Remember me + Forgot password row ──────────
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Forgot password (RTL: left)
+                              TextButton(
+                                onPressed: () =>
+                                    context.push(AppRoutes.forgotPassword),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                child: const Text(
+                                  'نسيت كلمة المرور؟',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.primary,
+                                    fontFamily: 'Almarai',
+                                  ),
                                 ),
                               ),
-                            ),
+                              // Remember me (RTL: right)
+                              Row(
+                                children: [
+                                  Text(
+                                    'تذكرني',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColors.onSurfaceVariant,
+                                      fontFamily: 'Almarai',
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Checkbox(
+                                      value: _rememberMe,
+                                      onChanged: (v) => setState(
+                                          () => _rememberMe = v ?? false),
+                                      activeColor: AppColors.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      side: const BorderSide(
+                                          color: AppColors.outlineVariant),
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 24),
                           _buildLoginButton(),
+                          const SizedBox(height: 16),
+                          // ── Create account link ─────────────────────────
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () => context.push(AppRoutes.signup),
+                                child: const Text(
+                                  'إنشاء حساب جديد',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primary,
+                                    fontFamily: 'Almarai',
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              const Text(
+                                'ليس لديك حساب؟',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.onSurfaceVariant,
+                                  fontFamily: 'Almarai',
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          // ── Google Sign-In ──────────────────────────────
+                          _buildGoogleSignIn(),
                           const SizedBox(height: 24),
                           _buildDemoSection(),
                         ],
@@ -453,6 +523,88 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ],
               ),
       ),
+    );
+  }
+
+  Widget _buildGoogleSignIn() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Expanded(child: Divider()),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                'أو',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: AppColors.onSurfaceVariant,
+                  fontFamily: 'Almarai',
+                ),
+              ),
+            ),
+            const Expanded(child: Divider()),
+          ],
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          height: 48,
+          child: OutlinedButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'تسجيل الدخول بـ Google سيكون متاحاً عند الاتصال بالخادم',
+                    style: TextStyle(fontFamily: 'Almarai'),
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.onSurface,
+              side: const BorderSide(color: AppColors.outlineVariant),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Google G icon (using colored container)
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFEA4335),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'G',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Text(
+                  'تسجيل الدخول بـ Google',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Almarai',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

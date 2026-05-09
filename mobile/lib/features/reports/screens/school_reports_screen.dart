@@ -205,7 +205,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Color(0xFF64748B)),
-          onPressed: () {},
+          onPressed: () => context.push('/teacher/notifications'),
         ),
         const SizedBox(width: 4),
         Padding(
@@ -383,7 +383,45 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                   style: AppTextStyles.titleMedium),
               const Spacer(),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                    builder: (ctx) => Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text('تصفية المقارنة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                          const SizedBox(height: 16),
+                          const Text('المادة الدراسية:', style: TextStyle(fontWeight: FontWeight.w600)),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            children: ['الكل', 'الرياضيات', 'العلوم', 'اللغة العربية', 'الإنجليزية'].map((s) =>
+                              ActionChip(
+                                label: Text(s),
+                                onPressed: () {
+                                  setState(() => _selectedSubject = s == 'الكل' ? null : s);
+                                  Navigator.pop(ctx);
+                                  _onFiltersChanged();
+                                },
+                              ),
+                            ).toList(),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(ctx),
+                            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                            child: const Text('تطبيق'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.filter_list_rounded, size: 16),
                 label: const Text('تصفية'),
                 style: TextButton.styleFrom(
@@ -453,7 +491,9 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           const Divider(color: Color(0xFFDAD9E3)),
           Center(
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push('/admin/classrooms');
+              },
               child: const Text('عرض جميع الفصول',
                   style: TextStyle(
                       fontFamily: 'Almarai',

@@ -152,7 +152,47 @@ class _StudentAcademicProfileScreenState
               Row(
                 children: [
                   OutlinedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          title: Text('تقرير: $name'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const Text('اختر نوع التقرير:'),
+                              const SizedBox(height: 12),
+                              OutlinedButton.icon(
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('جاري تصدير التقرير الأكاديمي...'), behavior: SnackBarBehavior.floating),
+                                  );
+                                },
+                                icon: const Icon(Icons.school_outlined),
+                                label: const Text('التقرير الأكاديمي'),
+                              ),
+                              const SizedBox(height: 8),
+                              OutlinedButton.icon(
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('جاري تصدير تقرير الأداء...'), behavior: SnackBarBehavior.floating),
+                                  );
+                                },
+                                icon: const Icon(Icons.bar_chart_outlined),
+                                label: const Text('تقرير الأداء'),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
+                          ],
+                        ),
+                      );
+                    },
                     icon: const Icon(Icons.description_outlined, size: 16),
                     label: const Text('تقرير'),
                     style: OutlinedButton.styleFrom(
@@ -167,7 +207,48 @@ class _StudentAcademicProfileScreenState
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      final msgController = TextEditingController();
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                        builder: (ctx) => Padding(
+                          padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+                              const SizedBox(height: 16),
+                              Text('إرسال رسالة إلى: $name', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                              const SizedBox(height: 16),
+                              TextField(
+                                controller: msgController,
+                                maxLines: 4,
+                                textDirection: TextDirection.rtl,
+                                decoration: InputDecoration(
+                                  hintText: 'اكتب رسالتك هنا...',
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('تم إرسال الرسالة إلى $name'), behavior: SnackBarBehavior.floating, backgroundColor: const Color(0xFF2E7D32)),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1E40AF), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                                child: const Text('إرسال', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                     icon: const Icon(Icons.mail_outline, size: 16),
                     label: const Text('تواصل'),
                     style: ElevatedButton.styleFrom(
@@ -669,7 +750,11 @@ class _StudentAcademicProfileScreenState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('عرض جميع نتائج الاختبارات'), behavior: SnackBarBehavior.floating),
+                    );
+                  },
                   child: const Text(
                     'عرض الكل',
                     style: TextStyle(
@@ -835,7 +920,48 @@ class _StudentAcademicProfileScreenState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  final noteController = TextEditingController();
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                    builder: (ctx) => Padding(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+                          const SizedBox(height: 16),
+                          const Text('إضافة ملاحظة سلوكية', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: noteController,
+                            maxLines: 4,
+                            textDirection: TextDirection.rtl,
+                            decoration: InputDecoration(
+                              hintText: 'اكتب ملاحظتك هنا...',
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('تم إضافة الملاحظة بنجاح'), behavior: SnackBarBehavior.floating, backgroundColor: Color(0xFF2E7D32)),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1E40AF), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                            child: const Text('حفظ الملاحظة', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.add_circle_outline, size: 18),
                 label: const Text('إضافة ملاحظة'),
                 style: TextButton.styleFrom(

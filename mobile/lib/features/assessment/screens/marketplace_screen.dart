@@ -226,7 +226,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('عرض جميع مقتنياتك'), behavior: SnackBarBehavior.floating),
+                );
+              },
               child: const Text('عرض الكل', style: TextStyle(color: AppColors.outline, fontSize: 12)),
             ),
           ],
@@ -423,7 +427,43 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          title: Text('شراء: ${item.title}'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.diamond, color: AppColors.primary, size: 32),
+                                  const SizedBox(width: 8),
+                                  Text('${item.price} نقطة', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              const Text('هل تريد شراء هذا العنصر؟', textAlign: TextAlign.center),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('تم شراء "${item.title}" بنجاح!'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.success),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                              child: const Text('تأكيد الشراء'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,

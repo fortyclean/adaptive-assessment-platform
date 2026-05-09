@@ -184,7 +184,7 @@ class _AdvancedNotificationCenterScreenState
             Icons.notifications_outlined,
             color: Color(0xFF1E40AF),
           ),
-          onPressed: () {},
+          onPressed: () {}, // keep as is - already on notifications screen
         ),
       ],
     );

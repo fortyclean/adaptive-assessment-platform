@@ -37,7 +37,44 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         _isLoading = false;
       });
     } catch (_) {
-      setState(() => _isLoading = false);
+      setState(() {
+        _notifications = [
+          {
+            '_id': 'n1',
+            'title': 'اختبار جديد متاح',
+            'body': 'تم نشر اختبار الرياضيات الدوري. يمكنك البدء الآن.',
+            'type': 'assessment',
+            'isRead': false,
+            'createdAt': DateTime.now().toIso8601String(),
+          },
+          {
+            '_id': 'n2',
+            'title': 'نتيجة اختبارك',
+            'body': 'حصلت على 78% في اختبار اللغة العربية. أحسنت!',
+            'type': 'grade',
+            'isRead': false,
+            'createdAt': DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
+          },
+          {
+            '_id': 'n3',
+            'title': 'تنبيه أداء',
+            'body': 'انخفض متوسط أداء الطالب أحمد في مادة الفيزياء.',
+            'type': 'alert',
+            'isRead': true,
+            'createdAt': DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+          },
+          {
+            '_id': 'n4',
+            'title': 'رسالة من المعلم',
+            'body': 'يرجى مراجعة الوحدة الثالثة قبل الاختبار القادم.',
+            'type': 'message',
+            'isRead': true,
+            'createdAt': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+          },
+        ];
+        _unreadCount = 2;
+        _isLoading = false;
+      });
     }
   }
 

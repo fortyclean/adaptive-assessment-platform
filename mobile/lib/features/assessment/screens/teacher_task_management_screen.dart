@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
@@ -115,7 +116,7 @@ class _TeacherTaskManagementScreenState
                   IconButton(
                     icon: const Icon(Icons.notifications_outlined),
                     color: AppColors.onSurfaceVariant,
-                    onPressed: () {},
+                    onPressed: () => context.push('/teacher/notifications'),
                   ),
                 ],
               ),
@@ -146,7 +147,36 @@ class _TeacherTaskManagementScreenState
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.white,
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+              builder: (ctx) => Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text('إضافة مهمة جديدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 8),
+                    const Text('أنشئ واجباً جديداً لطلابك.', style: TextStyle(color: AppColors.onSurfaceVariant)),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('ميزة إنشاء المهام قيد التطوير'), behavior: SnackBarBehavior.floating),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 48)),
+                      child: const Text('إنشاء مهمة'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
           backgroundColor: AppColors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/demo_questions.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Supported question types returned by the backend.
@@ -54,6 +55,11 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   String? _selectedAnswer;
   bool _isLoading = true;
   bool _isSubmitting = false;
+
+  // Demo mode — used when API is unavailable
+  bool _isDemoMode = false;
+  int _demoQuestionIndex = 0;
+  List<Map<String, dynamic>> _demoQuestions = [];
 
   // Answers map: questionId → selectedAnswer (for offline resilience)
   final Map<String, String> _answers = {};
@@ -104,6 +110,23 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
 
   Future<void> _loadNextQuestion() async {
     setState(() => _isLoading = true);
+
+    // ── Demo mode: serve questions from local data ────────────────────────
+    if (_isDemoMode) {
+      if (_demoQuestionIndex >= _demoQuestions.length) {
+        await _finaliseSession();
+        return;
+      }
+      final q = _demoQuestions[_demoQuestionIndex];
+      setState(() {
+        _currentQuestion = q;
+        _selectedAnswer = _answers[q['_id'] as String? ?? ''];
+        _isLoading = false;
+      });
+      return;
+    }
+
+    // ── Normal mode: fetch from API ───────────────────────────────────────
     try {
       final data = await ref
           .read(assessmentRepositoryProvider)
@@ -132,8 +155,50 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
         _essayController.text = restoredAnswer ?? '';
       }
     } catch (e) {
-      setState(() => _isLoading = false);
+      // API failed — switch to demo mode
+      _isDemoMode = true;
+      _demoQuestionIndex = 0;
+      // Pick questions based on assessmentId subject hint, or use all
+      _demoQuestions = _buildDemoQuestions();
+      if (_demoQuestions.isEmpty) {
+        setState(() => _isLoading = false);
+        return;
+      }
+      final q = _demoQuestions[0];
+      setState(() {
+        _currentQuestion = q;
+        _selectedAnswer = null;
+        _isLoading = false;
+      });
     }
+  }
+
+  /// Build the demo question list for the current assessment.
+  List<Map<String, dynamic>> _buildDemoQuestions() {
+    final id = widget.assessmentId.toLowerCase();
+    List<Map<String, dynamic>> pool;
+    if (id.contains('math') || id.contains('demo-math') || id == '1') {
+      pool = DemoQuestions.mathematics;
+    } else if (id.contains('arabic') || id.contains('demo-arabic') || id == '2') {
+      pool = DemoQuestions.arabic;
+    } else if (id.contains('english') || id.contains('demo-english')) {
+      pool = DemoQuestions.english;
+    } else if (id.contains('history') || id.contains('demo-history')) {
+      pool = DemoQuestions.history;
+    } else if (id.contains('bio') || id.contains('demo-biology') || id.contains('science')) {
+      pool = DemoQuestions.biology;
+    } else if (id.contains('chem') || id.contains('demo-chemistry') || id.contains('chemical')) {
+      pool = DemoQuestions.chemistry;
+    } else if (id.startsWith('mock')) {
+      // For generic mock IDs, use mathematics as default
+      pool = DemoQuestions.mathematics;
+    } else {
+      // For real assessment IDs that failed API, use all questions
+      pool = DemoQuestions.all;
+    }
+    // Limit to questionCount
+    final count = widget.questionCount.clamp(1, pool.length);
+    return pool.take(count).toList();
   }
 
   Future<void> _selectAnswer(String key) async {
@@ -145,6 +210,16 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     // Persist locally (Req 7.11)
     _answers[questionId] = key;
     await _pendingAnswersBox.put(widget.attemptId, _answers);
+
+    // Demo mode: skip API call, advance to next question directly
+    if (_isDemoMode) {
+      await Future.delayed(const Duration(milliseconds: 400));
+      if (!mounted) return;
+      _demoQuestionIndex++;
+      setState(() => _questionNumber++);
+      await _loadNextQuestion();
+      return;
+    }
 
     // Submit to server
     try {
@@ -172,13 +247,15 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   }
 
   Future<void> _finaliseSession() async {
-    try {
-      await ref
-          .read(assessmentRepositoryProvider)
-          .submitAttempt(widget.attemptId);
-      // Clear local cache
-      await _pendingAnswersBox.delete(widget.attemptId);
-    } catch (_) {}
+    if (!_isDemoMode) {
+      try {
+        await ref
+            .read(assessmentRepositoryProvider)
+            .submitAttempt(widget.attemptId);
+        // Clear local cache
+        await _pendingAnswersBox.delete(widget.attemptId);
+      } catch (_) {}
+    }
 
     if (mounted) {
       context.pushReplacement(

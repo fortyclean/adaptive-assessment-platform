@@ -220,7 +220,28 @@ class _SupportScreenState extends State<SupportScreen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    title: const Text('الدعم الفني المباشر'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.support_agent_outlined, size: 48, color: AppColors.primary),
+                        SizedBox(height: 12),
+                        Text('فريق الدعم متواجد 24/7', style: TextStyle(fontWeight: FontWeight.w600)),
+                        SizedBox(height: 8),
+                        Text('للتواصل المباشر: support@adaptive-mastery.com', textAlign: TextAlign.center, style: TextStyle(color: AppColors.onSurfaceVariant)),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
+                    ],
+                  ),
+                );
+              },
               icon: const Icon(Icons.chat_outlined, size: 18),
               label: const Text('بدء محادثة فورية'),
               style: ElevatedButton.styleFrom(
@@ -236,7 +257,48 @@ class _SupportScreenState extends State<SupportScreen> {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                final msgController = TextEditingController();
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                  builder: (ctx) => Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+                        const SizedBox(height: 16),
+                        const Text('فتح تذكرة دعم', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: msgController,
+                          maxLines: 4,
+                          textDirection: TextDirection.rtl,
+                          decoration: InputDecoration(
+                            hintText: 'اشرح مشكلتك بالتفصيل...',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(ctx);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('تم إرسال تذكرة الدعم. سنتواصل معك خلال 24 ساعة.'), behavior: SnackBarBehavior.floating, backgroundColor: Color(0xFF2E7D32)),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                          child: const Text('إرسال التذكرة', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
               icon: const Icon(Icons.confirmation_number_outlined, size: 18),
               label: const Text('فتح تذكرة دعم'),
               style: OutlinedButton.styleFrom(
@@ -265,7 +327,11 @@ class _SupportScreenState extends State<SupportScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('شروحات تعليمية', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-            TextButton(onPressed: () {}, child: const Text('عرض الكل', style: TextStyle(color: AppColors.primary))),
+            TextButton(onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('عرض جميع الشروحات التعليمية'), behavior: SnackBarBehavior.floating),
+              );
+            }, child: const Text('عرض الكل', style: TextStyle(color: AppColors.primary))),
           ],
         ),
         const SizedBox(height: 8),

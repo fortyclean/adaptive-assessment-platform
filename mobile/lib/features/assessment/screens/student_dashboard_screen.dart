@@ -189,6 +189,53 @@ class _StudentDashboardScreenState
                   else
                     ..._upcomingAssessments
                         .map((a) => _buildUpcomingCard(a)),
+
+                  const SizedBox(height: 24),
+                  _buildSectionHeader('استكشف المزيد'),
+                  const SizedBox(height: 12),
+                  // Quick access grid for hidden screens
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 1.8,
+                    children: [
+                      _buildExploreCard(
+                        context,
+                        icon: Icons.diamond_outlined,
+                        label: 'متجر النقاط',
+                        color: AppColors.primary,
+                        bgColor: const Color(0xFFDDE1FF),
+                        route: '/student/marketplace',
+                      ),
+                      _buildExploreCard(
+                        context,
+                        icon: Icons.emoji_events_outlined,
+                        label: 'التحديات',
+                        color: const Color(0xFFD97706),
+                        bgColor: const Color(0xFFFEF3C7),
+                        route: '/student/challenges',
+                      ),
+                      _buildExploreCard(
+                        context,
+                        icon: Icons.psychology_outlined,
+                        label: 'التعلم المصغر',
+                        color: AppColors.success,
+                        bgColor: const Color(0xFFD1FAE5),
+                        route: '/student/micro-learning',
+                      ),
+                      _buildExploreCard(
+                        context,
+                        icon: Icons.analytics_outlined,
+                        label: 'تحليلاتي',
+                        color: AppColors.primaryContainer,
+                        bgColor: const Color(0xFFD0E1FB),
+                        route: '/student/analytics',
+                      ),
+                    ],
+                  ),
                 ]),
               ),
             ),
@@ -658,6 +705,60 @@ class _StudentDashboardScreenState
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  // ─── Explore Card ────────────────────────────────────────────────────────
+
+  Widget _buildExploreCard(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Color color,
+    required Color bgColor,
+    required String route,
+  }) {
+    return GestureDetector(
+      onTap: () => context.push(route),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: color, size: 22),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1B22),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

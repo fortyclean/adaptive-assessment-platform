@@ -53,8 +53,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
     setState(() => _isLoading = true);
     try {
-      // TODO: Call signup API endpoint
-      await Future.delayed(const Duration(seconds: 1));
+      // Demo mode: simulate successful registration
+      await Future.delayed(const Duration(milliseconds: 800));
+      // In production: call actual signup API
+      // await ref.read(authRepositoryProvider).signup(...)
       if (!mounted) return;
       // Navigate to login after successful signup
       context.go(AppRoutes.login);
@@ -584,7 +586,33 @@ class _SignupScreenState extends State<SignupScreen> {
                   WidgetSpan(
                     child: GestureDetector(
                       onTap: () {
-                        // TODO: Open terms page
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            title: const Text('الشروط والأحكام'),
+                            content: const SingleChildScrollView(
+                              child: Text(
+                                'باستخدام منصة التقييم التكيفي، أنت توافق على:\n\n'
+                                '1. استخدام المنصة للأغراض التعليمية فقط.\n'
+                                '2. الحفاظ على سرية بيانات الدخول.\n'
+                                '3. عدم مشاركة محتوى الاختبارات مع الآخرين.\n'
+                                '4. الالتزام بقواعد النزاهة الأكاديمية.\n'
+                                '5. قبول سياسة الخصوصية الخاصة بالمنصة.\n\n'
+                                'للاستفسار: support@adaptive-mastery.com',
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(height: 1.6),
+                              ),
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                                child: const Text('موافق'),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                       child: const Text(
                         'الشروط والأحكام',

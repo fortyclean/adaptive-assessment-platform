@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 
 /// Screen 67 — إدارة المهام (Teacher Task Management)
@@ -108,7 +109,11 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('إضافة مهمة جديدة'), behavior: SnackBarBehavior.floating),
+            );
+          },
           backgroundColor: AppColors.primary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: const Icon(Icons.add, color: Colors.white),
@@ -145,7 +150,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
-          onPressed: () {},
+          onPressed: () => context.push('/teacher/notifications'),
         ),
       ],
     );
@@ -263,7 +268,41 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
               ),
               IconButton(
                 icon: const Icon(Icons.more_vert, color: AppColors.outline),
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                    builder: (ctx) => Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.edit_outlined, color: AppColors.primary),
+                            title: const Text('تعديل المهمة'),
+                            onTap: () {
+                              Navigator.pop(ctx);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('تعديل المهمة'), behavior: SnackBarBehavior.floating),
+                              );
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.delete_outline, color: AppColors.error),
+                            title: const Text('حذف المهمة', style: TextStyle(color: AppColors.error)),
+                            onTap: () {
+                              Navigator.pop(ctx);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('تم حذف المهمة'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.error),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
               ),
@@ -318,30 +357,34 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(Icons.home_outlined, 'Home', false),
-          _navItem(Icons.quiz, 'Tests', true),
-          _navItem(Icons.bar_chart_outlined, 'Reports', false),
-          _navItem(Icons.settings_outlined, 'Settings', false),
+          _navItem(Icons.home_outlined, 'الرئيسية', false, onTap: () => context.push('/teacher')),
+          _navItem(Icons.quiz, 'الاختبارات', true, onTap: () => context.push('/teacher/assessments')),
+          _navItem(Icons.bar_chart_outlined, 'التقارير', false, onTap: () => context.push('/teacher/report-schedules')),
+          _navItem(Icons.settings_outlined, 'الإعدادات', false, onTap: () => context.push('/teacher/settings')),
         ],
       ),
     );
   }
 
-  Widget _navItem(IconData icon, String label, bool active) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            color: active ? const Color(0xFF1E40AF) : Colors.grey,
-            fontWeight: active ? FontWeight.w600 : FontWeight.w400,
+  Widget _navItem(IconData icon, String label, bool active, {required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: active ? const Color(0xFF1E40AF) : Colors.grey,
+              fontWeight: active ? FontWeight.w600 : FontWeight.w400,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

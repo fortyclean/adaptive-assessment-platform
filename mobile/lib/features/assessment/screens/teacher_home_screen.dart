@@ -337,7 +337,50 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
                 icon: Icons.campaign_outlined,
                 isPrimary: false,
                 hasBorder: false,
-                onTap: () {},
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                    builder: (ctx) {
+                      final msgController = TextEditingController();
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+                            const SizedBox(height: 16),
+                            const Text('إرسال إعلان للطلاب', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: msgController,
+                              maxLines: 3,
+                              textDirection: TextDirection.rtl,
+                              decoration: InputDecoration(
+                                hintText: 'اكتب نص الإعلان هنا...',
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('تم إرسال الإعلان لجميع الطلاب'), behavior: SnackBarBehavior.floating, backgroundColor: Color(0xFF2E7D32)),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                              child: const Text('إرسال الإعلان', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),
@@ -515,7 +558,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () => context.push(AppRoutes.classSchedule),
               child: const Text(
                 'الكل',
                 style: TextStyle(

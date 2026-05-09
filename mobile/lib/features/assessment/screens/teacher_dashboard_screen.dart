@@ -155,7 +155,14 @@ class _TeacherDashboardScreenState
               IconButton(
                 icon: const Icon(Icons.search_rounded),
                 color: const Color(0xFF1E40AF),
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('البحث قيد التطوير'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
                 tooltip: 'بحث',
               ),
               IconButton(
@@ -339,9 +346,101 @@ class _TeacherDashboardScreenState
         else
           ...recent.map((a) => _AssessmentTile(
                 assessment: a,
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.teacherAssessments),
               )),
+        const SizedBox(height: 20),
+        const Text(
+          'أدوات إضافية',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: AppColors.onSurface,
+            fontFamily: 'Almarai',
+          ),
+        ),
+        const SizedBox(height: 12),
+        _buildQuickLink(
+          icon: Icons.task_alt_rounded,
+          label: 'إدارة المهام',
+          onTap: () => context.push('/teacher/tasks'),
+        ),
+        _buildQuickLink(
+          icon: Icons.workspace_premium_rounded,
+          label: 'الشهادات',
+          onTap: () => context.push('/teacher/certificates'),
+        ),
+        _buildQuickLink(
+          icon: Icons.calendar_month_rounded,
+          label: 'الجدول الدراسي',
+          onTap: () => context.push('/teacher/class-schedule'),
+        ),
+        _buildQuickLink(
+          icon: Icons.class_rounded,
+          label: 'فصولي',
+          onTap: () => context.push('/teacher/my-classes'),
+        ),
+        const SizedBox(height: 24),
       ],
+    );
+  }
+
+  Widget _buildQuickLink({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.outlineVariant, width: 1),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            textDirection: TextDirection.rtl,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: AppColors.primaryContainer, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.onSurface,
+                    fontFamily: 'Almarai',
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+                color: AppColors.onSurfaceVariant,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

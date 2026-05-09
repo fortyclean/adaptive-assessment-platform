@@ -152,7 +152,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         icon: Icons.quiz_rounded,
                         color: AppColors.primaryContainer,
                         bgColor: const Color(0xFFD0E1FB),
-                        onTap: () {},
+                        onTap: () => context.push(AppRoutes.teacherAssessments),
                       ),
                     ],
                   ),
@@ -168,7 +168,11 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     iconBgColor: AppColors.errorContainer,
                     title: 'طلاب لم يؤدوا الاختبار',
                     subtitle: 'يوجد 5 طلاب لم يسلموا الاختبار الأخير',
-                    onTap: () {},
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('عرض قائمة الطلاب الغائبين عن الاختبار'), behavior: SnackBarBehavior.floating),
+                      );
+                    },
                   ),
                   const SizedBox(height: 8),
                   _AlertCard(
@@ -177,7 +181,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     iconBgColor: const Color(0xFFDDE1FF),
                     title: 'طلبات انضمام جديدة',
                     subtitle: 'يوجد 3 طلبات انضمام تنتظر الموافقة',
-                    onTap: () {},
+                    onTap: () => context.push(AppRoutes.adminUsers),
                   ),
                   const SizedBox(height: 8),
                   _AlertCard(
@@ -186,7 +190,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     iconBgColor: const Color(0xFFFEF3C7),
                     title: 'انخفاض في الأداء',
                     subtitle: 'فصل الرياضيات - المستوى العاشر',
-                    onTap: () {},
+                    onTap: () => context.push(AppRoutes.adminReports),
                   ),
 
                   const SizedBox(height: 24),
@@ -219,6 +223,33 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     color: AppColors.success,
                     bgColor: const Color(0xFFD1FAE5),
                     onTap: () => context.push(AppRoutes.adminReports),
+                  ),
+                  const SizedBox(height: 8),
+                  _QuickLink(
+                    icon: Icons.dashboard_customize_rounded,
+                    title: 'لوحة التحكم المتقدمة',
+                    subtitle: 'إحصائيات وتحليلات تفصيلية للمشرف',
+                    color: AppColors.primaryContainer,
+                    bgColor: const Color(0xFFD0E1FB),
+                    onTap: () => context.push(AppRoutes.adminDashboardV2),
+                  ),
+                  const SizedBox(height: 8),
+                  _QuickLink(
+                    icon: Icons.supervisor_account_rounded,
+                    title: 'لوحة المشرف المتقدمة',
+                    subtitle: 'إحصائيات وتحليلات تفصيلية',
+                    color: AppColors.primaryContainer,
+                    bgColor: const Color(0xFFD0E1FB),
+                    onTap: () => context.push('/supervisor'),
+                  ),
+                  const SizedBox(height: 8),
+                  _QuickLink(
+                    icon: Icons.settings_outlined,
+                    title: 'إعدادات المؤسسة',
+                    subtitle: 'ضبط إعدادات المؤسسة التعليمية',
+                    color: AppColors.onSurfaceVariant,
+                    bgColor: AppColors.surfaceContainer,
+                    onTap: () => context.push('/admin/institution-settings'),
                   ),
 
                   const SizedBox(height: 24),

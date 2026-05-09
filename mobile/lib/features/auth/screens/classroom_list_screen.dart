@@ -80,7 +80,22 @@ class _ClassroomListScreenState extends ConsumerState<ClassroomListScreen> {
                 const SizedBox(height: 24),
                 ..._filtered.map((c) => Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child: _ClassroomCard(classroom: c),
+                      child: _ClassroomCard(
+                        classroom: c,
+                        onViewStudents: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('عرض طلاب ${c.name}'), behavior: SnackBarBehavior.floating),
+                          );
+                        },
+                        onViewReports: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('تقارير ${c.name}'), behavior: SnackBarBehavior.floating),
+                          );
+                        },
+                        onViewAssessments: () {
+                          context.push(AppRoutes.teacherAssessments);
+                        },
+                      ),
                     )),
                 const SizedBox(height: 24),
                 _buildPerformanceOverview(),
@@ -122,7 +137,11 @@ class _ClassroomListScreenState extends ConsumerState<ClassroomListScreen> {
         children: [
           // Save button (RTL: left)
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('تم حفظ التغييرات'), behavior: SnackBarBehavior.floating, backgroundColor: Color(0xFF2E7D32)),
+              );
+            },
             child: const Text(
               'حفظ',
               style: TextStyle(
@@ -254,7 +273,11 @@ class _ClassroomListScreenState extends ConsumerState<ClassroomListScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('عرض جميع التنبيهات'), behavior: SnackBarBehavior.floating),
+                      );
+                    },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.primary,
                       side: const BorderSide(color: AppColors.primary),
@@ -340,7 +363,11 @@ class _ClassroomListScreenState extends ConsumerState<ClassroomListScreen> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('جاري تحميل التقرير الكامل...'), behavior: SnackBarBehavior.floating),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: AppColors.primary,
@@ -401,8 +428,11 @@ class _ClassroomListScreenState extends ConsumerState<ClassroomListScreen> {
 // ─── Classroom Card ───────────────────────────────────────────────────────────
 
 class _ClassroomCard extends StatelessWidget {
-  const _ClassroomCard({required this.classroom});
+  const _ClassroomCard({required this.classroom, this.onViewStudents, this.onViewReports, this.onViewAssessments});
   final _ClassroomData classroom;
+  final VoidCallback? onViewStudents;
+  final VoidCallback? onViewReports;
+  final VoidCallback? onViewAssessments;
 
   @override
   Widget build(BuildContext context) {
@@ -497,7 +527,7 @@ class _ClassroomCard extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: onViewStudents ?? () {},
               icon: const Icon(Icons.groups_outlined, size: 18),
               label: const Text('عرض الطلاب'),
               style: ElevatedButton.styleFrom(
@@ -517,7 +547,7 @@ class _ClassroomCard extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: onViewReports ?? () {},
                   icon: const Icon(Icons.analytics_outlined, size: 16),
                   label: const Text('التقارير'),
                   style: OutlinedButton.styleFrom(
@@ -534,7 +564,7 @@ class _ClassroomCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: onViewAssessments ?? () {},
                   icon: const Icon(Icons.description_outlined, size: 16),
                   label: const Text('الاختبارات'),
                   style: OutlinedButton.styleFrom(

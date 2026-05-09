@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 
 /// Screen 69 — إعدادات المؤسسة (Institution Settings)
 /// Matches design: _69/code.html
-class InstitutionSettingsScreen extends StatelessWidget {
+class InstitutionSettingsScreen extends StatefulWidget {
   const InstitutionSettingsScreen({super.key});
 
+  @override
+  State<InstitutionSettingsScreen> createState() =>
+      _InstitutionSettingsScreenState();
+}
+
+class _InstitutionSettingsScreenState
+    extends State<InstitutionSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -80,7 +88,11 @@ class InstitutionSettingsScreen extends StatelessWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
-          onPressed: () {},
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('لا توجد إشعارات جديدة'), behavior: SnackBarBehavior.floating),
+            );
+          },
         ),
       ],
     );
@@ -126,7 +138,33 @@ class InstitutionSettingsScreen extends StatelessWidget {
                 ],
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  final nameController = TextEditingController(text: 'أكاديمية المستقبل الدولية');
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      title: const Text('تعديل ملف المدرسة'),
+                      content: TextField(
+                        controller: nameController,
+                        decoration: const InputDecoration(labelText: 'اسم المؤسسة'),
+                      ),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(ctx);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('تم تحديث بيانات المؤسسة'), behavior: SnackBarBehavior.floating),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                          child: const Text('حفظ'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 child: const Text('تعديل', style: TextStyle(color: AppColors.primary, fontSize: 14)),
               ),
             ],
@@ -204,7 +242,19 @@ class InstitutionSettingsScreen extends StatelessWidget {
             return Column(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    if (item.title == 'الأدوار والصلاحيات') {
+                      context.push('/admin/users');
+                    } else if (item.title == 'سجلات الأنشطة') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('سجلات الأنشطة قيد التطوير'), behavior: SnackBarBehavior.floating),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${item.title}: قيد التطوير'), behavior: SnackBarBehavior.floating),
+                      );
+                    }
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -245,7 +295,28 @@ class InstitutionSettingsScreen extends StatelessWidget {
 
   Widget _buildDangerZone() {
     return OutlinedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text('تحذير: أرشفة البيانات'),
+            content: const Text('هذا الإجراء سيؤدي إلى أرشفة جميع بيانات المؤسسة. هل أنت متأكد؟'),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('تم إرسال طلب الأرشفة للمراجعة'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.error),
+                  );
+                },
+                child: const Text('تأكيد الأرشفة', style: TextStyle(color: AppColors.error)),
+              ),
+            ],
+          ),
+        );
+      },
       icon: const Icon(Icons.delete_forever_outlined, color: AppColors.error),
       label: const Text('أرشفة بيانات المؤسسة', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600)),
       style: OutlinedButton.styleFrom(
@@ -268,23 +339,26 @@ class InstitutionSettingsScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(Icons.home_outlined, 'Home', false),
-          _navItem(Icons.quiz_outlined, 'Tests', false),
-          _navItem(Icons.bar_chart_outlined, 'Reports', false),
-          _navItem(Icons.settings, 'Settings', true),
+          _navItem(Icons.home_outlined, 'الرئيسية', false, onTap: () => context.push('/admin/dashboard')),
+          _navItem(Icons.quiz_outlined, 'الاختبارات', false, onTap: () => context.push('/admin/classrooms')),
+          _navItem(Icons.bar_chart_outlined, 'التقارير', false, onTap: () => context.push('/admin/reports')),
+          _navItem(Icons.settings, 'الإعدادات', true, onTap: null),
         ],
       ),
     );
   }
 
-  Widget _navItem(IconData icon, String label, bool active) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
-        const SizedBox(height: 2),
-        Text(label, style: TextStyle(fontSize: 11, color: active ? const Color(0xFF1E40AF) : Colors.grey)),
-      ],
+  Widget _navItem(IconData icon, String label, bool active, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
+          const SizedBox(height: 2),
+          Text(label, style: TextStyle(fontSize: 11, color: active ? const Color(0xFF1E40AF) : Colors.grey)),
+        ],
+      ),
     );
   }
 }

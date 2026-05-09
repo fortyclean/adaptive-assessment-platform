@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/demo_questions.dart';
 import '../../../core/router/app_router.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
@@ -72,7 +73,95 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
         _isLoading = false;
       });
     } catch (_) {
-      setState(() => _isLoading = false);
+      // Demo mode: show questions from DemoQuestions
+      setState(() {
+        _questions = DemoQuestions.all.take(20).map((q) => {
+          '_id': q['_id'],
+          'questionText': q['questionText'],
+          'subject': q['subject'],
+          'difficulty': q['difficulty'] == 1 ? 'easy' : q['difficulty'] == 3 ? 'hard' : 'medium',
+          'mainSkill': 'مهارة عامة',
+          'questionType': 'mcq',
+        }).toList();
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _editQuestion(Map<String, dynamic> question) {
+    final textController = TextEditingController(text: question['questionText'] as String? ?? '');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 16),
+            const Text('تعديل السؤال', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: textController,
+              maxLines: 4,
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(
+                labelText: 'نص السؤال',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                final idx = _questions.indexWhere((q) => q['_id'] == question['_id']);
+                if (idx != -1) {
+                  setState(() {
+                    _questions[idx] = Map.from(_questions[idx])..['questionText'] = textController.text.trim();
+                  });
+                }
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تم تحديث السؤال'), behavior: SnackBarBehavior.floating),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryContainer, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+              child: const Text('حفظ التعديل', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _deleteQuestion(Map<String, dynamic> question) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('حذف السؤال'),
+        content: const Text('هل تريد حذف هذا السؤال نهائياً؟'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('إلغاء')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('حذف', style: TextStyle(color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      setState(() {
+        _questions.removeWhere((q) => q['_id'] == question['_id']);
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم حذف السؤال'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.error),
+        );
+      }
     }
   }
 
@@ -145,9 +234,7 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
           // Action buttons row
           _ActionBar(
             onAddQuestion: () => context.push(AppRoutes.teacherAddQuestion),
-            onImportExcel: () {
-              // TODO: implement Excel import
-            },
+            onImportExcel: () => context.push(AppRoutes.teacherImportExcel),
           ),
 
           // Questions list
@@ -186,7 +273,11 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
                                 ),
                               );
                             }
-                            return _QuestionCard(question: _questions[i]);
+                            return _QuestionCard(
+                              question: _questions[i],
+                              onEdit: () => _editQuestion(_questions[i]),
+                              onDelete: () => _deleteQuestion(_questions[i]),
+                            );
                           },
                         ),
                       ),
@@ -453,8 +544,10 @@ class _ActionButton extends StatelessWidget {
 // ─── Question Card ────────────────────────────────────────────────────────────
 
 class _QuestionCard extends StatelessWidget {
-  const _QuestionCard({required this.question});
+  const _QuestionCard({required this.question, this.onEdit, this.onDelete});
   final Map<String, dynamic> question;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   Color get _difficultyColor {
     switch (question['difficulty']) {
@@ -568,6 +661,10 @@ class _QuestionCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
+                    onSelected: (value) {
+                      if (value == 'edit' && onEdit != null) onEdit!();
+                      if (value == 'delete' && onDelete != null) onDelete!();
+                    },
                     itemBuilder: (_) => [
                       const PopupMenuItem(
                         value: 'edit',

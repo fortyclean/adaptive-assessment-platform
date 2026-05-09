@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 
 /// Screen 68 — لوحة تحكم المشرف المتقدمة (Supervisor/Admin Advanced Dashboard)
 /// Matches design: _68/code.html
-class SupervisorDashboardScreen extends StatelessWidget {
+class SupervisorDashboardScreen extends StatefulWidget {
   const SupervisorDashboardScreen({super.key});
 
+  @override
+  State<SupervisorDashboardScreen> createState() => _SupervisorDashboardScreenState();
+}
+
+class _SupervisorDashboardScreenState extends State<SupervisorDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -46,7 +52,34 @@ class SupervisorDashboardScreen extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('ماذا تريد إضافة؟', textAlign: TextAlign.right),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                      context.push('/admin/users');
+                    },
+                    child: const Text('إضافة مستخدم'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                      context.push('/admin/classrooms');
+                    },
+                    child: const Text('إضافة فصل'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    child: const Text('إلغاء'),
+                  ),
+                ],
+              ),
+            );
+          },
           backgroundColor: AppColors.primary,
           shape: const CircleBorder(),
           child: const Icon(Icons.add, color: Colors.white),
@@ -77,10 +110,18 @@ class SupervisorDashboardScreen extends StatelessWidget {
         ],
       ),
       actions: [
-        IconButton(icon: const Icon(Icons.search, color: Colors.grey), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.search, color: Colors.grey), onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('البحث قيد التطوير'), behavior: SnackBarBehavior.floating),
+          );
+        }),
         Stack(
           children: [
-            IconButton(icon: const Icon(Icons.notifications_outlined, color: Colors.grey), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.notifications_outlined, color: Colors.grey), onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('لا توجد إشعارات جديدة'), behavior: SnackBarBehavior.floating),
+              );
+            }),
             Positioned(
               top: 10,
               right: 10,
@@ -121,6 +162,13 @@ class SupervisorDashboardScreen extends StatelessWidget {
       _StatCard(icon: Icons.timer_outlined, iconBg: const Color(0xFFFEE2E2), iconColor: AppColors.error, label: 'اختبارات جارية', value: '14'),
     ];
 
+    final onTaps = [
+      () => context.push('/admin/users'),
+      () => context.push('/admin/users'),
+      () => context.push('/admin/reports'),
+      () => context.push('/admin/classrooms'),
+    ];
+
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -128,12 +176,14 @@ class SupervisorDashboardScreen extends StatelessWidget {
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       childAspectRatio: 1.3,
-      children: stats.map(_buildStatCard).toList(),
+      children: List.generate(stats.length, (i) => _buildStatCard(stats[i], onTap: onTaps[i])),
     );
   }
 
-  Widget _buildStatCard(_StatCard stat) {
-    return Container(
+  Widget _buildStatCard(_StatCard stat, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -184,6 +234,7 @@ class SupervisorDashboardScreen extends StatelessWidget {
             ],
           ),
         ],
+      ),
       ),
     );
   }
@@ -278,7 +329,16 @@ class SupervisorDashboardScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('المعلمون المتميزون (هذا الشهر)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () => context.push('/admin/users'),
+                child: const Text('عرض الكل', style: TextStyle(color: AppColors.primary, fontSize: 13)),
+              ),
+              const Text('المعلمون المتميزون (هذا الشهر)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            ],
+          ),
           const SizedBox(height: 12),
           ...teachers.map((t) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
@@ -340,25 +400,41 @@ class SupervisorDashboardScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          ...alerts.map((a) => Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: a.bgColor,
+          ...alerts.map((a) {
+            VoidCallback onTap;
+            if (a.type == 'مراجعة مطلوبة') {
+              onTap = () => context.push('/admin/classrooms');
+            } else if (a.type == 'تقارير جاهزة') {
+              onTap = () => context.push('/admin/reports');
+            } else {
+              onTap = () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('تم تحديث الجداول'), behavior: SnackBarBehavior.floating),
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: InkWell(
+                onTap: onTap,
                 borderRadius: BorderRadius.circular(8),
-                border: Border(right: BorderSide(color: a.borderColor, width: 4)),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: a.bgColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border(right: BorderSide(color: a.borderColor, width: 4)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(a.type, style: TextStyle(color: a.textColor, fontSize: 12, fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 2),
+                      Text(a.message, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13)),
+                    ],
+                  ),
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(a.type, style: TextStyle(color: a.textColor, fontSize: 12, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 2),
-                  Text(a.message, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13)),
-                ],
-              ),
-            ),
-          )),
+            );
+          }),
         ],
       ),
     );
@@ -392,24 +468,41 @@ class SupervisorDashboardScreen extends StatelessWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             childAspectRatio: 2.5,
-            children: items.map((item) => InkWell(
-              onTap: () {},
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFFF1F5F9)),
-                  borderRadius: BorderRadius.circular(12),
+            children: items.map((item) {
+              final label = item['label'] as String;
+              VoidCallback onTap;
+              if (label == 'الإعدادات') {
+                onTap = () => context.push('/admin/institution-settings');
+              } else if (label == 'الجداول') {
+                onTap = () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('الجداول قيد التطوير'), behavior: SnackBarBehavior.floating),
+                );
+              } else if (label == 'إضافة طالب') {
+                onTap = () => context.push('/admin/users');
+              } else if (label == 'التقارير') {
+                onTap = () => context.push('/admin/reports');
+              } else {
+                onTap = () {};
+              }
+              return InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFFF1F5F9)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(item['icon'] as IconData, color: AppColors.primary, size: 20),
+                      const SizedBox(width: 8),
+                      Text(label, style: const TextStyle(fontSize: 12)),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Icon(item['icon'] as IconData, color: AppColors.primary, size: 20),
-                    const SizedBox(width: 8),
-                    Text(item['label'] as String, style: const TextStyle(fontSize: 12)),
-                  ],
-                ),
-              ),
-            )).toList(),
+              );
+            }).toList(),
           ),
         ],
       ),
@@ -427,23 +520,26 @@ class SupervisorDashboardScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(Icons.home, 'Home', true),
-          _navItem(Icons.quiz_outlined, 'Tests', false),
-          _navItem(Icons.bar_chart_outlined, 'Reports', false),
-          _navItem(Icons.settings_outlined, 'Settings', false),
+          _navItem(Icons.home, 'الرئيسية', true, onTap: null),
+          _navItem(Icons.quiz_outlined, 'الاختبارات', false, onTap: () => context.push('/admin/classrooms')),
+          _navItem(Icons.bar_chart_outlined, 'التقارير', false, onTap: () => context.push('/admin/reports')),
+          _navItem(Icons.settings_outlined, 'الإعدادات', false, onTap: () => context.push('/admin/institution-settings')),
         ],
       ),
     );
   }
 
-  Widget _navItem(IconData icon, String label, bool active) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
-        const SizedBox(height: 2),
-        Text(label, style: TextStyle(fontSize: 11, color: active ? const Color(0xFF1E40AF) : Colors.grey)),
-      ],
+  Widget _navItem(IconData icon, String label, bool active, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
+          const SizedBox(height: 2),
+          Text(label, style: TextStyle(fontSize: 11, color: active ? const Color(0xFF1E40AF) : Colors.grey)),
+        ],
+      ),
     );
   }
 }

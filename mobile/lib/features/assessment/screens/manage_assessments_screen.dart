@@ -67,6 +67,61 @@ class _ManageAssessmentsScreenState
       'questionCount': 30,
       'availableFrom': '2023-09-20T08:00:00.000Z',
     },
+    // ── Demo assessments (linked to DemoQuestions) ──────────────────────
+    {
+      '_id': 'demo-math',
+      'title': 'اختبار الرياضيات التجريبي',
+      'subject': 'Mathematics',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 20,
+      'availableFrom': null,
+    },
+    {
+      '_id': 'demo-arabic',
+      'title': 'اختبار اللغة العربية التجريبي',
+      'subject': 'Arabic',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 20,
+      'availableFrom': null,
+    },
+    {
+      '_id': 'demo-english',
+      'title': 'اختبار اللغة الإنجليزية التجريبي',
+      'subject': 'English',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 20,
+      'availableFrom': null,
+    },
+    {
+      '_id': 'demo-history',
+      'title': 'اختبار التاريخ التجريبي',
+      'subject': 'History',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 20,
+      'availableFrom': null,
+    },
+    {
+      '_id': 'demo-biology',
+      'title': 'اختبار الأحياء التجريبي',
+      'subject': 'Biology',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 20,
+      'availableFrom': null,
+    },
+    {
+      '_id': 'demo-chemistry',
+      'title': 'اختبار الكيمياء التجريبي',
+      'subject': 'Chemistry',
+      'status': 'active',
+      'assessmentType': 'adaptive',
+      'questionCount': 20,
+      'availableFrom': null,
+    },
   ];
 
   @override
@@ -96,6 +151,60 @@ class _ManageAssessmentsScreenState
     return _assessments
         .where((a) => a['status'] == _statusFilter)
         .toList();
+  }
+
+  void _showEditDialog(BuildContext context, Map<String, dynamic> assessment) {
+    final titleController = TextEditingController(text: assessment['title'] as String? ?? '');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+          left: 16, right: 16, top: 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Handle
+            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 16),
+            const Text('تعديل الاختبار', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(
+                labelText: 'عنوان الاختبار',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Update locally
+                final idx = _assessments.indexWhere((a) => a['_id'] == assessment['_id']);
+                if (idx != -1) {
+                  setState(() {
+                    _assessments[idx] = Map.from(_assessments[idx])..['title'] = titleController.text.trim();
+                  });
+                }
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تم تحديث الاختبار'), behavior: SnackBarBehavior.floating),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+              child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _publishAssessment(String id) async {
@@ -150,7 +259,7 @@ class _ManageAssessmentsScreenState
           IconButton(
             icon: const Icon(Icons.notifications_outlined,
                 color: Color(0xFF00288E)),
-            onPressed: () {},
+            onPressed: () => context.push('/teacher/notifications'),
           ),
         ],
         bottom: PreferredSize(
@@ -256,6 +365,7 @@ class _ManageAssessmentsScreenState
                                 ? () => _publishAssessment(
                                     _filtered[i]['_id'] as String)
                                 : null,
+                            onEdit: () => _showEditDialog(context, _filtered[i]),
                           ),
                         ),
                       ),
@@ -352,9 +462,10 @@ class _FilterChip extends StatelessWidget {
 
 class _AssessmentCard extends StatelessWidget {
   const _AssessmentCard(
-      {required this.assessment, this.onPublish});
+      {required this.assessment, this.onPublish, this.onEdit});
   final Map<String, dynamic> assessment;
   final VoidCallback? onPublish;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -466,8 +577,39 @@ class _AssessmentCard extends StatelessWidget {
                       child: _CardButton(
                         icon: Icons.edit_outlined,
                         label: 'تعديل',
-                        onTap: () {},
+                        onTap: onEdit ?? () {},
                         color: AppColors.primary,
+                        outlined: true,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _CardButton(
+                        icon: Icons.delete_outline_rounded,
+                        label: 'حذف',
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: const Text('حذف الاختبار'),
+                              content: const Text('هل تريد حذف هذا الاختبار؟'),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(ctx);
+                                    // Demo: remove locally
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('تم حذف الاختبار'), backgroundColor: AppColors.error),
+                                    );
+                                  },
+                                  child: const Text('حذف', style: TextStyle(color: AppColors.error)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        color: AppColors.error,
                         outlined: true,
                       ),
                     ),
@@ -487,7 +629,8 @@ class _AssessmentCard extends StatelessWidget {
                         child: _CardButton(
                           icon: Icons.bar_chart_rounded,
                           label: 'التقارير',
-                          onTap: () {},
+                          onTap: () => context.push(
+                              '/teacher/reports/${assessment['_id']}'),
                           color: AppColors.onSurfaceVariant,
                           outlined: true,
                         ),
