@@ -143,7 +143,7 @@ const studentAttemptSchema = new Schema<IStudentAttemptDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (_doc, ret) => {
+      transform: (_doc, ret: Record<string, unknown>) => {
         ret['__v'] = undefined;
         return ret;
       },

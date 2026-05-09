@@ -89,7 +89,7 @@ const userSchema = new Schema<IUserDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (_doc, ret) => {
+      transform: (_doc, ret: Record<string, unknown>) => {
         ret['passwordHash'] = undefined;
         ret['failedLoginAttempts'] = undefined;
         ret['lockedUntil'] = undefined;

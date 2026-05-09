@@ -72,7 +72,7 @@ const performanceAlertSchema = new Schema<IPerformanceAlertDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (_doc, ret) => {
+      transform: (_doc, ret: Record<string, unknown>) => {
         ret['__v'] = undefined;
         return ret;
       },

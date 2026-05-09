@@ -55,7 +55,7 @@ const notificationSchema = new Schema<INotificationDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (_doc, ret) => {
+      transform: (_doc, ret: Record<string, unknown>) => {
         ret['__v'] = undefined;
         return ret;
       },
