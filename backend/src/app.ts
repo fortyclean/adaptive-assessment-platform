@@ -32,11 +32,14 @@ app.use(
 );
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
+const corsOrigin = process.env.CORS_ORIGIN || process.env.ALLOWED_ORIGINS || '*';
+const allowedOrigins = corsOrigin === '*'
+  ? true
+  : corsOrigin.split(',').map(o => o.trim()).filter(Boolean);
+
 app.use(
   cors({
-    origin: config.app.isDevelopment
-      ? true // Allow all origins in development
-      : (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean),
+    origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
