@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../repositories/auth_repository.dart';
+import '../repositories/google_auth_service.dart';
 
 /// Login Screen — Screen 19
 /// Requirements: 1.2, 1.3
@@ -24,6 +26,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isLoading = false;
   bool _rememberMe = false;
   String? _errorMessage;
+  String _loadingMessage = 'جاري تسجيل الدخول...';
+  int _loadingSeconds = 0;
 
   @override
   void dispose() {
@@ -83,6 +87,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
+      _loadingMessage = 'جاري تسجيل الدخول...';
+      _loadingSeconds = 0;
+    });
+
+    // Timer to update loading message if server is slow (Render free tier wakeup)
+    Timer? loadingTimer;
+    loadingTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) { t.cancel(); return; }
+      setState(() {
+        _loadingSeconds++;
+        if (_loadingSeconds >= 5 && _loadingSeconds < 30) {
+          _loadingMessage = 'جاري تشغيل الخادم... ($_loadingSeconds ث)';
+        } else if (_loadingSeconds >= 30) {
+          _loadingMessage = 'يرجى الانتظار، الخادم يستيقظ...';
+        }
+      });
     });
 
     try {
@@ -103,18 +123,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         case UserRole.student:
           context.go(AppRoutes.studentDashboard);
       }
-    } on DioException {
-      // API unavailable — fall back to demo mode based on username or email
+    } on DioException catch (e) {
       if (!mounted) return;
-      final username = _usernameController.text.trim().toLowerCase();
-      if (username.startsWith('admin') || username.contains('admin') || username == 'مشرف') {
-        _demoLogin(UserRole.admin);
-      } else if (username.startsWith('teacher') || username.contains('teacher') || username == 'معلم') {
-        _demoLogin(UserRole.teacher);
+      String message;
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        message = 'الخادم يستيقظ، يرجى الانتظار 30 ثانية والمحاولة مجدداً';
+      } else if (e.response?.statusCode == 401) {
+        message = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+      } else if (e.response?.statusCode == 403) {
+        message = 'الحساب معطّل، تواصل مع المشرف';
+      } else if (e.type == DioExceptionType.connectionError) {
+        message = 'لا يوجد اتصال بالإنترنت';
       } else {
-        _demoLogin(UserRole.student);
+        message = 'حدث خطأ، يرجى المحاولة مجدداً';
       }
+      setState(() => _errorMessage = message);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _errorMessage = 'حدث خطأ غير متوقع، يرجى المحاولة مجدداً');
     } finally {
+      loadingTimer?.cancel();
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -498,13 +528,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
         child: _isLoading
-            ? const SizedBox(
-                height: 22,
-                width: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: Colors.white,
-                ),
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      color: Colors.white,
+                    ),
+                  ),
+                  if (_loadingSeconds >= 5) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      _loadingMessage,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.white70,
+                        fontFamily: 'Almarai',
+                      ),
+                    ),
+                  ],
+                ],
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -551,17 +597,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           width: double.infinity,
           height: 48,
           child: OutlinedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'تسجيل الدخول بـ Google سيكون متاحاً عند الاتصال بالخادم',
-                    style: TextStyle(fontFamily: 'Almarai'),
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            },
+            onPressed: _isLoading ? null : _handleGoogleSignIn,
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.onSurface,
               side: const BorderSide(color: AppColors.outlineVariant),
@@ -572,7 +608,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Google G icon (using colored container)
                 Container(
                   width: 20,
                   height: 20,
@@ -606,6 +641,44 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+      _loadingMessage = 'جاري تسجيل الدخول بـ Google...';
+      _loadingSeconds = 0;
+    });
+
+    try {
+      final result = await ref.read(googleAuthServiceProvider).signInWithGoogle();
+      ref.read(authProvider.notifier).setUser(result.user, result.accessToken);
+
+      if (!mounted) return;
+      switch (result.user.role) {
+        case UserRole.admin:
+          context.go(AppRoutes.adminDashboard);
+        case UserRole.teacher:
+          context.go(AppRoutes.teacherDashboard);
+        case UserRole.student:
+          context.go(AppRoutes.studentDashboard);
+      }
+    } on DioException catch (e) {
+      if (!mounted) return;
+      final msg = e.response?.statusCode == 503
+          ? 'تسجيل الدخول بـ Google غير مفعّل على الخادم حالياً'
+          : 'فشل تسجيل الدخول بـ Google، يرجى المحاولة مجدداً';
+      setState(() => _errorMessage = msg);
+    } catch (e) {
+      if (!mounted) return;
+      final msg = e.toString().contains('إلغاء')
+          ? 'تم إلغاء تسجيل الدخول'
+          : 'فشل تسجيل الدخول بـ Google';
+      setState(() => _errorMessage = msg);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   Widget _buildDemoSection() {

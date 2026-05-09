@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,9 +27,11 @@ class AuthRepository {
     final accessToken = data['accessToken'] as String;
     final user = AuthUser.fromJson(data['user'] as Map<String, dynamic>);
 
-    // Persist tokens
+    // Persist tokens and user data for offline session restore
     await _storage.write(
         key: AppConstants.accessTokenKey, value: accessToken);
+    await _storage.write(
+        key: AppConstants.userDataKey, value: jsonEncode(user.toJson()));
     if (data['refreshToken'] != null) {
       await _storage.write(
           key: AppConstants.refreshTokenKey,
@@ -48,6 +51,7 @@ class AuthRepository {
     } finally {
       await _storage.delete(key: AppConstants.accessTokenKey);
       await _storage.delete(key: AppConstants.refreshTokenKey);
+      await _storage.delete(key: AppConstants.userDataKey);
       _apiService.clearToken();
     }
   }

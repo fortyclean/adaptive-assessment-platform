@@ -9,14 +9,15 @@ class AppConstants {
   // Development (physical device): http://YOUR_LOCAL_IP:3000/api/v1
   static const String apiBaseUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue: 'https://eduassess-backend.onrender.com/api/v1',
+    defaultValue: 'https://eduassess-backend-production.up.railway.app/api/v1',
   );
-  static const Duration apiTimeout = Duration(seconds: 15);
-  static const Duration connectTimeout = Duration(seconds: 10);
+  // Render Free tier needs up to 60s to wake from sleep
+  static const Duration apiTimeout = Duration(seconds: 60);
+  static const Duration connectTimeout = Duration(seconds: 60);
 
   // ─── Demo / Offline Mode ──────────────────────────────────────────────────
-  /// Set to true to use mock data when the API is unavailable.
-  static const bool useMockData = true;
+  /// Set to false — app uses real backend
+  static const bool useMockData = false;
 
   // ─── Storage Keys ─────────────────────────────────────────────────────────
   static const String accessTokenKey = 'access_token';

@@ -12,6 +12,7 @@ import {
 import { authenticate } from '../middleware/authenticate';
 import { User } from '../models/User';
 import { logger } from '../utils/logger';
+import { OAuth2Client } from 'google-auth-library';
 
 const router = Router();
 
@@ -180,6 +181,117 @@ router.post('/reset-password', authenticate, async (req: Request, res: Response)
   } catch (error) {
     logger.error('Password reset error', { error });
     res.status(500).json({ error: 'An internal server error occurred' });
+  }
+});
+
+// ─── GET /api/v1/auth/me ─────────────────────────────────────────────────────
+
+router.get('/me', authenticate, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findById(req.user!.userId)
+      .select('-passwordHash -activeSessions -failedLoginAttempts');
+
+    if (!user || !user.isActive) {
+      res.status(401).json({ error: 'User not found or inactive' });
+      return;
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    logger.error('Get me error', { error });
+    res.status(500).json({ error: 'An internal server error occurred' });
+  }
+});
+
+// ─── POST /api/v1/auth/google ─────────────────────────────────────────────────
+
+router.post('/google', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { idToken } = req.body;
+    if (!idToken) {
+      res.status(400).json({ error: 'Google ID token is required' });
+      return;
+    }
+
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      res.status(503).json({ error: 'Google Sign-In is not configured on this server' });
+      return;
+    }
+
+    // Verify Google ID token
+    const client = new OAuth2Client(clientId);
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: clientId,
+    });
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      res.status(401).json({ error: 'Invalid Google token' });
+      return;
+    }
+
+    const { email, name, sub: googleId } = payload;
+
+    // Find or create user
+    let user = await User.findOne({ email });
+    if (!user) {
+      // Auto-create account for Google users (default role: student)
+      user = new User({
+        username: email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_'),
+        email,
+        fullName: name || email.split('@')[0],
+        passwordHash: await hashPassword(googleId + process.env.JWT_SECRET),
+        role: 'student',
+        isActive: true,
+        googleId,
+        classroomIds: [],
+        failedLoginAttempts: 0,
+        activeSessions: [],
+      });
+      await user.save();
+      logger.info('New user created via Google Sign-In', { email });
+    } else if (!user.isActive) {
+      res.status(403).json({ error: 'Account is deactivated' });
+      return;
+    }
+
+    // Generate session
+    const { v4: uuidv4 } = await import('uuid');
+    const sessionId = uuidv4();
+    user.activeSessions.push(sessionId);
+    await user.save();
+
+    const tokens = generateTokens({
+      userId: user._id.toString(),
+      role: user.role,
+      sessionId,
+    });
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    logger.info('Google Sign-In successful', { email });
+
+    res.status(200).json({
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      user: {
+        _id: user._id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        classroomIds: user.classroomIds,
+      },
+    });
+  } catch (error) {
+    logger.error('Google Sign-In error', { error });
+    res.status(500).json({ error: 'Google Sign-In failed' });
   }
 });
 

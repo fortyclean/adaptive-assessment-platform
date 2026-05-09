@@ -7,12 +7,14 @@
 
 | الخدمة | المنصة | التكلفة | الرابط |
 |--------|--------|---------|--------|
-| Backend API | Render.com | مجاني | https://render.com |
+| Backend API | Railway.app | مجاني ($5 credit) | https://railway.app |
 | قاعدة البيانات | MongoDB Atlas | مجاني (512MB) | https://mongodb.com/atlas |
-| Redis Cache | Upstash | مجاني (10K req/day) | https://upstash.com |
+| Redis Cache | اختياري | - | - |
 | APK | GitHub Releases | مجاني | https://github.com |
 
 **رابط GitHub:** `https://github.com/fortyclean/adaptive-assessment-platform`
+**رابط Backend (Railway):** `https://eduassess-backend-production.up.railway.app`
+**Health Check:** `https://eduassess-backend-production.up.railway.app/api/v1/health`
 
 ---
 
@@ -120,13 +122,13 @@ CORS_ORIGIN = *
 ### 3.4 النشر
 1. اضغط **"Create Web Service"**
 2. انتظر 3-5 دقائق حتى يكتمل البناء
-3. ستحصل على URL مثل:
+3. ✅ **الـ Backend يعمل الآن على:**
    ```
-   https://eduassess-backend.onrender.com
+   https://eduassess-backend-8cf4.onrender.com
    ```
 4. تحقق من الـ Health Check:
    ```
-   https://eduassess-backend.onrender.com/api/v1/health
+   https://eduassess-backend-8cf4.onrender.com/api/v1/health
    ```
    يجب أن يرجع:
    ```json
@@ -167,13 +169,15 @@ node scripts/seed-production.js
 cd "E:\Farid baghoza\Education study\adaptive-assessment-platform\mobile"
 
 flutter build apk --release ^
-  --dart-define=API_URL=https://eduassess-backend.onrender.com/api/v1
+  --dart-define=API_URL=https://eduassess-backend-8cf4.onrender.com/api/v1
 ```
 
 الـ APK سيكون في:
 ```
 mobile\build\app\outputs\flutter-apk\app-release.apk
 ```
+
+> ✅ **تم بناء APK جاهز:** `adaptive-mastery-v1.0.0-online.apk` (63.2MB)
 
 ---
 
@@ -207,17 +211,17 @@ mobile\build\app\outputs\flutter-apk\app-release.apk
 
 1. **Health Check:**
    ```
-   GET https://eduassess-backend.onrender.com/api/v1/health
+   GET https://eduassess-backend-production.up.railway.app/api/v1/health
    ```
 
 2. **تسجيل الدخول:**
    ```
-   POST https://eduassess-backend.onrender.com/api/v1/auth/login
+   POST https://eduassess-backend-production.up.railway.app/api/v1/auth/login
    Body: {"username": "admin", "password": "Admin@123"}
    ```
 
 3. **APK يتصل بالـ Backend:**
-   - افتح التطبيق
+   - ثبّت `adaptive-mastery-v1.0.0-railway.apk`
    - سجّل الدخول بـ admin / Admin@123
    - يجب أن تظهر البيانات الحقيقية
 
