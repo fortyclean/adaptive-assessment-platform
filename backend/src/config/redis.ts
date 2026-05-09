@@ -4,10 +4,7 @@ import { logger } from '../utils/logger';
 
 let redisClient: Redis | null = null;
 
-export function getRedisClient(): Redis {
-  if (!redisClient) {
-    throw new Error('Redis client not initialized. Call connectRedis() first.');
-  }
+export function getRedisClient(): Redis | null {
   return redisClient;
 }
 
@@ -17,14 +14,18 @@ export async function connectRedis(): Promise<Redis> {
     return redisClient;
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const client = new Redis(config.redis.url, {
       maxRetriesPerRequest: 3,
       enableReadyCheck: true,
       lazyConnect: false,
       retryStrategy(times) {
-        const delay = Math.min(times * 50, 2000);
-        return delay;
+        // Stop retrying after 5 attempts in production to avoid blocking startup
+        if (times > 5) {
+          logger.warn('Redis max retries reached — running without cache');
+          return null; // stop retrying
+        }
+        return Math.min(times * 200, 2000);
       },
     });
 
@@ -39,9 +40,10 @@ export async function connectRedis(): Promise<Redis> {
     });
 
     client.on('error', (error) => {
-      logger.error('Redis connection error', { error });
+      logger.warn('Redis connection error — app will run without cache', { message: (error as Error).message });
+      // Resolve anyway so the app starts — Redis is optional for basic functionality
       if (!redisClient) {
-        reject(error);
+        resolve(client);
       }
     });
 
@@ -52,6 +54,14 @@ export async function connectRedis(): Promise<Redis> {
     client.on('reconnecting', () => {
       logger.info('Redis reconnecting...');
     });
+
+    // Timeout: if Redis doesn't connect in 5s, continue without it
+    setTimeout(() => {
+      if (!redisClient) {
+        logger.warn('Redis connection timeout — starting without cache');
+        resolve(client);
+      }
+    }, 5000);
   });
 }
 
@@ -74,39 +84,55 @@ export function getRedisStatus(): { connected: boolean } {
   };
 }
 
-// Cache helper utilities
+// Cache helper utilities — gracefully degrade when Redis is unavailable
 export const cache = {
   async get<T>(key: string): Promise<T | null> {
     const client = getRedisClient();
-    const value = await client.get(key);
-    if (!value) return null;
+    if (!client || client.status !== 'ready') return null;
     try {
+      const value = await client.get(key);
+      if (!value) return null;
       return JSON.parse(value) as T;
     } catch {
-      return value as unknown as T;
+      return null;
     }
   },
 
   async set(key: string, value: unknown, ttlSeconds?: number): Promise<void> {
     const client = getRedisClient();
-    const serialized = JSON.stringify(value);
-    if (ttlSeconds) {
-      await client.setex(key, ttlSeconds, serialized);
-    } else {
-      await client.set(key, serialized);
+    if (!client || client.status !== 'ready') return;
+    try {
+      const serialized = JSON.stringify(value);
+      if (ttlSeconds) {
+        await client.setex(key, ttlSeconds, serialized);
+      } else {
+        await client.set(key, serialized);
+      }
+    } catch {
+      // ignore cache write errors
     }
   },
 
   async del(key: string): Promise<void> {
     const client = getRedisClient();
-    await client.del(key);
+    if (!client || client.status !== 'ready') return;
+    try {
+      await client.del(key);
+    } catch {
+      // ignore
+    }
   },
 
   async delPattern(pattern: string): Promise<void> {
     const client = getRedisClient();
-    const keys = await client.keys(pattern);
-    if (keys.length > 0) {
-      await client.del(...keys);
+    if (!client || client.status !== 'ready') return;
+    try {
+      const keys = await client.keys(pattern);
+      if (keys.length > 0) {
+        await client.del(...keys);
+      }
+    } catch {
+      // ignore
     }
   },
 
