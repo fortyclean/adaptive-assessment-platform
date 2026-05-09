@@ -29,8 +29,7 @@ RUN addgroup -g 1001 -S nodejs && \
 
 USER nodejs
 
-# Railway injects PORT dynamically — default to 3000
-ENV PORT=3000
-EXPOSE ${PORT}
+# Railway sets PORT dynamically — listen on 0.0.0.0
+EXPOSE 3000
 
 CMD ["node", "dist/app.js"]

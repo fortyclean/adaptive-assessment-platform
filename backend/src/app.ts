@@ -74,11 +74,12 @@ async function startServer(): Promise<void> {
     // Connect to Redis
     await connectRedis();
 
-    // Start HTTP server
-    const server = app.listen(config.app.port, () => {
-      logger.info(`Server running on port ${config.app.port}`, {
+    // Start HTTP server — Railway injects PORT dynamically
+    const port = parseInt(process.env.PORT || '3000', 10);
+    const server = app.listen(port, '0.0.0.0', () => {
+      logger.info(`Server running on port ${port}`, {
         environment: config.app.env,
-        port: config.app.port,
+        port,
       });
     });
 
