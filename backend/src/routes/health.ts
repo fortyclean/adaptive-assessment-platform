@@ -8,7 +8,8 @@ router.get('/', async (_req: Request, res: Response) => {
   const mongoStatus = getMongoDBStatus();
   const redisStatus = getRedisStatus();
 
-  const isHealthy = mongoStatus.connected && redisStatus.connected;
+  // Healthy = MongoDB connected (Redis is optional/cache only)
+  const isHealthy = mongoStatus.connected;
 
   const healthData = {
     status: isHealthy ? 'healthy' : 'degraded',
