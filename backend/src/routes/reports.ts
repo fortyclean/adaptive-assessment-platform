@@ -764,4 +764,83 @@ router.get('/school/export', authorize('admin'), async (req: Request, res: Respo
   }
 });
 
+// ─── GET /api/v1/reports/classroom/:id/certificates — Student certificates ───
+
+router.get('/classroom/:id/certificates', authorize('teacher', 'admin'), async (req: Request, res: Response): Promise<void> => {
+  try {
+    const classroomId = new mongoose.Types.ObjectId(req.params.id);
+
+    const classroom = await Classroom.findById(classroomId)
+      .populate('studentIds', 'fullName username email')
+      .lean();
+
+    if (!classroom) {
+      res.status(404).json({ error: 'Classroom not found' });
+      return;
+    }
+
+    // Get latest attempt score per student in this classroom
+    const studentScores = await StudentAttempt.aggregate([
+      { $match: { classroomId, status: { $in: ['completed', 'timed_out'] } } },
+      { $sort: { submittedAt: -1 } },
+      {
+        $group: {
+          _id: '$studentId',
+          averageScore: { $avg: '$scorePercentage' },
+          totalAttempts: { $sum: 1 },
+          lastScore: { $first: '$scorePercentage' },
+          totalPoints: { $sum: '$pointsEarned' },
+        },
+      },
+    ]);
+
+    const scoreMap = new Map(studentScores.map((s) => [s._id.toString(), s]));
+
+    const students = (classroom.studentIds as unknown as { _id: mongoose.Types.ObjectId; fullName: string; username: string; email?: string }[])
+      .map((student) => {
+        const stats = scoreMap.get(student._id.toString());
+        const avgScore = stats?.averageScore ?? 0;
+        const passed = avgScore >= 50;
+
+        let grade = 'راسب';
+        if (avgScore >= 95) grade = 'ممتاز';
+        else if (avgScore >= 85) grade = 'امتياز';
+        else if (avgScore >= 75) grade = 'جيد جداً';
+        else if (avgScore >= 65) grade = 'جيد';
+        else if (avgScore >= 50) grade = 'مقبول';
+
+        return {
+          _id: student._id,
+          fullName: student.fullName,
+          username: student.username,
+          email: student.email,
+          score: Math.round(avgScore * 100) / 100,
+          grade,
+          passed,
+          totalAttempts: stats?.totalAttempts ?? 0,
+          totalPoints: stats?.totalPoints ?? 0,
+        };
+      })
+      .sort((a, b) => b.score - a.score);
+
+    res.status(200).json({
+      classroom: {
+        _id: classroom._id,
+        name: classroom.name,
+        gradeLevel: classroom.gradeLevel,
+        academicYear: classroom.academicYear,
+      },
+      students,
+      summary: {
+        total: students.length,
+        passed: students.filter((s) => s.passed).length,
+        failed: students.filter((s) => !s.passed).length,
+      },
+    });
+  } catch (error) {
+    logger.error('Certificates report error', { error });
+    res.status(500).json({ error: 'An internal server error occurred' });
+  }
+});
+
 export default router;

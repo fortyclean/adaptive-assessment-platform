@@ -70,7 +70,7 @@ router.get('/', authorize('admin', 'teacher'), async (req: Request, res: Respons
 
 // ─── POST /api/v1/classrooms ──────────────────────────────────────────────────
 
-router.post('/', authorize('admin'), async (req: Request, res: Response): Promise<void> => {
+router.post('/', authorize('admin', 'teacher'), async (req: Request, res: Response): Promise<void> => {
   try {
     const validation = createClassroomSchema.safeParse(req.body);
     if (!validation.success) {
@@ -78,10 +78,24 @@ router.post('/', authorize('admin'), async (req: Request, res: Response): Promis
       return;
     }
 
-    const classroom = new Classroom(validation.data);
+    const classroomData: Record<string, unknown> = { ...validation.data };
+
+    // Teachers automatically become the teacher of the classroom they create
+    if (req.user!.role === 'teacher') {
+      classroomData.teacherIds = [new mongoose.Types.ObjectId(req.user!.userId)];
+    }
+
+    const classroom = new Classroom(classroomData);
     await classroom.save();
 
-    logger.info('Classroom created', { adminId: req.user!.userId, classroomId: classroom._id });
+    // Associate classroom with teacher's classroomIds
+    if (req.user!.role === 'teacher') {
+      await User.findByIdAndUpdate(req.user!.userId, {
+        $addToSet: { classroomIds: classroom._id },
+      });
+    }
+
+    logger.info('Classroom created', { userId: req.user!.userId, role: req.user!.role, classroomId: classroom._id });
     res.status(201).json({ classroom });
   } catch (error) {
     logger.error('Create classroom error', { error });

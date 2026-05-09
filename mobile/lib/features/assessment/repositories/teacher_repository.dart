@@ -82,7 +82,17 @@ class TeacherRepository {
         response.data['classrooms'] as List);
   }
 
-  /// GET /api/v1/attempts/:id — for essay grading
+  /// POST /api/v1/classrooms
+  Future<Map<String, dynamic>> createClassroom(Map<String, dynamic> data) async {
+    final response = await _apiService.dio.post('/classrooms', data: data);
+    return response.data['classroom'] as Map<String, dynamic>;
+  }
+
+  /// GET /api/v1/reports/classroom/:id/certificates
+  Future<Map<String, dynamic>> getClassroomCertificates(String classroomId) async {
+    final response = await _apiService.dio.get('/reports/classroom/$classroomId/certificates');
+    return response.data as Map<String, dynamic>;
+  }
   Future<Map<String, dynamic>> getAttemptForGrading(String attemptId) async {
     final response = await _apiService.dio.get('/attempts/$attemptId');
     return response.data as Map<String, dynamic>;
