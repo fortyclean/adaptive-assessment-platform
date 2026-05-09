@@ -154,7 +154,7 @@ router.post('/', authorize('student'), async (req: Request, res: Response): Prom
       }).select('_id difficulty subject unit mainSkill subSkill questionText options correctAnswer').lean();
 
       const ttlSeconds = assessment.timeLimitMinutes * 60 + 300; // session duration + 5 min buffer
-      await initializeSession(attempt._id.toString(), questions as QuestionCandidate[], ttlSeconds);
+      await initializeSession(attempt._id.toString(), questions as unknown as QuestionCandidate[], ttlSeconds);
     }
 
     logger.info('Attempt started', { studentId, assessmentId, attemptId: attempt._id });
@@ -233,7 +233,7 @@ router.get('/:id/next-question', authorize('student'), async (req: Request, res:
           unit: { $in: assessment.units },
           isArchived: false,
         }).select('_id difficulty subject unit mainSkill subSkill questionText options').lean();
-        questionBank = questions as (QuestionCandidate & Record<string, unknown>)[];
+        questionBank = questions as unknown as (QuestionCandidate & Record<string, unknown>)[];
         const ttlSeconds = assessment.timeLimitMinutes * 60 + 300;
         await initializeSession(attempt._id.toString(), questionBank, ttlSeconds);
       }

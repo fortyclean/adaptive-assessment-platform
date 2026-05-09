@@ -100,7 +100,7 @@ const reportScheduleSchema = new Schema<IReportScheduleDocument>(
     timestamps: true,
     toJSON: {
       transform: (_doc, ret) => {
-        delete ret.__v;
+        ret['__v'] = undefined;
         return ret;
       },
     },

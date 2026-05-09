@@ -71,7 +71,7 @@ const validateRow = (
 
   // Check required fields
   for (const col of REQUIRED_COLUMNS) {
-    const value = (row as Record<string, string>)[col];
+    const value = (row as unknown as Record<string, string>)[col];
     if (!value || String(value).trim() === '') {
       errors.push({
         row: rowIndex,

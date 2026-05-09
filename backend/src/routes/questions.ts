@@ -27,9 +27,6 @@ const upload = multer({
   },
 });
 
-const router = Router();
-router.use(authenticate);
-
 // ─── Validation Schemas ───────────────────────────────────────────────────────
 
 const questionSchema = z.object({

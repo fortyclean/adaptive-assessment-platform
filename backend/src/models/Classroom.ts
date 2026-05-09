@@ -52,7 +52,7 @@ const classroomSchema = new Schema<IClassroomDocument>(
     timestamps: true,
     toJSON: {
       transform: (_doc, ret) => {
-        delete ret.__v;
+        ret['__v'] = undefined;
         return ret;
       },
     },

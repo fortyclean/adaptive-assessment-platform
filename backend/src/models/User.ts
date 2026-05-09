@@ -90,11 +90,11 @@ const userSchema = new Schema<IUserDocument>(
     timestamps: true,
     toJSON: {
       transform: (_doc, ret) => {
-        delete ret.passwordHash;
-        delete ret.failedLoginAttempts;
-        delete ret.lockedUntil;
-        delete ret.activeSessions;
-        delete ret.__v;
+        ret['passwordHash'] = undefined;
+        ret['failedLoginAttempts'] = undefined;
+        ret['lockedUntil'] = undefined;
+        ret['activeSessions'] = undefined;
+        ret['__v'] = undefined;
         return ret;
       },
     },

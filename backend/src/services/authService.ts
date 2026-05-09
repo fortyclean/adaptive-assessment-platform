@@ -50,12 +50,12 @@ export const validatePasswordStrength = (password: string): { valid: boolean; me
 
 export const generateTokens = (payload: TokenPayload): AuthTokens => {
   const accessToken = jwt.sign(payload, env.JWT_SECRET, {
-    expiresIn: env.JWT_EXPIRES_IN as string,
+    expiresIn: env.JWT_EXPIRES_IN as unknown as number,
   });
 
   const refreshSecret = env.JWT_REFRESH_SECRET || env.JWT_SECRET;
   const refreshToken = jwt.sign(payload, refreshSecret, {
-    expiresIn: env.JWT_REFRESH_EXPIRES_IN as string,
+    expiresIn: env.JWT_REFRESH_EXPIRES_IN as unknown as number,
   });
 
   return { accessToken, refreshToken };
@@ -85,9 +85,8 @@ export const loginUser = async (
   password: string,
   ipAddress: string,
 ): Promise<LoginResult> => {
-  const user = await User.findByUsername(username).select(
-    '+passwordHash +failedLoginAttempts +lockedUntil +activeSessions',
-  );
+  const user = await User.findOne({ username: username.toLowerCase().trim() })
+    .select('+passwordHash +failedLoginAttempts +lockedUntil +activeSessions') as IUserDocument | null;
 
   if (!user) {
     // Return generic error to prevent username enumeration
