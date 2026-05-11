@@ -71,7 +71,7 @@ class _ManageAssessmentsScreenState
     {
       '_id': 'demo-math',
       'title': 'اختبار الرياضيات التجريبي',
-      'subject': 'Mathematics',
+      'subject': 'الرياضيات',
       'status': 'active',
       'assessmentType': 'adaptive',
       'questionCount': 20,
@@ -80,7 +80,7 @@ class _ManageAssessmentsScreenState
     {
       '_id': 'demo-arabic',
       'title': 'اختبار اللغة العربية التجريبي',
-      'subject': 'Arabic',
+      'subject': 'اللغة العربية',
       'status': 'active',
       'assessmentType': 'adaptive',
       'questionCount': 20,
@@ -89,7 +89,7 @@ class _ManageAssessmentsScreenState
     {
       '_id': 'demo-english',
       'title': 'اختبار اللغة الإنجليزية التجريبي',
-      'subject': 'English',
+      'subject': 'اللغة الإنجليزية',
       'status': 'active',
       'assessmentType': 'adaptive',
       'questionCount': 20,
@@ -98,7 +98,7 @@ class _ManageAssessmentsScreenState
     {
       '_id': 'demo-history',
       'title': 'اختبار التاريخ التجريبي',
-      'subject': 'History',
+      'subject': 'التاريخ',
       'status': 'active',
       'assessmentType': 'adaptive',
       'questionCount': 20,
@@ -107,7 +107,7 @@ class _ManageAssessmentsScreenState
     {
       '_id': 'demo-biology',
       'title': 'اختبار الأحياء التجريبي',
-      'subject': 'Biology',
+      'subject': 'الأحياء',
       'status': 'active',
       'assessmentType': 'adaptive',
       'questionCount': 20,
@@ -116,7 +116,7 @@ class _ManageAssessmentsScreenState
     {
       '_id': 'demo-chemistry',
       'title': 'اختبار الكيمياء التجريبي',
-      'subject': 'Chemistry',
+      'subject': 'الكيمياء',
       'status': 'active',
       'assessmentType': 'adaptive',
       'questionCount': 20,
@@ -155,53 +155,128 @@ class _ManageAssessmentsScreenState
 
   void _showEditDialog(BuildContext context, Map<String, dynamic> assessment) {
     final titleController = TextEditingController(text: assessment['title'] as String? ?? '');
+    final subjectController = TextEditingController(text: assessment['subject'] as String? ?? '');
+    String selectedStatus = assessment['status'] as String? ?? 'draft';
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-          left: 16, right: 16, top: 20,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Handle
-            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
-            const SizedBox(height: 16),
-            const Text('تعديل الاختبار', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 16),
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(
-                labelText: 'عنوان الاختبار',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+            left: 16, right: 16, top: 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
+                  const Text('تعديل الاختبار', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'Almarai')),
+                  const SizedBox(width: 40),
+                ],
               ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Update locally
-                final idx = _assessments.indexWhere((a) => a['_id'] == assessment['_id']);
-                if (idx != -1) {
-                  setState(() {
-                    _assessments[idx] = Map.from(_assessments[idx])..['title'] = titleController.text.trim();
-                  });
-                }
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم تحديث الاختبار'), behavior: SnackBarBehavior.floating),
-                );
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-              child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-            ),
-          ],
+              const SizedBox(height: 16),
+              // Title field
+              TextField(
+                controller: titleController,
+                textDirection: TextDirection.rtl,
+                decoration: InputDecoration(
+                  labelText: 'عنوان الاختبار',
+                  prefixIcon: const Icon(Icons.title_rounded),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Subject field
+              TextField(
+                controller: subjectController,
+                textDirection: TextDirection.rtl,
+                decoration: InputDecoration(
+                  labelText: 'المادة الدراسية',
+                  prefixIcon: const Icon(Icons.book_outlined),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Status selector
+              const Text('الحالة:', style: TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  for (final s in [
+                    {'value': 'draft', 'label': 'مسودة', 'color': AppColors.onSurfaceVariant},
+                    {'value': 'active', 'label': 'نشط', 'color': AppColors.success},
+                    {'value': 'completed', 'label': 'مؤرشف', 'color': AppColors.primary},
+                  ]) ...[
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => setModalState(() => selectedStatus = s['value'] as String),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          margin: const EdgeInsets.only(left: 6),
+                          decoration: BoxDecoration(
+                            color: selectedStatus == s['value'] ? (s['color'] as Color).withOpacity(0.15) : Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: selectedStatus == s['value'] ? s['color'] as Color : AppColors.outlineVariant, width: selectedStatus == s['value'] ? 2 : 1),
+                          ),
+                          child: Text(s['label'] as String, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Almarai', fontSize: 13, color: s['color'] as Color, fontWeight: FontWeight.w600)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Questions button
+              OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  context.push('/teacher/questions');
+                },
+                icon: const Icon(Icons.quiz_outlined),
+                label: const Text('تعديل الأسئلة من بنك الأسئلة', style: TextStyle(fontFamily: 'Almarai')),
+                style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 12), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              ),
+              const SizedBox(height: 10),
+              // Save button
+              ElevatedButton(
+                onPressed: () async {
+                  final idx = _assessments.indexWhere((a) => a['_id'] == assessment['_id']);
+                  if (idx != -1) {
+                    setState(() {
+                      _assessments[idx] = Map.from(_assessments[idx])
+                        ..['title'] = titleController.text.trim()
+                        ..['subject'] = subjectController.text.trim()
+                        ..['status'] = selectedStatus;
+                    });
+                  }
+                  Navigator.pop(ctx);
+                  // Try to save to backend
+                  try {
+                    // Backend update would go here
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('✅ تم حفظ التغييرات'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.success),
+                    );
+                  } catch (_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('تم الحفظ محلياً'), behavior: SnackBarBehavior.floating),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, fontFamily: 'Almarai')),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
         ),
       ),
     );

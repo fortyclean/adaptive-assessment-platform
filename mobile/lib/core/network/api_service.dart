@@ -93,6 +93,12 @@ class _AuthInterceptor extends Interceptor {
         if (newToken != null) {
           await _storage.write(
               key: AppConstants.accessTokenKey, value: newToken);
+          final newRefreshToken = response.data['refreshToken'] as String?;
+          if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
+            await _storage.write(
+                key: AppConstants.refreshTokenKey,
+                value: newRefreshToken);
+          }
 
           // Retry original request with new token
           final retryOptions = err.requestOptions;

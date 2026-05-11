@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../repositories/admin_repository.dart';
 
@@ -20,6 +21,7 @@ class _ClassroomManagementScreenState
     extends ConsumerState<ClassroomManagementScreen> {
   bool _isLoading = true;
   List<Map<String, dynamic>> _classrooms = [];
+  String? _errorMessage;
 
   // ── Mock data used as fallback when API fails ─────────────────────────────
   static const List<Map<String, dynamic>> _mockClassrooms = [
@@ -85,7 +87,10 @@ class _ClassroomManagementScreenState
   }
 
   Future<void> _loadClassrooms() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final data = await ref.read(adminRepositoryProvider).getClassrooms();
       setState(() {
@@ -93,7 +98,16 @@ class _ClassroomManagementScreenState
         _isLoading = false;
       });
     } catch (_) {
-      // Fallback to mock data so the screen is always usable
+      if (!AppConstants.useMockData) {
+        setState(() {
+          _classrooms = [];
+          _isLoading = false;
+          _errorMessage =
+              'تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.';
+        });
+        return;
+      }
+      // Fallback to mock data in demo mode
       setState(() {
         _classrooms = List<Map<String, dynamic>>.from(_mockClassrooms);
         _isLoading = false;
@@ -129,6 +143,18 @@ class _ClassroomManagementScreenState
         await ref.read(adminRepositoryProvider).deleteClassroom(id);
         _loadClassrooms();
       } catch (e) {
+        if (!AppConstants.useMockData) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('تعذر حذف الفصل. يرجى المحاولة مرة أخرى'),
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+          return;
+        }
         // Demo mode: delete locally
         setState(() {
           _classrooms.removeWhere((c) => c['_id'] == id);
@@ -182,6 +208,34 @@ class _ClassroomManagementScreenState
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
+            : _errorMessage != null
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.error_outline,
+                              color: AppColors.error, size: 40),
+                          const SizedBox(height: 12),
+                          Text(
+                            _errorMessage!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            onPressed: _loadClassrooms,
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('إعادة المحاولة'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
             : _classrooms.isEmpty
                 ? _buildEmptyState()
                 : RefreshIndicator(
@@ -243,7 +297,7 @@ class _ClassroomManagementScreenState
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Color(0xFF64748B)),
-          onPressed: () => context.push('/teacher/notifications'),
+          onPressed: () => context.push('/notifications'),
           tooltip: 'الإشعارات',
         ),
         const SizedBox(width: 4),
@@ -824,6 +878,18 @@ class _CreateClassroomDialogState
       });
       widget.onCreated();
     } catch (_) {
+      if (!AppConstants.useMockData) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تعذر إنشاء الفصل. يرجى المحاولة مرة أخرى'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
       // Demo mode: simulate successful creation locally
       // Pass the new classroom data back via callback
       widget.onCreatedWithData?.call({

@@ -61,11 +61,11 @@ class AppConstants {
 
   // ─── Subjects ─────────────────────────────────────────────────────────────
   static const List<String> subjects = [
-    'Mathematics',
-    'English',
-    'Arabic',
-    'Physics',
-    'Chemistry',
-    'Biology',
+    'الرياضيات',
+    'اللغة الإنجليزية',
+    'اللغة العربية',
+    'الفيزياء',
+    'الكيمياء',
+    'الأحياء',
   ];
 }

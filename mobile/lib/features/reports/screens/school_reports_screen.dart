@@ -5,12 +5,20 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../auth/repositories/admin_repository.dart';
+import '../../../shared/providers/auth_provider.dart';
 
 /// School Reports Screen — Screen 29
 /// Requirements: 19.1–19.5
 /// Shows KPI bento grid, classroom comparison bars, strengths/weaknesses.
 class SchoolReportsScreen extends ConsumerStatefulWidget {
-  const SchoolReportsScreen({super.key});
+  const SchoolReportsScreen({
+    super.key,
+    this.initialGradeLevel,
+    this.initialSubject,
+  });
+
+  final String? initialGradeLevel;
+  final String? initialSubject;
 
   @override
   ConsumerState<SchoolReportsScreen> createState() =>
@@ -21,6 +29,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   // ── Summary (Req 19.1) ────────────────────────────────────────────────────
   bool _summaryLoading = true;
   Map<String, dynamic>? _summaryReport;
+  String? _summaryError;
 
   // ── Filters (Req 19.5) ────────────────────────────────────────────────────
   String? _selectedSubject;
@@ -34,10 +43,18 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   // ── Classroom Comparison (Req 19.2) ───────────────────────────────────────
   bool _comparisonLoading = false;
   List<Map<String, dynamic>> _comparisonData = [];
+  String? _comparisonError;
 
   // ── Weakness Identification (Req 19.4) ────────────────────────────────────
   bool _weaknessLoading = false;
   List<Map<String, dynamic>> _weaknessData = [];
+  String? _weaknessError;
+
+  bool get _allowMockFallback {
+    if (AppConstants.useMockData) return true;
+    final authState = ref.read(authProvider);
+    return (authState.accessToken ?? '').startsWith('demo-token-');
+  }
 
   // ── Mock data fallbacks ───────────────────────────────────────────────────
   static const Map<String, dynamic> _mockSummary = {
@@ -68,13 +85,29 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   @override
   void initState() {
     super.initState();
+    // Set initial filters from constructor parameters
+    if (widget.initialGradeLevel != null) {
+      _selectedGradeLevel = widget.initialGradeLevel;
+    }
+    if (widget.initialSubject != null) {
+      _selectedSubject = widget.initialSubject;
+    }
     _loadSummary();
     _loadComparison();
     _loadWeaknesses();
+    // Call _onFiltersChanged after setting initial filters to load filtered data
+    if (widget.initialGradeLevel != null || widget.initialSubject != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _onFiltersChanged();
+      });
+    }
   }
 
   Future<void> _loadSummary() async {
-    setState(() => _summaryLoading = true);
+    setState(() {
+      _summaryLoading = true;
+      _summaryError = null;
+    });
     try {
       final data = await ref.read(adminRepositoryProvider).getSchoolReport();
       setState(() {
@@ -82,15 +115,25 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         _summaryLoading = false;
       });
     } catch (_) {
-      setState(() {
-        _summaryReport = Map<String, dynamic>.from(_mockSummary);
-        _summaryLoading = false;
-      });
+      if (_allowMockFallback) {
+        setState(() {
+          _summaryReport = Map<String, dynamic>.from(_mockSummary);
+          _summaryLoading = false;
+        });
+      } else {
+        setState(() {
+          _summaryLoading = false;
+          _summaryError = 'تعذر تحميل ملخص تقارير المدرسة.';
+        });
+      }
     }
   }
 
   Future<void> _loadComparison() async {
-    setState(() => _comparisonLoading = true);
+    setState(() {
+      _comparisonLoading = true;
+      _comparisonError = null;
+    });
     try {
       final data = await ref.read(adminRepositoryProvider).getClassroomComparison(
             subject: _selectedSubject,
@@ -101,15 +144,25 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         _comparisonLoading = false;
       });
     } catch (_) {
-      setState(() {
-        _comparisonData = List<Map<String, dynamic>>.from(_mockComparison);
-        _comparisonLoading = false;
-      });
+      if (_allowMockFallback) {
+        setState(() {
+          _comparisonData = List<Map<String, dynamic>>.from(_mockComparison);
+          _comparisonLoading = false;
+        });
+      } else {
+        setState(() {
+          _comparisonLoading = false;
+          _comparisonError = 'تعذر تحميل مقارنة الفصول.';
+        });
+      }
     }
   }
 
   Future<void> _loadWeaknesses() async {
-    setState(() => _weaknessLoading = true);
+    setState(() {
+      _weaknessLoading = true;
+      _weaknessError = null;
+    });
     try {
       final data = await ref.read(adminRepositoryProvider).getWeakestSkills(
             subject: _selectedSubject,
@@ -120,10 +173,17 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         _weaknessLoading = false;
       });
     } catch (_) {
-      setState(() {
-        _weaknessData = List<Map<String, dynamic>>.from(_mockWeaknesses);
-        _weaknessLoading = false;
-      });
+      if (_allowMockFallback) {
+        setState(() {
+          _weaknessData = List<Map<String, dynamic>>.from(_mockWeaknesses);
+          _weaknessLoading = false;
+        });
+      } else {
+        setState(() {
+          _weaknessLoading = false;
+          _weaknessError = 'تعذر تحميل مهارات الضعف.';
+        });
+      }
     }
   }
 
@@ -158,6 +218,16 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                         child: CircularProgressIndicator(),
                       ),
                     )
+                  : _summaryError != null
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Text(
+                              _summaryError!,
+                              style: const TextStyle(color: AppColors.error),
+                            ),
+                          ),
+                        )
                   : _buildKpiBentoGrid(),
               const SizedBox(height: 24),
 
@@ -436,6 +506,14 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           // Comparison bars
           if (_comparisonLoading)
             const Center(child: CircularProgressIndicator())
+          else if (_comparisonError != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                _comparisonError!,
+                style: const TextStyle(color: AppColors.error),
+              ),
+            )
           else
             ..._comparisonData.asMap().entries.map((entry) {
               final i = entry.key;
@@ -612,6 +690,11 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                 const SizedBox(height: 12),
                 if (_weaknessLoading)
                   const Center(child: CircularProgressIndicator())
+                else if (_weaknessError != null)
+                  Text(
+                    _weaknessError!,
+                    style: const TextStyle(color: AppColors.error, fontSize: 12),
+                  )
                 else
                   ..._weaknessData.take(3).map((s) {
                     return Padding(

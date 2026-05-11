@@ -55,9 +55,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   String? _selectedAnswer;
   bool _isLoading = true;
   bool _isSubmitting = false;
+  String? _fatalError;
 
-  // Demo mode — used when API is unavailable
-  bool _isDemoMode = false;
+  // Demo mode is enabled only when explicitly configured.
+  bool _isDemoMode = AppConstants.useMockData;
   int _demoQuestionIndex = 0;
   List<Map<String, dynamic>> _demoQuestions = [];
 
@@ -109,7 +110,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   }
 
   Future<void> _loadNextQuestion() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _fatalError = null;
+    });
 
     // ── Demo mode: serve questions from local data ────────────────────────
     if (_isDemoMode) {
@@ -154,21 +158,26 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       } else if (qType == _QuestionType.essay) {
         _essayController.text = restoredAnswer ?? '';
       }
-    } catch (e) {
-      // API failed — switch to demo mode
-      _isDemoMode = true;
-      _demoQuestionIndex = 0;
-      // Pick questions based on assessmentId subject hint, or use all
-      _demoQuestions = _buildDemoQuestions();
-      if (_demoQuestions.isEmpty) {
-        setState(() => _isLoading = false);
+    } catch (_) {
+      if (_isDemoMode) {
+        _demoQuestionIndex = 0;
+        _demoQuestions = _buildDemoQuestions();
+        if (_demoQuestions.isEmpty) {
+          setState(() => _isLoading = false);
+          return;
+        }
+        final q = _demoQuestions[0];
+        setState(() {
+          _currentQuestion = q;
+          _selectedAnswer = null;
+          _isLoading = false;
+        });
         return;
       }
-      final q = _demoQuestions[0];
       setState(() {
-        _currentQuestion = q;
-        _selectedAnswer = null;
         _isLoading = false;
+        _fatalError =
+            'تعذر تحميل السؤال من الخادم. يرجى إعادة المحاولة أو الرجوع.';
       });
     }
   }
@@ -236,7 +245,13 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
         await _loadNextQuestion();
       }
     } catch (_) {
-      // Answer saved locally — will retry on reconnect
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تعذر إرسال الإجابة. تحقق من الاتصال ثم أعد المحاولة.'),
+          backgroundColor: AppColors.error,
+        ),
+      );
     }
   }
 
@@ -254,7 +269,17 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
             .submitAttempt(widget.attemptId);
         // Clear local cache
         await _pendingAnswersBox.delete(widget.attemptId);
-      } catch (_) {}
+      } catch (_) {
+        if (!mounted) return;
+        setState(() => _isSubmitting = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تعذر تسليم الاختبار. يرجى المحاولة مرة أخرى.'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
     }
 
     if (mounted) {
@@ -341,13 +366,48 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 Expanded(
                   child: _isLoading
                       ? const Center(child: CircularProgressIndicator())
-                      : _buildQuestionBody(),
+                      : (_fatalError != null ? _buildFatalError() : _buildQuestionBody()),
                 ),
                 if (!_isLoading && _currentQuestion != null)
                   _buildNavigationBar(),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFatalError() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline_rounded,
+                size: 48, color: AppColors.error),
+            const SizedBox(height: 12),
+            Text(
+              _fatalError ?? '',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 14,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 16),
+            FilledButton(
+              onPressed: _loadNextQuestion,
+              child: const Text('إعادة المحاولة'),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('رجوع'),
+            ),
+          ],
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/download_helper.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
 /// Teacher Analytics Report Screen — Screen 9, 28, 22
@@ -72,44 +73,23 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
     }
   }
 
-  void _exportReport(BuildContext context) {
+  Future<void> _exportReport(BuildContext context) async {
     if (_report == null) return;
 
-    // Build CSV content
     final students = (_report!['studentResults'] as List?)?.cast<Map<String, dynamic>>() ?? [];
-    final csvLines = ['الاسم,النتيجة,الحالة,الوقت'];
-    for (final s in students) {
-      csvLines.add('${s['fullName']},${s['scorePercentage']}%,${s['status'] == 'completed' ? 'مكتمل' : 'انتهى الوقت'},${(s['timeTakenSeconds'] as int? ?? 0) ~/ 60} دقيقة');
-    }
-    final csvContent = csvLines.join('\n');
+    final headers = ['الاسم', 'النتيجة', 'الحالة', 'الوقت (دقيقة)'];
+    final rows = students.map((s) => [
+      s['fullName'] as String? ?? '',
+      '${s['scorePercentage']}%',
+      s['status'] == 'completed' ? 'مكتمل' : 'انتهى الوقت',
+      '${(s['timeTakenSeconds'] as int? ?? 0) ~/ 60}',
+    ]).toList();
 
-    showDialog(
+    await DownloadHelper.exportReportCsv(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('تصدير التقرير'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text('محتوى CSV:', style: TextStyle(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.outlineVariant),
-              ),
-              child: SelectableText(csvContent, style: const TextStyle(fontSize: 12, fontFamily: 'monospace')),
-            ),
-            const SizedBox(height: 8),
-            const Text('يمكنك نسخ هذا المحتوى ولصقه في Excel', style: TextStyle(fontSize: 12, color: AppColors.onSurfaceVariant)),
-          ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
-        ],
-      ),
+      rows: rows,
+      headers: headers,
+      fileName: 'report_${widget.assessmentId}.csv',
     );
   }
 

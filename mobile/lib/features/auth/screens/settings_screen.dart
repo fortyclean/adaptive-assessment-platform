@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -189,11 +190,31 @@ class SettingsScreen extends ConsumerWidget {
                                   ),
                                   const SizedBox(height: 16),
                                   ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(ctx);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('تم تحديث الملف الشخصي'), behavior: SnackBarBehavior.floating),
-                                      );
+                                    onPressed: () async {
+                                      final newName = nameController.text.trim();
+                                      if (newName.length < 2) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'), behavior: SnackBarBehavior.floating),
+                                        );
+                                        return;
+                                      }
+                                      try {
+                                        final userId = ref.read(currentUserProvider)?.id ?? '';
+                                        await ref.read(authRepositoryProvider).updateProfile(userId: userId, name: newName);
+                                        ref.read(authProvider.notifier).updateName(newName);
+                                        if (context.mounted) {
+                                          Navigator.pop(ctx);
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('تم تحديث الاسم بنجاح'), behavior: SnackBarBehavior.floating),
+                                          );
+                                        }
+                                      } catch (_) {
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'), behavior: SnackBarBehavior.floating),
+                                          );
+                                        }
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                                     child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
@@ -257,11 +278,31 @@ class SettingsScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 16),
                             ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('تم تحديث الملف الشخصي'), behavior: SnackBarBehavior.floating),
-                                );
+                              onPressed: () async {
+                                final newName = nameController.text.trim();
+                                if (newName.length < 2) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'), behavior: SnackBarBehavior.floating),
+                                  );
+                                  return;
+                                }
+                                try {
+                                  final userId = ref.read(currentUserProvider)?.id ?? '';
+                                  await ref.read(authRepositoryProvider).updateProfile(userId: userId, name: newName);
+                                  ref.read(authProvider.notifier).updateName(newName);
+                                  if (context.mounted) {
+                                    Navigator.pop(ctx);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('تم تحديث الاسم بنجاح'), behavior: SnackBarBehavior.floating),
+                                    );
+                                  }
+                                } catch (_) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'), behavior: SnackBarBehavior.floating),
+                                    );
+                                  }
+                                }
                               },
                               style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
                               child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
@@ -307,13 +348,12 @@ class SettingsScreen extends ConsumerWidget {
                           ListTile(
                             leading: const Text('🇺🇸',
                                 style: TextStyle(fontSize: 24)),
-                            title: const Text('English'),
+                            title: const Text('الإنجليزية'),
                             onTap: () {
                               Navigator.pop(ctx);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text(
-                                        'Language: English (coming soon)'),
+                                    content: Text('اللغة الإنجليزية (قريبًا)'),
                                     behavior: SnackBarBehavior.floating),
                               );
                             },
@@ -372,108 +412,10 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               _SettingsTile(
                 icon: Icons.info_outline_rounded,
-                iconColor: AppColors.onSurfaceVariant,
-                title: 'عن التطبيق',
-                subtitle: 'الإصدار 1.9.0 — Adaptive Mastery',
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                      contentPadding: EdgeInsets.zero,
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Header gradient
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(24),
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [AppColors.primary, AppColors.primaryContainer],
-                              ),
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 72,
-                                  height: 72,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 36),
-                                ),
-                                const SizedBox(height: 12),
-                                const Text(
-                                  'Adaptive Mastery',
-                                  style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
-                                ),
-                                const Text(
-                                  'منصة التقييم التكيفي الذكي',
-                                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                                ),
-                                const SizedBox(height: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Text('الإصدار 1.9.0', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Content
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'فكرة التطبيق',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.primary),
-                                ),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  'Adaptive Mastery هي منصة تعليمية ذكية تعتمد على الذكاء الاصطناعي لتقديم تقييمات تكيفية تتكيف مع مستوى كل طالب. تهدف المنصة إلى تحسين نتائج التعلم من خلال:',
-                                  style: TextStyle(fontSize: 13, color: AppColors.onSurfaceVariant, height: 1.6),
-                                  textDirection: TextDirection.rtl,
-                                ),
-                                const SizedBox(height: 12),
-                                _AboutFeature(icon: Icons.psychology_rounded, color: AppColors.primary, text: 'اختبارات تكيفية تتغير صعوبتها بناءً على أداء الطالب'),
-                                _AboutFeature(icon: Icons.analytics_rounded, color: AppColors.success, text: 'تحليلات تفصيلية لأداء الطلاب والفصول الدراسية'),
-                                _AboutFeature(icon: Icons.quiz_rounded, color: AppColors.warning, text: 'بنك أسئلة شامل بأكثر من 140 سؤال في 7 مواد'),
-                                _AboutFeature(icon: Icons.emoji_events_rounded, color: const Color(0xFFD97706), text: 'نظام نقاط وأوسمة لتحفيز الطلاب على التعلم'),
-                                _AboutFeature(icon: Icons.people_rounded, color: AppColors.primaryContainer, text: 'إدارة متكاملة للمعلمين والطلاب والفصول'),
-                                const SizedBox(height: 16),
-                                const Divider(),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Text('© 2024 Adaptive Mastery', style: TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant)),
-                                    Text('جميع الحقوق محفوظة', style: TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(ctx),
-                          child: const Text('إغلاق', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                iconColor: AppColors.primary,
+                title: 'عن التطبيق وسجل الإصدارات',
+                subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
+                onTap: () => context.push('/about'),
               ),
               _Divider(),
               _SettingsTile(

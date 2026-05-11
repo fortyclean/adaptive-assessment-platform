@@ -6,6 +6,7 @@ export interface IUser {
   username: string;
   passwordHash: string;
   email: string;
+  googleId?: string;
   fullName: string;
   role: UserRole;
   isActive: boolean;
@@ -45,6 +46,10 @@ const userSchema = new Schema<IUserDocument>(
       trim: true,
       lowercase: true,
       match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'],
+    },
+    googleId: {
+      type: String,
+      trim: true,
     },
     fullName: {
       type: String,
@@ -104,6 +109,7 @@ const userSchema = new Schema<IUserDocument>(
 // Indexes
 userSchema.index({ username: 1 }, { unique: true });
 userSchema.index({ email: 1 });
+userSchema.index({ googleId: 1 }, { sparse: true });
 userSchema.index({ role: 1, isActive: 1 });
 
 // Static methods

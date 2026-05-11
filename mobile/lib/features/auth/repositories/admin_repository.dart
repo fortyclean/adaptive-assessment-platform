@@ -14,11 +14,12 @@ class AdminRepository {
 
   /// GET /api/v1/users
   Future<List<Map<String, dynamic>>> getUsers(
-      {String? search, String? role}) async {
+      {String? search, String? role, bool? isActive}) async {
     final response = await _apiService.dio.get('/users',
         queryParameters: {
           if (search != null && search.isNotEmpty) 'search': search,
           if (role != null) 'role': role,
+          if (isActive != null) 'isActive': isActive.toString(),
         });
     return List<Map<String, dynamic>>.from(response.data['users'] as List);
   }
@@ -32,6 +33,11 @@ class AdminRepository {
   /// PATCH /api/v1/users/:id/deactivate
   Future<void> deactivateUser(String id) async {
     await _apiService.dio.patch('/users/$id/deactivate');
+  }
+
+  /// PATCH /api/v1/users/:id/reactivate
+  Future<void> reactivateUser(String id) async {
+    await _apiService.dio.patch('/users/$id/reactivate');
   }
 
   /// POST /api/v1/auth/reset-password

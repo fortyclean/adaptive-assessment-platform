@@ -16,6 +16,8 @@ class GoogleAuthService {
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
+    // Web Client ID — required for backend token verification
+    serverClientId: '444318033747-bsfncs58b51o9bda3491lnphnt1qh94c.apps.googleusercontent.com',
   );
 
   /// Signs in with Google and exchanges the token with the backend.
@@ -40,6 +42,9 @@ class GoogleAuthService {
     );
 
     final data = response.data as Map<String, dynamic>;
+    if (response.statusCode == 202 || data['status'] == 'pending_approval') {
+      throw Exception('pending_approval');
+    }
     final accessToken = data['accessToken'] as String;
     final user = AuthUser.fromJson(data['user'] as Map<String, dynamic>);
 

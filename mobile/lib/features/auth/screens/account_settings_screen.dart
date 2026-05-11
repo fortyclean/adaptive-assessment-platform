@@ -459,10 +459,69 @@ class _AccountSettingsScreenState
     return parts[0][0];
   }
 
-  void _onEditPhoto() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تغيير الصورة الشخصية')),
+  Future<void> _onEditPhoto() async {
+    // Show dialog to edit name
+    final user = ref.read(currentUserProvider);
+    final nameController = TextEditingController(text: user?.fullName ?? '');
+    
+    final result = await showDialog<String>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('تعديل الاسم'),
+          content: TextField(
+            controller: nameController,
+            textDirection: TextDirection.rtl,
+            decoration: InputDecoration(
+              labelText: 'الاسم الكامل',
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('إلغاء'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, nameController.text.trim()),
+              child: const Text('حفظ'),
+            ),
+          ],
+        ),
+      ),
     );
+
+    if (result != null && result.isNotEmpty && mounted) {
+      // Call API to update user profile
+      try {
+        final userId = user?.id ?? '';
+        await ref.read(authRepositoryProvider).updateProfile(
+          userId: userId,
+          name: result,
+        );
+        // Update local state
+        ref.read(authProvider.notifier).updateName(result);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم حفظ التعديلات بنجاح'),
+              backgroundColor: Color(0xFF2E7D32),
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('فشل حفظ التعديلات: $e'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      }
+    }
   }
 
   void _showHelpCenter(BuildContext context) {

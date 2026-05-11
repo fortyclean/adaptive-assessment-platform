@@ -70,6 +70,7 @@ import '../../features/assessment/screens/task_management_screen.dart';
 import '../../features/auth/screens/supervisor_dashboard_screen.dart';
 import '../../features/auth/screens/institution_settings_screen.dart';
 import '../../features/reports/screens/certificates_screen.dart';
+import '../../features/auth/screens/about_screen.dart';
 import '../../features/auth/screens/support_screen.dart';
 import '../../features/auth/screens/ui_feedback_screen.dart';
 
@@ -165,6 +166,7 @@ class AppRoutes {
 
   // Screen 72 — Support (الدعم الفني)
   static const String support = '/support';
+  static const String about = '/about';
 
   // Screen 73 — UI Feedback Components
   static const String uiFeedback = '/ui-feedback';
@@ -297,6 +299,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, __) => const SupportScreen(),
       ),
 
+      // About screen
+      GoRoute(
+        path: AppRoutes.about,
+        name: 'about',
+        builder: (_, __) => const AboutScreen(),
+      ),
+
       // Screen 73 — UI Feedback
       GoRoute(
         path: AppRoutes.uiFeedback,
@@ -334,7 +343,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'users',
             name: 'adminUsers',
-            builder: (_, __) => const UserManagementScreen(),
+            builder: (_, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return UserManagementScreen(
+                initialFilter: extra?['initialFilter'] as String?,
+              );
+            },
           ),
           GoRoute(
             path: 'classrooms',
@@ -344,7 +358,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'reports',
             name: 'adminReports',
-            builder: (_, __) => const SchoolReportsScreen(),
+            builder: (_, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return SchoolReportsScreen(
+                initialGradeLevel: extra?['gradeLevel'] as String?,
+                initialSubject: extra?['subject'] as String?,
+              );
+            },
           ),
           GoRoute(
             path: 'dashboard-v2',

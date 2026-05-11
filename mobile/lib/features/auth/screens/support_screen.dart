@@ -131,63 +131,160 @@ class _SupportScreenState extends State<SupportScreen> {
         const Text('الأقسام الرئيسية', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
         const SizedBox(height: 12),
         // Full-width general card
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('عام', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                  SizedBox(height: 2),
-                  Text('الأسئلة الشائعة حول المنصة', style: TextStyle(color: Colors.white70, fontSize: 12)),
-                ],
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (ctx) => Directionality(
+                textDirection: TextDirection.rtl,
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  title: const Text('قسم عام'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text('الأسئلة الشائعة:', style: TextStyle(fontWeight: FontWeight.w600)),
+                      SizedBox(height: 8),
+                      Text('• كيف أبدأ استخدام المنصة؟'),
+                      Text('• كيف أنشئ اختبار جديد؟'),
+                      Text('• كيف أضيف طلاب إلى الفصل؟'),
+                      Text('• كيف أعرض التقارير؟'),
+                      SizedBox(height: 12),
+                      Text('للمزيد من المساعدة، تواصل مع فريق الدعم.', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
+                  ],
+                ),
               ),
-              Icon(Icons.help_center_outlined, color: Colors.white, size: 40),
-            ],
+            );
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('عام', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                    SizedBox(height: 2),
+                    Text('الأسئلة الشائعة حول المنصة', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  ],
+                ),
+                Icon(Icons.help_center_outlined, color: Colors.white, size: 40),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Expanded(child: _buildCategoryCard(Icons.settings_outlined, 'تقني', 'حلول المشاكل الفنية', const Color(0xFFD0E1FB), const Color(0xFF54647A))),
+            Expanded(child: _buildCategoryCard(
+              Icons.settings_outlined, 'تقني', 'حلول المشاكل الفنية',
+              const Color(0xFFD0E1FB), const Color(0xFF54647A),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      title: const Text('قسم تقني'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text('المشاكل الفنية الشائعة:', style: TextStyle(fontWeight: FontWeight.w600)),
+                          SizedBox(height: 8),
+                          Text('• مشكلة في تسجيل الدخول'),
+                          Text('• بطء في تحميل الصفحات'),
+                          Text('• خطأ في حفظ البيانات'),
+                          Text('• مشكلة في رفع الملفات'),
+                          SizedBox(height: 12),
+                          Text('إذا استمرت المشكلة، تواصل مع الدعم الفني.', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            )),
             const SizedBox(width: 12),
-            Expanded(child: _buildCategoryCard(Icons.payments_outlined, 'الفواتير', 'الاشتراكات والمدفوعات', const Color(0xFFFFDBCE), const Color(0xFF802A00))),
+            Expanded(child: _buildCategoryCard(
+              Icons.payments_outlined, 'الفواتير', 'الاشتراكات والمدفوعات',
+              const Color(0xFFFFDBCE), const Color(0xFF802A00),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      title: const Text('قسم الفواتير'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text('معلومات الاشتراك:', style: TextStyle(fontWeight: FontWeight.w600)),
+                          SizedBox(height: 8),
+                          Text('• الخطة الحالية: مجانية'),
+                          Text('• تاريخ الانتهاء: غير محدد'),
+                          Text('• عدد المستخدمين: غير محدود'),
+                          SizedBox(height: 12),
+                          Text('للترقية أو الاستفسار عن الفواتير، تواصل مع قسم المبيعات.', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            )),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildCategoryCard(IconData icon, String title, String subtitle, Color iconBg, Color iconColor) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFC4C5D5)),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(color: iconBg, borderRadius: BorderRadius.circular(10)),
-            child: Icon(icon, color: iconColor, size: 20),
-          ),
-          const SizedBox(height: 8),
-          Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 2),
-          Text(subtitle, style: const TextStyle(color: AppColors.outline, fontSize: 11)),
-        ],
+  Widget _buildCategoryCard(IconData icon, String title, String subtitle, Color iconBg, Color iconColor, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFC4C5D5)),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(color: iconBg, borderRadius: BorderRadius.circular(10)),
+              child: Icon(icon, color: iconColor, size: 20),
+            ),
+            const SizedBox(height: 8),
+            Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 2),
+            Text(subtitle, style: const TextStyle(color: AppColors.outline, fontSize: 11)),
+          ],
+        ),
       ),
     );
   }
@@ -328,8 +425,33 @@ class _SupportScreenState extends State<SupportScreen> {
           children: [
             const Text('شروحات تعليمية', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             TextButton(onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('عرض جميع الشروحات التعليمية'), behavior: SnackBarBehavior.floating),
+              showDialog(
+                context: context,
+                builder: (ctx) => Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    title: const Text('جميع الشروحات التعليمية'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text('الشروحات المتاحة:', style: TextStyle(fontWeight: FontWeight.w600)),
+                        SizedBox(height: 8),
+                        Text('• كيفية بدء اختبارك الأول'),
+                        Text('• فهم تقارير الأداء'),
+                        Text('• إدارة الفصول الدراسية'),
+                        Text('• إنشاء بنك الأسئلة'),
+                        Text('• استخدام التقييم التكيفي'),
+                        SizedBox(height: 12),
+                        Text('المزيد من الشروحات قريباً...', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
+                    ],
+                  ),
+                ),
               );
             }, child: const Text('عرض الكل', style: TextStyle(color: AppColors.primary))),
           ],
@@ -337,38 +459,76 @@ class _SupportScreenState extends State<SupportScreen> {
         const SizedBox(height: 8),
         ...tutorials.map((t) => Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFC4C5D5)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 72,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE8E7F0),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.play_circle_filled, color: AppColors.primary, size: 32),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(t.title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 4),
-                      Text(t.duration, style: const TextStyle(color: AppColors.outline, fontSize: 11)),
+          child: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    title: Text(t.title),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE8E7F0),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.play_circle_filled, color: AppColors.primary, size: 48),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(t.duration, style: const TextStyle(color: AppColors.outline, fontSize: 12)),
+                        const SizedBox(height: 8),
+                        const Text('هذا الشرح التعليمي سيساعدك على فهم كيفية استخدام المنصة بشكل أفضل.', style: TextStyle(fontSize: 13)),
+                        const SizedBox(height: 8),
+                        const Text('للوصول إلى المحتوى الكامل، يرجى زيارة مركز المساعدة.', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إغلاق')),
                     ],
                   ),
                 ),
-                Icon(t.icon, color: AppColors.primary, size: 24),
-              ],
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFC4C5D5)),
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 72,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE8E7F0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.play_circle_filled, color: AppColors.primary, size: 32),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(t.title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                        const SizedBox(height: 4),
+                        Text(t.duration, style: const TextStyle(color: AppColors.outline, fontSize: 11)),
+                      ],
+                    ),
+                  ),
+                  Icon(t.icon, color: AppColors.primary, size: 24),
+                ],
+              ),
             ),
           ),
         )),

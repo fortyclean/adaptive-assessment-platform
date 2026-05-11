@@ -220,6 +220,26 @@ router.get('/:id/next-question', authorize('student'), async (req: Request, res:
     }
 
     let nextQuestion: QuestionCandidate | null = null;
+    const answeredCount = attempt.answers.length;
+    const presentedCount = attempt.presentedQuestionIds.length;
+
+    // If a question was already served but not yet answered, return it again.
+    // This prevents session drift on retries/network glitches.
+    if (presentedCount > answeredCount) {
+      const pendingQuestionId = attempt.presentedQuestionIds[presentedCount - 1];
+      const pendingQuestion = await Question.findById(pendingQuestionId)
+        .select('_id difficulty subject unit mainSkill subSkill questionText options')
+        .lean();
+      if (pendingQuestion) {
+        res.status(200).json({
+          complete: false,
+          question: pendingQuestion,
+          questionNumber: answeredCount + 1,
+          totalQuestions: assessment.questionCount,
+        });
+        return;
+      }
+    }
 
     if (assessment.assessmentType === 'adaptive') {
       // Retrieve from Redis cache (100ms SLA)
@@ -256,6 +276,10 @@ router.get('/:id/next-question', authorize('student'), async (req: Request, res:
       res.status(200).json({ complete: true, message: 'No more questions available' });
       return;
     }
+
+    // Persist served question inside the session before sending it to client.
+    attempt.presentedQuestionIds.push(new mongoose.Types.ObjectId(nextQuestion._id.toString()));
+    await attempt.save();
 
     // Never send correctAnswer to client before session ends (Req 7.14)
     const { correctAnswer: _hidden, ...safeQuestion } = nextQuestion as QuestionCandidate & { correctAnswer?: string };
@@ -358,7 +382,10 @@ router.post('/:id/answer', authorize('student'), async (req: Request, res: Respo
     });
 
     // Update adaptive difficulty for next question
-    attempt.currentDifficultyLevel = getNextDifficulty(question.difficulty, isCorrect);
+    attempt.currentDifficultyLevel = getNextDifficulty(
+      attempt.currentDifficultyLevel,
+      isCorrect,
+    );
 
     // Check if session is now complete
     if (attempt.answers.length >= assessment.questionCount) {

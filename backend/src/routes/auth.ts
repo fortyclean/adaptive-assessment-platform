@@ -27,6 +27,45 @@ const resetPasswordSchema = z.object({
   userId: z.string().min(1, 'User ID is required'),
 });
 
+const registerSchema = z.object({
+  fullName: z.string().min(2, 'Full name is required').max(100).trim(),
+  email: z.string().email('Valid email is required').trim().toLowerCase(),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
+const refreshSchema = z.object({
+  refreshToken: z.string().min(1).optional(),
+});
+
+function parseRefreshTokenFromCookieHeader(cookieHeader?: string): string | undefined {
+  if (!cookieHeader) return undefined;
+  const cookies = cookieHeader.split(';');
+  for (const cookie of cookies) {
+    const [rawKey, ...rawValueParts] = cookie.trim().split('=');
+    if (rawKey === 'refreshToken') {
+      return rawValueParts.join('=');
+    }
+  }
+  return undefined;
+}
+
+function createUsernameFromEmail(email: string): string {
+  const localPart = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_');
+  return localPart.slice(0, 50);
+}
+
+async function getUniqueUsername(email: string): Promise<string> {
+  const base = createUsernameFromEmail(email) || 'user';
+  let username = base;
+  let suffix = 1;
+  while (await User.findOne({ username })) {
+    const postfix = `_${suffix}`;
+    username = `${base.slice(0, 50 - postfix.length)}${postfix}`;
+    suffix += 1;
+  }
+  return username;
+}
+
 // ─── POST /api/v1/auth/login ──────────────────────────────────────────────────
 
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
@@ -63,10 +102,59 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       accessToken: result.tokens!.accessToken,
+      refreshToken: result.tokens!.refreshToken,
       user: result.user,
     });
   } catch (error) {
     logger.error('Login error', { error });
+    res.status(500).json({ error: 'An internal server error occurred' });
+  }
+});
+
+// ─── POST /api/v1/auth/register ───────────────────────────────────────────────
+
+router.post('/register', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const validation = registerSchema.safeParse(req.body);
+    if (!validation.success) {
+      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+      return;
+    }
+
+    const { fullName, email, password } = validation.data;
+    const existing = await User.findOne({ email });
+    if (existing) {
+      res.status(409).json({ error: 'An account with this email already exists' });
+      return;
+    }
+
+    const strengthCheck = validatePasswordStrength(password);
+    if (!strengthCheck.valid) {
+      res.status(400).json({ error: strengthCheck.message });
+      return;
+    }
+
+    const user = new User({
+      username: await getUniqueUsername(email),
+      email,
+      fullName,
+      passwordHash: await hashPassword(password),
+      role: 'student',
+      isActive: false,
+      classroomIds: [],
+      failedLoginAttempts: 0,
+      activeSessions: [],
+    });
+
+    await user.save();
+    logger.info('Pending student registration created', { email, userId: user._id });
+
+    res.status(202).json({
+      message: 'Registration request submitted and is pending administrator approval.',
+      status: 'pending_approval',
+    });
+  } catch (error) {
+    logger.error('Register error', { error });
     res.status(500).json({ error: 'An internal server error occurred' });
   }
 });
@@ -89,7 +177,17 @@ router.post('/logout', authenticate, async (req: Request, res: Response): Promis
 
 router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
   try {
-    const refreshToken = req.cookies?.refreshToken;
+    const validation = refreshSchema.safeParse(req.body);
+    if (!validation.success) {
+      res.status(400).json({ error: 'Invalid refresh request' });
+      return;
+    }
+
+    const refreshTokenFromBody = validation.data.refreshToken;
+    const refreshTokenFromCookieObject = (req as Request & { cookies?: { refreshToken?: string } }).cookies?.refreshToken;
+    const refreshTokenFromHeader = parseRefreshTokenFromCookieHeader(req.headers.cookie);
+    const refreshToken =
+      refreshTokenFromBody ?? refreshTokenFromCookieObject ?? refreshTokenFromHeader;
 
     if (!refreshToken) {
       res.status(401).json({ error: 'Refresh token not found' });
@@ -127,7 +225,10 @@ router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ accessToken: tokens.accessToken });
+    res.status(200).json({
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    });
   } catch (error) {
     logger.error('Token refresh error', { error });
     res.status(500).json({ error: 'An internal server error occurred' });
@@ -236,23 +337,31 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
     // Find or create user
     let user = await User.findOne({ email });
     if (!user) {
-      // Auto-create account for Google users (default role: student)
+      // Create a pending student request. The administrator must activate it.
       user = new User({
-        username: email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_'),
+        username: await getUniqueUsername(email),
         email,
         fullName: name || email.split('@')[0],
         passwordHash: await hashPassword(googleId + process.env.JWT_SECRET),
         role: 'student',
-        isActive: true,
+        isActive: false,
         googleId,
         classroomIds: [],
         failedLoginAttempts: 0,
         activeSessions: [],
       });
       await user.save();
-      logger.info('New user created via Google Sign-In', { email });
+      logger.info('Pending user created via Google Sign-In', { email });
+      res.status(202).json({
+        message: 'Google account registration is pending administrator approval.',
+        status: 'pending_approval',
+      });
+      return;
     } else if (!user.isActive) {
-      res.status(403).json({ error: 'Account is deactivated' });
+      res.status(403).json({
+        error: 'Account is pending administrator approval or deactivated',
+        status: 'pending_approval',
+      });
       return;
     }
 

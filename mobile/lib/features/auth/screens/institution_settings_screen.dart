@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/router/app_router.dart';
 
 /// Screen 69 — إعدادات المؤسسة (Institution Settings)
 /// Matches design: _69/code.html
@@ -339,9 +340,9 @@ class _InstitutionSettingsScreenState
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(Icons.home_outlined, 'الرئيسية', false, onTap: () => context.push('/admin/dashboard')),
-          _navItem(Icons.quiz_outlined, 'الاختبارات', false, onTap: () => context.push('/admin/classrooms')),
-          _navItem(Icons.bar_chart_outlined, 'التقارير', false, onTap: () => context.push('/admin/reports')),
+          _navItem(Icons.home_outlined, 'الرئيسية', false, onTap: () => context.go(AppRoutes.adminDashboard)),
+          _navItem(Icons.quiz_outlined, 'الاختبارات', false, onTap: () => context.go(AppRoutes.teacherAssessments)),
+          _navItem(Icons.bar_chart_outlined, 'التقارير', false, onTap: () => context.go(AppRoutes.adminReports)),
           _navItem(Icons.settings, 'الإعدادات', true, onTap: null),
         ],
       ),

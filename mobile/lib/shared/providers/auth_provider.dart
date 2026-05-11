@@ -106,6 +106,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
   void logout() {
     state = const AuthState();
   }
+
+  void updateName(String name) {
+    if (state.user == null) return;
+    final updatedUser = AuthUser(
+      id: state.user!.id,
+      username: state.user!.username,
+      fullName: name,
+      email: state.user!.email,
+      role: state.user!.role,
+      classroomIds: state.user!.classroomIds,
+    );
+    state = state.copyWith(user: updatedUser);
+  }
 }
 
 /// Global auth state provider.

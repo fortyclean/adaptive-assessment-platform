@@ -76,14 +76,14 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
   Widget _buildPageIntro() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+        children: const [
         Text(
-          'UI Feedback Components',
+          'مكوّنات رسائل النظام',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Color(0xFF1A1B22)),
         ),
         SizedBox(height: 4),
         Text(
-          'Review the adaptive design of alerts and modals within the mastery environment.',
+          'راجع تصميم التنبيهات والنوافذ المنبثقة داخل واجهة المنصة.',
           style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14),
         ),
       ],
@@ -120,12 +120,12 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
                   Text(
-                    'Data Imported Successfully',
+                    'تم استيراد البيانات بنجاح',
                     style: TextStyle(color: Color(0xFF166534), fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 4),
                   Text(
-                    "32 new adaptive questions have been added to the 'Advanced Biology' bank.",
+                    'تمت إضافة 32 سؤالًا تكيفيًا جديدًا إلى بنك الأحياء المتقدم.',
                     style: TextStyle(color: Color(0xFF166534), fontSize: 13),
                   ),
                 ],
@@ -171,12 +171,12 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
                   Text(
-                    'Failed to Save Question',
+                    'فشل حفظ السؤال',
                     style: TextStyle(color: AppColors.error, fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 4),
                   Text(
-                    "Network connection interrupted. Your progress on 'Item #402' was not synchronized.",
+                    'انقطع اتصال الشبكة. لم تتم مزامنة تقدمك في العنصر رقم 402.',
                     style: TextStyle(color: Color(0xFF991B1B), fontSize: 13),
                   ),
                 ],
@@ -221,13 +221,13 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Deleting an Exam',
+                'حذف اختبار',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               const Text(
-                'This action is irreversible. All student progress data and associated analytics for the "Mid-Term Physics" exam will be permanently removed.',
+                'لا يمكن التراجع عن هذا الإجراء. سيتم حذف بيانات تقدم الطلاب والتحليلات المرتبطة باختبار فيزياء منتصف الفصل نهائيًا.',
                 style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13),
                 textAlign: TextAlign.center,
               ),
@@ -243,7 +243,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                   ),
-                  child: const Text('Permanently Delete', style: TextStyle(fontWeight: FontWeight.w600)),
+                  child: const Text('حذف نهائي', style: TextStyle(fontWeight: FontWeight.w600)),
                 ),
               ),
               const SizedBox(height: 10),
@@ -257,7 +257,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: const Text('Cancel Action'),
+                  child: const Text('إلغاء'),
                 ),
               ),
             ],
@@ -282,7 +282,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'CURRENT SYNC STATUS',
+                'حالة المزامنة الحالية',
                 style: TextStyle(color: Colors.white70, fontSize: 11, letterSpacing: 1),
               ),
               const SizedBox(height: 8),
@@ -323,7 +323,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                     Icon(Icons.history_outlined, color: AppColors.primary, size: 24),
                     SizedBox(height: 8),
                     Text('3', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                    Text('Pending Alerts', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11)),
+                    Text('تنبيهات معلّقة', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11)),
                   ],
                 ),
               ),
@@ -342,8 +342,8 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                   children: const [
                     Icon(Icons.security_outlined, color: Color(0xFF872D00), size: 24),
                     SizedBox(height: 8),
-                    Text('Secure', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                    Text('Access Logged', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11)),
+                    Text('آمن', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                    Text('تم تسجيل الوصول', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 11)),
                   ],
                 ),
               ),
@@ -365,10 +365,10 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(Icons.home_outlined, 'Home', false),
-          _navItem(Icons.quiz_outlined, 'Tests', false),
-          _navItem(Icons.bar_chart_outlined, 'Reports', false),
-          _navItem(Icons.settings, 'Settings', true),
+          _navItem(Icons.home_outlined, 'الرئيسية', false),
+          _navItem(Icons.quiz_outlined, 'الاختبارات', false),
+          _navItem(Icons.bar_chart_outlined, 'التقارير', false),
+          _navItem(Icons.settings, 'الإعدادات', true),
         ],
       ),
     );

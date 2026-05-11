@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Assessment Start Screen — Screen 14
@@ -51,11 +52,18 @@ class _AssessmentStartScreenState
           .getAssessment(widget.assessmentId);
       setState(() {
         _assessment = data;
+        _error = null;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _assessment = _mockAssessment;
+        if (AppConstants.useMockData) {
+          _assessment = _mockAssessment;
+          _error = null;
+        } else {
+          _assessment = null;
+          _error = 'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.';
+        }
         _isLoading = false;
       });
     }
@@ -84,11 +92,12 @@ class _AssessmentStartScreenState
           ? classroomIds!.first as String
           : '';
 
-      // Demo mode: if assessmentId starts with 'mock', 'demo-', or is '1'/'2', go directly to exam
-      if (widget.assessmentId.startsWith('mock') ||
-          widget.assessmentId.startsWith('demo-') ||
-          widget.assessmentId == '1' ||
-          widget.assessmentId == '2') {
+      // Demo mode must be explicitly enabled.
+      if (AppConstants.useMockData &&
+          (widget.assessmentId.startsWith('mock') ||
+              widget.assessmentId.startsWith('demo-') ||
+              widget.assessmentId == '1' ||
+              widget.assessmentId == '2')) {
         if (!mounted) return;
         context.push(
           '/student/assessments/${widget.assessmentId}/exam',
@@ -116,15 +125,12 @@ class _AssessmentStartScreenState
         },
       );
     } catch (e) {
-      // عند فشل API، الانتقال للاختبار بوضع demo باستخدام البيانات المحلية
       if (!mounted) return;
-      context.push(
-        '/student/assessments/${widget.assessmentId}/exam',
-        extra: {
-          'attemptId': 'demo-attempt-${widget.assessmentId}',
-          'questionCount': _assessment!['questionCount'] as int? ?? 20,
-          'timeLimitMinutes': _assessment!['timeLimitMinutes'] as int? ?? 30,
-        },
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.'),
+          backgroundColor: AppColors.error,
+        ),
       );
     } finally {
       if (mounted && _isStarting) setState(() => _isStarting = false);

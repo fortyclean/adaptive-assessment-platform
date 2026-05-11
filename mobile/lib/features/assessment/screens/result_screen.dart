@@ -69,9 +69,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
   /// التحقق مما إذا كان attemptId يشير إلى وضع demo/mock
   bool get _isDemoAttempt {
     final id = widget.attemptId;
-    return id.startsWith('demo-') ||
-        id.startsWith('mock') ||
-        id.startsWith('local-');
+    return AppConstants.useMockData &&
+        (id.startsWith('demo-') ||
+            id.startsWith('mock') ||
+            id.startsWith('local-'));
   }
 
   Future<void> _loadResult() async {
@@ -98,13 +99,11 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
       });
       _animController.forward();
     } on Exception {
-      // عند فشل API، عرض نتائج demo بدلاً من رسالة خطأ
       if (!mounted) return;
       setState(() {
-        _result = _buildDemoResult(widget.attemptId);
+        _error = 'تعذر تحميل النتيجة. يرجى المحاولة مرة أخرى.';
         _isLoading = false;
       });
-      _animController.forward();
     }
   }
 

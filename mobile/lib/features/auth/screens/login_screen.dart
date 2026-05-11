@@ -133,7 +133,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       } else if (e.response?.statusCode == 401) {
         message = 'اسم المستخدم أو كلمة المرور غير صحيحة';
       } else if (e.response?.statusCode == 403) {
-        message = 'الحساب معطّل، تواصل مع المشرف';
+        message = 'الحساب بانتظار اعتماد المشرف أو تم تعطيله. تواصل مع المشرف.';
       } else if (e.type == DioExceptionType.connectionError) {
         message = 'لا يوجد اتصال بالإنترنت';
       } else {
@@ -666,12 +666,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } on DioException catch (e) {
       if (!mounted) return;
+      if (e.response?.data is Map &&
+          (e.response?.data as Map)['status'] == 'pending_approval') {
+        setState(() => _errorMessage =
+            'تم إرسال طلب الانضمام بحساب Google. سيحتاج المشرف إلى الموافقة قبل الدخول.');
+        return;
+      }
       final msg = e.response?.statusCode == 503
           ? 'تسجيل الدخول بـ Google غير مفعّل على الخادم حالياً'
           : 'فشل تسجيل الدخول بـ Google، يرجى المحاولة مجدداً';
       setState(() => _errorMessage = msg);
     } catch (e) {
       if (!mounted) return;
+      if (e.toString().contains('pending_approval')) {
+        setState(() => _errorMessage =
+            'تم إرسال طلب الانضمام بحساب Google. سيحتاج المشرف إلى الموافقة قبل الدخول.');
+        return;
+      }
       final msg = e.toString().contains('إلغاء')
           ? 'تم إلغاء تسجيل الدخول'
           : 'فشل تسجيل الدخول بـ Google';

@@ -22,8 +22,8 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
     _DayItem(name: 'الخميس', date: '19'),
   ];
 
-  final List<_ScheduleItem> _schedule = const [
-    _ScheduleItem(
+  final List<_ScheduleItem> _schedule = [
+    const _ScheduleItem(
       time: '08:00',
       subject: 'الرياضيات',
       teacher: 'أ. أحمد المنصور',
@@ -34,7 +34,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
       tagFg: Color(0xFF001453),
       isBreak: false,
     ),
-    _ScheduleItem(
+    const _ScheduleItem(
       time: '09:30',
       subject: 'العلوم الطبيعية',
       teacher: 'د. سارة العتيبي',
@@ -45,7 +45,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
       tagFg: Color(0xFF380D00),
       isBreak: false,
     ),
-    _ScheduleItem(
+    const _ScheduleItem(
       time: '11:00',
       subject: 'استراحة الصلاة والغداء',
       teacher: '',
@@ -56,7 +56,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
       tagFg: Colors.transparent,
       isBreak: true,
     ),
-    _ScheduleItem(
+    const _ScheduleItem(
       time: '12:30',
       subject: 'اللغة العربية',
       teacher: 'أ. فاطمة الزهراء',
@@ -496,46 +496,138 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
 
   Widget _buildFAB() {
     return FloatingActionButton.extended(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-          builder: (ctx) => Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text('إضافة حصة جديدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 8),
-                const Text('يمكنك إضافة حصة جديدة للجدول الدراسي.', style: TextStyle(color: AppColors.onSurfaceVariant)),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('ميزة إضافة الحصص قيد التطوير'), behavior: SnackBarBehavior.floating),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 48)),
-                  child: const Text('إضافة حصة'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      onPressed: () => _showAddLessonDialog(),
       backgroundColor: AppColors.primary,
       foregroundColor: Colors.white,
       elevation: 6,
       icon: const Icon(Icons.edit_calendar_outlined),
-      label: const Text(
-        'إضافة / تعديل حصة',
-        style: TextStyle(
-          fontFamily: 'Almarai',
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+      label: const Text('إضافة / تعديل حصة', style: TextStyle(fontFamily: 'Almarai', fontSize: 16, fontWeight: FontWeight.w600)),
+    );
+  }
+
+  void _showAddLessonDialog() {
+    final subjectCtrl = TextEditingController();
+    final teacherCtrl = TextEditingController();
+    final locationCtrl = TextEditingController();
+    String selectedTime = '08:00';
+    final times = ['07:00', '08:00', '09:00', '09:30', '10:00', '11:00', '12:00', '12:30', '13:00', '14:00'];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+            left: 16, right: 16, top: 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
+                    Text(
+                      'إضافة حصة - ${_days[_selectedDayIndex].name}',
+                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, fontFamily: 'Almarai'),
+                    ),
+                    const SizedBox(width: 40),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Subject
+                TextField(
+                  controller: subjectCtrl,
+                  textDirection: TextDirection.rtl,
+                  decoration: InputDecoration(
+                    labelText: 'المادة الدراسية *',
+                    prefixIcon: const Icon(Icons.book_outlined),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Teacher
+                TextField(
+                  controller: teacherCtrl,
+                  textDirection: TextDirection.rtl,
+                  decoration: InputDecoration(
+                    labelText: 'اسم المعلم',
+                    prefixIcon: const Icon(Icons.person_outline),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Location
+                TextField(
+                  controller: locationCtrl,
+                  textDirection: TextDirection.rtl,
+                  decoration: InputDecoration(
+                    labelText: 'القاعة / الموقع',
+                    prefixIcon: const Icon(Icons.location_on_outlined),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Time selector
+                const Text('وقت الحصة:', style: TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: times.map((t) => GestureDetector(
+                    onTap: () => setModalState(() => selectedTime = t),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: selectedTime == t ? AppColors.primary : Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: selectedTime == t ? AppColors.primary : AppColors.outlineVariant),
+                      ),
+                      child: Text(t, style: TextStyle(fontFamily: 'Almarai', color: selectedTime == t ? Colors.white : AppColors.onSurface, fontWeight: FontWeight.w600)),
+                    ),
+                  )).toList(),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    if (subjectCtrl.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('يرجى إدخال اسم المادة'), behavior: SnackBarBehavior.floating));
+                      return;
+                    }
+                    Navigator.pop(ctx);
+                    setState(() {
+                      _schedule.add(_ScheduleItem(
+                        time: selectedTime,
+                        subject: subjectCtrl.text.trim(),
+                        teacher: teacherCtrl.text.trim().isEmpty ? 'غير محدد' : teacherCtrl.text.trim(),
+                        location: locationCtrl.text.trim().isEmpty ? 'غير محدد' : locationCtrl.text.trim(),
+                        tag: subjectCtrl.text.trim(),
+                        accentColor: AppColors.primary,
+                        tagBg: const Color(0xFFDDE1FF),
+                        tagFg: const Color(0xFF001453),
+                        isBreak: false,
+                      ));
+                      _schedule.sort((a, b) => a.time.compareTo(b.time));
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('✅ تمت إضافة حصة ${subjectCtrl.text.trim()}'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.success),
+                    );
+                  },
+                  icon: const Icon(Icons.add_rounded),
+                  label: const Text('إضافة الحصة', style: TextStyle(fontSize: 16, fontFamily: 'Almarai')),
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
         ),
       ),
     );

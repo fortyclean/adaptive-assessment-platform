@@ -42,6 +42,22 @@ class AuthRepository {
     return (user: user, accessToken: accessToken);
   }
 
+  /// POST /api/v1/auth/register
+  Future<void> registerStudent({
+    required String fullName,
+    required String email,
+    required String password,
+  }) async {
+    await _apiService.dio.post(
+      '/auth/register',
+      data: {
+        'fullName': fullName,
+        'email': email,
+        'password': password,
+      },
+    );
+  }
+
   /// POST /api/v1/auth/logout
   Future<void> logout() async {
     try {
@@ -79,6 +95,17 @@ class AuthRepository {
       _apiService.clearToken();
       return null;
     }
+  }
+
+  /// PATCH /api/v1/users/:id — update the user's full name.
+  Future<void> updateProfile({
+    required String userId,
+    required String name,
+  }) async {
+    await _apiService.dio.patch(
+      '/users/$userId',
+      data: {'fullName': name},
+    );
   }
 }
 

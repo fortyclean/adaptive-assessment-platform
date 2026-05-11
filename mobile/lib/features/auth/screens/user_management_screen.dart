@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../repositories/admin_repository.dart';
+import '../../../shared/providers/auth_provider.dart';
 
 /// User Management Screen — Screen 17
 /// Requirements: 13.2–13.5
 class UserManagementScreen extends ConsumerStatefulWidget {
-  const UserManagementScreen({super.key});
+  const UserManagementScreen({super.key, this.initialFilter});
+  
+  final String? initialFilter;
 
   @override
   ConsumerState<UserManagementScreen> createState() =>
@@ -18,6 +22,7 @@ class _UserManagementScreenState
     extends ConsumerState<UserManagementScreen> {
   bool _isLoading = false;
   List<Map<String, dynamic>> _users = [];
+  String? _errorMessage;
   String _searchQuery = '';
   String? _roleFilter;
   final _searchController = TextEditingController();
@@ -82,6 +87,10 @@ class _UserManagementScreenState
   @override
   void initState() {
     super.initState();
+    // Set initial filter if provided
+    if (widget.initialFilter != null) {
+      _roleFilter = widget.initialFilter;
+    }
     _loadUsers();
   }
 
@@ -92,17 +101,35 @@ class _UserManagementScreenState
   }
 
   Future<void> _loadUsers() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    final authState = ref.read(authProvider);
+    final isDemoSession = (authState.accessToken ?? '').startsWith('demo-token-');
+    final backendRoleFilter = _roleFilter == 'pending' ? null : _roleFilter;
+    final backendIsActiveFilter = _roleFilter == 'pending' ? false : null;
+
     try {
       final users = await ref.read(adminRepositoryProvider).getUsers(
             search: _searchQuery.isNotEmpty ? _searchQuery : null,
-            role: _roleFilter,
+            role: backendRoleFilter,
+            isActive: backendIsActiveFilter,
           );
       setState(() {
         _users = users.isNotEmpty ? users : _getFilteredMock();
         _isLoading = false;
       });
     } catch (_) {
+      if (!AppConstants.useMockData && !isDemoSession) {
+        setState(() {
+          _users = [];
+          _isLoading = false;
+          _errorMessage =
+              'تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.';
+        });
+        return;
+      }
       setState(() {
         _users = _getFilteredMock();
         _isLoading = false;
@@ -113,7 +140,13 @@ class _UserManagementScreenState
   List<Map<String, dynamic>> _getFilteredMock() {
     var list = List<Map<String, dynamic>>.from(_mockUsers);
     if (_roleFilter != null) {
-      list = list.where((u) => u['role'] == _roleFilter).toList();
+      if (_roleFilter == 'pending') {
+        // Filter for pending users (inactive accounts)
+        list = list.where((u) => u['isActive'] == false).toList();
+      } else {
+        // Filter by role (teacher/student)
+        list = list.where((u) => u['role'] == _roleFilter).toList();
+      }
     }
     if (_searchQuery.isNotEmpty) {
       final q = _searchQuery.toLowerCase();
@@ -159,6 +192,18 @@ class _UserManagementScreenState
           );
         }
       } catch (_) {
+        if (!AppConstants.useMockData) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('تعذر تعطيل الحساب. يرجى المحاولة مرة أخرى'),
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+          return;
+        }
         // Mock deactivate
         setState(() {
           final idx = _users.indexWhere((u) => u['_id'] == id);
@@ -171,6 +216,37 @@ class _UserManagementScreenState
             const SnackBar(content: Text('تم تعطيل الحساب')),
           );
         }
+      }
+    }
+  }
+
+  Future<void> _reactivateUser(String id, String name) async {
+    try {
+      await ref.read(adminRepositoryProvider).reactivateUser(id);
+      await _loadUsers();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('تم تفعيل حساب $name')),
+        );
+      }
+    } catch (_) {
+      if (!AppConstants.useMockData) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تعذر تفعيل الحساب. يرجى المحاولة مرة أخرى'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
+      final idx = _users.indexWhere((u) => u['_id'] == id);
+      if (idx != -1) {
+        setState(() {
+          _users[idx] = Map.from(_users[idx])..['isActive'] = true;
+        });
       }
     }
   }
@@ -383,6 +459,34 @@ class _UserManagementScreenState
                 ? const Center(
                     child: CircularProgressIndicator(
                         color: AppColors.primary))
+                : _errorMessage != null
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.error_outline,
+                                  color: AppColors.error, size: 40),
+                              const SizedBox(height: 12),
+                              Text(
+                                _errorMessage!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.onSurfaceVariant,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                onPressed: _loadUsers,
+                                icon: const Icon(Icons.refresh),
+                                label: const Text('إعادة المحاولة'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                 : _users.isEmpty
                     ? _buildEmpty()
                     : RefreshIndicator(
@@ -401,6 +505,11 @@ class _UserManagementScreenState
                             onEdit: () => _editUser(_users[i]),
                             onReactivate: _users[i]['isActive'] == false
                                 ? () {
+                                    _reactivateUser(
+                                      _users[i]['_id'] as String,
+                                      _users[i]['fullName'] as String,
+                                    );
+                                    return;
                                     final idx = _users.indexWhere(
                                         (u) => u['_id'] == _users[i]['_id']);
                                     if (idx != -1) {
@@ -863,6 +972,18 @@ class _CreateUserDialogState
       });
       widget.onCreated();
     } catch (_) {
+      if (!AppConstants.useMockData) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تعذر إنشاء المستخدم. يرجى المحاولة مرة أخرى'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
       // Demo mode: simulate success
       if (mounted) {
         widget.onCreated();

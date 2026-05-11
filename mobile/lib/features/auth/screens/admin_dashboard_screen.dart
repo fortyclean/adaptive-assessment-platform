@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../repositories/admin_repository.dart';
@@ -19,6 +20,7 @@ class AdminDashboardScreen extends ConsumerStatefulWidget {
 class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
   bool _isLoading = true;
   Map<String, dynamic>? _schoolReport;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -27,7 +29,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
   }
 
   Future<void> _loadData() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final report = await ref.read(adminRepositoryProvider).getSchoolReport();
       setState(() {
@@ -35,19 +40,29 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         _isLoading = false;
       });
     } catch (_) {
-      if (mounted) {
+      if (!mounted) return;
+      final authState = ref.read(authProvider);
+      final isDemoSession =
+          (authState.accessToken ?? '').startsWith('demo-token-');
+      if (!AppConstants.useMockData && !isDemoSession) {
         setState(() {
-          _schoolReport = {
-            'summary': {
-              'totalTeachers': 12,
-              'totalStudents': 245,
-              'totalAssessments': 38,
-              'schoolAverage': 76,
-            }
-          };
           _isLoading = false;
+          _errorMessage =
+              'تعذر تحميل بيانات لوحة المشرف. تحقق من الاتصال ثم أعد المحاولة.';
         });
+        return;
       }
+      setState(() {
+        _schoolReport = {
+          'summary': {
+            'totalTeachers': 12,
+            'totalStudents': 245,
+            'totalAssessments': 38,
+            'schoolAverage': 76,
+          }
+        };
+        _isLoading = false;
+      });
     }
   }
 
@@ -90,7 +105,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: AppColors.primary),
-            onPressed: () => context.push(AppRoutes.teacherSettings),
+            onPressed: () => context.push(AppRoutes.institutionSettings),
           ),
         ],
         bottom: PreferredSize(
@@ -105,6 +120,35 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
           ? const Center(
               child: CircularProgressIndicator(color: AppColors.primary),
             )
+          : _errorMessage != null
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.error_outline,
+                            color: AppColors.error, size: 40),
+                        const SizedBox(height: 12),
+                        Text(
+                          _errorMessage!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Almarai',
+                            fontSize: 14,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          onPressed: _loadData,
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('إعادة المحاولة'),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
           : RefreshIndicator(
               onRefresh: _loadData,
               color: AppColors.primary,
@@ -128,7 +172,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         icon: Icons.person_rounded,
                         color: AppColors.primary,
                         bgColor: const Color(0xFFDDE1FF),
-                        onTap: () => context.push(AppRoutes.adminUsers),
+                        onTap: () => context.push(
+                          AppRoutes.adminUsers,
+                          extra: {'initialFilter': 'teacher'},
+                        ),
                       ),
                       _BentoCard(
                         label: 'الطلاب',
@@ -136,7 +183,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         icon: Icons.school_rounded,
                         color: AppColors.success,
                         bgColor: const Color(0xFFD1FAE5),
-                        onTap: () => context.push(AppRoutes.adminUsers),
+                        onTap: () => context.push(
+                          AppRoutes.adminUsers,
+                          extra: {'initialFilter': 'student'},
+                        ),
                       ),
                       _BentoCard(
                         label: 'الفصول',
@@ -168,11 +218,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     iconBgColor: AppColors.errorContainer,
                     title: 'طلاب لم يؤدوا الاختبار',
                     subtitle: 'يوجد 5 طلاب لم يسلموا الاختبار الأخير',
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('عرض قائمة الطلاب الغائبين عن الاختبار'), behavior: SnackBarBehavior.floating),
-                      );
-                    },
+                    onTap: () => context.push(
+                      AppRoutes.adminReports,
+                      extra: {'focus': 'participation'},
+                    ),
                   ),
                   const SizedBox(height: 8),
                   _AlertCard(
@@ -181,7 +230,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     iconBgColor: const Color(0xFFDDE1FF),
                     title: 'طلبات انضمام جديدة',
                     subtitle: 'يوجد 3 طلبات انضمام تنتظر الموافقة',
-                    onTap: () => context.push(AppRoutes.adminUsers),
+                    onTap: () => context.push(
+                      AppRoutes.adminUsers,
+                      extra: {'initialFilter': 'pending'},
+                    ),
                   ),
                   const SizedBox(height: 8),
                   _AlertCard(
@@ -190,7 +242,13 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     iconBgColor: const Color(0xFFFEF3C7),
                     title: 'انخفاض في الأداء',
                     subtitle: 'فصل الرياضيات - المستوى العاشر',
-                    onTap: () => context.push(AppRoutes.adminReports),
+                    onTap: () => context.push(
+                      AppRoutes.adminReports,
+                      extra: {
+                        'gradeLevel': '10',
+                        'subject': 'الرياضيات',
+                      },
+                    ),
                   ),
 
                   const SizedBox(height: 24),

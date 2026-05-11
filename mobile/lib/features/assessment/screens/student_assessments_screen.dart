@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -22,6 +23,7 @@ class _StudentAssessmentsScreenState
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   bool _isLoading = true;
+  String? _errorMessage;
   List<Map<String, dynamic>> _available = [];
   List<Map<String, dynamic>> _upcoming = [];
   List<Map<String, dynamic>> _past = [];
@@ -40,7 +42,10 @@ class _StudentAssessmentsScreenState
   }
 
   Future<void> _loadData() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final assessments =
           await ref.read(assessmentRepositoryProvider).getAssessments();
@@ -73,6 +78,13 @@ class _StudentAssessmentsScreenState
       }
     } catch (_) {
       if (mounted) {
+        if (!AppConstants.useMockData) {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = 'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.';
+          });
+          return;
+        }
         setState(() {
           _available = [
             {'_id': 'demo-math', 'title': 'اختبار الرياضيات التجريبي', 'subject': 'الرياضيات', 'questionCount': 20, 'timeLimitMinutes': 45, 'status': 'active'},
@@ -198,6 +210,8 @@ class _StudentAssessmentsScreenState
                       child: CircularProgressIndicator(),
                     ),
                   )
+                else if (_errorMessage != null)
+                  _buildErrorState()
                 else
                   _buildTabContent(),
               ]),
@@ -826,6 +840,35 @@ class _StudentAssessmentsScreenState
                 color: AppColors.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, color: AppColors.error, size: 42),
+            const SizedBox(height: 12),
+            Text(
+              _errorMessage ?? 'حدث خطأ غير متوقع',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _loadData,
+              icon: const Icon(Icons.refresh),
+              label: const Text('إعادة المحاولة'),
             ),
           ],
         ),

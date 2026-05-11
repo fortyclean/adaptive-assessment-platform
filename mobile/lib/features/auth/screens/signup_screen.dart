@@ -1,27 +1,30 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
+import '../repositories/auth_repository.dart';
 
 /// SignupScreen — Screen 55
 /// New user registration form with role selection (Student/Teacher),
 /// full name, email, password, confirm password, and terms checkbox.
 /// RTL Arabic layout matching _55/code.html design.
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  String _selectedRole = 'student'; // 'student' or 'teacher'
+  String _selectedRole = 'student';
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
   bool _termsAccepted = false;
@@ -53,13 +56,33 @@ class _SignupScreenState extends State<SignupScreen> {
 
     setState(() => _isLoading = true);
     try {
-      // Demo mode: simulate successful registration
-      await Future.delayed(const Duration(milliseconds: 800));
-      // In production: call actual signup API
-      // await ref.read(authRepositoryProvider).signup(...)
+      await ref.read(authRepositoryProvider).registerStudent(
+            fullName: _nameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
       if (!mounted) return;
-      // Navigate to login after successful signup
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'تم إرسال طلب الانضمام. سيظهر للمشرف للموافقة قبل تسجيل الدخول.',
+            style: TextStyle(fontFamily: 'Almarai'),
+          ),
+          backgroundColor: AppColors.success,
+        ),
+      );
       context.go(AppRoutes.login);
+    } on DioException catch (e) {
+      if (!mounted) return;
+      final message = e.response?.statusCode == 409
+          ? 'هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو تواصل مع المشرف.'
+          : 'تعذر إنشاء طلب الانضمام، تحقق من البيانات وحاول مرة أخرى.';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message, style: const TextStyle(fontFamily: 'Almarai')),
+          backgroundColor: AppColors.error,
+        ),
+      );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -227,7 +250,6 @@ class _SignupScreenState extends State<SignupScreen> {
       key: _formKey,
       child: Column(
         children: [
-          // Role selector
           _buildRoleSelector(),
           const SizedBox(height: 16),
 
@@ -357,7 +379,21 @@ class _SignupScreenState extends State<SignupScreen> {
     final isSelected = _selectedRole == role;
 
     return GestureDetector(
-      onTap: () => setState(() => _selectedRole = role),
+      onTap: () {
+        if (role == 'teacher') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'حسابات المعلمين يضيفها المشرف من إدارة المستخدمين.',
+                style: TextStyle(fontFamily: 'Almarai'),
+              ),
+              backgroundColor: AppColors.primary,
+            ),
+          );
+          return;
+        }
+        setState(() => _selectedRole = role);
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
