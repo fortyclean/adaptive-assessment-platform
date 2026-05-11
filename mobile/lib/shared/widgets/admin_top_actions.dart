@@ -14,8 +14,8 @@ class AdminTopActions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopupMenuButton<_AdminAction>(
-      tooltip: 'القائمة',
-      icon: const Icon(Icons.more_vert_rounded, color: AppColors.primary),
+      tooltip: 'حساب المشرف',
+      icon: const Icon(Icons.account_circle_outlined, color: AppColors.primary),
       onSelected: (action) => _handleAction(context, ref, action),
       itemBuilder: (context) => const [
         PopupMenuItem(

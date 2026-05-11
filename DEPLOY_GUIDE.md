@@ -251,4 +251,4 @@ mobile\build\app\outputs\flutter-apk\app-release.apk
 
 ---
 
-*آخر تحديث: مايو 2026 | EduAssess v1.0.12*
+*آخر تحديث: مايو 2026 | EduAssess v1.0.13*

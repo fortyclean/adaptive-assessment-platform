@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.12';
-  static const int buildNumber = 12;
+  static const String current = '1.0.13';
+  static const int buildNumber = 13;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.13',
+      buildNumber: 13,
+      date: 'مايو 2026',
+      title: 'استعادة جمال إعدادات المشرف',
+      changes: [
+        'إظهار إعدادات الحساب وعن التطبيق والدعم وتسجيل الخروج داخل إعدادات المؤسسة',
+        'الحفاظ على تصميم شاشة إعدادات المؤسسة الأصلي مع دمج عناصر المشرف الأساسية',
+        'استبدال قائمة الثلاث نقاط في شاشات المشرف بأيقونة حساب أوضح',
+        'إضافة قاعدة إلزامية للحفاظ على التصاميم الأصلية قبل أي تعديل بصري',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.12',
       buildNumber: 12,

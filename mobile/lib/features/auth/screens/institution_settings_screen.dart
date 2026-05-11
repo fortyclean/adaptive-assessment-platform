@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
-import '../../../shared/widgets/admin_top_actions.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../repositories/auth_repository.dart';
 
 /// Screen 69 — إعدادات المؤسسة (Institution Settings)
-class InstitutionSettingsScreen extends StatefulWidget {
+class InstitutionSettingsScreen extends ConsumerStatefulWidget {
   const InstitutionSettingsScreen({super.key});
 
   @override
-  State<InstitutionSettingsScreen> createState() =>
+  ConsumerState<InstitutionSettingsScreen> createState() =>
       _InstitutionSettingsScreenState();
 }
 
-class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
+class _InstitutionSettingsScreenState
+    extends ConsumerState<InstitutionSettingsScreen> {
   String _schoolName = 'أكاديمية المستقبل الدولية';
   String _schoolPhone = '+966 500 000 000';
   String _schoolEmail = 'contact@future-academy.edu';
@@ -106,6 +110,37 @@ class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
                 ],
               ),
               const SizedBox(height: 20),
+              _buildSettingsGroup(
+                title: 'الحساب والدعم',
+                items: const [
+                  _SettingsItem(
+                    icon: Icons.account_circle_outlined,
+                    title: 'إعدادات الحساب',
+                    subtitle: 'الملف الشخصي وكلمة المرور وتفضيلات الحساب',
+                    action: _SettingsAction.accountSettings,
+                  ),
+                  _SettingsItem(
+                    icon: Icons.info_outline_rounded,
+                    title: 'عن التطبيق وسجل الإصدارات',
+                    subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
+                    action: _SettingsAction.about,
+                  ),
+                  _SettingsItem(
+                    icon: Icons.support_agent_outlined,
+                    title: 'الدعم الفني',
+                    subtitle: 'التواصل مع فريق الدعم والمساعدة',
+                    action: _SettingsAction.support,
+                  ),
+                  _SettingsItem(
+                    icon: Icons.logout_rounded,
+                    title: 'تسجيل الخروج',
+                    subtitle: 'إنهاء جلسة المشرف الحالية',
+                    action: _SettingsAction.logout,
+                    color: AppColors.error,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
               _buildDangerZone(),
               const SizedBox(height: 80),
             ],
@@ -141,7 +176,6 @@ class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
         ],
       ),
       actions: [
-        const AdminTopActions(),
         IconButton(
           tooltip: 'الإشعارات',
           icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
@@ -301,12 +335,13 @@ class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
                         Container(
                           width: 40,
                           height: 40,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFEFF6FF),
+                          decoration: BoxDecoration(
+                            color: (item.color ?? AppColors.primary)
+                                .withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(item.icon,
-                              color: AppColors.primary, size: 20),
+                              color: item.color ?? AppColors.primary, size: 20),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -315,9 +350,10 @@ class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
                             children: [
                               Text(
                                 item.title,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
+                                  color: item.color ?? AppColors.onSurface,
                                 ),
                               ),
                               Text(
@@ -330,8 +366,10 @@ class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
                             ],
                           ),
                         ),
-                        const Icon(Icons.chevron_left,
-                            color: AppColors.outline),
+                        Icon(
+                          Icons.chevron_left,
+                          color: item.color ?? AppColors.outline,
+                        ),
                       ],
                     ),
                   ),
@@ -391,6 +429,48 @@ class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
       case _SettingsAction.integrations:
         _showIntegrationsSheet();
         break;
+      case _SettingsAction.accountSettings:
+        context.push(AppRoutes.accountSettings);
+        break;
+      case _SettingsAction.about:
+        context.push(AppRoutes.about);
+        break;
+      case _SettingsAction.support:
+        context.push(AppRoutes.support);
+        break;
+      case _SettingsAction.logout:
+        _confirmLogout();
+        break;
+    }
+  }
+
+  Future<void> _confirmLogout() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('تسجيل الخروج'),
+        content: const Text('هل تريد تسجيل الخروج من حساب المشرف؟'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('إلغاء'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'خروج',
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      ref.read(authProvider.notifier).logout();
+      context.go(AppRoutes.login);
+      ref.read(authRepositoryProvider).logout().catchError((_) {});
     }
   }
 
@@ -904,6 +984,10 @@ enum _SettingsAction {
   notifications,
   locale,
   integrations,
+  accountSettings,
+  about,
+  support,
+  logout,
 }
 
 class _SettingsItem {
@@ -912,10 +996,12 @@ class _SettingsItem {
     required this.title,
     required this.subtitle,
     required this.action,
+    this.color,
   });
 
   final IconData icon;
   final String title;
   final String subtitle;
   final _SettingsAction action;
+  final Color? color;
 }
