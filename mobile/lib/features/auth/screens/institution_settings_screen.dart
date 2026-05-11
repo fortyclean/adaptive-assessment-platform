@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// Screen 69 — إعدادات المؤسسة (Institution Settings)
-/// Matches design: _69/code.html
 class InstitutionSettingsScreen extends StatefulWidget {
   const InstitutionSettingsScreen({super.key});
 
@@ -15,8 +15,21 @@ class InstitutionSettingsScreen extends StatefulWidget {
       _InstitutionSettingsScreenState();
 }
 
-class _InstitutionSettingsScreenState
-    extends State<InstitutionSettingsScreen> {
+class _InstitutionSettingsScreenState extends State<InstitutionSettingsScreen> {
+  String _schoolName = 'أكاديمية المستقبل الدولية';
+  String _schoolPhone = '+966 500 000 000';
+  String _schoolEmail = 'contact@future-academy.edu';
+  String _academicYear = '2025 / 2026';
+  String _term = 'الفصل الدراسي الثاني';
+  String _gradeScale = 'A-F';
+  String _language = 'العربية';
+  String _timezone = 'Asia/Kuwait';
+  bool _emailNotifications = true;
+  bool _pushNotifications = true;
+  bool _weeklyDigest = true;
+  bool _sisIntegration = false;
+  bool _lmsIntegration = false;
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -35,26 +48,61 @@ class _InstitutionSettingsScreenState
               const SizedBox(height: 16),
               _buildSettingsGroup(
                 title: 'الهيكل الأكاديمي',
-                items: [
-                  _SettingsItem(icon: Icons.calendar_today_outlined, title: 'الأعوام الدراسية', subtitle: 'إدارة الفصول والتواريخ الدراسية'),
-                  _SettingsItem(icon: Icons.grade_outlined, title: 'مقاييس التقييم', subtitle: 'تحديد سلم الدرجات والتقديرات'),
+                items: const [
+                  _SettingsItem(
+                    icon: Icons.calendar_today_outlined,
+                    title: 'الأعوام الدراسية',
+                    subtitle: 'إدارة الفصول والتواريخ الدراسية',
+                    action: _SettingsAction.academicYears,
+                  ),
+                  _SettingsItem(
+                    icon: Icons.grade_outlined,
+                    title: 'مقاييس التقييم',
+                    subtitle: 'تحديد سلم الدرجات والتقديرات',
+                    action: _SettingsAction.gradeScale,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
               _buildSettingsGroup(
                 title: 'إدارة المستخدمين',
-                items: [
-                  _SettingsItem(icon: Icons.admin_panel_settings_outlined, title: 'الأدوار والصلاحيات', subtitle: 'تخصيص وصول المعلمين والإداريين'),
-                  _SettingsItem(icon: Icons.history_edu_outlined, title: 'سجلات الأنشطة', subtitle: 'تتبع الدخول وتغييرات النظام'),
+                items: const [
+                  _SettingsItem(
+                    icon: Icons.admin_panel_settings_outlined,
+                    title: 'الأدوار والصلاحيات',
+                    subtitle: 'تخصيص وصول المعلمين والإداريين',
+                    action: _SettingsAction.roles,
+                  ),
+                  _SettingsItem(
+                    icon: Icons.history_edu_outlined,
+                    title: 'سجلات الأنشطة',
+                    subtitle: 'تتبع الدخول وتغييرات النظام',
+                    action: _SettingsAction.activityLog,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
               _buildSettingsGroup(
                 title: 'تفضيلات النظام',
-                items: [
-                  _SettingsItem(icon: Icons.notifications_active_outlined, title: 'إعدادات التنبيهات', subtitle: 'البريد الإلكتروني والإشعارات الفورية'),
-                  _SettingsItem(icon: Icons.translate_outlined, title: 'اللغة والمنطقة', subtitle: 'اللغة العربية، التوقيت المحلي'),
-                  _SettingsItem(icon: Icons.hub_outlined, title: 'تكامل الأنظمة', subtitle: 'ربط API والمزودين الخارجيين'),
+                items: const [
+                  _SettingsItem(
+                    icon: Icons.notifications_active_outlined,
+                    title: 'إعدادات التنبيهات',
+                    subtitle: 'البريد الإلكتروني والإشعارات الفورية',
+                    action: _SettingsAction.notifications,
+                  ),
+                  _SettingsItem(
+                    icon: Icons.translate_outlined,
+                    title: 'اللغة والمنطقة',
+                    subtitle: 'اللغة العربية، التوقيت المحلي',
+                    action: _SettingsAction.locale,
+                  ),
+                  _SettingsItem(
+                    icon: Icons.hub_outlined,
+                    title: 'تكامل الأنظمة',
+                    subtitle: 'ربط API والمزودين الخارجيين',
+                    action: _SettingsAction.integrations,
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -75,40 +123,45 @@ class _InstitutionSettingsScreenState
       shadowColor: Colors.black12,
       automaticallyImplyLeading: false,
       title: Row(
-        children: [
+        children: const [
           CircleAvatar(
             radius: 20,
-            backgroundColor: const Color(0xFF1E40AF),
-            child: const Icon(Icons.person, color: Colors.white, size: 20),
+            backgroundColor: Color(0xFF1E40AF),
+            child: Icon(Icons.person, color: Colors.white, size: 20),
           ),
-          const SizedBox(width: 12),
-          const Text(
+          SizedBox(width: 12),
+          Text(
             'EduAssess',
-            style: TextStyle(color: Color(0xFF1E40AF), fontWeight: FontWeight.w700, fontSize: 18),
+            style: TextStyle(
+              color: Color(0xFF1E40AF),
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
           ),
         ],
       ),
       actions: [
         const AdminTopActions(),
         IconButton(
+          tooltip: 'الإشعارات',
           icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('لا توجد إشعارات جديدة'), behavior: SnackBarBehavior.floating),
-            );
-          },
+          onPressed: () => context.push(AppRoutes.notificationCenter),
         ),
       ],
     );
   }
 
   Widget _buildHeader() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Text(
           'إعدادات المؤسسة',
-          style: TextStyle(color: AppColors.primary, fontSize: 20, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            color: AppColors.primary,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         SizedBox(height: 4),
         Text(
@@ -122,12 +175,7 @@ class _InstitutionSettingsScreenState
   Widget _buildSchoolProfile() {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFC4C5D5)),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)],
-      ),
+      decoration: _cardDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -136,61 +184,51 @@ class _InstitutionSettingsScreenState
             children: [
               Row(
                 children: const [
-                  Icon(Icons.school_outlined, color: AppColors.primary, size: 20),
+                  Icon(Icons.school_outlined,
+                      color: AppColors.primary, size: 20),
                   SizedBox(width: 8),
-                  Text('ملف المدرسة', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  Text(
+                    'ملف المدرسة',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ],
               ),
               TextButton(
-                onPressed: () {
-                  final nameController = TextEditingController(text: 'أكاديمية المستقبل الدولية');
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      title: const Text('تعديل ملف المدرسة'),
-                      content: TextField(
-                        controller: nameController,
-                        decoration: const InputDecoration(labelText: 'اسم المؤسسة'),
-                      ),
-                      actions: [
-                        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('تم تحديث بيانات المؤسسة'), behavior: SnackBarBehavior.floating),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
-                          child: const Text('حفظ'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                child: const Text('تعديل', style: TextStyle(color: AppColors.primary, fontSize: 14)),
+                onPressed: _showSchoolProfileDialog,
+                child: const Text(
+                  'تعديل',
+                  style: TextStyle(color: AppColors.primary, fontSize: 14),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 12),
           Row(
             children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF4F2FC),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFC4C5D5), style: BorderStyle.solid),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.school, color: AppColors.primary, size: 32),
-                    SizedBox(height: 4),
-                    Text('تغيير الشعار', style: TextStyle(fontSize: 9, color: AppColors.outline)),
-                  ],
+              InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () => _showMessage(
+                    'يمكن تغيير الشعار من لوحة ربط التخزين عند تفعيل رفع الملفات.'),
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF4F2FC),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFC4C5D5)),
+                  ),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.school, color: AppColors.primary, size: 32),
+                      SizedBox(height: 4),
+                      Text(
+                        'الشعار',
+                        style:
+                            TextStyle(fontSize: 10, color: AppColors.outline),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -198,15 +236,22 @@ class _InstitutionSettingsScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('اسم المؤسسة', style: TextStyle(color: AppColors.outline, fontSize: 12)),
-                    const Text(
-                      'أكاديمية المستقبل الدولية',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    const Text('اسم المؤسسة',
+                        style:
+                            TextStyle(color: AppColors.outline, fontSize: 12)),
+                    Text(
+                      _schoolName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 8),
-                    const Text('معلومات التواصل', style: TextStyle(color: AppColors.outline, fontSize: 12)),
-                    const Text('+966 500 000 000', style: TextStyle(fontSize: 13)),
-                    const Text('contact@future-academy.edu', style: TextStyle(fontSize: 13)),
+                    const Text('معلومات التواصل',
+                        style:
+                            TextStyle(color: AppColors.outline, fontSize: 12)),
+                    Text(_schoolPhone, style: const TextStyle(fontSize: 13)),
+                    Text(_schoolEmail, style: const TextStyle(fontSize: 13)),
                   ],
                 ),
               ),
@@ -217,14 +262,12 @@ class _InstitutionSettingsScreenState
     );
   }
 
-  Widget _buildSettingsGroup({required String title, required List<_SettingsItem> items}) {
+  Widget _buildSettingsGroup({
+    required String title,
+    required List<_SettingsItem> items,
+  }) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFC4C5D5)),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)],
-      ),
+      decoration: _cardDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -237,7 +280,11 @@ class _InstitutionSettingsScreenState
             ),
             child: Text(
               title,
-              style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13, fontWeight: FontWeight.w700),
+              style: const TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           ...items.asMap().entries.map((entry) {
@@ -246,19 +293,7 @@ class _InstitutionSettingsScreenState
             return Column(
               children: [
                 InkWell(
-                  onTap: () {
-                    if (item.title == 'الأدوار والصلاحيات') {
-                      context.push('/admin/users');
-                    } else if (item.title == 'سجلات الأنشطة') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('سجلات الأنشطة قيد التطوير'), behavior: SnackBarBehavior.floating),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${item.title}: قيد التطوير'), behavior: SnackBarBehavior.floating),
-                      );
-                    }
-                  },
+                  onTap: () => _handleSettingsAction(item.action),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -266,29 +301,48 @@ class _InstitutionSettingsScreenState
                         Container(
                           width: 40,
                           height: 40,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEFF6FF),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFEFF6FF),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(item.icon, color: AppColors.primary, size: 20),
+                          child: Icon(item.icon,
+                              color: AppColors.primary, size: 20),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(item.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                              Text(item.subtitle, style: const TextStyle(color: AppColors.outline, fontSize: 12)),
+                              Text(
+                                item.title,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                item.subtitle,
+                                style: const TextStyle(
+                                  color: AppColors.outline,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                        const Icon(Icons.chevron_left, color: AppColors.outline),
+                        const Icon(Icons.chevron_left,
+                            color: AppColors.outline),
                       ],
                     ),
                   ),
                 ),
                 if (i < items.length - 1)
-                  const Divider(height: 1, color: Color(0xFFC4C5D5), indent: 16, endIndent: 16),
+                  const Divider(
+                    height: 1,
+                    color: Color(0xFFC4C5D5),
+                    indent: 16,
+                    endIndent: 16,
+                  ),
               ],
             );
           }),
@@ -299,30 +353,12 @@ class _InstitutionSettingsScreenState
 
   Widget _buildDangerZone() {
     return OutlinedButton.icon(
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: const Text('تحذير: أرشفة البيانات'),
-            content: const Text('هذا الإجراء سيؤدي إلى أرشفة جميع بيانات المؤسسة. هل أنت متأكد؟'),
-            actions: [
-              TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('تم إرسال طلب الأرشفة للمراجعة'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.error),
-                  );
-                },
-                child: const Text('تأكيد الأرشفة', style: TextStyle(color: AppColors.error)),
-              ),
-            ],
-          ),
-        );
-      },
-      icon: const Icon(Icons.delete_forever_outlined, color: AppColors.error),
-      label: const Text('أرشفة بيانات المؤسسة', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600)),
+      onPressed: _showArchiveDialog,
+      icon: const Icon(Icons.archive_outlined, color: AppColors.error),
+      label: const Text(
+        'أرشفة بيانات المؤسسة',
+        style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
+      ),
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: AppColors.error),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -332,44 +368,554 @@ class _InstitutionSettingsScreenState
     );
   }
 
-  Widget _buildBottomNav() {
-    return Container(
-      height: 64,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.shade200)),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, -2))],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _navItem(Icons.home_outlined, 'الرئيسية', false, onTap: () => context.go(AppRoutes.adminDashboard)),
-          _navItem(Icons.quiz_outlined, 'الاختبارات', false, onTap: () => context.go(AppRoutes.teacherAssessments)),
-          _navItem(Icons.bar_chart_outlined, 'التقارير', false, onTap: () => context.go(AppRoutes.adminReports)),
-          _navItem(Icons.settings, 'الإعدادات', true, onTap: null),
+  void _handleSettingsAction(_SettingsAction action) {
+    switch (action) {
+      case _SettingsAction.academicYears:
+        _showAcademicYearsSheet();
+        break;
+      case _SettingsAction.gradeScale:
+        _showGradeScaleSheet();
+        break;
+      case _SettingsAction.roles:
+        context.push(AppRoutes.adminUsers);
+        break;
+      case _SettingsAction.activityLog:
+        _showActivityLogSheet();
+        break;
+      case _SettingsAction.notifications:
+        _showNotificationSheet();
+        break;
+      case _SettingsAction.locale:
+        _showLocaleSheet();
+        break;
+      case _SettingsAction.integrations:
+        _showIntegrationsSheet();
+        break;
+    }
+  }
+
+  void _showSchoolProfileDialog() {
+    final nameController = TextEditingController(text: _schoolName);
+    final phoneController = TextEditingController(text: _schoolPhone);
+    final emailController = TextEditingController(text: _schoolEmail);
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('تعديل ملف المدرسة'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'اسم المؤسسة'),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: phoneController,
+                decoration: const InputDecoration(labelText: 'رقم التواصل'),
+                keyboardType: TextInputType.phone,
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: emailController,
+                decoration:
+                    const InputDecoration(labelText: 'البريد الإلكتروني'),
+                keyboardType: TextInputType.emailAddress,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إلغاء'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _schoolName = nameController.text.trim().isEmpty
+                    ? _schoolName
+                    : nameController.text.trim();
+                _schoolPhone = phoneController.text.trim().isEmpty
+                    ? _schoolPhone
+                    : phoneController.text.trim();
+                _schoolEmail = emailController.text.trim().isEmpty
+                    ? _schoolEmail
+                    : emailController.text.trim();
+              });
+              Navigator.pop(ctx);
+              _showMessage('تم تحديث بيانات المؤسسة في هذه الجلسة');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('حفظ'),
+          ),
         ],
       ),
     );
   }
 
-  Widget _navItem(IconData icon, String label, bool active, {VoidCallback? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
+  void _showAcademicYearsSheet() {
+    _showSettingsSheet(
+      title: 'الأعوام الدراسية',
+      icon: Icons.calendar_today_outlined,
+      child: StatefulBuilder(
+        builder: (context, setSheetState) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _dropdownField(
+              label: 'العام الدراسي الحالي',
+              value: _academicYear,
+              values: const ['2024 / 2025', '2025 / 2026', '2026 / 2027'],
+              onChanged: (value) {
+                if (value == null) return;
+                setSheetState(() => _academicYear = value);
+                setState(() => _academicYear = value);
+              },
+            ),
+            const SizedBox(height: 12),
+            _dropdownField(
+              label: 'الفصل الدراسي الحالي',
+              value: _term,
+              values: const [
+                'الفصل الدراسي الأول',
+                'الفصل الدراسي الثاني',
+                'الفصل الدراسي الثالث',
+              ],
+              onChanged: (value) {
+                if (value == null) return;
+                setSheetState(() => _term = value);
+                setState(() => _term = value);
+              },
+            ),
+            const SizedBox(height: 16),
+            _infoTile('إدارة الفصول',
+                'افتح شاشة الفصول لتعديل الصفوف وربط المعلمين والطلاب.'),
+            const SizedBox(height: 12),
+            _primaryButton(
+              label: 'فتح إدارة الفصول',
+              icon: Icons.class_outlined,
+              onPressed: () {
+                Navigator.pop(context);
+                context.push(AppRoutes.adminClassrooms);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showGradeScaleSheet() {
+    _showSettingsSheet(
+      title: 'مقاييس التقييم',
+      icon: Icons.grade_outlined,
+      child: StatefulBuilder(
+        builder: (context, setSheetState) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _dropdownField(
+              label: 'سلم التقديرات',
+              value: _gradeScale,
+              values: const [
+                'A-F',
+                'ممتاز / جيد جدًا / جيد / مقبول',
+                'نسبة مئوية فقط'
+              ],
+              onChanged: (value) {
+                if (value == null) return;
+                setSheetState(() => _gradeScale = value);
+                setState(() => _gradeScale = value);
+              },
+            ),
+            const SizedBox(height: 12),
+            _scaleRow('ممتاز', '90% - 100%'),
+            _scaleRow('جيد جدًا', '80% - 89%'),
+            _scaleRow('جيد', '70% - 79%'),
+            _scaleRow('يحتاج دعم', 'أقل من 70%'),
+            const SizedBox(height: 16),
+            _primaryButton(
+              label: 'حفظ مقياس التقييم',
+              icon: Icons.save_outlined,
+              onPressed: () {
+                Navigator.pop(context);
+                _showMessage('تم حفظ مقياس التقييم في هذه الجلسة');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showActivityLogSheet() {
+    _showSettingsSheet(
+      title: 'سجلات الأنشطة',
+      icon: Icons.history_edu_outlined,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
-          const SizedBox(height: 2),
-          Text(label, style: TextStyle(fontSize: 11, color: active ? const Color(0xFF1E40AF) : Colors.grey)),
+          _activityRow('تحديث إعدادات المؤسسة', 'منذ قليل'),
+          _activityRow('فتح إدارة المستخدمين', 'اليوم'),
+          _activityRow('مراجعة تقارير المدرسة', 'هذا الأسبوع'),
+          const SizedBox(height: 16),
+          _primaryButton(
+            label: 'فتح لوحة المشرف المتقدمة',
+            icon: Icons.dashboard_customize_outlined,
+            onPressed: () {
+              Navigator.pop(context);
+              context.push(AppRoutes.supervisorDashboard);
+            },
+          ),
         ],
+      ),
+    );
+  }
+
+  void _showNotificationSheet() {
+    _showSettingsSheet(
+      title: 'إعدادات التنبيهات',
+      icon: Icons.notifications_active_outlined,
+      child: StatefulBuilder(
+        builder: (context, setSheetState) => Column(
+          children: [
+            SwitchListTile(
+              value: _pushNotifications,
+              onChanged: (value) {
+                setSheetState(() => _pushNotifications = value);
+                setState(() => _pushNotifications = value);
+              },
+              title: const Text('الإشعارات الفورية'),
+              subtitle: const Text('تنبيهات داخل التطبيق للمشرف والمعلمين'),
+            ),
+            SwitchListTile(
+              value: _emailNotifications,
+              onChanged: (value) {
+                setSheetState(() => _emailNotifications = value);
+                setState(() => _emailNotifications = value);
+              },
+              title: const Text('تنبيهات البريد الإلكتروني'),
+              subtitle: const Text('إرسال ملخصات وتنبيهات مهمة عبر البريد'),
+            ),
+            SwitchListTile(
+              value: _weeklyDigest,
+              onChanged: (value) {
+                setSheetState(() => _weeklyDigest = value);
+                setState(() => _weeklyDigest = value);
+              },
+              title: const Text('ملخص أسبوعي'),
+              subtitle: const Text('ملخص أداء المؤسسة كل أسبوع'),
+            ),
+            const SizedBox(height: 12),
+            _primaryButton(
+              label: 'الإعدادات المتقدمة',
+              icon: Icons.tune_outlined,
+              onPressed: () {
+                Navigator.pop(context);
+                context.push(AppRoutes.notificationSettings);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLocaleSheet() {
+    _showSettingsSheet(
+      title: 'اللغة والمنطقة',
+      icon: Icons.translate_outlined,
+      child: StatefulBuilder(
+        builder: (context, setSheetState) => Column(
+          children: [
+            _dropdownField(
+              label: 'لغة الواجهة',
+              value: _language,
+              values: const ['العربية'],
+              onChanged: (value) {
+                if (value == null) return;
+                setSheetState(() => _language = value);
+                setState(() => _language = value);
+              },
+            ),
+            const SizedBox(height: 12),
+            _dropdownField(
+              label: 'المنطقة الزمنية',
+              value: _timezone,
+              values: const ['Asia/Kuwait', 'Asia/Riyadh', 'Asia/Dubai'],
+              onChanged: (value) {
+                if (value == null) return;
+                setSheetState(() => _timezone = value);
+                setState(() => _timezone = value);
+              },
+            ),
+            const SizedBox(height: 16),
+            _primaryButton(
+              label: 'حفظ اللغة والمنطقة',
+              icon: Icons.save_outlined,
+              onPressed: () {
+                Navigator.pop(context);
+                _showMessage('تم حفظ اللغة والمنطقة في هذه الجلسة');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showIntegrationsSheet() {
+    _showSettingsSheet(
+      title: 'تكامل الأنظمة',
+      icon: Icons.hub_outlined,
+      child: StatefulBuilder(
+        builder: (context, setSheetState) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _infoTile('واجهة API الحالية', AppConstants.apiBaseUrl),
+            const SizedBox(height: 12),
+            SwitchListTile(
+              value: _sisIntegration,
+              onChanged: (value) {
+                setSheetState(() => _sisIntegration = value);
+                setState(() => _sisIntegration = value);
+              },
+              title: const Text('نظام معلومات الطلاب SIS'),
+              subtitle: const Text('تجهيز الربط مع أنظمة سجلات الطلاب'),
+            ),
+            SwitchListTile(
+              value: _lmsIntegration,
+              onChanged: (value) {
+                setSheetState(() => _lmsIntegration = value);
+                setState(() => _lmsIntegration = value);
+              },
+              title: const Text('نظام إدارة التعلم LMS'),
+              subtitle: const Text('تجهيز الربط مع منصات التعلم الخارجية'),
+            ),
+            const SizedBox(height: 12),
+            _primaryButton(
+              label: 'طلب دعم الربط',
+              icon: Icons.support_agent_outlined,
+              onPressed: () {
+                Navigator.pop(context);
+                context.push(AppRoutes.support);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showArchiveDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('تحذير: أرشفة البيانات'),
+        content: const Text(
+          'سيتم إرسال طلب أرشفة بيانات المؤسسة للمراجعة الإدارية قبل التنفيذ، ولن تُحذف البيانات فورًا من هذا الزر.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إلغاء'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _showMessage('تم إرسال طلب الأرشفة للمراجعة', isError: true);
+            },
+            child: const Text(
+              'إرسال الطلب',
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSettingsSheet({
+    required String title,
+    required IconData icon,
+    required Widget child,
+  }) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(icon, color: AppColors.primary),
+                    const SizedBox(width: 8),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                child,
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _dropdownField({
+    required String label,
+    required String value,
+    required List<String> values,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      initialValue: value,
+      items: values
+          .map((item) => DropdownMenuItem(value: item, child: Text(item)))
+          .toList(),
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
+
+  Widget _primaryButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon),
+        label: Text(label),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      ),
+    );
+  }
+
+  Widget _infoTile(String title, String subtitle) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+          const SizedBox(height: 4),
+          Text(subtitle, style: const TextStyle(color: AppColors.outline)),
+        ],
+      ),
+    );
+  }
+
+  Widget _scaleRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
+        ],
+      ),
+    );
+  }
+
+  Widget _activityRow(String title, String time) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: const CircleAvatar(
+        backgroundColor: Color(0xFFEFF6FF),
+        child: Icon(Icons.check_circle_outline, color: AppColors.primary),
+      ),
+      title: Text(title),
+      subtitle: Text(time),
+    );
+  }
+
+  BoxDecoration _cardDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: const Color(0xFFC4C5D5)),
+      boxShadow: [
+        BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6),
+      ],
+    );
+  }
+
+  void _showMessage(String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: isError ? AppColors.error : null,
       ),
     );
   }
 }
 
+enum _SettingsAction {
+  academicYears,
+  gradeScale,
+  roles,
+  activityLog,
+  notifications,
+  locale,
+  integrations,
+}
+
 class _SettingsItem {
+  const _SettingsItem({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.action,
+  });
+
   final IconData icon;
   final String title;
   final String subtitle;
-  const _SettingsItem({required this.icon, required this.title, required this.subtitle});
+  final _SettingsAction action;
 }

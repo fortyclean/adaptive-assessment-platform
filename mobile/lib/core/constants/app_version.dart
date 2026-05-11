@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.11';
-  static const int buildNumber = 11;
+  static const String current = '1.0.12';
+  static const int buildNumber = 12;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.12',
+      buildNumber: 12,
+      date: 'مايو 2026',
+      title: 'تفعيل إعدادات المؤسسة للمشرف',
+      changes: [
+        'تفعيل أزرار إعدادات المؤسسة بدل رسائل قيد التطوير',
+        'ربط الأعوام الدراسية بإدارة الفصول وربط الأدوار بإدارة المستخدمين',
+        'إضافة إعدادات تفاعلية لمقاييس التقييم والتنبيهات واللغة والمنطقة',
+        'إضافة لوحة تكامل الأنظمة مع عرض واجهة API الحالية وطلب دعم الربط',
+        'ربط زر إشعارات إعدادات المؤسسة بمركز الإشعارات الحقيقي',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.11',
       buildNumber: 11,

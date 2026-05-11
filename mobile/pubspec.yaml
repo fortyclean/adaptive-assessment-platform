@@ -1,7 +1,7 @@
 name: adaptive_assessment
 description: Adaptive Assessment Platform — Mobile App (Flutter)
 publish_to: 'none'
-version: 1.0.11+11
+version: 1.0.12+12
 
 environment:
   sdk: '>=3.3.0 <4.0.0'

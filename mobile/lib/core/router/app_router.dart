@@ -45,7 +45,6 @@ import '../../features/assessment/screens/exam_with_image_screen.dart';
 import '../../features/assessment/screens/exam_with_bookmark_screen.dart';
 import '../../features/assessment/screens/exam_with_timer_toggle_screen.dart';
 import '../../features/assessment/screens/result_screen.dart';
-import '../../features/notifications/screens/notifications_screen.dart';
 import '../../features/notifications/screens/advanced_notification_center_screen.dart';
 import '../../features/notifications/screens/notification_settings_screen.dart';
 import '../../features/reports/screens/performance_alert_screen.dart';
@@ -123,7 +122,8 @@ class AppRoutes {
   static const String teacherReportSchedules = '/teacher/report-schedules';
 
   // Student Profile Detail (Screens 56–58)
-  static const String studentProfileDetail = '/teacher/students/:studentId/profile';
+  static const String studentProfileDetail =
+      '/teacher/students/:studentId/profile';
 
   // Screen 59 — Teacher Home (alternative dashboard)
   static const String teacherHome = '/teacher/home';
@@ -138,7 +138,8 @@ class AppRoutes {
   static const String studentChallenges = '/student/challenges';
 
   // Screen 65 — Student Academic Profile (teacher view)
-  static const String studentAcademicProfile = '/teacher/students/:studentId/academic-profile';
+  static const String studentAcademicProfile =
+      '/teacher/students/:studentId/academic-profile';
 
   // Screen 70 — Class Schedule (الجداول الدراسية)
   static const String classSchedule = '/teacher/class-schedule';
@@ -193,7 +194,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   bool onboardingSeen = false;
   try {
     final box = Hive.box<dynamic>(AppConstants.sessionStateBoxName);
-    onboardingSeen = box.get(AppConstants.onboardingSeenKey, defaultValue: false) as bool;
+    onboardingSeen =
+        box.get(AppConstants.onboardingSeenKey, defaultValue: false) as bool;
   } catch (_) {
     onboardingSeen = false;
   }
@@ -267,6 +269,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.notificationSettings,
         name: 'notificationSettings',
         builder: (_, __) => const NotificationSettingsScreen(),
+      ),
+
+      // Notification Center — accessible from any role
+      GoRoute(
+        path: AppRoutes.notificationCenter,
+        name: 'notificationCenter',
+        builder: (_, __) => const AdvancedNotificationCenterScreen(),
       ),
 
       // Account Settings (Screen 49) — accessible from any role
@@ -587,8 +596,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
                 timeLimitMinutes: extra?['timeLimitMinutes'] as int? ?? 30,
-                subjectTitle: extra?['subjectTitle'] as String? ??
-                    'الرياضيات المتقدمة',
+                subjectTitle:
+                    extra?['subjectTitle'] as String? ?? 'الرياضيات المتقدمة',
               );
             },
           ),
@@ -602,8 +611,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
                 timeLimitMinutes: extra?['timeLimitMinutes'] as int? ?? 30,
-                subjectTitle: extra?['subjectTitle'] as String? ??
-                    'الرياضيات المتقدمة',
+                subjectTitle:
+                    extra?['subjectTitle'] as String? ?? 'الرياضيات المتقدمة',
               );
             },
           ),
@@ -617,8 +626,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
                 timeLimitMinutes: extra?['timeLimitMinutes'] as int? ?? 30,
-                subjectTitle: extra?['subjectTitle'] as String? ??
-                    'الرياضيات المتقدمة',
+                subjectTitle:
+                    extra?['subjectTitle'] as String? ?? 'الرياضيات المتقدمة',
               );
             },
           ),
@@ -700,14 +709,16 @@ String _getDashboardRoute(UserRole? role) {
 String? _guardRouteForRole(String location, UserRole? role) {
   if (role == null) return AppRoutes.login;
 
-  final isAdminRoute =
-      location.startsWith('/admin') || location == AppRoutes.supervisorDashboard;
+  final isAdminRoute = location.startsWith('/admin') ||
+      location == AppRoutes.supervisorDashboard;
   final isTeacherRoute = location.startsWith('/teacher');
   final isStudentRoute = location.startsWith('/student');
 
   if (isAdminRoute && role != UserRole.admin) return _getDashboardRoute(role);
-  if (isTeacherRoute && role != UserRole.teacher) return _getDashboardRoute(role);
-  if (isStudentRoute && role != UserRole.student) return _getDashboardRoute(role);
+  if (isTeacherRoute && role != UserRole.teacher)
+    return _getDashboardRoute(role);
+  if (isStudentRoute && role != UserRole.student)
+    return _getDashboardRoute(role);
 
   return null;
 }
