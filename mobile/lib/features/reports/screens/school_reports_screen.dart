@@ -6,6 +6,8 @@ import '../../../core/constants/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../auth/repositories/admin_repository.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/widgets/admin_top_actions.dart';
+import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// School Reports Screen — Screen 29
 /// Requirements: 19.1–19.5
@@ -244,6 +246,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
             ],
           ),
         ),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 3, role: 'admin'),
       ),
     );
   }
@@ -273,6 +276,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       ),
       centerTitle: false,
       actions: [
+        const AdminTopActions(),
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Color(0xFF64748B)),
           onPressed: () => context.push('/teacher/notifications'),

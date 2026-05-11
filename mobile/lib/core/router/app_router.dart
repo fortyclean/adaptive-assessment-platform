@@ -220,6 +220,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isAuthenticated && isLoginRoute) {
         return _getDashboardRoute(authState.user?.role);
       }
+      final roleRedirect = _guardRouteForRole(
+        state.matchedLocation,
+        authState.user?.role,
+      );
+      if (roleRedirect != null) return roleRedirect;
       return null;
     },
     routes: [
@@ -690,4 +695,19 @@ String _getDashboardRoute(UserRole? role) {
     case null:
       return AppRoutes.login;
   }
+}
+
+String? _guardRouteForRole(String location, UserRole? role) {
+  if (role == null) return AppRoutes.login;
+
+  final isAdminRoute =
+      location.startsWith('/admin') || location == AppRoutes.supervisorDashboard;
+  final isTeacherRoute = location.startsWith('/teacher');
+  final isStudentRoute = location.startsWith('/student');
+
+  if (isAdminRoute && role != UserRole.admin) return _getDashboardRoute(role);
+  if (isTeacherRoute && role != UserRole.teacher) return _getDashboardRoute(role);
+  if (isStudentRoute && role != UserRole.student) return _getDashboardRoute(role);
+
+  return null;
 }

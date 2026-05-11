@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
+import '../../../shared/widgets/admin_top_actions.dart';
+import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// Screen 69 — إعدادات المؤسسة (Institution Settings)
 /// Matches design: _69/code.html
@@ -61,7 +63,7 @@ class _InstitutionSettingsScreenState
             ],
           ),
         ),
-        bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 4, role: 'admin'),
       ),
     );
   }
@@ -87,6 +89,7 @@ class _InstitutionSettingsScreenState
         ],
       ),
       actions: [
+        const AdminTopActions(),
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
           onPressed: () {

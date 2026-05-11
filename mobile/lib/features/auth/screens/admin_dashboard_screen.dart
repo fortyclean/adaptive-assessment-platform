@@ -5,6 +5,8 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/widgets/admin_top_actions.dart';
+import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/admin_repository.dart';
 
 /// Admin Dashboard Screen — Screen 23
@@ -103,10 +105,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: AppColors.primary),
-            onPressed: () => context.push(AppRoutes.institutionSettings),
-          ),
+          const AdminTopActions(),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
@@ -314,6 +313,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                 ],
               ),
             ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 0, role: 'admin'),
     );
   }
 }

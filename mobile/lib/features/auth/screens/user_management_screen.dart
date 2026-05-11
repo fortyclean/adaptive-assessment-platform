@@ -5,6 +5,8 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../repositories/admin_repository.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/widgets/admin_top_actions.dart';
+import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// User Management Screen — Screen 17
 /// Requirements: 13.2–13.5
@@ -331,6 +333,7 @@ class _UserManagementScreenState
           onPressed: () => context.pop(),
         ),
         actions: [
+          const AdminTopActions(),
           Padding(
             padding: const EdgeInsets.only(left: 8),
             child: TextButton.icon(
@@ -534,6 +537,7 @@ class _UserManagementScreenState
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'admin'),
     );
   }
 

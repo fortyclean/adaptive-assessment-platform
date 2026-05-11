@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.10';
-  static const int buildNumber = 10;
+  static const String current = '1.0.11';
+  static const int buildNumber = 11;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.11',
+      buildNumber: 11,
+      date: 'مايو 2026',
+      title: 'توحيد تجربة المشرف وحراسة التنقل',
+      changes: [
+        'تثبيت عناصر المشرف الأساسية في الشاشات الرئيسية: الرئيسية والإعدادات وعن التطبيق وتسجيل الخروج',
+        'توحيد شريط التنقل السفلي لشاشات المشرف وإضافة الإعدادات كوجهة ثابتة',
+        'إضافة قائمة إجراءات مشتركة للمشرف تعمل بنفس السلوك في الشاشات الإدارية',
+        'منع الوصول المباشر لمسارات أدوار غير مناسبة عبر حراسة مركزية في GoRouter',
+        'تقليل اختلاف التنقل بين إدارة المستخدمين والفصول والتقارير وإعدادات المؤسسة',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.10',
       buildNumber: 10,

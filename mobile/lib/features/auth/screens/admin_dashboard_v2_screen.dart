@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// Screen 68 — Admin Dashboard v2 (لوحة تحكم المشرف — نسخة محسّنة)
@@ -71,6 +72,7 @@ class _AdminDashboardV2ScreenState
                         );
                       },
                     ),
+                    const AdminTopActions(),
                   ],
                 ),
                 // Logo + avatar (RTL: right)

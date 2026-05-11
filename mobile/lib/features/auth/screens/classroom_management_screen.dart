@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../shared/widgets/admin_top_actions.dart';
+import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/admin_repository.dart';
 
 /// Classroom Management Screen — Screen 18
@@ -266,6 +268,7 @@ class _ClassroomManagementScreenState
                       ],
                     ),
                   ),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 2, role: 'admin'),
       ),
     );
   }
@@ -295,6 +298,7 @@ class _ClassroomManagementScreenState
       ),
       centerTitle: false,
       actions: [
+        const AdminTopActions(),
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Color(0xFF64748B)),
           onPressed: () => context.push('/notifications'),

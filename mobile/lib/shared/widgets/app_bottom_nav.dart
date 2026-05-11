@@ -140,6 +140,8 @@ class AppBottomNav extends StatelessWidget {
           context.go('/admin/classrooms');
         case 3:
           context.go('/admin/reports');
+        case 4:
+          context.go('/admin/institution-settings');
       }
     }
   }
@@ -218,6 +220,11 @@ class AppBottomNav extends StatelessWidget {
           label: 'التقارير',
           icon: Icons.bar_chart_outlined,
           activeIcon: Icons.bar_chart_rounded,
+        ),
+        _NavItem(
+          label: 'الإعدادات',
+          icon: Icons.settings_outlined,
+          activeIcon: Icons.settings_rounded,
         ),
       ];
     }
