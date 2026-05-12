@@ -25,6 +25,7 @@ router.get('/', async (_req: Request, res: Response) => {
       },
     },
     version: process.env.npm_package_version || '1.0.0',
+    build: 'auth-login-diagnostic-1.0.23',
     environment: process.env.NODE_ENV || 'development',
   };
 
