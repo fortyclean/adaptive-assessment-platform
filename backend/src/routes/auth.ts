@@ -455,10 +455,16 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
 
     // Verify Google ID token
     const client = new OAuth2Client(clientId);
-    const ticket = await client.verifyIdToken({
-      idToken,
-      audience: clientId,
-    });
+    let ticket;
+    try {
+      ticket = await client.verifyIdToken({
+        idToken,
+        audience: clientId,
+      });
+    } catch {
+      res.status(401).json({ error: 'Invalid Google token' });
+      return;
+    }
     const payload = ticket.getPayload();
     if (!payload || !payload.email) {
       res.status(401).json({ error: 'Invalid Google token' });
