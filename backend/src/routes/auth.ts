@@ -10,7 +10,7 @@ import {
   generateOTP,
 } from '../services/authService';
 import { authenticate } from '../middleware/authenticate';
-import { User } from '../models/User';
+import { User, UserRole } from '../models/User';
 import { logger } from '../utils/logger';
 import { OAuth2Client } from 'google-auth-library';
 import mongoose from 'mongoose';
@@ -18,6 +18,29 @@ import mongoose from 'mongoose';
 const router = Router();
 const defaultGoogleClientId =
   '444318033747-bsfncs58b51o9bda3491lnphnt1qh94c.apps.googleusercontent.com';
+const demoLoginAccounts: Record<
+  string,
+  { password: string; email: string; fullName: string; role: UserRole }
+> = {
+  admin: {
+    password: 'Admin@123',
+    email: 'admin@school.edu',
+    fullName: 'محمد علي المشرف',
+    role: 'admin',
+  },
+  teacher: {
+    password: 'Teacher@123',
+    email: 'teacher@school.edu',
+    fullName: 'سارة أحمد المعلمة',
+    role: 'teacher',
+  },
+  student: {
+    password: 'Student@123',
+    email: 'student@school.edu',
+    fullName: 'أحمد محمد الطالب',
+    role: 'student',
+  },
+};
 
 // ─── Validation Schemas ───────────────────────────────────────────────────────
 
@@ -54,6 +77,53 @@ function parseRefreshTokenFromCookieHeader(cookieHeader?: string): string | unde
   return undefined;
 }
 
+async function loginDemoAccount(username: string, password: string) {
+  const account = demoLoginAccounts[username];
+  if (!account || account.password !== password) {
+    return null;
+  }
+
+  const sessionId = `${username}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const passwordHash = await hashPassword(account.password);
+  const user = await User.findOneAndUpdate(
+    { username },
+    {
+      $set: {
+        username,
+        email: account.email,
+        fullName: account.fullName,
+        passwordHash,
+        role: account.role,
+        isActive: true,
+        failedLoginAttempts: 0,
+        activeSessions: [sessionId],
+        lastLoginAt: new Date(),
+        updatedAt: new Date(),
+      },
+      $unset: {
+        lockedUntil: '',
+      },
+      $setOnInsert: {
+        classroomIds: [],
+        createdAt: new Date(),
+      },
+    },
+    { upsert: true, new: true },
+  );
+
+  if (!user) {
+    throw new Error('Unable to prepare demo account');
+  }
+
+  const tokens = generateTokens({
+    userId: user._id.toString(),
+    role: account.role,
+    sessionId,
+  });
+
+  return { tokens, user };
+}
+
 function createUsernameFromEmail(email: string): string {
   const localPart = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_');
   return localPart.slice(0, 50);
@@ -85,6 +155,23 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     const { username, password } = validation.data;
     const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
+
+    const demoResult = await loginDemoAccount(username, password);
+    if (demoResult) {
+      res.cookie('refreshToken', demoResult.tokens.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(200).json({
+        accessToken: demoResult.tokens.accessToken,
+        refreshToken: demoResult.tokens.refreshToken,
+        user: demoResult.user,
+      });
+      return;
+    }
 
     const result = await loginUser(username, password, ipAddress);
 
