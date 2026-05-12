@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { config } from './config';
 import { connectMongoDB } from './config/database';
 import { connectRedis } from './config/redis';
+import { ensureDemoAccounts } from './services/demoAccountsService';
 import { logger } from './utils/logger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { apiRateLimiter } from './middleware/rateLimiter';
@@ -77,6 +78,7 @@ async function startServer(): Promise<void> {
   try {
     // Connect to MongoDB
     await connectMongoDB();
+    await ensureDemoAccounts();
 
     // Connect to Redis
     await connectRedis();

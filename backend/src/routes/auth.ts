@@ -16,6 +16,8 @@ import { OAuth2Client } from 'google-auth-library';
 import mongoose from 'mongoose';
 
 const router = Router();
+const defaultGoogleClientId =
+  '444318033747-bsfncs58b51o9bda3491lnphnt1qh94c.apps.googleusercontent.com';
 
 // ─── Validation Schemas ───────────────────────────────────────────────────────
 
@@ -358,7 +360,7 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientId = process.env.GOOGLE_CLIENT_ID || defaultGoogleClientId;
     if (!clientId) {
       res.status(503).json({ error: 'Google Sign-In is not configured on this server' });
       return;

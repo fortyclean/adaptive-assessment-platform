@@ -54,13 +54,33 @@ async function seed() {
 
   const userIds = {};
   for (const user of users) {
+    const passwordHash = await bcrypt.hash(user.password, COST_FACTOR);
     const existing = await db.collection('users').findOne({ username: user.username });
     if (existing) {
-      console.log(`⚠️  User '${user.username}' already exists — skipping`);
       userIds[user.role] = existing._id;
+      await db.collection('users').updateOne(
+        { _id: existing._id },
+        {
+          $set: {
+            passwordHash,
+            email: user.email,
+            fullName: user.fullName,
+            role: user.role,
+            isActive: true,
+            failedLoginAttempts: 0,
+            lockedUntil: null,
+            updatedAt: new Date(),
+          },
+          $setOnInsert: {
+            classroomIds: [],
+            activeSessions: [],
+            createdAt: new Date(),
+          },
+        }
+      );
+      console.log(`✅ Updated ${user.role}: ${user.username} / ${user.password}`);
       continue;
     }
-    const passwordHash = await bcrypt.hash(user.password, COST_FACTOR);
     const result = await db.collection('users').insertOne({
       username: user.username,
       passwordHash,
