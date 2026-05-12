@@ -155,6 +155,7 @@ export const loginUser = async (
 
   // Generate session ID
   const sessionId = `${user._id}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  user.activeSessions = user.activeSessions || [];
 
   // Enforce max concurrent sessions (max 2 devices)
   if (user.activeSessions.length >= MAX_CONCURRENT_SESSIONS) {

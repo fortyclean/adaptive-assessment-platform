@@ -49,6 +49,7 @@ export async function ensureDemoAccounts(): Promise<void> {
           role: account.role,
           isActive: true,
           failedLoginAttempts: 0,
+          activeSessions: [],
           updatedAt: new Date(),
         },
         $unset: {
@@ -57,7 +58,6 @@ export async function ensureDemoAccounts(): Promise<void> {
         $setOnInsert: {
           username: account.username,
           classroomIds: [],
-          activeSessions: [],
           createdAt: new Date(),
         },
       },
