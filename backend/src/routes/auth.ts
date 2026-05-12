@@ -414,8 +414,19 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
     // Generate session
     const { v4: uuidv4 } = await import('uuid');
     const sessionId = uuidv4();
-    user.activeSessions.push(sessionId);
-    await user.save();
+    const activeSessions = Array.isArray(user.activeSessions)
+      ? [...user.activeSessions]
+      : [];
+    activeSessions.push(sessionId);
+    await User.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          activeSessions,
+          lastLoginAt: new Date(),
+        },
+      },
+    );
 
     const tokens = generateTokens({
       userId: user._id.toString(),

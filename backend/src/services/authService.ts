@@ -134,7 +134,15 @@ export const loginUser = async (
       });
     }
 
-    await user.save();
+    await User.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          failedLoginAttempts: user.failedLoginAttempts,
+          ...(user.lockedUntil ? { lockedUntil: user.lockedUntil } : {}),
+        },
+      },
+    );
 
     logger.warn('Failed login attempt', {
       username,
@@ -150,23 +158,34 @@ export const loginUser = async (
   }
 
   // Reset failed attempts on successful login
-  user.failedLoginAttempts = 0;
-  user.lockedUntil = undefined;
+  const activeSessions = Array.isArray(user.activeSessions)
+    ? [...user.activeSessions]
+    : [];
 
   // Generate session ID
   const sessionId = `${user._id}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-  user.activeSessions = user.activeSessions || [];
 
   // Enforce max concurrent sessions (max 2 devices)
-  if (user.activeSessions.length >= MAX_CONCURRENT_SESSIONS) {
+  if (activeSessions.length >= MAX_CONCURRENT_SESSIONS) {
     // Remove oldest session
-    user.activeSessions.shift();
+    activeSessions.shift();
     logger.info('Oldest session invalidated due to concurrent session limit', { userId: user._id });
   }
 
-  user.activeSessions.push(sessionId);
-  user.lastLoginAt = new Date();
-  await user.save();
+  activeSessions.push(sessionId);
+  await User.updateOne(
+    { _id: user._id },
+    {
+      $set: {
+        failedLoginAttempts: 0,
+        activeSessions,
+        lastLoginAt: new Date(),
+      },
+      $unset: {
+        lockedUntil: '',
+      },
+    },
+  );
 
   const tokens = generateTokens({
     userId: user._id.toString(),
