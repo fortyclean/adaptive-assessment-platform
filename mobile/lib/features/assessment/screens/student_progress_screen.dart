@@ -93,7 +93,7 @@ class _StudentProgressScreenState
     final firstName = user?.fullName?.split(' ').first ?? 'طالب';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: CustomScrollView(
@@ -102,7 +102,7 @@ class _StudentProgressScreenState
             SliverAppBar(
               floating: true,
               snap: true,
-              backgroundColor: const Color(0xFFF8FAFC),
+              backgroundColor: Theme.of(context).colorScheme.surface,
               elevation: 0,
               scrolledUnderElevation: 1,
               automaticallyImplyLeading: false,

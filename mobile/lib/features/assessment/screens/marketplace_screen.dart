@@ -67,7 +67,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: const Color(0xFFFBF8FF),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: _buildAppBar(),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

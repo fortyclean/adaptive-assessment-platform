@@ -89,7 +89,7 @@ class _StudentMarketplaceScreenState
             SliverAppBar(
               floating: true,
               snap: true,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               elevation: 0,
               scrolledUnderElevation: 1,
               automaticallyImplyLeading: false,

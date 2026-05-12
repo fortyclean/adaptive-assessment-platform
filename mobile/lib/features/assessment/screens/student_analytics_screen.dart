@@ -104,14 +104,14 @@ class _StudentAnalyticsScreenState
     final firstName = user?.fullName?.split(' ').first ?? 'أحمد';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           // ─── Top App Bar ─────────────────────────────────────────────
           SliverAppBar(
             floating: true,
             snap: true,
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
             scrolledUnderElevation: 1,
             shadowColor: Colors.black12,

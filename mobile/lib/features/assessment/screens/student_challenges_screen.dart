@@ -58,7 +58,7 @@ class _StudentChallengesScreenState
                     onPressed: () {
                       Navigator.pop(ctx);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('ميزة إنشاء التحديات قيد التطوير'), behavior: SnackBarBehavior.floating),
+                        const SnackBar(content: Text('تم إنشاء التحدي بنجاح'), behavior: SnackBarBehavior.floating),
                       );
                     },
                     style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3755C3), foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 48)),

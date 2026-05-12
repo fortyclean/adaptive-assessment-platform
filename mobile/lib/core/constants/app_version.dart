@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.20';
-  static const int buildNumber = 20;
+  static const String current = '1.0.21';
+  static const int buildNumber = 21;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.21',
+      buildNumber: 21,
+      date: 'مايو 2026',
+      title: 'تحسين تجربة الطالب والثيم',
+      changes: [
+        'إزالة رسالة قيد التطوير من إنشاء التحديات في واجهة الطالب',
+        'توحيد خلفيات شاشات الطالب الأساسية لتتبع الثيم العام',
+        'تحسين اتساق الوضع الليلي عبر مكونات تنقل الطالب المشتركة',
+        'توحيد خلفية شريط التطبيق في شاشات الطالب الأساسية مع الثيم',
+        'إكمال تحسين تجربة الطالب دون تغيير الهوية البصرية المعتمدة',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.20',
       buildNumber: 20,

@@ -86,7 +86,7 @@ class _StudentDashboardScreenState
     final xpProgress = xpInLevel / 200.0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: CustomScrollView(
@@ -95,7 +95,7 @@ class _StudentDashboardScreenState
             SliverAppBar(
               floating: true,
               snap: true,
-              backgroundColor: const Color(0xFFF8FAFC),
+              backgroundColor: Theme.of(context).colorScheme.surface,
               elevation: 0,
               scrolledUnderElevation: 1,
               automaticallyImplyLeading: false,

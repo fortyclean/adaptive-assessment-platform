@@ -122,7 +122,7 @@ class _StudentSubjectsScreenState
     final firstName = user?.fullName?.split(' ').first ?? 'طالب';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -177,8 +177,8 @@ class _StudentSubjectsScreenState
     return Container(
       height: 64,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF8FAFC),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
         border: Border(
           bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
         ),
