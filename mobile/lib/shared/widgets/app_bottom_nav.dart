@@ -22,10 +22,11 @@ class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = _itemsForRole(role);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
         border: Border(
           top: BorderSide(color: Color(0xFFE2E8F0), width: 1),
         ),
@@ -74,7 +75,7 @@ class AppBottomNav extends StatelessWidget {
                           // Active: primary container blue, Inactive: gray
                           color: isActive
                               ? AppColors.primaryContainer
-                              : AppColors.onSurfaceVariant,
+                              : colorScheme.onSurface.withValues(alpha: 0.72),
                           size: 24,
                         ),
                         const SizedBox(height: 2),
@@ -87,7 +88,7 @@ class AppBottomNav extends StatelessWidget {
                                 : FontWeight.w500,
                             color: isActive
                                 ? AppColors.primaryContainer
-                                : AppColors.onSurfaceVariant,
+                                : colorScheme.onSurface.withValues(alpha: 0.72),
                             fontFamily: 'Almarai',
                           ),
                           maxLines: 1,
@@ -110,38 +111,52 @@ class AppBottomNav extends StatelessWidget {
       switch (index) {
         case 0:
           context.go('/student');
+          return;
         case 1:
           context.go('/student/assessments-list');
+          return;
         case 2:
-          context.go('/student/progress');  // Fix: was /student/results
+          context.go('/student/progress');
+          return;
         case 3:
-          context.go('/student/settings');  // Fix: was /student/notifications
+          context.go('/student/settings');
+          return;
       }
     } else if (role == 'teacher') {
       switch (index) {
         case 0:
           context.go('/teacher');
+          return;
         case 1:
           context.go('/teacher/assessments');
+          return;
         case 2:
           context.go('/teacher/questions');
+          return;
         case 3:
           context.go('/teacher/report-schedules');
+          return;
         case 4:
           context.go('/teacher/settings');
+          return;
       }
     } else if (role == 'admin') {
       switch (index) {
         case 0:
           context.go('/admin');
+          return;
         case 1:
           context.go('/admin/users');
+          return;
         case 2:
           context.go('/admin/classrooms');
+          return;
         case 3:
           context.go('/admin/reports');
+          return;
         case 4:
           context.go('/admin/institution-settings');
+          return;
       }
     }
   }

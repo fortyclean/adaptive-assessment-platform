@@ -66,11 +66,7 @@ class _AdminDashboardV2ScreenState
                     IconButton(
                       icon: const Icon(Icons.search),
                       color: AppColors.onSurfaceVariant,
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('البحث قيد التطوير'), behavior: SnackBarBehavior.floating),
-                        );
-                      },
+                      onPressed: () => context.push('/admin/users'),
                     ),
                     const AdminTopActions(),
                   ],
@@ -784,7 +780,7 @@ class _AdminDashboardV2ScreenState
                 onTap = () => context.push('/admin/institution-settings');
               } else if (label == 'الجداول') {
                 onTap = () => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('الجداول قيد التطوير'), behavior: SnackBarBehavior.floating),
+                  const SnackBar(content: Text('جاري فتح إدارة الفصول'), behavior: SnackBarBehavior.floating),
                 );
               } else if (label == 'إضافة طالب') {
                 onTap = () => context.push('/admin/users');

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/router/app_router.dart';
 import '../../auth/repositories/admin_repository.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
@@ -38,8 +39,18 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   String? _selectedGradeLevel;
 
   static const List<String> _gradeLevels = [
-    '1', '2', '3', '4', '5', '6',
-    '7', '8', '9', '10', '11', '12',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
   ];
 
   // ── Classroom Comparison (Req 19.2) ───────────────────────────────────────
@@ -70,10 +81,30 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   };
 
   static const List<Map<String, dynamic>> _mockComparison = [
-    {'classroomName': 'أولى متوسط (أ)', 'averageScore': 92, 'completionRate': 100, 'topSkill': 'الجبر'},
-    {'classroomName': 'ثالثة متوسط (ج)', 'averageScore': 88, 'completionRate': 95, 'topSkill': 'الهندسة'},
-    {'classroomName': 'أولى متوسط (ب)', 'averageScore': 85, 'completionRate': 92, 'topSkill': 'الأعداد'},
-    {'classroomName': 'ثانية متوسط (أ)', 'averageScore': 78, 'completionRate': 88, 'topSkill': 'الإحصاء'},
+    {
+      'classroomName': 'أولى متوسط (أ)',
+      'averageScore': 92,
+      'completionRate': 100,
+      'topSkill': 'الجبر'
+    },
+    {
+      'classroomName': 'ثالثة متوسط (ج)',
+      'averageScore': 88,
+      'completionRate': 95,
+      'topSkill': 'الهندسة'
+    },
+    {
+      'classroomName': 'أولى متوسط (ب)',
+      'averageScore': 85,
+      'completionRate': 92,
+      'topSkill': 'الأعداد'
+    },
+    {
+      'classroomName': 'ثانية متوسط (أ)',
+      'averageScore': 78,
+      'completionRate': 88,
+      'topSkill': 'الإحصاء'
+    },
   ];
 
   static const List<Map<String, dynamic>> _mockWeaknesses = [
@@ -137,10 +168,11 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       _comparisonError = null;
     });
     try {
-      final data = await ref.read(adminRepositoryProvider).getClassroomComparison(
-            subject: _selectedSubject,
-            gradeLevel: _selectedGradeLevel,
-          );
+      final data =
+          await ref.read(adminRepositoryProvider).getClassroomComparison(
+                subject: _selectedSubject,
+                gradeLevel: _selectedGradeLevel,
+              );
       setState(() {
         _comparisonData = data;
         _comparisonLoading = false;
@@ -203,7 +235,8 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         appBar: _buildAppBar(context),
         body: RefreshIndicator(
           onRefresh: () async {
-            await Future.wait([_loadSummary(), _loadComparison(), _loadWeaknesses()]);
+            await Future.wait(
+                [_loadSummary(), _loadComparison(), _loadWeaknesses()]);
           },
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
@@ -230,7 +263,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                             ),
                           ),
                         )
-                  : _buildKpiBentoGrid(),
+                      : _buildKpiBentoGrid(),
               const SizedBox(height: 24),
 
               // ── Classroom Comparison Chart ────────────────────────────────
@@ -278,8 +311,9 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       actions: [
         const AdminTopActions(),
         IconButton(
-          icon: const Icon(Icons.notifications_outlined, color: Color(0xFF64748B)),
-          onPressed: () => context.push('/teacher/notifications'),
+          icon: const Icon(Icons.notifications_outlined,
+              color: Color(0xFF64748B)),
+          onPressed: () => context.push(AppRoutes.notificationCenter),
         ),
         const SizedBox(width: 4),
         Padding(
@@ -300,21 +334,21 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       children: [
         Text(
           'تقارير المدرسة الكلية',
-          style: AppTextStyles.displayMedium.copyWith(color: AppColors.onSurface),
+          style:
+              AppTextStyles.displayMedium.copyWith(color: AppColors.onSurface),
         ),
         const SizedBox(height: 4),
         Text(
           'مقارنة شاملة لأداء الفصول ومعدلات المشاركة عبر الأقسام',
-          style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.onSurfaceVariant),
+          style: AppTextStyles.bodyMedium
+              .copyWith(color: AppColors.onSurfaceVariant),
         ),
       ],
     );
   }
 
   Widget _buildKpiBentoGrid() {
-    final summary =
-        (_summaryReport?['summary'] as Map<String, dynamic>?) ?? {};
+    final summary = (_summaryReport?['summary'] as Map<String, dynamic>?) ?? {};
     final avg = summary['schoolAverage'] ?? summary['averageScore'] ?? 84;
     final participation = summary['participationRate'] ?? 91;
     final topClass = summary['topClassroom'] as String? ?? 'أولى متوسط (أ)';
@@ -389,12 +423,11 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('الفصل المتصدر',
-                      style: AppTextStyles.labelSmall),
+                  Text('الفصل المتصدر', style: AppTextStyles.labelSmall),
                   const SizedBox(height: 4),
                   Text(topClass,
-                      style: AppTextStyles.titleLarge.copyWith(
-                          color: AppColors.primary)),
+                      style: AppTextStyles.titleLarge
+                          .copyWith(color: AppColors.primary)),
                   const SizedBox(height: 4),
                   Text('بمتوسط درجات 92% ومشاركة كاملة',
                       style: AppTextStyles.bodyMedium),
@@ -453,42 +486,57 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                     color: AppColors.primary, size: 20),
               ),
               const SizedBox(width: 8),
-              Text('مقارنة متوسط الدرجات',
-                  style: AppTextStyles.titleMedium),
+              Text('مقارنة متوسط الدرجات', style: AppTextStyles.titleMedium),
               const Spacer(),
               TextButton.icon(
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
                     backgroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20))),
                     builder: (ctx) => Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Text('تصفية المقارنة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                          const Text('تصفية المقارنة',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w700)),
                           const SizedBox(height: 16),
-                          const Text('المادة الدراسية:', style: TextStyle(fontWeight: FontWeight.w600)),
+                          const Text('المادة الدراسية:',
+                              style: TextStyle(fontWeight: FontWeight.w600)),
                           const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
-                            children: ['الكل', 'الرياضيات', 'العلوم', 'اللغة العربية', 'الإنجليزية'].map((s) =>
-                              ActionChip(
-                                label: Text(s),
-                                onPressed: () {
-                                  setState(() => _selectedSubject = s == 'الكل' ? null : s);
-                                  Navigator.pop(ctx);
-                                  _onFiltersChanged();
-                                },
-                              ),
-                            ).toList(),
+                            children: [
+                              'الكل',
+                              'الرياضيات',
+                              'العلوم',
+                              'اللغة العربية',
+                              'الإنجليزية'
+                            ]
+                                .map(
+                                  (s) => ActionChip(
+                                    label: Text(s),
+                                    onPressed: () {
+                                      setState(() => _selectedSubject =
+                                          s == 'الكل' ? null : s);
+                                      Navigator.pop(ctx);
+                                      _onFiltersChanged();
+                                    },
+                                  ),
+                                )
+                                .toList(),
                           ),
                           const SizedBox(height: 16),
                           ElevatedButton(
                             onPressed: () => Navigator.pop(ctx),
-                            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white),
                             child: const Text('تطبيق'),
                           ),
                         ],
@@ -500,8 +548,8 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                 label: const Text('تصفية'),
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.onSurfaceVariant,
-                  textStyle: const TextStyle(
-                      fontFamily: 'Almarai', fontSize: 12),
+                  textStyle:
+                      const TextStyle(fontFamily: 'Almarai', fontSize: 12),
                 ),
               ),
             ],
@@ -523,16 +571,17 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
               final i = entry.key;
               final c = entry.value;
               final name = c['classroomName'] as String? ??
-                  c['name'] as String? ?? 'فصل';
-              final score =
-                  (c['averageScore'] as num?)?.toDouble() ?? 0.0;
+                  c['name'] as String? ??
+                  'فصل';
+              final score = (c['averageScore'] as num?)?.toDouble() ?? 0.0;
               final colors = [
                 AppColors.primary,
                 AppColors.outline,
                 AppColors.outline,
                 AppColors.outline,
               ];
-              final barColor = i < colors.length ? colors[i] : AppColors.outline;
+              final barColor =
+                  i < colors.length ? colors[i] : AppColors.outline;
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16),
@@ -542,8 +591,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(name,
-                            style: AppTextStyles.labelLarge),
+                        Text(name, style: AppTextStyles.labelLarge),
                         Text(
                           '${score.round()}%',
                           style: TextStyle(
@@ -625,23 +673,17 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text('نقاط القوة',
-                          style: AppTextStyles.titleMedium.copyWith(
-                              fontSize: 15)),
+                          style:
+                              AppTextStyles.titleMedium.copyWith(fontSize: 15)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                _SkillChip(
-                    label: 'الرياضيات - الجبر',
-                    isStrength: true),
+                _SkillChip(label: 'الرياضيات - الجبر', isStrength: true),
                 const SizedBox(height: 6),
-                _SkillChip(
-                    label: 'العلوم - الأحياء',
-                    isStrength: true),
+                _SkillChip(label: 'العلوم - الأحياء', isStrength: true),
                 const SizedBox(height: 6),
-                _SkillChip(
-                    label: 'اللغة العربية - النحو',
-                    isStrength: true),
+                _SkillChip(label: 'اللغة العربية - النحو', isStrength: true),
                 const SizedBox(height: 12),
                 Text(
                   'أداء استثنائي في فصول المرحلة الأولى.',
@@ -686,8 +728,8 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text('تحتاج تدخل',
-                          style: AppTextStyles.titleMedium.copyWith(
-                              fontSize: 15)),
+                          style:
+                              AppTextStyles.titleMedium.copyWith(fontSize: 15)),
                     ),
                   ],
                 ),
@@ -697,7 +739,8 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                 else if (_weaknessError != null)
                   Text(
                     _weaknessError!,
-                    style: const TextStyle(color: AppColors.error, fontSize: 12),
+                    style:
+                        const TextStyle(color: AppColors.error, fontSize: 12),
                   )
                 else
                   ..._weaknessData.take(3).map((s) {
@@ -854,9 +897,7 @@ class _SkillChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: isStrength
-            ? const Color(0xFFD0E1FB)
-            : const Color(0xFFFFDAD6),
+        color: isStrength ? const Color(0xFFD0E1FB) : const Color(0xFFFFDAD6),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -867,9 +908,7 @@ class _SkillChip extends StatelessWidget {
                 ? Icons.check_circle_outline_rounded
                 : Icons.arrow_downward_rounded,
             size: 14,
-            color: isStrength
-                ? AppColors.primary
-                : const Color(0xFF93000A),
+            color: isStrength ? AppColors.primary : const Color(0xFF93000A),
           ),
           const SizedBox(width: 4),
           Flexible(
@@ -879,9 +918,7 @@ class _SkillChip extends StatelessWidget {
                 fontFamily: 'Almarai',
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
-                color: isStrength
-                    ? AppColors.primary
-                    : const Color(0xFF93000A),
+                color: isStrength ? AppColors.primary : const Color(0xFF93000A),
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -915,8 +952,7 @@ class _FilterDropdown extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         isDense: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.outlineVariant),
@@ -925,8 +961,8 @@ class _FilterDropdown extends StatelessWidget {
       items: [
         DropdownMenuItem<String>(
           value: null,
-          child: Text('الكل',
-              style: TextStyle(color: AppColors.onSurfaceVariant)),
+          child:
+              Text('الكل', style: TextStyle(color: AppColors.onSurfaceVariant)),
         ),
         ...items.map(
           (s) => DropdownMenuItem<String>(value: s, child: Text(s)),

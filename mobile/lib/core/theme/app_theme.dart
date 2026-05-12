@@ -105,9 +105,12 @@ class AppTheme {
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: AppColors.error),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          labelStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.outline),
-          hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.outline),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          labelStyle:
+              AppTextStyles.bodyMedium.copyWith(color: AppColors.outline),
+          hintStyle:
+              AppTextStyles.bodyMedium.copyWith(color: AppColors.outline),
         ),
         scaffoldBackgroundColor: AppColors.surface,
         dividerTheme: const DividerThemeData(
@@ -124,6 +127,29 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
+        ),
+      );
+
+  static ThemeData get darkTheme => lightTheme.copyWith(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0F172A),
+        colorScheme: lightTheme.colorScheme.copyWith(
+          brightness: Brightness.dark,
+          surface: const Color(0xFF0F172A),
+          onSurface: const Color(0xFFE5E7EB),
+          surfaceContainerHighest: const Color(0xFF1E293B),
+          outline: const Color(0xFF475569),
+          outlineVariant: const Color(0xFF334155),
+        ),
+        cardTheme: lightTheme.cardTheme.copyWith(
+          color: const Color(0xFF111827),
+        ),
+        appBarTheme: lightTheme.appBarTheme.copyWith(
+          backgroundColor: const Color(0xFF0F172A),
+          foregroundColor: const Color(0xFFE5E7EB),
+        ),
+        inputDecorationTheme: lightTheme.inputDecorationTheme.copyWith(
+          fillColor: const Color(0xFF1F2937),
         ),
       );
 }

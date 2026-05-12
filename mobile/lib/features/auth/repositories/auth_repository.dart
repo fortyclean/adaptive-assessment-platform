@@ -18,7 +18,7 @@ class AuthRepository {
     required String username,
     required String password,
   }) async {
-    final response = await _apiService.dio.post(
+    final response = await _apiService.dio.post<Map<String, dynamic>>(
       '/auth/login',
       data: {'username': username, 'password': password},
     );
@@ -28,8 +28,7 @@ class AuthRepository {
     final user = AuthUser.fromJson(data['user'] as Map<String, dynamic>);
 
     // Persist tokens and user data for offline session restore
-    await _storage.write(
-        key: AppConstants.accessTokenKey, value: accessToken);
+    await _storage.write(key: AppConstants.accessTokenKey, value: accessToken);
     await _storage.write(
         key: AppConstants.userDataKey, value: jsonEncode(user.toJson()));
     if (data['refreshToken'] != null) {
@@ -42,18 +41,22 @@ class AuthRepository {
     return (user: user, accessToken: accessToken);
   }
 
-  /// POST /api/v1/auth/register
-  Future<void> registerStudent({
+  /// POST /api/v1/auth/register (student/teacher pending approval)
+  Future<void> registerAccount({
     required String fullName,
+    required String username,
     required String email,
     required String password,
+    required String role,
   }) async {
-    await _apiService.dio.post(
+    await _apiService.dio.post<Map<String, dynamic>>(
       '/auth/register',
       data: {
         'fullName': fullName,
+        'username': username,
         'email': email,
         'password': password,
+        'role': role,
       },
     );
   }
@@ -61,8 +64,8 @@ class AuthRepository {
   /// POST /api/v1/auth/logout
   Future<void> logout() async {
     try {
-      await _apiService.dio.post('/auth/logout');
-    } catch (_) {
+      await _apiService.dio.post<Map<String, dynamic>>('/auth/logout');
+    } on DioException {
       // Best-effort logout
     } finally {
       await _storage.delete(key: AppConstants.accessTokenKey);
@@ -74,7 +77,7 @@ class AuthRepository {
 
   /// POST /api/v1/auth/reset-password
   Future<void> requestPasswordReset(String email) async {
-    await _apiService.dio.post(
+    await _apiService.dio.post<Map<String, dynamic>>(
       '/auth/reset-password',
       data: {'email': email},
     );
@@ -87,9 +90,10 @@ class AuthRepository {
 
     try {
       _apiService.setToken(token);
-      final response = await _apiService.dio.get('/auth/me');
-      return AuthUser.fromJson(
-          response.data['user'] as Map<String, dynamic>);
+      final response =
+          await _apiService.dio.get<Map<String, dynamic>>('/auth/me');
+      final body = response.data ?? <String, dynamic>{};
+      return AuthUser.fromJson(body['user'] as Map<String, dynamic>);
     } on DioException {
       await _storage.delete(key: AppConstants.accessTokenKey);
       _apiService.clearToken();
@@ -102,7 +106,7 @@ class AuthRepository {
     required String userId,
     required String name,
   }) async {
-    await _apiService.dio.patch(
+    await _apiService.dio.patch<Map<String, dynamic>>(
       '/users/$userId',
       data: {'fullName': name},
     );

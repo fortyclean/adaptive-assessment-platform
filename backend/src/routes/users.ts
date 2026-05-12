@@ -6,6 +6,7 @@ import { authenticate, authorize } from '../middleware/authenticate';
 import { invalidateAllSessions, hashPassword, validatePasswordStrength } from '../services/authService';
 import { logger } from '../utils/logger';
 import { env } from '../config/env';
+import mongoose from 'mongoose';
 
 const router = Router();
 
@@ -140,6 +141,10 @@ router.post('/', authorize('admin'), async (req: Request, res: Response): Promis
 
     res.status(201).json(response);
   } catch (error) {
+    if (error instanceof mongoose.Error && 'code' in error && (error as { code?: number }).code === 11000) {
+      res.status(409).json({ error: 'Username or email already exists' });
+      return;
+    }
     logger.error('Create user error', { error });
     res.status(500).json({ error: 'An internal server error occurred' });
   }
@@ -180,6 +185,10 @@ router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Pr
     logger.info('User updated by admin', { adminId: req.user!.userId, targetUserId: req.params.id });
     res.status(200).json({ user });
   } catch (error) {
+    if (error instanceof mongoose.Error && 'code' in error && (error as { code?: number }).code === 11000) {
+      res.status(409).json({ error: 'Username or email already exists' });
+      return;
+    }
     logger.error('Update user error', { error });
     res.status(500).json({ error: 'An internal server error occurred' });
   }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/admin_repository.dart';
@@ -25,6 +26,11 @@ class _ClassroomManagementScreenState
   List<Map<String, dynamic>> _classrooms = [];
   String? _errorMessage;
 
+  bool get _isDemoSession {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return token.startsWith('demo-token-');
+  }
+
   // ── Mock data used as fallback when API fails ─────────────────────────────
   static const List<Map<String, dynamic>> _mockClassrooms = [
     {
@@ -32,10 +38,36 @@ class _ClassroomManagementScreenState
       'name': 'أولى متوسط (أ)',
       'gradeLevel': 'الصف الأول المتوسط',
       'academicYear': '2024-2025',
-      'studentIds': ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
-                     's9', 's10', 's11', 's12', 's13', 's14', 's15',
-                     's16', 's17', 's18', 's19', 's20', 's21', 's22',
-                     's23', 's24', 's25', 's26', 's27', 's28'],
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18',
+        's19',
+        's20',
+        's21',
+        's22',
+        's23',
+        's24',
+        's25',
+        's26',
+        's27',
+        's28'
+      ],
       'teacherName': 'أ. محمد العتيبي',
       'activeAssessments': 3,
       'averageScore': 87,
@@ -45,10 +77,33 @@ class _ClassroomManagementScreenState
       'name': 'أولى متوسط (ب)',
       'gradeLevel': 'الصف الأول المتوسط',
       'academicYear': '2024-2025',
-      'studentIds': ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
-                     's9', 's10', 's11', 's12', 's13', 's14', 's15',
-                     's16', 's17', 's18', 's19', 's20', 's21', 's22',
-                     's23', 's24', 's25'],
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18',
+        's19',
+        's20',
+        's21',
+        's22',
+        's23',
+        's24',
+        's25'
+      ],
       'teacherName': 'أ. سارة الزهراني',
       'activeAssessments': 1,
       'averageScore': 79,
@@ -58,11 +113,38 @@ class _ClassroomManagementScreenState
       'name': 'ثانية متوسط (أ)',
       'gradeLevel': 'الصف الثاني المتوسط',
       'academicYear': '2024-2025',
-      'studentIds': ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
-                     's9', 's10', 's11', 's12', 's13', 's14', 's15',
-                     's16', 's17', 's18', 's19', 's20', 's21', 's22',
-                     's23', 's24', 's25', 's26', 's27', 's28', 's29',
-                     's30'],
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18',
+        's19',
+        's20',
+        's21',
+        's22',
+        's23',
+        's24',
+        's25',
+        's26',
+        's27',
+        's28',
+        's29',
+        's30'
+      ],
       'teacherName': 'أ. خالد الشمري',
       'activeAssessments': 2,
       'averageScore': 82,
@@ -72,13 +154,171 @@ class _ClassroomManagementScreenState
       'name': 'ثالثة متوسط (ج)',
       'gradeLevel': 'الصف الثالث المتوسط',
       'academicYear': '2024-2025',
-      'studentIds': ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
-                     's9', 's10', 's11', 's12', 's13', 's14', 's15',
-                     's16', 's17', 's18', 's19', 's20', 's21', 's22',
-                     's23', 's24'],
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18',
+        's19',
+        's20',
+        's21',
+        's22',
+        's23',
+        's24'
+      ],
       'teacherName': 'أ. نورة القحطاني',
       'activeAssessments': 0,
       'averageScore': 91,
+    },
+    {
+      '_id': 'mock-5',
+      'name': 'ثالثة متوسط (أ)',
+      'gradeLevel': 'الصف الثالث المتوسط',
+      'academicYear': '2024-2025',
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18',
+        's19',
+        's20'
+      ],
+      'teacherName': 'أ. منى عبدالله',
+      'activeAssessments': 2,
+      'averageScore': 84,
+    },
+    {
+      '_id': 'mock-6',
+      'name': 'أولى ثانوي (أ)',
+      'gradeLevel': 'الصف الأول الثانوي',
+      'academicYear': '2024-2025',
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18',
+        's19',
+        's20',
+        's21',
+        's22',
+        's23',
+        's24',
+        's25',
+        's26',
+        's27',
+        's28',
+        's29',
+        's30',
+        's31'
+      ],
+      'teacherName': 'أ. علي الغامدي',
+      'activeAssessments': 4,
+      'averageScore': 77,
+    },
+    {
+      '_id': 'mock-7',
+      'name': 'ثانية ثانوي (ب)',
+      'gradeLevel': 'الصف الثاني الثانوي',
+      'academicYear': '2024-2025',
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18',
+        's19',
+        's20',
+        's21',
+        's22',
+        's23'
+      ],
+      'teacherName': 'أ. سعاد القحطاني',
+      'activeAssessments': 1,
+      'averageScore': 89,
+    },
+    {
+      '_id': 'mock-8',
+      'name': 'ثالثة ثانوي (ج)',
+      'gradeLevel': 'الصف الثالث الثانوي',
+      'academicYear': '2024-2025',
+      'studentIds': [
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+        's9',
+        's10',
+        's11',
+        's12',
+        's13',
+        's14',
+        's15',
+        's16',
+        's17',
+        's18'
+      ],
+      'teacherName': 'أ. خالد الدوسري',
+      'activeAssessments': 3,
+      'averageScore': 73,
     },
   ];
 
@@ -99,8 +339,8 @@ class _ClassroomManagementScreenState
         _classrooms = data;
         _isLoading = false;
       });
-    } catch (_) {
-      if (!AppConstants.useMockData) {
+    } on Object {
+      if (!AppConstants.useMockData && !_isDemoSession) {
         setState(() {
           _classrooms = [];
           _isLoading = false;
@@ -123,8 +363,8 @@ class _ClassroomManagementScreenState
       builder: (ctx) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: const Text('حذف الفصل'),
           content: Text('هل تريد حذف فصل "$name"؟'),
           actions: [
@@ -140,12 +380,12 @@ class _ClassroomManagementScreenState
       ),
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       try {
         await ref.read(adminRepositoryProvider).deleteClassroom(id);
-        _loadClassrooms();
-      } catch (e) {
-        if (!AppConstants.useMockData) {
+        await _loadClassrooms();
+      } on Object {
+        if (!AppConstants.useMockData && !_isDemoSession) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -175,7 +415,7 @@ class _ClassroomManagementScreenState
   }
 
   void _showCreateDialog() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => _CreateClassroomDialog(
         onCreated: () {
@@ -206,7 +446,8 @@ class _ClassroomManagementScreenState
           foregroundColor: Colors.white,
           icon: const Icon(Icons.add_rounded),
           label: const Text('إضافة فصل',
-              style: TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
+              style: TextStyle(
+                  fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -238,36 +479,37 @@ class _ClassroomManagementScreenState
                       ),
                     ),
                   )
-            : _classrooms.isEmpty
-                ? _buildEmptyState()
-                : RefreshIndicator(
-                    onRefresh: _loadClassrooms,
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
-                      children: [
-                        // ── Page Header ──────────────────────────────────
-                        _buildPageHeader(),
-                        const SizedBox(height: 20),
-                        // ── KPI Row ──────────────────────────────────────
-                        _buildKpiRow(),
-                        const SizedBox(height: 24),
-                        // ── Classroom Cards ───────────────────────────────
-                        ...List.generate(_classrooms.length, (i) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: _ClassroomCard(
-                              classroom: _classrooms[i],
-                              onDelete: () => _deleteClassroom(
-                                  _classrooms[i]['_id'] as String? ?? '',
-                                  _classrooms[i]['name'] as String? ?? ''),
-                              onEdit: () => _showEditDialog(_classrooms[i]),
-                              onAssignTeacher: () => _showAssignTeacherDialog(_classrooms[i]),
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
+                : _classrooms.isEmpty
+                    ? _buildEmptyState()
+                    : RefreshIndicator(
+                        onRefresh: _loadClassrooms,
+                        child: ListView(
+                          padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+                          children: [
+                            // ── Page Header ──────────────────────────────────
+                            _buildPageHeader(),
+                            const SizedBox(height: 20),
+                            // ── KPI Row ──────────────────────────────────────
+                            _buildKpiRow(),
+                            const SizedBox(height: 24),
+                            // ── Classroom Cards ───────────────────────────────
+                            ...List.generate(_classrooms.length, (i) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: _ClassroomCard(
+                                  classroom: _classrooms[i],
+                                  onDelete: () => _deleteClassroom(
+                                      _classrooms[i]['_id'] as String? ?? '',
+                                      _classrooms[i]['name'] as String? ?? ''),
+                                  onEdit: () => _showEditDialog(_classrooms[i]),
+                                  onAssignTeacher: () =>
+                                      _showAssignTeacherDialog(_classrooms[i]),
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
         bottomNavigationBar: const AppBottomNav(currentIndex: 2, role: 'admin'),
       ),
     );
@@ -300,7 +542,8 @@ class _ClassroomManagementScreenState
       actions: [
         const AdminTopActions(),
         IconButton(
-          icon: const Icon(Icons.notifications_outlined, color: Color(0xFF64748B)),
+          icon: const Icon(Icons.notifications_outlined,
+              color: Color(0xFF64748B)),
           onPressed: () => context.push('/notifications'),
           tooltip: 'الإشعارات',
         ),
@@ -328,8 +571,8 @@ class _ClassroomManagementScreenState
         const SizedBox(height: 4),
         Text(
           'إدارة الفصول وتعيين المعلمين والطلاب',
-          style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.onSurfaceVariant),
+          style: AppTextStyles.bodyMedium
+              .copyWith(color: AppColors.onSurfaceVariant),
         ),
       ],
     );
@@ -390,12 +633,12 @@ class _ClassroomManagementScreenState
           ),
           const SizedBox(height: 16),
           Text('لا توجد فصول دراسية',
-              style: AppTextStyles.titleMedium.copyWith(
-                  color: AppColors.onSurfaceVariant)),
+              style: AppTextStyles.titleMedium
+                  .copyWith(color: AppColors.onSurfaceVariant)),
           const SizedBox(height: 8),
           Text('أضف فصلاً جديداً للبدء',
-              style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.outlineVariant)),
+              style: AppTextStyles.bodyMedium
+                  .copyWith(color: AppColors.outlineVariant)),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: _showCreateDialog,
@@ -426,61 +669,110 @@ class _ClassroomManagementScreenState
 
     String? selectedTeacherId = classroom['teacherId'] as String?;
 
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setModalState) => Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+              left: 16,
+              right: 16,
+              top: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+              Center(
+                  child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                          color: AppColors.outlineVariant,
+                          borderRadius: BorderRadius.circular(2)))),
               const SizedBox(height: 16),
-              Text('ربط معلم بـ: ${classroom['name']}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              Text('ربط معلم بـ: ${classroom['name']}',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w700)),
               const SizedBox(height: 4),
-              const Text('اختر معلماً لتعيينه في هذا الفصل', style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13)),
+              const Text('اختر معلماً لتعيينه في هذا الفصل',
+                  style: TextStyle(
+                      color: AppColors.onSurfaceVariant, fontSize: 13)),
               const SizedBox(height: 16),
               ...teachers.map((t) => RadioListTile<String>(
-                value: t['_id'] as String,
-                groupValue: selectedTeacherId,
-                onChanged: (v) => setModalState(() => selectedTeacherId = v),
-                title: Text(t['fullName'] as String, style: const TextStyle(fontWeight: FontWeight.w600)),
-                subtitle: Text(t['subject'] as String, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
-                activeColor: AppColors.primary,
-                contentPadding: EdgeInsets.zero,
-              )),
+                    value: t['_id'] as String,
+                    groupValue: selectedTeacherId,
+                    onChanged: (v) =>
+                        setModalState(() => selectedTeacherId = v),
+                    title: Text(t['fullName'] as String,
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle: Text(t['subject'] as String,
+                        style: const TextStyle(
+                            color: AppColors.onSurfaceVariant, fontSize: 12)),
+                    activeColor: AppColors.primary,
+                    contentPadding: EdgeInsets.zero,
+                  )),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: selectedTeacherId == null ? null : () {
-                  final teacher = teachers.firstWhere((t) => t['_id'] == selectedTeacherId);
-                  final idx = _classrooms.indexWhere((c) => c['_id'] == classroom['_id']);
-                  if (idx != -1) {
-                    setState(() {
-                      _classrooms[idx] = Map.from(_classrooms[idx])
-                        ..['teacherId'] = selectedTeacherId
-                        ..['teacherName'] = teacher['fullName'];
-                    });
-                  }
-                  Navigator.pop(ctx);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('تم ربط ${teacher['fullName']} بفصل ${classroom['name']}'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: const Color(0xFF2E7D32),
-                    ),
-                  );
-                },
+                onPressed: selectedTeacherId == null
+                    ? null
+                    : () async {
+                        final teacher = teachers
+                            .firstWhere((t) => t['_id'] == selectedTeacherId);
+                        try {
+                          await ref
+                              .read(adminRepositoryProvider)
+                              .assignTeachers(classroom['_id'] as String,
+                                  [selectedTeacherId!]);
+                          await _loadClassrooms();
+                        } on Object {
+                          if (!AppConstants.useMockData && !_isDemoSession) {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'تعذر ربط المعلم بالفصل. يرجى المحاولة مرة أخرى'),
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: AppColors.error,
+                                ),
+                              );
+                            }
+                            return;
+                          }
+                          final idx = _classrooms
+                              .indexWhere((c) => c['_id'] == classroom['_id']);
+                          if (idx != -1) {
+                            setState(() {
+                              _classrooms[idx] = Map.from(_classrooms[idx])
+                                ..['teacherId'] = selectedTeacherId
+                                ..['teacherName'] = teacher['fullName'];
+                            });
+                          }
+                        }
+                        if (!ctx.mounted) return;
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(ctx).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'تم ربط ${teacher['fullName']} بفصل ${classroom['name']}'),
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: const Color(0xFF2E7D32),
+                          ),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
-                child: const Text('تأكيد الربط', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                child: const Text('تأكيد الربط',
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
               ),
             ],
           ),
@@ -490,43 +782,93 @@ class _ClassroomManagementScreenState
   }
 
   void _showEditDialog(Map<String, dynamic> classroom) {
-    final nameController = TextEditingController(text: classroom['name'] as String? ?? '');
-    showModalBottomSheet(
+    final nameController =
+        TextEditingController(text: classroom['name'] as String? ?? '');
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+            left: 16,
+            right: 16,
+            top: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+            Center(
+                child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                        color: AppColors.outlineVariant,
+                        borderRadius: BorderRadius.circular(2)))),
             const SizedBox(height: 16),
-            Text('تعديل: ${classroom['name']}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            Text('تعديل: ${classroom['name']}',
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
             TextField(
               controller: nameController,
               textDirection: TextDirection.rtl,
-              decoration: InputDecoration(labelText: 'اسم الفصل', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+              decoration: InputDecoration(
+                  labelText: 'اسم الفصل',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8))),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                final idx = _classrooms.indexWhere((c) => c['_id'] == classroom['_id']);
-                if (idx != -1) {
-                  setState(() {
-                    _classrooms[idx] = Map.from(_classrooms[idx])..['name'] = nameController.text.trim();
-                  });
+              onPressed: () async {
+                final updatedName = nameController.text.trim();
+                try {
+                  await ref.read(adminRepositoryProvider).updateClassroom(
+                    classroom['_id'] as String,
+                    {'name': updatedName},
+                  );
+                  await _loadClassrooms();
+                } on Object {
+                  if (!AppConstants.useMockData && !_isDemoSession) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'تعذر تحديث بيانات الفصل. يرجى المحاولة مرة أخرى'),
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: AppColors.error,
+                        ),
+                      );
+                    }
+                    return;
+                  }
+                  final idx = _classrooms
+                      .indexWhere((c) => c['_id'] == classroom['_id']);
+                  if (idx != -1) {
+                    setState(() {
+                      _classrooms[idx] = Map.from(_classrooms[idx])
+                        ..['name'] = updatedName;
+                    });
+                  }
                 }
+                if (!ctx.mounted) return;
                 Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم تحديث الفصل'), behavior: SnackBarBehavior.floating),
+                ScaffoldMessenger.of(ctx).showSnackBar(
+                  const SnackBar(
+                      content: Text('تم تحديث الفصل'),
+                      behavior: SnackBarBehavior.floating),
                 );
               },
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-              child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8))),
+              child: const Text('حفظ التغييرات',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -652,7 +994,7 @@ class _ClassroomCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(Icons.class_rounded,
@@ -745,8 +1087,8 @@ class _ClassroomCard extends StatelessWidget {
                   const SizedBox(height: 12),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: AppColors.warningContainer,
                       borderRadius: BorderRadius.circular(8),
@@ -781,8 +1123,10 @@ class _ClassroomCard extends StatelessWidget {
                       foregroundColor: AppColors.primary,
                       side: const BorderSide(color: AppColors.primary),
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      textStyle: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -852,7 +1196,8 @@ class _StatItem extends StatelessWidget {
 // ─── Create Classroom Dialog ──────────────────────────────────────────────────
 
 class _CreateClassroomDialog extends ConsumerStatefulWidget {
-  const _CreateClassroomDialog({required this.onCreated, this.onCreatedWithData});
+  const _CreateClassroomDialog(
+      {required this.onCreated, this.onCreatedWithData});
   final VoidCallback onCreated;
   final void Function(Map<String, dynamic>)? onCreatedWithData;
 
@@ -881,8 +1226,10 @@ class _CreateClassroomDialogState
         'academicYear': _academicYear,
       });
       widget.onCreated();
-    } catch (_) {
-      if (!AppConstants.useMockData) {
+    } on Object {
+      final isDemoSession =
+          (ref.read(authProvider).accessToken ?? '').startsWith('demo-token-');
+      if (!AppConstants.useMockData && !isDemoSession) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -901,7 +1248,7 @@ class _CreateClassroomDialogState
         'name': _name,
         'gradeLevel': _gradeLevel,
         'academicYear': _academicYear,
-        'studentIds': [],
+        'studentIds': <String>[],
         'teacherName': 'غير محدد',
         'activeAssessments': 0,
         'averageScore': null,
@@ -927,7 +1274,8 @@ class _CreateClassroomDialogState
       child: AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('إضافة فصل جديد',
-            style: TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w700)),
+            style:
+                TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w700)),
         content: Form(
           key: _formKey,
           child: Column(
@@ -940,8 +1288,7 @@ class _CreateClassroomDialogState
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? 'مطلوب' : null,
+                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
                 onSaved: (v) => _name = v!,
               ),
               const SizedBox(height: 12),
@@ -952,8 +1299,7 @@ class _CreateClassroomDialogState
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? 'مطلوب' : null,
+                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
                 onSaved: (v) => _gradeLevel = v!,
               ),
               const SizedBox(height: 12),
@@ -964,8 +1310,7 @@ class _CreateClassroomDialogState
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? 'مطلوب' : null,
+                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
                 onSaved: (v) => _academicYear = v!,
               ),
             ],

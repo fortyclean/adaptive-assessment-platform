@@ -67,8 +67,7 @@ class _ExamWithTimerToggleScreenState
   }
 
   Future<void> _initHive() async {
-    _pendingAnswersBox =
-        Hive.box<dynamic>(AppConstants.pendingAnswersBoxName);
+    _pendingAnswersBox = Hive.box<dynamic>(AppConstants.pendingAnswersBoxName);
     final saved = _pendingAnswersBox.get(widget.attemptId);
     if (saved is Map) {
       _answers.addAll(Map<String, String>.from(saved));
@@ -101,8 +100,7 @@ class _ExamWithTimerToggleScreenState
       setState(() {
         _currentQuestion = data['question'] as Map<String, dynamic>?;
         _questionNumber = data['questionNumber'] as int? ?? _questionNumber;
-        _selectedAnswer =
-            _answers[_currentQuestion?['_id'] as String? ?? ''];
+        _selectedAnswer = _answers[_currentQuestion?['_id'] as String? ?? ''];
         _isLoading = false;
       });
     } catch (e) {
@@ -173,28 +171,26 @@ class _ExamWithTimerToggleScreenState
           .submitAttempt(widget.attemptId);
       await _pendingAnswersBox.delete(widget.attemptId);
     } catch (_) {}
-    if (mounted) {
-      context.pushReplacement('/student/results/${widget.attemptId}');
-    }
+    if (!mounted) return;
+    context.pushReplacement('/student/results/${widget.attemptId}');
   }
 
   Future<bool> _onWillPop() async {
-    ref.read(assessmentRepositoryProvider).logAntiCheatEvent(
-        widget.attemptId, 'back_button_pressed');
+    ref
+        .read(assessmentRepositoryProvider)
+        .logAntiCheatEvent(widget.attemptId, 'back_button_pressed');
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('تأكيد الخروج'),
-        content: const Text(
-            'هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
+        content: const Text('هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
               child: const Text('إلغاء')),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: Text('خروج',
-                  style: TextStyle(color: AppColors.error))),
+              child: Text('خروج', style: TextStyle(color: AppColors.error))),
         ],
       ),
     );
@@ -204,11 +200,13 @@ class _ExamWithTimerToggleScreenState
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      ref.read(assessmentRepositoryProvider).logAntiCheatEvent(
-          widget.attemptId, 'app_backgrounded');
+      ref
+          .read(assessmentRepositoryProvider)
+          .logAntiCheatEvent(widget.attemptId, 'app_backgrounded');
     } else if (state == AppLifecycleState.resumed) {
-      ref.read(assessmentRepositoryProvider).logAntiCheatEvent(
-          widget.attemptId, 'app_foregrounded');
+      ref
+          .read(assessmentRepositoryProvider)
+          .logAntiCheatEvent(widget.attemptId, 'app_foregrounded');
     }
   }
 
@@ -229,10 +227,9 @@ class _ExamWithTimerToggleScreenState
   bool get _isTimerWarning =>
       _remainingSeconds <= AppConstants.timerWarningThresholdSeconds;
 
-  double get _progressValue =>
-      widget.questionCount > 0
-          ? (_questionNumber - 1) / widget.questionCount
-          : 0.0;
+  double get _progressValue => widget.questionCount > 0
+      ? (_questionNumber - 1) / widget.questionCount
+      : 0.0;
 
   int get _progressPercent => (_progressValue * 100).round();
 
@@ -243,7 +240,9 @@ class _ExamWithTimerToggleScreenState
       onPopInvoked: (didPop) async {
         if (!didPop) {
           final shouldPop = await _onWillPop();
-          if (shouldPop && mounted) context.pop();
+          if (shouldPop && context.mounted) {
+            context.pop();
+          }
         }
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -276,8 +275,7 @@ class _ExamWithTimerToggleScreenState
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: const BoxDecoration(
         color: Color(0xFFF8FAFC),
-        border: Border(
-            bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1)),
+        border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -288,7 +286,9 @@ class _ExamWithTimerToggleScreenState
             color: const Color(0xFF64748B),
             onPressed: () async {
               final shouldPop = await _onWillPop();
-              if (shouldPop && mounted) context.pop();
+              if (shouldPop && context.mounted) {
+                context.pop();
+              }
             },
           ),
           // Timer with toggle (RTL: center)
@@ -363,8 +363,7 @@ class _ExamWithTimerToggleScreenState
 
   Widget _buildBody() {
     final options =
-        (_currentQuestion?['options'] as List?)
-            ?.cast<Map<String, dynamic>>() ??
+        (_currentQuestion?['options'] as List?)?.cast<Map<String, dynamic>>() ??
             _mockOptions();
 
     return SingleChildScrollView(
@@ -422,8 +421,8 @@ class _ExamWithTimerToggleScreenState
             value: _progressValue.clamp(0.0, 1.0),
             minHeight: 8,
             backgroundColor: AppColors.surfaceContainer,
-            valueColor: AlwaysStoppedAnimation<Color>(
-                AppColors.primaryContainer),
+            valueColor:
+                AlwaysStoppedAnimation<Color>(AppColors.primaryContainer),
           ),
         ),
       ],
@@ -431,9 +430,8 @@ class _ExamWithTimerToggleScreenState
   }
 
   Widget _buildQuestionCard() {
-    final questionText =
-        _currentQuestion?['questionText'] as String? ??
-            'إذا كان x + 5 = 12، فما هي قيمة 2x - 4؟';
+    final questionText = _currentQuestion?['questionText'] as String? ??
+        'إذا كان x + 5 = 12، فما هي قيمة 2x - 4؟';
     final imageUrl = _currentQuestion?['imageUrl'] as String?;
 
     return Container(
@@ -511,8 +509,7 @@ class _ExamWithTimerToggleScreenState
                   ? Image.network(
                       imageUrl,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          _buildImagePlaceholder(),
+                      errorBuilder: (_, __, ___) => _buildImagePlaceholder(),
                     )
                   : _buildImagePlaceholder(),
             ),
@@ -527,12 +524,10 @@ class _ExamWithTimerToggleScreenState
       onTap: _toggleBookmark,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: _isCurrentFlagged
-              ? const Color(0xFFFFF7ED)
-              : Colors.transparent,
+          color:
+              _isCurrentFlagged ? const Color(0xFFFFF7ED) : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: _isCurrentFlagged
@@ -592,8 +587,7 @@ class _ExamWithTimerToggleScreenState
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(
-            top: BorderSide(color: Color(0xFFC4C5D5), width: 1)),
+        border: Border(top: BorderSide(color: Color(0xFFC4C5D5), width: 1)),
       ),
       child: Row(
         children: [
@@ -669,9 +663,8 @@ class _McqOptionTile extends StatelessWidget {
           color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xFF1E40AF)
-                : AppColors.outlineVariant,
+            color:
+                isSelected ? const Color(0xFF1E40AF) : AppColors.outlineVariant,
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
@@ -694,8 +687,7 @@ class _McqOptionTile extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                      color: const Color(0xFF1E40AF), width: 2),
+                  border: Border.all(color: const Color(0xFF1E40AF), width: 2),
                 ),
                 child: Center(
                   child: Container(
@@ -715,8 +707,8 @@ class _McqOptionTile extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                        color: AppColors.outlineVariant, width: 1.5),
+                    border:
+                        Border.all(color: AppColors.outlineVariant, width: 1.5),
                   ),
                 ),
               ),
@@ -727,9 +719,7 @@ class _McqOptionTile extends StatelessWidget {
                   value,
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: isSelected
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     color: const Color(0xFF1A1B22),
                   ),
                 ),
@@ -738,9 +728,7 @@ class _McqOptionTile extends StatelessWidget {
                   '$optionKey)',
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: isSelected
-                        ? FontWeight.w700
-                        : FontWeight.w400,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                     color: isSelected
                         ? const Color(0xFF1E40AF)
                         : AppColors.outline,

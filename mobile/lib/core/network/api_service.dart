@@ -83,17 +83,18 @@ class _AuthInterceptor extends Interceptor {
         }
 
         // Attempt token refresh
-        final response = await _dio.post(
+        final response = await _dio.post<Map<String, dynamic>>(
           '/auth/refresh',
           data: {'refreshToken': refreshToken},
           options: Options(headers: {'Authorization': null}),
         );
 
-        final newToken = response.data['accessToken'] as String?;
+        final responseData = response.data;
+        final newToken = responseData?['accessToken'] as String?;
         if (newToken != null) {
           await _storage.write(
               key: AppConstants.accessTokenKey, value: newToken);
-          final newRefreshToken = response.data['refreshToken'] as String?;
+          final newRefreshToken = responseData?['refreshToken'] as String?;
           if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
             await _storage.write(
                 key: AppConstants.refreshTokenKey,
@@ -103,12 +104,13 @@ class _AuthInterceptor extends Interceptor {
           // Retry original request with new token
           final retryOptions = err.requestOptions;
           retryOptions.headers['Authorization'] = 'Bearer $newToken';
-          final retryResponse = await _dio.fetch(retryOptions);
+          final retryResponse =
+              await _dio.fetch<Map<String, dynamic>>(retryOptions);
           _isRefreshing = false;
           handler.resolve(retryResponse);
           return;
         }
-      } catch (_) {
+      } on Object {
         // Refresh failed — clear tokens and let the error propagate
         await _storage.delete(key: AppConstants.accessTokenKey);
         await _storage.delete(key: AppConstants.refreshTokenKey);

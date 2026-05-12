@@ -155,14 +155,7 @@ class _TeacherDashboardScreenState
               IconButton(
                 icon: const Icon(Icons.search_rounded),
                 color: const Color(0xFF1E40AF),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('البحث قيد التطوير'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                },
+                onPressed: () => context.push('/teacher/assessments'),
                 tooltip: 'بحث',
               ),
               IconButton(

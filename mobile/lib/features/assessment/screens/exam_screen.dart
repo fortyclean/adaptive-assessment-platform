@@ -89,8 +89,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   }
 
   Future<void> _initHive() async {
-    _pendingAnswersBox =
-        Hive.box<dynamic>(AppConstants.pendingAnswersBoxName);
+    _pendingAnswersBox = Hive.box<dynamic>(AppConstants.pendingAnswersBoxName);
     // Restore any pending answers for this attempt
     final saved = _pendingAnswersBox.get(widget.attemptId);
     if (saved is Map) {
@@ -144,15 +143,15 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       setState(() {
         _currentQuestion = data['question'] as Map<String, dynamic>?;
         _questionNumber = data['questionNumber'] as int? ?? _questionNumber;
-        _selectedAnswer =
-            _answers[_currentQuestion?['_id'] as String? ?? ''];
+        _selectedAnswer = _answers[_currentQuestion?['_id'] as String? ?? ''];
         _isLoading = false;
       });
 
       // Restore fill-blank text if the student already answered this question
-      final restoredAnswer = _answers[_currentQuestion?['_id'] as String? ?? ''];
-      final qType = _parseQuestionType(
-          _currentQuestion?['questionType'] as String?);
+      final restoredAnswer =
+          _answers[_currentQuestion?['_id'] as String? ?? ''];
+      final qType =
+          _parseQuestionType(_currentQuestion?['questionType'] as String?);
       if (qType == _QuestionType.fillBlank) {
         _fillBlankController.text = restoredAnswer ?? '';
       } else if (qType == _QuestionType.essay) {
@@ -188,15 +187,21 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     List<Map<String, dynamic>> pool;
     if (id.contains('math') || id.contains('demo-math') || id == '1') {
       pool = DemoQuestions.mathematics;
-    } else if (id.contains('arabic') || id.contains('demo-arabic') || id == '2') {
+    } else if (id.contains('arabic') ||
+        id.contains('demo-arabic') ||
+        id == '2') {
       pool = DemoQuestions.arabic;
     } else if (id.contains('english') || id.contains('demo-english')) {
       pool = DemoQuestions.english;
     } else if (id.contains('history') || id.contains('demo-history')) {
       pool = DemoQuestions.history;
-    } else if (id.contains('bio') || id.contains('demo-biology') || id.contains('science')) {
+    } else if (id.contains('bio') ||
+        id.contains('demo-biology') ||
+        id.contains('science')) {
       pool = DemoQuestions.biology;
-    } else if (id.contains('chem') || id.contains('demo-chemistry') || id.contains('chemical')) {
+    } else if (id.contains('chem') ||
+        id.contains('demo-chemistry') ||
+        id.contains('chemical')) {
       pool = DemoQuestions.chemistry;
     } else if (id.startsWith('mock')) {
       // For generic mock IDs, use mathematics as default
@@ -282,31 +287,29 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       }
     }
 
-    if (mounted) {
-      context.pushReplacement(
-          '/student/results/${widget.attemptId}');
-    }
+    if (!mounted) return;
+    context.pushReplacement('/student/results/${widget.attemptId}');
   }
 
   Future<bool> _onWillPop() async {
     // Log navigation event (Req 7.9)
-    ref.read(assessmentRepositoryProvider).logAntiCheatEvent(
-        widget.attemptId, 'back_button_pressed');
+    ref
+        .read(assessmentRepositoryProvider)
+        .logAntiCheatEvent(widget.attemptId, 'back_button_pressed');
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('تأكيد الخروج'),
-        content: const Text(
-            'هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
+        content: const Text('هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
               child: const Text('إلغاء')),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('خروج',
-                  style: TextStyle(color: AppColors.error))),
+              child:
+                  const Text('خروج', style: TextStyle(color: AppColors.error))),
         ],
       ),
     );
@@ -317,11 +320,13 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Log app background/foreground events (Req 7.9)
     if (state == AppLifecycleState.paused) {
-      ref.read(assessmentRepositoryProvider).logAntiCheatEvent(
-          widget.attemptId, 'app_backgrounded');
+      ref
+          .read(assessmentRepositoryProvider)
+          .logAntiCheatEvent(widget.attemptId, 'app_backgrounded');
     } else if (state == AppLifecycleState.resumed) {
-      ref.read(assessmentRepositoryProvider).logAntiCheatEvent(
-          widget.attemptId, 'app_foregrounded');
+      ref
+          .read(assessmentRepositoryProvider)
+          .logAntiCheatEvent(widget.attemptId, 'app_foregrounded');
     }
   }
 
@@ -351,7 +356,9 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       onPopInvoked: (didPop) async {
         if (!didPop) {
           final shouldPop = await _onWillPop();
-          if (shouldPop && mounted) context.pop();
+          if (shouldPop && context.mounted) {
+            context.pop();
+          }
         }
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -366,7 +373,9 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 Expanded(
                   child: _isLoading
                       ? const Center(child: CircularProgressIndicator())
-                      : (_fatalError != null ? _buildFatalError() : _buildQuestionBody()),
+                      : (_fatalError != null
+                          ? _buildFatalError()
+                          : _buildQuestionBody()),
                 ),
                 if (!_isLoading && _currentQuestion != null)
                   _buildNavigationBar(),
@@ -446,7 +455,9 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 Icon(
                   Icons.timer_rounded,
                   size: 16,
-                  color: _isTimerWarning ? AppColors.error : AppColors.onSurfaceVariant,
+                  color: _isTimerWarning
+                      ? AppColors.error
+                      : AppColors.onSurfaceVariant,
                 ),
                 const SizedBox(width: 6),
                 Text(
@@ -484,9 +495,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   }
 
   Widget _buildProgressBar() {
-    final progress = widget.questionCount > 0
-        ? _questionNumber / widget.questionCount
-        : 0.0;
+    final progress =
+        widget.questionCount > 0 ? _questionNumber / widget.questionCount : 0.0;
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -547,7 +557,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 disabledBackgroundColor: AppColors.surfaceContainer,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.buttonBorderRadius),
+                  borderRadius:
+                      BorderRadius.circular(AppConstants.buttonBorderRadius),
                 ),
               ),
               child: Row(
@@ -556,7 +567,9 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                   Text(
                     isLastQuestion ? 'تسليم الاختبار' : 'التالي',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: canGoNext ? Colors.white : AppColors.onSurfaceVariant,
+                          color: canGoNext
+                              ? Colors.white
+                              : AppColors.onSurfaceVariant,
                           fontWeight: FontWeight.w600,
                           fontSize: 15,
                         ),
@@ -566,14 +579,16 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                     Icon(
                       Icons.arrow_back_rounded,
                       size: 18,
-                      color: canGoNext ? Colors.white : AppColors.onSurfaceVariant,
+                      color:
+                          canGoNext ? Colors.white : AppColors.onSurfaceVariant,
                     ),
                   ] else ...[
                     const SizedBox(width: 6),
                     Icon(
                       Icons.check_rounded,
                       size: 18,
-                      color: canGoNext ? Colors.white : AppColors.onSurfaceVariant,
+                      color:
+                          canGoNext ? Colors.white : AppColors.onSurfaceVariant,
                     ),
                   ],
                 ],
@@ -598,7 +613,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                   side: const BorderSide(color: AppColors.outlineVariant),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppConstants.buttonBorderRadius),
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.buttonBorderRadius),
                   ),
                 ),
                 child: Row(
@@ -629,8 +645,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       return const Center(child: Text('لا توجد أسئلة'));
     }
 
-    final qType = _parseQuestionType(
-        _currentQuestion!['questionType'] as String?);
+    final qType =
+        _parseQuestionType(_currentQuestion!['questionType'] as String?);
 
     final options =
         (_currentQuestion!['options'] as List?)?.cast<Map<String, dynamic>>() ??
@@ -646,7 +662,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
+              borderRadius:
+                  BorderRadius.circular(AppConstants.cardBorderRadius),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: const [
                 BoxShadow(
@@ -663,7 +680,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.surfaceContainer,
                         borderRadius: BorderRadius.circular(20),
@@ -827,8 +845,8 @@ class _McqOption extends StatelessWidget {
       borderWidth = 2;
       badgeBg = AppColors.error;
       badgeFg = Colors.white;
-      trailingIcon = const Icon(Icons.cancel_rounded,
-          color: AppColors.error, size: 20);
+      trailingIcon =
+          const Icon(Icons.cancel_rounded, color: AppColors.error, size: 20);
     } else if (isSelected) {
       borderColor = AppColors.optionSelectedBorder;
       bgColor = AppColors.optionSelectedBackground;

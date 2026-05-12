@@ -13,6 +13,7 @@ import { authenticate } from '../middleware/authenticate';
 import { User } from '../models/User';
 import { logger } from '../utils/logger';
 import { OAuth2Client } from 'google-auth-library';
+import mongoose from 'mongoose';
 
 const router = Router();
 
@@ -29,8 +30,10 @@ const resetPasswordSchema = z.object({
 
 const registerSchema = z.object({
   fullName: z.string().min(2, 'Full name is required').max(100).trim(),
+  username: z.string().min(3, 'Username must be at least 3 characters').max(50).trim().toLowerCase(),
   email: z.string().email('Valid email is required').trim().toLowerCase(),
   password: z.string().min(8, 'Password must be at least 8 characters'),
+  role: z.enum(['student', 'teacher']).optional(),
 });
 
 const refreshSchema = z.object({
@@ -86,7 +89,18 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     const elapsed = Date.now() - startTime;
 
     if (!result.success) {
-      res.status(401).json({ error: result.error, lockedUntil: result.lockedUntil });
+      if (result.status === 'inactive') {
+        res.status(403).json({
+          error: result.error,
+          status: 'pending_approval',
+        });
+        return;
+      }
+      res.status(401).json({
+        error: result.error,
+        status: result.status ?? 'invalid_credentials',
+        lockedUntil: result.lockedUntil,
+      });
       return;
     }
 
@@ -121,10 +135,16 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const { fullName, email, password } = validation.data;
-    const existing = await User.findOne({ email });
+    const { fullName, email, password, username, role } = validation.data;
+    const existing = await User.findOne({
+      $or: [{ email }, { username }],
+    });
     if (existing) {
-      res.status(409).json({ error: 'An account with this email already exists' });
+      if (existing.email === email) {
+        res.status(409).json({ error: 'An account with this email already exists' });
+        return;
+      }
+      res.status(409).json({ error: 'This username is already taken' });
       return;
     }
 
@@ -134,12 +154,13 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const normalizedUsername = username.trim().toLowerCase();
     const user = new User({
-      username: await getUniqueUsername(email),
+      username: normalizedUsername.length > 0 ? normalizedUsername : await getUniqueUsername(email),
       email,
       fullName,
       passwordHash: await hashPassword(password),
-      role: 'student',
+      role: role ?? 'student',
       isActive: false,
       classroomIds: [],
       failedLoginAttempts: 0,
@@ -147,13 +168,22 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
     });
 
     await user.save();
-    logger.info('Pending student registration created', { email, userId: user._id });
+    logger.info('Pending registration created', {
+      email,
+      username: user.username,
+      role: user.role,
+      userId: user._id,
+    });
 
     res.status(202).json({
       message: 'Registration request submitted and is pending administrator approval.',
       status: 'pending_approval',
     });
   } catch (error) {
+    if (error instanceof mongoose.Error && 'code' in error && (error as { code?: number }).code === 11000) {
+      res.status(409).json({ error: 'This username is already taken' });
+      return;
+    }
     logger.error('Register error', { error });
     res.status(500).json({ error: 'An internal server error occurred' });
   }

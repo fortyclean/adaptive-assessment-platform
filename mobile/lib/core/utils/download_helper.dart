@@ -60,7 +60,7 @@ class DownloadHelper {
           subject: subject ?? fileName,
         );
       }
-    } catch (e) {
+    } on Object catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         _showError(context, 'فشل التحميل: ${_friendlyError(e)}');
@@ -83,7 +83,7 @@ class DownloadHelper {
         [XFile(file.path)],
         subject: subject ?? fileName,
       );
-    } catch (e) {
+    } on Object catch (e) {
       if (context.mounted) {
         _showError(context, 'فشل التصدير: ${_friendlyError(e)}');
       }
@@ -98,7 +98,7 @@ class DownloadHelper {
   }) async {
     try {
       await Share.share(text, subject: subject);
-    } catch (e) {
+    } on Object {
       if (context.mounted) {
         _showError(context, 'فشل المشاركة');
       }
@@ -106,17 +106,19 @@ class DownloadHelper {
   }
 
   // ── Download Excel template ───────────────────────────────────────────────
-  static Future<void> downloadExcelTemplate(BuildContext context, String token) async {
+  static Future<void> downloadExcelTemplate(
+      BuildContext context, String token) async {
     // Backend returns JSON template — convert to CSV for download
     try {
       _showProgress(context, 'جاري تحميل قالب الأسئلة...');
-      final response = await _dio.get(
+      final response = await _dio.get<Map<String, dynamic>>(
         '${AppConstants.apiBaseUrl}/questions/template/download',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-      final template = response.data['template'] as Map<String, dynamic>?;
+      final template = response.data?['template'] as Map<String, dynamic>?;
       final columns = (template?['columns'] as List?)?.cast<String>() ?? [];
       final example = template?['example'] as Map<String, dynamic>? ?? {};
 
@@ -134,11 +136,12 @@ class DownloadHelper {
           subject: 'قالب استيراد الأسئلة - EduAssess',
         );
       }
-    } catch (e) {
+    } on Object {
       if (context.mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Fallback: provide a basic template
-        const csvContent = 'subject,gradeLevel,academicTerm,unit,mainSkill,subSkill,difficulty,questionType,questionText,optionA,optionB,optionC,optionD,correctAnswer\nMathematics,Grade 7,Term 1,Algebra,Equations,Linear Equations,medium,mcq,What is x in 2x+4=10?,2,3,4,5,B';
+        const csvContent =
+            'subject,gradeLevel,academicTerm,unit,mainSkill,subSkill,difficulty,questionType,questionText,optionA,optionB,optionC,optionD,correctAnswer\nMathematics,Grade 7,Term 1,Algebra,Equations,Linear Equations,medium,mcq,What is x in 2x+4=10?,2,3,4,5,B';
         await shareTextAsFile(
           content: csvContent,
           fileName: 'questions_template.csv',
@@ -219,13 +222,18 @@ $studentName
     BuildContext? context,
   }) async {
     try {
-      await _dio.post(
+      await _dio.post<Map<String, dynamic>>(
         '${AppConstants.apiBaseUrl}/notifications',
-        data: {'recipientId': recipientId, 'message': message, 'type': 'teacher_message'},
+        data: {
+          'recipientId': recipientId,
+          'message': message,
+          'type': 'teacher_message'
+        },
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       return true;
-    } catch (_) {
+    } on Object catch (error) {
+      debugPrint('sendNotification failed: $error');
       return false;
     }
   }
@@ -236,7 +244,11 @@ $studentName
       SnackBar(
         content: Row(
           children: [
-            const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
+            const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                    strokeWidth: 2, color: Colors.white)),
             const SizedBox(width: 12),
             Text(message, style: const TextStyle(fontFamily: 'Almarai')),
           ],
@@ -257,11 +269,17 @@ $studentName
     );
   }
 
-  static String _friendlyError(dynamic e) {
+  static String _friendlyError(Object e) {
     if (e is DioException) {
-      if (e.type == DioExceptionType.connectionTimeout) return 'انتهت مهلة الاتصال';
-      if (e.response?.statusCode == 401) return 'غير مصرح';
-      if (e.response?.statusCode == 404) return 'الملف غير موجود';
+      if (e.type == DioExceptionType.connectionTimeout) {
+        return 'انتهت مهلة الاتصال';
+      }
+      if (e.response?.statusCode == 401) {
+        return 'غير مصرح';
+      }
+      if (e.response?.statusCode == 404) {
+        return 'الملف غير موجود';
+      }
     }
     return e.toString().length > 50 ? 'خطأ في الاتصال' : e.toString();
   }

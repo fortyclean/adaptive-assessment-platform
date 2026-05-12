@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_version.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/providers/theme_provider.dart';
+import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/auth_repository.dart';
 
 /// Account Settings Screen — Screen 49: إعدادات الحساب | EduAssess
@@ -17,19 +20,19 @@ class AccountSettingsScreen extends ConsumerStatefulWidget {
       _AccountSettingsScreenState();
 }
 
-class _AccountSettingsScreenState
-    extends ConsumerState<AccountSettingsScreen> {
+class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
   bool _examNotificationsEnabled = true;
-  bool _darkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
+    final themeMode = ref.watch(themeModeProvider);
+    final darkModeEnabled = themeMode == ThemeMode.dark;
 
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: _buildAppBar(user),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -54,7 +57,7 @@ class _AccountSettingsScreenState
                 // ── Appearance & Language Group ──────────────────────────
                 _buildSectionLabel('المظهر واللغة'),
                 const SizedBox(height: 8),
-                _buildAppearanceGroup(),
+                _buildAppearanceGroup(darkModeEnabled),
                 const SizedBox(height: 16),
 
                 // ── Other Group ──────────────────────────────────────────
@@ -66,7 +69,7 @@ class _AccountSettingsScreenState
                 // ── App Version ──────────────────────────────────────────
                 Center(
                   child: Text(
-                    'EduAssess v2.4.0',
+                    'EduAssess v${AppVersion.current}',
                     style: AppTextStyles.labelSmall.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -85,7 +88,7 @@ class _AccountSettingsScreenState
 
   PreferredSizeWidget _buildAppBar(AuthUser? user) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       elevation: 0,
       scrolledUnderElevation: 1,
       shadowColor: Colors.black12,
@@ -186,7 +189,8 @@ class _AccountSettingsScreenState
                   ),
                 ),
                 child: ClipOval(
-                  child: _buildAvatarContent(user, size: 64, initials: initials),
+                  child:
+                      _buildAvatarContent(user, size: 64, initials: initials),
                 ),
               ),
               Positioned(
@@ -283,7 +287,7 @@ class _AccountSettingsScreenState
 
   // ── Appearance Group ───────────────────────────────────────────────────────
 
-  Widget _buildAppearanceGroup() {
+  Widget _buildAppearanceGroup(bool darkModeEnabled) {
     return _SettingsCard(
       children: [
         // Language row — static badge
@@ -291,8 +295,7 @@ class _AccountSettingsScreenState
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
-              Icon(Icons.language_rounded,
-                  color: AppColors.primary, size: 24),
+              Icon(Icons.language_rounded, color: AppColors.primary, size: 24),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
@@ -322,8 +325,10 @@ class _AccountSettingsScreenState
         _SettingsToggleTile(
           icon: Icons.dark_mode_outlined,
           title: 'الوضع الليلي',
-          value: _darkModeEnabled,
-          onChanged: (v) => setState(() => _darkModeEnabled = v),
+          value: darkModeEnabled,
+          onChanged: (v) {
+            ref.read(themeModeProvider.notifier).setDarkMode(enabled: v);
+          },
         ),
       ],
     );
@@ -372,60 +377,29 @@ class _AccountSettingsScreenState
   // ── Bottom Navigation ──────────────────────────────────────────────────────
 
   Widget _buildBottomNav(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(color: AppColors.outlineVariant, width: 1),
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 10,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 64,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home_rounded,
-                label: 'الرئيسية',
-                isActive: false,
-                onTap: () => context.go('/teacher'),
-              ),
-              _NavItem(
-                icon: Icons.quiz_outlined,
-                activeIcon: Icons.quiz_rounded,
-                label: 'الاختبارات',
-                isActive: false,
-                onTap: () => context.go('/teacher/assessments'),
-              ),
-              _NavItem(
-                icon: Icons.bar_chart_outlined,
-                activeIcon: Icons.bar_chart_rounded,
-                label: 'التقارير',
-                isActive: false,
-                onTap: () => context.push('/teacher/reports/overview'),
-              ),
-              _NavItem(
-                icon: Icons.settings_outlined,
-                activeIcon: Icons.settings_rounded,
-                label: 'الإعدادات',
-                isActive: true,
-                onTap: () => context.go('/teacher/settings'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    final role = ref.watch(currentUserProvider)?.role;
+    final location = GoRouterState.of(context).uri.toString();
+
+    if (role == null) {
+      if (location.startsWith('/admin')) {
+        return const AppBottomNav(currentIndex: 4, role: 'admin');
+      }
+      if (location.startsWith('/student')) {
+        return const AppBottomNav(currentIndex: 3, role: 'student');
+      }
+      if (location.startsWith('/supervisor')) {
+        return const AppBottomNav(currentIndex: 4, role: 'admin');
+      }
+      return const AppBottomNav(currentIndex: 4, role: 'teacher');
+    }
+
+    if (role == UserRole.admin) {
+      return const AppBottomNav(currentIndex: 4, role: 'admin');
+    }
+    if (role == UserRole.student) {
+      return const AppBottomNav(currentIndex: 3, role: 'student');
+    }
+    return const AppBottomNav(currentIndex: 4, role: 'teacher');
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
@@ -463,20 +437,22 @@ class _AccountSettingsScreenState
     // Show dialog to edit name
     final user = ref.read(currentUserProvider);
     final nameController = TextEditingController(text: user?.fullName ?? '');
-    
+
     final result = await showDialog<String>(
       context: context,
       builder: (ctx) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: const Text('تعديل الاسم'),
           content: TextField(
             controller: nameController,
             textDirection: TextDirection.rtl,
             decoration: InputDecoration(
               labelText: 'الاسم الكامل',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             ),
           ),
           actions: [
@@ -498,9 +474,9 @@ class _AccountSettingsScreenState
       try {
         final userId = user?.id ?? '';
         await ref.read(authRepositoryProvider).updateProfile(
-          userId: userId,
-          name: result,
-        );
+              userId: userId,
+              name: result,
+            );
         // Update local state
         ref.read(authProvider.notifier).updateName(result);
         if (mounted) {
@@ -683,7 +659,7 @@ class _SettingsToggleTile extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Colors.white,
+            activeThumbColor: Colors.white,
             activeTrackColor: AppColors.primaryContainer,
             inactiveThumbColor: Colors.white,
             inactiveTrackColor: AppColors.surfaceContainerHigh,
@@ -712,68 +688,6 @@ class _Divider extends StatelessWidget {
       color: AppColors.outlineVariant,
       indent: 0,
       endIndent: 0,
-    );
-  }
-}
-
-/// A single bottom navigation item.
-class _NavItem extends StatelessWidget {
-  const _NavItem({
-    required this.icon,
-    required this.activeIcon,
-    required this.label,
-    required this.isActive,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final IconData activeIcon;
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.opaque,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          decoration: BoxDecoration(
-            color: isActive
-                ? AppColors.primary.withOpacity(0.08)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                isActive ? activeIcon : icon,
-                color: isActive
-                    ? AppColors.primary
-                    : AppColors.onSurfaceVariant,
-                size: 24,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight:
-                      isActive ? FontWeight.w600 : FontWeight.w500,
-                  color: isActive
-                      ? AppColors.primary
-                      : AppColors.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -318,7 +318,7 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pop(ctx);
                           final token = ref.read(authProvider).accessToken ?? '';
                           DownloadHelper.sendNotification(

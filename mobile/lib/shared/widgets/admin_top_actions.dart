@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -57,7 +59,7 @@ class AdminTopActions extends ConsumerWidget {
       case _AdminAction.settings:
         context.go(AppRoutes.institutionSettings);
       case _AdminAction.about:
-        context.push(AppRoutes.about);
+        await context.push(AppRoutes.about);
       case _AdminAction.logout:
         final confirmed = await showDialog<bool>(
           context: context,
@@ -85,7 +87,8 @@ class AdminTopActions extends ConsumerWidget {
         if (confirmed == true && context.mounted) {
           ref.read(authProvider.notifier).logout();
           context.go(AppRoutes.login);
-          ref.read(authRepositoryProvider).logout().catchError((_) {});
+          unawaited(
+              ref.read(authRepositoryProvider).logout().catchError((_) {}));
         }
     }
   }

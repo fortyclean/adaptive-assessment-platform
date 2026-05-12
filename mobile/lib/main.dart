@@ -10,6 +10,7 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/repositories/auth_repository.dart';
 import 'shared/providers/auth_provider.dart';
+import 'shared/providers/theme_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,9 +54,7 @@ Future<void> _restoreSession(ProviderContainer container) async {
 
   // Try online restore first
   try {
-    final user = await container
-        .read(authRepositoryProvider)
-        .restoreSession();
+    final user = await container.read(authRepositoryProvider).restoreSession();
     if (user != null) {
       // Save user data for offline fallback
       await storage.write(
@@ -92,6 +91,7 @@ class AdaptiveAssessmentApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       title: 'منصة التقييم التكيفي',
@@ -99,6 +99,8 @@ class AdaptiveAssessmentApp extends ConsumerWidget {
 
       // ─── Theme ──────────────────────────────────────────────────────────
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
 
       // ─── Routing ────────────────────────────────────────────────────────
       routerConfig: router,

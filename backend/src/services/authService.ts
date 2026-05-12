@@ -77,6 +77,7 @@ export interface LoginResult {
   tokens?: AuthTokens;
   user?: Omit<IUserDocument, 'passwordHash'>;
   error?: string;
+  status?: 'invalid_credentials' | 'inactive' | 'locked';
   lockedUntil?: Date;
 }
 
@@ -90,12 +91,20 @@ export const loginUser = async (
 
   if (!user) {
     // Return generic error to prevent username enumeration
-    return { success: false, error: 'Invalid credentials' };
+    return {
+      success: false,
+      error: 'Invalid credentials',
+      status: 'invalid_credentials',
+    };
   }
 
   // Check if account is active
   if (!user.isActive) {
-    return { success: false, error: 'Account has been deactivated. Please contact your administrator.' };
+    return {
+      success: false,
+      error: 'Account has been deactivated. Please contact your administrator.',
+      status: 'inactive',
+    };
   }
 
   // Check if account is locked
@@ -104,6 +113,7 @@ export const loginUser = async (
     return {
       success: false,
       error: `Account is locked. Please try again after ${user.lockedUntil.toISOString()}`,
+      status: 'locked',
       lockedUntil: user.lockedUntil,
     };
   }
@@ -132,7 +142,11 @@ export const loginUser = async (
       failedAttempts: user.failedLoginAttempts,
     });
 
-    return { success: false, error: 'Invalid credentials' };
+    return {
+      success: false,
+      error: 'Invalid credentials',
+      status: 'invalid_credentials',
+    };
   }
 
   // Reset failed attempts on successful login

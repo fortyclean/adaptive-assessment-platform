@@ -12,7 +12,7 @@ import '../../../shared/widgets/app_bottom_nav.dart';
 /// Requirements: 13.2–13.5
 class UserManagementScreen extends ConsumerStatefulWidget {
   const UserManagementScreen({super.key, this.initialFilter});
-  
+
   final String? initialFilter;
 
   @override
@@ -20,8 +20,7 @@ class UserManagementScreen extends ConsumerStatefulWidget {
       _UserManagementScreenState();
 }
 
-class _UserManagementScreenState
-    extends ConsumerState<UserManagementScreen> {
+class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
   bool _isLoading = false;
   List<Map<String, dynamic>> _users = [];
   String? _errorMessage;
@@ -84,6 +83,60 @@ class _UserManagementScreenState
       'grade': 'الثاني الثانوي',
       'lastActive': 'منذ أسبوع',
     },
+    {
+      '_id': 'u7',
+      'fullName': 'نورة فهد',
+      'email': 'noura.f@school.edu',
+      'role': 'teacher',
+      'isActive': true,
+      'subject': 'اللغة الإنجليزية',
+      'classroomCount': 4,
+    },
+    {
+      '_id': 'u8',
+      'fullName': 'عبدالله راشد',
+      'username': 'STU-2024-014',
+      'role': 'student',
+      'isActive': true,
+      'grade': 'الثاني المتوسط',
+      'lastActive': 'منذ 3 ساعات',
+    },
+    {
+      '_id': 'u9',
+      'fullName': 'ريم سعد',
+      'email': 'reem.s@school.edu',
+      'role': 'teacher',
+      'isActive': false,
+      'subject': 'الكيمياء',
+      'classroomCount': 1,
+    },
+    {
+      '_id': 'u10',
+      'fullName': 'سلمان عادل',
+      'username': 'STU-2024-102',
+      'role': 'student',
+      'isActive': false,
+      'grade': 'الأول المتوسط',
+      'lastActive': 'منذ أسبوعين',
+    },
+    {
+      '_id': 'u11',
+      'fullName': 'هند جابر',
+      'email': 'hind.j@school.edu',
+      'role': 'teacher',
+      'isActive': true,
+      'subject': 'الأحياء',
+      'classroomCount': 2,
+    },
+    {
+      '_id': 'u12',
+      'fullName': 'تركي ناصر',
+      'username': 'STU-2024-130',
+      'role': 'student',
+      'isActive': true,
+      'grade': 'الثالث المتوسط',
+      'lastActive': 'اليوم',
+    },
   ];
 
   @override
@@ -108,7 +161,8 @@ class _UserManagementScreenState
       _errorMessage = null;
     });
     final authState = ref.read(authProvider);
-    final isDemoSession = (authState.accessToken ?? '').startsWith('demo-token-');
+    final isDemoSession =
+        (authState.accessToken ?? '').startsWith('demo-token-');
     final backendRoleFilter = _roleFilter == 'pending' ? null : _roleFilter;
     final backendIsActiveFilter = _roleFilter == 'pending' ? false : null;
 
@@ -122,7 +176,7 @@ class _UserManagementScreenState
         _users = users.isNotEmpty ? users : _getFilteredMock();
         _isLoading = false;
       });
-    } catch (_) {
+    } on Object {
       if (!AppConstants.useMockData && !isDemoSession) {
         setState(() {
           _users = [];
@@ -156,20 +210,20 @@ class _UserManagementScreenState
         final name = (u['fullName'] as String? ?? '').toLowerCase();
         final email = (u['email'] as String? ?? '').toLowerCase();
         final username = (u['username'] as String? ?? '').toLowerCase();
-        return name.contains(q) ||
-            email.contains(q) ||
-            username.contains(q);
+        return name.contains(q) || email.contains(q) || username.contains(q);
       }).toList();
     }
     return list;
   }
 
   Future<void> _deactivateUser(String id, String name) async {
+    final authState = ref.read(authProvider);
+    final isDemoSession =
+        (authState.accessToken ?? '').startsWith('demo-token-');
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('تعطيل الحساب'),
         content: Text('هل تريد تعطيل حساب $name؟'),
         actions: [
@@ -184,17 +238,17 @@ class _UserManagementScreenState
       ),
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       try {
         await ref.read(adminRepositoryProvider).deactivateUser(id);
-        _loadUsers();
+        await _loadUsers();
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('تم تعطيل الحساب')),
           );
         }
-      } catch (_) {
-        if (!AppConstants.useMockData) {
+      } on Object {
+        if (!AppConstants.useMockData && !isDemoSession) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -223,6 +277,9 @@ class _UserManagementScreenState
   }
 
   Future<void> _reactivateUser(String id, String name) async {
+    final authState = ref.read(authProvider);
+    final isDemoSession =
+        (authState.accessToken ?? '').startsWith('demo-token-');
     try {
       await ref.read(adminRepositoryProvider).reactivateUser(id);
       await _loadUsers();
@@ -231,8 +288,8 @@ class _UserManagementScreenState
           SnackBar(content: Text('تم تفعيل حساب $name')),
         );
       }
-    } catch (_) {
-      if (!AppConstants.useMockData) {
+    } on Object {
+      if (!AppConstants.useMockData && !isDemoSession) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -254,26 +311,43 @@ class _UserManagementScreenState
   }
 
   void _editUser(Map<String, dynamic> user) {
-    final nameController = TextEditingController(text: user['fullName'] as String? ?? '');
-    showModalBottomSheet(
+    final nameController =
+        TextEditingController(text: user['fullName'] as String? ?? '');
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom + 16, left: 16, right: 16, top: 20),
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+            left: 16,
+            right: 16,
+            top: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+            Center(
+                child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                        color: AppColors.outlineVariant,
+                        borderRadius: BorderRadius.circular(2)))),
             const SizedBox(height: 16),
-            Text('تعديل: ${user['fullName']}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            Text('تعديل: ${user['fullName']}',
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
             TextField(
               controller: nameController,
               textDirection: TextDirection.rtl,
-              decoration: InputDecoration(labelText: 'الاسم الكامل', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+              decoration: InputDecoration(
+                  labelText: 'الاسم الكامل',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8))),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -281,16 +355,25 @@ class _UserManagementScreenState
                 final idx = _users.indexWhere((u) => u['_id'] == user['_id']);
                 if (idx != -1) {
                   setState(() {
-                    _users[idx] = Map.from(_users[idx])..['fullName'] = nameController.text.trim();
+                    _users[idx] = Map.from(_users[idx])
+                      ..['fullName'] = nameController.text.trim();
                   });
                 }
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم تحديث بيانات المستخدم'), behavior: SnackBarBehavior.floating),
+                  const SnackBar(
+                      content: Text('تم تحديث بيانات المستخدم'),
+                      behavior: SnackBarBehavior.floating),
                 );
               },
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-              child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8))),
+              child: const Text('حفظ التغييرات',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -299,7 +382,7 @@ class _UserManagementScreenState
   }
 
   void _showCreateUserDialog() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => _CreateUserDialog(
         onCreated: () {
@@ -345,10 +428,10 @@ class _UserManagementScreenState
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 8),
-                textStyle: const TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.w500),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                textStyle:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -398,8 +481,7 @@ class _UserManagementScreenState
                           color: AppColors.onSurfaceVariant, size: 20),
                       suffixIcon: _searchQuery.isNotEmpty
                           ? IconButton(
-                              icon: const Icon(Icons.clear_rounded,
-                                  size: 18),
+                              icon: const Icon(Icons.clear_rounded, size: 18),
                               onPressed: () {
                                 _searchController.clear();
                                 setState(() => _searchQuery = '');
@@ -449,6 +531,15 @@ class _UserManagementScreenState
                           _loadUsers();
                         },
                       ),
+                      const SizedBox(width: 8),
+                      _RoleChip(
+                        label: 'بانتظار الاعتماد',
+                        selected: _roleFilter == 'pending',
+                        onTap: () {
+                          setState(() => _roleFilter = 'pending');
+                          _loadUsers();
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -460,8 +551,7 @@ class _UserManagementScreenState
           Expanded(
             child: _isLoading
                 ? const Center(
-                    child: CircularProgressIndicator(
-                        color: AppColors.primary))
+                    child: CircularProgressIndicator(color: AppColors.primary))
                 : _errorMessage != null
                     ? Center(
                         child: Padding(
@@ -490,50 +580,31 @@ class _UserManagementScreenState
                           ),
                         ),
                       )
-                : _users.isEmpty
-                    ? _buildEmpty()
-                    : RefreshIndicator(
-                        onRefresh: _loadUsers,
-                        color: AppColors.primary,
-                        child: ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: _users.length,
-                          itemBuilder: (ctx, i) => _UserCard(
-                            user: _users[i],
-                            onDeactivate: _users[i]['isActive'] == true
-                                ? () => _deactivateUser(
-                                    _users[i]['_id'] as String,
-                                    _users[i]['fullName'] as String)
-                                : null,
-                            onEdit: () => _editUser(_users[i]),
-                            onReactivate: _users[i]['isActive'] == false
-                                ? () {
-                                    _reactivateUser(
-                                      _users[i]['_id'] as String,
-                                      _users[i]['fullName'] as String,
-                                    );
-                                    return;
-                                    final idx = _users.indexWhere(
-                                        (u) => u['_id'] == _users[i]['_id']);
-                                    if (idx != -1) {
-                                      setState(() {
-                                        _users[idx] = Map.from(_users[idx])
-                                          ..['isActive'] = true;
-                                      });
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'تم تفعيل حساب ${_users[i]['fullName']}'),
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor: AppColors.success,
-                                      ),
-                                    );
-                                  }
-                                : null,
+                    : _users.isEmpty
+                        ? _buildEmpty()
+                        : RefreshIndicator(
+                            onRefresh: _loadUsers,
+                            color: AppColors.primary,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(16),
+                              itemCount: _users.length,
+                              itemBuilder: (ctx, i) => _UserCard(
+                                user: _users[i],
+                                onDeactivate: _users[i]['isActive'] == true
+                                    ? () => _deactivateUser(
+                                        _users[i]['_id'] as String,
+                                        _users[i]['fullName'] as String)
+                                    : null,
+                                onEdit: () => _editUser(_users[i]),
+                                onReactivate: _users[i]['isActive'] == false
+                                    ? () => _reactivateUser(
+                                          _users[i]['_id'] as String,
+                                          _users[i]['fullName'] as String,
+                                        )
+                                    : null,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
           ),
         ],
       ),
@@ -583,9 +654,7 @@ class _UserManagementScreenState
 
 class _RoleChip extends StatelessWidget {
   const _RoleChip(
-      {required this.label,
-      required this.selected,
-      required this.onTap});
+      {required this.label, required this.selected, required this.onTap});
   final String label;
   final bool selected;
   final VoidCallback onTap;
@@ -596,25 +665,21 @@ class _RoleChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
           color: selected
               ? AppColors.primaryContainer
               : AppColors.surfaceContainer,
           borderRadius: BorderRadius.circular(999),
           border: Border.all(
-            color: selected
-                ? Colors.transparent
-                : AppColors.outlineVariant,
+            color: selected ? Colors.transparent : AppColors.outlineVariant,
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: selected
-                ? const Color(0xFFA8B8FF)
-                : AppColors.onSurfaceVariant,
+            color:
+                selected ? const Color(0xFFA8B8FF) : AppColors.onSurfaceVariant,
             fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
@@ -627,7 +692,8 @@ class _RoleChip extends StatelessWidget {
 // ── User card ─────────────────────────────────────────────────────────────────
 
 class _UserCard extends StatelessWidget {
-  const _UserCard({required this.user, this.onDeactivate, this.onEdit, this.onReactivate});
+  const _UserCard(
+      {required this.user, this.onDeactivate, this.onEdit, this.onReactivate});
   final Map<String, dynamic> user;
   final VoidCallback? onDeactivate;
   final VoidCallback? onEdit;
@@ -793,7 +859,7 @@ class _UserCard extends StatelessWidget {
                         )
                       : _ActionButton(
                           icon: Icons.settings_backup_restore_rounded,
-                          label: 'تفعيل',
+                          label: 'اعتماد',
                           onTap: onReactivate ?? () {},
                           color: AppColors.onSurfaceVariant,
                           isDestructive: false,
@@ -821,8 +887,7 @@ class _RoleBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.errorContainer,
           borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-              color: AppColors.error.withOpacity(0.3)),
+          border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
         ),
         child: const Text(
           'موقوف',
@@ -839,22 +904,18 @@ class _RoleBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: isTeacher
-            ? const Color(0xFFFFDBCE)
-            : const Color(0xFFD0E1FB),
+        color: isTeacher ? const Color(0xFFFFDBCE) : const Color(0xFFD0E1FB),
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
           color: isTeacher
-              ? const Color(0xFFFFB59A).withOpacity(0.3)
-              : const Color(0xFFB7C8E1).withOpacity(0.3),
+              ? const Color(0xFFFFB59A).withValues(alpha: 0.3)
+              : const Color(0xFFB7C8E1).withValues(alpha: 0.3),
         ),
       ),
       child: Text(
         isTeacher ? 'معلم' : 'طالب',
         style: TextStyle(
-          color: isTeacher
-              ? const Color(0xFF611E00)
-              : const Color(0xFF54647A),
+          color: isTeacher ? const Color(0xFF611E00) : const Color(0xFF54647A),
           fontSize: 11,
           fontWeight: FontWeight.w500,
         ),
@@ -947,12 +1008,10 @@ class _CreateUserDialog extends ConsumerStatefulWidget {
   final VoidCallback onCreated;
 
   @override
-  ConsumerState<_CreateUserDialog> createState() =>
-      _CreateUserDialogState();
+  ConsumerState<_CreateUserDialog> createState() => _CreateUserDialogState();
 }
 
-class _CreateUserDialogState
-    extends ConsumerState<_CreateUserDialog> {
+class _CreateUserDialogState extends ConsumerState<_CreateUserDialog> {
   final _formKey = GlobalKey<FormState>();
   String _fullName = '';
   String _username = '';
@@ -975,8 +1034,10 @@ class _CreateUserDialogState
         'role': _role,
       });
       widget.onCreated();
-    } catch (_) {
-      if (!AppConstants.useMockData) {
+    } on Object {
+      final isDemoSession =
+          (ref.read(authProvider).accessToken ?? '').startsWith('demo-token-');
+      if (!AppConstants.useMockData && !isDemoSession) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -1007,8 +1068,7 @@ class _CreateUserDialogState
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: const Text('إضافة مستخدم جديد'),
       content: Form(
         key: _formKey,
@@ -1018,44 +1078,35 @@ class _CreateUserDialogState
             children: [
               TextFormField(
                 textDirection: TextDirection.rtl,
-                decoration:
-                    const InputDecoration(labelText: 'الاسم الكامل'),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? 'مطلوب' : null,
+                decoration: const InputDecoration(labelText: 'الاسم الكامل'),
+                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
                 onSaved: (v) => _fullName = v!,
               ),
               TextFormField(
-                decoration:
-                    const InputDecoration(labelText: 'اسم المستخدم'),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? 'مطلوب' : null,
+                decoration: const InputDecoration(labelText: 'اسم المستخدم'),
+                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
                 onSaved: (v) => _username = v!,
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                    labelText: 'البريد الإلكتروني'),
+                decoration:
+                    const InputDecoration(labelText: 'البريد الإلكتروني'),
                 keyboardType: TextInputType.emailAddress,
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? 'مطلوب' : null,
+                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
                 onSaved: (v) => _email = v!,
               ),
               TextFormField(
-                decoration:
-                    const InputDecoration(labelText: 'كلمة المرور'),
+                decoration: const InputDecoration(labelText: 'كلمة المرور'),
                 obscureText: true,
                 validator: (v) =>
                     (v == null || v.length < 8) ? '8 أحرف على الأقل' : null,
                 onSaved: (v) => _password = v!,
               ),
               DropdownButtonFormField<String>(
-                decoration:
-                    const InputDecoration(labelText: 'الدور'),
-                value: _role,
+                decoration: const InputDecoration(labelText: 'الدور'),
+                initialValue: _role,
                 items: const [
-                  DropdownMenuItem(
-                      value: 'teacher', child: Text('معلم')),
-                  DropdownMenuItem(
-                      value: 'student', child: Text('طالب')),
+                  DropdownMenuItem(value: 'teacher', child: Text('معلم')),
+                  DropdownMenuItem(value: 'student', child: Text('طالب')),
                 ],
                 onChanged: (v) => setState(() => _role = v!),
               ),
@@ -1072,8 +1123,8 @@ class _CreateUserDialogState
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           child: _isLoading
               ? const SizedBox(

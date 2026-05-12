@@ -337,7 +337,7 @@ class _InstitutionSettingsScreenState
                           height: 40,
                           decoration: BoxDecoration(
                             color: (item.color ?? AppColors.primary)
-                                .withOpacity(0.1),
+                                .withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(item.icon,
@@ -467,10 +467,10 @@ class _InstitutionSettingsScreenState
       ),
     );
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       ref.read(authProvider.notifier).logout();
       context.go(AppRoutes.login);
-      ref.read(authRepositoryProvider).logout().catchError((_) {});
+      await ref.read(authRepositoryProvider).logout();
     }
   }
 
@@ -960,7 +960,7 @@ class _InstitutionSettingsScreenState
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: const Color(0xFFC4C5D5)),
       boxShadow: [
-        BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6),
+        BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6),
       ],
     );
   }

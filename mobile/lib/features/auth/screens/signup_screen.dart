@@ -20,6 +20,7 @@ class SignupScreen extends ConsumerStatefulWidget {
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -33,6 +34,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -56,10 +58,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await ref.read(authRepositoryProvider).registerStudent(
+      await ref.read(authRepositoryProvider).registerAccount(
             fullName: _nameController.text.trim(),
+            username: _usernameController.text.trim().toLowerCase(),
             email: _emailController.text.trim(),
             password: _passwordController.text,
+            role: _selectedRole,
           );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -74,8 +78,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       context.go(AppRoutes.login);
     } on DioException catch (e) {
       if (!mounted) return;
+      final backendError = (e.response?.data is Map<String, dynamic>)
+          ? (e.response?.data['error'] as String?)
+          : null;
       final message = e.response?.statusCode == 409
-          ? 'هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو تواصل مع المشرف.'
+          ? (backendError == 'This username is already taken'
+              ? 'اسم المستخدم مستخدم بالفعل. اختر اسمًا آخر.'
+              : 'هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو تواصل مع المشرف.')
           : 'تعذر إنشاء طلب الانضمام، تحقق من البيانات وحاول مرة أخرى.';
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -269,6 +278,29 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           ),
           const SizedBox(height: 12),
 
+          // Username
+          _buildTextField(
+            controller: _usernameController,
+            label: 'اسم المستخدم',
+            hint: 'teacher_ali',
+            icon: Icons.alternate_email_rounded,
+            keyboardType: TextInputType.text,
+            textDirection: TextDirection.ltr,
+            validator: (v) {
+              if (v == null || v.trim().isEmpty) {
+                return 'اسم المستخدم مطلوب';
+              }
+              if (v.trim().length < 3) {
+                return 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+              }
+              if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(v.trim())) {
+                return 'يسمح بالحروف الإنجليزية والأرقام و_ فقط';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 12),
+
           // Email
           _buildTextField(
             controller: _emailController,
@@ -380,7 +412,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     return GestureDetector(
       onTap: () {
-        if (role == 'teacher') {
+        setState(() => _selectedRole = role);
+        if (role == 'teacher_disabled') {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
@@ -392,7 +425,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           );
           return;
         }
-        setState(() => _selectedRole = role);
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -400,9 +432,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         decoration: BoxDecoration(
           color: isSelected ? Colors.white : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: isSelected
-              ? Border.all(color: AppColors.primary)
-              : null,
+          border: isSelected ? Border.all(color: AppColors.primary) : null,
           boxShadow: isSelected
               ? [
                   BoxShadow(
@@ -419,9 +449,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             Icon(
               icon,
               size: 20,
-              color: isSelected
-                  ? AppColors.primary
-                  : AppColors.onSurfaceVariant,
+              color:
+                  isSelected ? AppColors.primary : AppColors.onSurfaceVariant,
             ),
             const SizedBox(width: 8),
             Text(
@@ -430,9 +459,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 fontFamily: 'Almarai',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: isSelected
-                    ? AppColors.primary
-                    : AppColors.onSurfaceVariant,
+                color:
+                    isSelected ? AppColors.primary : AppColors.onSurfaceVariant,
               ),
             ),
           ],
@@ -622,10 +650,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   WidgetSpan(
                     child: GestureDetector(
                       onTap: () {
-                        showDialog(
+                        showDialog<void>(
                           context: context,
                           builder: (ctx) => AlertDialog(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
                             title: const Text('الشروط والأحكام'),
                             content: const SingleChildScrollView(
                               child: Text(
@@ -643,7 +672,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             actions: [
                               ElevatedButton(
                                 onPressed: () => Navigator.pop(ctx),
-                                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                    foregroundColor: Colors.white),
                                 child: const Text('موافق'),
                               ),
                             ],

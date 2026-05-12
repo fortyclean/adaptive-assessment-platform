@@ -41,7 +41,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         _schoolReport = report;
         _isLoading = false;
       });
-    } catch (_) {
+    } on Object {
       if (!mounted) return;
       final authState = ref.read(authProvider);
       final isDemoSession =
@@ -59,6 +59,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
           'summary': {
             'totalTeachers': 12,
             'totalStudents': 245,
+            'totalClassrooms': 9,
             'totalAssessments': 38,
             'schoolAverage': 76,
           }
@@ -148,171 +149,173 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     ),
                   ),
                 )
-          : RefreshIndicator(
-              onRefresh: _loadData,
-              color: AppColors.primary,
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  // ─── School Performance Banner ──────────────────────────
-                  if (schoolAverage != null) ...[
-                    _PerformanceBanner(average: schoolAverage.round()),
-                    const SizedBox(height: 20),
-                  ],
-
-                  // ─── Bento Grid Stats ───────────────────────────────────
-                  _SectionHeader(title: 'إحصائيات المدرسة'),
-                  const SizedBox(height: 12),
-                  _BentoGrid(
+              : RefreshIndicator(
+                  onRefresh: _loadData,
+                  color: AppColors.primary,
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
                     children: [
-                      _BentoCard(
-                        label: 'المعلمون',
-                        value: '${summary['totalTeachers'] ?? 0}',
-                        icon: Icons.person_rounded,
+                      // ─── School Performance Banner ──────────────────────────
+                      if (schoolAverage != null) ...[
+                        _PerformanceBanner(average: schoolAverage.round()),
+                        const SizedBox(height: 20),
+                      ],
+
+                      // ─── Bento Grid Stats ───────────────────────────────────
+                      _SectionHeader(title: 'إحصائيات المدرسة'),
+                      const SizedBox(height: 12),
+                      _BentoGrid(
+                        children: [
+                          _BentoCard(
+                            label: 'المعلمون',
+                            value: '${summary['totalTeachers'] ?? 0}',
+                            icon: Icons.person_rounded,
+                            color: AppColors.primary,
+                            bgColor: const Color(0xFFDDE1FF),
+                            onTap: () => context.push(
+                              AppRoutes.adminUsers,
+                              extra: {'initialFilter': 'teacher'},
+                            ),
+                          ),
+                          _BentoCard(
+                            label: 'الطلاب',
+                            value: '${summary['totalStudents'] ?? 0}',
+                            icon: Icons.school_rounded,
+                            color: AppColors.success,
+                            bgColor: const Color(0xFFD1FAE5),
+                            onTap: () => context.push(
+                              AppRoutes.adminUsers,
+                              extra: {'initialFilter': 'student'},
+                            ),
+                          ),
+                          _BentoCard(
+                            label: 'الفصول',
+                            value: '${summary['totalClassrooms'] ?? 0}',
+                            icon: Icons.class_rounded,
+                            color: AppColors.warning,
+                            bgColor: const Color(0xFFFEF3C7),
+                            onTap: () =>
+                                context.push(AppRoutes.adminClassrooms),
+                          ),
+                          _BentoCard(
+                            label: 'الاختبارات',
+                            value: '${summary['totalAssessments'] ?? 0}',
+                            icon: Icons.quiz_rounded,
+                            color: AppColors.primaryContainer,
+                            bgColor: const Color(0xFFD0E1FB),
+                            onTap: () => context.push(AppRoutes.adminReports),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ─── Administrative Alerts ──────────────────────────────
+                      _SectionHeader(title: 'التنبيهات الإدارية'),
+                      const SizedBox(height: 12),
+                      _AlertCard(
+                        icon: Icons.warning_rounded,
+                        iconColor: AppColors.error,
+                        iconBgColor: AppColors.errorContainer,
+                        title: 'طلاب لم يؤدوا الاختبار',
+                        subtitle: 'يوجد 5 طلاب لم يسلموا الاختبار الأخير',
+                        onTap: () => context.push(
+                          AppRoutes.adminReports,
+                          extra: {'focus': 'participation'},
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _AlertCard(
+                        icon: Icons.notification_important_rounded,
+                        iconColor: AppColors.primary,
+                        iconBgColor: const Color(0xFFDDE1FF),
+                        title: 'طلبات انضمام جديدة',
+                        subtitle: 'يوجد 3 طلبات انضمام تنتظر الموافقة',
+                        onTap: () => context.push(
+                          AppRoutes.adminUsers,
+                          extra: {'initialFilter': 'pending'},
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _AlertCard(
+                        icon: Icons.trending_down_rounded,
+                        iconColor: AppColors.warning,
+                        iconBgColor: const Color(0xFFFEF3C7),
+                        title: 'انخفاض في الأداء',
+                        subtitle: 'فصل الرياضيات - المستوى العاشر',
+                        onTap: () => context.push(
+                          AppRoutes.adminReports,
+                          extra: {
+                            'gradeLevel': '10',
+                            'subject': 'الرياضيات',
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ─── Quick Access Links ─────────────────────────────────
+                      _SectionHeader(title: 'روابط سريعة'),
+                      const SizedBox(height: 12),
+                      _QuickLink(
+                        icon: Icons.people_rounded,
+                        title: 'إدارة المستخدمين',
+                        subtitle: 'إضافة وتعديل حسابات المعلمين والطلاب',
                         color: AppColors.primary,
                         bgColor: const Color(0xFFDDE1FF),
-                        onTap: () => context.push(
-                          AppRoutes.adminUsers,
-                          extra: {'initialFilter': 'teacher'},
-                        ),
+                        onTap: () => context.push(AppRoutes.adminUsers),
                       ),
-                      _BentoCard(
-                        label: 'الطلاب',
-                        value: '${summary['totalStudents'] ?? 0}',
-                        icon: Icons.school_rounded,
-                        color: AppColors.success,
-                        bgColor: const Color(0xFFD1FAE5),
-                        onTap: () => context.push(
-                          AppRoutes.adminUsers,
-                          extra: {'initialFilter': 'student'},
-                        ),
-                      ),
-                      _BentoCard(
-                        label: 'الفصول',
-                        value: '0',
+                      const SizedBox(height: 8),
+                      _QuickLink(
                         icon: Icons.class_rounded,
+                        title: 'إدارة الفصول',
+                        subtitle: 'عرض وتنظيم الفصول الدراسية',
                         color: AppColors.warning,
                         bgColor: const Color(0xFFFEF3C7),
                         onTap: () => context.push(AppRoutes.adminClassrooms),
                       ),
-                      _BentoCard(
-                        label: 'الاختبارات',
-                        value: '${summary['totalAssessments'] ?? 0}',
-                        icon: Icons.quiz_rounded,
+                      const SizedBox(height: 8),
+                      _QuickLink(
+                        icon: Icons.bar_chart_rounded,
+                        title: 'تقارير المدرسة',
+                        subtitle: 'تحليلات شاملة لأداء المدرسة',
+                        color: AppColors.success,
+                        bgColor: const Color(0xFFD1FAE5),
+                        onTap: () => context.push(AppRoutes.adminReports),
+                      ),
+                      const SizedBox(height: 8),
+                      _QuickLink(
+                        icon: Icons.dashboard_customize_rounded,
+                        title: 'لوحة التحكم المتقدمة',
+                        subtitle: 'إحصائيات وتحليلات تفصيلية للمشرف',
                         color: AppColors.primaryContainer,
                         bgColor: const Color(0xFFD0E1FB),
-                        onTap: () => context.push(AppRoutes.teacherAssessments),
+                        onTap: () => context.push(AppRoutes.adminDashboardV2),
                       ),
+                      const SizedBox(height: 8),
+                      _QuickLink(
+                        icon: Icons.supervisor_account_rounded,
+                        title: 'لوحة المشرف المتقدمة',
+                        subtitle: 'إحصائيات وتحليلات تفصيلية',
+                        color: AppColors.primaryContainer,
+                        bgColor: const Color(0xFFD0E1FB),
+                        onTap: () => context.push('/supervisor'),
+                      ),
+                      const SizedBox(height: 8),
+                      _QuickLink(
+                        icon: Icons.settings_outlined,
+                        title: 'إعدادات المؤسسة',
+                        subtitle: 'ضبط إعدادات المؤسسة التعليمية',
+                        color: AppColors.onSurfaceVariant,
+                        bgColor: AppColors.surfaceContainer,
+                        onTap: () =>
+                            context.push('/admin/institution-settings'),
+                      ),
+
+                      const SizedBox(height: 24),
                     ],
                   ),
-
-                  const SizedBox(height: 24),
-
-                  // ─── Administrative Alerts ──────────────────────────────
-                  _SectionHeader(title: 'التنبيهات الإدارية'),
-                  const SizedBox(height: 12),
-                  _AlertCard(
-                    icon: Icons.warning_rounded,
-                    iconColor: AppColors.error,
-                    iconBgColor: AppColors.errorContainer,
-                    title: 'طلاب لم يؤدوا الاختبار',
-                    subtitle: 'يوجد 5 طلاب لم يسلموا الاختبار الأخير',
-                    onTap: () => context.push(
-                      AppRoutes.adminReports,
-                      extra: {'focus': 'participation'},
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _AlertCard(
-                    icon: Icons.notification_important_rounded,
-                    iconColor: AppColors.primary,
-                    iconBgColor: const Color(0xFFDDE1FF),
-                    title: 'طلبات انضمام جديدة',
-                    subtitle: 'يوجد 3 طلبات انضمام تنتظر الموافقة',
-                    onTap: () => context.push(
-                      AppRoutes.adminUsers,
-                      extra: {'initialFilter': 'pending'},
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _AlertCard(
-                    icon: Icons.trending_down_rounded,
-                    iconColor: AppColors.warning,
-                    iconBgColor: const Color(0xFFFEF3C7),
-                    title: 'انخفاض في الأداء',
-                    subtitle: 'فصل الرياضيات - المستوى العاشر',
-                    onTap: () => context.push(
-                      AppRoutes.adminReports,
-                      extra: {
-                        'gradeLevel': '10',
-                        'subject': 'الرياضيات',
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // ─── Quick Access Links ─────────────────────────────────
-                  _SectionHeader(title: 'روابط سريعة'),
-                  const SizedBox(height: 12),
-                  _QuickLink(
-                    icon: Icons.people_rounded,
-                    title: 'إدارة المستخدمين',
-                    subtitle: 'إضافة وتعديل حسابات المعلمين والطلاب',
-                    color: AppColors.primary,
-                    bgColor: const Color(0xFFDDE1FF),
-                    onTap: () => context.push(AppRoutes.adminUsers),
-                  ),
-                  const SizedBox(height: 8),
-                  _QuickLink(
-                    icon: Icons.class_rounded,
-                    title: 'إدارة الفصول',
-                    subtitle: 'عرض وتنظيم الفصول الدراسية',
-                    color: AppColors.warning,
-                    bgColor: const Color(0xFFFEF3C7),
-                    onTap: () => context.push(AppRoutes.adminClassrooms),
-                  ),
-                  const SizedBox(height: 8),
-                  _QuickLink(
-                    icon: Icons.bar_chart_rounded,
-                    title: 'تقارير المدرسة',
-                    subtitle: 'تحليلات شاملة لأداء المدرسة',
-                    color: AppColors.success,
-                    bgColor: const Color(0xFFD1FAE5),
-                    onTap: () => context.push(AppRoutes.adminReports),
-                  ),
-                  const SizedBox(height: 8),
-                  _QuickLink(
-                    icon: Icons.dashboard_customize_rounded,
-                    title: 'لوحة التحكم المتقدمة',
-                    subtitle: 'إحصائيات وتحليلات تفصيلية للمشرف',
-                    color: AppColors.primaryContainer,
-                    bgColor: const Color(0xFFD0E1FB),
-                    onTap: () => context.push(AppRoutes.adminDashboardV2),
-                  ),
-                  const SizedBox(height: 8),
-                  _QuickLink(
-                    icon: Icons.supervisor_account_rounded,
-                    title: 'لوحة المشرف المتقدمة',
-                    subtitle: 'إحصائيات وتحليلات تفصيلية',
-                    color: AppColors.primaryContainer,
-                    bgColor: const Color(0xFFD0E1FB),
-                    onTap: () => context.push('/supervisor'),
-                  ),
-                  const SizedBox(height: 8),
-                  _QuickLink(
-                    icon: Icons.settings_outlined,
-                    title: 'إعدادات المؤسسة',
-                    subtitle: 'ضبط إعدادات المؤسسة التعليمية',
-                    color: AppColors.onSurfaceVariant,
-                    bgColor: AppColors.surfaceContainer,
-                    onTap: () => context.push('/admin/institution-settings'),
-                  ),
-
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
+                ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 0, role: 'admin'),
     );
   }
@@ -536,7 +539,8 @@ class _BentoCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.6)),
+          border: Border.all(
+              color: AppColors.outlineVariant.withValues(alpha: 0.6)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
@@ -615,7 +619,8 @@ class _AlertCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.6)),
+          border: Border.all(
+              color: AppColors.outlineVariant.withValues(alpha: 0.6)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -700,7 +705,8 @@ class _QuickLink extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.6)),
+          border: Border.all(
+              color: AppColors.outlineVariant.withValues(alpha: 0.6)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
