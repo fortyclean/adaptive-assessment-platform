@@ -87,10 +87,34 @@ export function selectNextQuestion<T extends QuestionCandidate>(
     return null;
   }
 
-  // Find candidates at the target difficulty
-  const targetCandidates = available.filter((q) => q.difficulty === session.currentDifficulty);
+  // Find candidates at the target difficulty first.
+  const targetCandidates = available.filter(
+    (q) => q.difficulty === session.currentDifficulty,
+  );
 
-  const candidates = targetCandidates.length > 0 ? targetCandidates : available;
+  let candidates = targetCandidates;
+
+  // Requirement-aligned fallback: choose nearest available difficulty
+  // instead of any random difficulty.
+  if (candidates.length == 0) {
+    const targetRank = DIFFICULTY_RANK[session.currentDifficulty];
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    let nearestCandidates: T[] = [];
+
+    for (const candidate of available) {
+      const candidateRank = DIFFICULTY_RANK[candidate.difficulty];
+      const distance = Math.abs(candidateRank - targetRank);
+
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestCandidates = [candidate];
+      } else if (distance === nearestDistance) {
+        nearestCandidates.push(candidate);
+      }
+    }
+
+    candidates = nearestCandidates;
+  }
 
   // Random pick from candidates
   const randomIndex = Math.floor(Math.random() * candidates.length);

@@ -41,9 +41,6 @@ import '../../features/assessment/screens/student_progress_screen.dart';
 import '../../features/assessment/screens/student_subjects_screen.dart';
 import '../../features/assessment/screens/assessment_start_screen.dart';
 import '../../features/assessment/screens/exam_screen.dart';
-import '../../features/assessment/screens/exam_with_image_screen.dart';
-import '../../features/assessment/screens/exam_with_bookmark_screen.dart';
-import '../../features/assessment/screens/exam_with_timer_toggle_screen.dart';
 import '../../features/assessment/screens/result_screen.dart';
 import '../../features/notifications/screens/advanced_notification_center_screen.dart';
 import '../../features/notifications/screens/notification_settings_screen.dart';
@@ -591,13 +588,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'studentExamWithImage',
             builder: (_, state) {
               final extra = state.extra as Map<String, dynamic>?;
-              return ExamWithImageScreen(
+              return ExamScreen(
                 assessmentId: state.pathParameters['id'] ?? '',
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
                 timeLimitMinutes: extra?['timeLimitMinutes'] as int? ?? 30,
-                subjectTitle:
-                    extra?['subjectTitle'] as String? ?? 'الرياضيات المتقدمة',
               );
             },
           ),
@@ -606,13 +601,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'studentExamWithBookmark',
             builder: (_, state) {
               final extra = state.extra as Map<String, dynamic>?;
-              return ExamWithBookmarkScreen(
+              return ExamScreen(
                 assessmentId: state.pathParameters['id'] ?? '',
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
                 timeLimitMinutes: extra?['timeLimitMinutes'] as int? ?? 30,
-                subjectTitle:
-                    extra?['subjectTitle'] as String? ?? 'الرياضيات المتقدمة',
               );
             },
           ),
@@ -621,13 +614,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'studentExamWithTimerToggle',
             builder: (_, state) {
               final extra = state.extra as Map<String, dynamic>?;
-              return ExamWithTimerToggleScreen(
+              return ExamScreen(
                 assessmentId: state.pathParameters['id'] ?? '',
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
                 timeLimitMinutes: extra?['timeLimitMinutes'] as int? ?? 30,
-                subjectTitle:
-                    extra?['subjectTitle'] as String? ?? 'الرياضيات المتقدمة',
               );
             },
           ),

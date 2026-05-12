@@ -36,6 +36,17 @@ class AdminRepository {
     return (body['user'] as Map<String, dynamic>?) ?? body;
   }
 
+  /// PATCH /api/v1/users/:id
+  Future<Map<String, dynamic>> updateUser(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
+    final response = await _apiService.dio
+        .patch<Map<String, dynamic>>('/users/$id', data: data);
+    final body = response.data ?? <String, dynamic>{};
+    return (body['user'] as Map<String, dynamic>?) ?? body;
+  }
+
   /// PATCH /api/v1/users/:id/deactivate
   Future<void> deactivateUser(String id) async {
     await _apiService.dio.patch<Map<String, dynamic>>('/users/$id/deactivate');
@@ -82,27 +93,51 @@ class AdminRepository {
   }
 
   List<Map<String, dynamic>> _parseClassroomsResponse(dynamic data) {
+    List<Map<String, dynamic>> normalizeList(List<dynamic> items) => items
+        .whereType<Map<String, dynamic>>()
+        .map(_normalizeClassroom)
+        .toList();
+
     if (data is List) {
-      return List<Map<String, dynamic>>.from(data);
+      return normalizeList(data);
     }
     if (data is Map<String, dynamic>) {
       final directClassrooms = data['classrooms'];
       if (directClassrooms is List) {
-        return List<Map<String, dynamic>>.from(directClassrooms);
+        return normalizeList(directClassrooms);
       }
 
       final nestedData = data['data'];
       if (nestedData is List) {
-        return List<Map<String, dynamic>>.from(nestedData);
+        return normalizeList(nestedData);
       }
       if (nestedData is Map<String, dynamic>) {
         final nestedClassrooms = nestedData['classrooms'];
         if (nestedClassrooms is List) {
-          return List<Map<String, dynamic>>.from(nestedClassrooms);
+          return normalizeList(nestedClassrooms);
         }
       }
     }
     return <Map<String, dynamic>>[];
+  }
+
+  Map<String, dynamic> _normalizeClassroom(Map<String, dynamic> classroom) {
+    final normalized = Map<String, dynamic>.from(classroom);
+    normalized['activeAssessments'] =
+        normalized['activeAssessments'] ?? normalized['activeAssessmentCount'];
+
+    final teacherIds = normalized['teacherIds'];
+    if (teacherIds is List && teacherIds.isNotEmpty) {
+      final firstTeacher = teacherIds.first;
+      if (firstTeacher is Map<String, dynamic>) {
+        normalized['teacherId'] = firstTeacher['_id'] ?? firstTeacher['id'];
+        normalized['teacherName'] =
+            firstTeacher['fullName'] ?? firstTeacher['username'];
+      }
+    }
+
+    normalized['studentIds'] = normalized['studentIds'] ?? <dynamic>[];
+    return normalized;
   }
 
   /// DELETE /api/v1/classrooms/:id
@@ -130,7 +165,7 @@ class AdminRepository {
       String classroomId, List<String> studentIds) async {
     await _apiService.dio.post<Map<String, dynamic>>(
         '/classrooms/$classroomId/students',
-        data: {'studentIds': studentIds});
+        data: {'userIds': studentIds});
   }
 
   /// POST /api/v1/classrooms/:id/teachers

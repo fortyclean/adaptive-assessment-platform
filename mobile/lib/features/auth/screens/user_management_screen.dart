@@ -313,6 +313,16 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
   void _editUser(Map<String, dynamic> user) {
     final nameController =
         TextEditingController(text: user['fullName'] as String? ?? '');
+    final emailController =
+        TextEditingController(text: user['email'] as String? ?? '');
+    final classroomIdsController = TextEditingController(
+      text: ((user['classroomIds'] as List?) ?? const [])
+          .map((item) => item is Map
+              ? (item['_id'] ?? item['id'] ?? '').toString()
+              : item.toString())
+          .where((value) => value.isNotEmpty)
+          .join(', '),
+    );
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -350,21 +360,147 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       borderRadius: BorderRadius.circular(8))),
             ),
             const SizedBox(height: 16),
+            TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+              decoration: InputDecoration(
+                  labelText: 'البريد الإلكتروني',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8))),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: classroomIdsController,
+              textDirection: TextDirection.ltr,
+              decoration: InputDecoration(
+                labelText: 'معرفات الفصول',
+                helperText: 'اكتب المعرفات مفصولة بفواصل عند الحاجة',
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                Chip(
+                  label: Text(
+                    (user['role'] as String? ?? 'user') == 'teacher'
+                        ? 'معلم'
+                        : (user['role'] as String? ?? 'user') == 'student'
+                            ? 'طالب'
+                            : 'مشرف',
+                  ),
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+                  labelStyle: const TextStyle(color: AppColors.primary),
+                ),
+                Chip(
+                  label: Text((user['isActive'] as bool? ?? false)
+                      ? 'نشط'
+                      : 'بانتظار الاعتماد'),
+                  backgroundColor: (user['isActive'] as bool? ?? false)
+                      ? AppColors.success.withValues(alpha: 0.08)
+                      : AppColors.warningContainer,
+                  labelStyle: TextStyle(
+                    color: (user['isActive'] as bool? ?? false)
+                        ? AppColors.success
+                        : AppColors.warning,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                final idx = _users.indexWhere((u) => u['_id'] == user['_id']);
-                if (idx != -1) {
-                  setState(() {
-                    _users[idx] = Map.from(_users[idx])
-                      ..['fullName'] = nameController.text.trim();
-                  });
+              onPressed: () async {
+                final newName = nameController.text.trim();
+                final newEmail = emailController.text.trim();
+                final classroomIds = classroomIdsController.text
+                    .split(',')
+                    .map((value) => value.trim())
+                    .where((value) => value.isNotEmpty)
+                    .toList();
+                if (newName.length < 2) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  return;
                 }
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('تم تحديث بيانات المستخدم'),
-                      behavior: SnackBarBehavior.floating),
-                );
+                if (newEmail.isNotEmpty && !newEmail.contains('@')) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('البريد الإلكتروني غير صحيح'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  return;
+                }
+
+                final idx = _users.indexWhere((u) => u['_id'] == user['_id']);
+                final authState = ref.read(authProvider);
+                final isDemoSession =
+                    (authState.accessToken ?? '').startsWith('demo-token-');
+                final payload = <String, dynamic>{
+                  'fullName': newName,
+                  if (newEmail.isNotEmpty) 'email': newEmail,
+                  if (classroomIds.isNotEmpty) 'classroomIds': classroomIds,
+                };
+
+                try {
+                  if (!AppConstants.useMockData && !isDemoSession) {
+                    await ref.read(adminRepositoryProvider).updateUser(
+                          user['_id'] as String? ?? '',
+                          payload,
+                        );
+                  }
+                  if (idx != -1) {
+                    setState(() {
+                      _users[idx] = Map.from(_users[idx])
+                        ..['fullName'] = newName
+                        ..['email'] = newEmail
+                        ..['classroomIds'] = classroomIds;
+                    });
+                  }
+                  if (mounted) {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('تم تحديث بيانات المستخدم'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                } on Object {
+                  if (!AppConstants.useMockData && !isDemoSession) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'تعذر حفظ بيانات المستخدم. يرجى المحاولة مرة أخرى',
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: AppColors.error,
+                        ),
+                      );
+                    }
+                    return;
+                  }
+                  if (idx != -1) {
+                    setState(() {
+                      _users[idx] = Map.from(_users[idx])
+                        ..['fullName'] = newName
+                        ..['email'] = newEmail
+                        ..['classroomIds'] = classroomIds;
+                    });
+                  }
+                  if (mounted) {
+                    Navigator.pop(ctx);
+                  }
+                }
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

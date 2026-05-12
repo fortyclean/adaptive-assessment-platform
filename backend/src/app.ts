@@ -33,14 +33,21 @@ app.use(
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 const corsOrigin = process.env.CORS_ORIGIN || process.env.ALLOWED_ORIGINS || '*';
-const allowedOrigins = corsOrigin === '*'
+const isWildcardCors = corsOrigin.trim() === '*';
+const allowedOrigins = isWildcardCors
   ? true
   : corsOrigin.split(',').map(o => o.trim()).filter(Boolean);
+
+if (config.app.env === 'production' && isWildcardCors) {
+  logger.warn(
+    'CORS is configured as wildcard in production. Cookies/credentials will be disabled for safety.',
+  );
+}
 
 app.use(
   cors({
     origin: allowedOrigins,
-    credentials: true,
+    credentials: !isWildcardCors,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
   }),

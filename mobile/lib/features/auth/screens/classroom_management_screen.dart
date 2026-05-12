@@ -504,6 +504,8 @@ class _ClassroomManagementScreenState
                                   onEdit: () => _showEditDialog(_classrooms[i]),
                                   onAssignTeacher: () =>
                                       _showAssignTeacherDialog(_classrooms[i]),
+                                  onAssignStudents: () =>
+                                      _showAssignStudentsDialog(_classrooms[i]),
                                 ),
                               );
                             }),
@@ -524,11 +526,14 @@ class _ClassroomManagementScreenState
       shape: const Border(
         bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
       ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_forward_rounded, color: Color(0xFF64748B)),
-        onPressed: () => context.pop(),
-        tooltip: 'رجوع',
-      ),
+      leading: context.canPop()
+          ? IconButton(
+              icon: const Icon(Icons.arrow_forward_rounded,
+                  color: Color(0xFF64748B)),
+              onPressed: () => context.pop(),
+              tooltip: 'رجوع',
+            )
+          : null,
       title: const Text(
         'التقييم الذكي',
         style: TextStyle(
@@ -657,19 +662,66 @@ class _ClassroomManagementScreenState
     );
   }
 
-  void _showAssignTeacherDialog(Map<String, dynamic> classroom) {
+  Future<List<Map<String, dynamic>>> _loadTeacherOptions(
+    List<Map<String, dynamic>> fallbackTeachers,
+  ) async {
+    try {
+      final teachers = await ref
+          .read(adminRepositoryProvider)
+          .getUsers(role: 'teacher', isActive: true);
+      return teachers.isNotEmpty ? teachers : fallbackTeachers;
+    } on Object {
+      if (!AppConstants.useMockData && !_isDemoSession) {
+        return const [];
+      }
+      return fallbackTeachers;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> _loadStudentOptions(
+    List<Map<String, dynamic>> fallbackStudents,
+  ) async {
+    try {
+      final students = await ref
+          .read(adminRepositoryProvider)
+          .getUsers(role: 'student', isActive: true);
+      return students.isNotEmpty ? students : fallbackStudents;
+    } on Object {
+      if (!AppConstants.useMockData && !_isDemoSession) {
+        return const [];
+      }
+      return fallbackStudents;
+    }
+  }
+
+  Future<void> _showAssignTeacherDialog(Map<String, dynamic> classroom) async {
     // Mock teachers list
-    final teachers = [
+    final fallbackTeachers = [
       {'_id': 't1', 'fullName': 'أ. محمد العتيبي', 'subject': 'الرياضيات'},
       {'_id': 't2', 'fullName': 'أ. سارة الزهراني', 'subject': 'العلوم'},
       {'_id': 't3', 'fullName': 'أ. خالد الشمري', 'subject': 'اللغة العربية'},
       {'_id': 't4', 'fullName': 'أ. نورة القحطاني', 'subject': 'الإنجليزية'},
       {'_id': 't5', 'fullName': 'أ. فهد المطيري', 'subject': 'الفيزياء'},
     ];
+    final teachers = await _loadTeacherOptions(fallbackTeachers);
+
+    if (teachers.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'تعذر تحميل قائمة المعلمين. تحقق من الاتصال ثم أعد المحاولة.'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
 
     String? selectedTeacherId = classroom['teacherId'] as String?;
+    if (!mounted) return;
 
-    showModalBottomSheet<void>(
+    await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
@@ -709,7 +761,7 @@ class _ClassroomManagementScreenState
                         setModalState(() => selectedTeacherId = v),
                     title: Text(t['fullName'] as String,
                         style: const TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: Text(t['subject'] as String,
+                    subtitle: Text(t['subject'] as String? ?? 'معلم',
                         style: const TextStyle(
                             color: AppColors.onSurfaceVariant, fontSize: 12)),
                     activeColor: AppColors.primary,
@@ -775,6 +827,180 @@ class _ClassroomManagementScreenState
                         TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showAssignStudentsDialog(Map<String, dynamic> classroom) async {
+    final fallbackStudents = List<Map<String, dynamic>>.generate(
+      36,
+      (index) => {
+        '_id': 's${index + 1}',
+        'fullName': 'طالب تجريبي ${index + 1}',
+        'grade': classroom['gradeLevel'] as String? ?? 'الصف الدراسي',
+      },
+    );
+    final students = await _loadStudentOptions(fallbackStudents);
+
+    if (students.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content:
+              Text('تعذر تحميل قائمة الطلاب. تحقق من الاتصال ثم أعد المحاولة.'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
+
+    final assignedItems = classroom['studentIds'] as List? ?? const [];
+    final selectedStudentIds = <String>{
+      for (final item in assignedItems)
+        if (item is String)
+          item
+        else if (item is Map && (item['_id'] ?? item['id']) != null)
+          (item['_id'] ?? item['id']).toString(),
+    };
+    if (!mounted) return;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => Padding(
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+              left: 16,
+              right: 16,
+              top: 20),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(ctx).size.height * 0.78,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                    child: Container(
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                            color: AppColors.outlineVariant,
+                            borderRadius: BorderRadius.circular(2)))),
+                const SizedBox(height: 16),
+                Text('ربط طلاب بـ: ${classroom['name']}',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 4),
+                Text(
+                  'اختر الطلاب المرتبطين بهذا الفصل (${selectedStudentIds.length})',
+                  style: const TextStyle(
+                      color: AppColors.onSurfaceVariant, fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                Flexible(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: students.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final student = students[index];
+                      final id = (student['_id'] ?? student['id']).toString();
+                      final isSelected = selectedStudentIds.contains(id);
+                      return CheckboxListTile(
+                        value: isSelected,
+                        onChanged: (checked) {
+                          setModalState(() {
+                            if (checked ?? false) {
+                              selectedStudentIds.add(id);
+                            } else {
+                              selectedStudentIds.remove(id);
+                            }
+                          });
+                        },
+                        activeColor: AppColors.primary,
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(
+                          student['fullName'] as String? ??
+                              student['username'] as String? ??
+                              'طالب',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text(
+                          student['grade'] as String? ??
+                              student['username'] as String? ??
+                              'طالب نشط',
+                          style: const TextStyle(
+                              color: AppColors.onSurfaceVariant, fontSize: 12),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await ref.read(adminRepositoryProvider).assignStudents(
+                            classroom['_id'] as String,
+                            selectedStudentIds.toList(),
+                          );
+                      await _loadClassrooms();
+                    } on Object {
+                      if (!AppConstants.useMockData && !_isDemoSession) {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'تعذر ربط الطلاب بالفصل. يرجى المحاولة مرة أخرى'),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: AppColors.error,
+                            ),
+                          );
+                        }
+                        return;
+                      }
+                      final idx = _classrooms
+                          .indexWhere((c) => c['_id'] == classroom['_id']);
+                      if (idx != -1) {
+                        setState(() {
+                          _classrooms[idx] = Map.from(_classrooms[idx])
+                            ..['studentIds'] = selectedStudentIds.toList();
+                        });
+                      }
+                    }
+                    if (!ctx.mounted) return;
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(ctx).showSnackBar(
+                      const SnackBar(
+                        content: Text('تم تحديث طلاب الفصل'),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Color(0xFF2E7D32),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: const Text('حفظ الطلاب',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -947,16 +1173,20 @@ class _ClassroomCard extends StatelessWidget {
     required this.onDelete,
     required this.onEdit,
     required this.onAssignTeacher,
+    required this.onAssignStudents,
   });
 
   final Map<String, dynamic> classroom;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
   final VoidCallback onAssignTeacher;
+  final VoidCallback onAssignStudents;
 
   @override
   Widget build(BuildContext context) {
-    final studentCount = (classroom['studentIds'] as List?)?.length ?? 0;
+    final studentCount = (classroom['studentIds'] as List?)?.length ??
+        (classroom['studentCount'] as int?) ??
+        0;
     final teacherName = classroom['teacherName'] as String? ?? 'غير محدد';
     final activeAssessments = classroom['activeAssessments'] as int? ?? 0;
     final averageScore = classroom['averageScore'] as int?;
@@ -1113,22 +1343,42 @@ class _ClassroomCard extends StatelessWidget {
                 ],
                 // ── Assign Teacher Button ─────────────────────────────────────────────
                 const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: onAssignTeacher,
-                    icon: const Icon(Icons.person_add_outlined, size: 16),
-                    label: const Text('ربط معلم بالفصل'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.primary,
-                      side: const BorderSide(color: AppColors.primary),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      textStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w500),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: onAssignTeacher,
+                        icon: const Icon(Icons.person_add_outlined, size: 16),
+                        label: const Text('ربط معلم'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.primary),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          textStyle: const TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: onAssignStudents,
+                        icon: const Icon(Icons.group_add_outlined, size: 16),
+                        label: const Text('ربط طلاب'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.primary),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          textStyle: const TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -6,7 +6,6 @@ import '../../../core/constants/app_version.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
-import '../../../shared/providers/theme_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/auth_repository.dart';
 
@@ -26,8 +25,6 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
-    final themeMode = ref.watch(themeModeProvider);
-    final darkModeEnabled = themeMode == ThemeMode.dark;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -57,7 +54,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 // ── Appearance & Language Group ──────────────────────────
                 _buildSectionLabel('المظهر واللغة'),
                 const SizedBox(height: 8),
-                _buildAppearanceGroup(darkModeEnabled),
+                _buildAppearanceGroup(),
                 const SizedBox(height: 16),
 
                 // ── Other Group ──────────────────────────────────────────
@@ -124,7 +121,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             IconButton(
               icon: const Icon(Icons.notifications_outlined,
                   color: Color(0xFF64748B)),
-              onPressed: () {},
+              onPressed: () => context.push(AppRoutes.notificationCenter),
             ),
           ],
         ),
@@ -287,7 +284,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
 
   // ── Appearance Group ───────────────────────────────────────────────────────
 
-  Widget _buildAppearanceGroup(bool darkModeEnabled) {
+  Widget _buildAppearanceGroup() {
     return _SettingsCard(
       children: [
         // Language row — static badge
@@ -322,13 +319,12 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
         ),
         const _Divider(),
         // Dark mode toggle
-        _SettingsToggleTile(
+        _SettingsRowTile(
           icon: Icons.dark_mode_outlined,
-          title: 'الوضع الليلي',
-          value: darkModeEnabled,
-          onChanged: (v) {
-            ref.read(themeModeProvider.notifier).setDarkMode(enabled: v);
-          },
+          title: 'الوضع الليلي (غير متاح مؤقتًا)',
+          subtitle: 'سيتم تفعيله بعد ضبطه على جميع الشاشات.',
+          showChevron: false,
+          onTap: null,
         ),
       ],
     );
@@ -378,19 +374,9 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
 
   Widget _buildBottomNav(BuildContext context) {
     final role = ref.watch(currentUserProvider)?.role;
-    final location = GoRouterState.of(context).uri.toString();
-
     if (role == null) {
-      if (location.startsWith('/admin')) {
-        return const AppBottomNav(currentIndex: 4, role: 'admin');
-      }
-      if (location.startsWith('/student')) {
-        return const AppBottomNav(currentIndex: 3, role: 'student');
-      }
-      if (location.startsWith('/supervisor')) {
-        return const AppBottomNav(currentIndex: 4, role: 'admin');
-      }
-      return const AppBottomNav(currentIndex: 4, role: 'teacher');
+      // Avoid rendering a potentially wrong role nav while auth state is still restoring.
+      return const SizedBox.shrink();
     }
 
     if (role == UserRole.admin) {
@@ -581,11 +567,15 @@ class _SettingsRowTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
+    this.subtitle,
+    this.showChevron = true,
   });
 
   final IconData icon;
   final String title;
-  final VoidCallback onTap;
+  final String? subtitle;
+  final bool showChevron;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -598,16 +588,31 @@ class _SettingsRowTile extends StatelessWidget {
             Icon(icon, color: AppColors.primary, size: 24),
             const SizedBox(width: 16),
             Expanded(
-              child: Text(
-                title,
-                style: AppTextStyles.bodyLarge,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.bodyLarge,
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle!,
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            const Icon(
-              Icons.chevron_left_rounded,
-              color: AppColors.onSurfaceVariant,
-              size: 24,
-            ),
+            if (showChevron)
+              const Icon(
+                Icons.chevron_left_rounded,
+                color: AppColors.onSurfaceVariant,
+                size: 24,
+              ),
           ],
         ),
       ),

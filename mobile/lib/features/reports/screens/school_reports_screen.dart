@@ -293,11 +293,14 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       shape: const Border(
         bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
       ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_forward_rounded, color: Color(0xFF64748B)),
-        onPressed: () => context.pop(),
-        tooltip: 'رجوع',
-      ),
+      leading: context.canPop()
+          ? IconButton(
+              icon: const Icon(Icons.arrow_forward_rounded,
+                  color: Color(0xFF64748B)),
+              onPressed: () => context.pop(),
+              tooltip: 'رجوع',
+            )
+          : null,
       title: const Text(
         'التقييم الذكي',
         style: TextStyle(

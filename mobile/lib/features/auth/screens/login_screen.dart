@@ -126,10 +126,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } on DioException catch (e) {
       if (!mounted) return;
       String message;
+      final responseStatus = e.response?.data is Map<String, dynamic>
+          ? (e.response?.data as Map<String, dynamic>)['status'] as String?
+          : null;
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.sendTimeout) {
         message = 'الخادم يستيقظ، يرجى الانتظار 30 ثانية والمحاولة مجدداً';
+      } else if (responseStatus == 'pending_approval') {
+        message =
+            'الحساب بانتظار اعتماد المشرف. تواصل مع إدارة المؤسسة.';
       } else if (e.response?.statusCode == 401) {
         message = 'اسم المستخدم أو كلمة المرور غير صحيحة';
       } else if (e.response?.statusCode == 403) {

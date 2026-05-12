@@ -108,7 +108,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     });
   }
 
-  Future<void> _loadNextQuestion() async {
+  Future<void> _loadNextQuestion({int retryCount = 0}) async {
     setState(() {
       _isLoading = true;
       _fatalError = null;
@@ -171,6 +171,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
           _selectedAnswer = null;
           _isLoading = false;
         });
+        return;
+      }
+      if (retryCount < 1) {
+        await Future<void>.delayed(const Duration(milliseconds: 350));
+        if (!mounted) return;
+        await _loadNextQuestion(retryCount: retryCount + 1);
         return;
       }
       setState(() {

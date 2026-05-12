@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../repositories/admin_repository.dart';
 
 /// Screen 68 — Admin Dashboard v2 (لوحة تحكم المشرف — نسخة محسّنة)
 /// Features subject performance chart, top teachers list, admin alerts, quick access.
@@ -18,6 +21,42 @@ class AdminDashboardV2Screen extends ConsumerStatefulWidget {
 
 class _AdminDashboardV2ScreenState
     extends ConsumerState<AdminDashboardV2Screen> {
+  bool _isLoadingSummary = true;
+  Map<String, dynamic> _summary = const {
+    'totalStudents': 245,
+    'totalTeachers': 12,
+    'totalClassrooms': 9,
+    'totalAssessments': 38,
+    'schoolAverage': 82,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSummary();
+  }
+
+  Future<void> _loadSummary() async {
+    try {
+      final report = await ref.read(adminRepositoryProvider).getSchoolReport();
+      final summary = report['summary'];
+      if (summary is Map<String, dynamic>) {
+        setState(() {
+          _summary = summary;
+          _isLoadingSummary = false;
+        });
+        return;
+      }
+    } on Object {
+      final token = ref.read(authProvider).accessToken ?? '';
+      if (!AppConstants.useMockData && !token.startsWith('demo-token-')) {
+        setState(() => _isLoadingSummary = false);
+        return;
+      }
+    }
+    setState(() => _isLoadingSummary = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +82,7 @@ class _AdminDashboardV2ScreenState
                         IconButton(
                           icon: const Icon(Icons.notifications_outlined),
                           color: AppColors.onSurfaceVariant,
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('لا توجد إشعارات جديدة'), behavior: SnackBarBehavior.floating),
-                            );
-                          },
+                          onPressed: () => context.push('/notifications'),
                         ),
                         Positioned(
                           top: 8,
@@ -137,11 +172,7 @@ class _AdminDashboardV2ScreenState
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('إضافة عنصر جديد'), behavior: SnackBarBehavior.floating),
-          );
-        },
+        onPressed: () => context.push('/admin/users'),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         shape: const CircleBorder(),
@@ -182,6 +213,13 @@ class _AdminDashboardV2ScreenState
   // ─── Stats Bento Grid ────────────────────────────────────────────────────
 
   Widget _buildStatsBentoGrid() {
+    final students = (_summary['totalStudents'] as num?)?.round() ?? 0;
+    final teachers = (_summary['totalTeachers'] as num?)?.round() ?? 0;
+    final classrooms = (_summary['totalClassrooms'] as num?)?.round() ?? 0;
+    final assessments = (_summary['totalAssessments'] as num?)?.round() ?? 0;
+    final average = (_summary['schoolAverage'] as num?)?.round() ?? 0;
+    final averageProgress = average.clamp(0, 100) / 100;
+
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -195,35 +233,43 @@ class _AdminDashboardV2ScreenState
           iconBg: const Color(0xFFDDE1FF),
           iconColor: AppColors.primary,
           label: 'إجمالي الطلاب',
-          value: '1,284',
-          badge: '+12%',
+          value: _isLoadingSummary ? '...' : '$students',
+          badge: 'نشط',
           badgeColor: Colors.green,
-          onTap: () => context.push('/admin/users'),
+          onTap: () => context.push(
+            '/admin/users',
+            extra: {'initialFilter': 'student'},
+          ),
         ),
         _buildStatCard(
           icon: Icons.person_outline,
           iconBg: const Color(0xFFFFDBCE),
           iconColor: const Color(0xFF611E00),
           label: 'المعلمون النشطون',
-          value: '86',
-          onTap: () => context.push('/admin/users'),
+          value: _isLoadingSummary ? '...' : '$teachers',
+          onTap: () => context.push(
+            '/admin/users',
+            extra: {'initialFilter': 'teacher'},
+          ),
         ),
         _buildStatCard(
           icon: Icons.trending_up,
           iconBg: const Color(0xFFD3E4FE),
           iconColor: const Color(0xFF505F76),
           label: 'متوسط الأداء العام',
-          value: '82%',
+          value: _isLoadingSummary ? '...' : '$average%',
           showCircularProgress: true,
-          progressValue: 0.82,
+          progressValue: averageProgress.toDouble(),
           onTap: () => context.push('/admin/reports'),
         ),
         _buildStatCard(
           icon: Icons.timer,
           iconBg: const Color(0xFFFEE2E2),
           iconColor: AppColors.error,
-          label: 'اختبارات جارية',
-          value: '14',
+          label: classrooms > 0 ? 'الفصول الدراسية' : 'اختبارات جارية',
+          value: _isLoadingSummary
+              ? '...'
+              : (classrooms > 0 ? '$classrooms' : '$assessments'),
           onTap: () => context.push('/admin/classrooms'),
         ),
       ],
@@ -245,93 +291,94 @@ class _AdminDashboardV2ScreenState
     return GestureDetector(
       onTap: onTap,
       child: Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (showCircularProgress)
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: CircularProgressIndicator(
-                    value: progressValue,
-                    strokeWidth: 4,
-                    backgroundColor: const Color(0xFFF1F5F9),
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                  ),
-                )
-              else if (badge != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: (badgeColor ?? Colors.green).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    badge,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: badgeColor ?? Colors.green,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (showCircularProgress)
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: CircularProgressIndicator(
+                      value: progressValue,
+                      strokeWidth: 4,
+                      backgroundColor: const Color(0xFFF1F5F9),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.primary),
                     ),
+                  )
+                else if (badge != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: (badgeColor ?? Colors.green).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      badge,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: badgeColor ?? Colors.green,
+                      ),
+                    ),
+                  )
+                else
+                  const SizedBox.shrink(),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: iconBg,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                )
-              else
-                const SizedBox.shrink(),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: iconBg,
-                  borderRadius: BorderRadius.circular(8),
+                  child: Icon(icon, size: 20, color: iconColor),
                 ),
-                child: Icon(icon, size: 20, color: iconColor),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.onSurfaceVariant,
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.right,
                 ),
-                textAlign: TextAlign.right,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
+                  textAlign: TextAlign.right,
                 ),
-                textAlign: TextAlign.right,
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -500,7 +547,8 @@ class _AdminDashboardV2ScreenState
             children: [
               TextButton(
                 onPressed: () => context.push('/admin/users'),
-                child: const Text('عرض الكل', style: TextStyle(color: AppColors.primary, fontSize: 13)),
+                child: const Text('عرض الكل',
+                    style: TextStyle(color: AppColors.primary, fontSize: 13)),
               ),
               Text(
                 'المعلمون المتميزون (هذا الشهر)',
@@ -684,9 +732,7 @@ class _AdminDashboardV2ScreenState
     } else if (title == 'تقارير جاهزة') {
       onTap = () => context.push('/admin/reports');
     } else {
-      onTap = () => ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم تحديث الجداول'), behavior: SnackBarBehavior.floating),
-      );
+      onTap = () => context.push('/admin/classrooms');
     }
 
     return InkWell(
@@ -779,15 +825,13 @@ class _AdminDashboardV2ScreenState
               if (label == 'الإعدادات') {
                 onTap = () => context.push('/admin/institution-settings');
               } else if (label == 'الجداول') {
-                onTap = () => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('جاري فتح إدارة الفصول'), behavior: SnackBarBehavior.floating),
-                );
+                onTap = () => context.push('/admin/classrooms');
               } else if (label == 'إضافة طالب') {
                 onTap = () => context.push('/admin/users');
               } else if (label == 'التقارير') {
                 onTap = () => context.push('/admin/reports');
               } else {
-                onTap = () {};
+                onTap = () => context.push('/admin');
               }
               return InkWell(
                 onTap: onTap,

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.21';
-  static const int buildNumber = 21;
+  static const String current = '1.0.23';
+  static const int buildNumber = 23;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,36 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.23',
+      buildNumber: 23,
+      date: 'مايو 2026',
+      title: 'فحص وتحسين شاشات المشرف',
+      changes: [
+        'تفعيل إحصاءات لوحة المشرف من تقرير المدرسة مع fallback ديمو متسق.',
+        'توسيع تعديل المستخدم ليشمل الاسم والبريد ومعرفات الفصول مع الحفظ عبر API.',
+        'تفعيل ربط المعلمين والطلاب من إدارة الفصول مع دعم الحسابات التجريبية.',
+        'تحسين تطبيع بيانات الفصول القادمة من الخادم لعرض المعلم والطلاب والاختبارات بوضوح.',
+        'تثبيت التنقل المباشر في التقارير والإعدادات ومركز الإشعارات دون صفحات فارغة.',
+        'إخفاء الوضع الليلي مؤقتا من إعدادات الحساب إلى حين تعميمه على كامل التطبيق.',
+      ],
+      type: VersionType.fix,
+    ),
+    VersionEntry(
+      version: '1.0.22',
+      buildNumber: 22,
+      date: 'مايو 2026',
+      title: 'Sprint A: تعزيز الأمان وثبات الدخول',
+      changes: [
+        'Sprint B: Adaptive fallback now selects the nearest available difficulty level.',
+        'Sprint B: Added one automatic retry when loading the next question fails.',
+        'Sprint B: Unified exam variant routes to the main production exam screen.',
+        'تشديد إعدادات CORS في الخادم وتعطيل credentials تلقائيًا عند wildcard للحماية',
+        'توحيد رسالة حالة pending_approval في شاشة تسجيل الدخول بدل إظهارها كبيانات خاطئة',
+        'تحسين اتساق مسار المصادقة تمهيدًا لإكمال بقية عناصر Sprint A',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.21',
       buildNumber: 21,

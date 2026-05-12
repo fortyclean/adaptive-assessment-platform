@@ -216,8 +216,22 @@ router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
     const refreshTokenFromBody = validation.data.refreshToken;
     const refreshTokenFromCookieObject = (req as Request & { cookies?: { refreshToken?: string } }).cookies?.refreshToken;
     const refreshTokenFromHeader = parseRefreshTokenFromCookieHeader(req.headers.cookie);
-    const refreshToken =
-      refreshTokenFromBody ?? refreshTokenFromCookieObject ?? refreshTokenFromHeader;
+    const isMobileClient =
+      (req.headers['x-client-platform'] as string | undefined)?.toLowerCase() === 'mobile';
+    const refreshTokenFromCookie = refreshTokenFromCookieObject ?? refreshTokenFromHeader;
+    const refreshToken = refreshTokenFromCookie ?? refreshTokenFromBody;
+
+    if (
+      process.env.NODE_ENV === 'production' &&
+      !refreshTokenFromCookie &&
+      refreshTokenFromBody &&
+      !isMobileClient
+    ) {
+      res.status(401).json({
+        error: 'Refresh token must be provided via secure cookie for non-mobile clients.',
+      });
+      return;
+    }
 
     if (!refreshToken) {
       res.status(401).json({ error: 'Refresh token not found' });
