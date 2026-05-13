@@ -1,23 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:adaptive_assessment/features/assessment/screens/marketplace_screen.dart';
 import 'package:adaptive_assessment/features/assessment/screens/task_management_screen.dart';
-import 'package:adaptive_assessment/features/auth/screens/supervisor_dashboard_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/institution_settings_screen.dart';
-import 'package:adaptive_assessment/features/reports/screens/certificates_screen.dart';
+import 'package:adaptive_assessment/features/auth/screens/supervisor_dashboard_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/support_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/ui_feedback_screen.dart';
+import 'package:adaptive_assessment/features/reports/screens/certificates_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 /// Helper: wraps a widget with Directionality + ProviderScope + MaterialApp
-Widget _wrap(Widget child) {
-  return ProviderScope(
-    child: MaterialApp(
-      home: child,
-    ),
-  );
-}
+Widget _wrap(Widget child) => ProviderScope(
+      child: MaterialApp(
+        home: child,
+      ),
+    );
 
 void main() {
   // ─── Screen 66: Marketplace ───────────────────────────────────────────────

@@ -8,6 +8,7 @@
 /// **Validates: Requirements 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7**
 ///
 /// Property 2: Preservation — السلوكيات غير المتغيرة عبر جميع المدخلات غير المعطوبة.
+library;
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -28,9 +29,8 @@ import 'package:flutter_test/flutter_test.dart';
 /// // استدعاء API...
 /// ```
 class StartAssessmentLogic {
-  final String assessmentId;
-
   StartAssessmentLogic(this.assessmentId);
+  final String assessmentId;
 
   /// هل هذا assessmentId في وضع Demo؟
   bool get isDemoMode =>
@@ -161,9 +161,7 @@ class SettingsScreenLeadingLogic {
   }
 
   /// يُحاكي السلوك المُصلح: leading مشروط بـ canPop
-  bool hasLeadingButtonFixed({required bool canPop}) {
-    return canPop;
-  }
+  bool hasLeadingButtonFixed({required bool canPop}) => canPop;
 }
 
 /// يُحاكي منطق bottomNavigationBar في SettingsScreen للمعلم.
@@ -202,9 +200,8 @@ class SettingsScreenBottomNavLogic {
 /// }
 /// ```
 class AssessmentAvailabilityLogic {
-  final Map<String, dynamic>? assessment;
-
   AssessmentAvailabilityLogic(this.assessment);
+  final Map<String, dynamic>? assessment;
 
   bool get isAvailable {
     if (assessment == null) return false;
@@ -359,7 +356,8 @@ void main() {
   // ───────────────────────────────────────────────────────────────────────────
   // 3. Bottom Nav index 1 → /student/assessments-list
   // ───────────────────────────────────────────────────────────────────────────
-  group('Preservation 3 — Student bottom nav index 1 → /student/assessments-list',
+  group(
+      'Preservation 3 — Student bottom nav index 1 → /student/assessments-list',
       () {
     /// **Validates: Requirements 3.3**
 
@@ -428,7 +426,8 @@ void main() {
   // ───────────────────────────────────────────────────────────────────────────
   // 5. زر الرجوع عند canPop=true يظهر في SettingsScreen
   // ───────────────────────────────────────────────────────────────────────────
-  group('Preservation 5 — Back button visible when canPop=true in SettingsScreen',
+  group(
+      'Preservation 5 — Back button visible when canPop=true in SettingsScreen',
       () {
     /// **Validates: Requirements 3.5**
     ///
@@ -474,7 +473,8 @@ void main() {
   // ───────────────────────────────────────────────────────────────────────────
   // 6. SettingsScreen للمعلم: AppBottomNav بـ currentIndex=4 و role='teacher'
   // ───────────────────────────────────────────────────────────────────────────
-  group('Preservation 6 — Teacher SettingsScreen shows AppBottomNav(currentIndex=4, role=teacher)',
+  group(
+      'Preservation 6 — Teacher SettingsScreen shows AppBottomNav(currentIndex=4, role=teacher)',
       () {
     /// **Validates: Requirements 3.6**
 
@@ -673,7 +673,8 @@ void main() {
         },
         {
           'id': 'P3',
-          'description': 'Student bottom nav index 1 → /student/assessments-list',
+          'description':
+              'Student bottom nav index 1 → /student/assessments-list',
           'requirement': '3.3',
         },
         {
@@ -683,17 +684,20 @@ void main() {
         },
         {
           'id': 'P5',
-          'description': 'Back button visible when canPop=true in SettingsScreen',
+          'description':
+              'Back button visible when canPop=true in SettingsScreen',
           'requirement': '3.5',
         },
         {
           'id': 'P6',
-          'description': 'Teacher SettingsScreen: AppBottomNav(currentIndex=4, role=teacher)',
+          'description':
+              'Teacher SettingsScreen: AppBottomNav(currentIndex=4, role=teacher)',
           'requirement': '3.6',
         },
         {
           'id': 'P7',
-          'description': 'Unavailable assessment (_isAvailable=false) disables start button',
+          'description':
+              'Unavailable assessment (_isAvailable=false) disables start button',
           'requirement': '3.7',
         },
       ];

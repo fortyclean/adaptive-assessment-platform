@@ -9,9 +9,9 @@ import '../../core/constants/app_colors.dart';
 /// Inactive: gray icon, no background.
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({
-    super.key,
     required this.currentIndex,
     required this.role,
+    super.key,
   });
 
   final int currentIndex;
@@ -27,10 +27,10 @@ class AppBottomNav extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        border: Border(
-          top: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+        border: const Border(
+          top: BorderSide(color: Color(0xFFE2E8F0)),
         ),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Color(0x0A000000),
             blurRadius: 10,
@@ -56,10 +56,10 @@ class AppBottomNav extends StatelessWidget {
                   behavior: HitTestBehavior.opaque,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 4, vertical: 6),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 6),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                     decoration: BoxDecoration(
                       // Active: #EFF6FF pill background
                       color: isActive
@@ -83,9 +83,8 @@ class AppBottomNav extends StatelessWidget {
                           item.label,
                           style: TextStyle(
                             fontSize: 10,
-                            fontWeight: isActive
-                                ? FontWeight.w600
-                                : FontWeight.w500,
+                            fontWeight:
+                                isActive ? FontWeight.w600 : FontWeight.w500,
                             color: isActive
                                 ? AppColors.primaryContainer
                                 : colorScheme.onSurface.withValues(alpha: 0.72),

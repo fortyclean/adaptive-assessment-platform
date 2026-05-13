@@ -8,6 +8,7 @@
 /// **النتيجة المتوقعة**: جميع الاختبارات تنجح على الكود الحالي وبعد الإصلاح.
 ///
 /// **Validates: Requirements 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8**
+library;
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -21,38 +22,39 @@ import 'package:flutter_test/flutter_test.dart';
 /// - بطاقة "الفصول": context.push(AppRoutes.adminClassrooms)  ← صحيح
 /// - بطاقة "الاختبارات": context.push(AppRoutes.teacherAssessments)  ← صحيح
 class BentoCardNavigation {
+  BentoCardNavigation({required this.route, this.extra});
   final String route;
   final Map<String, dynamic>? extra;
-
-  BentoCardNavigation({required this.route, this.extra});
 
   /// السلوك الحالي الصحيح لبطاقة "الفصول"
   /// الكود: onTap: () => context.push(AppRoutes.adminClassrooms)
   static BentoCardNavigation classroomsCard() =>
-      BentoCardNavigation(route: '/admin/classrooms', extra: null);
+      BentoCardNavigation(route: '/admin/classrooms');
 
   /// السلوك الحالي الصحيح لبطاقة "الاختبارات"
   /// الكود: onTap: () => context.push(AppRoutes.teacherAssessments)
   static BentoCardNavigation assessmentsCard() =>
-      BentoCardNavigation(route: '/teacher/assessments', extra: null);
+      BentoCardNavigation(route: '/teacher/assessments');
 }
 
 /// يُحاكي سلوك الروابط السريعة في AdminDashboardScreen.
 ///
 /// السلوك الصحيح الحالي لكل رابط سريع.
 class QuickLinkNavigation {
+  QuickLinkNavigation({required this.title, required this.route});
   final String title;
   final String route;
-
-  QuickLinkNavigation({required this.title, required this.route});
 
   static List<QuickLinkNavigation> allQuickLinks() => [
         QuickLinkNavigation(title: 'إدارة المستخدمين', route: '/admin/users'),
         QuickLinkNavigation(title: 'إدارة الفصول', route: '/admin/classrooms'),
         QuickLinkNavigation(title: 'تقارير المدرسة', route: '/admin/reports'),
-        QuickLinkNavigation(title: 'لوحة التحكم المتقدمة', route: '/admin/dashboard-v2'),
-        QuickLinkNavigation(title: 'لوحة المشرف المتقدمة', route: '/supervisor'),
-        QuickLinkNavigation(title: 'إعدادات المؤسسة', route: '/admin/institution-settings'),
+        QuickLinkNavigation(
+            title: 'لوحة التحكم المتقدمة', route: '/admin/dashboard-v2'),
+        QuickLinkNavigation(
+            title: 'لوحة المشرف المتقدمة', route: '/supervisor'),
+        QuickLinkNavigation(
+            title: 'إعدادات المؤسسة', route: '/admin/institution-settings'),
       ];
 }
 
@@ -154,7 +156,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // 3.1 — بطاقة "الفصول" تفتح AppRoutes.adminClassrooms بشكل صحيح
   // ---------------------------------------------------------------------------
-  group('Preservation 3.1 — "Classrooms" bento card navigates to adminClassrooms', () {
+  group(
+      'Preservation 3.1 — "Classrooms" bento card navigates to adminClassrooms',
+      () {
     /// **Validates: Requirements 3.1**
     ///
     /// السلوك المحفوظ:
@@ -169,7 +173,8 @@ void main() {
         expect(
           nav.route,
           equals('/admin/classrooms'),
-          reason: 'PRESERVED: "الفصول" card correctly navigates to adminClassrooms.',
+          reason:
+              'PRESERVED: "الفصول" card correctly navigates to adminClassrooms.',
         );
 
         print(
@@ -184,7 +189,8 @@ void main() {
     test(
       'PRESERVED: "الفصول" card route is exactly AppRoutes.adminClassrooms value',
       () {
-        const adminClassrooms = '/admin/classrooms'; // AppRoutes.adminClassrooms
+        const adminClassrooms =
+            '/admin/classrooms'; // AppRoutes.adminClassrooms
         final nav = BentoCardNavigation.classroomsCard();
 
         expect(nav.route, equals(adminClassrooms));
@@ -195,7 +201,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // 3.2 — بطاقة "الاختبارات" تفتح AppRoutes.teacherAssessments بشكل صحيح
   // ---------------------------------------------------------------------------
-  group('Preservation 3.2 — "Assessments" bento card navigates to teacherAssessments', () {
+  group(
+      'Preservation 3.2 — "Assessments" bento card navigates to teacherAssessments',
+      () {
     /// **Validates: Requirements 3.2**
     ///
     /// السلوك المحفوظ:
@@ -209,7 +217,8 @@ void main() {
         expect(
           nav.route,
           equals('/teacher/assessments'),
-          reason: 'PRESERVED: "الاختبارات" card correctly navigates to teacherAssessments.',
+          reason:
+              'PRESERVED: "الاختبارات" card correctly navigates to teacherAssessments.',
         );
 
         print(
@@ -223,7 +232,8 @@ void main() {
     test(
       'PRESERVED: "الاختبارات" card route is exactly AppRoutes.teacherAssessments value',
       () {
-        const teacherAssessments = '/teacher/assessments'; // AppRoutes.teacherAssessments
+        const teacherAssessments =
+            '/teacher/assessments'; // AppRoutes.teacherAssessments
         final nav = BentoCardNavigation.assessmentsCard();
 
         expect(nav.route, equals(teacherAssessments));
@@ -273,7 +283,8 @@ void main() {
       'PRESERVED: "إدارة المستخدمين" quick link navigates to /admin/users',
       () {
         final links = QuickLinkNavigation.allQuickLinks();
-        final usersLink = links.firstWhere((l) => l.title == 'إدارة المستخدمين');
+        final usersLink =
+            links.firstWhere((l) => l.title == 'إدارة المستخدمين');
 
         expect(usersLink.route, equals('/admin/users'));
       },
@@ -283,7 +294,8 @@ void main() {
       'PRESERVED: "إدارة الفصول" quick link navigates to /admin/classrooms',
       () {
         final links = QuickLinkNavigation.allQuickLinks();
-        final classroomsLink = links.firstWhere((l) => l.title == 'إدارة الفصول');
+        final classroomsLink =
+            links.firstWhere((l) => l.title == 'إدارة الفصول');
 
         expect(classroomsLink.route, equals('/admin/classrooms'));
       },
@@ -293,7 +305,8 @@ void main() {
       'PRESERVED: "تقارير المدرسة" quick link navigates to /admin/reports',
       () {
         final links = QuickLinkNavigation.allQuickLinks();
-        final reportsLink = links.firstWhere((l) => l.title == 'تقارير المدرسة');
+        final reportsLink =
+            links.firstWhere((l) => l.title == 'تقارير المدرسة');
 
         expect(reportsLink.route, equals('/admin/reports'));
       },
@@ -326,7 +339,8 @@ void main() {
         expect(
           button.navigatedRoute,
           equals('/teacher/settings'),
-          reason: 'PRESERVED: Settings button navigates to AppRoutes.teacherSettings.',
+          reason:
+              'PRESERVED: Settings button navigates to AppRoutes.teacherSettings.',
         );
 
         print(
@@ -341,7 +355,8 @@ void main() {
     test(
       'PRESERVED: settings route is exactly AppRoutes.teacherSettings value',
       () {
-        const teacherSettings = '/teacher/settings'; // AppRoutes.teacherSettings
+        const teacherSettings =
+            '/teacher/settings'; // AppRoutes.teacherSettings
         final button = AppBarSettingsButton();
         button.simulatePress();
 
@@ -381,7 +396,8 @@ void main() {
         expect(
           logout.isGoNavigation,
           isTrue,
-          reason: 'PRESERVED: Uses context.go (not context.push) to replace the stack.',
+          reason:
+              'PRESERVED: Uses context.go (not context.push) to replace the stack.',
         );
 
         print(
@@ -409,7 +425,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // 3.6 — "تعديل الملف الشخصي" للمعلم/الطالب يعرض bottom sheet
   // ---------------------------------------------------------------------------
-  group('Preservation 3.6 — "Edit profile" shows bottom sheet for teacher/student', () {
+  group(
+      'Preservation 3.6 — "Edit profile" shows bottom sheet for teacher/student',
+      () {
     /// **Validates: Requirements 3.6**
     ///
     /// السلوك المحفوظ:
@@ -432,7 +450,8 @@ void main() {
         expect(
           editProfile.navigationOccurred,
           isFalse,
-          reason: 'PRESERVED: No navigation occurs — bottom sheet is shown in-place.',
+          reason:
+              'PRESERVED: No navigation occurs — bottom sheet is shown in-place.',
         );
         expect(
           editProfile.dialogShown,
@@ -480,7 +499,8 @@ void main() {
   // ---------------------------------------------------------------------------
   // 3.7 — "بدء محادثة فورية" يفتح dialog
   // ---------------------------------------------------------------------------
-  group('Preservation 3.7 — "Start instant chat" shows dialog in SupportScreen', () {
+  group('Preservation 3.7 — "Start instant chat" shows dialog in SupportScreen',
+      () {
     /// **Validates: Requirements 3.7**
     ///
     /// السلوك المحفوظ:
@@ -542,7 +562,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // 3.8 — "عرض جميع الفصول" في SchoolReportsScreen يفتح /admin/classrooms
   // ---------------------------------------------------------------------------
-  group('Preservation 3.8 — "View all classrooms" in SchoolReportsScreen navigates correctly', () {
+  group(
+      'Preservation 3.8 — "View all classrooms" in SchoolReportsScreen navigates correctly',
+      () {
     /// **Validates: Requirements 3.8**
     ///
     /// السلوك المحفوظ:
@@ -565,7 +587,8 @@ void main() {
         expect(
           viewAll.navigatedRoute,
           equals('/admin/classrooms'),
-          reason: 'PRESERVED: "عرض جميع الفصول" navigates to /admin/classrooms.',
+          reason:
+              'PRESERVED: "عرض جميع الفصول" navigates to /admin/classrooms.',
         );
 
         print(
@@ -580,7 +603,8 @@ void main() {
     test(
       'PRESERVED: "عرض جميع الفصول" route matches AppRoutes.adminClassrooms',
       () {
-        const adminClassrooms = '/admin/classrooms'; // AppRoutes.adminClassrooms
+        const adminClassrooms =
+            '/admin/classrooms'; // AppRoutes.adminClassrooms
         final viewAll = ViewAllClassroomsBehavior();
         viewAll.simulateViewAllClassroomsTap();
 
@@ -600,7 +624,8 @@ void main() {
           'id': '3.1',
           'description': 'بطاقة "الفصول" تفتح AppRoutes.adminClassrooms',
           'file': 'admin_dashboard_screen.dart',
-          'current_code': 'onTap: () => context.push(AppRoutes.adminClassrooms)',
+          'current_code':
+              'onTap: () => context.push(AppRoutes.adminClassrooms)',
           'expected_route': '/admin/classrooms',
           'status': 'PRESERVED ✓',
         },
@@ -608,7 +633,8 @@ void main() {
           'id': '3.2',
           'description': 'بطاقة "الاختبارات" تفتح AppRoutes.teacherAssessments',
           'file': 'admin_dashboard_screen.dart',
-          'current_code': 'onTap: () => context.push(AppRoutes.teacherAssessments)',
+          'current_code':
+              'onTap: () => context.push(AppRoutes.teacherAssessments)',
           'expected_route': '/teacher/assessments',
           'status': 'PRESERVED ✓',
         },
@@ -624,7 +650,8 @@ void main() {
           'id': '3.4',
           'description': 'زر الإعدادات في AppBar يفتح SettingsScreen',
           'file': 'admin_dashboard_screen.dart',
-          'current_code': 'onPressed: () => context.push(AppRoutes.teacherSettings)',
+          'current_code':
+              'onPressed: () => context.push(AppRoutes.teacherSettings)',
           'expected_route': '/teacher/settings',
           'status': 'PRESERVED ✓',
         },
@@ -648,13 +675,15 @@ void main() {
           'id': '3.7',
           'description': '"بدء محادثة فورية" يفتح dialog',
           'file': 'support_screen.dart',
-          'current_code': 'showDialog(context: context, builder: (ctx) => AlertDialog(...))',
+          'current_code':
+              'showDialog(context: context, builder: (ctx) => AlertDialog(...))',
           'expected_route': 'N/A (dialog, no navigation)',
           'status': 'PRESERVED ✓',
         },
         {
           'id': '3.8',
-          'description': '"عرض جميع الفصول" في SchoolReportsScreen يفتح /admin/classrooms',
+          'description':
+              '"عرض جميع الفصول" في SchoolReportsScreen يفتح /admin/classrooms',
           'file': 'school_reports_screen.dart',
           'current_code': "context.push('/admin/classrooms')",
           'expected_route': '/admin/classrooms',
@@ -668,7 +697,7 @@ void main() {
         expect(behavior['status'], contains('PRESERVED'));
       }
 
-      print('\n' + '=' * 60);
+      print('\n${'=' * 60}');
       print('Admin Panel Behavior Preservation — All 8 Behaviors');
       print('=' * 60);
       for (final b in preservedBehaviors) {
@@ -678,7 +707,7 @@ void main() {
         print('  route: ${b['expected_route']}');
         print('  status: ${b['status']}');
       }
-      print('\n' + '=' * 60 + '\n');
+      print('\n${'=' * 60}\n');
     });
   });
 }

@@ -17,8 +17,7 @@ class StudentProgressScreen extends ConsumerStatefulWidget {
       _StudentProgressScreenState();
 }
 
-class _StudentProgressScreenState
-    extends ConsumerState<StudentProgressScreen> {
+class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
   bool _isLoading = true;
   int _totalPoints = 0;
   double _masteryPercent = 0;
@@ -50,9 +49,8 @@ class _StudentProgressScreenState
       final scores = history
           .map((h) => (h['scorePercentage'] as num?)?.toDouble() ?? 0.0)
           .toList();
-      final avg = scores.isEmpty
-          ? 0.0
-          : scores.reduce((a, b) => a + b) / scores.length;
+      final avg =
+          scores.isEmpty ? 0.0 : scores.reduce((a, b) => a + b) / scores.length;
 
       if (mounted) {
         setState(() {
@@ -90,7 +88,7 @@ class _StudentProgressScreenState
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final firstName = user?.fullName?.split(' ').first ?? 'طالب';
+    final firstName = user?.fullName.split(' ').first ?? 'طالب';
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -113,13 +111,12 @@ class _StudentProgressScreenState
                   IconButton(
                     icon: const Icon(Icons.notifications_outlined),
                     color: AppColors.onSurfaceVariant,
-                    onPressed: () =>
-                        context.push('/student/notifications'),
+                    onPressed: () => context.push('/student/notifications'),
                   ),
                   // App name + avatar (RTL: right)
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'التقييم الذكي',
                         style: TextStyle(
                           fontSize: 18,
@@ -134,10 +131,10 @@ class _StudentProgressScreenState
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.surfaceContainer,
-                          border: Border.all(
-                              color: AppColors.primary, width: 2),
+                          border:
+                              Border.all(color: AppColors.primary, width: 2),
                         ),
-                        child: ClipOval(
+                        child: const ClipOval(
                           child: Icon(
                             Icons.person_rounded,
                             color: AppColors.primary,
@@ -184,329 +181,319 @@ class _StudentProgressScreenState
           ],
         ),
       ),
-      bottomNavigationBar:
-          const AppBottomNav(currentIndex: 2, role: 'student'),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 2, role: 'student'),
     );
   }
 
   // ─── Welcome + Streak ────────────────────────────────────────────────────
 
-  Widget _buildWelcomeStreak(String firstName) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        // Streak badge (RTL: left)
-        Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.local_fire_department_rounded,
-                  color: Colors.orange, size: 20),
-              const SizedBox(width: 6),
-              const Text(
-                '15 يوم',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Greeting (RTL: right)
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              'أهلاً بك، $firstName! 👋',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF00288E),
-              ),
-            ),
-            Text(
-              'أنت تبلي بلاءً حسناً اليوم.',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  // ─── Motivational Card ───────────────────────────────────────────────────
-
-  Widget _buildMotivationalCard() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.primaryContainer,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryContainer.withOpacity(0.3),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Stack(
+  Widget _buildWelcomeStreak(String firstName) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // Decorative icon
-          Positioned(
-            left: -8,
-            bottom: -8,
-            child: Icon(
-              Icons.auto_awesome_rounded,
-              size: 100,
-              color: Colors.white.withOpacity(0.10),
+          // Streak badge (RTL: left)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Row(
+              children: [
+                Icon(Icons.local_fire_department_rounded,
+                    color: Colors.orange, size: 20),
+                SizedBox(width: 6),
+                Text(
+                  '15 يوم',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1B22),
+                  ),
+                ),
+              ],
             ),
           ),
+          // Greeting (RTL: right)
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Text(
-                '"العلم يرفع بيوتاً لا عماد لها"',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.right,
-              ),
-              const SizedBox(height: 8),
               Text(
-                'استمر في التقدم، لقد أنجزت 80% من هدفك الأسبوعي!',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.90),
-                  fontSize: 12,
-                  height: 1.5,
+                'أهلاً بك، $firstName! 👋',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF00288E),
                 ),
-                textAlign: TextAlign.right,
+              ),
+              const Text(
+                'أنت تبلي بلاءً حسناً اليوم.',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.onSurfaceVariant,
+                ),
               ),
             ],
           ),
         ],
-      ),
-    );
-  }
+      );
+
+  // ─── Motivational Card ───────────────────────────────────────────────────
+
+  Widget _buildMotivationalCard() => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColors.primaryContainer,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primaryContainer.withValues(alpha: 0.3),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Decorative icon
+            Positioned(
+              left: -8,
+              bottom: -8,
+              child: Icon(
+                Icons.auto_awesome_rounded,
+                size: 100,
+                color: Colors.white.withValues(alpha: 0.10),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Text(
+                  '"العلم يرفع بيوتاً لا عماد لها"',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'استمر في التقدم، لقد أنجزت 80% من هدفك الأسبوعي!',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.90),
+                    fontSize: 12,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
 
   // ─── Progress Overview Grid ──────────────────────────────────────────────
 
-  Widget _buildProgressGrid() {
-    return Row(
-      children: [
-        // Mastery circular indicator (RTL: left)
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.outlineVariant),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 72,
-                  height: 72,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 72,
-                        height: 72,
-                        child: CircularProgressIndicator(
-                          value: (_masteryPercent / 100).clamp(0.0, 1.0),
-                          strokeWidth: 7,
-                          backgroundColor: AppColors.surfaceContainer,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.primaryContainer),
-                        ),
-                      ),
-                      Text(
-                        '${_masteryPercent.round()}%',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF00288E),
-                        ),
-                      ),
-                    ],
+  Widget _buildProgressGrid() => Row(
+        children: [
+          // Mastery circular indicator (RTL: left)
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.outlineVariant),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'الإتقان العام',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        // Points card (RTL: right)
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.outlineVariant),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainer,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.military_tech_rounded,
-                    color: AppColors.primary,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _isLoading ? '...' : '$_totalPoints',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF00288E),
-                  ),
-                ),
-                Text(
-                  'نقطة تميز',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ─── Weekly Growth Chart ─────────────────────────────────────────────────
-
-  Widget _buildWeeklyChart() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(right: 4, bottom: 12),
-          child: Text(
-            'منحنى التطور',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF00288E),
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.outlineVariant),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+                ],
               ),
-            ],
-          ),
-          child: SizedBox(
-            height: 120,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(_weeklyData.length, (i) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 72,
+                    height: 72,
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: FractionallySizedBox(
-                              heightFactor: _weeklyData[i],
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryContainer,
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(6),
-                                  ),
-                                ),
-                              ),
-                            ),
+                        SizedBox(
+                          width: 72,
+                          height: 72,
+                          child: CircularProgressIndicator(
+                            value: (_masteryPercent / 100).clamp(0.0, 1.0),
+                            strokeWidth: 7,
+                            backgroundColor: AppColors.surfaceContainer,
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                AppColors.primaryContainer),
                           ),
                         ),
-                        const SizedBox(height: 6),
                         Text(
-                          _weekDays[i],
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: AppColors.outline,
+                          '${_masteryPercent.round()}%',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF00288E),
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
-              }),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'الإتقان العام',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(width: 12),
+          // Points card (RTL: right)
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.outlineVariant),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      color: AppColors.surfaceContainer,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.military_tech_rounded,
+                      color: AppColors.primary,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _isLoading ? '...' : '$_totalPoints',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF00288E),
+                    ),
+                  ),
+                  const Text(
+                    'نقطة تميز',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
+  // ─── Weekly Growth Chart ─────────────────────────────────────────────────
+
+  Widget _buildWeeklyChart() => Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(right: 4, bottom: 12),
+            child: Text(
+              'منحنى التطور',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF00288E),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.outlineVariant),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: SizedBox(
+              height: 120,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: List.generate(
+                    _weeklyData.length,
+                    (i) => Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: FractionallySizedBox(
+                                      heightFactor: _weeklyData[i],
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: AppColors.primaryContainer,
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(6),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  _weekDays[i],
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: AppColors.outline,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )),
+              ),
+            ),
+          ),
+        ],
+      );
 
   // ─── Badges Section ──────────────────────────────────────────────────────
 
@@ -599,16 +586,14 @@ class _StudentProgressScreenState
                 padding: EdgeInsets.all(16),
                 child: Text(
                   'جميع الأوسمة',
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                 ),
               ),
               Expanded(
                 child: GridView.builder(
                   controller: controller,
                   padding: const EdgeInsets.all(16),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 16,
@@ -629,7 +614,7 @@ class _StudentProgressScreenState
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: earned
-                                  ? color.withOpacity(0.15)
+                                  ? color.withValues(alpha: 0.15)
                                   : Colors.grey[100],
                             ),
                             child: Icon(
@@ -644,15 +629,13 @@ class _StudentProgressScreenState
                           Text(
                             badge['label'] as String,
                             style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600),
+                                fontSize: 12, fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                           Text(
                             badge['desc'] as String,
                             style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey[600]),
+                                fontSize: 10, color: Colors.grey[600]),
                             textAlign: TextAlign.center,
                             maxLines: 2,
                           ),
@@ -671,9 +654,24 @@ class _StudentProgressScreenState
 
   Widget _buildBadgesSection() {
     final badges = [
-      {'icon': Icons.workspace_premium_rounded, 'label': 'المنضبط', 'earned': true, 'color': Colors.amber},
-      {'icon': Icons.rocket_launch_rounded, 'label': 'المنطلق', 'earned': true, 'color': Colors.blue},
-      {'icon': Icons.psychology_rounded, 'label': 'المثابر', 'earned': false, 'color': Colors.grey},
+      {
+        'icon': Icons.workspace_premium_rounded,
+        'label': 'المنضبط',
+        'earned': true,
+        'color': Colors.amber
+      },
+      {
+        'icon': Icons.rocket_launch_rounded,
+        'label': 'المنطلق',
+        'earned': true,
+        'color': Colors.blue
+      },
+      {
+        'icon': Icons.psychology_rounded,
+        'label': 'المثابر',
+        'earned': false,
+        'color': Colors.grey
+      },
     ];
 
     return Column(
@@ -689,7 +687,7 @@ class _StudentProgressScreenState
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: Text(
+              child: const Text(
                 'عرض الكل',
                 style: TextStyle(
                   color: AppColors.primary,
@@ -732,7 +730,7 @@ class _StudentProgressScreenState
                   boxShadow: earned
                       ? [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
+                            color: Colors.black.withValues(alpha: 0.04),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -748,7 +746,7 @@ class _StudentProgressScreenState
                         height: 48,
                         decoration: BoxDecoration(
                           color: earned
-                              ? color.withOpacity(0.15)
+                              ? color.withValues(alpha: 0.15)
                               : AppColors.surfaceContainer,
                           shape: BoxShape.circle,
                         ),
@@ -761,7 +759,7 @@ class _StudentProgressScreenState
                       const SizedBox(height: 8),
                       Text(
                         label,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: AppColors.onSurface,
@@ -781,134 +779,130 @@ class _StudentProgressScreenState
 
   // ─── Leaderboard ─────────────────────────────────────────────────────────
 
-  Widget _buildLeaderboard() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(right: 4, bottom: 12),
-          child: Text(
-            'لوحة المتصدرين',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF00288E),
+  Widget _buildLeaderboard() => Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(right: 4, bottom: 12),
+            child: Text(
+              'لوحة المتصدرين',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF00288E),
+              ),
             ),
           ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.outlineVariant),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            children: _leaderboard.asMap().entries.map((entry) {
-              final i = entry.key;
-              final item = entry.value;
-              final isMe = item['isMe'] as bool;
-              final isLast = i == _leaderboard.length - 1;
-
-              return Container(
-                decoration: BoxDecoration(
-                  color: isMe
-                      ? AppColors.primaryContainer.withOpacity(0.05)
-                      : Colors.transparent,
-                  border: !isLast
-                      ? const Border(
-                          bottom: BorderSide(
-                              color: Color(0xFFF1F0FA), width: 1))
-                      : null,
-                  borderRadius: BorderRadius.vertical(
-                    top: i == 0 ? const Radius.circular(16) : Radius.zero,
-                    bottom: isLast ? const Radius.circular(16) : Radius.zero,
-                  ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.outlineVariant),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Points (RTL: left)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${item['points']}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: isMe
-                                  ? AppColors.primary
-                                  : AppColors.onSurface,
-                            ),
-                          ),
-                          if (isMe)
-                            const Text(
-                              '↑ 2 مركز',
+              ],
+            ),
+            child: Column(
+              children: _leaderboard.asMap().entries.map((entry) {
+                final i = entry.key;
+                final item = entry.value;
+                final isMe = item['isMe'] as bool;
+                final isLast = i == _leaderboard.length - 1;
+
+                return Container(
+                  decoration: BoxDecoration(
+                    color: isMe
+                        ? AppColors.primaryContainer.withValues(alpha: 0.05)
+                        : Colors.transparent,
+                    border: !isLast
+                        ? const Border(
+                            bottom: BorderSide(color: Color(0xFFF1F0FA)))
+                        : null,
+                    borderRadius: BorderRadius.vertical(
+                      top: i == 0 ? const Radius.circular(16) : Radius.zero,
+                      bottom: isLast ? const Radius.circular(16) : Radius.zero,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Points (RTL: left)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${item['points']}',
                               style: TextStyle(
-                                fontSize: 10,
-                                color: Color(0xFF047857),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: isMe
+                                    ? AppColors.primary
+                                    : AppColors.onSurface,
                               ),
                             ),
-                        ],
-                      ),
-                      // Name + avatar (RTL: right)
-                      Row(
-                        children: [
-                          Text(
-                            isMe
-                                ? 'أنت (${item['name']})'
-                                : item['name'] as String,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: isMe
-                                  ? FontWeight.w700
-                                  : FontWeight.w400,
-                              color: isMe
-                                  ? AppColors.primary
-                                  : AppColors.onSurface,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Container(
-                            width: 32,
-                            height: 32,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.surfaceContainer,
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${item['rank']}',
+                            if (isMe)
+                              const Text(
+                                '↑ 2 مركز',
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: isMe
-                                      ? AppColors.primary
-                                      : AppColors.outline,
+                                  fontSize: 10,
+                                  color: Color(0xFF047857),
+                                ),
+                              ),
+                          ],
+                        ),
+                        // Name + avatar (RTL: right)
+                        Row(
+                          children: [
+                            Text(
+                              isMe
+                                  ? 'أنت (${item['name']})'
+                                  : item['name'] as String,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight:
+                                    isMe ? FontWeight.w700 : FontWeight.w400,
+                                color: isMe
+                                    ? AppColors.primary
+                                    : AppColors.onSurface,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.surfaceContainer,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${item['rank']}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: isMe
+                                        ? AppColors.primary
+                                        : AppColors.outline,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }

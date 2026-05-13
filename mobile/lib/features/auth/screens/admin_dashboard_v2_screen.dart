@@ -58,157 +58,153 @@ class _AdminDashboardV2ScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.surface,
-      body: CustomScrollView(
-        slivers: [
-          // ─── App Bar ──────────────────────────────────────────────────
-          SliverAppBar(
-            floating: true,
-            snap: true,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            scrolledUnderElevation: 1,
-            automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Search + Notifications (RTL: left)
-                Row(
-                  children: [
-                    Stack(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.notifications_outlined),
-                          color: AppColors.onSurfaceVariant,
-                          onPressed: () => context.push('/notifications'),
-                        ),
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: AppColors.error,
-                              shape: BoxShape.circle,
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: AppColors.surface,
+        body: CustomScrollView(
+          slivers: [
+            // ─── App Bar ──────────────────────────────────────────────────
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              scrolledUnderElevation: 1,
+              automaticallyImplyLeading: false,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Search + Notifications (RTL: left)
+                  Row(
+                    children: [
+                      Stack(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.notifications_outlined),
+                            color: AppColors.onSurfaceVariant,
+                            onPressed: () => context.push('/notifications'),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                color: AppColors.error,
+                                shape: BoxShape.circle,
+                              ),
                             ),
                           ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.search),
+                        color: AppColors.onSurfaceVariant,
+                        onPressed: () => context.push('/admin/users'),
+                      ),
+                      const AdminTopActions(),
+                    ],
+                  ),
+                  // Logo + avatar (RTL: right)
+                  Row(
+                    children: [
+                      const Text(
+                        'EduAssess',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primaryContainer,
+                          fontFamily: 'Lexend',
                         ),
-                      ],
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      color: AppColors.onSurfaceVariant,
-                      onPressed: () => context.push('/admin/users'),
-                    ),
-                    const AdminTopActions(),
-                  ],
-                ),
-                // Logo + avatar (RTL: right)
-                Row(
-                  children: [
-                    Text(
-                      'EduAssess',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primaryContainer,
-                        fontFamily: 'Lexend',
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primaryContainer,
-                        border: Border.all(color: AppColors.outlineVariant),
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primaryContainer,
+                          border: Border.all(color: AppColors.outlineVariant),
+                        ),
+                        child: const Icon(
+                          Icons.person,
+                          size: 22,
+                          color: Colors.white,
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.person,
-                        size: 22,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // ─── Content ──────────────────────────────────────────────────
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                // Header
-                _buildHeader(),
-                const SizedBox(height: 24),
+            // ─── Content ──────────────────────────────────────────────────
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  // Header
+                  _buildHeader(),
+                  const SizedBox(height: 24),
 
-                // Stats Bento Grid
-                _buildStatsBentoGrid(),
-                const SizedBox(height: 24),
+                  // Stats Bento Grid
+                  _buildStatsBentoGrid(),
+                  const SizedBox(height: 24),
 
-                // Subject Performance Chart
-                _buildSubjectPerformanceChart(),
-                const SizedBox(height: 24),
+                  // Subject Performance Chart
+                  _buildSubjectPerformanceChart(),
+                  const SizedBox(height: 24),
 
-                // Top Teachers
-                _buildTopTeachers(),
-                const SizedBox(height: 24),
+                  // Top Teachers
+                  _buildTopTeachers(),
+                  const SizedBox(height: 24),
 
-                // Admin Alerts
-                _buildAdminAlerts(),
-                const SizedBox(height: 24),
+                  // Admin Alerts
+                  _buildAdminAlerts(),
+                  const SizedBox(height: 24),
 
-                // Quick Access
-                _buildQuickAccess(),
-              ]),
+                  // Quick Access
+                  _buildQuickAccess(),
+                ]),
+              ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/admin/users'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add),
-      ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 0, role: 'admin'),
-    );
-  }
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => context.push('/admin/users'),
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add),
+        ),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 0, role: 'admin'),
+      );
 
   // ─── Header ──────────────────────────────────────────────────────────────
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          'لوحة تحكم المشرف',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
+  Widget _buildHeader() => const Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            'لوحة تحكم المشرف',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary,
+            ),
+            textAlign: TextAlign.right,
           ),
-          textAlign: TextAlign.right,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'مرحباً بك مجدداً، إليك ملخص أداء المدرسة اليوم.',
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.onSurfaceVariant,
+          SizedBox(height: 4),
+          Text(
+            'مرحباً بك مجدداً، إليك ملخص أداء المدرسة اليوم.',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.right,
           ),
-          textAlign: TextAlign.right,
-        ),
-      ],
-    );
-  }
+        ],
+      );
 
   // ─── Stats Bento Grid ────────────────────────────────────────────────────
 
@@ -287,101 +283,101 @@ class _AdminDashboardV2ScreenState
     bool showCircularProgress = false,
     double progressValue = 0,
     VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (showCircularProgress)
-                  SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: CircularProgressIndicator(
-                      value: progressValue,
-                      strokeWidth: 4,
-                      backgroundColor: const Color(0xFFF1F5F9),
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(AppColors.primary),
-                    ),
-                  )
-                else if (badge != null)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: (badgeColor ?? Colors.green).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(
-                      badge,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: badgeColor ?? Colors.green,
+  }) =>
+      GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (showCircularProgress)
+                    SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        value: progressValue,
+                        strokeWidth: 4,
+                        backgroundColor: const Color(0xFFF1F5F9),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            AppColors.primary),
                       ),
+                    )
+                  else if (badge != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color:
+                            (badgeColor ?? Colors.green).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        badge,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: badgeColor ?? Colors.green,
+                        ),
+                      ),
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: iconBg,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  )
-                else
-                  const SizedBox.shrink(),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: iconBg,
-                    borderRadius: BorderRadius.circular(8),
+                    child: Icon(icon, size: 20, color: iconColor),
                   ),
-                  child: Icon(icon, size: 20, color: iconColor),
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.onSurfaceVariant,
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.right,
                   ),
-                  textAlign: TextAlign.right,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary,
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.right,
                   ),
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   // ─── Subject Performance Chart ───────────────────────────────────────────
 
@@ -402,7 +398,7 @@ class _AdminDashboardV2ScreenState
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -423,7 +419,7 @@ class _AdminDashboardV2ScreenState
                   color: AppColors.surfaceContainer,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(
+                child: const Text(
                   'الفصل الدراسي الحالي',
                   style: TextStyle(
                     fontSize: 12,
@@ -431,9 +427,9 @@ class _AdminDashboardV2ScreenState
                   ),
                 ),
               ),
-              Text(
+              const Text(
                 'أداء المواد الدراسية',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF1A1B22),
@@ -476,7 +472,7 @@ class _AdminDashboardV2ScreenState
                                 color: isHighest
                                     ? AppColors.primaryContainer
                                     : AppColors.primaryContainer
-                                        .withOpacity(0.2),
+                                        .withValues(alpha: 0.2),
                                 borderRadius: const BorderRadius.vertical(
                                   top: Radius.circular(6),
                                 ),
@@ -487,7 +483,7 @@ class _AdminDashboardV2ScreenState
                         const SizedBox(height: 8),
                         Text(
                           label,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
                             color: AppColors.onSurfaceVariant,
                           ),
@@ -533,7 +529,7 @@ class _AdminDashboardV2ScreenState
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -550,9 +546,9 @@ class _AdminDashboardV2ScreenState
                 child: const Text('عرض الكل',
                     style: TextStyle(color: AppColors.primary, fontSize: 13)),
               ),
-              Text(
+              const Text(
                 'المعلمون المتميزون (هذا الشهر)',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF1A1B22),
@@ -562,86 +558,84 @@ class _AdminDashboardV2ScreenState
             ],
           ),
           const SizedBox(height: 16),
-          ...teachers.map((t) => _buildTeacherRow(t)),
+          ...teachers.map(_buildTeacherRow),
         ],
       ),
     );
   }
 
-  Widget _buildTeacherRow(Map<String, dynamic> teacher) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          // Rating (RTL: left)
-          Row(
-            children: [
-              Text(
-                teacher['rating'] as String,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFFF59E0B),
-                ),
-              ),
-              const SizedBox(width: 4),
-              const Icon(Icons.star, size: 20, color: Color(0xFFF59E0B)),
-            ],
-          ),
-          const SizedBox(width: 16),
-          // Info (RTL: right)
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+  Widget _buildTeacherRow(Map<String, dynamic> teacher) => Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            // Rating (RTL: left)
+            Row(
               children: [
                 Text(
-                  teacher['name'] as String,
+                  teacher['rating'] as String,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFF59E0B),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const Icon(Icons.star, size: 20, color: Color(0xFFF59E0B)),
+              ],
+            ),
+            const SizedBox(width: 16),
+            // Info (RTL: right)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    teacher['name'] as String,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF1A1B22),
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                  Text(
+                    teacher['role'] as String,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            // Avatar (RTL: rightmost)
+            Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.surfaceContainer,
+              ),
+              child: Center(
+                child: Text(
+                  teacher['initials'] as String,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1A1B22),
+                    color: AppColors.primary,
                   ),
-                  textAlign: TextAlign.right,
-                ),
-                Text(
-                  teacher['role'] as String,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 16),
-          // Avatar (RTL: rightmost)
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.surfaceContainer,
-            ),
-            child: Center(
-              child: Text(
-                teacher['initials'] as String,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   // ─── Admin Alerts ────────────────────────────────────────────────────────
 
@@ -672,7 +666,7 @@ class _AdminDashboardV2ScreenState
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -681,23 +675,23 @@ class _AdminDashboardV2ScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 'تنبيهات الإدارة',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF1A1B22),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Icon(Icons.campaign, color: AppColors.error),
             ],
           ),
           const SizedBox(height: 16),
-          ...alerts.map((a) => _buildAlertItem(a)),
+          ...alerts.map(_buildAlertItem),
         ],
       ),
     );
@@ -710,7 +704,7 @@ class _AdminDashboardV2ScreenState
 
     switch (alert['type']) {
       case 'error':
-        bgColor = AppColors.errorContainer.withOpacity(0.2);
+        bgColor = AppColors.errorContainer.withValues(alpha: 0.2);
         borderColor = AppColors.error;
         titleColor = AppColors.error;
         break;
@@ -720,7 +714,7 @@ class _AdminDashboardV2ScreenState
         titleColor = AppColors.primary;
         break;
       default:
-        bgColor = const Color(0xFFD0E1FB).withOpacity(0.2);
+        bgColor = const Color(0xFFD0E1FB).withValues(alpha: 0.2);
         borderColor = const Color(0xFF505F76);
         titleColor = const Color(0xFF54647A);
     }
@@ -763,7 +757,7 @@ class _AdminDashboardV2ScreenState
             const SizedBox(height: 4),
             Text(
               alert['body'] as String,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.onSurfaceVariant,
               ),
@@ -793,7 +787,7 @@ class _AdminDashboardV2ScreenState
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -802,9 +796,9 @@ class _AdminDashboardV2ScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(
+          const Text(
             'وصول سريع',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Color(0xFF1A1B22),

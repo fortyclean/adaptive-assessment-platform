@@ -14,13 +14,6 @@ class AuthUser {
     this.classroomIds = const [],
   });
 
-  final String id;
-  final String username;
-  final String fullName;
-  final String email;
-  final UserRole role;
-  final List<String> classroomIds;
-
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
         id: json['_id'] as String,
         username: json['username'] as String,
@@ -35,6 +28,13 @@ class AuthUser {
                 .toList() ??
             [],
       );
+
+  final String id;
+  final String username;
+  final String fullName;
+  final String email;
+  final UserRole role;
+  final List<String> classroomIds;
 
   Map<String, dynamic> toJson() => {
         '_id': id,

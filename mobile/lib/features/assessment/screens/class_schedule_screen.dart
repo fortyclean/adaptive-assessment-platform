@@ -70,235 +70,230 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        body: Column(
-          children: [
-            _buildHeader(),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
-                child: Column(
-                  children: [
-                    _buildWeeklyCalendar(),
-                    const SizedBox(height: 24),
-                    _buildTimeline(),
-                  ],
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF8FAFC),
+          body: Column(
+            children: [
+              _buildHeader(),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
+                  child: Column(
+                    children: [
+                      _buildWeeklyCalendar(),
+                      const SizedBox(height: 24),
+                      _buildTimeline(),
+                    ],
+                  ),
                 ),
+              ),
+            ],
+          ),
+          floatingActionButton: _buildFAB(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+          bottomNavigationBar: const AppBottomNav(
+            currentIndex: 1,
+            role: 'teacher',
+          ),
+        ),
+      );
+
+  // ─── Header ──────────────────────────────────────────────────────────────
+
+  Widget _buildHeader() => Container(
+        color: AppColors.surface,
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + 8,
+          bottom: 8,
+          right: 16,
+          left: 16,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: const Border(
+            bottom: BorderSide(color: AppColors.outlineVariant),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Avatar + Title (RTL: right side)
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.surfaceContainer,
+                    border: Border.all(color: AppColors.outlineVariant),
+                  ),
+                  child: const Icon(
+                    Icons.person_outline,
+                    color: AppColors.onSurfaceVariant,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  'الجداول الدراسية',
+                  style: TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+            // Menu button (RTL: left side)
+            IconButton(
+              icon: const Icon(Icons.menu_rounded),
+              color: AppColors.primary,
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('خيارات الجدول'),
+                      behavior: SnackBarBehavior.floating),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+
+  // ─── Weekly Calendar ─────────────────────────────────────────────────────
+
+  Widget _buildWeeklyCalendar() => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD0E1FB),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: const Text(
+                    'سبتمبر 2024',
+                    style: TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF54647A),
+                    ),
+                  ),
+                ),
+                const Text(
+                  'جدول الأسبوع',
+                  style: TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.onSurface,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              reverse: true, // RTL scroll
+              child: Row(
+                children: _days.asMap().entries.map((entry) {
+                  final i = entry.key;
+                  final day = entry.value;
+                  final isActive = i == _selectedDayIndex;
+                  return GestureDetector(
+                    onTap: () => setState(() => _selectedDayIndex = i),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: 64,
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        color: isActive ? AppColors.primary : Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: isActive
+                            ? null
+                            : Border.all(color: AppColors.outlineVariant),
+                        boxShadow: isActive
+                            ? [
+                                BoxShadow(
+                                  color:
+                                      AppColors.primary.withValues(alpha: 0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                            : null,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            day.name,
+                            style: TextStyle(
+                              fontFamily: 'Almarai',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: isActive
+                                  ? Colors.white.withValues(alpha: 0.85)
+                                  : AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            day.date,
+                            style: TextStyle(
+                              fontFamily: 'Almarai',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color:
+                                  isActive ? Colors.white : AppColors.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ],
         ),
-        floatingActionButton: _buildFAB(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        bottomNavigationBar: const AppBottomNav(
-          currentIndex: 1,
-          role: 'teacher',
-        ),
-      ),
-    );
-  }
-
-  // ─── Header ──────────────────────────────────────────────────────────────
-
-  Widget _buildHeader() {
-    return Container(
-      color: AppColors.surface,
-      padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top + 8,
-        bottom: 8,
-        right: 16,
-        left: 16,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(
-          bottom: BorderSide(color: AppColors.outlineVariant, width: 1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Avatar + Title (RTL: right side)
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.surfaceContainer,
-                  border: Border.all(color: AppColors.outlineVariant),
-                ),
-                child: const Icon(
-                  Icons.person_outline,
-                  color: AppColors.onSurfaceVariant,
-                  size: 22,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'الجداول الدراسية',
-                style: const TextStyle(
-                  fontFamily: 'Almarai',
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
-                ),
-              ),
-            ],
-          ),
-          // Menu button (RTL: left side)
-          IconButton(
-            icon: const Icon(Icons.menu_rounded),
-            color: AppColors.primary,
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('خيارات الجدول'), behavior: SnackBarBehavior.floating),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Weekly Calendar ─────────────────────────────────────────────────────
-
-  Widget _buildWeeklyCalendar() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFD0E1FB),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: const Text(
-                  'سبتمبر 2024',
-                  style: TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF54647A),
-                  ),
-                ),
-              ),
-              const Text(
-                'جدول الأسبوع',
-                style: TextStyle(
-                  fontFamily: 'Almarai',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.onSurface,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            reverse: true, // RTL scroll
-            child: Row(
-              children: _days.asMap().entries.map((entry) {
-                final i = entry.key;
-                final day = entry.value;
-                final isActive = i == _selectedDayIndex;
-                return GestureDetector(
-                  onTap: () => setState(() => _selectedDayIndex = i),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: 64,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: isActive ? AppColors.primary : Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: isActive
-                          ? null
-                          : Border.all(color: AppColors.outlineVariant),
-                      boxShadow: isActive
-                          ? [
-                              BoxShadow(
-                                color: AppColors.primary.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          day.name,
-                          style: TextStyle(
-                            fontFamily: 'Almarai',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: isActive
-                                ? Colors.white.withOpacity(0.85)
-                                : AppColors.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          day.date,
-                          style: TextStyle(
-                            fontFamily: 'Almarai',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: isActive
-                                ? Colors.white
-                                : AppColors.onSurface,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+      );
 
   // ─── Timeline ────────────────────────────────────────────────────────────
 
-  Widget _buildTimeline() {
-    return Column(
-      children: _schedule.map((item) => _buildTimelineItem(item)).toList(),
-    );
-  }
+  Widget _buildTimeline() => Column(
+        children: _schedule.map(_buildTimelineItem).toList(),
+      );
 
   Widget _buildTimelineItem(_ScheduleItem item) {
     if (item.isBreak) {
@@ -334,7 +329,6 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: AppColors.outlineVariant,
-                    style: BorderStyle.solid,
                   ),
                 ),
                 child: Center(
@@ -396,7 +390,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                 border: Border.all(color: AppColors.outlineVariant),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
+                    color: Colors.black.withValues(alpha: 0.04),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -494,49 +488,76 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
 
   // ─── FAB ─────────────────────────────────────────────────────────────────
 
-  Widget _buildFAB() {
-    return FloatingActionButton.extended(
-      onPressed: () => _showAddLessonDialog(),
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
-      elevation: 6,
-      icon: const Icon(Icons.edit_calendar_outlined),
-      label: const Text('إضافة / تعديل حصة', style: TextStyle(fontFamily: 'Almarai', fontSize: 16, fontWeight: FontWeight.w600)),
-    );
-  }
+  Widget _buildFAB() => FloatingActionButton.extended(
+        onPressed: _showAddLessonDialog,
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        elevation: 6,
+        icon: const Icon(Icons.edit_calendar_outlined),
+        label: const Text('إضافة / تعديل حصة',
+            style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 16,
+                fontWeight: FontWeight.w600)),
+      );
 
   void _showAddLessonDialog() {
     final subjectCtrl = TextEditingController();
     final teacherCtrl = TextEditingController();
     final locationCtrl = TextEditingController();
-    String selectedTime = '08:00';
-    final times = ['07:00', '08:00', '09:00', '09:30', '10:00', '11:00', '12:00', '12:30', '13:00', '14:00'];
+    var selectedTime = '08:00';
+    final times = [
+      '07:00',
+      '08:00',
+      '09:00',
+      '09:30',
+      '10:00',
+      '11:00',
+      '12:00',
+      '12:30',
+      '13:00',
+      '14:00'
+    ];
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setModalState) => Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-            left: 16, right: 16, top: 20,
+            left: 16,
+            right: 16,
+            top: 20,
           ),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+                Center(
+                    child: Container(
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                            color: AppColors.outlineVariant,
+                            borderRadius: BorderRadius.circular(2)))),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
+                    IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(ctx)),
                     Text(
                       'إضافة حصة - ${_days[_selectedDayIndex].name}',
-                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, fontFamily: 'Almarai'),
+                      style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Almarai'),
                     ),
                     const SizedBox(width: 40),
                   ],
@@ -549,7 +570,8 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   decoration: InputDecoration(
                     labelText: 'المادة الدراسية *',
                     prefixIcon: const Icon(Icons.book_outlined),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -560,7 +582,8 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   decoration: InputDecoration(
                     labelText: 'اسم المعلم',
                     prefixIcon: const Icon(Icons.person_outline),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -571,34 +594,53 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   decoration: InputDecoration(
                     labelText: 'القاعة / الموقع',
                     prefixIcon: const Icon(Icons.location_on_outlined),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
                 const SizedBox(height: 12),
                 // Time selector
-                const Text('وقت الحصة:', style: TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
+                const Text('وقت الحصة:',
+                    style: TextStyle(
+                        fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: times.map((t) => GestureDetector(
-                    onTap: () => setModalState(() => selectedTime = t),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: selectedTime == t ? AppColors.primary : Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: selectedTime == t ? AppColors.primary : AppColors.outlineVariant),
-                      ),
-                      child: Text(t, style: TextStyle(fontFamily: 'Almarai', color: selectedTime == t ? Colors.white : AppColors.onSurface, fontWeight: FontWeight.w600)),
-                    ),
-                  )).toList(),
+                  children: times
+                      .map((t) => GestureDetector(
+                            onTap: () => setModalState(() => selectedTime = t),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: selectedTime == t
+                                    ? AppColors.primary
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    color: selectedTime == t
+                                        ? AppColors.primary
+                                        : AppColors.outlineVariant),
+                              ),
+                              child: Text(t,
+                                  style: TextStyle(
+                                      fontFamily: 'Almarai',
+                                      color: selectedTime == t
+                                          ? Colors.white
+                                          : AppColors.onSurface,
+                                      fontWeight: FontWeight.w600)),
+                            ),
+                          ))
+                      .toList(),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () {
                     if (subjectCtrl.text.trim().isEmpty) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('يرجى إدخال اسم المادة'), behavior: SnackBarBehavior.floating));
+                      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+                          content: Text('يرجى إدخال اسم المادة'),
+                          behavior: SnackBarBehavior.floating));
                       return;
                     }
                     Navigator.pop(ctx);
@@ -606,8 +648,12 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                       _schedule.add(_ScheduleItem(
                         time: selectedTime,
                         subject: subjectCtrl.text.trim(),
-                        teacher: teacherCtrl.text.trim().isEmpty ? 'غير محدد' : teacherCtrl.text.trim(),
-                        location: locationCtrl.text.trim().isEmpty ? 'غير محدد' : locationCtrl.text.trim(),
+                        teacher: teacherCtrl.text.trim().isEmpty
+                            ? 'غير محدد'
+                            : teacherCtrl.text.trim(),
+                        location: locationCtrl.text.trim().isEmpty
+                            ? 'غير محدد'
+                            : locationCtrl.text.trim(),
                         tag: subjectCtrl.text.trim(),
                         accentColor: AppColors.primary,
                         tagBg: const Color(0xFFDDE1FF),
@@ -617,12 +663,22 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                       _schedule.sort((a, b) => a.time.compareTo(b.time));
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('✅ تمت إضافة حصة ${subjectCtrl.text.trim()}'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.success),
+                      SnackBar(
+                          content: Text(
+                              '✅ تمت إضافة حصة ${subjectCtrl.text.trim()}'),
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: AppColors.success),
                     );
                   },
                   icon: const Icon(Icons.add_rounded),
-                  label: const Text('إضافة الحصة', style: TextStyle(fontSize: 16, fontFamily: 'Almarai')),
-                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  label: const Text('إضافة الحصة',
+                      style: TextStyle(fontSize: 16, fontFamily: 'Almarai')),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
                 ),
                 const SizedBox(height: 8),
               ],

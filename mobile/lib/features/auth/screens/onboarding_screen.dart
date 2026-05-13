@@ -250,8 +250,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: slide.gradientStart
-                                    .withValues(alpha: 0.35),
+                                color:
+                                    slide.gradientStart.withValues(alpha: 0.35),
                                 blurRadius: 16,
                                 offset: const Offset(0, 6),
                               ),
@@ -337,114 +337,111 @@ class _OnboardingSlideWidget extends StatelessWidget {
   final _OnboardingSlide slide;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // ─── Illustration ───────────────────────────────────────────────
-          Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: slide.accentColor.withValues(alpha: 0.3),
-            ),
-            child: Center(
-              child: Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: slide.accentColor.withValues(alpha: 0.5),
-                ),
-                child: Center(
-                  child: Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          slide.gradientStart,
-                          slide.gradientEnd,
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // ─── Illustration ───────────────────────────────────────────────
+            Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: slide.accentColor.withValues(alpha: 0.3),
+              ),
+              child: Center(
+                child: Container(
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: slide.accentColor.withValues(alpha: 0.5),
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 96,
+                      height: 96,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            slide.gradientStart,
+                            slide.gradientEnd,
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: slide.gradientStart.withValues(alpha: 0.4),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
+                          ),
                         ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: slide.gradientStart.withValues(alpha: 0.4),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      slide.icon,
-                      size: 48,
-                      color: Colors.white,
+                      child: Icon(
+                        slide.icon,
+                        size: 48,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
 
-          const SizedBox(height: 48),
+            const SizedBox(height: 48),
 
-          // ─── Title ──────────────────────────────────────────────────────
-          Text(
-            slide.title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 30,
-              fontWeight: FontWeight.w800,
-              color: slide.gradientStart,
-              height: 1.2,
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          // ─── Subtitle ───────────────────────────────────────────────────
-          Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            decoration: BoxDecoration(
-              color: slide.accentColor.withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              slide.subtitle,
+            // ─── Title ──────────────────────────────────────────────────────
+            Text(
+              slide.title,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Almarai',
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
                 color: slide.gradientStart,
+                height: 1.2,
               ),
             ),
-          ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 10),
 
-          // ─── Description ────────────────────────────────────────────────
-          Text(
-            slide.description,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: AppColors.onSurfaceVariant,
-              height: 1.75,
+            // ─── Subtitle ───────────────────────────────────────────────────
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                color: slide.accentColor.withValues(alpha: 0.6),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                slide.subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Almarai',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: slide.gradientStart,
+                ),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+
+            const SizedBox(height: 24),
+
+            // ─── Description ────────────────────────────────────────────────
+            Text(
+              slide.description,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: AppColors.onSurfaceVariant,
+                height: 1.75,
+              ),
+            ),
+          ],
+        ),
+      );
 }

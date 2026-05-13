@@ -1,4 +1,4 @@
-﻿// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print
 
 /// Bug Condition Exploration Tests — admin-panel-bugs
 ///
@@ -8,6 +8,7 @@
 /// **Validates: Requirements 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9**
 ///
 /// بعد تطبيق الإصلاحات (المهمة 3)، يجب أن تنجح هذه الاختبارات.
+library;
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -28,12 +29,11 @@ import 'package:flutter_test/flutter_test.dart';
 /// ```
 /// الخطأ: لا استدعاء API، لا تحديث authProvider — الاسم يبقى كما هو.
 class BuggySettingsSaveBehavior {
+  BuggySettingsSaveBehavior(this.currentFullName);
   String currentFullName;
   bool snackBarShown = false;
   bool apiCalled = false;
   bool authProviderUpdated = false;
-
-  BuggySettingsSaveBehavior(this.currentFullName);
 
   /// يُحاكي الـ onPressed الحالي (الخاطئ)
   void simulateSavePressed(String newName) {
@@ -66,10 +66,9 @@ class BuggySettingsSaveBehavior {
 /// ```
 /// الخطأ: Container بدون GestureDetector — الضغط لا يفعل شيئاً.
 class BuggySupportCategoryBehavior {
+  BuggySupportCategoryBehavior({required this.hasGestureDetector});
   bool hasGestureDetector;
   bool tapResponseShown = false;
-
-  BuggySupportCategoryBehavior({required this.hasGestureDetector});
 
   /// يُحاكي الضغط على البطاقة
   void simulateTap() {
@@ -96,14 +95,13 @@ class BuggySupportCategoryBehavior {
 /// ```
 /// الخطأ: لا معامل extra — UserManagementScreen تفتح بدون تصفية.
 class BuggyBentoCardNavigation {
+  BuggyBentoCardNavigation({required this.route, this.extra});
   final String route;
   final Map<String, dynamic>? extra;
 
-  BuggyBentoCardNavigation({required this.route, this.extra});
-
   /// التنقل الحالي الخاطئ لبطاقة المعلمون
   static BuggyBentoCardNavigation teachersCardBuggy() =>
-      BuggyBentoCardNavigation(route: '/admin/users', extra: null);
+      BuggyBentoCardNavigation(route: '/admin/users');
 
   /// التنقل المُصلح لبطاقة المعلمون
   static BuggyBentoCardNavigation teachersCardFixed() =>
@@ -214,7 +212,8 @@ void main() {
         expect(
           behavior.currentFullName,
           equals(originalName),
-          reason: 'BUG CONFIRMED: Name stays "$originalName" despite saving "$newName".',
+          reason:
+              'BUG CONFIRMED: Name stays "$originalName" despite saving "$newName".',
         );
 
         print(
@@ -322,7 +321,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // الخطأ 3 — بطاقة "المعلمون" تتنقل بدون initialFilter
   // ---------------------------------------------------------------------------
-  group('Bug 3 — AdminDashboard: "Teachers" card navigates without initialFilter', () {
+  group(
+      'Bug 3 — AdminDashboard: "Teachers" card navigates without initialFilter',
+      () {
     /// المثال المضاد:
     /// المشرف يضغط على بطاقة "المعلمون"
     /// السلوك الحالي: context.push('/admin/users') مع extra=null
@@ -374,7 +375,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // الخطأ 4 — تنبيه "طلاب لم يؤدوا الاختبار" يعرض SnackBar فقط
   // ---------------------------------------------------------------------------
-  group('Bug 4 — "Absent students" alert does not navigate to UserManagementScreen', () {
+  group(
+      'Bug 4 — "Absent students" alert does not navigate to UserManagementScreen',
+      () {
     /// المثال المضاد:
     /// المشرف يضغط على تنبيه "طلاب لم يؤدوا الاختبار"
     /// السلوك الحالي: SnackBar يظهر، لا context.push
@@ -436,7 +439,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // الخطأ 5 — تنبيه "طلبات الانضمام" يتنقل بدون initialFilter: pending
   // ---------------------------------------------------------------------------
-  group('Bug 5 — "Join requests" alert navigates without initialFilter="pending"', () {
+  group(
+      'Bug 5 — "Join requests" alert navigates without initialFilter="pending"',
+      () {
     /// المثال المضاد:
     /// المشرف يضغط على تنبيه "طلبات انضمام جديدة"
     /// السلوك الحالي: context.push('/admin/users') مع extra=null
@@ -498,7 +503,9 @@ void main() {
   // ---------------------------------------------------------------------------
   // الخطأ 6 — تنبيه "انخفاض في الأداء" يتنقل بدون معاملات تصفية
   // ---------------------------------------------------------------------------
-  group('Bug 6 — "Performance drop" alert navigates without gradeLevel/subject params', () {
+  group(
+      'Bug 6 — "Performance drop" alert navigates without gradeLevel/subject params',
+      () {
     /// المثال المضاد:
     /// المشرف يضغط على تنبيه "انخفاض في الأداء" (رياضيات، الصف العاشر)
     /// السلوك الحالي: context.push('/admin/reports') مع extra=null
@@ -577,8 +584,10 @@ void main() {
           'file': 'settings_screen.dart',
           'location': 'Save button onPressed (both bottom sheets)',
           'counterexample': 'Admin enters new name, taps save',
-          'current_behavior': 'SnackBar shown, no API call, authProvider unchanged',
-          'expected_behavior': 'PATCH /users/:id called, authProvider.user.fullName updated',
+          'current_behavior':
+              'SnackBar shown, no API call, authProvider unchanged',
+          'expected_behavior':
+              'PATCH /users/:id called, authProvider.user.fullName updated',
           'requirement': '1.1, 1.2',
         },
         {
@@ -586,7 +595,8 @@ void main() {
           'file': 'support_screen.dart',
           'location': '_buildCategories() cards',
           'counterexample': 'User taps any category card',
-          'current_behavior': 'Nothing happens (Container without GestureDetector)',
+          'current_behavior':
+              'Nothing happens (Container without GestureDetector)',
           'expected_behavior': 'SnackBar or dialog shown with category name',
           'requirement': '1.3, 1.4',
         },
@@ -596,7 +606,8 @@ void main() {
           'location': '_BentoCard Teachers onTap',
           'counterexample': 'Admin taps Teachers card',
           'current_behavior': 'context.push(adminUsers) -- no extra',
-          'expected_behavior': 'context.push(adminUsers, extra: {initialFilter: teacher})',
+          'expected_behavior':
+              'context.push(adminUsers, extra: {initialFilter: teacher})',
           'requirement': '1.5',
         },
         {
@@ -605,7 +616,8 @@ void main() {
           'location': '_AlertCard absent students onTap',
           'counterexample': 'Admin taps absent students alert',
           'current_behavior': 'SnackBar shown only, no navigation',
-          'expected_behavior': 'context.push(adminUsers, extra: {initialFilter: student})',
+          'expected_behavior':
+              'context.push(adminUsers, extra: {initialFilter: student})',
           'requirement': '1.7',
         },
         {
@@ -614,16 +626,19 @@ void main() {
           'location': '_AlertCard join requests onTap',
           'counterexample': 'Admin taps join requests alert',
           'current_behavior': 'context.push(adminUsers) -- no extra',
-          'expected_behavior': 'context.push(adminUsers, extra: {initialFilter: pending})',
+          'expected_behavior':
+              'context.push(adminUsers, extra: {initialFilter: pending})',
           'requirement': '1.8',
         },
         {
           'id': 'Bug 6',
           'file': 'admin_dashboard_screen.dart',
           'location': '_AlertCard performance drop onTap',
-          'counterexample': 'Admin taps performance drop alert (Math, Grade 10)',
+          'counterexample':
+              'Admin taps performance drop alert (Math, Grade 10)',
           'current_behavior': 'context.push(adminReports) -- no extra',
-          'expected_behavior': 'context.push(adminReports, extra: {gradeLevel: 10, subject: Math})',
+          'expected_behavior':
+              'context.push(adminReports, extra: {gradeLevel: 10, subject: Math})',
           'requirement': '1.9',
         },
       ];
@@ -634,14 +649,14 @@ void main() {
         expect(bug['counterexample'], isNotNull);
       }
 
-      print('\n' + '=' * 60);
+      print('\n${'=' * 60}');
       print('Admin Panel Bug Condition Exploration — Counterexamples');
       print('=' * 60);
       for (final bug in bugs) {
         print('\n${bug['id']}:');
         bug.forEach((k, v) => print('  $k: $v'));
       }
-      print('\n' + '=' * 60 + '\n');
+      print('\n${'=' * 60}\n');
     });
   });
 }

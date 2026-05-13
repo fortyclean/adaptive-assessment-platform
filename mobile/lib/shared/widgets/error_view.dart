@@ -5,8 +5,8 @@ import '../../core/constants/app_text_styles.dart';
 /// A generic error display widget with optional retry action.
 class ErrorView extends StatelessWidget {
   const ErrorView({
-    super.key,
     required this.message,
+    super.key,
     this.onRetry,
     this.icon = Icons.error_outline,
   });

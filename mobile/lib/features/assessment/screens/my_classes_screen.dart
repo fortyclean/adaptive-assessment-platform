@@ -18,7 +18,6 @@ class MyClassesScreen extends ConsumerStatefulWidget {
 class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
   bool _isLoading = true;
   List<Map<String, dynamic>> _classrooms = [];
-  String? _error;
 
   @override
   void initState() {
@@ -29,16 +28,16 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
   Future<void> _loadClassrooms() async {
     setState(() {
       _isLoading = true;
-      _error = null;
     });
     try {
       final classrooms =
           await ref.read(teacherRepositoryProvider).getClassrooms();
-      if (mounted)
+      if (mounted) {
         setState(() {
           _classrooms = classrooms;
           _isLoading = false;
         });
+      }
     } catch (_) {
       if (mounted) {
         setState(() {
@@ -117,7 +116,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                       : gradeCtrl.text.trim(),
                   'academicYear': '2024-2025',
                 });
-                if (!context.mounted) return;
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                       content: Text('تم إنشاء الفصل: ${nameCtrl.text}'),
@@ -126,7 +125,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                 );
                 _loadClassrooms();
               } catch (e) {
-                if (!context.mounted) return;
+                if (!mounted) return;
                 // Fallback: add locally for demo
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -271,33 +270,31 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
     );
   }
 
-  Widget _detailStat(String label, String value, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF4F2FC),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: AppColors.primary, size: 20),
-          const SizedBox(height: 6),
-          Text(value,
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
-                  fontFamily: 'Almarai')),
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 10,
-                  color: AppColors.onSurfaceVariant,
-                  fontFamily: 'Almarai'),
-              textAlign: TextAlign.center),
-        ],
-      ),
-    );
-  }
+  Widget _detailStat(String label, String value, IconData icon) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF4F2FC),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: AppColors.primary, size: 20),
+            const SizedBox(height: 6),
+            Text(value,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                    fontFamily: 'Almarai')),
+            Text(label,
+                style: const TextStyle(
+                    fontSize: 10,
+                    color: AppColors.onSurfaceVariant,
+                    fontFamily: 'Almarai'),
+                textAlign: TextAlign.center),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +320,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
                     fontFamily: 'Almarai')),
-            Text('${user?.fullName ?? ''}',
+            Text(user?.fullName ?? '',
                 style: const TextStyle(
                     color: AppColors.onSurfaceVariant,
                     fontSize: 12,
@@ -371,8 +368,6 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
   Widget _buildSummaryRow() {
     final totalStudents = _classrooms.fold<int>(
         0, (sum, c) => sum + ((c['studentIds'] as List?)?.length ?? 0));
-    final totalActive = _classrooms.fold<int>(
-        0, (sum, c) => sum + (c['activeAssessments'] as int? ?? 0));
     final avgScore = _classrooms.isEmpty
         ? 0.0
         : _classrooms.fold<double>(
@@ -401,37 +396,37 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
     );
   }
 
-  Widget _summaryCard(String label, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8)
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 22),
-          const SizedBox(height: 6),
-          Text(value,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: color,
-                  fontFamily: 'Almarai')),
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 10,
-                  color: AppColors.onSurfaceVariant,
-                  fontFamily: 'Almarai'),
-              textAlign: TextAlign.center),
-        ],
-      ),
-    );
-  }
+  Widget _summaryCard(String label, String value, IconData icon, Color color) =>
+      Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04), blurRadius: 8)
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 22),
+            const SizedBox(height: 6),
+            Text(value,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                    fontFamily: 'Almarai')),
+            Text(label,
+                style: const TextStyle(
+                    fontSize: 10,
+                    color: AppColors.onSurfaceVariant,
+                    fontFamily: 'Almarai'),
+                textAlign: TextAlign.center),
+          ],
+        ),
+      );
 
   Widget _buildClassCard(Map<String, dynamic> classroom) {
     final name = classroom['name'] as String? ?? '';
@@ -452,7 +447,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
             border: Border.all(color: AppColors.outlineVariant),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 8,
                   offset: const Offset(0, 2))
             ],
@@ -555,72 +550,68 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
     );
   }
 
-  Widget _miniStat(IconData icon, String label) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 16, color: AppColors.onSurfaceVariant),
-        const SizedBox(width: 4),
-        Text(label,
-            style: const TextStyle(
-                fontSize: 12,
-                color: AppColors.onSurfaceVariant,
-                fontFamily: 'Almarai')),
-      ],
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                  color: const Color(0xFFDDE1FF), shape: BoxShape.circle),
-              child: const Icon(Icons.class_outlined,
-                  size: 48, color: AppColors.primary),
-            ),
-            const SizedBox(height: 24),
-            const Text('لا توجد فصول دراسية بعد',
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Almarai')),
-            const SizedBox(height: 8),
-            const Text(
-              'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم',
-              style: TextStyle(
+  Widget _miniStat(IconData icon, String label) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: AppColors.onSurfaceVariant),
+          const SizedBox(width: 4),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 12,
                   color: AppColors.onSurfaceVariant,
-                  fontSize: 14,
-                  fontFamily: 'Almarai',
-                  height: 1.6),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton.icon(
-                onPressed: _showAddClassDialog,
-                icon: const Icon(Icons.add_circle_outline),
-                label: const Text('إضافة فصل جديد',
-                    style: TextStyle(fontSize: 16, fontFamily: 'Almarai')),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                  fontFamily: 'Almarai')),
+        ],
+      );
+
+  Widget _buildEmptyState() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: const BoxDecoration(
+                    color: Color(0xFFDDE1FF), shape: BoxShape.circle),
+                child: const Icon(Icons.class_outlined,
+                    size: 48, color: AppColors.primary),
+              ),
+              const SizedBox(height: 24),
+              const Text('لا توجد فصول دراسية بعد',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Almarai')),
+              const SizedBox(height: 8),
+              const Text(
+                'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم',
+                style: TextStyle(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 14,
+                    fontFamily: 'Almarai',
+                    height: 1.6),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: _showAddClassDialog,
+                  icon: const Icon(Icons.add_circle_outline),
+                  label: const Text('إضافة فصل جديد',
+                      style: TextStyle(fontSize: 16, fontFamily: 'Almarai')),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

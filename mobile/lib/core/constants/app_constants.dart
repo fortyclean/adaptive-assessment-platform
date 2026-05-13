@@ -38,21 +38,21 @@ class AppConstants {
   static const int defaultPageSize = 20;
 
   // ─── Points ───────────────────────────────────────────────────────────────
-  static const double bonusScoreThreshold = 90.0;
+  static const double bonusScoreThreshold = 90;
   static const int bonusPoints = 50;
 
   // ─── Skill Classification ─────────────────────────────────────────────────
-  static const double strengthThreshold = 70.0;
+  static const double strengthThreshold = 70;
 
   // ─── Notifications ────────────────────────────────────────────────────────
   static const int maxNotificationsPerUser = 50;
 
   // ─── UI ───────────────────────────────────────────────────────────────────
-  static const double cardBorderRadius = 16.0;
-  static const double buttonBorderRadius = 12.0;
-  static const double inputBorderRadius = 8.0;
-  static const double cardBorderWidth = 1.0;
-  static const double selectedOptionBorderWidth = 2.0;
+  static const double cardBorderRadius = 16;
+  static const double buttonBorderRadius = 12;
+  static const double inputBorderRadius = 8;
+  static const double cardBorderWidth = 1;
+  static const double selectedOptionBorderWidth = 2;
 
   // ─── Animation ────────────────────────────────────────────────────────────
   static const Duration shortAnimation = Duration(milliseconds: 150);

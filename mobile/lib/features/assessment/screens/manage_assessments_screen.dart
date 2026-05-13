@@ -148,38 +148,53 @@ class _ManageAssessmentsScreenState
 
   List<Map<String, dynamic>> get _filtered {
     if (_statusFilter == 'all') return _assessments;
-    return _assessments
-        .where((a) => a['status'] == _statusFilter)
-        .toList();
+    return _assessments.where((a) => a['status'] == _statusFilter).toList();
   }
 
   void _showEditDialog(BuildContext context, Map<String, dynamic> assessment) {
-    final titleController = TextEditingController(text: assessment['title'] as String? ?? '');
-    final subjectController = TextEditingController(text: assessment['subject'] as String? ?? '');
-    String selectedStatus = assessment['status'] as String? ?? 'draft';
+    final titleController =
+        TextEditingController(text: assessment['title'] as String? ?? '');
+    final subjectController =
+        TextEditingController(text: assessment['subject'] as String? ?? '');
+    var selectedStatus = assessment['status'] as String? ?? 'draft';
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setModalState) => Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-            left: 16, right: 16, top: 20,
+            left: 16,
+            right: 16,
+            top: 20,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.outlineVariant, borderRadius: BorderRadius.circular(2)))),
+              Center(
+                  child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                          color: AppColors.outlineVariant,
+                          borderRadius: BorderRadius.circular(2)))),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
-                  const Text('تعديل الاختبار', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'Almarai')),
+                  IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(ctx)),
+                  const Text('تعديل الاختبار',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Almarai')),
                   const SizedBox(width: 40),
                 ],
               ),
@@ -191,7 +206,8 @@ class _ManageAssessmentsScreenState
                 decoration: InputDecoration(
                   labelText: 'عنوان الاختبار',
                   prefixIcon: const Icon(Icons.title_rounded),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
               ),
               const SizedBox(height: 12),
@@ -202,32 +218,60 @@ class _ManageAssessmentsScreenState
                 decoration: InputDecoration(
                   labelText: 'المادة الدراسية',
                   prefixIcon: const Icon(Icons.book_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
               ),
               const SizedBox(height: 12),
               // Status selector
-              const Text('الحالة:', style: TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
+              const Text('الحالة:',
+                  style: TextStyle(
+                      fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
               const SizedBox(height: 8),
               Row(
                 children: [
                   for (final s in [
-                    {'value': 'draft', 'label': 'مسودة', 'color': AppColors.onSurfaceVariant},
-                    {'value': 'active', 'label': 'نشط', 'color': AppColors.success},
-                    {'value': 'completed', 'label': 'مؤرشف', 'color': AppColors.primary},
+                    {
+                      'value': 'draft',
+                      'label': 'مسودة',
+                      'color': AppColors.onSurfaceVariant
+                    },
+                    {
+                      'value': 'active',
+                      'label': 'نشط',
+                      'color': AppColors.success
+                    },
+                    {
+                      'value': 'completed',
+                      'label': 'مؤرشف',
+                      'color': AppColors.primary
+                    },
                   ]) ...[
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => setModalState(() => selectedStatus = s['value'] as String),
+                        onTap: () => setModalState(
+                            () => selectedStatus = s['value'] as String),
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           margin: const EdgeInsets.only(left: 6),
                           decoration: BoxDecoration(
-                            color: selectedStatus == s['value'] ? (s['color'] as Color).withOpacity(0.15) : Colors.white,
+                            color: selectedStatus == s['value']
+                                ? (s['color'] as Color).withValues(alpha: 0.15)
+                                : Colors.white,
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: selectedStatus == s['value'] ? s['color'] as Color : AppColors.outlineVariant, width: selectedStatus == s['value'] ? 2 : 1),
+                            border: Border.all(
+                                color: selectedStatus == s['value']
+                                    ? s['color'] as Color
+                                    : AppColors.outlineVariant,
+                                width: selectedStatus == s['value'] ? 2 : 1),
                           ),
-                          child: Text(s['label'] as String, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Almarai', fontSize: 13, color: s['color'] as Color, fontWeight: FontWeight.w600)),
+                          child: Text(s['label'] as String,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Almarai',
+                                  fontSize: 13,
+                                  color: s['color'] as Color,
+                                  fontWeight: FontWeight.w600)),
                         ),
                       ),
                     ),
@@ -242,14 +286,19 @@ class _ManageAssessmentsScreenState
                   context.push('/teacher/questions');
                 },
                 icon: const Icon(Icons.quiz_outlined),
-                label: const Text('تعديل الأسئلة من بنك الأسئلة', style: TextStyle(fontFamily: 'Almarai')),
-                style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 12), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                label: const Text('تعديل الأسئلة من بنك الأسئلة',
+                    style: TextStyle(fontFamily: 'Almarai')),
+                style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
               ),
               const SizedBox(height: 10),
               // Save button
               ElevatedButton(
                 onPressed: () async {
-                  final idx = _assessments.indexWhere((a) => a['_id'] == assessment['_id']);
+                  final idx = _assessments
+                      .indexWhere((a) => a['_id'] == assessment['_id']);
                   if (idx != -1) {
                     setState(() {
                       _assessments[idx] = Map.from(_assessments[idx])
@@ -263,16 +312,30 @@ class _ManageAssessmentsScreenState
                   try {
                     // Backend update would go here
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('✅ تم حفظ التغييرات'), behavior: SnackBarBehavior.floating, backgroundColor: AppColors.success),
+                      const SnackBar(
+                          content: Text('✅ تم حفظ التغييرات'),
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: AppColors.success),
                     );
                   } catch (_) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('تم الحفظ محلياً'), behavior: SnackBarBehavior.floating),
+                      const SnackBar(
+                          content: Text('تم الحفظ محلياً'),
+                          behavior: SnackBarBehavior.floating),
                     );
                   }
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                child: const Text('حفظ التغييرات', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, fontFamily: 'Almarai')),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                child: const Text('حفظ التغييرات',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Almarai')),
               ),
               const SizedBox(height: 8),
             ],
@@ -309,228 +372,215 @@ class _ManageAssessmentsScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFBF8FF),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'التقييم الذكي',
-          style: TextStyle(
-            color: Color(0xFF00288E),
-            fontWeight: FontWeight.w900,
-            fontSize: 20,
-          ),
-        ),
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.onSurfaceVariant),
-          onPressed: () => context.pop(),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Color(0xFF00288E)),
-            onPressed: () => context.push('/teacher/notifications'),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: AppColors.outlineVariant),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(AppRoutes.teacherCreateAssessment),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14)),
-        child: const Icon(Icons.add, size: 28),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── Page header ───────────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'الاختبارات',
-                  style: TextStyle(
-                    color: AppColors.onSurface,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    height: 1.3,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'إدارة وتتبع جميع الاختبارات الخاصة بك.',
-                  style: TextStyle(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    height: 1.6,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                // ── Filter chips ─────────────────────────────────────────
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _FilterChip(
-                        label: 'الكل',
-                        selected: _statusFilter == 'all',
-                        onTap: () => setState(() => _statusFilter = 'all'),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'نشط',
-                        selected: _statusFilter == 'active',
-                        onTap: () =>
-                            setState(() => _statusFilter = 'active'),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'مسودة',
-                        selected: _statusFilter == 'draft',
-                        onTap: () =>
-                            setState(() => _statusFilter = 'draft'),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'مؤرشف',
-                        selected: _statusFilter == 'completed',
-                        onTap: () =>
-                            setState(() => _statusFilter = 'completed'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFFBF8FF),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          title: const Text(
+            'التقييم الذكي',
+            style: TextStyle(
+              color: Color(0xFF00288E),
+              fontWeight: FontWeight.w900,
+              fontSize: 20,
             ),
           ),
+          centerTitle: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: AppColors.onSurfaceVariant),
+            onPressed: () => context.pop(),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications_outlined,
+                  color: Color(0xFF00288E)),
+              onPressed: () => context.push('/teacher/notifications'),
+            ),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(height: 1, color: AppColors.outlineVariant),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => context.push(AppRoutes.teacherCreateAssessment),
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          child: const Icon(Icons.add, size: 28),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── Page header ───────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'الاختبارات',
+                    style: TextStyle(
+                      color: AppColors.onSurface,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      height: 1.3,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'إدارة وتتبع جميع الاختبارات الخاصة بك.',
+                    style: TextStyle(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 1.6,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // ── Filter chips ─────────────────────────────────────────
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _FilterChip(
+                          label: 'الكل',
+                          selected: _statusFilter == 'all',
+                          onTap: () => setState(() => _statusFilter = 'all'),
+                        ),
+                        const SizedBox(width: 8),
+                        _FilterChip(
+                          label: 'نشط',
+                          selected: _statusFilter == 'active',
+                          onTap: () => setState(() => _statusFilter = 'active'),
+                        ),
+                        const SizedBox(width: 8),
+                        _FilterChip(
+                          label: 'مسودة',
+                          selected: _statusFilter == 'draft',
+                          onTap: () => setState(() => _statusFilter = 'draft'),
+                        ),
+                        const SizedBox(width: 8),
+                        _FilterChip(
+                          label: 'مؤرشف',
+                          selected: _statusFilter == 'completed',
+                          onTap: () =>
+                              setState(() => _statusFilter = 'completed'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          // ── Assessment list ───────────────────────────────────────────────
-          Expanded(
-            child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(
-                        color: AppColors.primary))
-                : _filtered.isEmpty
-                    ? _buildEmpty()
-                    : RefreshIndicator(
-                        onRefresh: _loadAssessments,
-                        color: AppColors.primary,
-                        child: ListView.builder(
-                          padding:
-                              const EdgeInsets.fromLTRB(16, 0, 16, 100),
-                          itemCount: _filtered.length,
-                          itemBuilder: (ctx, i) => _AssessmentCard(
-                            assessment: _filtered[i],
-                            onPublish: _filtered[i]['status'] == 'draft'
-                                ? () => _publishAssessment(
-                                    _filtered[i]['_id'] as String)
-                                : null,
-                            onEdit: () => _showEditDialog(context, _filtered[i]),
+            // ── Assessment list ───────────────────────────────────────────────
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary))
+                  : _filtered.isEmpty
+                      ? _buildEmpty()
+                      : RefreshIndicator(
+                          onRefresh: _loadAssessments,
+                          color: AppColors.primary,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+                            itemCount: _filtered.length,
+                            itemBuilder: (ctx, i) => _AssessmentCard(
+                              assessment: _filtered[i],
+                              onPublish: _filtered[i]['status'] == 'draft'
+                                  ? () => _publishAssessment(
+                                      _filtered[i]['_id'] as String)
+                                  : null,
+                              onEdit: () =>
+                                  _showEditDialog(context, _filtered[i]),
+                            ),
                           ),
                         ),
-                      ),
-          ),
-        ],
-      ),
-    );
-  }
+            ),
+          ],
+        ),
+      );
 
-  Widget _buildEmpty() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
-              shape: BoxShape.circle,
+  Widget _buildEmpty() => Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: AppColors.surfaceContainer,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.assignment_outlined,
+                  size: 40, color: AppColors.outlineVariant),
             ),
-            child: const Icon(Icons.assignment_outlined,
-                size: 40, color: AppColors.outlineVariant),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'لا توجد اختبارات',
-            style: TextStyle(
-              color: AppColors.onSurface,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+            const SizedBox(height: 16),
+            const Text(
+              'لا توجد اختبارات',
+              style: TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'ابدأ بإنشاء اختبارك الأول',
-            style: TextStyle(
-              color: AppColors.onSurfaceVariant,
-              fontSize: 14,
+            const SizedBox(height: 8),
+            const Text(
+              'ابدأ بإنشاء اختبارك الأول',
+              style: TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 14,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 // ── Filter chip ───────────────────────────────────────────────────────────────
 
 class _FilterChip extends StatelessWidget {
   const _FilterChip(
-      {required this.label,
-      required this.selected,
-      required this.onTap});
+      {required this.label, required this.selected, required this.onTap});
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primaryContainer
-              : AppColors.surfaceContainer,
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
             color: selected
-                ? Colors.transparent
-                : AppColors.outlineVariant,
+                ? AppColors.primaryContainer
+                : AppColors.surfaceContainer,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: selected ? Colors.transparent : AppColors.outlineVariant,
+            ),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: selected
+                  ? const Color(0xFFA8B8FF)
+                  : AppColors.onSurfaceVariant,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected
-                ? const Color(0xFFA8B8FF)
-                : AppColors.onSurfaceVariant,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
+      );
 }
 
 // ── Assessment card ───────────────────────────────────────────────────────────
@@ -549,7 +599,7 @@ class _AssessmentCard extends StatelessWidget {
     final isDraft = status == 'draft';
     final isAdaptive = assessment['assessmentType'] == 'adaptive';
     final date = assessment['availableFrom'] as String?;
-    String dateLabel = 'غير محدد';
+    var dateLabel = 'غير محدد';
     if (date != null) {
       try {
         final dt = DateTime.parse(date);
@@ -580,8 +630,7 @@ class _AssessmentCard extends StatelessWidget {
               height: 4,
               decoration: const BoxDecoration(
                 color: AppColors.primary,
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
               ),
             ),
           Padding(
@@ -620,8 +669,7 @@ class _AssessmentCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.quiz_outlined,
-                        size: 16,
-                        color: AppColors.onSurfaceVariant),
+                        size: 16, color: AppColors.onSurfaceVariant),
                     const SizedBox(width: 4),
                     Text(
                       '${assessment['questionCount'] ?? '--'} سؤال',
@@ -632,8 +680,7 @@ class _AssessmentCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     const Icon(Icons.event_outlined,
-                        size: 16,
-                        color: AppColors.onSurfaceVariant),
+                        size: 16, color: AppColors.onSurfaceVariant),
                     const SizedBox(width: 4),
                     Text(
                       dateLabel,
@@ -669,16 +716,21 @@ class _AssessmentCard extends StatelessWidget {
                               title: const Text('حذف الاختبار'),
                               content: const Text('هل تريد حذف هذا الاختبار؟'),
                               actions: [
-                                TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+                                TextButton(
+                                    onPressed: () => Navigator.pop(ctx),
+                                    child: const Text('إلغاء')),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(ctx);
                                     // Demo: remove locally
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('تم حذف الاختبار'), backgroundColor: AppColors.error),
+                                      const SnackBar(
+                                          content: Text('تم حذف الاختبار'),
+                                          backgroundColor: AppColors.error),
                                     );
                                   },
-                                  child: const Text('حذف', style: TextStyle(color: AppColors.error)),
+                                  child: const Text('حذف',
+                                      style: TextStyle(color: AppColors.error)),
                                 ),
                               ],
                             ),
@@ -704,8 +756,8 @@ class _AssessmentCard extends StatelessWidget {
                         child: _CardButton(
                           icon: Icons.bar_chart_rounded,
                           label: 'التقارير',
-                          onTap: () => context.push(
-                              '/teacher/reports/${assessment['_id']}'),
+                          onTap: () => context
+                              .push('/teacher/reports/${assessment['_id']}'),
                           color: AppColors.onSurfaceVariant,
                           outlined: true,
                         ),
@@ -736,37 +788,34 @@ class _CardButton extends StatelessWidget {
   final bool outlined;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: outlined ? Colors.white : color,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: outlined ? AppColors.outlineVariant : color,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: outlined ? Colors.white : color,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: outlined ? AppColors.outlineVariant : color,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 15, color: outlined ? color : Colors.white),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  color: outlined ? color : Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 15,
-                color: outlined ? color : Colors.white),
-            const SizedBox(width: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: outlined ? color : Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+      );
 }
 
 class _StatusBadge extends StatelessWidget {
@@ -842,30 +891,24 @@ class _TypeBadge extends StatelessWidget {
   final bool isAdaptive;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: isAdaptive
-            ? const Color(0xFFD0E1FB)
-            : const Color(0xFFFFDBCE),
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: isAdaptive
-              ? const Color(0xFFD3E4FE)
-              : const Color(0xFFFFB59A),
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: isAdaptive ? const Color(0xFFD0E1FB) : const Color(0xFFFFDBCE),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color:
+                isAdaptive ? const Color(0xFFD3E4FE) : const Color(0xFFFFB59A),
+          ),
         ),
-      ),
-      child: Text(
-        isAdaptive ? 'تكيفي' : 'عشوائي',
-        style: TextStyle(
-          color: isAdaptive
-              ? const Color(0xFF54647A)
-              : const Color(0xFF611E00),
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
+        child: Text(
+          isAdaptive ? 'تكيفي' : 'عشوائي',
+          style: TextStyle(
+            color:
+                isAdaptive ? const Color(0xFF54647A) : const Color(0xFF611E00),
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

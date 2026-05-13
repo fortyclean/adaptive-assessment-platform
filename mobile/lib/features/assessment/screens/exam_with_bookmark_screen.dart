@@ -19,11 +19,11 @@ import '../repositories/assessment_repository.dart';
 /// Requirements: 7.1–7.11
 class ExamWithBookmarkScreen extends ConsumerStatefulWidget {
   const ExamWithBookmarkScreen({
-    super.key,
     required this.assessmentId,
     required this.attemptId,
     required this.questionCount,
     required this.timeLimitMinutes,
+    super.key,
     this.subjectTitle = 'الرياضيات المتقدمة',
   });
 
@@ -183,7 +183,8 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
               child: const Text('إلغاء')),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: Text('خروج', style: TextStyle(color: AppColors.error))),
+              child:
+                  const Text('خروج', style: TextStyle(color: AppColors.error))),
         ],
       ),
     );
@@ -216,9 +217,6 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
     return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
   }
 
-  bool get _isTimerWarning =>
-      _remainingSeconds <= AppConstants.timerWarningThresholdSeconds;
-
   double get _progressValue => widget.questionCount > 0
       ? (_questionNumber - 1) / widget.questionCount
       : 0.0;
@@ -226,100 +224,98 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
   int get _progressPercent => (_progressValue * 100).round();
 
   @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (!didPop) {
-          final shouldPop = await _onWillPop();
-          if (shouldPop && context.mounted) {
-            context.pop();
+  Widget build(BuildContext context) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) async {
+          if (!didPop) {
+            final shouldPop = await _onWillPop();
+            if (shouldPop && context.mounted) {
+              context.pop();
+            }
           }
-        }
-      },
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
-        child: Scaffold(
-          backgroundColor: AppColors.surface,
-          body: SafeArea(
-            child: Column(
-              children: [
-                _buildHeader(),
-                Expanded(
-                  child: _isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : _buildBody(),
-                ),
-                _buildFooter(),
-              ],
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.dark,
+          child: Scaffold(
+            backgroundColor: AppColors.surface,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
+                    child: _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : _buildBody(),
+                  ),
+                  _buildFooter(),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 
   // ─── Header ──────────────────────────────────────────────────────────────
 
-  Widget _buildHeader() {
-    return Container(
-      height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF8FAFC),
-        border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Close button (RTL: left)
-          IconButton(
-            icon: const Icon(Icons.close_rounded),
-            color: const Color(0xFF64748B),
-            onPressed: () async {
-              final shouldPop = await _onWillPop();
-              if (shouldPop && context.mounted) {
-                context.pop();
-              }
-            },
-          ),
-          // Timer (RTL: center)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppColors.errorContainer.withOpacity(0.10),
-              borderRadius: BorderRadius.circular(20),
+  Widget _buildHeader() => Container(
+        height: 64,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: const BoxDecoration(
+          color: Color(0xFFF8FAFC),
+          border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0))),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Close button (RTL: left)
+            IconButton(
+              icon: const Icon(Icons.close_rounded),
+              color: const Color(0xFF64748B),
+              onPressed: () async {
+                final shouldPop = await _onWillPop();
+                if (shouldPop && context.mounted) {
+                  // ignore: use_build_context_synchronously
+                  context.pop();
+                }
+              },
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.timer_rounded, size: 18, color: AppColors.error),
-                const SizedBox(width: 6),
-                Text(
-                  _timerDisplay,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.error,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+            // Timer (RTL: center)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.errorContainer.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.timer_rounded,
+                      size: 18, color: AppColors.error),
+                  const SizedBox(width: 6),
+                  Text(
+                    _timerDisplay,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.error,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          // Subject title (RTL: right)
-          Text(
-            widget.subjectTitle,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1E40AF),
+            // Subject title (RTL: right)
+            Text(
+              widget.subjectTitle,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1E40AF),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   // ─── Body ────────────────────────────────────────────────────────────────
 
@@ -357,44 +353,42 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
     );
   }
 
-  Widget _buildProgressRow() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '$_progressPercent% مكتمل',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.onSurfaceVariant,
+  Widget _buildProgressRow() => Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '$_progressPercent% مكتمل',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.onSurfaceVariant,
+                ),
               ),
-            ),
-            Text(
-              'السؤال $_questionNumber من ${widget.questionCount}',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.primary,
+              Text(
+                'السؤال $_questionNumber من ${widget.questionCount}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: LinearProgressIndicator(
-            value: _progressValue.clamp(0.0, 1.0),
-            minHeight: 8,
-            backgroundColor: AppColors.surfaceContainer,
-            valueColor:
-                AlwaysStoppedAnimation<Color>(AppColors.primaryContainer),
+            ],
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: _progressValue.clamp(0.0, 1.0),
+              minHeight: 8,
+              backgroundColor: AppColors.surfaceContainer,
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                  AppColors.primaryContainer),
+            ),
+          ),
+        ],
+      );
 
   Widget _buildQuestionCard() {
     final questionText = _currentQuestion?['questionText'] as String? ??
@@ -409,7 +403,7 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
         border: Border.all(color: AppColors.outlineVariant),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -486,114 +480,109 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
     );
   }
 
-  Widget _buildBookmarkButton() {
-    return GestureDetector(
-      onTap: _toggleBookmark,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color:
-              _isCurrentFlagged ? const Color(0xFFFFF7ED) : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
+  Widget _buildBookmarkButton() => GestureDetector(
+        onTap: _toggleBookmark,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
             color: _isCurrentFlagged
-                ? const Color(0xFFD97706)
-                : AppColors.outlineVariant,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              _isCurrentFlagged
-                  ? Icons.bookmark_rounded
-                  : Icons.bookmark_border_rounded,
-              size: 18,
+                ? const Color(0xFFFFF7ED)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
               color: _isCurrentFlagged
                   ? const Color(0xFFD97706)
-                  : AppColors.outline,
+                  : AppColors.outlineVariant,
             ),
-            const SizedBox(width: 4),
-            Text(
-              'تحديد للمراجعة',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                _isCurrentFlagged
+                    ? Icons.bookmark_rounded
+                    : Icons.bookmark_border_rounded,
+                size: 18,
                 color: _isCurrentFlagged
                     ? const Color(0xFFD97706)
                     : AppColors.outline,
               ),
+              const SizedBox(width: 4),
+              Text(
+                'تحديد للمراجعة',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: _isCurrentFlagged
+                      ? const Color(0xFFD97706)
+                      : AppColors.outline,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildImagePlaceholder() => const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.image_outlined, size: 36, color: AppColors.outline),
+            SizedBox(height: 8),
+            Text(
+              'صورة توضيحية',
+              style: TextStyle(fontSize: 12, color: AppColors.outline),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildImagePlaceholder() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.image_outlined, size: 36, color: AppColors.outline),
-          const SizedBox(height: 8),
-          Text(
-            'صورة توضيحية',
-            style: TextStyle(fontSize: 12, color: AppColors.outline),
-          ),
-        ],
-      ),
-    );
-  }
+      );
 
   // ─── Footer ──────────────────────────────────────────────────────────────
 
-  Widget _buildFooter() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFC4C5D5), width: 1)),
-      ),
-      child: Row(
-        children: [
-          // Previous (RTL: left)
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: _questionNumber > 1 ? _goToPrevious : null,
-              icon: const Icon(Icons.chevron_right_rounded),
-              label: const Text('السابق'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.onSurface,
-                side: const BorderSide(color: Color(0xFFC4C5D5)),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+  Widget _buildFooter() => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Color(0xFFC4C5D5))),
+        ),
+        child: Row(
+          children: [
+            // Previous (RTL: left)
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _questionNumber > 1 ? _goToPrevious : null,
+                icon: const Icon(Icons.chevron_right_rounded),
+                label: const Text('السابق'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.onSurface,
+                  side: const BorderSide(color: Color(0xFFC4C5D5)),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-          // Next (RTL: right)
-          Expanded(
-            child: FilledButton.icon(
-              onPressed: _goToNext,
-              icon: const Icon(Icons.chevron_left_rounded),
-              label: const Text('التالي'),
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            const SizedBox(width: 12),
+            // Next (RTL: right)
+            Expanded(
+              child: FilledButton.icon(
+                onPressed: _goToNext,
+                icon: const Icon(Icons.chevron_left_rounded),
+                label: const Text('التالي'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   List<Map<String, dynamic>> _mockOptions() => [
         {'key': 'A', 'value': '10'},
@@ -619,93 +608,95 @@ class _McqOptionTile extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color:
-                isSelected ? const Color(0xFF1E40AF) : AppColors.outlineVariant,
-            width: isSelected ? 2 : 1,
-          ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: const Color(0xFF1E40AF).withOpacity(0.08),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Radio indicator (RTL: left)
-            if (isSelected)
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF1E40AF), width: 2),
-                ),
-                child: Center(
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFF1E40AF),
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? const Color(0xFF1E40AF)
+                  : AppColors.outlineVariant,
+              width: isSelected ? 2 : 1,
+            ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF1E40AF).withValues(alpha: 0.08),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
-                  ),
-                ),
-              )
-            else
-              SizedBox(
-                width: 24,
-                height: 24,
-                child: DecoratedBox(
+                  ]
+                : null,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Radio indicator (RTL: left)
+              if (isSelected)
+                Container(
+                  width: 24,
+                  height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border:
-                        Border.all(color: AppColors.outlineVariant, width: 1.5),
+                        Border.all(color: const Color(0xFF1E40AF), width: 2),
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 12,
+                      height: 12,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFF1E40AF),
+                      ),
+                    ),
+                  ),
+                )
+              else
+                SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: AppColors.outlineVariant, width: 1.5),
+                    ),
                   ),
                 ),
+              // Option text + key (RTL: right)
+              Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
+                      color: const Color(0xFF1A1B22),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    '$optionKey)',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w400,
+                      color: isSelected
+                          ? const Color(0xFF1E40AF)
+                          : AppColors.outline,
+                    ),
+                  ),
+                ],
               ),
-            // Option text + key (RTL: right)
-            Row(
-              children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                    color: const Color(0xFF1A1B22),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  '$optionKey)',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                    color: isSelected
-                        ? const Color(0xFF1E40AF)
-                        : AppColors.outline,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

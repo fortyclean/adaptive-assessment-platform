@@ -8,7 +8,7 @@ import '../repositories/assessment_repository.dart';
 /// Assessment Start Screen — Screen 14
 /// Requirements: 14.1–14.5
 class AssessmentStartScreen extends ConsumerStatefulWidget {
-  const AssessmentStartScreen({super.key, required this.assessmentId});
+  const AssessmentStartScreen({required this.assessmentId, super.key});
   final String assessmentId;
 
   @override
@@ -16,8 +16,7 @@ class AssessmentStartScreen extends ConsumerStatefulWidget {
       _AssessmentStartScreenState();
 }
 
-class _AssessmentStartScreenState
-    extends ConsumerState<AssessmentStartScreen> {
+class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
   bool _isLoading = true;
   bool _isStarting = false;
   Map<String, dynamic>? _assessment;
@@ -62,7 +61,8 @@ class _AssessmentStartScreenState
           _error = null;
         } else {
           _assessment = null;
-          _error = 'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.';
+          _error =
+              'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.';
         }
         _isLoading = false;
       });
@@ -88,7 +88,7 @@ class _AssessmentStartScreenState
     setState(() => _isStarting = true);
     try {
       final classroomIds = _assessment!['classroomIds'] as List?;
-      final classroomId = classroomIds?.isNotEmpty == true
+      final classroomId = classroomIds?.isNotEmpty ?? false
           ? classroomIds!.first as String
           : '';
 
@@ -138,74 +138,69 @@ class _AssessmentStartScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'بدء الاختبار',
-          style: TextStyle(
-            color: Color(0xFF1A1B22),
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          title: const Text(
+            'بدء الاختبار',
+            style: TextStyle(
+              color: Color(0xFF1A1B22),
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
+          ),
+          centerTitle: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: AppColors.onSurfaceVariant),
+            onPressed: () => context.pop(),
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(height: 1, color: AppColors.outlineVariant),
           ),
         ),
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.onSurfaceVariant),
-          onPressed: () => context.pop(),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: AppColors.outlineVariant),
-        ),
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.primary))
-          : _error != null
-              ? _buildError()
-              : _buildContent(),
-    );
-  }
+        body: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.primary))
+            : _error != null
+                ? _buildError()
+                : _buildContent(),
+      );
 
-  Widget _buildError() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline_rounded,
-                size: 48, color: AppColors.error),
-            const SizedBox(height: 16),
-            Text(
-              _error!,
-              style: const TextStyle(
-                  color: AppColors.onSurface, fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            OutlinedButton(
-              onPressed: _loadAssessment,
-              child: const Text('إعادة المحاولة'),
-            ),
-          ],
+  Widget _buildError() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline_rounded,
+                  size: 48, color: AppColors.error),
+              const SizedBox(height: 16),
+              Text(
+                _error!,
+                style:
+                    const TextStyle(color: AppColors.onSurface, fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              OutlinedButton(
+                onPressed: _loadAssessment,
+                child: const Text('إعادة المحاولة'),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   Widget _buildContent() {
     final a = _assessment!;
     final type = a['assessmentType'] == 'adaptive' ? 'تكيفي' : 'عشوائي';
     final isAdaptive = a['assessmentType'] == 'adaptive';
-    final teacherName =
-        (a['createdBy'] as Map?)?['fullName'] as String? ?? '';
+    final teacherName = (a['createdBy'] as Map?)?['fullName'] as String? ?? '';
     final previousScore = a['previousScore'] as num?;
     final unit = a['unit'] as String?;
 
@@ -258,13 +253,12 @@ class _AssessmentStartScreenState
                           height: 1.4,
                         ),
                       ),
-                      if ((a['subject'] as String?)?.isNotEmpty == true) ...[
+                      if ((a['subject'] as String?)?.isNotEmpty ?? false) ...[
                         const SizedBox(height: 6),
                         Row(
                           children: [
                             const Icon(Icons.book_outlined,
-                                size: 14,
-                                color: AppColors.onSurfaceVariant),
+                                size: 14, color: AppColors.onSurfaceVariant),
                             const SizedBox(width: 4),
                             Text(
                               a['subject'] as String,
@@ -277,13 +271,12 @@ class _AssessmentStartScreenState
                           ],
                         ),
                       ],
-                      if (unit?.isNotEmpty == true) ...[
+                      if (unit?.isNotEmpty ?? false) ...[
                         const SizedBox(height: 4),
                         Row(
                           children: [
                             const Icon(Icons.layers_outlined,
-                                size: 14,
-                                color: AppColors.onSurfaceVariant),
+                                size: 14, color: AppColors.onSurfaceVariant),
                             const SizedBox(width: 4),
                             Text(
                               unit!,
@@ -332,9 +325,7 @@ class _AssessmentStartScreenState
                       ),
                     ),
                     Container(
-                        width: 1,
-                        height: 48,
-                        color: AppColors.outlineVariant),
+                        width: 1, height: 48, color: AppColors.outlineVariant),
                     Expanded(
                       child: _DetailItem(
                         icon: Icons.timer_outlined,
@@ -345,8 +336,7 @@ class _AssessmentStartScreenState
                   ],
                 ),
                 if (teacherName.isNotEmpty) ...[
-                  const Divider(
-                      height: 24, color: AppColors.outlineVariant),
+                  const Divider(height: 24, color: AppColors.outlineVariant),
                   _DetailRow(
                     icon: Icons.person_outline_rounded,
                     label: 'المعلم',
@@ -364,8 +354,8 @@ class _AssessmentStartScreenState
               decoration: BoxDecoration(
                 color: AppColors.successContainer,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    color: AppColors.success.withOpacity(0.3)),
+                border:
+                    Border.all(color: AppColors.success.withValues(alpha: 0.3)),
               ),
               padding: const EdgeInsets.all(16),
               child: Row(
@@ -406,17 +396,17 @@ class _AssessmentStartScreenState
             decoration: BoxDecoration(
               color: AppColors.warningContainer,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                  color: AppColors.warning.withOpacity(0.4)),
+              border:
+                  Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
             ),
             padding: const EdgeInsets.all(14),
-            child: Row(
+            child: const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.info_outline_rounded,
+                Icon(Icons.info_outline_rounded,
                     color: AppColors.warning, size: 20),
-                const SizedBox(width: 10),
-                const Expanded(
+                SizedBox(width: 10),
+                Expanded(
                   child: Text(
                     'سيتم تسجيل أي محاولة للخروج من شاشة الاختبار',
                     style: TextStyle(
@@ -437,16 +427,15 @@ class _AssessmentStartScreenState
           SizedBox(
             height: 52,
             child: ElevatedButton(
-              onPressed: (_isAvailable && !_isStarting)
-                  ? _startAssessment
-                  : null,
+              onPressed:
+                  (_isAvailable && !_isStarting) ? _startAssessment : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 disabledBackgroundColor: AppColors.outlineVariant,
                 disabledForegroundColor: AppColors.onSurfaceVariant,
                 elevation: 2,
-                shadowColor: AppColors.primary.withOpacity(0.3),
+                shadowColor: AppColors.primary.withValues(alpha: 0.3),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -513,32 +502,26 @@ class _TypeBadge extends StatelessWidget {
   final bool isAdaptive;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: isAdaptive
-            ? const Color(0xFFD0E1FB)
-            : const Color(0xFFFFDBCE),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: isAdaptive
-              ? const Color(0xFFB7C8E1)
-              : const Color(0xFFFFB59A),
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: isAdaptive ? const Color(0xFFD0E1FB) : const Color(0xFFFFDBCE),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(
+            color:
+                isAdaptive ? const Color(0xFFB7C8E1) : const Color(0xFFFFB59A),
+          ),
         ),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isAdaptive
-              ? const Color(0xFF54647A)
-              : const Color(0xFF611E00),
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
+        child: Text(
+          label,
+          style: TextStyle(
+            color:
+                isAdaptive ? const Color(0xFF54647A) : const Color(0xFF611E00),
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _DetailItem extends StatelessWidget {
@@ -549,34 +532,32 @@ class _DetailItem extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Column(
-        children: [
-          Icon(icon, size: 24, color: AppColors.primary),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.onSurfaceVariant,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          children: [
+            Icon(icon, size: 24, color: AppColors.primary),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            style: const TextStyle(
-              color: AppColors.onSurface,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
+            const SizedBox(height: 2),
+            Text(
+              value,
+              style: const TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 class _DetailRow extends StatelessWidget {
@@ -587,30 +568,28 @@ class _DetailRow extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
-        const SizedBox(width: 8),
-        Text(
-          '$label: ',
-          style: const TextStyle(
-            color: AppColors.onSurfaceVariant,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Expanded(
-          child: Text(
-            value,
+  Widget build(BuildContext context) => Row(
+        children: [
+          Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
+          const SizedBox(width: 8),
+          Text(
+            '$label: ',
             style: const TextStyle(
-              color: AppColors.onSurface,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
+              color: AppColors.onSurfaceVariant,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-      ],
-    );
-  }
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      );
 }

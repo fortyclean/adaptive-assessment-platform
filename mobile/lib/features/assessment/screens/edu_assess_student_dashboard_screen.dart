@@ -47,368 +47,357 @@ class _EduAssessStudentDashboardScreenState
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      body: Column(
-        children: [
-          // ─── Top App Bar ───────────────────────────────────────────────
-          _buildTopAppBar(context),
-
-          // ─── Scrollable Content ────────────────────────────────────────
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Greeting & Motivation
-                  _buildGreetingSection(),
-                  const SizedBox(height: 24),
-
-                  // Summary Metrics Bento
-                  _buildMetricsBento(),
-                  const SizedBox(height: 24),
-
-                  // My Courses
-                  _buildCoursesSection(),
-                  const SizedBox(height: 24),
-
-                  // Upcoming Exams
-                  _buildUpcomingExams(),
-                  const SizedBox(height: 24),
-
-                  // Quick Access
-                  _buildQuickAccess(context),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar:
-          const AppBottomNav(currentIndex: 0, role: 'student'),
-    );
-  }
-
-  // ─── Top App Bar ─────────────────────────────────────────────────────────
-
-  Widget _buildTopAppBar(BuildContext context) {
-    return Container(
-      height: 64 + MediaQuery.of(context).padding.top,
-      padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top,
-        left: 16,
-        right: 16,
-      ),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Notification button (RTL: left)
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            color: const Color(0xFF475569),
-            onPressed: () => context.push('/student/notifications'),
-          ),
-          // Avatar + App name (RTL: right)
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text(
-                    'EduAssess',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1E40AF),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 12),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFDDE1FF),
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: const Icon(
-                  Icons.person_rounded,
-                  color: AppColors.primary,
-                  size: 22,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Greeting & Motivation ────────────────────────────────────────────────
-
-  Widget _buildGreetingSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'أهلاً بك، أحمد! 👋',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
-          ),
-          textAlign: TextAlign.right,
-        ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color(0xFFDDE1FF).withOpacity(0.3),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: const Color(0xFFDDE1FF).withOpacity(0.5),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              Text(
-                '"النجاح ليس عدم فعل الأخطاء، بل هو عدم تكرار نفس الخطأ مرتين."',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontStyle: FontStyle.italic,
-                  color: Color(0xFF001453),
-                  height: 1.6,
-                ),
-                textAlign: TextAlign.right,
-              ),
-              SizedBox(height: 8),
-              Text(
-                '— جورج برنارد شو',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF001453),
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ─── Summary Metrics Bento ────────────────────────────────────────────────
-
-  Widget _buildMetricsBento() {
-    return Column(
-      children: [
-        // GPA — full width
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.outlineVariant),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Icon (RTL: left)
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.grade_rounded,
-                  color: AppColors.primary,
-                  size: 28,
-                ),
-              ),
-              // Text (RTL: right)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'المعدل التراكمي (GPA)',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${_gpa.toStringAsFixed(2)} / 4.0',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        // Tasks + Badges — two columns
-        Row(
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        body: Column(
           children: [
+            // ─── Top App Bar ───────────────────────────────────────────────
+            _buildTopAppBar(context),
+
+            // ─── Scrollable Content ────────────────────────────────────────
             Expanded(
-              child: _buildMetricCard(
-                icon: Icons.task_alt_rounded,
-                label: 'المهام المكتملة',
-                value: '$_completedTasks/$_totalTasks',
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildMetricCard(
-                icon: Icons.military_tech_rounded,
-                label: 'الأوسمة المستحقة',
-                value: '$_badgesCount وساماً',
-                iconColor: const Color(0xFFD97706),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Greeting & Motivation
+                    _buildGreetingSection(),
+                    const SizedBox(height: 24),
+
+                    // Summary Metrics Bento
+                    _buildMetricsBento(),
+                    const SizedBox(height: 24),
+
+                    // My Courses
+                    _buildCoursesSection(),
+                    const SizedBox(height: 24),
+
+                    // Upcoming Exams
+                    _buildUpcomingExams(),
+                    const SizedBox(height: 24),
+
+                    // Quick Access
+                    _buildQuickAccess(context),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-      ],
-    );
-  }
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 0, role: 'student'),
+      );
+
+  // ─── Top App Bar ─────────────────────────────────────────────────────────
+
+  Widget _buildTopAppBar(BuildContext context) => Container(
+        height: 64 + MediaQuery.of(context).padding.top,
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top,
+          left: 16,
+          right: 16,
+        ),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(color: Color(0xFFE2E8F0)),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Notification button (RTL: left)
+            IconButton(
+              icon: const Icon(Icons.notifications_outlined),
+              color: const Color(0xFF475569),
+              onPressed: () => context.push('/student/notifications'),
+            ),
+            // Avatar + App name (RTL: right)
+            Row(
+              children: [
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'EduAssess',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF1E40AF),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFFDDE1FF),
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: const Icon(
+                    Icons.person_rounded,
+                    color: AppColors.primary,
+                    size: 22,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  // ─── Greeting & Motivation ────────────────────────────────────────────────
+
+  Widget _buildGreetingSection() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'أهلاً بك، أحمد! 👋',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary,
+            ),
+            textAlign: TextAlign.right,
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFDDE1FF).withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: const Color(0xFFDDE1FF).withValues(alpha: 0.5),
+              ),
+            ),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  '"النجاح ليس عدم فعل الأخطاء، بل هو عدم تكرار نفس الخطأ مرتين."',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    color: Color(0xFF001453),
+                    height: 1.6,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  '— جورج برنارد شو',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF001453),
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+
+  // ─── Summary Metrics Bento ────────────────────────────────────────────────
+
+  Widget _buildMetricsBento() => Column(
+        children: [
+          // GPA — full width
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.outlineVariant),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Icon (RTL: left)
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.grade_rounded,
+                    color: AppColors.primary,
+                    size: 28,
+                  ),
+                ),
+                // Text (RTL: right)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'المعدل التراكمي (GPA)',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${_gpa.toStringAsFixed(2)} / 4.0',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Tasks + Badges — two columns
+          Row(
+            children: [
+              Expanded(
+                child: _buildMetricCard(
+                  icon: Icons.task_alt_rounded,
+                  label: 'المهام المكتملة',
+                  value: '$_completedTasks/$_totalTasks',
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildMetricCard(
+                  icon: Icons.military_tech_rounded,
+                  label: 'الأوسمة المستحقة',
+                  value: '$_badgesCount وساماً',
+                  iconColor: const Color(0xFFD97706),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
 
   Widget _buildMetricCard({
     required IconData icon,
     required String label,
     required String value,
     Color? iconColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Icon(
-            icon,
-            color: iconColor ?? AppColors.onSurfaceVariant,
-            size: 24,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColors.onSurfaceVariant,
-            ),
-            textAlign: TextAlign.right,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1B22),
-            ),
-            textAlign: TextAlign.right,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── My Courses ───────────────────────────────────────────────────────────
-
-  Widget _buildCoursesSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                'عرض الكل',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            const Text(
-              'مساقاتي الدراسية',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
-              ),
+  }) =>
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 160,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            reverse: true, // RTL scroll
-            itemCount: _courses.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, index) =>
-                _buildCourseCard(_courses[index]),
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Icon(
+              icon,
+              color: iconColor ?? AppColors.onSurfaceVariant,
+              size: 24,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1A1B22),
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ],
         ),
-      ],
-    );
-  }
+      );
+
+  // ─── My Courses ───────────────────────────────────────────────────────────
+
+  Widget _buildCoursesSection() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text(
+                  'عرض الكل',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const Text(
+                'مساقاتي الدراسية',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1B22),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 160,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              reverse: true, // RTL scroll
+              itemCount: _courses.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) =>
+                  _buildCourseCard(_courses[index]),
+            ),
+          ),
+        ],
+      );
 
   Widget _buildCourseCard(_CourseProgress course) {
     final percent = (course.progress * 100).round();
@@ -421,7 +410,7 @@ class _EduAssessStudentDashboardScreenState
         border: Border.all(color: AppColors.outlineVariant),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -448,7 +437,7 @@ class _EduAssessStudentDashboardScreenState
                 ),
                 Text(
                   '$percent%',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
@@ -474,24 +463,22 @@ class _EduAssessStudentDashboardScreenState
 
   // ─── Upcoming Exams ───────────────────────────────────────────────────────
 
-  Widget _buildUpcomingExams() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Text(
-          'الاختبارات القادمة',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1B22),
+  Widget _buildUpcomingExams() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'الاختبارات القادمة',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1A1B22),
+            ),
+            textAlign: TextAlign.right,
           ),
-          textAlign: TextAlign.right,
-        ),
-        const SizedBox(height: 12),
-        ..._upcomingExams.map((exam) => _buildExamCard(exam)),
-      ],
-    );
-  }
+          const SizedBox(height: 12),
+          ..._upcomingExams.map(_buildExamCard),
+        ],
+      );
 
   Widget _buildExamCard(_UpcomingExam exam) {
     final colors = [
@@ -512,7 +499,7 @@ class _EduAssessStudentDashboardScreenState
         border: Border.all(color: AppColors.outlineVariant),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -523,7 +510,7 @@ class _EduAssessStudentDashboardScreenState
           // Chevron (RTL: left)
           Icon(
             Icons.chevron_left_rounded,
-            color: AppColors.onSurfaceVariant.withOpacity(0.4),
+            color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
             size: 24,
           ),
           const SizedBox(width: 12),
@@ -545,7 +532,7 @@ class _EduAssessStudentDashboardScreenState
                 const SizedBox(height: 4),
                 Text(
                   exam.time,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -591,55 +578,52 @@ class _EduAssessStudentDashboardScreenState
 
   // ─── Quick Access ─────────────────────────────────────────────────────────
 
-  Widget _buildQuickAccess(BuildContext context) {
-    return Row(
-      children: [
-        // Resources button (RTL: left)
-        Expanded(
-          child: OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.auto_stories_rounded, size: 24),
-            label: const Text('مصادري'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              side: BorderSide(color: AppColors.primary, width: 2),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              textStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        // Start training button (RTL: right)
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: () =>
-                context.push('/student/micro-learning'),
-            icon: const Icon(Icons.play_circle_rounded, size: 24),
-            label: const Text('ابدأ التدريب'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              elevation: 2,
-              textStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+  Widget _buildQuickAccess(BuildContext context) => Row(
+        children: [
+          // Resources button (RTL: left)
+          Expanded(
+            child: OutlinedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.auto_stories_rounded, size: 24),
+              label: const Text('مصادري'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(color: AppColors.primary, width: 2),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(width: 12),
+          // Start training button (RTL: right)
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () => context.push('/student/micro-learning'),
+              icon: const Icon(Icons.play_circle_rounded, size: 24),
+              label: const Text('ابدأ التدريب'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 2,
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
 }
 
 // ─── Data Models ─────────────────────────────────────────────────────────────
@@ -713,6 +697,5 @@ class _CircularProgressPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_CircularProgressPainter oldDelegate) =>
-      oldDelegate.progress != progress ||
-      oldDelegate.color != color;
+      oldDelegate.progress != progress || oldDelegate.color != color;
 }

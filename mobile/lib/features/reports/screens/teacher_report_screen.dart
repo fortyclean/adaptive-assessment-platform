@@ -8,7 +8,7 @@ import '../../assessment/repositories/teacher_repository.dart';
 /// Teacher Analytics Report Screen — Screen 9, 28, 22
 /// Requirements: 9.1–9.6
 class TeacherReportScreen extends ConsumerStatefulWidget {
-  const TeacherReportScreen({super.key, required this.assessmentId});
+  const TeacherReportScreen({required this.assessmentId, super.key});
   final String assessmentId;
 
   @override
@@ -31,7 +31,8 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
     // Demo mode: if assessmentId starts with 'mock' or 'demo-', show mock report
     if (widget.assessmentId.startsWith('mock') ||
         widget.assessmentId.startsWith('demo-') ||
-        widget.assessmentId == '1' || widget.assessmentId == '2') {
+        widget.assessmentId == '1' ||
+        widget.assessmentId == '2') {
       await Future.delayed(const Duration(milliseconds: 600));
       setState(() {
         _report = {
@@ -45,11 +46,36 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
             {'mainSkill': 'التحليل والتقييم', 'averagePercentage': 55.0},
           ],
           'studentResults': [
-            {'fullName': 'أحمد محمد', 'scorePercentage': 95.0, 'status': 'completed', 'timeTakenSeconds': 1800},
-            {'fullName': 'سارة علي', 'scorePercentage': 88.0, 'status': 'completed', 'timeTakenSeconds': 2100},
-            {'fullName': 'محمد خالد', 'scorePercentage': 76.0, 'status': 'completed', 'timeTakenSeconds': 2400},
-            {'fullName': 'فاطمة أحمد', 'scorePercentage': 65.0, 'status': 'completed', 'timeTakenSeconds': 2700},
-            {'fullName': 'عمر حسن', 'scorePercentage': 45.0, 'status': 'timeout', 'timeTakenSeconds': 2700},
+            {
+              'fullName': 'أحمد محمد',
+              'scorePercentage': 95.0,
+              'status': 'completed',
+              'timeTakenSeconds': 1800
+            },
+            {
+              'fullName': 'سارة علي',
+              'scorePercentage': 88.0,
+              'status': 'completed',
+              'timeTakenSeconds': 2100
+            },
+            {
+              'fullName': 'محمد خالد',
+              'scorePercentage': 76.0,
+              'status': 'completed',
+              'timeTakenSeconds': 2400
+            },
+            {
+              'fullName': 'فاطمة أحمد',
+              'scorePercentage': 65.0,
+              'status': 'completed',
+              'timeTakenSeconds': 2700
+            },
+            {
+              'fullName': 'عمر حسن',
+              'scorePercentage': 45.0,
+              'status': 'timeout',
+              'timeTakenSeconds': 2700
+            },
           ],
         };
         _isLoading = false;
@@ -76,14 +102,18 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
   Future<void> _exportReport(BuildContext context) async {
     if (_report == null) return;
 
-    final students = (_report!['studentResults'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+    final students =
+        (_report!['studentResults'] as List?)?.cast<Map<String, dynamic>>() ??
+            [];
     final headers = ['الاسم', 'النتيجة', 'الحالة', 'الوقت (دقيقة)'];
-    final rows = students.map((s) => [
-      s['fullName'] as String? ?? '',
-      '${s['scorePercentage']}%',
-      s['status'] == 'completed' ? 'مكتمل' : 'انتهى الوقت',
-      '${(s['timeTakenSeconds'] as int? ?? 0) ~/ 60}',
-    ]).toList();
+    final rows = students
+        .map((s) => [
+              s['fullName'] as String? ?? '',
+              '${s['scorePercentage']}%',
+              if (s['status'] == 'completed') 'مكتمل' else 'انتهى الوقت',
+              '${(s['timeTakenSeconds'] as int? ?? 0) ~/ 60}',
+            ])
+        .toList();
 
     await DownloadHelper.exportReportCsv(
       context: context,
@@ -94,88 +124,85 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        titleSpacing: 0,
-        title: const Text(
-          'تقرير الاختبار',
-          style: TextStyle(
-            color: AppColors.onSurface,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_forward_ios_rounded,
-              color: AppColors.onSurface, size: 20),
-          onPressed: () => context.pop(),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.download_rounded, color: AppColors.primary),
-            onPressed: () => _exportReport(context),
-            tooltip: 'تصدير CSV',
-          ),
-          const SizedBox(width: 4),
-        ],
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: AppColors.outlineVariant),
-        ),
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.primary))
-          : _error != null
-              ? _buildErrorState()
-              : _buildContent(),
-    );
-  }
-
-  Widget _buildErrorState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: AppColors.errorContainer,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(Icons.error_outline_rounded,
-                color: AppColors.error, size: 32),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _error!,
-            style: const TextStyle(
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          titleSpacing: 0,
+          title: const Text(
+            'تقرير الاختبار',
+            style: TextStyle(
               color: AppColors.onSurface,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
             ),
           ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _isLoading = true;
-                _error = null;
-              });
-              _loadReport();
-            },
-            child: const Text('إعادة المحاولة'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_forward_ios_rounded,
+                color: AppColors.onSurface, size: 20),
+            onPressed: () => context.pop(),
           ),
-        ],
-      ),
-    );
-  }
+          actions: [
+            IconButton(
+              icon:
+                  const Icon(Icons.download_rounded, color: AppColors.primary),
+              onPressed: () => _exportReport(context),
+              tooltip: 'تصدير CSV',
+            ),
+            const SizedBox(width: 4),
+          ],
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(1),
+            child: Divider(height: 1, color: AppColors.outlineVariant),
+          ),
+        ),
+        body: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.primary))
+            : _error != null
+                ? _buildErrorState()
+                : _buildContent(),
+      );
+
+  Widget _buildErrorState() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: AppColors.errorContainer,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Icon(Icons.error_outline_rounded,
+                  color: AppColors.error, size: 32),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              _error!,
+              style: const TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _isLoading = true;
+                  _error = null;
+                });
+                _loadReport();
+              },
+              child: const Text('إعادة المحاولة'),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildContent() {
     final r = _report!;
@@ -260,42 +287,38 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
     );
   }
 
-  Widget _buildSectionLabel(String label) {
-    return Text(
-      label,
-      style: const TextStyle(
-        color: AppColors.onSurface,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-      ),
-      textDirection: TextDirection.rtl,
-    );
-  }
+  Widget _buildSectionLabel(String label) => Text(
+        label,
+        style: const TextStyle(
+          color: AppColors.onSurface,
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        ),
+        textDirection: TextDirection.rtl,
+      );
 
-  Widget _buildEmptyStudents() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outlineVariant),
-      ),
-      child: const Column(
-        children: [
-          Icon(Icons.people_outline_rounded,
-              color: AppColors.outlineVariant, size: 40),
-          SizedBox(height: 12),
-          Text(
-            'لا توجد نتائج بعد',
-            style: TextStyle(
-              color: AppColors.onSurfaceVariant,
-              fontSize: 14,
+  Widget _buildEmptyStudents() => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.outlineVariant),
+        ),
+        child: const Column(
+          children: [
+            Icon(Icons.people_outline_rounded,
+                color: AppColors.outlineVariant, size: 40),
+            SizedBox(height: 12),
+            Text(
+              'لا توجد نتائج بعد',
+              style: TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 14,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 // ─── Stat Card ─────────────────────────────────────────────────────────────
@@ -316,56 +339,54 @@ class _StatCard extends StatelessWidget {
   final Color bgColor;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x05000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(10),
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x05000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
             ),
-            child: Icon(icon, color: color, size: 20),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              height: 1.0,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: color, size: 20),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.onSurfaceVariant,
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
+            const SizedBox(height: 10),
+            Text(
+              value,
+              style: TextStyle(
+                color: color,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                height: 1,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 // ─── Distribution Chart ────────────────────────────────────────────────────
@@ -377,14 +398,14 @@ class _DistributionChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buckets = [
-      _Bucket('90-100%', distribution['90-100'] as int? ?? 0,
-          AppColors.success, const Color(0xFFD1FAE5)),
-      _Bucket('70-89%', distribution['70-89'] as int? ?? 0,
-          AppColors.primary, const Color(0xFFDDE1FF)),
-      _Bucket('50-69%', distribution['50-69'] as int? ?? 0,
-          AppColors.warning, AppColors.warningContainer),
-      _Bucket('0-49%', distribution['0-49'] as int? ?? 0,
-          AppColors.error, AppColors.errorContainer),
+      _Bucket('90-100%', distribution['90-100'] as int? ?? 0, AppColors.success,
+          const Color(0xFFD1FAE5)),
+      _Bucket('70-89%', distribution['70-89'] as int? ?? 0, AppColors.primary,
+          const Color(0xFFDDE1FF)),
+      _Bucket('50-69%', distribution['50-69'] as int? ?? 0, AppColors.warning,
+          AppColors.warningContainer),
+      _Bucket('0-49%', distribution['0-49'] as int? ?? 0, AppColors.error,
+          AppColors.errorContainer),
     ];
 
     final maxCount =
@@ -455,21 +476,21 @@ class _DistributionChart extends StatelessWidget {
           const SizedBox(height: 8),
           // Labels row
           Row(
-            children: buckets.map((b) {
-              return Expanded(
-                child: Center(
-                  child: Text(
-                    b.label,
-                    style: const TextStyle(
-                      color: AppColors.onSurfaceVariant,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              );
-            }).toList(),
+            children: buckets
+                .map((b) => Expanded(
+                      child: Center(
+                        child: Text(
+                          b.label,
+                          style: const TextStyle(
+                            color: AppColors.onSurfaceVariant,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ))
+                .toList(),
           ),
         ],
       ),
@@ -492,71 +513,69 @@ class _SkillHeatmapCard extends StatelessWidget {
   final List<Map<String, dynamic>> heatmap;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x05000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: const BoxDecoration(
-              color: Color(0xFFF4F2FC),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              border: Border(
-                bottom: BorderSide(color: AppColors.outlineVariant),
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x05000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF4F2FC),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                border: Border(
+                  bottom: BorderSide(color: AppColors.outlineVariant),
+                ),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.psychology_rounded,
+                      color: AppColors.primary, size: 18),
+                  SizedBox(width: 8),
+                  Text(
+                    'تحليل مفصل للمفاهيم الأساسية',
+                    style: TextStyle(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: const Row(
-              children: [
-                Icon(Icons.psychology_rounded,
-                    color: AppColors.primary, size: 18),
-                SizedBox(width: 8),
-                Text(
-                  'تحليل مفصل للمفاهيم الأساسية',
-                  style: TextStyle(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Skills list
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: heatmap.asMap().entries.map((e) {
-                final isLast = e.key == heatmap.length - 1;
-                return Column(
-                  children: [
-                    _SkillHeatmapRow(skill: e.value),
-                    if (!isLast) ...[
-                      const SizedBox(height: 4),
-                      const Divider(
-                          height: 16, color: AppColors.outlineVariant),
+            // Skills list
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: heatmap.asMap().entries.map((e) {
+                  final isLast = e.key == heatmap.length - 1;
+                  return Column(
+                    children: [
+                      _SkillHeatmapRow(skill: e.value),
+                      if (!isLast) ...[
+                        const SizedBox(height: 4),
+                        const Divider(
+                            height: 16, color: AppColors.outlineVariant),
+                      ],
                     ],
-                  ],
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 class _SkillHeatmapRow extends StatelessWidget {
@@ -590,8 +609,7 @@ class _SkillHeatmapRow extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
                 color: bgColor,
                 borderRadius: BorderRadius.circular(20),
@@ -632,18 +650,18 @@ class _SkillHeatmapRow extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'الهدف: 80%',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.onSurfaceVariant,
                 fontSize: 10,
               ),
               textDirection: TextDirection.rtl,
             ),
-            const SizedBox.shrink(),
+            SizedBox.shrink(),
           ],
         ),
       ],
@@ -789,7 +807,7 @@ class _StudentResultTile extends StatelessWidget {
                     color: scoreColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    height: 1.0,
+                    height: 1,
                   ),
                 ),
                 Text(

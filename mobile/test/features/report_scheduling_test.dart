@@ -1,7 +1,7 @@
+import 'package:adaptive_assessment/features/notifications/screens/notification_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:adaptive_assessment/features/notifications/screens/notification_settings_screen.dart';
 
 /// Widget tests for Report Scheduling and Notification Settings
 /// Task: 26.5
@@ -9,13 +9,11 @@ import 'package:adaptive_assessment/features/notifications/screens/notification_
 void main() {
   // ─── Helper: Build Widget with ProviderScope ─────────────────────────────
 
-  Widget buildTestWidget(Widget child) {
-    return ProviderScope(
-      child: MaterialApp(
-        home: child,
-      ),
-    );
-  }
+  Widget buildTestWidget(Widget child) => ProviderScope(
+        child: MaterialApp(
+          home: child,
+        ),
+      );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // GROUP 1: Report Schedule Creation and Validation
@@ -104,7 +102,9 @@ void main() {
 
     // ─── Test: Classroom Selection Validation ────────────────────────────────
 
-    test('at least one classroom must be selected for classroom-specific reports', () {
+    test(
+        'at least one classroom must be selected for classroom-specific reports',
+        () {
       final selectedClassrooms = <String>[];
       const reportType = 'مقارنة الفصول';
 
@@ -226,7 +226,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check page title (may be off-screen in list, use skipOffstage)
-      expect(find.text('إعدادات التنبيهات', skipOffstage: false), findsOneWidget);
+      expect(
+          find.text('إعدادات التنبيهات', skipOffstage: false), findsOneWidget);
 
       // Check all three notification groups are present (may need scrolling)
       expect(find.text('أداء الطلاب', skipOffstage: false), findsOneWidget);
@@ -267,7 +268,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // Find the first toggle row by its title (may be off-screen)
-      final pushToggleRow = find.text('تنبيهات لحظية (Push)', skipOffstage: false);
+      final pushToggleRow =
+          find.text('تنبيهات لحظية (Push)', skipOffstage: false);
       expect(pushToggleRow, findsOneWidget);
 
       // Scroll to make it visible, then tap
@@ -554,7 +556,7 @@ void main() {
 
     test('notification settings save and reload workflow', () {
       // Step 1: Load default settings
-      var settings = {
+      final settings = {
         'studentPerformance': {'push': true, 'email': false},
         'questionBank': {'push': true, 'sms': false},
         'periodicReports': {'email': true},
@@ -570,7 +572,8 @@ void main() {
       final savedSettings = Map<String, Map<String, bool>>.from(settings);
 
       // Step 4: Reload settings (simulate)
-      final reloadedSettings = Map<String, Map<String, bool>>.from(savedSettings);
+      final reloadedSettings =
+          Map<String, Map<String, bool>>.from(savedSettings);
 
       // Step 5: Verify persistence
       expect(reloadedSettings['studentPerformance']!['email'], isTrue);

@@ -29,8 +29,8 @@ class _TeacherTaskManagementScreenState
   final List<Map<String, dynamic>> _activeTasks = [
     {
       'subject': 'رياضيات',
-      'subjectColor': Color(0xFFD0E1FB),
-      'subjectTextColor': Color(0xFF54647A),
+      'subjectColor': const Color(0xFFD0E1FB),
+      'subjectTextColor': const Color(0xFF54647A),
       'title': 'الجبر المتطور: المعادلات التربيعية',
       'class': 'الصف العاشر - أ',
       'deadline': 'تسليم: 15 أكتوبر',
@@ -39,8 +39,8 @@ class _TeacherTaskManagementScreenState
     },
     {
       'subject': 'فيزياء',
-      'subjectColor': Color(0xFFFFDBCE),
-      'subjectTextColor': Color(0xFF802A00),
+      'subjectColor': const Color(0xFFFFDBCE),
+      'subjectTextColor': const Color(0xFF802A00),
       'title': 'مقدمة في قوانين نيوتن',
       'class': 'الصف الحادي عشر - ج',
       'deadline': 'تسليم: غداً',
@@ -49,8 +49,8 @@ class _TeacherTaskManagementScreenState
     },
     {
       'subject': 'رياضيات',
-      'subjectColor': Color(0xFFD0E1FB),
-      'subjectTextColor': Color(0xFF54647A),
+      'subjectColor': const Color(0xFFD0E1FB),
+      'subjectTextColor': const Color(0xFF54647A),
       'title': 'الاحتمالات والإحصاء الوصفي',
       'class': 'الصف العاشر - ب',
       'deadline': 'تسليم: 20 أكتوبر',
@@ -62,265 +62,262 @@ class _TeacherTaskManagementScreenState
   List<Map<String, dynamic>> get _filteredTasks {
     if (_selectedFilter == 0) return _activeTasks;
     if (_selectedFilter == 1) {
-      return _activeTasks
-          .where((t) => t['subject'] == 'رياضيات')
-          .toList();
+      return _activeTasks.where((t) => t['subject'] == 'رياضيات').toList();
     }
-    return _activeTasks
-        .where((t) => t['subject'] == 'فيزياء')
-        .toList();
+    return _activeTasks.where((t) => t['subject'] == 'فيزياء').toList();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: AppColors.surface,
-        body: CustomScrollView(
-          slivers: [
-            // ─── App Bar ────────────────────────────────────────────────
-            SliverAppBar(
-              floating: true,
-              snap: true,
-              backgroundColor: Colors.white,
-              elevation: 0,
-              scrolledUnderElevation: 1,
-              automaticallyImplyLeading: false,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.surfaceContainer,
-                          border: Border.all(color: AppColors.outlineVariant),
-                        ),
-                        child: const Icon(Icons.person, color: AppColors.primary),
-                      ),
-                      const SizedBox(width: 12),
-                      const Text(
-                        'EduAssess',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primaryContainer,
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.notifications_outlined),
-                    color: AppColors.onSurfaceVariant,
-                    onPressed: () => context.push('/teacher/notifications'),
-                  ),
-                ],
-              ),
-            ),
-
-            // ─── Content ────────────────────────────────────────────────
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  // Header
-                  _buildHeader(),
-                  const SizedBox(height: 16),
-
-                  // Filter chips
-                  _buildFilterChips(),
-                  const SizedBox(height: 16),
-
-                  // Tabs
-                  _buildTabs(),
-                  const SizedBox(height: 16),
-
-                  // Task cards
-                  ..._filteredTasks.map(_buildTaskCard),
-                ]),
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.white,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-              builder: (ctx) => Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: AppColors.surface,
+          body: CustomScrollView(
+            slivers: [
+              // ─── App Bar ────────────────────────────────────────────────
+              SliverAppBar(
+                floating: true,
+                snap: true,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                scrolledUnderElevation: 1,
+                automaticallyImplyLeading: false,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('إضافة مهمة جديدة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 8),
-                    const Text('أنشئ واجباً جديداً لطلابك.', style: TextStyle(color: AppColors.onSurfaceVariant)),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(ctx);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('ميزة إنشاء المهام قيد التطوير'), behavior: SnackBarBehavior.floating),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, minimumSize: const Size(double.infinity, 48)),
-                      child: const Text('إنشاء مهمة'),
+                    Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.surfaceContainer,
+                            border: Border.all(color: AppColors.outlineVariant),
+                          ),
+                          child: const Icon(Icons.person,
+                              color: AppColors.primary),
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'EduAssess',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primaryContainer,
+                          ),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.notifications_outlined),
+                      color: AppColors.onSurfaceVariant,
+                      onPressed: () => context.push('/teacher/notifications'),
                     ),
                   ],
                 ),
               ),
-            );
-          },
-          backgroundColor: AppColors.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+
+              // ─── Content ────────────────────────────────────────────────
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    // Header
+                    _buildHeader(),
+                    const SizedBox(height: 16),
+
+                    // Filter chips
+                    _buildFilterChips(),
+                    const SizedBox(height: 16),
+
+                    // Tabs
+                    _buildTabs(),
+                    const SizedBox(height: 16),
+
+                    // Task cards
+                    ..._filteredTasks.map(_buildTaskCard),
+                  ]),
+                ),
+              ),
+            ],
           ),
-          child: const Icon(Icons.add, color: Colors.white),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20))),
+                builder: (ctx) => Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text('إضافة مهمة جديدة',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 8),
+                      const Text('أنشئ واجباً جديداً لطلابك.',
+                          style: TextStyle(color: AppColors.onSurfaceVariant)),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('ميزة إنشاء المهام قيد التطوير'),
+                                behavior: SnackBarBehavior.floating),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 48)),
+                        child: const Text('إنشاء مهمة'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            backgroundColor: AppColors.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+          bottomNavigationBar:
+              const AppBottomNav(currentIndex: 1, role: 'teacher'),
         ),
-        bottomNavigationBar:
-            const AppBottomNav(currentIndex: 1, role: 'teacher'),
-      ),
-    );
-  }
+      );
 
   // ─── Header ──────────────────────────────────────────────────────────────
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text(
-          'إدارة المهام',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
+  Widget _buildHeader() => const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'إدارة المهام',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary,
+            ),
           ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          'تابع واجبات طلابك ونسب الإنجاز بكل سهولة.',
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.onSurfaceVariant,
+          SizedBox(height: 4),
+          Text(
+            'تابع واجبات طلابك ونسب الإنجاز بكل سهولة.',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.onSurfaceVariant,
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 
   // ─── Filter Chips ────────────────────────────────────────────────────────
 
-  Widget _buildFilterChips() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      reverse: true,
-      child: Row(
-        children: List.generate(_filters.length, (index) {
-          final isSelected = _selectedFilter == index;
-          return Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: GestureDetector(
-              onTap: () => setState(() => _selectedFilter = index),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primaryContainer
-                      : Colors.white,
-                  borderRadius: BorderRadius.circular(999),
-                  border: Border.all(
-                    color: isSelected
-                        ? AppColors.primaryContainer
-                        : AppColors.outlineVariant,
+  Widget _buildFilterChips() => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        reverse: true,
+        child: Row(
+          children: List.generate(_filters.length, (index) {
+            final isSelected = _selectedFilter == index;
+            return Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: GestureDetector(
+                onTap: () => setState(() => _selectedFilter = index),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        isSelected ? AppColors.primaryContainer : Colors.white,
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.primaryContainer
+                          : AppColors.outlineVariant,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      if (index == 0) ...[
+                        Icon(
+                          Icons.filter_list,
+                          size: 18,
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 4),
+                      ],
+                      Text(
+                        _filters[index],
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Row(
-                  children: [
-                    if (index == 0) ...[
-                      Icon(
-                        Icons.filter_list,
-                        size: 18,
-                        color: isSelected
-                            ? Colors.white
-                            : AppColors.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 4),
-                    ],
-                    Text(
-                      _filters[index],
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: isSelected
-                            ? Colors.white
-                            : AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
+            );
+          }),
+        ),
+      );
 
   // ─── Tabs ────────────────────────────────────────────────────────────────
 
-  Widget _buildTabs() {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppColors.outlineVariant),
+  Widget _buildTabs() => Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: AppColors.outlineVariant),
+          ),
         ),
-      ),
-      child: Row(
-        children: List.generate(_tabs.length, (index) {
-          final isActive = _activeTab == index;
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => setState(() => _activeTab = index),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: isActive
-                          ? AppColors.primary
-                          : Colors.transparent,
-                      width: 2,
+        child: Row(
+          children: List.generate(_tabs.length, (index) {
+            final isActive = _activeTab == index;
+            return Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _activeTab = index),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color:
+                            isActive ? AppColors.primary : Colors.transparent,
+                        width: 2,
+                      ),
                     ),
                   ),
-                ),
-                child: Text(
-                  _tabs[index],
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: isActive
-                        ? AppColors.primary
-                        : AppColors.onSurfaceVariant,
+                  child: Text(
+                    _tabs[index],
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: isActive
+                          ? AppColors.primary
+                          : AppColors.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
+            );
+          }),
+        ),
+      );
 
   // ─── Task Card ───────────────────────────────────────────────────────────
 
@@ -337,7 +334,7 @@ class _TeacherTaskManagementScreenState
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -352,7 +349,7 @@ class _TeacherTaskManagementScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // More options
-              Icon(Icons.more_vert, color: AppColors.outline, size: 20),
+              const Icon(Icons.more_vert, color: AppColors.outline, size: 20),
               // Subject + title
               Expanded(
                 child: Column(
@@ -424,7 +421,8 @@ class _TeacherTaskManagementScreenState
                 ),
               ),
               const SizedBox(width: 4),
-              const Icon(Icons.groups, size: 16, color: AppColors.onSurfaceVariant),
+              const Icon(Icons.groups,
+                  size: 16, color: AppColors.onSurfaceVariant),
             ],
           ),
           const SizedBox(height: 16),
@@ -456,7 +454,8 @@ class _TeacherTaskManagementScreenState
             child: LinearProgressIndicator(
               value: progress,
               backgroundColor: AppColors.surfaceContainer,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 8,
             ),
           ),

@@ -434,154 +434,158 @@ class _ClassroomManagementScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: _buildAppBar(context),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: _showCreateDialog,
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          icon: const Icon(Icons.add_rounded),
-          label: const Text('إضافة فصل',
-              style: TextStyle(
-                  fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
-        ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _errorMessage != null
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.error_outline,
-                              color: AppColors.error, size: 40),
-                          const SizedBox(height: 12),
-                          Text(
-                            _errorMessage!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton.icon(
-                            onPressed: _loadClassrooms,
-                            icon: const Icon(Icons.refresh),
-                            label: const Text('إعادة المحاولة'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : _classrooms.isEmpty
-                    ? _buildEmptyState()
-                    : RefreshIndicator(
-                        onRefresh: _loadClassrooms,
-                        child: ListView(
-                          padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF8FAFC),
+          appBar: _buildAppBar(context),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: _showCreateDialog,
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            icon: const Icon(Icons.add_rounded),
+            label: const Text('إضافة فصل',
+                style: TextStyle(
+                    fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
+          ),
+          body: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _errorMessage != null
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // ── Page Header ──────────────────────────────────
-                            _buildPageHeader(),
-                            const SizedBox(height: 20),
-                            // ── KPI Row ──────────────────────────────────────
-                            _buildKpiRow(),
-                            const SizedBox(height: 24),
-                            // ── Classroom Cards ───────────────────────────────
-                            ...List.generate(_classrooms.length, (i) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: _ClassroomCard(
-                                  classroom: _classrooms[i],
-                                  onDelete: () => _deleteClassroom(
-                                      _classrooms[i]['_id'] as String? ?? '',
-                                      _classrooms[i]['name'] as String? ?? ''),
-                                  onEdit: () => _showEditDialog(_classrooms[i]),
-                                  onAssignTeacher: () =>
-                                      _showAssignTeacherDialog(_classrooms[i]),
-                                  onAssignStudents: () =>
-                                      _showAssignStudentsDialog(_classrooms[i]),
-                                ),
-                              );
-                            }),
+                            const Icon(Icons.error_outline,
+                                color: AppColors.error, size: 40),
+                            const SizedBox(height: 12),
+                            Text(
+                              _errorMessage!,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton.icon(
+                              onPressed: _loadClassrooms,
+                              icon: const Icon(Icons.refresh),
+                              label: const Text('إعادة المحاولة'),
+                            ),
                           ],
                         ),
                       ),
-        bottomNavigationBar: const AppBottomNav(currentIndex: 2, role: 'admin'),
-      ),
-    );
-  }
+                    )
+                  : _classrooms.isEmpty
+                      ? _buildEmptyState()
+                      : RefreshIndicator(
+                          onRefresh: _loadClassrooms,
+                          child: ListView(
+                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+                            children: [
+                              // ── Page Header ──────────────────────────────────
+                              _buildPageHeader(),
+                              const SizedBox(height: 20),
+                              // ── KPI Row ──────────────────────────────────────
+                              _buildKpiRow(),
+                              const SizedBox(height: 24),
+                              // ── Classroom Cards ───────────────────────────────
+                              ...List.generate(
+                                  _classrooms.length,
+                                  (i) => Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 12),
+                                        child: _ClassroomCard(
+                                          classroom: _classrooms[i],
+                                          onDelete: () => _deleteClassroom(
+                                              _classrooms[i]['_id']
+                                                      as String? ??
+                                                  '',
+                                              _classrooms[i]['name']
+                                                      as String? ??
+                                                  ''),
+                                          onEdit: () =>
+                                              _showEditDialog(_classrooms[i]),
+                                          onAssignTeacher: () =>
+                                              _showAssignTeacherDialog(
+                                                  _classrooms[i]),
+                                          onAssignStudents: () =>
+                                              _showAssignStudentsDialog(
+                                                  _classrooms[i]),
+                                        ),
+                                      )),
+                            ],
+                          ),
+                        ),
+          bottomNavigationBar:
+              const AppBottomNav(currentIndex: 2, role: 'admin'),
+        ),
+      );
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: const Color(0xFFF8FAFC),
-      elevation: 0,
-      shadowColor: Colors.black12,
-      surfaceTintColor: Colors.transparent,
-      shape: const Border(
-        bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
-      ),
-      leading: context.canPop()
-          ? IconButton(
-              icon: const Icon(Icons.arrow_forward_rounded,
-                  color: Color(0xFF64748B)),
-              onPressed: () => context.pop(),
-              tooltip: 'رجوع',
-            )
-          : null,
-      title: const Text(
-        'التقييم الذكي',
-        style: TextStyle(
-          fontFamily: 'Almarai',
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          color: Color(0xFF1E40AF),
+  PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
+        backgroundColor: const Color(0xFFF8FAFC),
+        elevation: 0,
+        shadowColor: Colors.black12,
+        surfaceTintColor: Colors.transparent,
+        shape: const Border(
+          bottom: BorderSide(color: Color(0xFFE2E8F0)),
         ),
-      ),
-      centerTitle: false,
-      actions: [
-        const AdminTopActions(),
-        IconButton(
-          icon: const Icon(Icons.notifications_outlined,
-              color: Color(0xFF64748B)),
-          onPressed: () => context.push('/notifications'),
-          tooltip: 'الإشعارات',
-        ),
-        const SizedBox(width: 4),
-        Padding(
-          padding: const EdgeInsets.only(left: 12),
-          child: CircleAvatar(
-            radius: 18,
-            backgroundColor: AppColors.primaryContainer,
-            child: const Icon(Icons.person, color: Colors.white, size: 20),
+        leading: context.canPop()
+            ? IconButton(
+                icon: const Icon(Icons.arrow_forward_rounded,
+                    color: Color(0xFF64748B)),
+                onPressed: () => context.pop(),
+                tooltip: 'رجوع',
+              )
+            : null,
+        title: const Text(
+          'التقييم الذكي',
+          style: TextStyle(
+            fontFamily: 'Almarai',
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF1E40AF),
           ),
         ),
-      ],
-    );
-  }
+        centerTitle: false,
+        actions: [
+          const AdminTopActions(),
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined,
+                color: Color(0xFF64748B)),
+            onPressed: () => context.push('/notifications'),
+            tooltip: 'الإشعارات',
+          ),
+          const SizedBox(width: 4),
+          const Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: AppColors.primaryContainer,
+              child: Icon(Icons.person, color: Colors.white, size: 20),
+            ),
+          ),
+        ],
+      );
 
-  Widget _buildPageHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'إدارة الفصول الدراسية',
-          style: AppTextStyles.displayMedium.copyWith(color: AppColors.primary),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'إدارة الفصول وتعيين المعلمين والطلاب',
-          style: AppTextStyles.bodyMedium
-              .copyWith(color: AppColors.onSurfaceVariant),
-        ),
-      ],
-    );
-  }
+  Widget _buildPageHeader() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'إدارة الفصول الدراسية',
+            style:
+                AppTextStyles.displayMedium.copyWith(color: AppColors.primary),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'إدارة الفصول وتعيين المعلمين والطلاب',
+            style: AppTextStyles.bodyMedium
+                .copyWith(color: AppColors.onSurfaceVariant),
+          ),
+        ],
+      );
 
   Widget _buildKpiRow() {
     final totalStudents = _classrooms.fold<int>(
@@ -621,46 +625,45 @@ class _ClassroomManagementScreenState
     );
   }
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
-              shape: BoxShape.circle,
+  Widget _buildEmptyState() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: AppColors.surfaceContainer,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.class_rounded,
+                  size: 40, color: AppColors.outlineVariant),
             ),
-            child: const Icon(Icons.class_rounded,
-                size: 40, color: AppColors.outlineVariant),
-          ),
-          const SizedBox(height: 16),
-          Text('لا توجد فصول دراسية',
-              style: AppTextStyles.titleMedium
-                  .copyWith(color: AppColors.onSurfaceVariant)),
-          const SizedBox(height: 8),
-          Text('أضف فصلاً جديداً للبدء',
-              style: AppTextStyles.bodyMedium
-                  .copyWith(color: AppColors.outlineVariant)),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: _showCreateDialog,
-            icon: const Icon(Icons.add_rounded),
-            label: const Text('إضافة فصل'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            const SizedBox(height: 16),
+            Text('لا توجد فصول دراسية',
+                style: AppTextStyles.titleMedium
+                    .copyWith(color: AppColors.onSurfaceVariant)),
+            const SizedBox(height: 8),
+            Text('أضف فصلاً جديداً للبدء',
+                style: AppTextStyles.bodyMedium
+                    .copyWith(color: AppColors.outlineVariant)),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: _showCreateDialog,
+              icon: const Icon(Icons.add_rounded),
+              label: const Text('إضافة فصل'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   Future<List<Map<String, dynamic>>> _loadTeacherOptions(
     List<Map<String, dynamic>> fallbackTeachers,
@@ -718,8 +721,8 @@ class _ClassroomManagementScreenState
       return;
     }
 
-    String? selectedTeacherId = classroom['teacherId'] as String?;
-    String teacherSearchQuery = '';
+    var selectedTeacherId = classroom['teacherId'] as String?;
+    var teacherSearchQuery = '';
     if (!mounted) return;
 
     await showModalBottomSheet<void>(
@@ -786,7 +789,9 @@ class _ClassroomManagementScreenState
                       children: filteredTeachers
                           .map((t) => RadioListTile<String>(
                                 value: t['_id'] as String,
+                                // ignore: deprecated_member_use
                                 groupValue: selectedTeacherId,
+                                // ignore: deprecated_member_use
                                 onChanged: (v) =>
                                     setModalState(() => selectedTeacherId = v),
                                 title: Text(t['fullName'] as String,
@@ -904,7 +909,7 @@ class _ClassroomManagementScreenState
         else if (item is Map && (item['_id'] ?? item['id']) != null)
           (item['_id'] ?? item['id']).toString(),
     };
-    String studentSearchQuery = '';
+    var studentSearchQuery = '';
     if (!mounted) return;
 
     await showModalBottomSheet<void>(
@@ -1218,50 +1223,48 @@ class _KpiCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFDAD9E3)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: color,
-              height: 1.2,
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFDAD9E3)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
             ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-              color: AppColors.onSurfaceVariant,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: color, size: 20),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: color,
+                height: 1.2,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 // ─── Classroom Card ───────────────────────────────────────────────────────────
@@ -1504,42 +1507,40 @@ class _StatItem extends StatelessWidget {
   final bool isText;
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: 11,
-                    color: AppColors.onSurfaceVariant,
+  Widget build(BuildContext context) => Expanded(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 16, color: color),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: 11,
+                      color: AppColors.onSurfaceVariant,
+                    ),
                   ),
-                ),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: isText ? 12 : 16,
-                    fontWeight: FontWeight.w700,
-                    color: color,
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: isText ? 12 : 16,
+                      fontWeight: FontWeight.w700,
+                      color: color,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 // ─── Create Classroom Dialog ──────────────────────────────────────────────────
@@ -1617,76 +1618,75 @@ class _CreateClassroomDialogState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('إضافة فصل جديد',
-            style:
-                TextStyle(fontFamily: 'Almarai', fontWeight: FontWeight.w700)),
-        content: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'اسم الفصل *',
-                  hintText: 'مثال: أولى متوسط (أ)',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('إضافة فصل جديد',
+              style: TextStyle(
+                  fontFamily: 'Almarai', fontWeight: FontWeight.w700)),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'اسم الفصل *',
+                    hintText: 'مثال: أولى متوسط (أ)',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
+                  onSaved: (v) => _name = v!,
                 ),
-                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _name = v!,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'المرحلة الدراسية *',
-                  hintText: 'مثال: الصف الأول المتوسط',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                const SizedBox(height: 12),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'المرحلة الدراسية *',
+                    hintText: 'مثال: الصف الأول المتوسط',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
+                  onSaved: (v) => _gradeLevel = v!,
                 ),
-                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _gradeLevel = v!,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'العام الدراسي *',
-                  hintText: 'مثال: 2024-2025',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                const SizedBox(height: 12),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'العام الدراسي *',
+                    hintText: 'مثال: 2024-2025',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
+                  onSaved: (v) => _academicYear = v!,
                 ),
-                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _academicYear = v!,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('إلغاء')),
-          ElevatedButton(
-            onPressed: _isLoading ? null : _submit,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+              ],
             ),
-            child: _isLoading
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white))
-                : const Text('إنشاء'),
           ),
-        ],
-      ),
-    );
-  }
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('إلغاء')),
+            ElevatedButton(
+              onPressed: _isLoading ? null : _submit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
+              child: _isLoading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white))
+                  : const Text('إنشاء'),
+            ),
+          ],
+        ),
+      );
 }

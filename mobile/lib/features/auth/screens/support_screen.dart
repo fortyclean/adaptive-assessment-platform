@@ -21,385 +21,148 @@ class _SupportScreenState extends State<SupportScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFBF8FF),
-        appBar: _buildAppBar(),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHero(),
-              const SizedBox(height: 24),
-              _buildSearchBar(),
-              const SizedBox(height: 24),
-              _buildCategories(),
-              const SizedBox(height: 24),
-              _buildContactSupport(),
-              const SizedBox(height: 24),
-              _buildTutorials(),
-              const SizedBox(height: 80),
-            ],
-          ),
-        ),
-        bottomNavigationBar: _buildBottomNav(),
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 1,
-      shadowColor: Colors.black12,
-      automaticallyImplyLeading: false,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: AppColors.primary),
-            onPressed: () {
-              if (context.canPop()) {
-                context.pop();
-              } else {
-                context.go('/admin');
-              }
-            },
-          ),
-          const Text(
-            'التقييم الذكي',
-            style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w700,
-                fontSize: 18),
-          ),
-        ],
-      ),
-      actions: [
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: const Color(0xFFE8E7F0),
-          child: const Icon(Icons.person, color: AppColors.primary, size: 20),
-        ),
-        const SizedBox(width: 12),
-      ],
-    );
-  }
-
-  Widget _buildHero() {
-    return Column(
-      children: const [
-        Text(
-          'الدعم الفني والمساعدة',
-          style: TextStyle(
-              color: AppColors.primary,
-              fontSize: 24,
-              fontWeight: FontWeight.w700),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 8),
-        Text(
-          'نحن هنا للإجابة على استفساراتك ومساعدتك في رحلتك التعليمية.',
-          style: TextStyle(color: AppColors.outline, fontSize: 14),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return TextField(
-      controller: _searchController,
-      textDirection: TextDirection.rtl,
-      decoration: InputDecoration(
-        hintText: 'كيف يمكننا مساعدتك اليوم؟',
-        hintStyle: const TextStyle(color: AppColors.outline, fontSize: 14),
-        prefixIcon: const Icon(Icons.search, color: AppColors.outline),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      ),
-    );
-  }
-
-  Widget _buildCategories() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('الأقسام الرئيسية',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 12),
-        // Full-width general card
-        GestureDetector(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (ctx) => Directionality(
-                textDirection: TextDirection.rtl,
-                child: AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  title: const Text('قسم عام'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text('الأسئلة الشائعة:',
-                          style: TextStyle(fontWeight: FontWeight.w600)),
-                      SizedBox(height: 8),
-                      Text('• كيف أبدأ استخدام المنصة؟'),
-                      Text('• كيف أنشئ اختبار جديد؟'),
-                      Text('• كيف أضيف طلاب إلى الفصل؟'),
-                      Text('• كيف أعرض التقارير؟'),
-                      SizedBox(height: 12),
-                      Text('للمزيد من المساعدة، تواصل مع فريق الدعم.',
-                          style: TextStyle(
-                              color: AppColors.onSurfaceVariant, fontSize: 12)),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                        onPressed: () => Navigator.pop(ctx),
-                        child: const Text('إغلاق')),
-                  ],
-                ),
-              ),
-            );
-          },
-          child: Container(
-            width: double.infinity,
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: const Color(0xFFFBF8FF),
+          appBar: _buildAppBar(),
+          body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('عام',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600)),
-                    SizedBox(height: 2),
-                    Text('الأسئلة الشائعة حول المنصة',
-                        style: TextStyle(color: Colors.white70, fontSize: 12)),
-                  ],
-                ),
-                Icon(Icons.help_center_outlined, color: Colors.white, size: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHero(),
+                const SizedBox(height: 24),
+                _buildSearchBar(),
+                const SizedBox(height: 24),
+                _buildCategories(),
+                const SizedBox(height: 24),
+                _buildContactSupport(),
+                const SizedBox(height: 24),
+                _buildTutorials(),
+                const SizedBox(height: 80),
               ],
             ),
           ),
+          bottomNavigationBar: _buildBottomNav(),
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-                child: _buildCategoryCard(
-              Icons.settings_outlined,
-              'تقني',
-              'حلول المشاكل الفنية',
-              const Color(0xFFD0E1FB),
-              const Color(0xFF54647A),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: AlertDialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      title: const Text('قسم تقني'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text('المشاكل الفنية الشائعة:',
-                              style: TextStyle(fontWeight: FontWeight.w600)),
-                          SizedBox(height: 8),
-                          Text('• مشكلة في تسجيل الدخول'),
-                          Text('• بطء في تحميل الصفحات'),
-                          Text('• خطأ في حفظ البيانات'),
-                          Text('• مشكلة في رفع الملفات'),
-                          SizedBox(height: 12),
-                          Text('إذا استمرت المشكلة، تواصل مع الدعم الفني.',
-                              style: TextStyle(
-                                  color: AppColors.onSurfaceVariant,
-                                  fontSize: 12)),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                            onPressed: () => Navigator.pop(ctx),
-                            child: const Text('إغلاق')),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            )),
-            const SizedBox(width: 12),
-            Expanded(
-                child: _buildCategoryCard(
-              Icons.payments_outlined,
-              'الفواتير',
-              'الاشتراكات والمدفوعات',
-              const Color(0xFFFFDBCE),
-              const Color(0xFF802A00),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: AlertDialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      title: const Text('قسم الفواتير'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text('معلومات الاشتراك:',
-                              style: TextStyle(fontWeight: FontWeight.w600)),
-                          SizedBox(height: 8),
-                          Text('• الخطة الحالية: مجانية'),
-                          Text('• تاريخ الانتهاء: غير محدد'),
-                          Text('• عدد المستخدمين: غير محدود'),
-                          SizedBox(height: 12),
-                          Text(
-                              'للترقية أو الاستفسار عن الفواتير، تواصل مع قسم المبيعات.',
-                              style: TextStyle(
-                                  color: AppColors.onSurfaceVariant,
-                                  fontSize: 12)),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                            onPressed: () => Navigator.pop(ctx),
-                            child: const Text('إغلاق')),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            )),
-          ],
-        ),
-      ],
-    );
-  }
+      );
 
-  Widget _buildCategoryCard(IconData icon, String title, String subtitle,
-      Color iconBg, Color iconColor,
-      {VoidCallback? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  PreferredSizeWidget _buildAppBar() => AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        shadowColor: Colors.black12,
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                  color: iconBg, borderRadius: BorderRadius.circular(10)),
-              child: Icon(icon, color: iconColor, size: 20),
+            IconButton(
+              icon: const Icon(Icons.menu, color: AppColors.primary),
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/admin');
+                }
+              },
             ),
-            const SizedBox(height: 8),
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 2),
-            Text(subtitle,
-                style: const TextStyle(color: AppColors.outline, fontSize: 11)),
+            const Text(
+              'التقييم الذكي',
+              style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18),
+            ),
           ],
         ),
-      ),
-    );
-  }
+        actions: const [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: Color(0xFFE8E7F0),
+            child: Icon(Icons.person, color: AppColors.primary, size: 20),
+          ),
+          SizedBox(width: 12),
+        ],
+      );
 
-  Widget _buildContactSupport() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFD0E1FB).withOpacity(0.3),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFD0E1FB)),
-      ),
-      child: Column(
+  Widget _buildHero() => const Column(
+        children: [
+          Text(
+            'الدعم الفني والمساعدة',
+            style: TextStyle(
+                color: AppColors.primary,
+                fontSize: 24,
+                fontWeight: FontWeight.w700),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8),
+          Text(
+            'نحن هنا للإجابة على استفساراتك ومساعدتك في رحلتك التعليمية.',
+            style: TextStyle(color: AppColors.outline, fontSize: 14),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      );
+
+  Widget _buildSearchBar() => TextField(
+        controller: _searchController,
+        textDirection: TextDirection.rtl,
+        decoration: InputDecoration(
+          hintText: 'كيف يمكننا مساعدتك اليوم؟',
+          hintStyle: const TextStyle(color: AppColors.outline, fontSize: 14),
+          prefixIcon: const Icon(Icons.search, color: AppColors.outline),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        ),
+      );
+
+  Widget _buildCategories() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.support_agent_outlined,
-                  color: Color(0xFF1E40AF), size: 32),
-              SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('تواصل مع الدعم',
-                      style: TextStyle(
-                          color: Color(0xFF1E40AF),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600)),
-                  Text('فريقنا متواجد 24/7 لمساعدتك',
-                      style: TextStyle(color: Color(0xFF54647A), fontSize: 13)),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
+          const Text('الأقسام الرئيسية',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 12),
+          // Full-width general card
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),
-                    title: const Text('الدعم الفني المباشر'),
-                    content: Column(
+                    title: const Text('قسم عام'),
+                    content: const Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.support_agent_outlined,
-                            size: 48, color: AppColors.primary),
-                        SizedBox(height: 12),
-                        Text('فريق الدعم متواجد 24/7',
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('الأسئلة الشائعة:',
                             style: TextStyle(fontWeight: FontWeight.w600)),
                         SizedBox(height: 8),
-                        Text('للتواصل المباشر: support@adaptive-mastery.com',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: AppColors.onSurfaceVariant)),
+                        Text('• كيف أبدأ استخدام المنصة؟'),
+                        Text('• كيف أنشئ اختبار جديد؟'),
+                        Text('• كيف أضيف طلاب إلى الفصل؟'),
+                        Text('• كيف أعرض التقارير؟'),
+                        SizedBox(height: 12),
+                        Text('للمزيد من المساعدة، تواصل مع فريق الدعم.',
+                            style: TextStyle(
+                                color: AppColors.onSurfaceVariant,
+                                fontSize: 12)),
                       ],
                     ),
                     actions: [
@@ -408,115 +171,346 @@ class _SupportScreenState extends State<SupportScreen> {
                           child: const Text('إغلاق')),
                     ],
                   ),
-                );
-              },
-              icon: const Icon(Icons.chat_outlined, size: 18),
-              label: const Text('بدء محادثة فورية'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                elevation: 0,
+                ),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('عام',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      SizedBox(height: 2),
+                      Text('الأسئلة الشائعة حول المنصة',
+                          style:
+                              TextStyle(color: Colors.white70, fontSize: 12)),
+                    ],
+                  ),
+                  Icon(Icons.help_center_outlined,
+                      color: Colors.white, size: 40),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () {
-                final msgController = TextEditingController();
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20))),
-                  builder: (ctx) => Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-                        left: 16,
-                        right: 16,
-                        top: 20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Center(
-                            child: Container(
-                                width: 40,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    color: AppColors.outlineVariant,
-                                    borderRadius: BorderRadius.circular(2)))),
-                        const SizedBox(height: 16),
-                        const Text('فتح تذكرة دعم',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: msgController,
-                          maxLines: 4,
-                          textDirection: TextDirection.rtl,
-                          decoration: InputDecoration(
-                            hintText: 'اشرح مشكلتك بالتفصيل...',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                  child: _buildCategoryCard(
+                Icons.settings_outlined,
+                'تقني',
+                'حلول المشاكل الفنية',
+                const Color(0xFFD0E1FB),
+                const Color(0xFF54647A),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        title: const Text('قسم تقني'),
+                        content: const Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('المشاكل الفنية الشائعة:',
+                                style: TextStyle(fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8),
+                            Text('• مشكلة في تسجيل الدخول'),
+                            Text('• بطء في تحميل الصفحات'),
+                            Text('• خطأ في حفظ البيانات'),
+                            Text('• مشكلة في رفع الملفات'),
+                            SizedBox(height: 12),
+                            Text('إذا استمرت المشكلة، تواصل مع الدعم الفني.',
+                                style: TextStyle(
+                                    color: AppColors.onSurfaceVariant,
+                                    fontSize: 12)),
+                          ],
                         ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      'تم إرسال تذكرة الدعم. سنتواصل معك خلال 24 ساعة.'),
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Color(0xFF2E7D32)),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8))),
-                          child: const Text('إرسال التذكرة',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w600)),
-                        ),
-                      ],
+                        actions: [
+                          TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: const Text('إغلاق')),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.confirmation_number_outlined, size: 18),
-              label: const Text('فتح تذكرة دعم'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-              ),
-            ),
+                  );
+                },
+              )),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: _buildCategoryCard(
+                Icons.payments_outlined,
+                'الفواتير',
+                'الاشتراكات والمدفوعات',
+                const Color(0xFFFFDBCE),
+                const Color(0xFF802A00),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        title: const Text('قسم الفواتير'),
+                        content: const Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('معلومات الاشتراك:',
+                                style: TextStyle(fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8),
+                            Text('• الخطة الحالية: مجانية'),
+                            Text('• تاريخ الانتهاء: غير محدد'),
+                            Text('• عدد المستخدمين: غير محدود'),
+                            SizedBox(height: 12),
+                            Text(
+                                'للترقية أو الاستفسار عن الفواتير، تواصل مع قسم المبيعات.',
+                                style: TextStyle(
+                                    color: AppColors.onSurfaceVariant,
+                                    fontSize: 12)),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: const Text('إغلاق')),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              )),
+            ],
           ),
         ],
-      ),
-    );
-  }
+      );
+
+  Widget _buildCategoryCard(IconData icon, String title, String subtitle,
+          Color iconBg, Color iconColor,
+          {VoidCallback? onTap}) =>
+      GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFC4C5D5)),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                    color: iconBg, borderRadius: BorderRadius.circular(10)),
+                child: Icon(icon, color: iconColor, size: 20),
+              ),
+              const SizedBox(height: 8),
+              Text(title,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
+              const SizedBox(height: 2),
+              Text(subtitle,
+                  style:
+                      const TextStyle(color: AppColors.outline, fontSize: 11)),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildContactSupport() => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFD0E1FB).withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFD0E1FB)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Row(
+              children: [
+                Icon(Icons.support_agent_outlined,
+                    color: Color(0xFF1E40AF), size: 32),
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('تواصل مع الدعم',
+                        style: TextStyle(
+                            color: Color(0xFF1E40AF),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600)),
+                    Text('فريقنا متواجد 24/7 لمساعدتك',
+                        style:
+                            TextStyle(color: Color(0xFF54647A), fontSize: 13)),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      title: const Text('الدعم الفني المباشر'),
+                      content: const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.support_agent_outlined,
+                              size: 48, color: AppColors.primary),
+                          SizedBox(height: 12),
+                          Text('فريق الدعم متواجد 24/7',
+                              style: TextStyle(fontWeight: FontWeight.w600)),
+                          SizedBox(height: 8),
+                          Text('للتواصل المباشر: support@adaptive-mastery.com',
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: AppColors.onSurfaceVariant)),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.pop(ctx),
+                            child: const Text('إغلاق')),
+                      ],
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.chat_outlined, size: 18),
+                label: const Text('بدء محادثة فورية'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  elevation: 0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  final msgController = TextEditingController();
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20))),
+                    builder: (ctx) => Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+                          left: 16,
+                          right: 16,
+                          top: 20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(
+                              child: Container(
+                                  width: 40,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.outlineVariant,
+                                      borderRadius: BorderRadius.circular(2)))),
+                          const SizedBox(height: 16),
+                          const Text('فتح تذكرة دعم',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w700)),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: msgController,
+                            maxLines: 4,
+                            textDirection: TextDirection.rtl,
+                            decoration: InputDecoration(
+                              hintText: 'اشرح مشكلتك بالتفصيل...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'تم إرسال تذكرة الدعم. سنتواصل معك خلال 24 ساعة.'),
+                                    behavior: SnackBarBehavior.floating,
+                                    backgroundColor: Color(0xFF2E7D32)),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            child: const Text('إرسال التذكرة',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.confirmation_number_outlined, size: 18),
+                label: const Text('فتح تذكرة دعم'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.primary),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildTutorials() {
     final tutorials = [
-      _Tutorial(
+      const _Tutorial(
           title: 'كيفية بدء اختبارك الأول',
           duration: '3 دقائق • فيديو',
           icon: Icons.play_circle_outline),
-      _Tutorial(
+      const _Tutorial(
           title: 'فهم تقارير الأداء',
           duration: '5 دقائق • مقال',
           icon: Icons.article_outlined),
@@ -540,10 +534,10 @@ class _SupportScreenState extends State<SupportScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)),
                         title: const Text('جميع الشروحات التعليمية'),
-                        content: Column(
+                        content: const Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text('الشروحات المتاحة:',
                                 style: TextStyle(fontWeight: FontWeight.w600)),
                             SizedBox(height: 8),
@@ -632,7 +626,8 @@ class _SupportScreenState extends State<SupportScreen> {
                     border: Border.all(color: const Color(0xFFC4C5D5)),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.04), blurRadius: 6)
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 6)
                     ],
                   ),
                   child: Row(
@@ -672,51 +667,47 @@ class _SupportScreenState extends State<SupportScreen> {
     );
   }
 
-  Widget _buildBottomNav() {
-    return Container(
-      height: 64,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEEEDF7),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, -2))
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _navItem(Icons.home_outlined, 'الرئيسية', false),
-          _navItem(Icons.assignment_outlined, 'الاختبارات', false),
-          _navItem(Icons.folder_open, 'المصادر', true),
-          _navItem(Icons.analytics_outlined, 'التقارير', false),
-        ],
-      ),
-    );
-  }
+  Widget _buildBottomNav() => Container(
+        height: 64,
+        decoration: BoxDecoration(
+          color: const Color(0xFFEEEDF7),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, -2))
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _navItem(Icons.home_outlined, 'الرئيسية', false),
+            _navItem(Icons.assignment_outlined, 'الاختبارات', false),
+            _navItem(Icons.folder_open, 'المصادر', true),
+            _navItem(Icons.analytics_outlined, 'التقارير', false),
+          ],
+        ),
+      );
 
-  Widget _navItem(IconData icon, String label, bool active) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon,
-            color: active ? AppColors.primary : AppColors.outline, size: 24),
-        const SizedBox(height: 2),
-        Text(label,
-            style: TextStyle(
-                fontSize: 11,
-                color: active ? AppColors.primary : AppColors.outline)),
-      ],
-    );
-  }
+  Widget _navItem(IconData icon, String label, bool active) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon,
+              color: active ? AppColors.primary : AppColors.outline, size: 24),
+          const SizedBox(height: 2),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 11,
+                  color: active ? AppColors.primary : AppColors.outline)),
+        ],
+      );
 }
 
 class _Tutorial {
+  const _Tutorial(
+      {required this.title, required this.duration, required this.icon});
   final String title;
   final String duration;
   final IconData icon;
-  const _Tutorial(
-      {required this.title, required this.duration, required this.icon});
 }

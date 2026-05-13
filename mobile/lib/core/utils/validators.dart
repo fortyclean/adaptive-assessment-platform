@@ -21,13 +21,13 @@ class AppValidators {
     if (value.length < 8) {
       return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
     }
-    if (!value.contains(RegExp(r'[A-Z]'))) {
+    if (!value.contains(RegExp('[A-Z]'))) {
       return 'كلمة المرور يجب أن تحتوي على حرف كبير';
     }
-    if (!value.contains(RegExp(r'[a-z]'))) {
+    if (!value.contains(RegExp('[a-z]'))) {
       return 'كلمة المرور يجب أن تحتوي على حرف صغير';
     }
-    if (!value.contains(RegExp(r'[0-9]'))) {
+    if (!value.contains(RegExp('[0-9]'))) {
       return 'كلمة المرور يجب أن تحتوي على رقم';
     }
     return null;
@@ -57,7 +57,8 @@ class AppValidators {
   }
 
   /// Validates a required text field.
-  static String? validateRequired(String? value, {String fieldName = 'هذا الحقل'}) {
+  static String? validateRequired(String? value,
+      {String fieldName = 'هذا الحقل'}) {
     if (value == null || value.trim().isEmpty) {
       return '$fieldName مطلوب';
     }

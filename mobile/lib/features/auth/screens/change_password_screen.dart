@@ -40,8 +40,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   String? _validateNewPassword(String? value) {
     if (value == null || value.isEmpty) return 'يرجى إدخال كلمة المرور الجديدة';
     if (value.length < 8) return 'يجب أن تكون 8 أحرف على الأقل';
-    if (!value.contains(RegExp(r'[A-Z]'))) return 'يجب أن تحتوي على حرف كبير';
-    if (!value.contains(RegExp(r'[0-9]'))) return 'يجب أن تحتوي على رقم';
+    if (!value.contains(RegExp('[A-Z]'))) return 'يجب أن تحتوي على حرف كبير';
+    if (!value.contains(RegExp('[0-9]'))) return 'يجب أن تحتوي على رقم';
     return null;
   }
 
@@ -82,132 +82,129 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('تغيير كلمة المرور'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('تغيير كلمة المرور'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => context.pop(),
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: _success ? _buildSuccessView() : _buildFormView(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: _success ? _buildSuccessView() : _buildFormView(),
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _buildFormView() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Password strength hint
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'متطلبات كلمة المرور:',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 4),
-                _buildRequirement('8 أحرف على الأقل'),
-                _buildRequirement('حرف كبير واحد على الأقل'),
-                _buildRequirement('رقم واحد على الأقل'),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Current password
-          _buildPasswordField(
-            controller: _currentPasswordController,
-            label: 'كلمة المرور الحالية',
-            obscure: _obscureCurrent,
-            onToggle: () =>
-                setState(() => _obscureCurrent = !_obscureCurrent),
-            validator: (v) =>
-                (v == null || v.isEmpty) ? 'يرجى إدخال كلمة المرور الحالية' : null,
-          ),
-
-          const SizedBox(height: 16),
-
-          // New password
-          _buildPasswordField(
-            controller: _newPasswordController,
-            label: 'كلمة المرور الجديدة',
-            obscure: _obscureNew,
-            onToggle: () => setState(() => _obscureNew = !_obscureNew),
-            validator: _validateNewPassword,
-          ),
-
-          const SizedBox(height: 16),
-
-          // Confirm password
-          _buildPasswordField(
-            controller: _confirmPasswordController,
-            label: 'تأكيد كلمة المرور الجديدة',
-            obscure: _obscureConfirm,
-            onToggle: () =>
-                setState(() => _obscureConfirm = !_obscureConfirm),
-            validator: (v) {
-              if (v == null || v.isEmpty) return 'يرجى تأكيد كلمة المرور';
-              if (v != _newPasswordController.text) {
-                return 'كلمتا المرور غير متطابقتين';
-              }
-              return null;
-            },
-          ),
-
-          if (_errorMessage != null) ...[
-            const SizedBox(height: 12),
+  Widget _buildFormView() => Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Password strength hint
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.errorContainer,
+                color: AppColors.surfaceContainer,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(
-                _errorMessage!,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: AppColors.error),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'متطلبات كلمة المرور:',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  _buildRequirement('8 أحرف على الأقل'),
+                  _buildRequirement('حرف كبير واحد على الأقل'),
+                  _buildRequirement('رقم واحد على الأقل'),
+                ],
               ),
             ),
+
+            const SizedBox(height: 24),
+
+            // Current password
+            _buildPasswordField(
+              controller: _currentPasswordController,
+              label: 'كلمة المرور الحالية',
+              obscure: _obscureCurrent,
+              onToggle: () =>
+                  setState(() => _obscureCurrent = !_obscureCurrent),
+              validator: (v) => (v == null || v.isEmpty)
+                  ? 'يرجى إدخال كلمة المرور الحالية'
+                  : null,
+            ),
+
+            const SizedBox(height: 16),
+
+            // New password
+            _buildPasswordField(
+              controller: _newPasswordController,
+              label: 'كلمة المرور الجديدة',
+              obscure: _obscureNew,
+              onToggle: () => setState(() => _obscureNew = !_obscureNew),
+              validator: _validateNewPassword,
+            ),
+
+            const SizedBox(height: 16),
+
+            // Confirm password
+            _buildPasswordField(
+              controller: _confirmPasswordController,
+              label: 'تأكيد كلمة المرور الجديدة',
+              obscure: _obscureConfirm,
+              onToggle: () =>
+                  setState(() => _obscureConfirm = !_obscureConfirm),
+              validator: (v) {
+                if (v == null || v.isEmpty) return 'يرجى تأكيد كلمة المرور';
+                if (v != _newPasswordController.text) {
+                  return 'كلمتا المرور غير متطابقتين';
+                }
+                return null;
+              },
+            ),
+
+            if (_errorMessage != null) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.errorContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  _errorMessage!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: AppColors.error),
+                ),
+              ),
+            ],
+
+            const SizedBox(height: 32),
+
+            ElevatedButton(
+              onPressed: _isLoading ? null : _handleSubmit,
+              child: _isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Text('تغيير كلمة المرور'),
+            ),
           ],
-
-          const SizedBox(height: 32),
-
-          ElevatedButton(
-            onPressed: _isLoading ? null : _handleSubmit,
-            child: _isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white),
-                  )
-                : const Text('تغيير كلمة المرور'),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      );
 
   Widget _buildPasswordField({
     required TextEditingController controller,
@@ -215,64 +212,60 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     required bool obscure,
     required VoidCallback onToggle,
     required String? Function(String?) validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscure,
-      textDirection: TextDirection.ltr,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: const Icon(Icons.lock_outline_rounded),
-        suffixIcon: IconButton(
-          icon: Icon(
-              obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-          onPressed: onToggle,
+  }) =>
+      TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        textDirection: TextDirection.ltr,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: const Icon(Icons.lock_outline_rounded),
+          suffixIcon: IconButton(
+            icon: Icon(obscure
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined),
+            onPressed: onToggle,
+          ),
         ),
-      ),
-      validator: validator,
-    );
-  }
+        validator: validator,
+      );
 
-  Widget _buildRequirement(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 2),
-      child: Row(
+  Widget _buildRequirement(String text) => Padding(
+        padding: const EdgeInsets.only(top: 2),
+        child: Row(
+          children: [
+            const Icon(Icons.check_circle_outline,
+                size: 14, color: AppColors.onSurfaceVariant),
+            const SizedBox(width: 6),
+            Text(
+              text,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall
+                  ?.copyWith(color: AppColors.onSurfaceVariant),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildSuccessView() => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Icon(Icons.check_circle_outline,
-              size: 14, color: AppColors.onSurfaceVariant),
-          const SizedBox(width: 6),
+          const SizedBox(height: 60),
+          const Icon(Icons.check_circle_rounded,
+              size: 80, color: AppColors.success),
+          const SizedBox(height: 24),
           Text(
-            text,
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall
-                ?.copyWith(color: AppColors.onSurfaceVariant),
+            'تم تغيير كلمة المرور بنجاح',
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton(
+            onPressed: () => context.pop(),
+            child: const Text('العودة'),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSuccessView() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(height: 60),
-        const Icon(Icons.check_circle_rounded,
-            size: 80, color: AppColors.success),
-        const SizedBox(height: 24),
-        Text(
-          'تم تغيير كلمة المرور بنجاح',
-          style: Theme.of(context).textTheme.titleLarge,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 32),
-        ElevatedButton(
-          onPressed: () => context.pop(),
-          child: const Text('العودة'),
-        ),
-      ],
-    );
-  }
+      );
 }

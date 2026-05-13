@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
 
 /// Accessible button wrapper that ensures WCAG 2.1 Level AA compliance.
 /// Requirements: 12.6
@@ -9,9 +8,9 @@ import '../../core/constants/app_colors.dart';
 /// - Sufficient color contrast (primary #00288E on white = 8.59:1 ratio)
 class AccessibleButton extends StatelessWidget {
   const AccessibleButton({
-    super.key,
     required this.label,
     required this.onPressed,
+    super.key,
     this.semanticLabel,
     this.icon,
     this.isLoading = false,
@@ -26,21 +25,20 @@ class AccessibleButton extends StatelessWidget {
   final AccessibleButtonVariant variant;
 
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: semanticLabel ?? label,
-      button: true,
-      enabled: onPressed != null && !isLoading,
-      child: _buildButton(context),
-    );
-  }
+  Widget build(BuildContext context) => Semantics(
+        label: semanticLabel ?? label,
+        button: true,
+        enabled: onPressed != null && !isLoading,
+        child: _buildButton(context),
+      );
 
   Widget _buildButton(BuildContext context) {
     final child = isLoading
         ? const SizedBox(
             width: 20,
             height: 20,
-            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+            child:
+                CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
           )
         : icon != null
             ? Row(
@@ -84,10 +82,10 @@ enum AccessibleButtonVariant { primary, outlined, text }
 /// Accessible icon button with minimum 44x44 touch target.
 class AccessibleIconButton extends StatelessWidget {
   const AccessibleIconButton({
-    super.key,
     required this.icon,
     required this.onPressed,
     required this.tooltip,
+    super.key,
   });
 
   final IconData icon;
@@ -95,29 +93,27 @@ class AccessibleIconButton extends StatelessWidget {
   final String tooltip;
 
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: tooltip,
-      button: true,
-      child: SizedBox(
-        width: 44,
-        height: 44,
-        child: IconButton(
-          icon: Icon(icon),
-          onPressed: onPressed,
-          tooltip: tooltip,
-          padding: EdgeInsets.zero,
+  Widget build(BuildContext context) => Semantics(
+        label: tooltip,
+        button: true,
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: IconButton(
+            icon: Icon(icon),
+            onPressed: onPressed,
+            tooltip: tooltip,
+            padding: EdgeInsets.zero,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 /// Accessible form field with proper labeling.
 class AccessibleTextField extends StatelessWidget {
   const AccessibleTextField({
-    super.key,
     required this.label,
+    super.key,
     this.hint,
     this.controller,
     this.validator,
@@ -143,25 +139,23 @@ class AccessibleTextField extends StatelessWidget {
   final TextDirection? textDirection;
 
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: label,
-      textField: true,
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        maxLines: maxLines,
-        textDirection: textDirection,
-        decoration: InputDecoration(
-          labelText: label,
-          hintText: hint,
-          prefixIcon: prefixIcon,
-          suffixIcon: suffixIcon,
+  Widget build(BuildContext context) => Semantics(
+        label: label,
+        textField: true,
+        child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          textDirection: textDirection,
+          decoration: InputDecoration(
+            labelText: label,
+            hintText: hint,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+          ),
+          validator: validator,
+          onSaved: onSaved,
         ),
-        validator: validator,
-        onSaved: onSaved,
-      ),
-    );
-  }
+      );
 }

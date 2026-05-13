@@ -34,7 +34,7 @@ class AppTheme {
           outlineVariant: AppColors.outlineVariant,
         ),
         fontFamily: 'Almarai',
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           displayLarge: AppTextStyles.displayLarge,
           displayMedium: AppTextStyles.displayMedium,
           titleLarge: AppTextStyles.titleLarge,
@@ -60,7 +60,6 @@ class AppTheme {
             borderRadius: BorderRadius.circular(16),
             side: const BorderSide(
               color: AppColors.outlineVariant,
-              width: 1,
             ),
           ),
         ),

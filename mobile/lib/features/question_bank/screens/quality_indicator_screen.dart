@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
@@ -10,10 +9,10 @@ import '../../assessment/repositories/teacher_repository.dart';
 /// Requirements: 22.3, 22.4
 class QualityIndicatorScreen extends ConsumerStatefulWidget {
   const QualityIndicatorScreen({
-    super.key,
     required this.subject,
     required this.gradeLevel,
     required this.unit,
+    super.key,
   });
   final String subject;
   final String gradeLevel;
@@ -52,22 +51,20 @@ class _QualityIndicatorScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('جودة بنك الأسئلة'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('جودة بنك الأسئلة'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => context.pop(),
+          ),
         ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _qualityData == null
-              ? const Center(child: Text('تعذر تحميل البيانات'))
-              : _buildContent(),
-    );
-  }
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _qualityData == null
+                ? const Center(child: Text('تعذر تحميل البيانات'))
+                : _buildContent(),
+      );
 
   Widget _buildContent() {
     final data = _qualityData!;
@@ -159,30 +156,28 @@ class _BentoCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: color, size: 28),
-            const SizedBox(height: 8),
-            Text(value,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: color,
-                      fontWeight: FontWeight.w700,
-                    )),
-            Text(label,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall
-                    ?.copyWith(color: AppColors.onSurfaceVariant)),
-          ],
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: color, size: 28),
+              const SizedBox(height: 8),
+              Text(value,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: color,
+                        fontWeight: FontWeight.w700,
+                      )),
+              Text(label,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(color: AppColors.onSurfaceVariant)),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _DifficultyCard extends StatelessWidget {

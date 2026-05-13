@@ -9,7 +9,7 @@ import '../repositories/assessment_repository.dart';
 /// Results Screen — Screen 4 & 16
 /// Requirements: 8.1–8.4, 15.2, 15.4
 class ResultScreen extends ConsumerStatefulWidget {
-  const ResultScreen({super.key, required this.attemptId});
+  const ResultScreen({required this.attemptId, super.key});
   final String attemptId;
 
   @override
@@ -45,26 +45,24 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
   }
 
   /// بناء نتيجة demo واقعية عند عدم توفر API
-  static Map<String, dynamic> _buildDemoResult(String attemptId) {
-    return {
-      'status': 'completed',
-      'scorePercentage': 78.5,
-      'correctAnswers': 16,
-      'totalQuestions': 20,
-      'timeTakenSeconds': 1245,
-      'passed': true,
-      'masteryLevel': 'متقدم',
-      'pointsEarned': 157,
-      'bonusAwarded': false,
-      'skillBreakdown': [
-        {'mainSkill': 'الفهم والاستيعاب', 'percentage': 85.0},
-        {'mainSkill': 'التطبيق', 'percentage': 75.0},
-        {'mainSkill': 'التحليل', 'percentage': 70.0},
-      ],
-      'wrongAnswers': [],
-      'pendingEssayGrading': 0,
-    };
-  }
+  static Map<String, dynamic> _buildDemoResult(String attemptId) => {
+        'status': 'completed',
+        'scorePercentage': 78.5,
+        'correctAnswers': 16,
+        'totalQuestions': 20,
+        'timeTakenSeconds': 1245,
+        'passed': true,
+        'masteryLevel': 'متقدم',
+        'pointsEarned': 157,
+        'bonusAwarded': false,
+        'skillBreakdown': [
+          {'mainSkill': 'الفهم والاستيعاب', 'percentage': 85.0},
+          {'mainSkill': 'التطبيق', 'percentage': 75.0},
+          {'mainSkill': 'التحليل', 'percentage': 70.0},
+        ],
+        'wrongAnswers': [],
+        'pendingEssayGrading': 0,
+      };
 
   /// التحقق مما إذا كان attemptId يشير إلى وضع demo/mock
   bool get _isDemoAttempt {
@@ -78,7 +76,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
   Future<void> _loadResult() async {
     // Demo mode: if attemptId starts with 'demo-', 'mock', or 'local-'
     if (_isDemoAttempt) {
-      await Future.delayed(const Duration(milliseconds: 800)); // simulate loading
+      await Future.delayed(
+          const Duration(milliseconds: 800)); // simulate loading
       if (!mounted) return;
       setState(() {
         _result = _buildDemoResult(widget.attemptId);
@@ -108,56 +107,54 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        shadowColor: Colors.black12,
-        surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'نتيجة الاختبار',
-          style: TextStyle(
-            color: AppColors.primaryContainer,
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-          ),
-        ),
-        automaticallyImplyLeading: false,
-        actions: [
-          TextButton(
-            onPressed: () => context.go('/student'),
-            child: const Text(
-              'الرئيسية',
-              style: TextStyle(
-                color: AppColors.primaryContainer,
-                fontWeight: FontWeight.w600,
-              ),
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          shadowColor: Colors.black12,
+          surfaceTintColor: Colors.transparent,
+          title: const Text(
+            'نتيجة الاختبار',
+            style: TextStyle(
+              color: AppColors.primaryContainer,
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
             ),
           ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: const Color(0xFFE2E8F0)),
-        ),
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryContainer,
+          automaticallyImplyLeading: false,
+          actions: [
+            TextButton(
+              onPressed: () => context.go('/student'),
+              child: const Text(
+                'الرئيسية',
+                style: TextStyle(
+                  color: AppColors.primaryContainer,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            )
-          : _error != null
-              ? Center(
-                  child: Text(
-                    _error!,
-                    style: const TextStyle(color: AppColors.onSurfaceVariant),
-                  ),
-                )
-              : _buildContent(),
-    );
-  }
+            ),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(height: 1, color: const Color(0xFFE2E8F0)),
+          ),
+        ),
+        body: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryContainer,
+                ),
+              )
+            : _error != null
+                ? Center(
+                    child: Text(
+                      _error!,
+                      style: const TextStyle(color: AppColors.onSurfaceVariant),
+                    ),
+                  )
+                : _buildContent(),
+      );
 
   Widget _buildContent() {
     final r = _result!;
@@ -202,7 +199,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
 
           // Skill breakdown
           if (skillBreakdown.isNotEmpty) ...[
-            _SectionHeader(title: 'تحليل المهارات'),
+            const _SectionHeader(title: 'تحليل المهارات'),
             const SizedBox(height: 12),
             _SkillBreakdownCard(skills: skillBreakdown),
             const SizedBox(height: 24),
@@ -210,7 +207,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
 
           // Wrong answers
           if (wrongAnswers.isNotEmpty) ...[
-            _SectionHeader(title: 'الأسئلة الخاطئة'),
+            const _SectionHeader(title: 'الأسئلة الخاطئة'),
             const SizedBox(height: 12),
             ...wrongAnswers.map((a) => _WrongAnswerCard(answer: a)),
           ],
@@ -219,70 +216,68 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
     );
   }
 
-  Widget _buildPendingReviewContent(int pendingCount) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.surfaceContainer,
-                border: Border.all(color: AppColors.outlineVariant, width: 3),
-              ),
-              child: const Icon(
-                Icons.hourglass_top_rounded,
-                size: 48,
-                color: AppColors.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'في انتظار المراجعة',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppColors.onSurface,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'تم تسليم اختبارك بنجاح. يحتوي على '
-              '${pendingCount > 0 ? pendingCount : 'بعض'} '
-              'أسئلة مقالية تحتاج إلى مراجعة يدوية من المعلم.\n\n'
-              'ستصلك إشعاراً عند اكتمال التصحيح.',
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.onSurfaceVariant,
-                height: 1.6,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            OutlinedButton.icon(
-              onPressed: () => context.go('/student'),
-              icon: const Icon(Icons.home_rounded),
-              label: const Text('العودة للرئيسية'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primaryContainer,
-                side: const BorderSide(color: AppColors.primaryContainer),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+  Widget _buildPendingReviewContent(int pendingCount) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.surfaceContainer,
+                  border: Border.all(color: AppColors.outlineVariant, width: 3),
+                ),
+                child: const Icon(
+                  Icons.hourglass_top_rounded,
+                  size: 48,
+                  color: AppColors.onSurfaceVariant,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+              const Text(
+                'في انتظار المراجعة',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.onSurface,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'تم تسليم اختبارك بنجاح. يحتوي على '
+                '${pendingCount > 0 ? pendingCount : 'بعض'} '
+                'أسئلة مقالية تحتاج إلى مراجعة يدوية من المعلم.\n\n'
+                'ستصلك إشعاراً عند اكتمال التصحيح.',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.onSurfaceVariant,
+                  height: 1.6,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              OutlinedButton.icon(
+                onPressed: () => context.go('/student'),
+                icon: const Icon(Icons.home_rounded),
+                label: const Text('العودة للرئيسية'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primaryContainer,
+                  side: const BorderSide(color: AppColors.primaryContainer),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 // ─── Score Ring ───────────────────────────────────────────────────────────────
@@ -410,48 +405,46 @@ class _RingPainter extends CustomPainter {
 
 class _AchievementBadge extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFEF3C7), Color(0xFFFDE68A)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-        ),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF59E0B), width: 1.5),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.emoji_events_rounded,
-              color: Color(0xFFD97706), size: 28),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                'إنجاز رائع!',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF92400E),
-                ),
-              ),
-              Text(
-                'حصلت على شارة التميز',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFFB45309),
-                ),
-              ),
-            ],
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFEF3C7), Color(0xFFFDE68A)],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
           ),
-        ],
-      ),
-    );
-  }
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFF59E0B), width: 1.5),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.emoji_events_rounded,
+                color: Color(0xFFD97706), size: 28),
+            SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'إنجاز رائع!',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF92400E),
+                  ),
+                ),
+                Text(
+                  'حصلت على شارة التميز',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFFB45309),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
 }
 
 // ─── Points Card ──────────────────────────────────────────────────────────────
@@ -462,56 +455,56 @@ class _PointsCard extends StatelessWidget {
   final bool bonusAwarded;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.star_rounded, color: AppColors.pointsGold, size: 28),
-          const SizedBox(width: 8),
-          Text(
-            '+$points نقطة',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: AppColors.pointsGold,
-            ),
-          ),
-          if (bonusAwarded) ...[
-            const SizedBox(width: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: AppColors.pointsGold,
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Text(
-                '+${AppConstants.bonusPoints} مكافأة',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
             ),
           ],
-        ],
-      ),
-    );
-  }
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.star_rounded,
+                color: AppColors.pointsGold, size: 28),
+            const SizedBox(width: 8),
+            Text(
+              '+$points نقطة',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: AppColors.pointsGold,
+              ),
+            ),
+            if (bonusAwarded) ...[
+              const SizedBox(width: 10),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: AppColors.pointsGold,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Text(
+                  '+${AppConstants.bonusPoints} مكافأة',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
 }
 
 // ─── Section Header ───────────────────────────────────────────────────────────
@@ -521,16 +514,14 @@ class _SectionHeader extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w700,
-        color: AppColors.onSurface,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: AppColors.onSurface,
+        ),
+      );
 }
 
 // ─── Skill Breakdown Card ─────────────────────────────────────────────────────
@@ -540,28 +531,26 @@ class _SkillBreakdownCard extends StatelessWidget {
   final List<Map<String, dynamic>> skills;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: skills
-            .map((s) => _SkillRow(skill: s, isLast: s == skills.last))
-            .toList(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: skills
+              .map((s) => _SkillRow(skill: s, isLast: s == skills.last))
+              .toList(),
+        ),
+      );
 }
 
 class _SkillRow extends StatelessWidget {
@@ -676,62 +665,60 @@ class _WrongAnswerCard extends StatelessWidget {
   final Map<String, dynamic> answer;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Question text
-            Text(
-              answer['questionText'] as String? ?? '',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.onSurface,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Divider
-            const Divider(color: AppColors.outlineVariant, height: 1),
-            const SizedBox(height: 10),
-            // Your answer
-            _AnswerRow(
-              icon: Icons.close_rounded,
-              label: 'إجابتك',
-              value: answer['selectedAnswer'] as String? ?? '',
-              color: AppColors.error,
-              bgColor: AppColors.errorContainer,
-            ),
-            const SizedBox(height: 8),
-            // Correct answer
-            _AnswerRow(
-              icon: Icons.check_rounded,
-              label: 'الإجابة الصحيحة',
-              value: answer['correctAnswer'] as String? ?? '',
-              color: AppColors.success,
-              bgColor: AppColors.successContainer,
+  Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
             ),
           ],
         ),
-      ),
-    );
-  }
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Question text
+              Text(
+                answer['questionText'] as String? ?? '',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.onSurface,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 10),
+              // Divider
+              const Divider(color: AppColors.outlineVariant, height: 1),
+              const SizedBox(height: 10),
+              // Your answer
+              _AnswerRow(
+                icon: Icons.close_rounded,
+                label: 'إجابتك',
+                value: answer['selectedAnswer'] as String? ?? '',
+                color: AppColors.error,
+                bgColor: AppColors.errorContainer,
+              ),
+              const SizedBox(height: 8),
+              // Correct answer
+              _AnswerRow(
+                icon: Icons.check_rounded,
+                label: 'الإجابة الصحيحة',
+                value: answer['correctAnswer'] as String? ?? '',
+                color: AppColors.success,
+                bgColor: AppColors.successContainer,
+              ),
+            ],
+          ),
+        ),
+      );
 }
 
 class _AnswerRow extends StatelessWidget {
@@ -749,44 +736,42 @@ class _AnswerRow extends StatelessWidget {
   final Color bgColor;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 22,
-          height: 22,
-          decoration: BoxDecoration(
-            color: bgColor,
-            shape: BoxShape.circle,
+  Widget build(BuildContext context) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              color: bgColor,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 14, color: color),
           ),
-          child: Icon(icon, size: 14, color: color),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: '$label: ',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.onSurfaceVariant,
+          const SizedBox(width: 8),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '$label: ',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.onSurfaceVariant,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: value,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: color,
+                  TextSpan(
+                    text: value,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: color,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }

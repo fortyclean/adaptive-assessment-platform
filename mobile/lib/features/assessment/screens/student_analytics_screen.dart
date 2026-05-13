@@ -101,7 +101,7 @@ class _StudentAnalyticsScreenState
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final firstName = user?.fullName?.split(' ').first ?? 'أحمد';
+    final firstName = user?.fullName.split(' ').first ?? 'أحمد';
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -128,9 +128,9 @@ class _StudentAnalyticsScreenState
                 // Logo + Avatar (RTL: right)
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'إحصائيات EduAssess',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -146,7 +146,6 @@ class _StudentAnalyticsScreenState
                         color: AppColors.surfaceContainer,
                         border: Border.all(
                           color: AppColors.outlineVariant,
-                          width: 1,
                         ),
                       ),
                       child: Center(
@@ -195,519 +194,181 @@ class _StudentAnalyticsScreenState
           ),
         ],
       ),
-      bottomNavigationBar:
-          const AppBottomNav(currentIndex: 2, role: 'student'),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 2, role: 'student'),
     );
   }
 
   // ─── Welcome Section ─────────────────────────────────────────────────────
 
-  Widget _buildWelcomeSection(String name) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          'مرحباً، $name!',
-          style: const TextStyle(
-            fontFamily: 'Almarai',
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.onSurface,
-          ),
-          textAlign: TextAlign.right,
-        ),
-        const SizedBox(height: 4),
-        const Text(
-          'إليك نظرة شاملة على أدائك التعليمي لهذا الفصل.',
-          style: TextStyle(
-            fontFamily: 'Almarai',
-            fontSize: 14,
-            color: AppColors.onSurfaceVariant,
-          ),
-          textAlign: TextAlign.right,
-        ),
-      ],
-    );
-  }
-
-  // ─── Bento Grid ──────────────────────────────────────────────────────────
-
-  Widget _buildBentoGrid() {
-    return Column(
-      children: [
-        // Full-width performance card
-        _buildPerformanceCard(),
-        const SizedBox(height: 12),
-        // Two small cards
-        Row(
-          children: [
-            Expanded(child: _buildSmallMetricCard(
-              icon: Icons.schedule_outlined,
-              iconColor: const Color(0xFF611E00),
-              value: '$_learningHours',
-              label: 'ساعة تعليمية',
-            )),
-            const SizedBox(width: 12),
-            Expanded(child: _buildSmallMetricCard(
-              icon: Icons.description_outlined,
-              iconColor: AppColors.primary,
-              value: '$_filesOpened',
-              label: 'ملف تم فتحه',
-            )),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPerformanceCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildWelcomeSection(String name) => Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // Circular progress (RTL: left)
-          SizedBox(
-            width: 96,
-            height: 96,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 96,
-                  height: 96,
-                  child: CircularProgressIndicator(
-                    value: _overallPerformance / 100,
-                    strokeWidth: 8,
-                    backgroundColor: const Color(0xFFF1F5F9),
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.primaryContainer,
-                    ),
-                  ),
-                ),
-                const Text(
-                  'جيد جداً',
-                  style: TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          // Text info (RTL: right)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text(
-                    'معدل الأداء العام',
-                    style: TextStyle(
-                      fontFamily: 'Almarai',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.onSurfaceVariant,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${_overallPerformance.toStringAsFixed(1)}%',
-                    style: const TextStyle(
-                      fontFamily: 'Almarai',
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Text(
-                        '+4.2% عن الشهر الماضي',
-                        style: TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.success,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.trending_up,
-                        size: 16,
-                        color: AppColors.success,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSmallMetricCard({
-    required IconData icon,
-    required Color iconColor,
-    required String value,
-    required String label,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: iconColor, size: 24),
-          const SizedBox(height: 8),
           Text(
-            value,
+            'مرحباً، $name!',
             style: const TextStyle(
               fontFamily: 'Almarai',
               fontSize: 24,
               fontWeight: FontWeight.w700,
               color: AppColors.onSurface,
             ),
+            textAlign: TextAlign.right,
           ),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(
+          const Text(
+            'إليك نظرة شاملة على أدائك التعليمي لهذا الفصل.',
+            style: TextStyle(
               fontFamily: 'Almarai',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+              fontSize: 14,
               color: AppColors.onSurfaceVariant,
             ),
+            textAlign: TextAlign.right,
           ),
         ],
-      ),
-    );
-  }
+      );
 
-  // ─── Subject Progress ─────────────────────────────────────────────────────
+  // ─── Bento Grid ──────────────────────────────────────────────────────────
 
-  Widget _buildSubjectProgress() {
-    return Column(
-      children: [
-        Row(
+  Widget _buildBentoGrid() => Column(
+        children: [
+          // Full-width performance card
+          _buildPerformanceCard(),
+          const SizedBox(height: 12),
+          // Two small cards
+          Row(
+            children: [
+              Expanded(
+                  child: _buildSmallMetricCard(
+                icon: Icons.schedule_outlined,
+                iconColor: const Color(0xFF611E00),
+                value: '$_learningHours',
+                label: 'ساعة تعليمية',
+              )),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: _buildSmallMetricCard(
+                icon: Icons.description_outlined,
+                iconColor: AppColors.primary,
+                value: '$_filesOpened',
+                label: 'ملف تم فتحه',
+              )),
+            ],
+          ),
+        ],
+      );
+
+  Widget _buildPerformanceCard() => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton(
-              onPressed: () => context.push('/student/subjects'),
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: const Text(
-                'تفاصيل أكثر',
-                style: TextStyle(
-                  fontFamily: 'Almarai',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.primary,
-                ),
+            // Circular progress (RTL: left)
+            SizedBox(
+              width: 96,
+              height: 96,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 96,
+                    height: 96,
+                    child: CircularProgressIndicator(
+                      value: _overallPerformance / 100,
+                      strokeWidth: 8,
+                      backgroundColor: const Color(0xFFF1F5F9),
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                        AppColors.primaryContainer,
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'جيد جداً',
+                    style: TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
-            const Text(
-              'تقدم المواد الدراسية',
-              style: TextStyle(
-                fontFamily: 'Almarai',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.onSurface,
+            // Text info (RTL: right)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'معدل الأداء العام',
+                      style: TextStyle(
+                        fontFamily: 'Almarai',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.onSurfaceVariant,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${_overallPerformance.toStringAsFixed(1)}%',
+                      style: const TextStyle(
+                        fontFamily: 'Almarai',
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '+4.2% عن الشهر الماضي',
+                          style: TextStyle(
+                            fontFamily: 'Almarai',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.success,
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Icon(
+                          Icons.trending_up,
+                          size: 16,
+                          color: AppColors.success,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.outlineVariant),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              // Subject bars
-              ..._subjects.map((s) => _buildSubjectBar(s)),
-              const SizedBox(height: 16),
-              // Weekly chart
-              _buildWeeklyChart(),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+      );
 
-  Widget _buildSubjectBar(_SubjectProgress subject) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${(subject.percentage * 100).round()}%',
-                style: const TextStyle(
-                  fontFamily: 'Almarai',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.primary,
-                ),
-              ),
-              Text(
-                subject.name,
-                style: const TextStyle(
-                  fontFamily: 'Almarai',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.onSurface,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: subject.percentage,
-              minHeight: 8,
-              backgroundColor: const Color(0xFFF1F5F9),
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildWeeklyChart() {
-    return Column(
-      children: [
-        const Divider(color: Color(0xFFF1F5F9), height: 1),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 128,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(_weeklyData.length, (i) {
-              final isMax = _weeklyData[i] ==
-                  _weeklyData.reduce((a, b) => a > b ? a : b);
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: FractionallySizedBox(
-                    heightFactor: _weeklyData[i],
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isMax
-                            ? AppColors.primary
-                            : AppColors.primaryContainer.withValues(alpha: 0.4),
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(6),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _weekDays
-              .map((d) => Expanded(
-                    child: Text(
-                      d,
-                      style: const TextStyle(
-                        fontFamily: 'Almarai',
-                        fontSize: 11,
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ))
-              .toList(),
-        ),
-      ],
-    );
-  }
-
-  // ─── Attachment Stats ─────────────────────────────────────────────────────
-
-  Widget _buildAttachmentStats() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Text(
-          'استهلاك المرفقات التعليمية',
-          style: TextStyle(
-            fontFamily: 'Almarai',
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.onSurface,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ..._attachments.map((a) => _buildAttachmentCard(a)),
-      ],
-    );
-  }
-
-  Widget _buildAttachmentCard(_AttachmentStat stat) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: stat.bgColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: stat.borderColor),
-      ),
-      child: Row(
-        children: [
-          // Percentage (RTL: left)
-          Text(
-            '${stat.percentage}%',
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: stat.percentageColor,
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Text info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  stat.title,
-                  style: const TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  stat.subtitle,
-                  style: const TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: 14,
-                    color: AppColors.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Icon (RTL: right)
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.06),
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-              ],
-            ),
-            child: Icon(stat.icon, color: stat.iconColor, size: 28),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Achievements & Badges ────────────────────────────────────────────────
-
-  Widget _buildAchievements() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Text(
-          'الأوسمة والإنجازات',
-          style: TextStyle(
-            fontFamily: 'Almarai',
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: AppColors.onSurface,
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 140,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            reverse: true, // RTL scroll
-            itemCount: _badges.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, index) => _buildBadgeCard(_badges[index]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBadgeCard(_Badge badge) {
-    return Opacity(
-      opacity: badge.isEarned ? 1.0 : 0.5,
-      child: Container(
-        width: 120,
-        padding: const EdgeInsets.all(12),
+  Widget _buildSmallMetricCard({
+    required IconData icon,
+    required Color iconColor,
+    required String value,
+    required String label,
+  }) =>
+      Container(
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -721,68 +382,388 @@ class _StudentAnalyticsScreenState
           ],
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: badge.bgColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: badge.borderColor, width: 4),
-                  ),
-                  child: Icon(
-                    badge.icon,
-                    color: badge.iconColor,
-                    size: 28,
+            Icon(icon, color: iconColor, size: 24),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: const TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: AppColors.onSurface,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  // ─── Subject Progress ─────────────────────────────────────────────────────
+
+  Widget _buildSubjectProgress() => Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () => context.push('/student/subjects'),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text(
+                  'تفاصيل أكثر',
+                  style: TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
                   ),
                 ),
-                if (badge.count != null)
-                  Positioned(
-                    top: -4,
-                    right: -4,
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFD97706),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          'x${badge.count}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
+              ),
+              const Text(
+                'تقدم المواد الدراسية',
+                style: TextStyle(
+                  fontFamily: 'Almarai',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.outlineVariant),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                // Subject bars
+                ..._subjects.map(_buildSubjectBar),
+                const SizedBox(height: 16),
+                // Weekly chart
+                _buildWeeklyChart(),
+              ],
+            ),
+          ),
+        ],
+      );
+
+  Widget _buildSubjectBar(_SubjectProgress subject) => Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${(subject.percentage * 100).round()}%',
+                  style: const TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
+                ),
+                Text(
+                  subject.name,
+                  style: const TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.onSurface,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: subject.percentage,
+                minHeight: 8,
+                backgroundColor: const Color(0xFFF1F5F9),
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildWeeklyChart() => Column(
+        children: [
+          const Divider(color: Color(0xFFF1F5F9), height: 1),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 128,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(_weeklyData.length, (i) {
+                final isMax = _weeklyData[i] ==
+                    _weeklyData.reduce((a, b) => a > b ? a : b);
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: FractionallySizedBox(
+                      heightFactor: _weeklyData[i],
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isMax
+                              ? AppColors.primary
+                              : AppColors.primaryContainer
+                                  .withValues(alpha: 0.4),
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(6),
                           ),
                         ),
                       ),
                     ),
                   ),
-              ],
+                );
+              }),
             ),
-            const SizedBox(height: 8),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: _weekDays
+                .map((d) => Expanded(
+                      child: Text(
+                        d,
+                        style: const TextStyle(
+                          fontFamily: 'Almarai',
+                          fontSize: 11,
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ))
+                .toList(),
+          ),
+        ],
+      );
+
+  // ─── Attachment Stats ─────────────────────────────────────────────────────
+
+  Widget _buildAttachmentStats() => Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text(
+            'استهلاك المرفقات التعليمية',
+            style: TextStyle(
+              fontFamily: 'Almarai',
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.onSurface,
+            ),
+          ),
+          const SizedBox(height: 12),
+          ..._attachments.map(_buildAttachmentCard),
+        ],
+      );
+
+  Widget _buildAttachmentCard(_AttachmentStat stat) => Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: stat.bgColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: stat.borderColor),
+        ),
+        child: Row(
+          children: [
+            // Percentage (RTL: left)
             Text(
-              badge.label,
-              style: const TextStyle(
+              '${stat.percentage}%',
+              style: TextStyle(
                 fontFamily: 'Almarai',
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: AppColors.onSurface,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: stat.percentageColor,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(width: 12),
+            // Text info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    stat.title,
+                    style: const TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    stat.subtitle,
+                    style: const TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: 14,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Icon (RTL: right)
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Icon(stat.icon, color: stat.iconColor, size: 28),
             ),
           ],
         ),
-      ),
-    );
-  }
+      );
+
+  // ─── Achievements & Badges ────────────────────────────────────────────────
+
+  Widget _buildAchievements() => Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text(
+            'الأوسمة والإنجازات',
+            style: TextStyle(
+              fontFamily: 'Almarai',
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.onSurface,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 140,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              reverse: true, // RTL scroll
+              itemCount: _badges.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) => _buildBadgeCard(_badges[index]),
+            ),
+          ),
+        ],
+      );
+
+  Widget _buildBadgeCard(_Badge badge) => Opacity(
+        opacity: badge.isEarned ? 1.0 : 0.5,
+        child: Container(
+          width: 120,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.outlineVariant),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: badge.bgColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: badge.borderColor, width: 4),
+                    ),
+                    child: Icon(
+                      badge.icon,
+                      color: badge.iconColor,
+                      size: 28,
+                    ),
+                  ),
+                  if (badge.count != null)
+                    Positioned(
+                      top: -4,
+                      right: -4,
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFD97706),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'x${badge.count}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                badge.label,
+                style: const TextStyle(
+                  fontFamily: 'Almarai',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.onSurface,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      );
 }
 
 // ─── Data Models ──────────────────────────────────────────────────────────────

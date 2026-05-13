@@ -8,14 +8,16 @@ class AssessmentRepository {
 
   /// GET /api/v1/assessments — list assessments for current user
   Future<List<Map<String, dynamic>>> getAssessments() async {
-    final response = await _apiService.dio.get<Map<String, dynamic>>('/assessments');
+    final response =
+        await _apiService.dio.get<Map<String, dynamic>>('/assessments');
     return List<Map<String, dynamic>>.from(
         (response.data?['assessments'] as List?) ?? const []);
   }
 
   /// GET /api/v1/assessments/:id
   Future<Map<String, dynamic>> getAssessment(String id) async {
-    final response = await _apiService.dio.get<Map<String, dynamic>>('/assessments/$id');
+    final response =
+        await _apiService.dio.get<Map<String, dynamic>>('/assessments/$id');
     return (response.data?['assessment'] as Map<String, dynamic>?) ?? {};
   }
 
@@ -24,7 +26,8 @@ class AssessmentRepository {
     required String assessmentId,
     required String classroomId,
   }) async {
-    final response = await _apiService.dio.post<Map<String, dynamic>>('/attempts', data: {
+    final response =
+        await _apiService.dio.post<Map<String, dynamic>>('/attempts', data: {
       'assessmentId': assessmentId,
       'classroomId': classroomId,
     });
@@ -33,8 +36,8 @@ class AssessmentRepository {
 
   /// GET /api/v1/attempts/:id/next-question
   Future<Map<String, dynamic>> getNextQuestion(String attemptId) async {
-    final response =
-        await _apiService.dio.get<Map<String, dynamic>>('/attempts/$attemptId/next-question');
+    final response = await _apiService.dio
+        .get<Map<String, dynamic>>('/attempts/$attemptId/next-question');
     return response.data ?? {};
   }
 
@@ -53,7 +56,8 @@ class AssessmentRepository {
 
   /// POST /api/v1/attempts/:id/submit
   Future<void> submitAttempt(String attemptId) async {
-    await _apiService.dio.post<Map<String, dynamic>>('/attempts/$attemptId/submit');
+    await _apiService.dio
+        .post<Map<String, dynamic>>('/attempts/$attemptId/submit');
   }
 
   /// POST /api/v1/attempts/:id/anti-cheat
@@ -66,20 +70,23 @@ class AssessmentRepository {
 
   /// GET /api/v1/attempts/:id/result
   Future<Map<String, dynamic>> getResult(String attemptId) async {
-    final response =
-        await _apiService.dio.get<Map<String, dynamic>>('/attempts/$attemptId/result');
+    final response = await _apiService.dio
+        .get<Map<String, dynamic>>('/attempts/$attemptId/result');
     return response.data ?? {};
   }
 
   /// GET /api/v1/attempts — student session history
   Future<List<Map<String, dynamic>>> getAttemptHistory() async {
-    final response = await _apiService.dio.get<Map<String, dynamic>>('/attempts');
-    return List<Map<String, dynamic>>.from((response.data?['attempts'] as List?) ?? const []);
+    final response =
+        await _apiService.dio.get<Map<String, dynamic>>('/attempts');
+    return List<Map<String, dynamic>>.from(
+        (response.data?['attempts'] as List?) ?? const []);
   }
 
   /// GET /api/v1/notifications/points
   Future<Map<String, dynamic>> getPointsSummary() async {
-    final response = await _apiService.dio.get<Map<String, dynamic>>('/notifications/points');
+    final response = await _apiService.dio
+        .get<Map<String, dynamic>>('/notifications/points');
     return response.data ?? {};
   }
 }

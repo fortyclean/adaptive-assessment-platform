@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
-import '../../../core/router/app_router.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
 /// Pending Essays Screen — lists all student attempts awaiting essay grading.
@@ -36,9 +35,8 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
       _error = null;
     });
     try {
-      final data = await ref
-          .read(teacherRepositoryProvider)
-          .getPendingEssayAttempts();
+      final data =
+          await ref.read(teacherRepositoryProvider).getPendingEssayAttempts();
       setState(() {
         _attempts = data;
         _isLoading = false;
@@ -53,96 +51,92 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('الأسئلة المقالية — بانتظار التصحيح'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
-          tooltip: 'رجوع',
+        appBar: AppBar(
+          title: const Text('الأسئلة المقالية — بانتظار التصحيح'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => context.pop(),
+            tooltip: 'رجوع',
+          ),
         ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? _buildError()
-              : RefreshIndicator(
-                  onRefresh: _loadAttempts,
-                  child: _attempts.isEmpty
-                      ? _buildEmpty()
-                      : _buildList(),
-                ),
-    );
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _error != null
+                ? _buildError()
+                : RefreshIndicator(
+                    onRefresh: _loadAttempts,
+                    child: _attempts.isEmpty ? _buildEmpty() : _buildList(),
+                  ),
+      );
 
   Widget _buildError() => Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          const SizedBox(height: 12),
-          Text(_error!,
-              style: Theme.of(context).textTheme.bodyLarge),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            onPressed: _loadAttempts,
-            icon: const Icon(Icons.refresh_rounded),
-            label: const Text('إعادة المحاولة'),
-          ),
-        ],
-      ),
-    );
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const SizedBox(height: 12),
+            Text(_error!, style: Theme.of(context).textTheme.bodyLarge),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _loadAttempts,
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('إعادة المحاولة'),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildEmpty() => ListView(
-      // Wrap in ListView so RefreshIndicator works even when empty
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.check_circle_outline_rounded,
-                size: 72,
-                color: AppColors.success,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'لا توجد أسئلة مقالية بانتظار التصحيح',
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'جميع الجلسات المقالية تم تصحيحها',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+        // Wrap in ListView so RefreshIndicator works even when empty
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.check_circle_outline_rounded,
+                  size: 72,
+                  color: AppColors.success,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'لا توجد أسئلة مقالية بانتظار التصحيح',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'جميع الجلسات المقالية تم تصحيحها',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
 
   Widget _buildList() => ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: _attempts.length,
-      itemBuilder: (ctx, i) {
-        final attempt = _attempts[i];
-        return _PendingAttemptCard(
-          attempt: attempt,
-          onGrade: () {
-            final attemptId = attempt['_id'] as String? ?? '';
-            final studentName =
-                attempt['studentName'] as String? ?? 'طالب';
-            context.push(
-              '/teacher/pending-essays/$attemptId',
-              extra: {'studentName': studentName},
-            );
-          },
-        );
-      },
-    );
+        padding: const EdgeInsets.all(16),
+        itemCount: _attempts.length,
+        itemBuilder: (ctx, i) {
+          final attempt = _attempts[i];
+          return _PendingAttemptCard(
+            attempt: attempt,
+            onGrade: () {
+              final attemptId = attempt['_id'] as String? ?? '';
+              final studentName = attempt['studentName'] as String? ?? 'طالب';
+              context.push(
+                '/teacher/pending-essays/$attemptId',
+                extra: {'studentName': studentName},
+              );
+            },
+          );
+        },
+      );
 }
 
 /// Card representing a single pending-review attempt.
@@ -158,8 +152,7 @@ class _PendingAttemptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final studentName = attempt['studentName'] as String? ?? 'طالب';
-    final assessmentTitle =
-        attempt['assessmentTitle'] as String? ?? 'اختبار';
+    final assessmentTitle = attempt['assessmentTitle'] as String? ?? 'اختبار';
     final subject = attempt['subject'] as String? ?? '';
     final submittedAt = attempt['submittedAt'] as String?;
     final essayCount = attempt['pendingEssayCount'] as int? ?? 0;
@@ -177,8 +170,7 @@ class _PendingAttemptCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(AppConstants.cardBorderRadius),
+        borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
         side: const BorderSide(color: AppColors.outlineVariant),
       ),
       child: Padding(
@@ -255,8 +247,8 @@ class _PendingAttemptCard extends StatelessWidget {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        AppConstants.buttonBorderRadius),
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.buttonBorderRadius),
                   ),
                 ),
               ),
@@ -275,28 +267,27 @@ class _PendingBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.warningContainer,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-            color: AppColors.warning.withOpacity(0.5)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.pending_actions_rounded,
-              size: 14, color: AppColors.warning),
-          const SizedBox(width: 4),
-          Text(
-            '$count سؤال',
-            style: const TextStyle(
-              color: AppColors.warning,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: AppColors.warningContainer,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.warning.withValues(alpha: 0.5)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.pending_actions_rounded,
+                size: 14, color: AppColors.warning),
+            const SizedBox(width: 4),
+            Text(
+              '$count سؤال',
+              style: const TextStyle(
+                color: AppColors.warning,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
 }

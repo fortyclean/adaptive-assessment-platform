@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:adaptive_assessment/core/constants/app_constants.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 /// Widget tests for Teacher Screens
 /// Requirements: 5.1, 5.4, 3.4, 4.1
@@ -9,7 +9,8 @@ void main() {
   group('Create Assessment — Form Validation (Req 5.1, 5.4)', () {
     test('question count must be between 5 and 50', () {
       bool isValidCount(int count) =>
-          count >= AppConstants.minQuestions && count <= AppConstants.maxQuestions;
+          count >= AppConstants.minQuestions &&
+          count <= AppConstants.maxQuestions;
 
       expect(isValidCount(5), isTrue);
       expect(isValidCount(10), isTrue);
@@ -78,20 +79,47 @@ void main() {
 
   group('Question Bank — Filtering Logic (Req 3.4)', () {
     final questions = [
-      {'subject': 'Mathematics', 'difficulty': 'easy', 'unit': 'Algebra', 'mainSkill': 'Equations'},
-      {'subject': 'Mathematics', 'difficulty': 'medium', 'unit': 'Algebra', 'mainSkill': 'Functions'},
-      {'subject': 'Mathematics', 'difficulty': 'hard', 'unit': 'Geometry', 'mainSkill': 'Shapes'},
-      {'subject': 'Physics', 'difficulty': 'easy', 'unit': 'Mechanics', 'mainSkill': 'Forces'},
-      {'subject': 'English', 'difficulty': 'medium', 'unit': 'Grammar', 'mainSkill': 'Tenses'},
+      {
+        'subject': 'Mathematics',
+        'difficulty': 'easy',
+        'unit': 'Algebra',
+        'mainSkill': 'Equations'
+      },
+      {
+        'subject': 'Mathematics',
+        'difficulty': 'medium',
+        'unit': 'Algebra',
+        'mainSkill': 'Functions'
+      },
+      {
+        'subject': 'Mathematics',
+        'difficulty': 'hard',
+        'unit': 'Geometry',
+        'mainSkill': 'Shapes'
+      },
+      {
+        'subject': 'Physics',
+        'difficulty': 'easy',
+        'unit': 'Mechanics',
+        'mainSkill': 'Forces'
+      },
+      {
+        'subject': 'English',
+        'difficulty': 'medium',
+        'unit': 'Grammar',
+        'mainSkill': 'Tenses'
+      },
     ];
 
     test('filters by subject', () {
-      final filtered = questions.where((q) => q['subject'] == 'Mathematics').toList();
+      final filtered =
+          questions.where((q) => q['subject'] == 'Mathematics').toList();
       expect(filtered.length, equals(3));
     });
 
     test('filters by difficulty', () {
-      final filtered = questions.where((q) => q['difficulty'] == 'easy').toList();
+      final filtered =
+          questions.where((q) => q['difficulty'] == 'easy').toList();
       expect(filtered.length, equals(2));
     });
 
@@ -102,14 +130,16 @@ void main() {
 
     test('filters by multiple criteria', () {
       final filtered = questions
-          .where((q) => q['subject'] == 'Mathematics' && q['difficulty'] == 'easy')
+          .where(
+              (q) => q['subject'] == 'Mathematics' && q['difficulty'] == 'easy')
           .toList();
       expect(filtered.length, equals(1));
       expect(filtered.first['unit'], equals('Algebra'));
     });
 
     test('returns empty list when no match', () {
-      final filtered = questions.where((q) => q['subject'] == 'Chemistry').toList();
+      final filtered =
+          questions.where((q) => q['subject'] == 'Chemistry').toList();
       expect(filtered, isEmpty);
     });
 
@@ -165,13 +195,15 @@ void main() {
   group('Quality Check — Adaptive Readiness (Req 22.3, 22.4)', () {
     const minPerDifficulty = 3;
 
-    test('unit is adaptive-ready when all difficulties have >= 3 questions', () {
+    test('unit is adaptive-ready when all difficulties have >= 3 questions',
+        () {
       final counts = {'easy': 5, 'medium': 4, 'hard': 3};
       final isReady = counts.values.every((c) => c >= minPerDifficulty);
       expect(isReady, isTrue);
     });
 
-    test('unit is NOT adaptive-ready when any difficulty has < 3 questions', () {
+    test('unit is NOT adaptive-ready when any difficulty has < 3 questions',
+        () {
       final counts = {'easy': 5, 'medium': 5, 'hard': 2};
       final isReady = counts.values.every((c) => c >= minPerDifficulty);
       expect(isReady, isFalse);
@@ -228,8 +260,14 @@ void additionalTeacherTests() {
   group('Add Question — Validation (Req 16.1, 16.2, 16.3)', () {
     test('all mandatory fields must be filled', () {
       final requiredFields = [
-        'subject', 'gradeLevel', 'unit', 'mainSkill',
-        'subSkill', 'difficulty', 'questionText', 'correctAnswer'
+        'subject',
+        'gradeLevel',
+        'unit',
+        'mainSkill',
+        'subSkill',
+        'difficulty',
+        'questionText',
+        'correctAnswer'
       ];
 
       final filledFields = {
@@ -273,7 +311,11 @@ void additionalTeacherTests() {
       final errors = [
         {'row': 5, 'type': 'missing_field', 'description': 'حقل المادة مفقود'},
         {'row': 12, 'type': 'duplicate', 'description': 'سؤال مكرر'},
-        {'row': 18, 'type': 'invalid_answer', 'description': 'الإجابة الصحيحة غير صالحة'},
+        {
+          'row': 18,
+          'type': 'invalid_answer',
+          'description': 'الإجابة الصحيحة غير صالحة'
+        },
       ];
 
       for (final error in errors) {
@@ -301,9 +343,19 @@ void additionalTeacherTests() {
 
     test('template download provides correct column headers', () {
       final templateHeaders = [
-        'Subject', 'Grade Level', 'Academic Term', 'Unit',
-        'Main Skill', 'Sub Skill', 'Difficulty', 'Question Text',
-        'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer',
+        'Subject',
+        'Grade Level',
+        'Academic Term',
+        'Unit',
+        'Main Skill',
+        'Sub Skill',
+        'Difficulty',
+        'Question Text',
+        'Option A',
+        'Option B',
+        'Option C',
+        'Option D',
+        'Correct Answer',
       ];
 
       expect(templateHeaders.length, equals(13));

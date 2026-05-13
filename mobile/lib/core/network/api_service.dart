@@ -21,11 +21,7 @@ class ApiService {
     );
 
     _dio.interceptors.add(_AuthInterceptor(_storage, _dio));
-    _dio.interceptors.add(LogInterceptor(
-      requestBody: false,
-      responseBody: false,
-      error: true,
-    ));
+    _dio.interceptors.add(LogInterceptor());
   }
 
   static final ApiService _instance = ApiService._();
@@ -98,8 +94,7 @@ class _AuthInterceptor extends Interceptor {
           final newRefreshToken = responseData?['refreshToken'] as String?;
           if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
             await _storage.write(
-                key: AppConstants.refreshTokenKey,
-                value: newRefreshToken);
+                key: AppConstants.refreshTokenKey, value: newRefreshToken);
           }
 
           // Retry original request with new token

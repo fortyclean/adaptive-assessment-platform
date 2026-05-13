@@ -1,19 +1,16 @@
+import 'package:adaptive_assessment/features/auth/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:adaptive_assessment/features/auth/screens/login_screen.dart';
-import 'package:adaptive_assessment/core/constants/app_colors.dart';
 
 /// Widget tests for Login Screen
 /// Requirements: 1.2, 1.3
 void main() {
-  Widget buildLoginScreen() {
-    return const ProviderScope(
-      child: MaterialApp(
-        home: LoginScreen(),
-      ),
-    );
-  }
+  Widget buildLoginScreen() => const ProviderScope(
+        child: MaterialApp(
+          home: LoginScreen(),
+        ),
+      );
 
   group('LoginScreen — Form Validation (Req 1.2)', () {
     testWidgets('renders username and password fields', (tester) async {
@@ -25,7 +22,8 @@ void main() {
       expect(find.text('كلمة المرور'), findsOneWidget);
     });
 
-    testWidgets('shows validation error when username is empty', (tester) async {
+    testWidgets('shows validation error when username is empty',
+        (tester) async {
       await tester.pumpWidget(buildLoginScreen());
       await tester.pumpAndSettle();
 
@@ -36,7 +34,8 @@ void main() {
       expect(find.text('يرجى إدخال اسم المستخدم'), findsOneWidget);
     });
 
-    testWidgets('shows validation error when password is empty', (tester) async {
+    testWidgets('shows validation error when password is empty',
+        (tester) async {
       await tester.pumpWidget(buildLoginScreen());
       await tester.pumpAndSettle();
 

@@ -13,7 +13,8 @@ class AppFormatters {
   }
 
   /// Formats a percentage value with one decimal place.
-  static String formatPercentage(double value) => '${value.toStringAsFixed(1)}%';
+  static String formatPercentage(double value) =>
+      '${value.toStringAsFixed(1)}%';
 
   /// Formats a date to a localized Arabic string.
   static String formatDate(DateTime date, {String locale = 'ar'}) {

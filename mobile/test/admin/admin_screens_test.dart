@@ -7,20 +7,46 @@ void main() {
 
   group('User Management — Search Logic (Req 13.2)', () {
     final users = [
-      {'fullName': 'أحمد علي', 'username': 'ahmed.ali', 'role': 'teacher', 'isActive': true},
-      {'fullName': 'سارة محمد', 'username': 'sara.m', 'role': 'student', 'isActive': true},
-      {'fullName': 'خالد عمر', 'username': 'khaled.o', 'role': 'teacher', 'isActive': false},
-      {'fullName': 'فاطمة حسن', 'username': 'fatima.h', 'role': 'student', 'isActive': true},
-      {'fullName': 'محمد أحمد', 'username': 'mohammed.a', 'role': 'teacher', 'isActive': true},
+      {
+        'fullName': 'أحمد علي',
+        'username': 'ahmed.ali',
+        'role': 'teacher',
+        'isActive': true
+      },
+      {
+        'fullName': 'سارة محمد',
+        'username': 'sara.m',
+        'role': 'student',
+        'isActive': true
+      },
+      {
+        'fullName': 'خالد عمر',
+        'username': 'khaled.o',
+        'role': 'teacher',
+        'isActive': false
+      },
+      {
+        'fullName': 'فاطمة حسن',
+        'username': 'fatima.h',
+        'role': 'student',
+        'isActive': true
+      },
+      {
+        'fullName': 'محمد أحمد',
+        'username': 'mohammed.a',
+        'role': 'teacher',
+        'isActive': true
+      },
     ];
 
     List<Map<String, dynamic>> searchUsers(String query) {
       if (query.isEmpty) return users;
       final q = query.toLowerCase();
-      return users.where((u) =>
-        (u['fullName'] as String).toLowerCase().contains(q) ||
-        (u['username'] as String).toLowerCase().contains(q)
-      ).toList();
+      return users
+          .where((u) =>
+              (u['fullName'] as String).toLowerCase().contains(q) ||
+              (u['username'] as String).toLowerCase().contains(q))
+          .toList();
     }
 
     test('returns all users when search is empty', () {

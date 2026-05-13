@@ -58,10 +58,7 @@ class _AdvancedNotificationCenterScreenState
 
   Future<void> _markAllRead() async {
     try {
-      await ref
-          .read(apiServiceProvider)
-          .dio
-          .patch('/notifications/read-all');
+      await ref.read(apiServiceProvider).dio.patch('/notifications/read-all');
     } catch (_) {}
     setState(() {
       for (final n in _notifications) {
@@ -73,10 +70,7 @@ class _AdvancedNotificationCenterScreenState
 
   Future<void> _markRead(String id) async {
     try {
-      await ref
-          .read(apiServiceProvider)
-          .dio
-          .patch('/notifications/$id/read');
+      await ref.read(apiServiceProvider).dio.patch('/notifications/$id/read');
     } catch (_) {}
     setState(() {
       final idx = _notifications.indexWhere((n) => n['_id'] == id);
@@ -90,9 +84,8 @@ class _AdvancedNotificationCenterScreenState
   void _dismissNotification(String id) {
     setState(() {
       _notifications.removeWhere((n) => n['_id'] == id);
-      _unreadCount = _notifications
-          .where((n) => !(n['isRead'] as bool? ?? true))
-          .length;
+      _unreadCount =
+          _notifications.where((n) => !(n['isRead'] as bool? ?? true)).length;
     });
   }
 
@@ -110,8 +103,7 @@ class _AdvancedNotificationCenterScreenState
       final createdAt = n['createdAt'] != null
           ? DateTime.parse(n['createdAt'] as String)
           : now;
-      final itemDate =
-          DateTime(createdAt.year, createdAt.month, createdAt.day);
+      final itemDate = DateTime(createdAt.year, createdAt.month, createdAt.day);
 
       if (itemDate == todayDate) {
         today.add(n);
@@ -130,70 +122,65 @@ class _AdvancedNotificationCenterScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: _buildAppBar(),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _loadNotifications,
-              child: _buildBody(),
-            ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: _buildAppBar(),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : RefreshIndicator(
+                onRefresh: _loadNotifications,
+                child: _buildBody(),
+              ),
+      );
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: const Color(0xFFF8FAFC),
-      elevation: 0,
-      shadowColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(
-          height: 1,
-          color: const Color(0xFFE2E8F0),
-        ),
-      ),
-      title: const Text(
-        'التقييم الذكي',
-        style: TextStyle(
-          color: Color(0xFF1E40AF),
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          fontFamily: 'Almarai',
-        ),
-      ),
-      centerTitle: true,
-      leading: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CircleAvatar(
-          radius: 18,
-          backgroundColor: const Color(0xFF1E40AF).withOpacity(0.15),
-          child: const Icon(
-            Icons.person_outline_rounded,
-            color: Color(0xFF1E40AF),
-            size: 20,
+  PreferredSizeWidget _buildAppBar() => AppBar(
+        backgroundColor: const Color(0xFFF8FAFC),
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: const Color(0xFFE2E8F0),
           ),
         ),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(
-            Icons.notifications_outlined,
+        title: const Text(
+          'التقييم الذكي',
+          style: TextStyle(
             color: Color(0xFF1E40AF),
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Almarai',
           ),
-          onPressed: () {}, // keep as is - already on notifications screen
         ),
-      ],
-    );
-  }
+        centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.all(8),
+          child: CircleAvatar(
+            radius: 18,
+            backgroundColor: const Color(0xFF1E40AF).withValues(alpha: 0.15),
+            child: const Icon(
+              Icons.person_outline_rounded,
+              color: Color(0xFF1E40AF),
+              size: 20,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: Color(0xFF1E40AF),
+            ),
+            onPressed: () {}, // keep as is - already on notifications screen
+          ),
+        ],
+      );
 
   Widget _buildBody() {
     final grouped = _grouped;
-    final hasAnyNotifications =
-        grouped.values.any((list) => list.isNotEmpty);
+    final hasAnyNotifications = grouped.values.any((list) => list.isNotEmpty);
 
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -227,29 +214,83 @@ class _AdvancedNotificationCenterScreenState
     );
   }
 
-  Widget _buildPageHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title + subtitle
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'مركز التنبيهات',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF1A1B22),
-                fontFamily: 'Almarai',
+  Widget _buildPageHeader() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title + subtitle
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'مركز التنبيهات',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1A1B22),
+                  fontFamily: 'Almarai',
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                _unreadCount > 0
+                    ? 'لديك $_unreadCount تنبيهات جديدة غير مقروءة'
+                    : 'لا توجد تنبيهات غير مقروءة',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF444653),
+                  fontFamily: 'Almarai',
+                ),
+              ),
+            ],
+          ),
+          // Mark all read button
+          if (_unreadCount > 0)
+            TextButton(
+              onPressed: _markAllRead,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'تحديد الكل كمقروء',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Almarai',
+                ),
               ),
             ),
-            const SizedBox(height: 4),
+        ],
+      );
+
+  Widget _buildEmptyState(bool hasNotifications) => Padding(
+        padding: const EdgeInsets.only(top: 48, bottom: 24),
+        child: Column(
+          children: [
+            Container(
+              width: 128,
+              height: 128,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.surfaceContainer,
+              ),
+              child: const Icon(
+                Icons.notifications_none_rounded,
+                size: 64,
+                color: Color(0xFFC4C5D5),
+              ),
+            ),
+            const SizedBox(height: 16),
             Text(
-              _unreadCount > 0
-                  ? 'لديك $_unreadCount تنبيهات جديدة غير مقروءة'
-                  : 'لا توجد تنبيهات غير مقروءة',
+              hasNotifications
+                  ? 'لا توجد تنبيهات أقدم لعرضها'
+                  : 'لا توجد تنبيهات',
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -259,65 +300,7 @@ class _AdvancedNotificationCenterScreenState
             ),
           ],
         ),
-        // Mark all read button
-        if (_unreadCount > 0)
-          TextButton(
-            onPressed: _markAllRead,
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text(
-              'تحديد الكل كمقروء',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Almarai',
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildEmptyState(bool hasNotifications) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 48, bottom: 24),
-      child: Column(
-        children: [
-          Container(
-            width: 128,
-            height: 128,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.surfaceContainer,
-            ),
-            child: const Icon(
-              Icons.notifications_none_rounded,
-              size: 64,
-              color: Color(0xFFC4C5D5),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            hasNotifications
-                ? 'لا توجد تنبيهات أقدم لعرضها'
-                : 'لا توجد تنبيهات',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Color(0xFF444653),
-              fontFamily: 'Almarai',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+      );
 
   // ── Sample data for offline/preview ──────────────────────────────────────
   List<Map<String, dynamic>> _sampleNotifications() {
@@ -331,8 +314,8 @@ class _AdvancedNotificationCenterScreenState
             'تم إصدار نتائج اختبار "الجبر المتقدم". لقد حققت نسبة 92%، رائع!',
         'type': 'quiz',
         'isRead': false,
-        'createdAt': DateTime(now.year, now.month, now.day, 10, 30)
-            .toIso8601String(),
+        'createdAt':
+            DateTime(now.year, now.month, now.day, 10, 30).toIso8601String(),
       },
       {
         '_id': '2',
@@ -340,8 +323,8 @@ class _AdvancedNotificationCenterScreenState
         'body': 'تهانينا! لقد أكملت 80% من مسار العلوم لهذا الأسبوع.',
         'type': 'trending_up',
         'isRead': false,
-        'createdAt': DateTime(now.year, now.month, now.day, 9, 15)
-            .toIso8601String(),
+        'createdAt':
+            DateTime(now.year, now.month, now.day, 9, 15).toIso8601String(),
       },
       {
         '_id': '3',
@@ -350,9 +333,9 @@ class _AdvancedNotificationCenterScreenState
             'تم تحديث تطبيق التقييم الذكي إلى الإصدار 2.4.5 مع تحسينات في الأداء.',
         'type': 'settings',
         'isRead': true,
-        'createdAt': DateTime(yesterday.year, yesterday.month, yesterday.day,
-                16, 0)
-            .toIso8601String(),
+        'createdAt':
+            DateTime(yesterday.year, yesterday.month, yesterday.day, 16)
+                .toIso8601String(),
       },
       {
         '_id': '4',
@@ -361,9 +344,9 @@ class _AdvancedNotificationCenterScreenState
             'التقرير الشهري لشهر أكتوبر متاح الآن للعرض والتحميل بصيغة PDF.',
         'type': 'bar_chart',
         'isRead': true,
-        'createdAt': DateTime(yesterday.year, yesterday.month, yesterday.day,
-                14, 30)
-            .toIso8601String(),
+        'createdAt':
+            DateTime(yesterday.year, yesterday.month, yesterday.day, 14, 30)
+                .toIso8601String(),
       },
     ];
   }
@@ -376,28 +359,26 @@ class _SectionHeader extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1B22),
-            fontFamily: 'Almarai',
+  Widget build(BuildContext context) => Row(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1A1B22),
+              fontFamily: 'Almarai',
+            ),
           ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: const Color(0xFFC4C5D5),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Container(
+              height: 1,
+              color: const Color(0xFFC4C5D5),
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 // ─── Swipeable Notification Card ─────────────────────────────────────────────
@@ -414,38 +395,34 @@ class _SwipeableNotificationCard extends StatelessWidget {
   final VoidCallback onDismiss;
 
   @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(notification['_id']),
-      direction: DismissDirection.startToEnd,
-      background: _buildSwipeBackground(),
-      onDismissed: (_) => onDismiss(),
-      child: _NotificationCard(
-        notification: notification,
-        onTap: onTap,
-      ),
-    );
-  }
-
-  Widget _buildSwipeBackground() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.centerRight,
-          end: Alignment.centerLeft,
-          colors: [Color(0xFFBA1A1A), Color(0xFFFFDAD6)],
+  Widget build(BuildContext context) => Dismissible(
+        key: ValueKey(notification['_id']),
+        direction: DismissDirection.startToEnd,
+        background: _buildSwipeBackground(),
+        onDismissed: (_) => onDismiss(),
+        child: _NotificationCard(
+          notification: notification,
+          onTap: onTap,
         ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      alignment: Alignment.centerRight,
-      padding: const EdgeInsets.only(right: 20),
-      child: const Icon(
-        Icons.delete_outline_rounded,
-        color: Colors.white,
-        size: 28,
-      ),
-    );
-  }
+      );
+
+  Widget _buildSwipeBackground() => Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+            colors: [Color(0xFFBA1A1A), Color(0xFFFFDAD6)],
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: const Icon(
+          Icons.delete_outline_rounded,
+          color: Colors.white,
+          size: 28,
+        ),
+      );
 }
 
 // ─── Notification Card ────────────────────────────────────────────────────────
@@ -480,7 +457,6 @@ class _NotificationCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: const Color(0xFFE2E8F0),
-            width: 1,
           ),
           boxShadow: const [
             BoxShadow(
@@ -593,8 +569,7 @@ class _NotificationCard extends StatelessWidget {
           : hour > 12
               ? hour - 12
               : hour;
-      final prefix = itemDate ==
-              todayDate.subtract(const Duration(days: 1))
+      final prefix = itemDate == todayDate.subtract(const Duration(days: 1))
           ? 'أمس،'
           : DateFormat('d MMM', 'ar').format(dt);
       return '$prefix $displayHour:$minute $period';
@@ -632,43 +607,43 @@ class _NotificationIcon extends StatelessWidget {
   _IconConfig _iconConfig(String type, bool isRead) {
     switch (type) {
       case 'quiz':
-        return _IconConfig(
+        return const _IconConfig(
           icon: Icons.quiz_outlined,
           backgroundColor: AppColors.primaryContainer,
           iconColor: Colors.white,
         );
       case 'trending_up':
-        return _IconConfig(
+        return const _IconConfig(
           icon: Icons.trending_up_rounded,
-          backgroundColor: const Color(0xFFEFF6FF),
-          iconColor: const Color(0xFF1E40AF),
+          backgroundColor: Color(0xFFEFF6FF),
+          iconColor: Color(0xFF1E40AF),
         );
       case 'settings':
-        return _IconConfig(
+        return const _IconConfig(
           icon: Icons.settings_outlined,
           backgroundColor: AppColors.surfaceContainer,
           iconColor: AppColors.onSurfaceVariant,
         );
       case 'bar_chart':
-        return _IconConfig(
+        return const _IconConfig(
           icon: Icons.bar_chart_rounded,
           backgroundColor: AppColors.surfaceContainer,
           iconColor: AppColors.onSurfaceVariant,
         );
       case 'assessment':
-        return _IconConfig(
+        return const _IconConfig(
           icon: Icons.assignment_outlined,
           backgroundColor: AppColors.primaryContainer,
           iconColor: Colors.white,
         );
       case 'reminder':
-        return _IconConfig(
+        return const _IconConfig(
           icon: Icons.alarm_outlined,
-          backgroundColor: const Color(0xFFFEF3C7),
-          iconColor: const Color(0xFFD97706),
+          backgroundColor: Color(0xFFFEF3C7),
+          iconColor: Color(0xFFD97706),
         );
       default:
-        return _IconConfig(
+        return const _IconConfig(
           icon: Icons.notifications_outlined,
           backgroundColor: AppColors.surfaceContainer,
           iconColor: AppColors.onSurfaceVariant,

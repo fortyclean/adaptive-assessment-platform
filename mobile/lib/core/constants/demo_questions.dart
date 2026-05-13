@@ -8,7 +8,8 @@ class DemoQuestions {
   static const List<Map<String, dynamic>> arabic = [
     {
       '_id': 'ara_001',
-      'questionText': 'ما إعراب كلمة \'الطالب\' في جملة: \'حضر الطالبُ الاجتماع\'؟',
+      'questionText':
+          'ما إعراب كلمة \'الطالب\' في جملة: \'حضر الطالبُ الاجتماع\'؟',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'فاعل مرفوع'},
@@ -218,7 +219,8 @@ class DemoQuestions {
     },
     {
       '_id': 'ara_016',
-      'questionText': 'ما نوع الاستفهام في قوله تعالى: \'هل أتاك حديث الغاشية؟\'',
+      'questionText':
+          'ما نوع الاستفهام في قوله تعالى: \'هل أتاك حديث الغاشية؟\'',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'استفهام تقريري'},
@@ -292,7 +294,8 @@ class DemoQuestions {
   static const List<Map<String, dynamic>> english = [
     {
       '_id': 'eng_001',
-      'questionText': 'Choose the correct verb: \'She ______ to school every day.\'',
+      'questionText':
+          'Choose the correct verb: \'She ______ to school every day.\'',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'go'},
@@ -362,7 +365,8 @@ class DemoQuestions {
     },
     {
       '_id': 'eng_006',
-      'questionText': 'What is the object in the sentence: \'The boy kicked the ball\'?',
+      'questionText':
+          'What is the object in the sentence: \'The boy kicked the ball\'?',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'The boy'},
@@ -376,7 +380,8 @@ class DemoQuestions {
     },
     {
       '_id': 'eng_007',
-      'questionText': 'Choose the correct preposition: \'I am interested ______ learning Arabic.\'',
+      'questionText':
+          'Choose the correct preposition: \'I am interested ______ learning Arabic.\'',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'in'},
@@ -432,7 +437,8 @@ class DemoQuestions {
     },
     {
       '_id': 'eng_011',
-      'questionText': 'Identify the adverb in: \'He ran quickly to catch the bus.\'',
+      'questionText':
+          'Identify the adverb in: \'He ran quickly to catch the bus.\'',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'He'},
@@ -446,7 +452,8 @@ class DemoQuestions {
     },
     {
       '_id': 'eng_012',
-      'questionText': 'What is the passive voice of \'The chef cooked dinner\'?',
+      'questionText':
+          'What is the passive voice of \'The chef cooked dinner\'?',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'Dinner is cooked'},
@@ -502,7 +509,8 @@ class DemoQuestions {
     },
     {
       '_id': 'eng_016',
-      'questionText': 'What is the subject in: \'The beautiful flowers bloom in spring\'?',
+      'questionText':
+          'What is the subject in: \'The beautiful flowers bloom in spring\'?',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'beautiful'},
@@ -618,7 +626,8 @@ class DemoQuestions {
     },
     {
       '_id': 'math_004',
-      'questionText': 'What is the area of a rectangle with length 8 and width 3?',
+      'questionText':
+          'What is the area of a rectangle with length 8 and width 3?',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': '11'},
@@ -702,7 +711,8 @@ class DemoQuestions {
     },
     {
       '_id': 'math_010',
-      'questionText': 'What is the slope of a line with points (0,0) and (2,4)?',
+      'questionText':
+          'What is the slope of a line with points (0,0) and (2,4)?',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': '1'},
@@ -744,7 +754,8 @@ class DemoQuestions {
     },
     {
       '_id': 'math_013',
-      'questionText': 'What is the probability of rolling an even number on a dice?',
+      'questionText':
+          'What is the probability of rolling an even number on a dice?',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': '1/2'},
@@ -1382,7 +1393,8 @@ class DemoQuestions {
     },
     {
       '_id': 'bio_018',
-      'questionText': 'ما اسم العملية التي تحصل فيها الخلية على الطاقة بدون أكسجين؟',
+      'questionText':
+          'ما اسم العملية التي تحصل فيها الخلية على الطاقة بدون أكسجين؟',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'التخمر'},
@@ -1652,7 +1664,8 @@ class DemoQuestions {
     },
     {
       '_id': 'chem_017',
-      'questionText': 'أي من التالي يعتبر عاملاً مساعداً في التفاعلات الكيميائية؟',
+      'questionText':
+          'أي من التالي يعتبر عاملاً مساعداً في التفاعلات الكيميائية؟',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'المحفز'},
@@ -1793,7 +1806,8 @@ class DemoQuestions {
     },
     {
       '_id': 'extra_006',
-      'questionText': 'ما هو لغة البرمجة المستخدمة أساساً لتطوير تطبيقات Android؟',
+      'questionText':
+          'ما هو لغة البرمجة المستخدمة أساساً لتطوير تطبيقات Android؟',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'Swift'},
@@ -1821,7 +1835,8 @@ class DemoQuestions {
     },
     {
       '_id': 'extra_008',
-      'questionText': 'ما هو نظام الترقيم الثنائي (Binary) الذي يمثل العدد 10 في النظام العشري؟',
+      'questionText':
+          'ما هو نظام الترقيم الثنائي (Binary) الذي يمثل العدد 10 في النظام العشري؟',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': '1010'},
@@ -1839,7 +1854,10 @@ class DemoQuestions {
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'RAM أسرع من ROM دائماً'},
-        {'key': 'b', 'value': 'RAM مؤقتة وتُفقد عند إيقاف التشغيل، بينما ROM دائمة'},
+        {
+          'key': 'b',
+          'value': 'RAM مؤقتة وتُفقد عند إيقاف التشغيل، بينما ROM دائمة'
+        },
         {'key': 'c', 'value': 'ROM تُستخدم للتخزين المؤقت فقط'},
         {'key': 'd', 'value': 'لا فرق بينهما'},
       ],
@@ -1863,7 +1881,8 @@ class DemoQuestions {
     },
     {
       '_id': 'extra_011',
-      'questionText': 'إذا كانت جميع الطلاب يحبون الرياضيات، وأحمد طالب، فماذا نستنتج؟',
+      'questionText':
+          'إذا كانت جميع الطلاب يحبون الرياضيات، وأحمد طالب، فماذا نستنتج؟',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'أحمد لا يحب الرياضيات'},
@@ -1923,7 +1942,10 @@ class DemoQuestions {
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'لا فرق بينهما'},
-        {'key': 'b', 'value': 'الحقيقة قابلة للتحقق والإثبات، بينما الرأي تقدير شخصي'},
+        {
+          'key': 'b',
+          'value': 'الحقيقة قابلة للتحقق والإثبات، بينما الرأي تقدير شخصي'
+        },
         {'key': 'c', 'value': 'الرأي دائماً صحيح'},
         {'key': 'd', 'value': 'الحقيقة تتغير بتغير الأشخاص'},
       ],
@@ -1989,7 +2011,8 @@ class DemoQuestions {
     },
     {
       '_id': 'extra_020',
-      'questionText': 'ما هي اللغة الأكثر انتشاراً في العالم من حيث عدد المتحدثين الأصليين؟',
+      'questionText':
+          'ما هي اللغة الأكثر انتشاراً في العالم من حيث عدد المتحدثين الأصليين؟',
       'questionType': 'mcq',
       'options': [
         {'key': 'a', 'value': 'الإنجليزية'},
@@ -2004,7 +2027,6 @@ class DemoQuestions {
   ];
 
   /// Get questions filtered by subject name.
-  static List<Map<String, dynamic>> bySubject(String subject) {
-    return all.where((q) => q['subject'] == subject).toList();
-  }
+  static List<Map<String, dynamic>> bySubject(String subject) =>
+      all.where((q) => q['subject'] == subject).toList();
 }

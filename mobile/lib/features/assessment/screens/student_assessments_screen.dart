@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants/app_constants.dart';
+
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/assessment_repository.dart';
@@ -81,40 +82,95 @@ class _StudentAssessmentsScreenState
         if (!AppConstants.useMockData) {
           setState(() {
             _isLoading = false;
-            _errorMessage = 'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.';
+            _errorMessage =
+                'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.';
           });
           return;
         }
         setState(() {
           _available = [
-            {'_id': 'demo-math', 'title': 'اختبار الرياضيات التجريبي', 'subject': 'الرياضيات', 'questionCount': 20, 'timeLimitMinutes': 45, 'status': 'active'},
-            {'_id': 'demo-arabic', 'title': 'اختبار اللغة العربية التجريبي', 'subject': 'اللغة العربية', 'questionCount': 20, 'timeLimitMinutes': 30, 'status': 'active'},
-            {'_id': 'demo-english', 'title': 'اختبار اللغة الإنجليزية التجريبي', 'subject': 'الإنجليزية', 'questionCount': 20, 'timeLimitMinutes': 30, 'status': 'active'},
-            {'_id': 'demo-biology', 'title': 'اختبار الأحياء التجريبي', 'subject': 'الأحياء', 'questionCount': 20, 'timeLimitMinutes': 35, 'status': 'active'},
-            {'_id': 'demo-history', 'title': 'اختبار التاريخ التجريبي', 'subject': 'التاريخ', 'questionCount': 20, 'timeLimitMinutes': 40, 'status': 'active'},
-            {'_id': 'demo-chemistry', 'title': 'اختبار الكيمياء التجريبي', 'subject': 'الكيمياء', 'questionCount': 20, 'timeLimitMinutes': 40, 'status': 'active'},
+            {
+              '_id': 'demo-math',
+              'title': 'اختبار الرياضيات التجريبي',
+              'subject': 'الرياضيات',
+              'questionCount': 20,
+              'timeLimitMinutes': 45,
+              'status': 'active'
+            },
+            {
+              '_id': 'demo-arabic',
+              'title': 'اختبار اللغة العربية التجريبي',
+              'subject': 'اللغة العربية',
+              'questionCount': 20,
+              'timeLimitMinutes': 30,
+              'status': 'active'
+            },
+            {
+              '_id': 'demo-english',
+              'title': 'اختبار اللغة الإنجليزية التجريبي',
+              'subject': 'الإنجليزية',
+              'questionCount': 20,
+              'timeLimitMinutes': 30,
+              'status': 'active'
+            },
+            {
+              '_id': 'demo-biology',
+              'title': 'اختبار الأحياء التجريبي',
+              'subject': 'الأحياء',
+              'questionCount': 20,
+              'timeLimitMinutes': 35,
+              'status': 'active'
+            },
+            {
+              '_id': 'demo-history',
+              'title': 'اختبار التاريخ التجريبي',
+              'subject': 'التاريخ',
+              'questionCount': 20,
+              'timeLimitMinutes': 40,
+              'status': 'active'
+            },
+            {
+              '_id': 'demo-chemistry',
+              'title': 'اختبار الكيمياء التجريبي',
+              'subject': 'الكيمياء',
+              'questionCount': 20,
+              'timeLimitMinutes': 40,
+              'status': 'active'
+            },
           ];
           _past = [
             {
               '_id': 'demo-attempt-1',
-              'assessmentId': {'title': 'اختبار الرياضيات الدوري', 'subject': 'رياضيات'},
+              'assessmentId': {
+                'title': 'اختبار الرياضيات الدوري',
+                'subject': 'رياضيات'
+              },
               'scorePercentage': 85.0,
               'status': 'completed',
-              'submittedAt': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+              'submittedAt': DateTime.now()
+                  .subtract(const Duration(days: 2))
+                  .toIso8601String(),
             },
             {
               '_id': 'demo-attempt-2',
-              'assessmentId': {'title': 'اختبار قواعد اللغة العربية', 'subject': 'لغة عربية'},
+              'assessmentId': {
+                'title': 'اختبار قواعد اللغة العربية',
+                'subject': 'لغة عربية'
+              },
               'scorePercentage': 72.0,
               'status': 'completed',
-              'submittedAt': DateTime.now().subtract(const Duration(days: 5)).toIso8601String(),
+              'submittedAt': DateTime.now()
+                  .subtract(const Duration(days: 5))
+                  .toIso8601String(),
             },
             {
               '_id': 'demo-attempt-3',
               'assessmentId': {'title': 'اختبار الأحياء', 'subject': 'أحياء'},
               'scorePercentage': 91.0,
               'status': 'completed',
-              'submittedAt': DateTime.now().subtract(const Duration(days: 7)).toIso8601String(),
+              'submittedAt': DateTime.now()
+                  .subtract(const Duration(days: 7))
+                  .toIso8601String(),
             },
           ];
           _isLoading = false;
@@ -126,7 +182,7 @@ class _StudentAssessmentsScreenState
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final firstName = user?.fullName?.split(' ').first ?? 'أحمد';
+    final firstName = user?.fullName.split(' ').first ?? 'أحمد';
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -152,7 +208,7 @@ class _StudentAssessmentsScreenState
                 // App title + avatar (RTL: right side)
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'التقييم الذكي',
                       style: TextStyle(
                         fontSize: 20,
@@ -169,13 +225,12 @@ class _StudentAssessmentsScreenState
                         color: AppColors.surfaceContainer,
                         border: Border.all(
                           color: AppColors.outlineVariant,
-                          width: 1,
                         ),
                       ),
                       child: Center(
                         child: Text(
                           firstName.isNotEmpty ? firstName[0] : 'أ',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: AppColors.onSurface,
@@ -219,111 +274,105 @@ class _StudentAssessmentsScreenState
           ),
         ],
       ),
-      bottomNavigationBar:
-          const AppBottomNav(currentIndex: 1, role: 'student'),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'student'),
     );
   }
 
   // ─── Greeting Section ────────────────────────────────────────────────────
 
-  Widget _buildGreeting(String name) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          'مرحباً بك، $name',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
+  Widget _buildGreeting(String name) => Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            'مرحباً بك، $name',
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary,
+            ),
+            textAlign: TextAlign.right,
           ),
-          textAlign: TextAlign.right,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'لديك ${_available.length} ${_available.length == 1 ? 'اختبار متاح' : 'اختبارات متاحة'} اليوم للبدء بها.',
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.onSurfaceVariant,
+          const SizedBox(height: 8),
+          Text(
+            'لديك ${_available.length} ${_available.length == 1 ? 'اختبار متاح' : 'اختبارات متاحة'} اليوم للبدء بها.',
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.right,
           ),
-          textAlign: TextAlign.right,
-        ),
-      ],
-    );
-  }
+        ],
+      );
 
   // ─── Tabs Navigation ─────────────────────────────────────────────────────
 
-  Widget _buildTabsNavigation() {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildTabButton(
-              label: 'الاختبارات المتاحة',
-              isActive: _tabController.index == 0,
-              onTap: () => setState(() => _tabController.index = 0),
+  Widget _buildTabsNavigation() => Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: _buildTabButton(
+                label: 'الاختبارات المتاحة',
+                isActive: _tabController.index == 0,
+                onTap: () => setState(() => _tabController.index = 0),
+              ),
             ),
-          ),
-          Expanded(
-            child: _buildTabButton(
-              label: 'القادمة',
-              isActive: _tabController.index == 1,
-              onTap: () => setState(() => _tabController.index = 1),
+            Expanded(
+              child: _buildTabButton(
+                label: 'القادمة',
+                isActive: _tabController.index == 1,
+                onTap: () => setState(() => _tabController.index = 1),
+              ),
             ),
-          ),
-          Expanded(
-            child: _buildTabButton(
-              label: 'النتائج السابقة',
-              isActive: _tabController.index == 2,
-              onTap: () => setState(() => _tabController.index = 2),
+            Expanded(
+              child: _buildTabButton(
+                label: 'النتائج السابقة',
+                isActive: _tabController.index == 2,
+                onTap: () => setState(() => _tabController.index = 2),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   Widget _buildTabButton({
     required String label,
     required bool isActive,
     required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        decoration: BoxDecoration(
-          color: isActive ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 4,
-                    offset: const Offset(0, 1),
-                  ),
-                ]
-              : null,
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-            color: isActive ? AppColors.primary : AppColors.onSurfaceVariant,
+  }) =>
+      GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+          decoration: BoxDecoration(
+            color: isActive ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.06),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ]
+                : null,
           ),
-          textAlign: TextAlign.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              color: isActive ? AppColors.primary : AppColors.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   // ─── Tab Content ─────────────────────────────────────────────────────────
 
@@ -460,13 +509,13 @@ class _StudentAssessmentsScreenState
               children: [
                 Text(
                   '$questionCount سؤال',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
-                Icon(
+                const Icon(
                   Icons.list_alt,
                   size: 16,
                   color: AppColors.onSurfaceVariant,
@@ -474,13 +523,13 @@ class _StudentAssessmentsScreenState
                 const SizedBox(width: 16),
                 Text(
                   '$timeLimitMinutes دقيقة',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 4),
-                Icon(
+                const Icon(
                   Icons.schedule,
                   size: 16,
                   color: AppColors.onSurfaceVariant,
@@ -521,110 +570,106 @@ class _StudentAssessmentsScreenState
 
   // ─── Featured Banner ─────────────────────────────────────────────────────
 
-  Widget _buildFeaturedBanner() {
-    return Container(
-      height: 160,
-      decoration: BoxDecoration(
-        color: AppColors.primaryContainer,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryContainer.withValues(alpha: 0.3),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      AppColors.primaryContainer,
-                      AppColors.primaryContainer.withValues(alpha: 0.8),
-                    ],
-                  ),
-                ),
-              ),
+  Widget _buildFeaturedBanner() => Container(
+        height: 160,
+        decoration: BoxDecoration(
+          color: AppColors.primaryContainer,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primaryContainer.withValues(alpha: 0.3),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const [
-                Text(
-                  'المراجعة النهائية',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'استعد لاختبارات نهاية العام مع نماذجنا الذكية',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Past Results Preview ────────────────────────────────────────────────
-
-  Widget _buildPastResultsPreview() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ],
+        ),
+        child: Stack(
           children: [
-            TextButton(
-              onPressed: () => setState(() => _tabController.index = 2),
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                'عرض الكل',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.primary,
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        AppColors.primaryContainer,
+                        AppColors.primaryContainer.withValues(alpha: 0.8),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-            Text(
-              'النتائج الأخيرة',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.onSurfaceVariant,
+            const Padding(
+              padding: EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'المراجعة النهائية',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'استعد لاختبارات نهاية العام مع نماذجنا الذكية',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        ..._past.take(2).map(_buildPastCard),
-      ],
-    );
-  }
+      );
+
+  // ─── Past Results Preview ────────────────────────────────────────────────
+
+  Widget _buildPastResultsPreview() => Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () => setState(() => _tabController.index = 2),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text(
+                  'عرض الكل',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+              const Text(
+                'النتائج الأخيرة',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ..._past.take(2).map(_buildPastCard),
+        ],
+      );
 
   // ─── Upcoming Assessment Card ────────────────────────────────────────────
 
@@ -633,8 +678,7 @@ class _StudentAssessmentsScreenState
     final from = assessment['availableFrom'] != null
         ? DateTime.tryParse(assessment['availableFrom'] as String)
         : null;
-    final daysUntil =
-        from != null ? from.difference(DateTime.now()).inDays : 0;
+    final daysUntil = from != null ? from.difference(DateTime.now()).inDays : 0;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -671,7 +715,7 @@ class _StudentAssessmentsScreenState
                     color: Color(0xFF1A1B22),
                   ),
                 ),
-                Text(
+                const Text(
                   'يوم',
                   style: TextStyle(
                     fontSize: 12,
@@ -703,16 +747,14 @@ class _StudentAssessmentsScreenState
   Widget _buildPastCard(Map<String, dynamic> attempt) {
     final assessment = attempt['assessmentId'] as Map<String, dynamic>?;
     final title = assessment?['title'] as String? ?? 'اختبار';
-    final score =
-        (attempt['scorePercentage'] as num?)?.toDouble() ?? 0.0;
+    final score = (attempt['scorePercentage'] as num?)?.toDouble() ?? 0.0;
     final submittedAt = attempt['submittedAt'] != null
         ? DateTime.tryParse(attempt['submittedAt'] as String)
         : null;
     final dateStr = submittedAt != null
         ? 'تم الانتهاء: ${submittedAt.day} ${_getMonthName(submittedAt.month)}'
         : '';
-    final scoreColor =
-        score >= 70 ? AppColors.success : AppColors.error;
+    final scoreColor = score >= 70 ? AppColors.success : AppColors.error;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -732,13 +774,11 @@ class _StudentAssessmentsScreenState
       child: Row(
         children: [
           OutlinedButton(
-            onPressed: () =>
-                context.push('/student/results/${attempt['_id']}'),
+            onPressed: () => context.push('/student/results/${attempt['_id']}'),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
-              side: BorderSide(color: AppColors.primary),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              side: const BorderSide(color: AppColors.primary),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -766,7 +806,7 @@ class _StudentAssessmentsScreenState
                   const SizedBox(height: 2),
                   Text(
                     dateStr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -806,82 +846,89 @@ class _StudentAssessmentsScreenState
     required IconData icon,
     required String title,
     required String subtitle,
-  }) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(48),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: AppColors.surfaceContainer,
-                shape: BoxShape.circle,
+  }) =>
+      Center(
+        child: Padding(
+          padding: const EdgeInsets.all(48),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: const BoxDecoration(
+                  color: AppColors.surfaceContainer,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 36, color: AppColors.onSurfaceVariant),
               ),
-              child: Icon(icon, size: 36, color: AppColors.onSurfaceVariant),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+              const SizedBox(height: 16),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1B22),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.onSurfaceVariant,
+              const SizedBox(height: 8),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _buildErrorState() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, color: AppColors.error, size: 42),
-            const SizedBox(height: 12),
-            Text(
-              _errorMessage ?? 'حدث خطأ غير متوقع',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.onSurfaceVariant,
+  Widget _buildErrorState() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, color: AppColors.error, size: 42),
+              const SizedBox(height: 12),
+              Text(
+                _errorMessage ?? 'حدث خطأ غير متوقع',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.onSurfaceVariant,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _loadData,
-              icon: const Icon(Icons.refresh),
-              label: const Text('إعادة المحاولة'),
-            ),
-          ],
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: _loadData,
+                icon: const Icon(Icons.refresh),
+                label: const Text('إعادة المحاولة'),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   // ─── Helper Methods ──────────────────────────────────────────────────────
 
   String _getMonthName(int month) {
     const months = [
-      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
     ];
     return months[month - 1];
   }

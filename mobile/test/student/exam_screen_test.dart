@@ -1,7 +1,7 @@
+import 'package:adaptive_assessment/core/constants/app_colors.dart';
+import 'package:adaptive_assessment/shared/widgets/mcq_option.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:adaptive_assessment/shared/widgets/mcq_option.dart';
-import 'package:adaptive_assessment/core/constants/app_colors.dart';
 
 /// Widget tests for Student Screens
 /// Requirements: 7.2, 7.3, 7.4, 7.5, 8.3
@@ -14,21 +14,20 @@ void main() {
       bool? isCorrect,
       bool? isIncorrect,
       bool isDisabled = false,
-    }) {
-      return MaterialApp(
-        home: Scaffold(
-          body: McqOption(
-            optionKey: 'A',
-            value: 'الإجابة الأولى',
-            isSelected: isSelected,
-            onTap: () {},
-            isCorrect: isCorrect,
-            isIncorrect: isIncorrect,
-            isDisabled: isDisabled,
+    }) =>
+        MaterialApp(
+          home: Scaffold(
+            body: McqOption(
+              optionKey: 'A',
+              value: 'الإجابة الأولى',
+              isSelected: isSelected,
+              onTap: () {},
+              isCorrect: isCorrect,
+              isIncorrect: isIncorrect,
+              isDisabled: isDisabled,
+            ),
           ),
-        ),
-      );
-    }
+        );
 
     testWidgets('renders option key and value', (tester) async {
       await tester.pumpWidget(buildOption(isSelected: false));
@@ -55,7 +54,8 @@ void main() {
         find.byType(AnimatedContainer).last,
       );
       final decoration = container.decoration as BoxDecoration;
-      expect(decoration.border?.top.color, equals(AppColors.optionSelectedBorder));
+      expect(
+          decoration.border?.top.color, equals(AppColors.optionSelectedBorder));
     });
 
     testWidgets('correct state shows check icon', (tester) async {
@@ -73,7 +73,7 @@ void main() {
     });
 
     testWidgets('tapping option calls onTap callback', (tester) async {
-      bool tapped = false;
+      var tapped = false;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: McqOption(
@@ -90,7 +90,7 @@ void main() {
     });
 
     testWidgets('disabled option does not call onTap', (tester) async {
-      bool tapped = false;
+      var tapped = false;
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: McqOption(
@@ -196,9 +196,9 @@ void main() {
       String classify(double percentage) =>
           percentage >= 70.0 ? 'strength' : 'weakness';
 
-      expect(classify(70.0), equals('strength'));
-      expect(classify(75.0), equals('strength'));
-      expect(classify(100.0), equals('strength'));
+      expect(classify(70), equals('strength'));
+      expect(classify(75), equals('strength'));
+      expect(classify(100), equals('strength'));
     });
 
     test('classifies skill as weakness below 70%', () {
@@ -206,8 +206,8 @@ void main() {
           percentage >= 70.0 ? 'strength' : 'weakness';
 
       expect(classify(69.9), equals('weakness'));
-      expect(classify(50.0), equals('weakness'));
-      expect(classify(0.0), equals('weakness'));
+      expect(classify(50), equals('weakness'));
+      expect(classify(0), equals('weakness'));
     });
 
     test('calculates skill percentage correctly', () {
@@ -226,9 +226,9 @@ void main() {
     test('awards bonus badge at 90% or above', () {
       bool hasBonusBadge(double score) => score >= 90.0;
 
-      expect(hasBonusBadge(90.0), isTrue);
-      expect(hasBonusBadge(95.0), isTrue);
-      expect(hasBonusBadge(100.0), isTrue);
+      expect(hasBonusBadge(90), isTrue);
+      expect(hasBonusBadge(95), isTrue);
+      expect(hasBonusBadge(100), isTrue);
       expect(hasBonusBadge(89.9), isFalse);
     });
 
@@ -236,10 +236,10 @@ void main() {
       int calcPoints(double score, int questionCount) =>
           (score / 100 * questionCount * 10).round();
 
-      expect(calcPoints(80.0, 10), equals(80));
-      expect(calcPoints(90.0, 10), equals(90));
-      expect(calcPoints(100.0, 10), equals(100));
-      expect(calcPoints(0.0, 10), equals(0));
+      expect(calcPoints(80, 10), equals(80));
+      expect(calcPoints(90, 10), equals(90));
+      expect(calcPoints(100, 10), equals(100));
+      expect(calcPoints(0, 10), equals(0));
     });
   });
 }

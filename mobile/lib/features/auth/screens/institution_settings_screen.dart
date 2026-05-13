@@ -103,376 +103,369 @@ class _InstitutionSettingsScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFBF8FF),
-        appBar: _buildAppBar(),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 20),
-              _buildSchoolProfile(),
-              const SizedBox(height: 16),
-              _buildSettingsGroup(
-                title: 'الهيكل الأكاديمي',
-                items: const [
-                  _SettingsItem(
-                    icon: Icons.calendar_today_outlined,
-                    title: 'الأعوام الدراسية',
-                    subtitle: 'إدارة الفصول والتواريخ الدراسية',
-                    action: _SettingsAction.academicYears,
-                  ),
-                  _SettingsItem(
-                    icon: Icons.grade_outlined,
-                    title: 'مقاييس التقييم',
-                    subtitle: 'تحديد سلم الدرجات والتقديرات',
-                    action: _SettingsAction.gradeScale,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _buildSettingsGroup(
-                title: 'إدارة المستخدمين',
-                items: const [
-                  _SettingsItem(
-                    icon: Icons.admin_panel_settings_outlined,
-                    title: 'الأدوار والصلاحيات',
-                    subtitle: 'تخصيص وصول المعلمين والإداريين',
-                    action: _SettingsAction.roles,
-                  ),
-                  _SettingsItem(
-                    icon: Icons.history_edu_outlined,
-                    title: 'سجلات الأنشطة',
-                    subtitle: 'تتبع الدخول وتغييرات النظام',
-                    action: _SettingsAction.activityLog,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _buildSettingsGroup(
-                title: 'تفضيلات النظام',
-                items: const [
-                  _SettingsItem(
-                    icon: Icons.notifications_active_outlined,
-                    title: 'إعدادات التنبيهات',
-                    subtitle: 'البريد الإلكتروني والإشعارات الفورية',
-                    action: _SettingsAction.notifications,
-                  ),
-                  _SettingsItem(
-                    icon: Icons.translate_outlined,
-                    title: 'اللغة والمنطقة',
-                    subtitle: 'اللغة العربية، التوقيت المحلي',
-                    action: _SettingsAction.locale,
-                  ),
-                  _SettingsItem(
-                    icon: Icons.hub_outlined,
-                    title: 'تكامل الأنظمة',
-                    subtitle: 'ربط API والمزودين الخارجيين',
-                    action: _SettingsAction.integrations,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              _buildSettingsGroup(
-                title: 'الحساب والدعم',
-                items: const [
-                  _SettingsItem(
-                    icon: Icons.account_circle_outlined,
-                    title: 'إعدادات الحساب',
-                    subtitle: 'الملف الشخصي وكلمة المرور وتفضيلات الحساب',
-                    action: _SettingsAction.accountSettings,
-                  ),
-                  _SettingsItem(
-                    icon: Icons.info_outline_rounded,
-                    title: 'عن التطبيق وسجل الإصدارات',
-                    subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
-                    action: _SettingsAction.about,
-                  ),
-                  _SettingsItem(
-                    icon: Icons.support_agent_outlined,
-                    title: 'الدعم الفني',
-                    subtitle: 'التواصل مع فريق الدعم والمساعدة',
-                    action: _SettingsAction.support,
-                  ),
-                  _SettingsItem(
-                    icon: Icons.logout_rounded,
-                    title: 'تسجيل الخروج',
-                    subtitle: 'إنهاء جلسة المشرف الحالية',
-                    action: _SettingsAction.logout,
-                    color: AppColors.error,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              _buildDangerZone(),
-              const SizedBox(height: 80),
-            ],
-          ),
-        ),
-        bottomNavigationBar: const AppBottomNav(currentIndex: 4, role: 'admin'),
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 1,
-      shadowColor: Colors.black12,
-      automaticallyImplyLeading: false,
-      title: Row(
-        children: const [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: Color(0xFF1E40AF),
-            child: Icon(Icons.person, color: Colors.white, size: 20),
-          ),
-          SizedBox(width: 12),
-          Text(
-            'EduAssess',
-            style: TextStyle(
-              color: Color(0xFF1E40AF),
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        IconButton(
-          tooltip: 'الإشعارات',
-          icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
-          onPressed: () => context.push(AppRoutes.notificationCenter),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildHeader() {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'إعدادات المؤسسة',
-          style: TextStyle(
-            color: AppColors.primary,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          'إدارة الهوية الأكاديمية وصلاحيات النظام',
-          style: TextStyle(color: AppColors.outline, fontSize: 14),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSchoolProfile() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: _cardDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: const [
-                  Icon(Icons.school_outlined,
-                      color: AppColors.primary, size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    'ملف المدرسة',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-              TextButton(
-                onPressed: _showSchoolProfileDialog,
-                child: const Text(
-                  'تعديل',
-                  style: TextStyle(color: AppColors.primary, fontSize: 14),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: () => _showMessage(
-                    'يمكن تغيير الشعار من لوحة ربط التخزين عند تفعيل رفع الملفات.'),
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF4F2FC),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFC4C5D5)),
-                  ),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.school, color: AppColors.primary, size: 32),
-                      SizedBox(height: 4),
-                      Text(
-                        'الشعار',
-                        style:
-                            TextStyle(fontSize: 10, color: AppColors.outline),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('اسم المؤسسة',
-                        style:
-                            TextStyle(color: AppColors.outline, fontSize: 12)),
-                    Text(
-                      _schoolName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: const Color(0xFFFBF8FF),
+          appBar: _buildAppBar(),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                const SizedBox(height: 20),
+                _buildSchoolProfile(),
+                const SizedBox(height: 16),
+                _buildSettingsGroup(
+                  title: 'الهيكل الأكاديمي',
+                  items: const [
+                    _SettingsItem(
+                      icon: Icons.calendar_today_outlined,
+                      title: 'الأعوام الدراسية',
+                      subtitle: 'إدارة الفصول والتواريخ الدراسية',
+                      action: _SettingsAction.academicYears,
                     ),
-                    const SizedBox(height: 8),
-                    const Text('معلومات التواصل',
-                        style:
-                            TextStyle(color: AppColors.outline, fontSize: 12)),
-                    Text(_schoolPhone, style: const TextStyle(fontSize: 13)),
-                    Text(_schoolEmail, style: const TextStyle(fontSize: 13)),
+                    _SettingsItem(
+                      icon: Icons.grade_outlined,
+                      title: 'مقاييس التقييم',
+                      subtitle: 'تحديد سلم الدرجات والتقديرات',
+                      action: _SettingsAction.gradeScale,
+                    ),
                   ],
                 ),
+                const SizedBox(height: 12),
+                _buildSettingsGroup(
+                  title: 'إدارة المستخدمين',
+                  items: const [
+                    _SettingsItem(
+                      icon: Icons.admin_panel_settings_outlined,
+                      title: 'الأدوار والصلاحيات',
+                      subtitle: 'تخصيص وصول المعلمين والإداريين',
+                      action: _SettingsAction.roles,
+                    ),
+                    _SettingsItem(
+                      icon: Icons.history_edu_outlined,
+                      title: 'سجلات الأنشطة',
+                      subtitle: 'تتبع الدخول وتغييرات النظام',
+                      action: _SettingsAction.activityLog,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _buildSettingsGroup(
+                  title: 'تفضيلات النظام',
+                  items: const [
+                    _SettingsItem(
+                      icon: Icons.notifications_active_outlined,
+                      title: 'إعدادات التنبيهات',
+                      subtitle: 'البريد الإلكتروني والإشعارات الفورية',
+                      action: _SettingsAction.notifications,
+                    ),
+                    _SettingsItem(
+                      icon: Icons.translate_outlined,
+                      title: 'اللغة والمنطقة',
+                      subtitle: 'اللغة العربية، التوقيت المحلي',
+                      action: _SettingsAction.locale,
+                    ),
+                    _SettingsItem(
+                      icon: Icons.hub_outlined,
+                      title: 'تكامل الأنظمة',
+                      subtitle: 'ربط API والمزودين الخارجيين',
+                      action: _SettingsAction.integrations,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                _buildSettingsGroup(
+                  title: 'الحساب والدعم',
+                  items: const [
+                    _SettingsItem(
+                      icon: Icons.account_circle_outlined,
+                      title: 'إعدادات الحساب',
+                      subtitle: 'الملف الشخصي وكلمة المرور وتفضيلات الحساب',
+                      action: _SettingsAction.accountSettings,
+                    ),
+                    _SettingsItem(
+                      icon: Icons.info_outline_rounded,
+                      title: 'عن التطبيق وسجل الإصدارات',
+                      subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
+                      action: _SettingsAction.about,
+                    ),
+                    _SettingsItem(
+                      icon: Icons.support_agent_outlined,
+                      title: 'الدعم الفني',
+                      subtitle: 'التواصل مع فريق الدعم والمساعدة',
+                      action: _SettingsAction.support,
+                    ),
+                    _SettingsItem(
+                      icon: Icons.logout_rounded,
+                      title: 'تسجيل الخروج',
+                      subtitle: 'إنهاء جلسة المشرف الحالية',
+                      action: _SettingsAction.logout,
+                      color: AppColors.error,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                _buildDangerZone(),
+                const SizedBox(height: 80),
+              ],
+            ),
+          ),
+          bottomNavigationBar:
+              const AppBottomNav(currentIndex: 4, role: 'admin'),
+        ),
+      );
+
+  PreferredSizeWidget _buildAppBar() => AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        shadowColor: Colors.black12,
+        automaticallyImplyLeading: false,
+        title: const Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: Color(0xFF1E40AF),
+              child: Icon(Icons.person, color: Colors.white, size: 20),
+            ),
+            SizedBox(width: 12),
+            Text(
+              'EduAssess',
+              style: TextStyle(
+                color: Color(0xFF1E40AF),
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
               ),
-            ],
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            tooltip: 'الإشعارات',
+            icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
+            onPressed: () => context.push(AppRoutes.notificationCenter),
           ),
         ],
-      ),
-    );
-  }
+      );
 
-  Widget _buildSettingsGroup({
-    required String title,
-    required List<_SettingsItem> items,
-  }) {
-    return Container(
-      decoration: _cardDecoration(),
-      child: Column(
+  Widget _buildHeader() => const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: const BoxDecoration(
-              color: Color(0xFFF4F2FC),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              border: Border(bottom: BorderSide(color: Color(0xFFC4C5D5))),
-            ),
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: AppColors.onSurfaceVariant,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
+          Text(
+            'إعدادات المؤسسة',
+            style: TextStyle(
+              color: AppColors.primary,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          ...items.asMap().entries.map((entry) {
-            final i = entry.key;
-            final item = entry.value;
-            return Column(
+          SizedBox(height: 4),
+          Text(
+            'إدارة الهوية الأكاديمية وصلاحيات النظام',
+            style: TextStyle(color: AppColors.outline, fontSize: 14),
+          ),
+        ],
+      );
+
+  Widget _buildSchoolProfile() => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: _cardDecoration(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.school_outlined,
+                        color: AppColors.primary, size: 20),
+                    SizedBox(width: 8),
+                    Text(
+                      'ملف المدرسة',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                TextButton(
+                  onPressed: _showSchoolProfileDialog,
+                  child: const Text(
+                    'تعديل',
+                    style: TextStyle(color: AppColors.primary, fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
               children: [
                 InkWell(
-                  onTap: () => _handleSettingsAction(item.action),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => _showMessage(
+                      'يمكن تغيير الشعار من لوحة ربط التخزين عند تفعيل رفع الملفات.'),
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF4F2FC),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xFFC4C5D5)),
+                    ),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: (item.color ?? AppColors.primary)
-                                .withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(item.icon,
-                              color: item.color ?? AppColors.primary, size: 20),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.title,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: item.color ?? AppColors.onSurface,
-                                ),
-                              ),
-                              Text(
-                                item.subtitle,
-                                style: const TextStyle(
-                                  color: AppColors.outline,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_left,
-                          color: item.color ?? AppColors.outline,
+                        Icon(Icons.school, color: AppColors.primary, size: 32),
+                        SizedBox(height: 4),
+                        Text(
+                          'الشعار',
+                          style:
+                              TextStyle(fontSize: 10, color: AppColors.outline),
                         ),
                       ],
                     ),
                   ),
                 ),
-                if (i < items.length - 1)
-                  const Divider(
-                    height: 1,
-                    color: Color(0xFFC4C5D5),
-                    indent: 16,
-                    endIndent: 16,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('اسم المؤسسة',
+                          style: TextStyle(
+                              color: AppColors.outline, fontSize: 12)),
+                      Text(
+                        _schoolName,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text('معلومات التواصل',
+                          style: TextStyle(
+                              color: AppColors.outline, fontSize: 12)),
+                      Text(_schoolPhone, style: const TextStyle(fontSize: 13)),
+                      Text(_schoolEmail, style: const TextStyle(fontSize: 13)),
+                    ],
                   ),
+                ),
               ],
-            );
-          }),
-        ],
-      ),
-    );
-  }
+            ),
+          ],
+        ),
+      );
 
-  Widget _buildDangerZone() {
-    return OutlinedButton.icon(
-      onPressed: _showArchiveDialog,
-      icon: const Icon(Icons.archive_outlined, color: AppColors.error),
-      label: const Text(
-        'أرشفة بيانات المؤسسة',
-        style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
-      ),
-      style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: AppColors.error),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        minimumSize: const Size(double.infinity, 0),
-      ),
-    );
-  }
+  Widget _buildSettingsGroup({
+    required String title,
+    required List<_SettingsItem> items,
+  }) =>
+      Container(
+        decoration: _cardDecoration(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF4F2FC),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                border: Border(bottom: BorderSide(color: Color(0xFFC4C5D5))),
+              ),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: AppColors.onSurfaceVariant,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            ...items.asMap().entries.map((entry) {
+              final i = entry.key;
+              final item = entry.value;
+              return Column(
+                children: [
+                  InkWell(
+                    onTap: () => _handleSettingsAction(item.action),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: (item.color ?? AppColors.primary)
+                                  .withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(item.icon,
+                                color: item.color ?? AppColors.primary,
+                                size: 20),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.title,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: item.color ?? AppColors.onSurface,
+                                  ),
+                                ),
+                                Text(
+                                  item.subtitle,
+                                  style: const TextStyle(
+                                    color: AppColors.outline,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.chevron_left,
+                            color: item.color ?? AppColors.outline,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (i < items.length - 1)
+                    const Divider(
+                      height: 1,
+                      color: Color(0xFFC4C5D5),
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                ],
+              );
+            }),
+          ],
+        ),
+      );
+
+  Widget _buildDangerZone() => OutlinedButton.icon(
+        onPressed: _showArchiveDialog,
+        icon: const Icon(Icons.archive_outlined, color: AppColors.error),
+        label: const Text(
+          'أرشفة بيانات المؤسسة',
+          style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
+        ),
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: AppColors.error),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          minimumSize: const Size(double.infinity, 0),
+        ),
+      );
 
   void _handleSettingsAction(_SettingsAction action) {
     switch (action) {
@@ -963,96 +956,86 @@ class _InstitutionSettingsScreenState
     required String value,
     required List<String> values,
     required ValueChanged<String?> onChanged,
-  }) {
-    return DropdownButtonFormField<String>(
-      initialValue: value,
-      items: values
-          .map((item) => DropdownMenuItem(value: item, child: Text(item)))
-          .toList(),
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
+  }) =>
+      DropdownButtonFormField<String>(
+        initialValue: value,
+        items: values
+            .map((item) => DropdownMenuItem(value: item, child: Text(item)))
+            .toList(),
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
 
   Widget _primaryButton({
     required String label,
     required IconData icon,
     required VoidCallback onPressed,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon),
-        label: Text(label),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  }) =>
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          onPressed: onPressed,
+          icon: Icon(icon),
+          label: Text(label),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _infoTile(String title, String subtitle) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 4),
-          Text(subtitle, style: const TextStyle(color: AppColors.outline)),
+  Widget _infoTile(String title, String subtitle) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 4),
+            Text(subtitle, style: const TextStyle(color: AppColors.outline)),
+          ],
+        ),
+      );
+
+  Widget _scaleRow(String label, String value) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            Expanded(child: Text(label)),
+            Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
+          ],
+        ),
+      );
+
+  Widget _activityRow(String title, String time) => ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: const CircleAvatar(
+          backgroundColor: Color(0xFFEFF6FF),
+          child: Icon(Icons.check_circle_outline, color: AppColors.primary),
+        ),
+        title: Text(title),
+        subtitle: Text(time),
+      );
+
+  BoxDecoration _cardDecoration() => BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFC4C5D5)),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6),
         ],
-      ),
-    );
-  }
-
-  Widget _scaleRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Expanded(child: Text(label)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
-        ],
-      ),
-    );
-  }
-
-  Widget _activityRow(String title, String time) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: const CircleAvatar(
-        backgroundColor: Color(0xFFEFF6FF),
-        child: Icon(Icons.check_circle_outline, color: AppColors.primary),
-      ),
-      title: Text(title),
-      subtitle: Text(time),
-    );
-  }
-
-  BoxDecoration _cardDecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: const Color(0xFFC4C5D5)),
-      boxShadow: [
-        BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6),
-      ],
-    );
-  }
+      );
 
   void _showMessage(String message, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(

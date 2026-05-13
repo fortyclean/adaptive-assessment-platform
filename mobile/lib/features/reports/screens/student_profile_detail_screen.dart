@@ -1,4 +1,4 @@
-﻿import 'dart:math' as math;
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,8 +13,8 @@ import '../../assessment/repositories/teacher_repository.dart';
 /// Requirements: 9.5, 9.6
 class StudentProfileDetailScreen extends ConsumerStatefulWidget {
   const StudentProfileDetailScreen({
-    super.key,
     required this.studentId,
+    super.key,
     this.studentName,
     this.assessmentId,
   });
@@ -33,7 +33,6 @@ class _StudentProfileDetailScreenState
     with SingleTickerProviderStateMixin {
   bool _isLoading = true;
   Map<String, dynamic>? _studentData;
-  String? _error;
   late TabController _tabController;
 
   // ── Mock / fallback data ──────────────────────────────────────────────────
@@ -47,11 +46,23 @@ class _StudentProfileDetailScreenState
   ];
 
   final List<double> _weeklyScores = const [
-    0.62, 0.75, 0.68, 0.82, 0.79, 0.88, 0.84,
+    0.62,
+    0.75,
+    0.68,
+    0.82,
+    0.79,
+    0.88,
+    0.84,
   ];
 
   final List<String> _weekDays = const [
-    'أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت',
+    'أحد',
+    'اثنين',
+    'ثلاثاء',
+    'أربعاء',
+    'خميس',
+    'جمعة',
+    'سبت',
   ];
 
   final List<_ActivityLog> _activityLog = const [
@@ -113,9 +124,9 @@ class _StudentProfileDetailScreenState
   Future<void> _loadStudentData() async {
     try {
       if (widget.assessmentId != null && widget.assessmentId!.isNotEmpty) {
-        final data = await ref
-            .read(teacherRepositoryProvider)
-            .getStudentReport(widget.studentId, assessmentId: widget.assessmentId!);
+        final data = await ref.read(teacherRepositoryProvider).getStudentReport(
+            widget.studentId,
+            assessmentId: widget.assessmentId!);
         setState(() {
           _studentData = data;
           _isLoading = false;
@@ -134,9 +145,8 @@ class _StudentProfileDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final name = _studentData?['fullName'] as String? ??
-        widget.studentName ??
-        'الطالب';
+    final name =
+        _studentData?['fullName'] as String? ?? widget.studentName ?? 'الطالب';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -148,7 +158,6 @@ class _StudentProfileDetailScreenState
                 SliverToBoxAdapter(child: _buildProfileHeader(name)),
                 SliverToBoxAdapter(child: _buildTabBar()),
                 SliverFillRemaining(
-                  hasScrollBody: true,
                   child: TabBarView(
                     controller: _tabController,
                     children: [
@@ -163,42 +172,39 @@ class _StudentProfileDetailScreenState
     );
   }
 
-
   // ─── Sliver App Bar ───────────────────────────────────────────────────────
 
-  SliverAppBar _buildSliverAppBar(String name) {
-    return SliverAppBar(
-      expandedHeight: 0,
-      floating: true,
-      snap: true,
-      backgroundColor: Colors.white,
-      elevation: 0,
-      scrolledUnderElevation: 1,
-      shadowColor: Colors.black12,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded),
-        color: AppColors.onSurface,
-        onPressed: () => context.pop(),
-      ),
-      title: Text(
-        name,
-        style: const TextStyle(
-          fontFamily: 'Almarai',
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
+  SliverAppBar _buildSliverAppBar(String name) => SliverAppBar(
+        expandedHeight: 0,
+        floating: true,
+        snap: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        shadowColor: Colors.black12,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           color: AppColors.onSurface,
+          onPressed: () => context.pop(),
         ),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.download_rounded),
-          color: AppColors.onSurfaceVariant,
-          onPressed: _exportReport,
-          tooltip: 'تصدير التقرير',
+        title: Text(
+          name,
+          style: const TextStyle(
+            fontFamily: 'Almarai',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: AppColors.onSurface,
+          ),
         ),
-      ],
-    );
-  }
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.download_rounded),
+            color: AppColors.onSurfaceVariant,
+            onPressed: _exportReport,
+            tooltip: 'تصدير التقرير',
+          ),
+        ],
+      );
 
   void _exportReport() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -214,9 +220,8 @@ class _StudentProfileDetailScreenState
   Widget _buildProfileHeader(String name) {
     final score = _studentData?['scorePercentage'] as num?;
     final timeTaken = _studentData?['timeTakenSeconds'] as num?;
-    final scoreColor = score != null && score >= 70
-        ? AppColors.success
-        : AppColors.error;
+    final scoreColor =
+        score != null && score >= 70 ? AppColors.success : AppColors.error;
 
     return Container(
       color: Colors.white,
@@ -228,14 +233,15 @@ class _StudentProfileDetailScreenState
               // Score badge (RTL: left)
               if (score != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: score >= 70
                         ? AppColors.successContainer
                         : AppColors.errorContainer,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: scoreColor.withValues(alpha: 0.3)),
+                    border:
+                        Border.all(color: scoreColor.withValues(alpha: 0.3)),
                   ),
                   child: Column(
                     children: [
@@ -280,9 +286,9 @@ class _StudentProfileDetailScreenState
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         if (timeTaken != null) ...[
-                          Text(
+                          const Text(
                             ' دقيقة',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Almarai',
                               fontSize: 13,
                               color: AppColors.onSurfaceVariant,
@@ -290,8 +296,7 @@ class _StudentProfileDetailScreenState
                           ),
                           const SizedBox(width: 4),
                           const Icon(Icons.schedule_outlined,
-                              size: 14,
-                              color: AppColors.onSurfaceVariant),
+                              size: 14, color: AppColors.onSurfaceVariant),
                           const SizedBox(width: 8),
                         ],
                         Text(
@@ -337,34 +342,31 @@ class _StudentProfileDetailScreenState
 
   // ─── Tab Bar ──────────────────────────────────────────────────────────────
 
-  Widget _buildTabBar() {
-    return Container(
-      color: Colors.white,
-      child: TabBar(
-        controller: _tabController,
-        labelColor: AppColors.primary,
-        unselectedLabelColor: AppColors.onSurfaceVariant,
-        indicatorColor: AppColors.primary,
-        indicatorWeight: 3,
-        labelStyle: const TextStyle(
-          fontFamily: 'Almarai',
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
+  Widget _buildTabBar() => Container(
+        color: Colors.white,
+        child: TabBar(
+          controller: _tabController,
+          labelColor: AppColors.primary,
+          unselectedLabelColor: AppColors.onSurfaceVariant,
+          indicatorColor: AppColors.primary,
+          indicatorWeight: 3,
+          labelStyle: const TextStyle(
+            fontFamily: 'Almarai',
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontFamily: 'Almarai',
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+          tabs: const [
+            Tab(text: 'المهارات'),
+            Tab(text: 'الأداء'),
+            Tab(text: 'النشاط'),
+          ],
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontFamily: 'Almarai',
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-        ),
-        tabs: const [
-          Tab(text: 'المهارات'),
-          Tab(text: 'الأداء'),
-          Tab(text: 'النشاط'),
-        ],
-      ),
-    );
-  }
-
+      );
 
   // ─── Skills Tab (Radar Chart) ─────────────────────────────────────────────
 
@@ -510,7 +512,7 @@ class _StudentProfileDetailScreenState
     final weeklyData = _studentData?['weeklyScores'] as List?;
     if (weeklyData != null && weeklyData.isNotEmpty) {
       scores = weeklyData
-          .map((v) => ((v as num).toDouble()).clamp(0.0, 100.0) / 100.0)
+          .map((v) => (v as num).toDouble().clamp(0.0, 100.0) / 100.0)
           .toList();
       days = List.generate(scores.length, (i) => 'يوم ${i + 1}');
     } else {
@@ -518,9 +520,8 @@ class _StudentProfileDetailScreenState
       days = _weekDays;
     }
 
-    final avg = scores.isEmpty
-        ? 0.0
-        : scores.reduce((a, b) => a + b) / scores.length;
+    final avg =
+        scores.isEmpty ? 0.0 : scores.reduce((a, b) => a + b) / scores.length;
     final best = scores.isEmpty ? 0.0 : scores.reduce(math.max);
 
     return SingleChildScrollView(
@@ -615,13 +616,13 @@ class _StudentProfileDetailScreenState
                               ),
                               const SizedBox(height: 4),
                               AnimatedContainer(
-                                duration: Duration(
-                                    milliseconds: 400 + i * 60),
+                                duration: Duration(milliseconds: 400 + i * 60),
                                 height: (score * 140).clamp(8.0, 140.0),
                                 decoration: BoxDecoration(
                                   color: isHighest
                                       ? AppColors.success
-                                      : AppColors.primary.withOpacity(0.75),
+                                      : AppColors.primary
+                                          .withValues(alpha: 0.75),
                                   borderRadius: const BorderRadius.vertical(
                                     top: Radius.circular(6),
                                   ),
@@ -661,123 +662,121 @@ class _StudentProfileDetailScreenState
 
   // ─── Activity Tab ─────────────────────────────────────────────────────────
 
-  Widget _buildActivityTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'سجل النشاط الأخير',
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColors.onSurface,
+  Widget _buildActivityTab() => SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'سجل النشاط الأخير',
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppColors.onSurface,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'آخر الأنشطة والمحاولات',
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 13,
-              color: AppColors.onSurfaceVariant,
+            const SizedBox(height: 4),
+            const Text(
+              'آخر الأنشطة والمحاولات',
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 13,
+                color: AppColors.onSurfaceVariant,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.outlineVariant),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x0A000000),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: List.generate(_activityLog.length, (i) {
-                final log = _activityLog[i];
-                final isLast = i == _activityLog.length - 1;
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          // Icon
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: log.bgColor,
-                              borderRadius: BorderRadius.circular(12),
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.outlineVariant),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x0A000000),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: List.generate(_activityLog.length, (i) {
+                  final log = _activityLog[i];
+                  final isLast = i == _activityLog.length - 1;
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            // Icon
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: log.bgColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                log.icon,
+                                color: log.iconColor,
+                                size: 22,
+                              ),
                             ),
-                            child: Icon(
-                              log.icon,
-                              color: log.iconColor,
-                              size: 22,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          // Content
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  log.title,
-                                  style: const TextStyle(
-                                    fontFamily: 'Almarai',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.onSurface,
+                            const SizedBox(width: 12),
+                            // Content
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    log.title,
+                                    style: const TextStyle(
+                                      fontFamily: 'Almarai',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.onSurface,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  log.subtitle,
-                                  style: const TextStyle(
-                                    fontFamily: 'Almarai',
-                                    fontSize: 12,
-                                    color: AppColors.onSurfaceVariant,
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    log.subtitle,
+                                    style: const TextStyle(
+                                      fontFamily: 'Almarai',
+                                      fontSize: 12,
+                                      color: AppColors.onSurfaceVariant,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          // Time
-                          Text(
-                            log.time,
-                            style: const TextStyle(
-                              fontFamily: 'Almarai',
-                              fontSize: 11,
-                              color: AppColors.outline,
+                            const SizedBox(width: 8),
+                            // Time
+                            Text(
+                              log.time,
+                              style: const TextStyle(
+                                fontFamily: 'Almarai',
+                                fontSize: 11,
+                                color: AppColors.outline,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    if (!isLast)
-                      const Divider(
-                        height: 1,
-                        indent: 72,
-                        color: AppColors.outlineVariant,
-                      ),
-                  ],
-                );
-              }),
+                      if (!isLast)
+                        const Divider(
+                          height: 1,
+                          indent: 72,
+                          color: AppColors.outlineVariant,
+                        ),
+                    ],
+                  );
+                }),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 // ─── Data Classes ─────────────────────────────────────────────────────────────
@@ -824,14 +823,14 @@ class _SkillRadarPainter extends CustomPainter {
 
     // ── Grid lines (concentric hexagons) ──────────────────────────────────
     final gridPaint = Paint()
-      ..color = AppColors.outlineVariant.withOpacity(0.5)
+      ..color = AppColors.outlineVariant.withValues(alpha: 0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
-    for (int level = 1; level <= 4; level++) {
+    for (var level = 1; level <= 4; level++) {
       final r = radius * level / 4;
       final path = Path();
-      for (int i = 0; i < count; i++) {
+      for (var i = 0; i < count; i++) {
         final angle = startAngle + i * angleStep;
         final x = center.dx + r * math.cos(angle);
         final y = center.dy + r * math.sin(angle);
@@ -847,10 +846,10 @@ class _SkillRadarPainter extends CustomPainter {
 
     // ── Axis lines ────────────────────────────────────────────────────────
     final axisPaint = Paint()
-      ..color = AppColors.outlineVariant.withOpacity(0.4)
+      ..color = AppColors.outlineVariant.withValues(alpha: 0.4)
       ..strokeWidth = 1;
 
-    for (int i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++) {
       final angle = startAngle + i * angleStep;
       final x = center.dx + radius * math.cos(angle);
       final y = center.dy + radius * math.sin(angle);
@@ -859,7 +858,7 @@ class _SkillRadarPainter extends CustomPainter {
 
     // ── Data polygon ──────────────────────────────────────────────────────
     final fillPaint = Paint()
-      ..color = AppColors.primary.withOpacity(0.15)
+      ..color = AppColors.primary.withValues(alpha: 0.15)
       ..style = PaintingStyle.fill;
 
     final strokePaint = Paint()
@@ -869,7 +868,7 @@ class _SkillRadarPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     final dataPath = Path();
-    for (int i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++) {
       final angle = startAngle + i * angleStep;
       final r = radius * skills[i].value.clamp(0.0, 1.0);
       final x = center.dx + r * math.cos(angle);
@@ -889,7 +888,7 @@ class _SkillRadarPainter extends CustomPainter {
       ..color = AppColors.primary
       ..style = PaintingStyle.fill;
 
-    for (int i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++) {
       final angle = startAngle + i * angleStep;
       final r = radius * skills[i].value.clamp(0.0, 1.0);
       final x = center.dx + r * math.cos(angle);
@@ -907,7 +906,7 @@ class _SkillRadarPainter extends CustomPainter {
 
     // ── Labels ────────────────────────────────────────────────────────────
     final labelRadius = radius + 20;
-    for (int i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++) {
       final angle = startAngle + i * angleStep;
       final x = center.dx + labelRadius * math.cos(angle);
       final y = center.dy + labelRadius * math.sin(angle);
@@ -962,8 +961,8 @@ class _SkillProgressRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: isStrength
                           ? AppColors.successContainer
@@ -1040,48 +1039,46 @@ class _KpiCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: color,
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 6,
+              offset: Offset(0, 2),
             ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 12,
-              color: AppColors.onSurfaceVariant,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: color, size: 24),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 12,
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 // ─── Answer History Card ──────────────────────────────────────────────────────
@@ -1116,12 +1113,9 @@ class _AnswerHistoryCard extends StatelessWidget {
           const SizedBox(height: 12),
           ...answers.take(10).map((answer) {
             final isCorrect = (answer['isCorrect'] as bool?) ?? false;
-            final questionText =
-                (answer['questionText'] as String?) ?? 'سؤال';
-            final selectedAnswer =
-                (answer['selectedAnswer'] as String?) ?? '';
-            final correctAnswer =
-                (answer['correctAnswer'] as String?) ?? '';
+            final questionText = (answer['questionText'] as String?) ?? 'سؤال';
+            final selectedAnswer = (answer['selectedAnswer'] as String?) ?? '';
+            final correctAnswer = (answer['correctAnswer'] as String?) ?? '';
             final difficulty =
                 (answer['difficultyLevel'] as String?) ?? 'medium';
 
@@ -1131,13 +1125,13 @@ class _AnswerHistoryCard extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: isCorrect
-                      ? AppColors.successContainer.withOpacity(0.4)
-                      : AppColors.errorContainer.withOpacity(0.4),
+                      ? AppColors.successContainer.withValues(alpha: 0.4)
+                      : AppColors.errorContainer.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: isCorrect
-                        ? AppColors.success.withOpacity(0.3)
-                        : AppColors.error.withOpacity(0.3),
+                        ? AppColors.success.withValues(alpha: 0.3)
+                        : AppColors.error.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Column(
@@ -1207,9 +1201,7 @@ class _AnswerHistoryCard extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 12,
-                        color: isCorrect
-                            ? AppColors.success
-                            : AppColors.error,
+                        color: isCorrect ? AppColors.success : AppColors.error,
                       ),
                     ),
                     if (!isCorrect) ...[

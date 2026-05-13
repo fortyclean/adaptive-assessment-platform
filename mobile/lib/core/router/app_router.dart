@@ -2,73 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../shared/providers/auth_provider.dart';
+
 import '../../core/constants/app_constants.dart';
-
-// Auth screens
-import '../../features/auth/screens/onboarding_screen.dart';
-import '../../features/auth/screens/extended_onboarding_screen.dart';
-import '../../features/auth/screens/login_screen.dart';
-import '../../features/auth/screens/forgot_password_screen.dart';
-import '../../features/auth/screens/change_password_screen.dart';
-import '../../features/auth/screens/settings_screen.dart';
+import '../../features/assessment/screens/assessment_start_screen.dart';
+// Screens 70, 74, 75
+import '../../features/assessment/screens/class_schedule_screen.dart';
+import '../../features/assessment/screens/create_assessment_screen.dart';
+import '../../features/assessment/screens/edu_assess_student_dashboard_screen.dart';
+import '../../features/assessment/screens/exam_screen.dart';
+import '../../features/assessment/screens/manage_assessments_screen.dart';
+// Screens 66–69, 71–73
+import '../../features/assessment/screens/marketplace_screen.dart';
+import '../../features/assessment/screens/micro_learning_screen.dart';
+import '../../features/assessment/screens/my_classes_screen.dart';
+import '../../features/assessment/screens/result_screen.dart';
+// Student screens
+import '../../features/assessment/screens/student_analytics_screen.dart';
+import '../../features/assessment/screens/student_assessments_screen.dart';
+import '../../features/assessment/screens/student_challenges_screen.dart';
+import '../../features/assessment/screens/student_dashboard_screen.dart';
+import '../../features/assessment/screens/student_progress_screen.dart';
+import '../../features/assessment/screens/student_subjects_screen.dart';
+import '../../features/assessment/screens/task_management_screen.dart';
+// Teacher screens
+import '../../features/assessment/screens/teacher_dashboard_screen.dart';
+// Screens 59, 61, 63, 64, 65
+import '../../features/assessment/screens/teacher_home_screen.dart';
+import '../../features/auth/screens/about_screen.dart';
 import '../../features/auth/screens/account_settings_screen.dart';
-import '../../features/auth/screens/signup_screen.dart';
-
 // Admin screens
 import '../../features/auth/screens/admin_dashboard_screen.dart';
 import '../../features/auth/screens/admin_dashboard_v2_screen.dart';
-import '../../features/auth/screens/user_management_screen.dart';
-import '../../features/auth/screens/classroom_management_screen.dart';
-import '../../features/reports/screens/school_reports_screen.dart';
-
-// Teacher screens
-import '../../features/assessment/screens/teacher_dashboard_screen.dart';
-import '../../features/assessment/screens/create_assessment_screen.dart';
-import '../../features/assessment/screens/manage_assessments_screen.dart';
-import '../../features/question_bank/screens/question_bank_screen.dart';
-import '../../features/question_bank/screens/add_question_screen.dart';
-import '../../features/question_bank/screens/import_excel_screen.dart';
-import '../../features/reports/screens/teacher_report_screen.dart';
-
-// Student screens
-import '../../features/assessment/screens/student_analytics_screen.dart';
-import '../../features/assessment/screens/student_dashboard_screen.dart';
-import '../../features/assessment/screens/edu_assess_student_dashboard_screen.dart';
-import '../../features/assessment/screens/micro_learning_screen.dart';
-import '../../features/assessment/screens/student_assessments_screen.dart';
-import '../../features/assessment/screens/student_progress_screen.dart';
-import '../../features/assessment/screens/student_subjects_screen.dart';
-import '../../features/assessment/screens/assessment_start_screen.dart';
-import '../../features/assessment/screens/exam_screen.dart';
-import '../../features/assessment/screens/result_screen.dart';
-import '../../features/notifications/screens/advanced_notification_center_screen.dart';
-import '../../features/notifications/screens/notification_settings_screen.dart';
-import '../../features/reports/screens/performance_alert_screen.dart';
-import '../../features/reports/screens/report_schedule_screen.dart';
-import '../../features/reports/screens/student_profile_detail_screen.dart';
-
-// Screens 59, 61, 63, 64, 65
-import '../../features/assessment/screens/teacher_home_screen.dart';
+import '../../features/auth/screens/change_password_screen.dart';
 import '../../features/auth/screens/classroom_list_screen.dart';
-import '../../features/reports/screens/student_files_screen.dart';
-import '../../features/assessment/screens/student_challenges_screen.dart';
-import '../../features/reports/screens/student_academic_profile_screen.dart';
-
-// Screens 70, 74, 75
-import '../../features/assessment/screens/class_schedule_screen.dart';
-import '../../features/assessment/screens/my_classes_screen.dart';
-import '../../features/question_bank/screens/advanced_question_editor_screen.dart';
-
-// Screens 66–69, 71–73
-import '../../features/assessment/screens/marketplace_screen.dart';
-import '../../features/assessment/screens/task_management_screen.dart';
-import '../../features/auth/screens/supervisor_dashboard_screen.dart';
+import '../../features/auth/screens/classroom_management_screen.dart';
+import '../../features/auth/screens/extended_onboarding_screen.dart';
+import '../../features/auth/screens/forgot_password_screen.dart';
 import '../../features/auth/screens/institution_settings_screen.dart';
-import '../../features/reports/screens/certificates_screen.dart';
-import '../../features/auth/screens/about_screen.dart';
+import '../../features/auth/screens/login_screen.dart';
+// Auth screens
+import '../../features/auth/screens/onboarding_screen.dart';
+import '../../features/auth/screens/settings_screen.dart';
+import '../../features/auth/screens/signup_screen.dart';
+import '../../features/auth/screens/supervisor_dashboard_screen.dart';
 import '../../features/auth/screens/support_screen.dart';
 import '../../features/auth/screens/ui_feedback_screen.dart';
+import '../../features/auth/screens/user_management_screen.dart';
+import '../../features/notifications/screens/advanced_notification_center_screen.dart';
+import '../../features/notifications/screens/notification_settings_screen.dart';
+import '../../features/question_bank/screens/add_question_screen.dart';
+import '../../features/question_bank/screens/advanced_question_editor_screen.dart';
+import '../../features/question_bank/screens/import_excel_screen.dart';
+import '../../features/question_bank/screens/question_bank_screen.dart';
+import '../../features/reports/screens/certificates_screen.dart';
+import '../../features/reports/screens/performance_alert_screen.dart';
+import '../../features/reports/screens/report_schedule_screen.dart';
+import '../../features/reports/screens/school_reports_screen.dart';
+import '../../features/reports/screens/student_academic_profile_screen.dart';
+import '../../features/reports/screens/student_files_screen.dart';
+import '../../features/reports/screens/student_profile_detail_screen.dart';
+import '../../features/reports/screens/teacher_report_screen.dart';
+import '../../shared/providers/auth_provider.dart';
 
 // ─── Route Names ──────────────────────────────────────────────────────────────
 class AppRoutes {
@@ -188,7 +182,7 @@ class AppRoutes {
 /// so switching apps never triggers a re-login.
 final routerProvider = Provider<GoRouter>((ref) {
   // Check if onboarding has been seen (stored in Hive)
-  bool onboardingSeen = false;
+  var onboardingSeen = false;
   try {
     final box = Hive.box<dynamic>(AppConstants.sessionStateBoxName);
     onboardingSeen =
@@ -657,7 +651,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 
   // Dispose notifier when provider is disposed
-  ref.onDispose(() => authNotifier.dispose());
+  ref.onDispose(authNotifier.dispose);
 
   return router;
 });
@@ -706,10 +700,12 @@ String? _guardRouteForRole(String location, UserRole? role) {
   final isStudentRoute = location.startsWith('/student');
 
   if (isAdminRoute && role != UserRole.admin) return _getDashboardRoute(role);
-  if (isTeacherRoute && role != UserRole.teacher)
+  if (isTeacherRoute && role != UserRole.teacher) {
     return _getDashboardRoute(role);
-  if (isStudentRoute && role != UserRole.student)
+  }
+  if (isStudentRoute && role != UserRole.student) {
     return _getDashboardRoute(role);
+  }
 
   return null;
 }

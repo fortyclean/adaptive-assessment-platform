@@ -8,6 +8,7 @@
 /// **Validates: Requirements 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7**
 ///
 /// بعد تطبيق الإصلاحات (المهمة 3)، يجب أن تنجح هذه الاختبارات.
+library;
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -32,12 +33,11 @@ import 'package:flutter_test/flutter_test.dart';
 ///
 /// المشكلة: الـ catch block يُوجّه صامتاً بدلاً من إظهار SnackBar.
 class BuggyStartAssessmentBehavior {
+  BuggyStartAssessmentBehavior(this.assessmentId);
   final String assessmentId;
   bool snackBarShown = false;
   bool silentNavigationOccurred = false;
   String? navigatedTo;
-
-  BuggyStartAssessmentBehavior(this.assessmentId);
 
   /// يُحاكي الـ catch block الحالي (المعطوب)
   void simulateCatchBlock() {
@@ -161,8 +161,7 @@ void main() {
         expect(
           behavior.silentNavigationOccurred,
           isTrue,
-          reason:
-              'BUG CONFIRMED: الكود الحالي يُوجّه صامتاً إلى شاشة الاختبار '
+          reason: 'BUG CONFIRMED: الكود الحالي يُوجّه صامتاً إلى شاشة الاختبار '
               'بـ attemptId غير صالح (demo-attempt-real-exam-id).',
         );
 
@@ -350,7 +349,8 @@ void main() {
 
         // الكود الحالي: leading ثابت بغض النظر عن canPop
         // يجب أن يكون false عندما canPop=false (بعد الإصلاح)
-        final hasLeadingWhenCannotPop = behavior.hasLeadingButton(canPop: false);
+        final hasLeadingWhenCannotPop =
+            behavior.hasLeadingButton(canPop: false);
         final hasLeadingWhenCanPop = behavior.hasLeadingButton(canPop: true);
 
         // كلاهما true في الكود الحالي — هذا هو الخطأ للحالة الأولى
@@ -413,7 +413,8 @@ void main() {
         'function': '_startAssessment()',
         'counterexample': 'assessmentId="real-exam-id", API throws',
         'current_behavior': 'context.push() silently (no SnackBar)',
-        'expected_behavior': 'ScaffoldMessenger.showSnackBar("تعذر بدء الاختبار...")',
+        'expected_behavior':
+            'ScaffoldMessenger.showSnackBar("تعذر بدء الاختبار...")',
         'requirement': '1.1, 1.2',
       };
 
@@ -423,8 +424,10 @@ void main() {
         'file': 'student_progress_screen.dart',
         'function': '_loadData()',
         'counterexample': 'getAttemptHistory() throws',
-        'current_behavior': '_totalPoints=0, _masteryPercent=0, _leaderboard=[]',
-        'expected_behavior': '_totalPoints=1250, _masteryPercent=72.0, _leaderboard=[5 users]',
+        'current_behavior':
+            '_totalPoints=0, _masteryPercent=0, _leaderboard=[]',
+        'expected_behavior':
+            '_totalPoints=1250, _masteryPercent=72.0, _leaderboard=[5 users]',
         'requirement': '1.3',
       };
 

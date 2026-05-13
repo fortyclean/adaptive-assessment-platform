@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
-import '../repositories/admin_repository.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../repositories/admin_repository.dart';
 
 /// User Management Screen — Screen 17
 /// Requirements: 13.2–13.5
@@ -335,12 +336,11 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     }
   }
 
-  String _classroomName(Map<String, dynamic> classroom) {
-    return classroom['name'] as String? ??
-        classroom['classroomName'] as String? ??
-        classroom['title'] as String? ??
-        'فصل دراسي';
-  }
+  String _classroomName(Map<String, dynamic> classroom) =>
+      classroom['name'] as String? ??
+      classroom['classroomName'] as String? ??
+      classroom['title'] as String? ??
+      'فصل دراسي';
 
   Future<void> _editUser(Map<String, dynamic> user) async {
     final nameController =
@@ -355,7 +355,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
         else if (item is String && item.isNotEmpty)
           item,
     };
-    String classroomSearchQuery = '';
+    var classroomSearchQuery = '';
     if (!mounted) return;
 
     showModalBottomSheet<void>(
@@ -568,7 +568,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                               ..['classroomIds'] = classroomIds;
                           });
                         }
-                        if (mounted) {
+                        if (mounted && ctx.mounted) {
                           Navigator.pop(ctx);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -600,7 +600,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                               ..['classroomIds'] = classroomIds;
                           });
                         }
-                        if (mounted) {
+                        if (ctx.mounted) {
                           Navigator.pop(ctx);
                         }
                       }
@@ -637,260 +637,257 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFBF8FF),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'إدارة المستخدمين',
-          style: TextStyle(
-            color: Color(0xFF1A1B22),
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFFBF8FF),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          title: const Text(
+            'إدارة المستخدمين',
+            style: TextStyle(
+              color: Color(0xFF1A1B22),
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
           ),
-        ),
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.onSurfaceVariant),
-          onPressed: () => context.pop(),
-        ),
-        actions: [
-          const AdminTopActions(),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: TextButton.icon(
-              onPressed: _showCreateUserDialog,
-              icon: const Icon(Icons.add, size: 18),
-              label: const Text('إضافة مستخدم'),
-              style: TextButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                textStyle:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+          centerTitle: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: AppColors.onSurfaceVariant),
+            onPressed: () => context.pop(),
+          ),
+          actions: [
+            const AdminTopActions(),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: TextButton.icon(
+                onPressed: _showCreateUserDialog,
+                icon: const Icon(Icons.add, size: 18),
+                label: const Text('إضافة مستخدم'),
+                style: TextButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  textStyle: const TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.w500),
+                ),
               ),
             ),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(height: 1, color: AppColors.outlineVariant),
           ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: AppColors.outlineVariant),
         ),
-      ),
-      body: Column(
-        children: [
-          // ── Search & filter bar ───────────────────────────────────────────
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Subtitle
-                const Text(
-                  'التحكم في حسابات المعلمين والطلاب والصلاحيات',
-                  style: TextStyle(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                // Search field
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.outlineVariant),
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    textDirection: TextDirection.rtl,
-                    decoration: InputDecoration(
-                      hintText:
-                          'البحث بالاسم، البريد الإلكتروني، أو الرقم التعريفي...',
-                      hintStyle: const TextStyle(
-                        color: AppColors.onSurfaceVariant,
-                        fontSize: 13,
-                      ),
-                      prefixIcon: const Icon(Icons.search_rounded,
-                          color: AppColors.onSurfaceVariant, size: 20),
-                      suffixIcon: _searchQuery.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear_rounded, size: 18),
-                              onPressed: () {
-                                _searchController.clear();
-                                setState(() => _searchQuery = '');
-                                _loadUsers();
-                              },
-                            )
-                          : null,
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 12),
+        body: Column(
+          children: [
+            // ── Search & filter bar ───────────────────────────────────────────
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Subtitle
+                  const Text(
+                    'التحكم في حسابات المعلمين والطلاب والصلاحيات',
+                    style: TextStyle(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
                     ),
-                    onChanged: (v) {
-                      setState(() => _searchQuery = v);
-                      if (v.length >= 2 || v.isEmpty) _loadUsers();
-                    },
                   ),
-                ),
-                const SizedBox(height: 10),
-                // Role filter chips
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _RoleChip(
-                        label: 'كل الأدوار',
-                        selected: _roleFilter == null,
-                        onTap: () {
-                          setState(() => _roleFilter = null);
-                          _loadUsers();
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      _RoleChip(
-                        label: 'معلم',
-                        selected: _roleFilter == 'teacher',
-                        onTap: () {
-                          setState(() => _roleFilter = 'teacher');
-                          _loadUsers();
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      _RoleChip(
-                        label: 'طالب',
-                        selected: _roleFilter == 'student',
-                        onTap: () {
-                          setState(() => _roleFilter = 'student');
-                          _loadUsers();
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      _RoleChip(
-                        label: 'بانتظار الاعتماد',
-                        selected: _roleFilter == 'pending',
-                        onTap: () {
-                          setState(() => _roleFilter = 'pending');
-                          _loadUsers();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // ── User list ─────────────────────────────────────────────────────
-          Expanded(
-            child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(color: AppColors.primary))
-                : _errorMessage != null
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.error_outline,
-                                  color: AppColors.error, size: 40),
-                              const SizedBox(height: 12),
-                              Text(
-                                _errorMessage!,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.onSurfaceVariant,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton.icon(
-                                onPressed: _loadUsers,
-                                icon: const Icon(Icons.refresh),
-                                label: const Text('إعادة المحاولة'),
-                              ),
-                            ],
-                          ),
+                  const SizedBox(height: 12),
+                  // Search field
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.outlineVariant),
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      textDirection: TextDirection.rtl,
+                      decoration: InputDecoration(
+                        hintText:
+                            'البحث بالاسم، البريد الإلكتروني، أو الرقم التعريفي...',
+                        hintStyle: const TextStyle(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 13,
                         ),
-                      )
-                    : _users.isEmpty
-                        ? _buildEmpty()
-                        : RefreshIndicator(
-                            onRefresh: _loadUsers,
-                            color: AppColors.primary,
-                            child: ListView.builder(
-                              padding: const EdgeInsets.all(16),
-                              itemCount: _users.length,
-                              itemBuilder: (ctx, i) => _UserCard(
-                                user: _users[i],
-                                onDeactivate: _users[i]['isActive'] == true
-                                    ? () => _deactivateUser(
-                                        _users[i]['_id'] as String,
-                                        _users[i]['fullName'] as String)
-                                    : null,
-                                onEdit: () => _editUser(_users[i]),
-                                onReactivate: _users[i]['isActive'] == false
-                                    ? () => _reactivateUser(
-                                          _users[i]['_id'] as String,
-                                          _users[i]['fullName'] as String,
-                                        )
-                                    : null,
-                              ),
+                        prefixIcon: const Icon(Icons.search_rounded,
+                            color: AppColors.onSurfaceVariant, size: 20),
+                        suffixIcon: _searchQuery.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear_rounded, size: 18),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() => _searchQuery = '');
+                                  _loadUsers();
+                                },
+                              )
+                            : null,
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 12),
+                      ),
+                      onChanged: (v) {
+                        setState(() => _searchQuery = v);
+                        if (v.length >= 2 || v.isEmpty) _loadUsers();
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  // Role filter chips
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _RoleChip(
+                          label: 'كل الأدوار',
+                          selected: _roleFilter == null,
+                          onTap: () {
+                            setState(() => _roleFilter = null);
+                            _loadUsers();
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _RoleChip(
+                          label: 'معلم',
+                          selected: _roleFilter == 'teacher',
+                          onTap: () {
+                            setState(() => _roleFilter = 'teacher');
+                            _loadUsers();
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _RoleChip(
+                          label: 'طالب',
+                          selected: _roleFilter == 'student',
+                          onTap: () {
+                            setState(() => _roleFilter = 'student');
+                            _loadUsers();
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _RoleChip(
+                          label: 'بانتظار الاعتماد',
+                          selected: _roleFilter == 'pending',
+                          onTap: () {
+                            setState(() => _roleFilter = 'pending');
+                            _loadUsers();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // ── User list ─────────────────────────────────────────────────────
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary))
+                  : _errorMessage != null
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.error_outline,
+                                    color: AppColors.error, size: 40),
+                                const SizedBox(height: 12),
+                                Text(
+                                  _errorMessage!,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton.icon(
+                                  onPressed: _loadUsers,
+                                  icon: const Icon(Icons.refresh),
+                                  label: const Text('إعادة المحاولة'),
+                                ),
+                              ],
                             ),
                           ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'admin'),
-    );
-  }
+                        )
+                      : _users.isEmpty
+                          ? _buildEmpty()
+                          : RefreshIndicator(
+                              onRefresh: _loadUsers,
+                              color: AppColors.primary,
+                              child: ListView.builder(
+                                padding: const EdgeInsets.all(16),
+                                itemCount: _users.length,
+                                itemBuilder: (ctx, i) => _UserCard(
+                                  user: _users[i],
+                                  onDeactivate: _users[i]['isActive'] == true
+                                      ? () => _deactivateUser(
+                                          _users[i]['_id'] as String,
+                                          _users[i]['fullName'] as String)
+                                      : null,
+                                  onEdit: () => _editUser(_users[i]),
+                                  onReactivate: _users[i]['isActive'] == false
+                                      ? () => _reactivateUser(
+                                            _users[i]['_id'] as String,
+                                            _users[i]['fullName'] as String,
+                                          )
+                                      : null,
+                                ),
+                              ),
+                            ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'admin'),
+      );
 
-  Widget _buildEmpty() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
-              shape: BoxShape.circle,
+  Widget _buildEmpty() => Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: AppColors.surfaceContainer,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.people_outline_rounded,
+                  size: 40, color: AppColors.outlineVariant),
             ),
-            child: const Icon(Icons.people_outline_rounded,
-                size: 40, color: AppColors.outlineVariant),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'لا توجد نتائج',
-            style: TextStyle(
-              color: AppColors.onSurface,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+            const SizedBox(height: 16),
+            const Text(
+              'لا توجد نتائج',
+              style: TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'جرب تغيير معايير البحث',
-            style: TextStyle(
-              color: AppColors.onSurfaceVariant,
-              fontSize: 14,
+            const SizedBox(height: 8),
+            const Text(
+              'جرب تغيير معايير البحث',
+              style: TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 14,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 // ── Role filter chip ──────────────────────────────────────────────────────────
@@ -903,33 +900,32 @@ class _RoleChip extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primaryContainer
-              : AppColors.surfaceContainer,
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(
-            color: selected ? Colors.transparent : AppColors.outlineVariant,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+          decoration: BoxDecoration(
+            color: selected
+                ? AppColors.primaryContainer
+                : AppColors.surfaceContainer,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: selected ? Colors.transparent : AppColors.outlineVariant,
+            ),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: selected
+                  ? const Color(0xFFA8B8FF)
+                  : AppColors.onSurfaceVariant,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color:
-                selected ? const Color(0xFFA8B8FF) : AppColors.onSurfaceVariant,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
+      );
 }
 
 // ── User card ─────────────────────────────────────────────────────────────────
@@ -950,7 +946,7 @@ class _UserCard extends StatelessWidget {
     final fullName = user['fullName'] as String? ?? '';
     final email = user['email'] as String?;
     final username = user['username'] as String?;
-    final subtitle = email ?? (username != null ? username : '');
+    final subtitle = email ?? (username ?? '');
 
     // Initials
     final parts = fullName.trim().split(' ');
@@ -1173,30 +1169,28 @@ class _InfoCell extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: AppColors.onSurfaceVariant,
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.onSurfaceVariant,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          value,
-          style: const TextStyle(
-            color: AppColors.onSurface,
-            fontSize: 13,
-            fontWeight: FontWeight.w400,
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(
+              color: AppColors.onSurface,
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 class _ActionButton extends StatelessWidget {
@@ -1214,34 +1208,32 @@ class _ActionButton extends StatelessWidget {
   final bool isDestructive;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.outlineVariant),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 15, color: color),
-            const SizedBox(width: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.outlineVariant),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 15, color: color),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 // ── Create user dialog ────────────────────────────────────────────────────────
@@ -1309,75 +1301,73 @@ class _CreateUserDialogState extends ConsumerState<_CreateUserDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text('إضافة مستخدم جديد'),
-      content: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                textDirection: TextDirection.rtl,
-                decoration: const InputDecoration(labelText: 'الاسم الكامل'),
-                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _fullName = v!,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'اسم المستخدم'),
-                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _username = v!,
-              ),
-              TextFormField(
-                decoration:
-                    const InputDecoration(labelText: 'البريد الإلكتروني'),
-                keyboardType: TextInputType.emailAddress,
-                validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _email = v!,
-              ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'كلمة المرور'),
-                obscureText: true,
-                validator: (v) =>
-                    (v == null || v.length < 8) ? '8 أحرف على الأقل' : null,
-                onSaved: (v) => _password = v!,
-              ),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'الدور'),
-                initialValue: _role,
-                items: const [
-                  DropdownMenuItem(value: 'teacher', child: Text('معلم')),
-                  DropdownMenuItem(value: 'student', child: Text('طالب')),
-                ],
-                onChanged: (v) => setState(() => _role = v!),
-              ),
-            ],
+  Widget build(BuildContext context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('إضافة مستخدم جديد'),
+        content: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  textDirection: TextDirection.rtl,
+                  decoration: const InputDecoration(labelText: 'الاسم الكامل'),
+                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
+                  onSaved: (v) => _fullName = v!,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'اسم المستخدم'),
+                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
+                  onSaved: (v) => _username = v!,
+                ),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: 'البريد الإلكتروني'),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
+                  onSaved: (v) => _email = v!,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'كلمة المرور'),
+                  obscureText: true,
+                  validator: (v) =>
+                      (v == null || v.length < 8) ? '8 أحرف على الأقل' : null,
+                  onSaved: (v) => _password = v!,
+                ),
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'الدور'),
+                  initialValue: _role,
+                  items: const [
+                    DropdownMenuItem(value: 'teacher', child: Text('معلم')),
+                    DropdownMenuItem(value: 'student', child: Text('طالب')),
+                  ],
+                  onChanged: (v) => setState(() => _role = v!),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء')),
-        ElevatedButton(
-          onPressed: _isLoading ? null : _submit,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('إلغاء')),
+          ElevatedButton(
+            onPressed: _isLoading ? null : _submit,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+            child: _isLoading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2, color: Colors.white))
+                : const Text('إنشاء'),
           ),
-          child: _isLoading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                      strokeWidth: 2, color: Colors.white))
-              : const Text('إنشاء'),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }

@@ -50,170 +50,164 @@ class _AdvancedQuestionEditorScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      body: Column(
-        children: [
-          _buildHeader(context),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Page title
-                  const Text(
-                    'إنشاء سؤال متقدم',
-                    style: TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1A1B22),
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        body: Column(
+          children: [
+            _buildHeader(context),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Page title
+                    const Text(
+                      'إنشاء سؤال متقدم',
+                      style: TextStyle(
+                        fontFamily: 'Lexend',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF1A1B22),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'صمّم أسئلة تقييم متقدمة مع وسائط غنية وعناصر تفاعلية.',
-                    style: TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 14,
-                      color: Color(0xFF505F76),
-                      height: 1.6,
+                    const SizedBox(height: 4),
+                    const Text(
+                      'صمّم أسئلة تقييم متقدمة مع وسائط غنية وعناصر تفاعلية.',
+                      style: TextStyle(
+                        fontFamily: 'Lexend',
+                        fontSize: 14,
+                        color: Color(0xFF505F76),
+                        height: 1.6,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                  // Global settings bento grid
-                  _buildSettingsGrid(),
-                  const SizedBox(height: 32),
+                    // Global settings bento grid
+                    _buildSettingsGrid(),
+                    const SizedBox(height: 32),
 
-                  // Essay question editor
-                  _buildEssaySection(),
-                  const SizedBox(height: 32),
+                    // Essay question editor
+                    _buildEssaySection(),
+                    const SizedBox(height: 32),
 
-                  // Matching question interface
-                  _buildMatchingSection(),
-                  const SizedBox(height: 40),
+                    // Matching question interface
+                    _buildMatchingSection(),
+                    const SizedBox(height: 40),
 
-                  // Save actions
-                  _buildSaveActions(),
-                ],
+                    // Save actions
+                    _buildSaveActions(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: _buildAIFAB(),
-      bottomNavigationBar: const AppBottomNav(
-        currentIndex: 1,
-        role: 'teacher',
-      ),
-    );
-  }
+          ],
+        ),
+        floatingActionButton: _buildAIFAB(),
+        bottomNavigationBar: const AppBottomNav(
+          currentIndex: 1,
+          role: 'teacher',
+        ),
+      );
 
   // ─── Header ──────────────────────────────────────────────────────────────
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top,
-      ),
-      decoration: const BoxDecoration(
+  Widget _buildHeader(BuildContext context) => Container(
         color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(color: Color(0xFFE2E8F0)),
           ),
-        ],
-      ),
-      child: SizedBox(
-        height: 64,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Logo + avatar
-              Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color(0xFFDDE1FF),
-                        width: 2,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: SizedBox(
+          height: 64,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Logo + avatar
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFFDDE1FF),
+                          width: 2,
+                        ),
+                        color: AppColors.surfaceContainer,
                       ),
-                      color: AppColors.surfaceContainer,
+                      child: const Icon(
+                        Icons.person_outline,
+                        size: 20,
+                        color: AppColors.onSurfaceVariant,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.person_outline,
-                      size: 20,
-                      color: AppColors.onSurfaceVariant,
+                    const SizedBox(width: 12),
+                    const Text(
+                      'EduAssess',
+                      style: TextStyle(
+                        fontFamily: 'Lexend',
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF1E40AF),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Text(
-                    'EduAssess',
-                    style: TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1E40AF),
-                    ),
-                  ),
-                ],
-              ),
-              // Notifications
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                color: const Color(0xFF475569),
-                onPressed: () => context.push('/teacher/notifications'),
-              ),
-            ],
+                  ],
+                ),
+                // Notifications
+                IconButton(
+                  icon: const Icon(Icons.notifications_outlined),
+                  color: const Color(0xFF475569),
+                  onPressed: () => context.push('/teacher/notifications'),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 
   // ─── Settings Grid ───────────────────────────────────────────────────────
 
-  Widget _buildSettingsGrid() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWide = constraints.maxWidth > 600;
-        if (isWide) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildSettingsGrid() => LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth > 600;
+          if (isWide) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: constraints.maxWidth / 3 - 8,
+                  child: _buildDifficultyCard(),
+                ),
+                const SizedBox(width: 16),
+                Expanded(child: _buildUnitCard()),
+              ],
+            );
+          }
+          return Column(
             children: [
-              SizedBox(
-                width: constraints.maxWidth / 3 - 8,
-                child: _buildDifficultyCard(),
-              ),
-              const SizedBox(width: 16),
-              Expanded(child: _buildUnitCard()),
+              _buildDifficultyCard(),
+              const SizedBox(height: 12),
+              _buildUnitCard(),
             ],
           );
-        }
-        return Column(
-          children: [
-            _buildDifficultyCard(),
-            const SizedBox(height: 12),
-            _buildUnitCard(),
-          ],
-        );
-      },
-    );
-  }
+        },
+      );
 
   Widget _buildDifficultyCard() {
     final labels = ['سهل', 'متوسط', 'صعب'];
@@ -225,7 +219,7 @@ class _AdvancedQuestionEditorScreenState
         border: Border.all(color: AppColors.outlineVariant),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -290,235 +284,232 @@ class _AdvancedQuestionEditorScreenState
     );
   }
 
-  Widget _buildUnitCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'تعيين الوحدة',
-            style: TextStyle(
-              fontFamily: 'Lexend',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF505F76),
+  Widget _buildUnitCard() => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.outlineVariant),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<int>(
-                value: _selectedUnit,
-                isExpanded: true,
-                icon: const Icon(
-                  Icons.expand_more,
-                  color: AppColors.outline,
-                ),
-                style: const TextStyle(
-                  fontFamily: 'Lexend',
-                  fontSize: 14,
-                  color: Color(0xFF1A1B22),
-                ),
-                items: _units.asMap().entries.map((entry) {
-                  return DropdownMenuItem<int>(
-                    value: entry.key,
-                    child: Text(
-                      entry.value,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (v) {
-                  if (v != null) setState(() => _selectedUnit = v);
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─── Essay Section ───────────────────────────────────────────────────────
-
-  Widget _buildEssaySection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Icon(Icons.article_outlined, color: AppColors.primary, size: 22),
-            SizedBox(width: 8),
-            Text(
-              'محرر السؤال المقالي',
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'تعيين الوحدة',
               style: TextStyle(
                 fontFamily: 'Lexend',
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF505F76),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.outlineVariant),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: _selectedUnit,
+                  isExpanded: true,
+                  icon: const Icon(
+                    Icons.expand_more,
+                    color: AppColors.outline,
+                  ),
+                  style: const TextStyle(
+                    fontFamily: 'Lexend',
+                    fontSize: 14,
+                    color: Color(0xFF1A1B22),
+                  ),
+                  items: _units
+                      .asMap()
+                      .entries
+                      .map((entry) => DropdownMenuItem<int>(
+                            value: entry.key,
+                            child: Text(
+                              entry.value,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ))
+                      .toList(),
+                  onChanged: (v) {
+                    if (v != null) setState(() => _selectedUnit = v);
+                  },
+                ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.outlineVariant),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
+      );
+
+  // ─── Essay Section ───────────────────────────────────────────────────────
+
+  Widget _buildEssaySection() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
             children: [
-              // Toolbar
-              _buildEditorToolbar(),
-              // Text area
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'نص السؤال',
-                      style: TextStyle(
-                        fontFamily: 'Lexend',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF505F76),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _questionController,
-                      maxLines: 6,
-                      textAlign: TextAlign.left,
-                      decoration: const InputDecoration(
-                        hintText:
-                            'اكتب نص السؤال هنا...',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Lexend',
-                          fontSize: 16,
-                          color: Color(0xFFC4C5D5),
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                      style: const TextStyle(
-                        fontFamily: 'Lexend',
-                        fontSize: 16,
-                        color: Color(0xFF1A1B22),
-                        height: 1.6,
-                      ),
-                    ),
-                    const Divider(color: Color(0xFFF1F5F9), height: 24),
-                    // Footer row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Word limit (LTR: right)
-                        Row(
-                          children: [
-                            const Text(
-                              'حد الكلمات:',
-                              style: TextStyle(
-                                fontFamily: 'Lexend',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF505F76),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            SizedBox(
-                              width: 72,
-                              height: 36,
-                              child: TextField(
-                                controller: _wordLimitController,
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: const BorderSide(
-                                      color: AppColors.outlineVariant,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                    borderSide: const BorderSide(
-                                      color: AppColors.outlineVariant,
-                                    ),
-                                  ),
-                                ),
-                                style: const TextStyle(
-                                  fontFamily: 'Lexend',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        // Auto-grading (LTR: left)
-                        Row(
-                          children: const [
-                            Icon(
-                              Icons.spellcheck,
-                              size: 18,
-                              color: AppColors.outline,
-                            ),
-                            SizedBox(width: 6),
-                            Text(
-                              'التصحيح التلقائي مفعّل',
-                              style: TextStyle(
-                                fontFamily: 'Lexend',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF505F76),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+              Icon(Icons.article_outlined, color: AppColors.primary, size: 22),
+              SizedBox(width: 8),
+              Text(
+                'محرر السؤال المقالي',
+                style: TextStyle(
+                  fontFamily: 'Lexend',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1B22),
                 ),
               ),
             ],
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.outlineVariant),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                // Toolbar
+                _buildEditorToolbar(),
+                // Text area
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'نص السؤال',
+                        style: TextStyle(
+                          fontFamily: 'Lexend',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF505F76),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _questionController,
+                        maxLines: 6,
+                        textAlign: TextAlign.left,
+                        decoration: const InputDecoration(
+                          hintText: 'اكتب نص السؤال هنا...',
+                          hintStyle: TextStyle(
+                            fontFamily: 'Lexend',
+                            fontSize: 16,
+                            color: Color(0xFFC4C5D5),
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        style: const TextStyle(
+                          fontFamily: 'Lexend',
+                          fontSize: 16,
+                          color: Color(0xFF1A1B22),
+                          height: 1.6,
+                        ),
+                      ),
+                      const Divider(color: Color(0xFFF1F5F9), height: 24),
+                      // Footer row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Word limit (LTR: right)
+                          Row(
+                            children: [
+                              const Text(
+                                'حد الكلمات:',
+                                style: TextStyle(
+                                  fontFamily: 'Lexend',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF505F76),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              SizedBox(
+                                width: 72,
+                                height: 36,
+                                child: TextField(
+                                  controller: _wordLimitController,
+                                  keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                      borderSide: const BorderSide(
+                                        color: AppColors.outlineVariant,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                      borderSide: const BorderSide(
+                                        color: AppColors.outlineVariant,
+                                      ),
+                                    ),
+                                  ),
+                                  style: const TextStyle(
+                                    fontFamily: 'Lexend',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Auto-grading (LTR: left)
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.spellcheck,
+                                size: 18,
+                                color: AppColors.outline,
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                'التصحيح التلقائي مفعّل',
+                                style: TextStyle(
+                                  fontFamily: 'Lexend',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF505F76),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
 
   Widget _buildEditorToolbar() {
     final tools = [
@@ -544,7 +535,7 @@ class _AdvancedQuestionEditorScreenState
       child: Row(
         children: [
           ...tools.map(
-            (icon) => _buildToolbarButton(icon),
+            _buildToolbarButton,
           ),
           const Spacer(),
           _buildToolbarButton(Icons.functions),
@@ -553,364 +544,370 @@ class _AdvancedQuestionEditorScreenState
     );
   }
 
-  Widget _buildToolbarButton(IconData icon) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {},
-        borderRadius: BorderRadius.circular(6),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Icon(icon, size: 18, color: AppColors.onSurface),
+  Widget _buildToolbarButton(IconData icon) => Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {},
+          borderRadius: BorderRadius.circular(6),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Icon(icon, size: 18, color: AppColors.onSurface),
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   // ─── Matching Section ────────────────────────────────────────────────────
 
-  Widget _buildMatchingSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Icon(Icons.sync_alt, color: AppColors.primary, size: 22),
-            SizedBox(width: 8),
-            Text(
-              'واجهة أسئلة المطابقة',
-              style: TextStyle(
-                fontFamily: 'Lexend',
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+  Widget _buildMatchingSection() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.sync_alt, color: AppColors.primary, size: 22),
+              SizedBox(width: 8),
+              Text(
+                'واجهة أسئلة المطابقة',
+                style: TextStyle(
+                  fontFamily: 'Lexend',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1B22),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ..._pairs.asMap().entries.map(
+                (entry) => _buildMatchingPair(entry.key, entry.value),
+              ),
+          // Add pair button
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _pairs.add(
+                  _MatchingPair(
+                    itemA: TextEditingController(),
+                    matchB: TextEditingController(),
+                  ),
+                );
+              });
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.outlineVariant,
+                  width: 2,
+                ),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add_circle_outline,
+                    color: AppColors.outline,
+                    size: 20,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'إضافة زوج آخر',
+                    style: TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.outline,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
+  Widget _buildMatchingPair(int index, _MatchingPair pair) => Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Item A
+            Expanded(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'العنصر أ',
+                    style: TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF505F76),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  TextField(
+                    controller: pair.itemA,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide:
+                            const BorderSide(color: AppColors.outlineVariant),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide:
+                            const BorderSide(color: AppColors.outlineVariant),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: AppColors.primary),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    style: const TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Link icon
+            const Expanded(
+              flex: 2,
+              child: Center(
+                child: Icon(
+                  Icons.link,
+                  color: AppColors.outlineVariant,
+                  size: 22,
+                ),
+              ),
+            ),
+            // Match B
+            Expanded(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'المطابق ب',
+                    style: TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF505F76),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  TextField(
+                    controller: pair.matchB,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide:
+                            const BorderSide(color: AppColors.outlineVariant),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide:
+                            const BorderSide(color: AppColors.outlineVariant),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: AppColors.primary),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    style: const TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        ..._pairs.asMap().entries.map(
-              (entry) => _buildMatchingPair(entry.key, entry.value),
-            ),
-        // Add pair button
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _pairs.add(
-                _MatchingPair(
-                  itemA: TextEditingController(),
-                  matchB: TextEditingController(),
-                ),
-              );
-            });
-          },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.outlineVariant,
-                width: 2,
-                style: BorderStyle.solid,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(
-                  Icons.add_circle_outline,
-                  color: AppColors.outline,
-                  size: 20,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'إضافة زوج آخر',
-                  style: TextStyle(
-                    fontFamily: 'Lexend',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.outline,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMatchingPair(int index, _MatchingPair pair) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Item A
-          Expanded(
-            flex: 5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'العنصر أ',
-                  style: TextStyle(
-                    fontFamily: 'Lexend',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF505F76),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                TextField(
-                  controller: pair.itemA,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: AppColors.outlineVariant),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: AppColors.outlineVariant),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: AppColors.primary),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  style: const TextStyle(
-                    fontFamily: 'Lexend',
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Link icon
-          Expanded(
-            flex: 2,
-            child: Center(
-              child: Icon(
-                Icons.link,
-                color: AppColors.outlineVariant,
-                size: 22,
-              ),
-            ),
-          ),
-          // Match B
-          Expanded(
-            flex: 5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'المطابق ب',
-                  style: TextStyle(
-                    fontFamily: 'Lexend',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF505F76),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                TextField(
-                  controller: pair.matchB,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: AppColors.outlineVariant),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: AppColors.outlineVariant),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: AppColors.primary),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  style: const TextStyle(
-                    fontFamily: 'Lexend',
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+      );
 
   // ─── Save Actions ────────────────────────────────────────────────────────
 
-  Widget _buildSaveActions() {
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('تم حفظ السؤال كمسودة'),
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: AppColors.primary,
-                ),
-              );
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              side: const BorderSide(color: AppColors.primary, width: 2),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text(
-              'حفظ كمسودة',
-              style: TextStyle(
-                fontFamily: 'Lexend',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          flex: 2,
-          child: ElevatedButton(
-            onPressed: () {
-              if (_questionController.text.trim().isEmpty) {
+  Widget _buildSaveActions() => Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('يرجى كتابة نص السؤال أولاً'),
+                    content: Text('تم حفظ السؤال كمسودة'),
                     behavior: SnackBarBehavior.floating,
-                    backgroundColor: AppColors.error,
+                    backgroundColor: AppColors.primary,
                   ),
                 );
-                return;
-              }
-              showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  title: const Text('نشر السؤال'),
-                  content: const Text('هل تريد نشر هذا السؤال في بنك الأسئلة؟'),
-                  actions: [
-                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(ctx);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم نشر السؤال في بنك الأسئلة'),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Color(0xFF2E7D32),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
-                      child: const Text('نشر'),
-                    ),
-                  ],
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(color: AppColors.primary, width: 2),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              elevation: 4,
-              shadowColor: AppColors.primary.withOpacity(0.2),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
               ),
-            ),
-            child: const Text(
-              'نشر السؤال',
-              style: TextStyle(
-                fontFamily: 'Lexend',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+              child: const Text(
+                'حفظ كمسودة',
+                style: TextStyle(
+                  fontFamily: 'Lexend',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(width: 16),
+          Expanded(
+            flex: 2,
+            child: ElevatedButton(
+              onPressed: () {
+                if (_questionController.text.trim().isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('يرجى كتابة نص السؤال أولاً'),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: AppColors.error,
+                    ),
+                  );
+                  return;
+                }
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    title: const Text('نشر السؤال'),
+                    content:
+                        const Text('هل تريد نشر هذا السؤال في بنك الأسئلة؟'),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text('إلغاء')),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('تم نشر السؤال في بنك الأسئلة'),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Color(0xFF2E7D32),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white),
+                        child: const Text('نشر'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                elevation: 4,
+                shadowColor: AppColors.primary.withValues(alpha: 0.2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'نشر السؤال',
+                style: TextStyle(
+                  fontFamily: 'Lexend',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
 
   // ─── AI FAB ──────────────────────────────────────────────────────────────
 
-  Widget _buildAIFAB() {
-    return FloatingActionButton(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-          builder: (ctx) => Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.auto_awesome_rounded, color: Color(0xFF611E00), size: 40),
-                const SizedBox(height: 12),
-                const Text('مساعد الذكاء الاصطناعي', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 8),
-                const Text('يمكن للذكاء الاصطناعي مساعدتك في توليد أسئلة تلقائياً بناءً على الموضوع والمستوى.', textAlign: TextAlign.center, style: TextStyle(color: AppColors.onSurfaceVariant)),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('ميزة الذكاء الاصطناعي قيد التطوير'), behavior: SnackBarBehavior.floating),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF611E00), foregroundColor: Colors.white),
-                  child: const Text('توليد سؤال تلقائياً'),
-                ),
-              ],
+  Widget _buildAIFAB() => FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.white,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+            builder: (ctx) => Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.auto_awesome_rounded,
+                      color: Color(0xFF611E00), size: 40),
+                  const SizedBox(height: 12),
+                  const Text('مساعد الذكاء الاصطناعي',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 8),
+                  const Text(
+                      'يمكن للذكاء الاصطناعي مساعدتك في توليد أسئلة تلقائياً بناءً على الموضوع والمستوى.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: AppColors.onSurfaceVariant)),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('ميزة الذكاء الاصطناعي قيد التطوير'),
+                            behavior: SnackBarBehavior.floating),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF611E00),
+                        foregroundColor: Colors.white),
+                    child: const Text('توليد سؤال تلقائياً'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
-      backgroundColor: const Color(0xFF611E00),
-      foregroundColor: Colors.white,
-      elevation: 6,
-      child: const Icon(Icons.auto_awesome_rounded, size: 26),
-    );
-  }
+          );
+        },
+        backgroundColor: const Color(0xFF611E00),
+        foregroundColor: Colors.white,
+        elevation: 6,
+        child: const Icon(Icons.auto_awesome_rounded, size: 26),
+      );
 }
 
 // ─── Data Model ──────────────────────────────────────────────────────────────

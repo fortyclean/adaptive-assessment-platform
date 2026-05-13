@@ -10,7 +10,5 @@ class SupervisorDashboardScreen extends StatelessWidget {
   const SupervisorDashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const AdminDashboardV2Screen();
-  }
+  Widget build(BuildContext context) => const AdminDashboardV2Screen();
 }

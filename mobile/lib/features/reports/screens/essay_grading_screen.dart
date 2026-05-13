@@ -15,7 +15,9 @@ import '../../assessment/repositories/teacher_repository.dart';
 ///   - Finalize the session result after all essays are graded
 class EssayGradingScreen extends ConsumerStatefulWidget {
   const EssayGradingScreen({
-    required this.attemptId, required this.studentName, super.key,
+    required this.attemptId,
+    required this.studentName,
+    super.key,
   });
 
   /// The student attempt ID to grade.
@@ -25,17 +27,13 @@ class EssayGradingScreen extends ConsumerStatefulWidget {
   final String studentName;
 
   @override
-  ConsumerState<EssayGradingScreen> createState() =>
-      _EssayGradingScreenState();
+  ConsumerState<EssayGradingScreen> createState() => _EssayGradingScreenState();
 }
 
 class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
   bool _isLoading = true;
   bool _isSubmitting = false;
   String? _error;
-
-  /// The full attempt data returned by the API.
-  Map<String, dynamic>? _attempt;
 
   /// Essay answers that require grading.
   List<Map<String, dynamic>> _essayAnswers = [];
@@ -74,9 +72,8 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
           (data['answers'] as List?)?.cast<Map<String, dynamic>>() ?? [];
 
       // Filter only essay answers that need grading
-      final essays = answers
-          .where((a) => a['questionType'] == 'essay')
-          .toList();
+      final essays =
+          answers.where((a) => a['questionType'] == 'essay').toList();
 
       // Initialise controllers and pre-fill any existing scores
       for (final essay in essays) {
@@ -92,7 +89,6 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
       }
 
       setState(() {
-        _attempt = data;
         _essayAnswers = essays;
         _isLoading = false;
       });
@@ -187,41 +183,39 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: Text('تصحيح مقالات — ${widget.studentName}'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
-          tooltip: 'رجوع',
+        appBar: AppBar(
+          title: Text('تصحيح مقالات — ${widget.studentName}'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => context.pop(),
+            tooltip: 'رجوع',
+          ),
         ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? _buildError()
-              : _buildContent(),
-      bottomNavigationBar: _isLoading || _error != null
-          ? null
-          : _buildBottomBar(),
-    );
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _error != null
+                ? _buildError()
+                : _buildContent(),
+        bottomNavigationBar:
+            _isLoading || _error != null ? null : _buildBottomBar(),
+      );
 
   Widget _buildError() => Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-          const SizedBox(height: 12),
-          Text(_error!,
-              style: Theme.of(context).textTheme.bodyLarge),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            onPressed: _loadAttempt,
-            icon: const Icon(Icons.refresh_rounded),
-            label: const Text('إعادة المحاولة'),
-          ),
-        ],
-      ),
-    );
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+            const SizedBox(height: 12),
+            Text(_error!, style: Theme.of(context).textTheme.bodyLarge),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _loadAttempt,
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('إعادة المحاولة'),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildContent() {
     if (_essayAnswers.isEmpty) {
@@ -331,15 +325,17 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
                       )
                     : const Icon(Icons.check_circle_rounded),
                 label: Text(
-                  _isSubmitting ? 'جاري الحفظ...' : 'إنهاء التصحيح وتحديث النتيجة',
+                  _isSubmitting
+                      ? 'جاري الحفظ...'
+                      : 'إنهاء التصحيح وتحديث النتيجة',
                 ),
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   disabledBackgroundColor: AppColors.surfaceContainer,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        AppConstants.buttonBorderRadius),
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.buttonBorderRadius),
                   ),
                 ),
               ),
@@ -369,9 +365,8 @@ class _StatusBanner extends StatelessWidget {
     final color = isComplete ? AppColors.success : AppColors.warning;
     final bgColor =
         isComplete ? AppColors.successContainer : AppColors.warningContainer;
-    final icon = isComplete
-        ? Icons.check_circle_rounded
-        : Icons.pending_actions_rounded;
+    final icon =
+        isComplete ? Icons.check_circle_rounded : Icons.pending_actions_rounded;
     final message = isComplete
         ? 'تم تصحيح جميع الأسئلة المقالية — يمكنك إنهاء التصحيح'
         : 'تبقّى ${totalCount - gradedCount} سؤال مقالي بدون درجة';
@@ -380,9 +375,8 @@ class _StatusBanner extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius:
-            BorderRadius.circular(AppConstants.cardBorderRadius),
-        border: Border.all(color: color.withOpacity(0.4)),
+        borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
@@ -433,11 +427,10 @@ class _EssayGradingCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(AppConstants.cardBorderRadius),
+        borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
         side: BorderSide(
           color: isGraded
-              ? AppColors.success.withOpacity(0.5)
+              ? AppColors.success.withValues(alpha: 0.5)
               : AppColors.outlineVariant,
           width: isGraded ? 1.5 : 1.0,
         ),
@@ -528,13 +521,13 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-      label,
-      textDirection: TextDirection.rtl,
-      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: AppColors.onSurfaceVariant,
-            fontWeight: FontWeight.w600,
-          ),
-    );
+        label,
+        textDirection: TextDirection.rtl,
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: AppColors.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+            ),
+      );
 }
 
 /// Badge shown on a graded card displaying the awarded score.
@@ -545,29 +538,28 @@ class _GradedBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.successContainer,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.success.withOpacity(0.5)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.check_rounded,
-              size: 14, color: AppColors.success),
-          const SizedBox(width: 4),
-          Text(
-            '$score / $maxMarks',
-            style: const TextStyle(
-              color: AppColors.success,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: AppColors.successContainer,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.success.withValues(alpha: 0.5)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_rounded, size: 14, color: AppColors.success),
+            const SizedBox(width: 4),
+            Text(
+              '$score / $maxMarks',
+              style: const TextStyle(
+                color: AppColors.success,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
 }
 
 /// Score input field with validation (0 ≤ score ≤ maxMarks).
@@ -609,57 +601,51 @@ class _ScoreInputState extends State<_ScoreInput> {
 
   @override
   Widget build(BuildContext context) => TextField(
-      controller: widget.controller,
-      keyboardType: TextInputType.number,
-      textAlign: TextAlign.center,
-      onChanged: _validate,
-      decoration: InputDecoration(
-        hintText: '0 – ${widget.maxMarks}',
-        errorText: _validationError,
-        filled: true,
-        fillColor: AppColors.surfaceContainer,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
-        border: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(AppConstants.inputBorderRadius),
-          borderSide: const BorderSide(color: AppColors.outlineVariant),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(AppConstants.inputBorderRadius),
-          borderSide: const BorderSide(color: AppColors.outlineVariant),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(AppConstants.inputBorderRadius),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 2,
+        controller: widget.controller,
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        onChanged: _validate,
+        decoration: InputDecoration(
+          hintText: '0 – ${widget.maxMarks}',
+          errorText: _validationError,
+          filled: true,
+          fillColor: AppColors.surfaceContainer,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.inputBorderRadius),
+            borderSide: const BorderSide(color: AppColors.outlineVariant),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.inputBorderRadius),
+            borderSide: const BorderSide(color: AppColors.outlineVariant),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.inputBorderRadius),
+            borderSide: const BorderSide(
+              color: AppColors.primary,
+              width: 2,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.inputBorderRadius),
+            borderSide: const BorderSide(color: AppColors.error),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.inputBorderRadius),
+            borderSide: const BorderSide(color: AppColors.error, width: 2),
+          ),
+          suffixText: '/ ${widget.maxMarks}',
+          suffixStyle: const TextStyle(
+            color: AppColors.onSurfaceVariant,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        errorBorder: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(AppConstants.inputBorderRadius),
-          borderSide: const BorderSide(color: AppColors.error),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius:
-              BorderRadius.circular(AppConstants.inputBorderRadius),
-          borderSide:
-              const BorderSide(color: AppColors.error, width: 2),
-        ),
-        suffixText: '/ ${widget.maxMarks}',
-        suffixStyle: const TextStyle(
-          color: AppColors.onSurfaceVariant,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
-          ),
-    );
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary,
+            ),
+      );
 }

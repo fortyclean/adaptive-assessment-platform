@@ -12,11 +12,11 @@ import '../../core/constants/app_constants.dart';
 ///   - Incorrect (post-session): #FEE2E2 background, #BA1A1A border
 class McqOption extends StatelessWidget {
   const McqOption({
-    super.key,
     required this.optionKey,
     required this.value,
     required this.isSelected,
     required this.onTap,
+    super.key,
     this.isCorrect,
     this.isIncorrect,
     this.isDisabled = false,
@@ -37,113 +37,111 @@ class McqOption extends StatelessWidget {
   final bool isDisabled;
 
   Color get _borderColor {
-    if (isCorrect == true) return AppColors.optionCorrectBorder;
-    if (isIncorrect == true) return AppColors.optionIncorrectBorder;
+    if (isCorrect ?? false) return AppColors.optionCorrectBorder;
+    if (isIncorrect ?? false) return AppColors.optionIncorrectBorder;
     if (isSelected) return AppColors.optionSelectedBorder;
     return AppColors.optionUnselectedBorder;
   }
 
   Color get _backgroundColor {
-    if (isCorrect == true) return AppColors.optionCorrectBackground;
-    if (isIncorrect == true) return AppColors.optionIncorrectBackground;
+    if (isCorrect ?? false) return AppColors.optionCorrectBackground;
+    if (isIncorrect ?? false) return AppColors.optionIncorrectBackground;
     if (isSelected) return AppColors.optionSelectedBackground;
     return AppColors.optionUnselectedBackground;
   }
 
   double get _borderWidth {
-    if (isCorrect == true || isIncorrect == true) return 2;
+    if ((isCorrect ?? false) || (isIncorrect ?? false)) return 2;
     if (isSelected) return AppConstants.selectedOptionBorderWidth;
     return AppConstants.cardBorderWidth;
   }
 
   double get _scale {
     if (isSelected && isCorrect == null && isIncorrect == null) return 1.01;
-    return 1.0;
+    return 1;
   }
 
   Color get _keyCircleColor {
-    if (isCorrect == true) return AppColors.success;
-    if (isIncorrect == true) return AppColors.error;
+    if (isCorrect ?? false) return AppColors.success;
+    if (isIncorrect ?? false) return AppColors.error;
     if (isSelected) return AppColors.primary;
     return AppColors.surfaceContainer;
   }
 
   Color get _keyTextColor {
-    if (isCorrect == true || isIncorrect == true || isSelected) {
+    if ((isCorrect ?? false) || (isIncorrect ?? false) || isSelected) {
       return Colors.white;
     }
     return AppColors.onSurface;
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: 'الخيار $optionKey: $value',
-      button: true,
-      selected: isSelected,
-      child: AnimatedScale(
-        scale: _scale,
-        duration: AppConstants.shortAnimation,
-        child: GestureDetector(
-          onTap: isDisabled ? null : onTap,
-          child: AnimatedContainer(
-            duration: AppConstants.shortAnimation,
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: _backgroundColor,
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
-              border: Border.all(color: _borderColor, width: _borderWidth),
-            ),
-            child: Row(
-              children: [
-                // Option key circle
-                AnimatedContainer(
-                  duration: AppConstants.shortAnimation,
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _keyCircleColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      optionKey,
-                      style: TextStyle(
-                        color: _keyTextColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
+  Widget build(BuildContext context) => Semantics(
+        label: 'الخيار $optionKey: $value',
+        button: true,
+        selected: isSelected,
+        child: AnimatedScale(
+          scale: _scale,
+          duration: AppConstants.shortAnimation,
+          child: GestureDetector(
+            onTap: isDisabled ? null : onTap,
+            child: AnimatedContainer(
+              duration: AppConstants.shortAnimation,
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: _backgroundColor,
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+                border: Border.all(color: _borderColor, width: _borderWidth),
+              ),
+              child: Row(
+                children: [
+                  // Option key circle
+                  AnimatedContainer(
+                    duration: AppConstants.shortAnimation,
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _keyCircleColor,
+                    ),
+                    child: Center(
+                      child: Text(
+                        optionKey,
+                        style: TextStyle(
+                          color: _keyTextColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
+                  const SizedBox(width: 12),
 
-                // Option text
-                Expanded(
-                  child: Text(
-                    value,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: isSelected
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                        ),
+                  // Option text
+                  Expanded(
+                    child: Text(
+                      value,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                          ),
+                    ),
                   ),
-                ),
 
-                // Post-session indicator
-                if (isCorrect == true)
-                  const Icon(Icons.check_circle_rounded,
-                      color: AppColors.success, size: 20)
-                else if (isIncorrect == true)
-                  const Icon(Icons.cancel_rounded,
-                      color: AppColors.error, size: 20),
-              ],
+                  // Post-session indicator
+                  if (isCorrect ?? false)
+                    const Icon(Icons.check_circle_rounded,
+                        color: AppColors.success, size: 20)
+                  else if (isIncorrect ?? false)
+                    const Icon(Icons.cancel_rounded,
+                        color: AppColors.error, size: 20),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }

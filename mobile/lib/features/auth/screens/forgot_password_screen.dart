@@ -52,42 +52,107 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('نسيت كلمة المرور'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('نسيت كلمة المرور'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => context.pop(),
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: _submitted ? _buildSuccessView() : _buildFormView(),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: _submitted ? _buildSuccessView() : _buildFormView(),
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _buildFormView() {
-    return Form(
-      key: _formKey,
-      child: Column(
+  Widget _buildFormView() => Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 24),
+            const Icon(Icons.lock_reset_rounded,
+                size: 64, color: AppColors.primary),
+            const SizedBox(height: 24),
+            Text(
+              'إعادة تعيين كلمة المرور',
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'أدخل بريدك الإلكتروني وسنرسل لك رمز إعادة التعيين',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: AppColors.onSurfaceVariant),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              textDirection: TextDirection.ltr,
+              decoration: const InputDecoration(
+                labelText: 'البريد الإلكتروني',
+                prefixIcon: Icon(Icons.email_outlined),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال البريد الإلكتروني';
+                }
+                if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$')
+                    .hasMatch(value.trim())) {
+                  return 'يرجى إدخال بريد إلكتروني صحيح';
+                }
+                return null;
+              },
+            ),
+            if (_errorMessage != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _errorMessage!,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: AppColors.error),
+                textAlign: TextAlign.center,
+              ),
+            ],
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _isLoading ? null : _handleSubmit,
+              child: _isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Text('إرسال رمز التحقق'),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildSuccessView() => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 24),
-          const Icon(Icons.lock_reset_rounded,
-              size: 64, color: AppColors.primary),
+          const Icon(Icons.mark_email_read_rounded,
+              size: 80, color: AppColors.success),
           const SizedBox(height: 24),
           Text(
-            'إعادة تعيين كلمة المرور',
+            'تم الإرسال بنجاح',
             style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
-            'أدخل بريدك الإلكتروني وسنرسل لك رمز إعادة التعيين',
+            'تحقق من بريدك الإلكتروني للحصول على رمز إعادة التعيين',
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium
@@ -95,81 +160,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
-          TextFormField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            textDirection: TextDirection.ltr,
-            decoration: const InputDecoration(
-              labelText: 'البريد الإلكتروني',
-              prefixIcon: Icon(Icons.email_outlined),
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'يرجى إدخال البريد الإلكتروني';
-              }
-              if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$')
-                  .hasMatch(value.trim())) {
-                return 'يرجى إدخال بريد إلكتروني صحيح';
-              }
-              return null;
-            },
-          ),
-          if (_errorMessage != null) ...[
-            const SizedBox(height: 12),
-            Text(
-              _errorMessage!,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: AppColors.error),
-              textAlign: TextAlign.center,
-            ),
-          ],
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: _isLoading ? null : _handleSubmit,
-            child: _isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white),
-                  )
-                : const Text('إرسال رمز التحقق'),
+          OutlinedButton(
+            onPressed: () => context.pop(),
+            child: const Text('العودة لتسجيل الدخول'),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSuccessView() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Icon(Icons.mark_email_read_rounded,
-            size: 80, color: AppColors.success),
-        const SizedBox(height: 24),
-        Text(
-          'تم الإرسال بنجاح',
-          style: Theme.of(context).textTheme.titleLarge,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'تحقق من بريدك الإلكتروني للحصول على رمز إعادة التعيين',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: AppColors.onSurfaceVariant),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 32),
-        OutlinedButton(
-          onPressed: () => context.pop(),
-          child: const Text('العودة لتسجيل الدخول'),
-        ),
-      ],
-    );
-  }
+      );
 }

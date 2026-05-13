@@ -9,122 +9,118 @@ class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-          color: AppColors.primary,
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'عن التطبيق',
-          style: TextStyle(
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 1,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_rounded),
             color: AppColors.primary,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            fontFamily: 'Almarai',
+            onPressed: () => context.pop(),
           ),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildAppHeader(),
-          const SizedBox(height: 24),
-          _buildCurrentVersion(),
-          const SizedBox(height: 24),
-          const Text(
-            'سجل الإصدارات',
+          title: const Text(
+            'عن التطبيق',
             style: TextStyle(
-              fontSize: 18,
+              color: AppColors.primary,
               fontWeight: FontWeight.w700,
+              fontSize: 18,
               fontFamily: 'Almarai',
             ),
           ),
-          const SizedBox(height: 12),
-          ...AppVersion.changelog.map(_buildVersionCard),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAppHeader() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [Color(0xFF1E40AF), Color(0xFF3B82F6)],
         ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _buildAppHeader(),
+            const SizedBox(height: 24),
+            _buildCurrentVersion(),
+            const SizedBox(height: 24),
+            const Text(
+              'سجل الإصدارات',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Almarai',
+              ),
             ),
-            child: ClipOval(
-              child: Image.asset(
-                'assets/images/app_logo.jpeg',
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(
-                  Icons.school_rounded,
-                  color: Colors.white,
-                  size: 40,
+            const SizedBox(height: 12),
+            ...AppVersion.changelog.map(_buildVersionCard),
+            const SizedBox(height: 24),
+          ],
+        ),
+      );
+
+  Widget _buildAppHeader() => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [Color(0xFF1E40AF), Color(0xFF3B82F6)],
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/app_logo.jpeg',
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const Icon(
+                    Icons.school_rounded,
+                    color: Colors.white,
+                    size: 40,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'EduAssess',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              fontFamily: 'Almarai',
-            ),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'منصة التقييم التكيفي الذكي',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-              fontFamily: 'Almarai',
-            ),
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              AppVersion.display,
-              style: const TextStyle(
+            const SizedBox(height: 16),
+            const Text(
+              'EduAssess',
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 13,
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
                 fontFamily: 'Almarai',
-                fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 4),
+            const Text(
+              'منصة التقييم التكيفي الذكي',
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+                fontFamily: 'Almarai',
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                AppVersion.display,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontFamily: 'Almarai',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildCurrentVersion() {
     final latest = AppVersion.changelog.first;

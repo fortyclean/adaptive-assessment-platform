@@ -31,11 +31,11 @@ _QuestionType _parseQuestionType(String? raw) {
 /// Requirements: 7.1–7.11
 class ExamScreen extends ConsumerStatefulWidget {
   const ExamScreen({
-    super.key,
     required this.assessmentId,
     required this.attemptId,
     required this.questionCount,
     required this.timeLimitMinutes,
+    super.key,
   });
 
   final String assessmentId;
@@ -58,7 +58,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   String? _fatalError;
 
   // Demo mode is enabled only when explicitly configured.
-  bool _isDemoMode = AppConstants.useMockData;
+  final bool _isDemoMode = AppConstants.useMockData;
   int _demoQuestionIndex = 0;
   List<Map<String, dynamic>> _demoQuestions = [];
 
@@ -359,7 +359,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     // Full-screen exam — suppress system navigation (Req 7.1)
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, _) async {
         if (!didPop) {
           final shouldPop = await _onWillPop();
           if (shouldPop && context.mounted) {
@@ -393,112 +393,108 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     );
   }
 
-  Widget _buildFatalError() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+  Widget _buildFatalError() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline_rounded,
+                  size: 48, color: AppColors.error),
+              const SizedBox(height: 12),
+              Text(
+                _fatalError ?? '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: AppColors.onSurface,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: _loadNextQuestion,
+                child: const Text('إعادة المحاولة'),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => context.pop(),
+                child: const Text('رجوع'),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildHeader() => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(color: AppColors.outlineVariant),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(Icons.error_outline_rounded,
-                size: 48, color: AppColors.error),
-            const SizedBox(height: 12),
-            Text(
-              _fatalError ?? '',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.onSurface,
-                fontSize: 14,
-                height: 1.5,
+            // Timer (Req 7.2, 7.3) — on the right in RTL
+            AnimatedContainer(
+              duration: AppConstants.shortAnimation,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _isTimerWarning
+                    ? AppColors.errorContainer
+                    : AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: _isTimerWarning
+                      ? AppColors.error.withValues(alpha: 0.4)
+                      : AppColors.outlineVariant,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.timer_rounded,
+                    size: 16,
+                    color: _isTimerWarning
+                        ? AppColors.error
+                        : AppColors.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    _timerDisplay,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: _isTimerWarning
+                              ? AppColors.error
+                              : AppColors.onSurface,
+                          fontWeight: FontWeight.w700,
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                          letterSpacing: 1,
+                        ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: _loadNextQuestion,
-              child: const Text('إعادة المحاولة'),
-            ),
-            const SizedBox(height: 8),
-            TextButton(
-              onPressed: () => context.pop(),
-              child: const Text('رجوع'),
+            // Question counter — on the left in RTL
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'السؤال $_questionNumber من ${widget.questionCount}',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: AppColors.outlineVariant),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Timer (Req 7.2, 7.3) — on the right in RTL
-          AnimatedContainer(
-            duration: AppConstants.shortAnimation,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: _isTimerWarning
-                  ? AppColors.errorContainer
-                  : AppColors.surfaceContainer,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: _isTimerWarning
-                    ? AppColors.error.withValues(alpha: 0.4)
-                    : AppColors.outlineVariant,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.timer_rounded,
-                  size: 16,
-                  color: _isTimerWarning
-                      ? AppColors.error
-                      : AppColors.onSurfaceVariant,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  _timerDisplay,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: _isTimerWarning
-                            ? AppColors.error
-                            : AppColors.onSurface,
-                        fontWeight: FontWeight.w700,
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                        letterSpacing: 1.0,
-                      ),
-                ),
-              ],
-            ),
-          ),
-          // Question counter — on the left in RTL
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              'السؤال $_questionNumber من ${widget.questionCount}',
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: AppColors.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+      );
 
   Widget _buildProgressBar() {
     final progress =
@@ -739,12 +735,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
           if (qType == _QuestionType.fillBlank)
             _FillBlankInput(
               controller: _fillBlankController,
-              onSubmit: (text) => _selectAnswer(text),
+              onSubmit: _selectAnswer,
             )
           else if (qType == _QuestionType.essay)
             _EssayInput(
               controller: _essayController,
-              onSubmit: (text) => _selectAnswer(text),
+              onSubmit: _selectAnswer,
             )
           else if (qType == _QuestionType.trueFalse)
             ...options.isNotEmpty
@@ -817,16 +813,12 @@ class _McqOption extends StatelessWidget {
     required this.value,
     required this.isSelected,
     required this.onTap,
-    this.isCorrect,
-    this.isIncorrect,
   });
 
   final String optionKey;
   final String value;
   final bool isSelected;
   final VoidCallback onTap;
-  final bool? isCorrect;
-  final bool? isIncorrect;
 
   @override
   Widget build(BuildContext context) {
@@ -837,23 +829,7 @@ class _McqOption extends StatelessWidget {
     Color badgeFg;
     Widget? trailingIcon;
 
-    if (isCorrect == true) {
-      borderColor = AppColors.optionCorrectBorder;
-      bgColor = AppColors.optionCorrectBackground;
-      borderWidth = 2;
-      badgeBg = AppColors.success;
-      badgeFg = Colors.white;
-      trailingIcon = const Icon(Icons.check_circle_rounded,
-          color: AppColors.success, size: 20);
-    } else if (isIncorrect == true) {
-      borderColor = AppColors.optionIncorrectBorder;
-      bgColor = AppColors.optionIncorrectBackground;
-      borderWidth = 2;
-      badgeBg = AppColors.error;
-      badgeFg = Colors.white;
-      trailingIcon =
-          const Icon(Icons.cancel_rounded, color: AppColors.error, size: 20);
-    } else if (isSelected) {
+    if (isSelected) {
       borderColor = AppColors.optionSelectedBorder;
       bgColor = AppColors.optionSelectedBackground;
       borderWidth = AppConstants.selectedOptionBorderWidth;
@@ -901,7 +877,7 @@ class _McqOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: badgeBg,
-                border: isSelected || isCorrect == true || isIncorrect == true
+                border: isSelected
                     ? null
                     : Border.all(color: AppColors.outlineVariant),
               ),
@@ -934,7 +910,7 @@ class _McqOption extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             // Trailing state icon
-            if (trailingIcon != null) trailingIcon,
+            trailingIcon,
           ],
         ),
       ),
@@ -982,75 +958,73 @@ class _FillBlankInputState extends State<_FillBlankInput> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Text input field
-        TextField(
-          controller: widget.controller,
-          textDirection: TextDirection.rtl,
-          textInputAction: TextInputAction.done,
-          onSubmitted: (_) {
-            if (_hasText) widget.onSubmit(widget.controller.text.trim());
-          },
-          decoration: InputDecoration(
-            hintText: 'اكتب إجابتك هنا...',
-            hintTextDirection: TextDirection.rtl,
-            filled: true,
-            fillColor: AppColors.surfaceContainer,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-            border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
-              borderSide: const BorderSide(color: AppColors.outlineVariant),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
-              borderSide: const BorderSide(color: AppColors.outlineVariant),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
-              borderSide: const BorderSide(
-                color: AppColors.primary,
-                width: 2,
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Text input field
+          TextField(
+            controller: widget.controller,
+            textDirection: TextDirection.rtl,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (_) {
+              if (_hasText) widget.onSubmit(widget.controller.text.trim());
+            },
+            decoration: InputDecoration(
+              hintText: 'اكتب إجابتك هنا...',
+              hintTextDirection: TextDirection.rtl,
+              filled: true,
+              fillColor: AppColors.surfaceContainer,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+              border: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+                borderSide: const BorderSide(
+                  color: AppColors.primary,
+                  width: 2,
+                ),
               ),
             ),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-        // Confirm button — enabled only when the field is non-empty
-        FilledButton(
-          onPressed: _hasText
-              ? () => widget.onSubmit(widget.controller.text.trim())
-              : null,
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            disabledBackgroundColor: AppColors.surfaceContainer,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
+          // Confirm button — enabled only when the field is non-empty
+          FilledButton(
+            onPressed: _hasText
+                ? () => widget.onSubmit(widget.controller.text.trim())
+                : null,
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              disabledBackgroundColor: AppColors.surfaceContainer,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+              ),
+            ),
+            child: Text(
+              'تأكيد الإجابة',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: _hasText ? Colors.white : AppColors.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
           ),
-          child: Text(
-            'تأكيد الإجابة',
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: _hasText ? Colors.white : AppColors.onSurface,
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 /// Essay question input widget (Requirement 18.4)
@@ -1092,101 +1066,100 @@ class _EssayInputState extends State<_EssayInput> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Informational banner about pending review
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
-            borderRadius: BorderRadius.circular(AppConstants.cardBorderRadius),
-            border: Border.all(color: AppColors.outlineVariant),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Informational banner about pending review
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius:
+                  BorderRadius.circular(AppConstants.cardBorderRadius),
+              border: Border.all(color: AppColors.outlineVariant),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.info_outline_rounded,
+                    size: 16, color: AppColors.onSurfaceVariant),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً',
+                    textDirection: TextDirection.rtl,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              const Icon(Icons.info_outline_rounded,
-                  size: 16, color: AppColors.onSurfaceVariant),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً',
-                  textDirection: TextDirection.rtl,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
+          const SizedBox(height: 12),
+
+          // Multi-line text area
+          TextField(
+            controller: widget.controller,
+            textDirection: TextDirection.rtl,
+            maxLines: 8,
+            minLines: 5,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            decoration: InputDecoration(
+              hintText: 'اكتب إجابتك المقالية هنا...',
+              hintTextDirection: TextDirection.rtl,
+              filled: true,
+              fillColor: AppColors.surfaceContainer,
+              alignLabelWithHint: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+              border: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
+                borderSide: const BorderSide(
+                  color: AppColors.primary,
+                  width: 2,
                 ),
               ),
-            ],
+            ),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-        ),
-        const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
-        // Multi-line text area
-        TextField(
-          controller: widget.controller,
-          textDirection: TextDirection.rtl,
-          maxLines: 8,
-          minLines: 5,
-          keyboardType: TextInputType.multiline,
-          textInputAction: TextInputAction.newline,
-          decoration: InputDecoration(
-            hintText: 'اكتب إجابتك المقالية هنا...',
-            hintTextDirection: TextDirection.rtl,
-            filled: true,
-            fillColor: AppColors.surfaceContainer,
-            alignLabelWithHint: true,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-            border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
-              borderSide: const BorderSide(color: AppColors.outlineVariant),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
-              borderSide: const BorderSide(color: AppColors.outlineVariant),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
-              borderSide: const BorderSide(
-                color: AppColors.primary,
-                width: 2,
+          // Submit button — enabled only when the field is non-empty
+          FilledButton(
+            onPressed: _hasText
+                ? () => widget.onSubmit(widget.controller.text.trim())
+                : null,
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              disabledBackgroundColor: AppColors.surfaceContainer,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.cardBorderRadius),
               ),
             ),
-          ),
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        const SizedBox(height: 16),
-
-        // Submit button — enabled only when the field is non-empty
-        FilledButton(
-          onPressed: _hasText
-              ? () => widget.onSubmit(widget.controller.text.trim())
-              : null,
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            disabledBackgroundColor: AppColors.surfaceContainer,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cardBorderRadius),
+            child: Text(
+              'تسليم الإجابة',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: _hasText ? Colors.white : AppColors.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
           ),
-          child: Text(
-            'تسليم الإجابة',
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: _hasText ? Colors.white : AppColors.onSurface,
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }

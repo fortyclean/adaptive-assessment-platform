@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import '../../../core/constants/app_constants.dart';
 import '../../../core/network/api_service.dart';
 import '../../../shared/providers/auth_provider.dart';
@@ -17,7 +19,8 @@ class GoogleAuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
     // Web Client ID — required for backend token verification
-    serverClientId: '444318033747-bsfncs58b51o9bda3491lnphnt1qh94c.apps.googleusercontent.com',
+    serverClientId:
+        '444318033747-bsfncs58b51o9bda3491lnphnt1qh94c.apps.googleusercontent.com',
   );
 
   /// Signs in with Google and exchanges the token with the backend.

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_version.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -83,72 +84,68 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
 
   // ── AppBar ─────────────────────────────────────────────────────────────────
 
-  PreferredSizeWidget _buildAppBar(AuthUser? user) {
-    return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      elevation: 0,
-      scrolledUnderElevation: 1,
-      shadowColor: Colors.black12,
-      automaticallyImplyLeading: false,
-      titleSpacing: 0,
-      title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            // Profile avatar
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.surfaceContainer,
+  PreferredSizeWidget _buildAppBar(AuthUser? user) => AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        shadowColor: Colors.black12,
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              // Profile avatar
+              Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.surfaceContainer,
+                ),
+                child: ClipOval(
+                  child: _buildAvatarContent(user),
+                ),
               ),
-              child: ClipOval(
-                child: _buildAvatarContent(user),
+              const SizedBox(width: 12),
+              const Text(
+                'EduAssess',
+                style: TextStyle(
+                  fontFamily: 'Lexend',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1E40AF),
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'EduAssess',
-              style: const TextStyle(
-                fontFamily: 'Lexend',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF1E40AF),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined,
+                    color: Color(0xFF64748B)),
+                onPressed: () => context.push(AppRoutes.notificationCenter),
               ),
-            ),
-            const Spacer(),
-            IconButton(
-              icon: const Icon(Icons.notifications_outlined,
-                  color: Color(0xFF64748B)),
-              onPressed: () => context.push(AppRoutes.notificationCenter),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   // ── Header Section ─────────────────────────────────────────────────────────
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'إعدادات الحساب',
-          style: AppTextStyles.displayMedium,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'تحكم في ملفك الشخصي وتفضيلات التطبيق',
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.onSurfaceVariant,
+  Widget _buildHeader() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'إعدادات الحساب',
+            style: AppTextStyles.displayMedium,
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(height: 8),
+          Text(
+            'تحكم في ملفك الشخصي وتفضيلات التطبيق',
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      );
 
   // ── Profile Card ───────────────────────────────────────────────────────────
 
@@ -247,128 +244,121 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
 
   // ── Section Label ──────────────────────────────────────────────────────────
 
-  Widget _buildSectionLabel(String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Text(
-        label.toUpperCase(),
-        style: AppTextStyles.labelSmall.copyWith(
-          color: AppColors.onSurfaceVariant,
-          letterSpacing: 1.2,
+  Widget _buildSectionLabel(String label) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Text(
+          label.toUpperCase(),
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.onSurfaceVariant,
+            letterSpacing: 1.2,
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   // ── Security Group ─────────────────────────────────────────────────────────
 
-  Widget _buildSecurityGroup(BuildContext context) {
-    return _SettingsCard(
-      children: [
-        _SettingsRowTile(
-          icon: Icons.lock_outline_rounded,
-          title: 'تغيير كلمة المرور',
-          onTap: () => context.push(AppRoutes.changePassword),
-        ),
-        const _Divider(),
-        _SettingsToggleTile(
-          icon: Icons.notifications_active_outlined,
-          title: 'تنبيهات الاختبارات',
-          subtitle: 'تفعيل التذكير بالاختبارات القادمة',
-          value: _examNotificationsEnabled,
-          onChanged: (v) => setState(() => _examNotificationsEnabled = v),
-        ),
-      ],
-    );
-  }
+  Widget _buildSecurityGroup(BuildContext context) => _SettingsCard(
+        children: [
+          _SettingsRowTile(
+            icon: Icons.lock_outline_rounded,
+            title: 'تغيير كلمة المرور',
+            onTap: () => context.push(AppRoutes.changePassword),
+          ),
+          const _Divider(),
+          _SettingsToggleTile(
+            icon: Icons.notifications_active_outlined,
+            title: 'تنبيهات الاختبارات',
+            subtitle: 'تفعيل التذكير بالاختبارات القادمة',
+            value: _examNotificationsEnabled,
+            onChanged: (v) => setState(() => _examNotificationsEnabled = v),
+          ),
+        ],
+      );
 
   // ── Appearance Group ───────────────────────────────────────────────────────
 
-  Widget _buildAppearanceGroup() {
-    return _SettingsCard(
-      children: [
-        // Language row — static badge
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(Icons.language_rounded, color: AppColors.primary, size: 24),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  'لغة التطبيق',
-                  style: AppTextStyles.bodyLarge,
-                ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFDDE1FF),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  'العربية',
-                  style: AppTextStyles.labelLarge.copyWith(
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const _Divider(),
-        // Dark mode toggle
-        _SettingsRowTile(
-          icon: Icons.dark_mode_outlined,
-          title: 'الوضع الليلي (غير متاح مؤقتًا)',
-          subtitle: 'سيتم تفعيله بعد ضبطه على جميع الشاشات.',
-          showChevron: false,
-          onTap: null,
-        ),
-      ],
-    );
-  }
-
-  // ── Other Group ────────────────────────────────────────────────────────────
-
-  Widget _buildOtherGroup(BuildContext context) {
-    return _SettingsCard(
-      children: [
-        _SettingsRowTile(
-          icon: Icons.help_outline_rounded,
-          title: 'مركز المساعدة',
-          onTap: () => _showHelpCenter(context),
-        ),
-        const _Divider(),
-        // Logout row
-        InkWell(
-          onTap: () => _handleLogout(context),
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(12),
-            bottomRight: Radius.circular(12),
-          ),
-          child: Padding(
+  Widget _buildAppearanceGroup() => _SettingsCard(
+        children: [
+          // Language row — static badge
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                const Icon(Icons.logout_rounded,
-                    color: AppColors.error, size: 24),
+                const Icon(Icons.language_rounded,
+                    color: AppColors.primary, size: 24),
                 const SizedBox(width: 16),
-                Text(
-                  'تسجيل الخروج',
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.error,
-                    fontWeight: FontWeight.w700,
+                const Expanded(
+                  child: Text(
+                    'لغة التطبيق',
+                    style: AppTextStyles.bodyLarge,
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDDE1FF),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    'العربية',
+                    style: AppTextStyles.labelLarge.copyWith(
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ],
-    );
-  }
+          const _Divider(),
+          // Dark mode toggle
+          const _SettingsRowTile(
+            icon: Icons.dark_mode_outlined,
+            title: 'الوضع الليلي (غير متاح مؤقتًا)',
+            subtitle: 'سيتم تفعيله بعد ضبطه على جميع الشاشات.',
+            showChevron: false,
+            onTap: null,
+          ),
+        ],
+      );
+
+  // ── Other Group ────────────────────────────────────────────────────────────
+
+  Widget _buildOtherGroup(BuildContext context) => _SettingsCard(
+        children: [
+          _SettingsRowTile(
+            icon: Icons.help_outline_rounded,
+            title: 'مركز المساعدة',
+            onTap: () => _showHelpCenter(context),
+          ),
+          const _Divider(),
+          // Logout row
+          InkWell(
+            onTap: () => _handleLogout(context),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(12),
+              bottomRight: Radius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Row(
+                children: [
+                  const Icon(Icons.logout_rounded,
+                      color: AppColors.error, size: 24),
+                  const SizedBox(width: 16),
+                  Text(
+                    'تسجيل الخروج',
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: AppColors.error,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
 
   // ── Bottom Navigation ──────────────────────────────────────────────────────
 
@@ -520,7 +510,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
       ),
     );
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       await ref.read(authRepositoryProvider).logout();
       ref.read(authProvider.notifier).logout();
       if (context.mounted) context.go(AppRoutes.login);
@@ -536,29 +526,27 @@ class _SettingsCard extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: children,
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
-      ),
-    );
-  }
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: children,
+          ),
+        ),
+      );
 }
 
 /// A tappable settings row with icon, title, and chevron.
@@ -578,11 +566,65 @@ class _SettingsRowTile extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+  Widget build(BuildContext context) => InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(icon, color: AppColors.primary, size: 24),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.bodyLarge,
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: AppTextStyles.labelSmall.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              if (showChevron)
+                const Icon(
+                  Icons.chevron_left_rounded,
+                  color: AppColors.onSurfaceVariant,
+                  size: 24,
+                ),
+            ],
+          ),
+        ),
+      );
+}
+
+/// A settings row with icon, title, optional subtitle, and a toggle switch.
+class _SettingsToggleTile extends StatelessWidget {
+  const _SettingsToggleTile({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.onChanged,
+    this.subtitle,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
             Icon(icon, color: AppColors.primary, size: 24),
@@ -591,10 +633,7 @@ class _SettingsRowTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.bodyLarge,
-                  ),
+                  Text(title, style: AppTextStyles.bodyLarge),
                   if (subtitle != null) ...[
                     const SizedBox(height: 2),
                     Text(
@@ -607,78 +646,23 @@ class _SettingsRowTile extends StatelessWidget {
                 ],
               ),
             ),
-            if (showChevron)
-              const Icon(
-                Icons.chevron_left_rounded,
-                color: AppColors.onSurfaceVariant,
-                size: 24,
-              ),
+            Switch(
+              value: value,
+              onChanged: onChanged,
+              activeThumbColor: Colors.white,
+              activeTrackColor: AppColors.primaryContainer,
+              inactiveThumbColor: Colors.white,
+              inactiveTrackColor: AppColors.surfaceContainerHigh,
+              trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return Colors.transparent;
+                }
+                return AppColors.outlineVariant;
+              }),
+            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// A settings row with icon, title, optional subtitle, and a toggle switch.
-class _SettingsToggleTile extends StatelessWidget {
-  const _SettingsToggleTile({
-    required this.icon,
-    required this.title,
-    this.subtitle,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColors.primary, size: 24),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: AppTextStyles.bodyLarge),
-                if (subtitle != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle!,
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeThumbColor: Colors.white,
-            activeTrackColor: AppColors.primaryContainer,
-            inactiveThumbColor: Colors.white,
-            inactiveTrackColor: AppColors.surfaceContainerHigh,
-            trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-              if (states.contains(WidgetState.selected)) {
-                return Colors.transparent;
-              }
-              return AppColors.outlineVariant;
-            }),
-          ),
-        ],
-      ),
-    );
-  }
+      );
 }
 
 /// A thin horizontal divider matching the design system.
@@ -686,13 +670,11 @@ class _Divider extends StatelessWidget {
   const _Divider();
 
   @override
-  Widget build(BuildContext context) {
-    return const Divider(
-      height: 1,
-      thickness: 1,
-      color: AppColors.outlineVariant,
-      indent: 0,
-      endIndent: 0,
-    );
-  }
+  Widget build(BuildContext context) => const Divider(
+        height: 1,
+        thickness: 1,
+        color: AppColors.outlineVariant,
+        indent: 0,
+        endIndent: 0,
+      );
 }

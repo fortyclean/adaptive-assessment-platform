@@ -14,39 +14,40 @@ class AdminTopActions extends ConsumerWidget {
   const AdminTopActions({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return PopupMenuButton<_AdminAction>(
-      tooltip: 'حساب المشرف',
-      icon: const Icon(Icons.account_circle_outlined, color: AppColors.primary),
-      onSelected: (action) => _handleAction(context, ref, action),
-      itemBuilder: (context) => const [
-        PopupMenuItem(
-          value: _AdminAction.home,
-          child: _AdminMenuItem(icon: Icons.home_outlined, label: 'الرئيسية'),
-        ),
-        PopupMenuItem(
-          value: _AdminAction.settings,
-          child: _AdminMenuItem(
-            icon: Icons.settings_outlined,
-            label: 'الإعدادات',
+  Widget build(BuildContext context, WidgetRef ref) =>
+      PopupMenuButton<_AdminAction>(
+        tooltip: 'حساب المشرف',
+        icon:
+            const Icon(Icons.account_circle_outlined, color: AppColors.primary),
+        onSelected: (action) => _handleAction(context, ref, action),
+        itemBuilder: (context) => const [
+          PopupMenuItem(
+            value: _AdminAction.home,
+            child: _AdminMenuItem(icon: Icons.home_outlined, label: 'الرئيسية'),
           ),
-        ),
-        PopupMenuItem(
-          value: _AdminAction.about,
-          child: _AdminMenuItem(icon: Icons.info_outline, label: 'عن التطبيق'),
-        ),
-        PopupMenuDivider(),
-        PopupMenuItem(
-          value: _AdminAction.logout,
-          child: _AdminMenuItem(
-            icon: Icons.logout_rounded,
-            label: 'تسجيل الخروج',
-            color: AppColors.error,
+          PopupMenuItem(
+            value: _AdminAction.settings,
+            child: _AdminMenuItem(
+              icon: Icons.settings_outlined,
+              label: 'الإعدادات',
+            ),
           ),
-        ),
-      ],
-    );
-  }
+          PopupMenuItem(
+            value: _AdminAction.about,
+            child:
+                _AdminMenuItem(icon: Icons.info_outline, label: 'عن التطبيق'),
+          ),
+          PopupMenuDivider(),
+          PopupMenuItem(
+            value: _AdminAction.logout,
+            child: _AdminMenuItem(
+              icon: Icons.logout_rounded,
+              label: 'تسجيل الخروج',
+              color: AppColors.error,
+            ),
+          ),
+        ],
+      );
 
   Future<void> _handleAction(
     BuildContext context,
@@ -84,7 +85,7 @@ class AdminTopActions extends ConsumerWidget {
             ],
           ),
         );
-        if (confirmed == true && context.mounted) {
+        if ((confirmed ?? false) && context.mounted) {
           ref.read(authProvider.notifier).logout();
           context.go(AppRoutes.login);
           unawaited(

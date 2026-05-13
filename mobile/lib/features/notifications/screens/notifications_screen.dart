@@ -53,7 +53,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             'body': 'حصلت على 78% في اختبار اللغة العربية. أحسنت!',
             'type': 'grade',
             'isRead': false,
-            'createdAt': DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
+            'createdAt': DateTime.now()
+                .subtract(const Duration(hours: 2))
+                .toIso8601String(),
           },
           {
             '_id': 'n3',
@@ -61,7 +63,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             'body': 'انخفض متوسط أداء الطالب أحمد في مادة الفيزياء.',
             'type': 'alert',
             'isRead': true,
-            'createdAt': DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+            'createdAt': DateTime.now()
+                .subtract(const Duration(days: 1))
+                .toIso8601String(),
           },
           {
             '_id': 'n4',
@@ -69,7 +73,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             'body': 'يرجى مراجعة الوحدة الثالثة قبل الاختبار القادم.',
             'type': 'message',
             'isRead': true,
-            'createdAt': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+            'createdAt': DateTime.now()
+                .subtract(const Duration(days: 2))
+                .toIso8601String(),
           },
         ];
         _unreadCount = 2;
@@ -80,10 +86,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
   Future<void> _markAllRead() async {
     try {
-      await ref
-          .read(apiServiceProvider)
-          .dio
-          .patch('/notifications/read-all');
+      await ref.read(apiServiceProvider).dio.patch('/notifications/read-all');
       setState(() {
         for (final n in _notifications) {
           n['isRead'] = true;
@@ -95,10 +98,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
   Future<void> _markRead(String id) async {
     try {
-      await ref
-          .read(apiServiceProvider)
-          .dio
-          .patch('/notifications/$id/read');
+      await ref.read(apiServiceProvider).dio.patch('/notifications/$id/read');
       setState(() {
         final idx = _notifications.indexWhere((n) => n['_id'] == id);
         if (idx != -1) {
@@ -132,143 +132,139 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: Row(
-          children: [
-            const Text(
-              'الإشعارات',
-              style: TextStyle(
-                fontFamily: 'Almarai',
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primary,
-              ),
-            ),
-            if (_unreadCount > 0) ...[
-              const SizedBox(width: 8),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '$_unreadCount',
-                  style: const TextStyle(
-                    fontFamily: 'Almarai',
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        actions: [
-          if (_unreadCount > 0)
-            TextButton(
-              onPressed: _markAllRead,
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.primary,
-              ),
-              child: const Text(
-                'تحديد الكل كمقروء',
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: const Color(0xFFF8FAFC),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          title: Row(
+            children: [
+              const Text(
+                'الإشعارات',
                 style: TextStyle(
                   fontFamily: 'Almarai',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
                 ),
               ),
-            ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(
-            height: 1,
-            color: AppColors.outlineVariant.withValues(alpha: 0.5),
-          ),
-        ),
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            )
-          : _notifications.isEmpty
-              ? _EmptyState()
-              : RefreshIndicator(
-                  onRefresh: _loadNotifications,
-                  color: AppColors.primary,
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    children: [
-                      for (final entry in _grouped.entries)
-                        if (entry.value.isNotEmpty) ...[
-                          _GroupHeader(title: entry.key),
-                          ...entry.value.map((n) => _NotificationTile(
-                                notification: n,
-                                onTap: () => _markRead(n['_id'] as String),
-                              )),
-                        ],
-                    ],
+              if (_unreadCount > 0) ...[
+                const SizedBox(width: 8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '$_unreadCount',
+                    style: const TextStyle(
+                      fontFamily: 'Almarai',
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-    );
-  }
+              ],
+            ],
+          ),
+          actions: [
+            if (_unreadCount > 0)
+              TextButton(
+                onPressed: _markAllRead,
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                ),
+                child: const Text(
+                  'تحديد الكل كمقروء',
+                  style: TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(
+              height: 1,
+              color: AppColors.outlineVariant.withValues(alpha: 0.5),
+            ),
+          ),
+        ),
+        body: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              )
+            : _notifications.isEmpty
+                ? _EmptyState()
+                : RefreshIndicator(
+                    onRefresh: _loadNotifications,
+                    color: AppColors.primary,
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      children: [
+                        for (final entry in _grouped.entries)
+                          if (entry.value.isNotEmpty) ...[
+                            _GroupHeader(title: entry.key),
+                            ...entry.value.map((n) => _NotificationTile(
+                                  notification: n,
+                                  onTap: () => _markRead(n['_id'] as String),
+                                )),
+                          ],
+                      ],
+                    ),
+                  ),
+      );
 }
 
 // ─── Empty State ──────────────────────────────────────────────────────────────
 
 class _EmptyState extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: const Color(0xFFDDE1FF),
-              shape: BoxShape.circle,
+  Widget build(BuildContext context) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: Color(0xFFDDE1FF),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.notifications_none_rounded,
+                size: 40,
+                color: AppColors.primary,
+              ),
             ),
-            child: const Icon(
-              Icons.notifications_none_rounded,
-              size: 40,
-              color: AppColors.primary,
+            const SizedBox(height: 16),
+            const Text(
+              'لا توجد إشعارات',
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppColors.onSurface,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'لا توجد إشعارات',
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColors.onSurface,
+            const SizedBox(height: 8),
+            const Text(
+              'ستظهر هنا إشعاراتك الجديدة',
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 14,
+                color: AppColors.onSurfaceVariant,
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'ستظهر هنا إشعاراتك الجديدة',
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 14,
-              color: AppColors.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 // ─── Group Header ─────────────────────────────────────────────────────────────
@@ -278,38 +274,35 @@ class _GroupHeader extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: AppColors.onSurfaceVariant,
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        child: Row(
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.onSurfaceVariant,
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              height: 1,
-              color: AppColors.outlineVariant.withValues(alpha: 0.5),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Container(
+                height: 1,
+                color: AppColors.outlineVariant.withValues(alpha: 0.5),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 // ─── Notification Tile ────────────────────────────────────────────────────────
 
 class _NotificationTile extends StatelessWidget {
-  const _NotificationTile(
-      {required this.notification, required this.onTap});
+  const _NotificationTile({required this.notification, required this.onTap});
   final Map<String, dynamic> notification;
   final VoidCallback onTap;
 
@@ -422,9 +415,8 @@ class _NotificationTile extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Almarai',
                             fontSize: 14,
-                            fontWeight: isRead
-                                ? FontWeight.w500
-                                : FontWeight.w700,
+                            fontWeight:
+                                isRead ? FontWeight.w500 : FontWeight.w700,
                             color: AppColors.onSurface,
                           ),
                         ),
