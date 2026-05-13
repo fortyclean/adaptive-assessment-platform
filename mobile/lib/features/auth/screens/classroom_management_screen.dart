@@ -719,6 +719,7 @@ class _ClassroomManagementScreenState
     }
 
     String? selectedTeacherId = classroom['teacherId'] as String?;
+    String teacherSearchQuery = '';
     if (!mounted) return;
 
     await showModalBottomSheet<void>(
@@ -728,107 +729,145 @@ class _ClassroomManagementScreenState
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setModalState) => Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-              left: 16,
-              right: 16,
-              top: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                  child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                          color: AppColors.outlineVariant,
-                          borderRadius: BorderRadius.circular(2)))),
-              const SizedBox(height: 16),
-              Text('ربط معلم بـ: ${classroom['name']}',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w700)),
-              const SizedBox(height: 4),
-              const Text('اختر معلماً لتعيينه في هذا الفصل',
-                  style: TextStyle(
-                      color: AppColors.onSurfaceVariant, fontSize: 13)),
-              const SizedBox(height: 16),
-              ...teachers.map((t) => RadioListTile<String>(
-                    value: t['_id'] as String,
-                    groupValue: selectedTeacherId,
-                    onChanged: (v) =>
-                        setModalState(() => selectedTeacherId = v),
-                    title: Text(t['fullName'] as String,
-                        style: const TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: Text(t['subject'] as String? ?? 'معلم',
-                        style: const TextStyle(
-                            color: AppColors.onSurfaceVariant, fontSize: 12)),
-                    activeColor: AppColors.primary,
-                    contentPadding: EdgeInsets.zero,
-                  )),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: selectedTeacherId == null
-                    ? null
-                    : () async {
-                        final teacher = teachers
-                            .firstWhere((t) => t['_id'] == selectedTeacherId);
-                        try {
-                          await ref
-                              .read(adminRepositoryProvider)
-                              .assignTeachers(classroom['_id'] as String,
-                                  [selectedTeacherId!]);
-                          await _loadClassrooms();
-                        } on Object {
-                          if (!AppConstants.useMockData && !_isDemoSession) {
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'تعذر ربط المعلم بالفصل. يرجى المحاولة مرة أخرى'),
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: AppColors.error,
-                                ),
-                              );
-                            }
-                            return;
-                          }
-                          final idx = _classrooms
-                              .indexWhere((c) => c['_id'] == classroom['_id']);
-                          if (idx != -1) {
-                            setState(() {
-                              _classrooms[idx] = Map.from(_classrooms[idx])
-                                ..['teacherId'] = selectedTeacherId
-                                ..['teacherName'] = teacher['fullName'];
-                            });
-                          }
-                        }
-                        if (!ctx.mounted) return;
-                        Navigator.pop(ctx);
-                        ScaffoldMessenger.of(ctx).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                'تم ربط ${teacher['fullName']} بفصل ${classroom['name']}'),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: const Color(0xFF2E7D32),
-                          ),
-                        );
-                      },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                child: const Text('تأكيد الربط',
-                    style:
-                        TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+        builder: (ctx, setModalState) {
+          final filteredTeachers = teachers.where((teacher) {
+            final haystack =
+                '${teacher['fullName'] ?? ''} ${teacher['subject'] ?? ''}'
+                    .toLowerCase();
+            return haystack.contains(teacherSearchQuery.toLowerCase());
+          }).toList();
+
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+                left: 16,
+                right: 16,
+                top: 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(ctx).size.height * 0.78,
               ),
-            ],
-          ),
-        ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                      child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: AppColors.outlineVariant,
+                              borderRadius: BorderRadius.circular(2)))),
+                  const SizedBox(height: 16),
+                  Text('ربط معلم بـ: ${classroom['name']}',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 4),
+                  const Text('اختر معلماً لتعيينه في هذا الفصل',
+                      style: TextStyle(
+                          color: AppColors.onSurfaceVariant, fontSize: 13)),
+                  const SizedBox(height: 12),
+                  TextField(
+                    textDirection: TextDirection.rtl,
+                    decoration: InputDecoration(
+                      labelText: 'بحث عن معلم',
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onChanged: (value) =>
+                        setModalState(() => teacherSearchQuery = value),
+                  ),
+                  const SizedBox(height: 12),
+                  Flexible(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: filteredTeachers
+                          .map((t) => RadioListTile<String>(
+                                value: t['_id'] as String,
+                                groupValue: selectedTeacherId,
+                                onChanged: (v) =>
+                                    setModalState(() => selectedTeacherId = v),
+                                title: Text(t['fullName'] as String,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600)),
+                                subtitle: Text(
+                                    t['subject'] as String? ?? 'معلم',
+                                    style: const TextStyle(
+                                        color: AppColors.onSurfaceVariant,
+                                        fontSize: 12)),
+                                activeColor: AppColors.primary,
+                                contentPadding: EdgeInsets.zero,
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: selectedTeacherId == null
+                        ? null
+                        : () async {
+                            final teacher = teachers.firstWhere(
+                                (t) => t['_id'] == selectedTeacherId);
+                            try {
+                              await ref
+                                  .read(adminRepositoryProvider)
+                                  .assignTeachers(classroom['_id'] as String,
+                                      [selectedTeacherId!]);
+                              await _loadClassrooms();
+                            } on Object {
+                              if (!AppConstants.useMockData &&
+                                  !_isDemoSession) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'تعذر ربط المعلم بالفصل. يرجى المحاولة مرة أخرى'),
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: AppColors.error,
+                                    ),
+                                  );
+                                }
+                                return;
+                              }
+                              final idx = _classrooms.indexWhere(
+                                  (c) => c['_id'] == classroom['_id']);
+                              if (idx != -1) {
+                                setState(() {
+                                  _classrooms[idx] = Map.from(_classrooms[idx])
+                                    ..['teacherId'] = selectedTeacherId
+                                    ..['teacherName'] = teacher['fullName'];
+                                });
+                              }
+                            }
+                            if (!ctx.mounted) return;
+                            Navigator.pop(ctx);
+                            ScaffoldMessenger.of(ctx).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'تم ربط ${teacher['fullName']} بفصل ${classroom['name']}'),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: const Color(0xFF2E7D32),
+                              ),
+                            );
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
+                    child: const Text('تأكيد الربط',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w600)),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -865,6 +904,7 @@ class _ClassroomManagementScreenState
         else if (item is Map && (item['_id'] ?? item['id']) != null)
           (item['_id'] ?? item['id']).toString(),
     };
+    String studentSearchQuery = '';
     if (!mounted) return;
 
     await showModalBottomSheet<void>(
@@ -874,135 +914,194 @@ class _ClassroomManagementScreenState
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setModalState) => Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-              left: 16,
-              right: 16,
-              top: 20),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(ctx).size.height * 0.78,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Center(
-                    child: Container(
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                            color: AppColors.outlineVariant,
-                            borderRadius: BorderRadius.circular(2)))),
-                const SizedBox(height: 16),
-                Text('ربط طلاب بـ: ${classroom['name']}',
+        builder: (ctx, setModalState) {
+          final filteredStudents = students.where((student) {
+            final haystack =
+                '${student['fullName'] ?? ''} ${student['username'] ?? ''} ${student['grade'] ?? ''}'
+                    .toLowerCase();
+            return haystack.contains(studentSearchQuery.toLowerCase());
+          }).toList();
+
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+                left: 16,
+                right: 16,
+                top: 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(ctx).size.height * 0.78,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                      child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: AppColors.outlineVariant,
+                              borderRadius: BorderRadius.circular(2)))),
+                  const SizedBox(height: 16),
+                  Text('ربط طلاب بـ: ${classroom['name']}',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 4),
+                  Text(
+                    'اختر الطلاب المرتبطين بهذا الفصل (${selectedStudentIds.length})',
                     style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 4),
-                Text(
-                  'اختر الطلاب المرتبطين بهذا الفصل (${selectedStudentIds.length})',
-                  style: const TextStyle(
-                      color: AppColors.onSurfaceVariant, fontSize: 13),
-                ),
-                const SizedBox(height: 12),
-                Flexible(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: students.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1),
-                    itemBuilder: (context, index) {
-                      final student = students[index];
-                      final id = (student['_id'] ?? student['id']).toString();
-                      final isSelected = selectedStudentIds.contains(id);
-                      return CheckboxListTile(
-                        value: isSelected,
-                        onChanged: (checked) {
-                          setModalState(() {
-                            if (checked ?? false) {
-                              selectedStudentIds.add(id);
-                            } else {
-                              selectedStudentIds.remove(id);
-                            }
+                        color: AppColors.onSurfaceVariant, fontSize: 13),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    textDirection: TextDirection.rtl,
+                    decoration: InputDecoration(
+                      labelText: 'بحث عن طالب',
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onChanged: (value) =>
+                        setModalState(() => studentSearchQuery = value),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      TextButton.icon(
+                        onPressed: filteredStudents.isEmpty
+                            ? null
+                            : () {
+                                setModalState(() {
+                                  for (final student in filteredStudents) {
+                                    final id = (student['_id'] ?? student['id'])
+                                        .toString();
+                                    selectedStudentIds.add(id);
+                                  }
+                                });
+                              },
+                        icon: const Icon(Icons.done_all_rounded, size: 18),
+                        label: const Text('تحديد الظاهر'),
+                      ),
+                      const SizedBox(width: 8),
+                      TextButton.icon(
+                        onPressed: filteredStudents.isEmpty
+                            ? null
+                            : () {
+                                setModalState(() {
+                                  for (final student in filteredStudents) {
+                                    final id = (student['_id'] ?? student['id'])
+                                        .toString();
+                                    selectedStudentIds.remove(id);
+                                  }
+                                });
+                              },
+                        icon: const Icon(Icons.remove_done_rounded, size: 18),
+                        label: const Text('إلغاء الظاهر'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Flexible(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: filteredStudents.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final student = filteredStudents[index];
+                        final id = (student['_id'] ?? student['id']).toString();
+                        final isSelected = selectedStudentIds.contains(id);
+                        return CheckboxListTile(
+                          value: isSelected,
+                          onChanged: (checked) {
+                            setModalState(() {
+                              if (checked ?? false) {
+                                selectedStudentIds.add(id);
+                              } else {
+                                selectedStudentIds.remove(id);
+                              }
+                            });
+                          },
+                          activeColor: AppColors.primary,
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(
+                            student['fullName'] as String? ??
+                                student['username'] as String? ??
+                                'طالب',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text(
+                            student['grade'] as String? ??
+                                student['username'] as String? ??
+                                'طالب نشط',
+                            style: const TextStyle(
+                                color: AppColors.onSurfaceVariant,
+                                fontSize: 12),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await ref.read(adminRepositoryProvider).assignStudents(
+                              classroom['_id'] as String,
+                              selectedStudentIds.toList(),
+                            );
+                        await _loadClassrooms();
+                      } on Object {
+                        if (!AppConstants.useMockData && !_isDemoSession) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'تعذر ربط الطلاب بالفصل. يرجى المحاولة مرة أخرى'),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          }
+                          return;
+                        }
+                        final idx = _classrooms
+                            .indexWhere((c) => c['_id'] == classroom['_id']);
+                        if (idx != -1) {
+                          setState(() {
+                            _classrooms[idx] = Map.from(_classrooms[idx])
+                              ..['studentIds'] = selectedStudentIds.toList();
                           });
-                        },
-                        activeColor: AppColors.primary,
-                        contentPadding: EdgeInsets.zero,
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(
-                          student['fullName'] as String? ??
-                              student['username'] as String? ??
-                              'طالب',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text(
-                          student['grade'] as String? ??
-                              student['username'] as String? ??
-                              'طالب نشط',
-                          style: const TextStyle(
-                              color: AppColors.onSurfaceVariant, fontSize: 12),
+                        }
+                      }
+                      if (!ctx.mounted) return;
+                      Navigator.pop(ctx);
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        const SnackBar(
+                          content: Text('تم تحديث طلاب الفصل'),
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Color(0xFF2E7D32),
                         ),
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
+                    child: const Text('حفظ الطلاب',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w600)),
                   ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await ref.read(adminRepositoryProvider).assignStudents(
-                            classroom['_id'] as String,
-                            selectedStudentIds.toList(),
-                          );
-                      await _loadClassrooms();
-                    } on Object {
-                      if (!AppConstants.useMockData && !_isDemoSession) {
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                  'تعذر ربط الطلاب بالفصل. يرجى المحاولة مرة أخرى'),
-                              behavior: SnackBarBehavior.floating,
-                              backgroundColor: AppColors.error,
-                            ),
-                          );
-                        }
-                        return;
-                      }
-                      final idx = _classrooms
-                          .indexWhere((c) => c['_id'] == classroom['_id']);
-                      if (idx != -1) {
-                        setState(() {
-                          _classrooms[idx] = Map.from(_classrooms[idx])
-                            ..['studentIds'] = selectedStudentIds.toList();
-                        });
-                      }
-                    }
-                    if (!ctx.mounted) return;
-                    Navigator.pop(ctx);
-                    ScaffoldMessenger.of(ctx).showSnackBar(
-                      const SnackBar(
-                        content: Text('تم تحديث طلاب الفصل'),
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Color(0xFF2E7D32),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: const Text('حفظ الطلاب',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

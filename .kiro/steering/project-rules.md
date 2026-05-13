@@ -50,17 +50,16 @@ version: 1.0.X+X   # رفع PATCH والـ BUILD معاً
 
 ### تسمية ملفات APK
 ```
-adaptive-mastery-v{VERSION}-{ENVIRONMENT}.apk
+adaptive-mastery-v{VERSION}.apk
 ```
 أمثلة:
-- `adaptive-mastery-v1.0.7.apk` — الإصدار العام
-- `adaptive-mastery-v1.0.7-railway.apk` — مع Railway backend
-- `adaptive-mastery-v1.0.7-online.apk` — مع Render backend
+- `adaptive-mastery-v1.0.24.apk` — الإصدار العام المتصل بالـ Backend المعتمد
+- ممنوع استخدام كلمة `railway` في اسم ملف APK.
 
 ### الإصدار الحالي
-- **Flutter (mobile):** `1.0.7+7`
-- **Backend (Node.js):** `1.0.0`
-- **آخر APKs منشورة:** v1.0.0 → v1.0.6 (6 إصدارات سابقة)
+- **Flutter (mobile):** `1.0.24+24`
+- **Backend (Node.js):** `1.0.24`
+- **آخر APK منشور:** `adaptive-mastery-v1.0.24.apk`
 
 ---
 
@@ -89,11 +88,11 @@ mobile\build\app\outputs\flutter-apk\app-release.apk
 
 ### بعد البناء — انسخ APK وأعد تسميته
 ```
-app-release.apk → adaptive-mastery-v{VERSION}-{ENV}.apk
+app-release.apk → adaptive-mastery-v{VERSION}.apk
 ```
 ثم انقله إلى جذر المشروع:
 ```
-adaptive-assessment-platform\adaptive-mastery-v{VERSION}-{ENV}.apk
+adaptive-assessment-platform\adaptive-mastery-v{VERSION}.apk
 ```
 
 ---

@@ -37,6 +37,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   // ── Filters (Req 19.5) ────────────────────────────────────────────────────
   String? _selectedSubject;
   String? _selectedGradeLevel;
+  bool _refreshingReports = false;
 
   static const List<String> _gradeLevels = [
     '1',
@@ -226,6 +227,21 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     _loadWeaknesses();
   }
 
+  Future<void> _refreshReports({bool showMessage = false}) async {
+    setState(() => _refreshingReports = true);
+    await Future.wait([_loadSummary(), _loadComparison(), _loadWeaknesses()]);
+    if (!mounted) return;
+    setState(() => _refreshingReports = false);
+    if (showMessage) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تم تحديث تقارير المدرسة'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -234,10 +250,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         backgroundColor: const Color(0xFFFBF8FF),
         appBar: _buildAppBar(context),
         body: RefreshIndicator(
-          onRefresh: () async {
-            await Future.wait(
-                [_loadSummary(), _loadComparison(), _loadWeaknesses()]);
-          },
+          onRefresh: _refreshReports,
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
             children: [
@@ -335,10 +348,29 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'تقارير المدرسة الكلية',
-          style:
-              AppTextStyles.displayMedium.copyWith(color: AppColors.onSurface),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'تقارير المدرسة الكلية',
+                style: AppTextStyles.displayMedium
+                    .copyWith(color: AppColors.onSurface),
+              ),
+            ),
+            IconButton.filledTonal(
+              onPressed: _refreshingReports
+                  ? null
+                  : () => _refreshReports(showMessage: true),
+              icon: _refreshingReports
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.refresh_rounded),
+              tooltip: 'تحديث التقارير',
+            ),
+          ],
         ),
         const SizedBox(height: 4),
         Text(
@@ -346,6 +378,25 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           style: AppTextStyles.bodyMedium
               .copyWith(color: AppColors.onSurfaceVariant),
         ),
+        if (_selectedSubject != null || _selectedGradeLevel != null) ...[
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              if (_selectedSubject != null)
+                Chip(
+                  label: Text('المادة: $_selectedSubject'),
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+                ),
+              if (_selectedGradeLevel != null)
+                Chip(
+                  label: Text('المرحلة: $_selectedGradeLevel'),
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+                ),
+            ],
+          ),
+        ],
       ],
     );
   }

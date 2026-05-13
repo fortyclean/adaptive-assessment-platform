@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.23';
-  static const int buildNumber = 23;
+  static const String current = '1.0.24';
+  static const int buildNumber = 24;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,21 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.24',
+      buildNumber: 24,
+      date: 'مايو 2026',
+      title: 'إكمال تحسينات شاشات المشرف',
+      changes: [
+        'تفعيل حفظ إعدادات المؤسسة محلياً: بيانات المدرسة، العام الدراسي، الفصل، مقياس التقييم، اللغة، المنطقة الزمنية، والتنبيهات.',
+        'إضافة زر تحديث واضح في تقارير المدرسة مع عرض الفلاتر الحالية قبل قراءة النتائج.',
+        'تحسين تعديل المستخدمين باستبدال معرفات الفصول اليدوية بقائمة اختيار قابلة للبحث.',
+        'تحسين ربط المعلمين والطلاب بالفصول بإضافة البحث وتحديد الطلاب الظاهرين وإلغاء تحديدهم.',
+        'إضافة فحص دخان تقني للخادم يتحقق من الصحة، تسجيل الدخول، refresh، المستخدمين، الفصول، والتقارير.',
+        'تحديث قواعد التحقق والبناء وسجل الإصدار دون تغيير التصميم العام للشاشات.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.23',
       buildNumber: 23,

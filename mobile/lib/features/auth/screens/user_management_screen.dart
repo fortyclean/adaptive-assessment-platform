@@ -310,209 +310,316 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     }
   }
 
-  void _editUser(Map<String, dynamic> user) {
+  Future<List<Map<String, dynamic>>> _loadClassroomOptions() async {
+    const fallbackClassrooms = [
+      {'_id': 'c1', 'name': 'الأول المتوسط (أ)', 'gradeLevel': '1'},
+      {'_id': 'c2', 'name': 'الأول المتوسط (ب)', 'gradeLevel': '1'},
+      {'_id': 'c3', 'name': 'الثاني المتوسط (أ)', 'gradeLevel': '2'},
+      {'_id': 'c4', 'name': 'الثالث المتوسط (أ)', 'gradeLevel': '3'},
+    ];
+
+    try {
+      final classrooms =
+          await ref.read(adminRepositoryProvider).getClassrooms();
+      return classrooms.isNotEmpty
+          ? classrooms
+          : List<Map<String, dynamic>>.from(fallbackClassrooms);
+    } on Object {
+      final authState = ref.read(authProvider);
+      final isDemoSession =
+          (authState.accessToken ?? '').startsWith('demo-token-');
+      if (!AppConstants.useMockData && !isDemoSession) {
+        return const [];
+      }
+      return List<Map<String, dynamic>>.from(fallbackClassrooms);
+    }
+  }
+
+  String _classroomName(Map<String, dynamic> classroom) {
+    return classroom['name'] as String? ??
+        classroom['classroomName'] as String? ??
+        classroom['title'] as String? ??
+        'فصل دراسي';
+  }
+
+  Future<void> _editUser(Map<String, dynamic> user) async {
     final nameController =
         TextEditingController(text: user['fullName'] as String? ?? '');
     final emailController =
         TextEditingController(text: user['email'] as String? ?? '');
-    final classroomIdsController = TextEditingController(
-      text: ((user['classroomIds'] as List?) ?? const [])
-          .map((item) => item is Map
-              ? (item['_id'] ?? item['id'] ?? '').toString()
-              : item.toString())
-          .where((value) => value.isNotEmpty)
-          .join(', '),
-    );
+    final classroomOptions = await _loadClassroomOptions();
+    final selectedClassroomIds = <String>{
+      for (final item in (user['classroomIds'] as List?) ?? const [])
+        if (item is Map && (item['_id'] ?? item['id']) != null)
+          (item['_id'] ?? item['id']).toString()
+        else if (item is String && item.isNotEmpty)
+          item,
+    };
+    String classroomSearchQuery = '';
+    if (!mounted) return;
+
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-            left: 16,
-            right: 16,
-            top: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-                child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                        color: AppColors.outlineVariant,
-                        borderRadius: BorderRadius.circular(2)))),
-            const SizedBox(height: 16),
-            Text('تعديل: ${user['fullName']}',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 16),
-            TextField(
-              controller: nameController,
-              textDirection: TextDirection.rtl,
-              decoration: InputDecoration(
-                  labelText: 'الاسم الكامل',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8))),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              textDirection: TextDirection.ltr,
-              decoration: InputDecoration(
-                  labelText: 'البريد الإلكتروني',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8))),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: classroomIdsController,
-              textDirection: TextDirection.ltr,
-              decoration: InputDecoration(
-                labelText: 'معرفات الفصول',
-                helperText: 'اكتب المعرفات مفصولة بفواصل عند الحاجة',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) {
+          final filteredClassrooms = classroomOptions.where((classroom) {
+            final haystack =
+                '${_classroomName(classroom)} ${classroom['gradeLevel'] ?? ''}'
+                    .toLowerCase();
+            return haystack.contains(classroomSearchQuery.toLowerCase());
+          }).toList();
+
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+                left: 16,
+                right: 16,
+                top: 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(ctx).size.height * 0.86,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                      child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: AppColors.outlineVariant,
+                              borderRadius: BorderRadius.circular(2)))),
+                  const SizedBox(height: 16),
+                  Text('تعديل: ${user['fullName']}',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: nameController,
+                    textDirection: TextDirection.rtl,
+                    decoration: InputDecoration(
+                        labelText: 'الاسم الكامل',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    textDirection: TextDirection.ltr,
+                    decoration: InputDecoration(
+                        labelText: 'البريد الإلكتروني',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    textDirection: TextDirection.rtl,
+                    decoration: InputDecoration(
+                      labelText: 'بحث في الفصول',
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
+                    onChanged: (value) =>
+                        setModalState(() => classroomSearchQuery = value),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'الفصول المرتبطة (${selectedClassroomIds.length})',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 13),
+                  ),
+                  const SizedBox(height: 8),
+                  if (classroomOptions.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: Text(
+                        'تعذر تحميل الفصول حالياً. تحقق من الاتصال ثم أعد المحاولة.',
+                        style: TextStyle(color: AppColors.error),
+                      ),
+                    )
+                  else
+                    Flexible(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: filteredClassrooms.length,
+                        separatorBuilder: (_, __) => const Divider(height: 1),
+                        itemBuilder: (context, index) {
+                          final classroom = filteredClassrooms[index];
+                          final id =
+                              (classroom['_id'] ?? classroom['id']).toString();
+                          final isSelected = selectedClassroomIds.contains(id);
+                          return CheckboxListTile(
+                            value: isSelected,
+                            onChanged: (checked) {
+                              setModalState(() {
+                                if (checked ?? false) {
+                                  selectedClassroomIds.add(id);
+                                } else {
+                                  selectedClassroomIds.remove(id);
+                                }
+                              });
+                            },
+                            activeColor: AppColors.primary,
+                            contentPadding: EdgeInsets.zero,
+                            controlAffinity: ListTileControlAffinity.leading,
+                            title: Text(
+                              _classroomName(classroom),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              'المرحلة: ${classroom['gradeLevel'] ?? 'غير محددة'}',
+                              style: const TextStyle(
+                                  color: AppColors.onSurfaceVariant,
+                                  fontSize: 12),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      Chip(
+                        label: Text(
+                          (user['role'] as String? ?? 'user') == 'teacher'
+                              ? 'معلم'
+                              : (user['role'] as String? ?? 'user') == 'student'
+                                  ? 'طالب'
+                                  : 'مشرف',
+                        ),
+                        backgroundColor:
+                            AppColors.primary.withValues(alpha: 0.08),
+                        labelStyle: const TextStyle(color: AppColors.primary),
+                      ),
+                      Chip(
+                        label: Text((user['isActive'] as bool? ?? false)
+                            ? 'نشط'
+                            : 'بانتظار الاعتماد'),
+                        backgroundColor: (user['isActive'] as bool? ?? false)
+                            ? AppColors.success.withValues(alpha: 0.08)
+                            : AppColors.warningContainer,
+                        labelStyle: TextStyle(
+                          color: (user['isActive'] as bool? ?? false)
+                              ? AppColors.success
+                              : AppColors.warning,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final newName = nameController.text.trim();
+                      final newEmail = emailController.text.trim();
+                      final classroomIds = selectedClassroomIds.toList();
+                      if (newName.length < 2) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                        return;
+                      }
+                      if (newEmail.isNotEmpty && !newEmail.contains('@')) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('البريد الإلكتروني غير صحيح'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                        return;
+                      }
+
+                      final idx =
+                          _users.indexWhere((u) => u['_id'] == user['_id']);
+                      final authState = ref.read(authProvider);
+                      final isDemoSession = (authState.accessToken ?? '')
+                          .startsWith('demo-token-');
+                      final payload = <String, dynamic>{
+                        'fullName': newName,
+                        if (newEmail.isNotEmpty) 'email': newEmail,
+                        'classroomIds': classroomIds,
+                      };
+
+                      try {
+                        if (!AppConstants.useMockData && !isDemoSession) {
+                          await ref.read(adminRepositoryProvider).updateUser(
+                                user['_id'] as String? ?? '',
+                                payload,
+                              );
+                        }
+                        if (idx != -1) {
+                          setState(() {
+                            _users[idx] = Map.from(_users[idx])
+                              ..['fullName'] = newName
+                              ..['email'] = newEmail
+                              ..['classroomIds'] = classroomIds;
+                          });
+                        }
+                        if (mounted) {
+                          Navigator.pop(ctx);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('تم تحديث بيانات المستخدم'),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      } on Object {
+                        if (!AppConstants.useMockData && !isDemoSession) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'تعذر حفظ بيانات المستخدم. يرجى المحاولة مرة أخرى',
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          }
+                          return;
+                        }
+                        if (idx != -1) {
+                          setState(() {
+                            _users[idx] = Map.from(_users[idx])
+                              ..['fullName'] = newName
+                              ..['email'] = newEmail
+                              ..['classroomIds'] = classroomIds;
+                          });
+                        }
+                        if (mounted) {
+                          Navigator.pop(ctx);
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                    child: const Text('حفظ التغييرات',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w600)),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                Chip(
-                  label: Text(
-                    (user['role'] as String? ?? 'user') == 'teacher'
-                        ? 'معلم'
-                        : (user['role'] as String? ?? 'user') == 'student'
-                            ? 'طالب'
-                            : 'مشرف',
-                  ),
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
-                  labelStyle: const TextStyle(color: AppColors.primary),
-                ),
-                Chip(
-                  label: Text((user['isActive'] as bool? ?? false)
-                      ? 'نشط'
-                      : 'بانتظار الاعتماد'),
-                  backgroundColor: (user['isActive'] as bool? ?? false)
-                      ? AppColors.success.withValues(alpha: 0.08)
-                      : AppColors.warningContainer,
-                  labelStyle: TextStyle(
-                    color: (user['isActive'] as bool? ?? false)
-                        ? AppColors.success
-                        : AppColors.warning,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                final newName = nameController.text.trim();
-                final newEmail = emailController.text.trim();
-                final classroomIds = classroomIdsController.text
-                    .split(',')
-                    .map((value) => value.trim())
-                    .where((value) => value.isNotEmpty)
-                    .toList();
-                if (newName.length < 2) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                  return;
-                }
-                if (newEmail.isNotEmpty && !newEmail.contains('@')) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('البريد الإلكتروني غير صحيح'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                  return;
-                }
-
-                final idx = _users.indexWhere((u) => u['_id'] == user['_id']);
-                final authState = ref.read(authProvider);
-                final isDemoSession =
-                    (authState.accessToken ?? '').startsWith('demo-token-');
-                final payload = <String, dynamic>{
-                  'fullName': newName,
-                  if (newEmail.isNotEmpty) 'email': newEmail,
-                  if (classroomIds.isNotEmpty) 'classroomIds': classroomIds,
-                };
-
-                try {
-                  if (!AppConstants.useMockData && !isDemoSession) {
-                    await ref.read(adminRepositoryProvider).updateUser(
-                          user['_id'] as String? ?? '',
-                          payload,
-                        );
-                  }
-                  if (idx != -1) {
-                    setState(() {
-                      _users[idx] = Map.from(_users[idx])
-                        ..['fullName'] = newName
-                        ..['email'] = newEmail
-                        ..['classroomIds'] = classroomIds;
-                    });
-                  }
-                  if (mounted) {
-                    Navigator.pop(ctx);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('تم تحديث بيانات المستخدم'),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                  }
-                } on Object {
-                  if (!AppConstants.useMockData && !isDemoSession) {
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'تعذر حفظ بيانات المستخدم. يرجى المحاولة مرة أخرى',
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: AppColors.error,
-                        ),
-                      );
-                    }
-                    return;
-                  }
-                  if (idx != -1) {
-                    setState(() {
-                      _users[idx] = Map.from(_users[idx])
-                        ..['fullName'] = newName
-                        ..['email'] = newEmail
-                        ..['classroomIds'] = classroomIds;
-                    });
-                  }
-                  if (mounted) {
-                    Navigator.pop(ctx);
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8))),
-              child: const Text('حفظ التغييرات',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

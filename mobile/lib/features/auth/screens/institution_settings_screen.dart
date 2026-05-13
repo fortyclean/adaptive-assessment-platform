@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_version.dart';
@@ -20,6 +21,8 @@ class InstitutionSettingsScreen extends ConsumerStatefulWidget {
 
 class _InstitutionSettingsScreenState
     extends ConsumerState<InstitutionSettingsScreen> {
+  static const String _settingsPrefix = 'admin_institution_settings.';
+
   String _schoolName = 'أكاديمية المستقبل الدولية';
   String _schoolPhone = '+966 500 000 000';
   String _schoolEmail = 'contact@future-academy.edu';
@@ -33,6 +36,71 @@ class _InstitutionSettingsScreenState
   bool _weeklyDigest = true;
   bool _sisIntegration = false;
   bool _lmsIntegration = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedInstitutionSettings();
+  }
+
+  Future<void> _loadSavedInstitutionSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+
+    setState(() {
+      _schoolName =
+          prefs.getString('${_settingsPrefix}schoolName') ?? _schoolName;
+      _schoolPhone =
+          prefs.getString('${_settingsPrefix}schoolPhone') ?? _schoolPhone;
+      _schoolEmail =
+          prefs.getString('${_settingsPrefix}schoolEmail') ?? _schoolEmail;
+      _academicYear =
+          prefs.getString('${_settingsPrefix}academicYear') ?? _academicYear;
+      _term = prefs.getString('${_settingsPrefix}term') ?? _term;
+      _gradeScale =
+          prefs.getString('${_settingsPrefix}gradeScale') ?? _gradeScale;
+      _language = prefs.getString('${_settingsPrefix}language') ?? _language;
+      _timezone = prefs.getString('${_settingsPrefix}timezone') ?? _timezone;
+      _emailNotifications =
+          prefs.getBool('${_settingsPrefix}emailNotifications') ??
+              _emailNotifications;
+      _pushNotifications =
+          prefs.getBool('${_settingsPrefix}pushNotifications') ??
+              _pushNotifications;
+      _weeklyDigest =
+          prefs.getBool('${_settingsPrefix}weeklyDigest') ?? _weeklyDigest;
+      _sisIntegration =
+          prefs.getBool('${_settingsPrefix}sisIntegration') ?? _sisIntegration;
+      _lmsIntegration =
+          prefs.getBool('${_settingsPrefix}lmsIntegration') ?? _lmsIntegration;
+    });
+  }
+
+  Future<void> _saveInstitutionSettings({String? successMessage}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('${_settingsPrefix}schoolName', _schoolName);
+    await prefs.setString('${_settingsPrefix}schoolPhone', _schoolPhone);
+    await prefs.setString('${_settingsPrefix}schoolEmail', _schoolEmail);
+    await prefs.setString('${_settingsPrefix}academicYear', _academicYear);
+    await prefs.setString('${_settingsPrefix}term', _term);
+    await prefs.setString('${_settingsPrefix}gradeScale', _gradeScale);
+    await prefs.setString('${_settingsPrefix}language', _language);
+    await prefs.setString('${_settingsPrefix}timezone', _timezone);
+    await prefs.setBool(
+        '${_settingsPrefix}emailNotifications', _emailNotifications);
+    await prefs.setBool(
+        '${_settingsPrefix}pushNotifications', _pushNotifications);
+    await prefs.setBool('${_settingsPrefix}weeklyDigest', _weeklyDigest);
+    await prefs.setBool('${_settingsPrefix}sisIntegration', _sisIntegration);
+    await prefs.setBool('${_settingsPrefix}lmsIntegration', _lmsIntegration);
+
+    if (!mounted || successMessage == null) return;
+    _showMessage(successMessage);
+  }
+
+  void _persistInstitutionSettingsSilently() {
+    _saveInstitutionSettings();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -514,7 +582,12 @@ class _InstitutionSettingsScreenState
             child: const Text('إلغاء'),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              final newEmail = emailController.text.trim();
+              if (newEmail.isNotEmpty && !newEmail.contains('@')) {
+                _showMessage('البريد الإلكتروني غير صحيح', isError: true);
+                return;
+              }
               setState(() {
                 _schoolName = nameController.text.trim().isEmpty
                     ? _schoolName
@@ -522,12 +595,12 @@ class _InstitutionSettingsScreenState
                 _schoolPhone = phoneController.text.trim().isEmpty
                     ? _schoolPhone
                     : phoneController.text.trim();
-                _schoolEmail = emailController.text.trim().isEmpty
-                    ? _schoolEmail
-                    : emailController.text.trim();
+                _schoolEmail = newEmail.isEmpty ? _schoolEmail : newEmail;
               });
               Navigator.pop(ctx);
-              _showMessage('تم تحديث بيانات المؤسسة في هذه الجلسة');
+              await _saveInstitutionSettings(
+                successMessage: 'تم حفظ بيانات المؤسسة',
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
@@ -556,6 +629,7 @@ class _InstitutionSettingsScreenState
                 if (value == null) return;
                 setSheetState(() => _academicYear = value);
                 setState(() => _academicYear = value);
+                _persistInstitutionSettingsSilently();
               },
             ),
             const SizedBox(height: 12),
@@ -571,6 +645,7 @@ class _InstitutionSettingsScreenState
                 if (value == null) return;
                 setSheetState(() => _term = value);
                 setState(() => _term = value);
+                _persistInstitutionSettingsSilently();
               },
             ),
             const SizedBox(height: 16),
@@ -611,6 +686,7 @@ class _InstitutionSettingsScreenState
                 if (value == null) return;
                 setSheetState(() => _gradeScale = value);
                 setState(() => _gradeScale = value);
+                _persistInstitutionSettingsSilently();
               },
             ),
             const SizedBox(height: 12),
@@ -622,9 +698,11 @@ class _InstitutionSettingsScreenState
             _primaryButton(
               label: 'حفظ مقياس التقييم',
               icon: Icons.save_outlined,
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(context);
-                _showMessage('تم حفظ مقياس التقييم في هذه الجلسة');
+                await _saveInstitutionSettings(
+                  successMessage: 'تم حفظ مقياس التقييم',
+                );
               },
             ),
           ],
@@ -668,6 +746,7 @@ class _InstitutionSettingsScreenState
               onChanged: (value) {
                 setSheetState(() => _pushNotifications = value);
                 setState(() => _pushNotifications = value);
+                _persistInstitutionSettingsSilently();
               },
               title: const Text('الإشعارات الفورية'),
               subtitle: const Text('تنبيهات داخل التطبيق للمشرف والمعلمين'),
@@ -677,6 +756,7 @@ class _InstitutionSettingsScreenState
               onChanged: (value) {
                 setSheetState(() => _emailNotifications = value);
                 setState(() => _emailNotifications = value);
+                _persistInstitutionSettingsSilently();
               },
               title: const Text('تنبيهات البريد الإلكتروني'),
               subtitle: const Text('إرسال ملخصات وتنبيهات مهمة عبر البريد'),
@@ -686,6 +766,7 @@ class _InstitutionSettingsScreenState
               onChanged: (value) {
                 setSheetState(() => _weeklyDigest = value);
                 setState(() => _weeklyDigest = value);
+                _persistInstitutionSettingsSilently();
               },
               title: const Text('ملخص أسبوعي'),
               subtitle: const Text('ملخص أداء المؤسسة كل أسبوع'),
@@ -720,6 +801,7 @@ class _InstitutionSettingsScreenState
                 if (value == null) return;
                 setSheetState(() => _language = value);
                 setState(() => _language = value);
+                _persistInstitutionSettingsSilently();
               },
             ),
             const SizedBox(height: 12),
@@ -731,15 +813,18 @@ class _InstitutionSettingsScreenState
                 if (value == null) return;
                 setSheetState(() => _timezone = value);
                 setState(() => _timezone = value);
+                _persistInstitutionSettingsSilently();
               },
             ),
             const SizedBox(height: 16),
             _primaryButton(
               label: 'حفظ اللغة والمنطقة',
               icon: Icons.save_outlined,
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(context);
-                _showMessage('تم حفظ اللغة والمنطقة في هذه الجلسة');
+                await _saveInstitutionSettings(
+                  successMessage: 'تم حفظ اللغة والمنطقة',
+                );
               },
             ),
           ],
@@ -763,6 +848,7 @@ class _InstitutionSettingsScreenState
               onChanged: (value) {
                 setSheetState(() => _sisIntegration = value);
                 setState(() => _sisIntegration = value);
+                _persistInstitutionSettingsSilently();
               },
               title: const Text('نظام معلومات الطلاب SIS'),
               subtitle: const Text('تجهيز الربط مع أنظمة سجلات الطلاب'),
@@ -772,6 +858,7 @@ class _InstitutionSettingsScreenState
               onChanged: (value) {
                 setSheetState(() => _lmsIntegration = value);
                 setState(() => _lmsIntegration = value);
+                _persistInstitutionSettingsSilently();
               },
               title: const Text('نظام إدارة التعلم LMS'),
               subtitle: const Text('تجهيز الربط مع منصات التعلم الخارجية'),
@@ -806,9 +893,11 @@ class _InstitutionSettingsScreenState
             child: const Text('إلغاء'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(ctx);
-              _showMessage('تم إرسال طلب الأرشفة للمراجعة', isError: true);
+              await _saveInstitutionSettings(
+                successMessage: 'تم تسجيل طلب الأرشفة للمراجعة',
+              );
             },
             child: const Text(
               'إرسال الطلب',
