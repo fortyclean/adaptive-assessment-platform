@@ -18,7 +18,7 @@ describe('Points — Formula Accuracy (Req 15.1)', () => {
 
   it('should calculate points for 5-question session', () => {
     const { points } = calculatePointsEarned(100, 5);
-    expect(points).toBe(50); // (100/100) * 5 * 10 = 50
+    expect(points).toBe(100); // 50 base + 50 bonus
   });
 
   it('should calculate points for 50-question session', () => {
@@ -39,7 +39,7 @@ describe('Points — Formula Accuracy (Req 15.1)', () => {
 
   it('should return maximum points for 100% score', () => {
     const { points } = calculatePointsEarned(100, 10);
-    expect(points).toBe(100); // (100/100) * 10 * 10 = 100 (no bonus yet)
+    expect(points).toBe(150); // 100 base + 50 bonus
   });
 });
 

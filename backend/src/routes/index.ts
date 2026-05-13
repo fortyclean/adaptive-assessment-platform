@@ -12,6 +12,7 @@ import mediaRouter from './media';
 import reportSchedulesRouter from './reportSchedules';
 import alertsRouter from './alerts';
 import studentsRouter from './students';
+import institutionSettingsRouter from './institutionSettings';
 
 const router = Router();
 
@@ -53,5 +54,8 @@ router.use('/alerts', alertsRouter);
 
 // Student profile routes (skill radar, behavior log, weekly trend)
 router.use('/students', studentsRouter);
+
+// Institution settings routes
+router.use('/institution-settings', institutionSettingsRouter);
 
 export default router;

@@ -174,7 +174,7 @@ describe('PBT — Property 2: Ascending Difficulty — Metamorphic (Req 6.2)', (
         ),
         // All-correct answer sequence of length 10
         fc.constant(Array(10).fill(true)),
-        ([questionBank, answers]) => {
+        (questionBank, answers) => {
           const { difficultySequence } = simulateSession(questionBank, answers, 10);
 
           // Property: for each consecutive pair, rank must be non-decreasing
@@ -235,7 +235,7 @@ describe('PBT — Property 3: Descending Difficulty — Metamorphic (Req 6.3)', 
           }),
         ),
         fc.constant(Array(10).fill(false)), // all incorrect
-        ([questionBank, answers]) => {
+        (questionBank, answers) => {
           const { difficultySequence } = simulateSession(questionBank, answers, 10);
 
           for (let i = 1; i < difficultySequence.length; i++) {

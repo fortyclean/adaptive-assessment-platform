@@ -566,20 +566,23 @@ describe('Essay — Teacher Grading (Req 18.6)', () => {
   // ─── Attempt status validation ─────────────────────────────────────────────
 
   it('should reject grading request when attempt is not in pending_review status', () => {
-    const attemptStatus = 'completed';
-    const canGrade = attemptStatus === 'pending_review';
+    const canGradeAttempt = (status: 'completed' | 'pending_review') =>
+      status === 'pending_review';
+    const canGrade = canGradeAttempt('completed');
     expect(canGrade).toBe(false);
   });
 
   it('should reject grading request when attempt is in_progress', () => {
-    const attemptStatus = 'in_progress';
-    const canGrade = attemptStatus === 'pending_review';
+    const canGradeAttempt = (status: 'in_progress' | 'pending_review') =>
+      status === 'pending_review';
+    const canGrade = canGradeAttempt('in_progress');
     expect(canGrade).toBe(false);
   });
 
   it('should allow grading when attempt is in pending_review status', () => {
-    const attemptStatus = 'pending_review';
-    const canGrade = attemptStatus === 'pending_review';
+    const canGradeAttempt = (status: 'completed' | 'pending_review') =>
+      status === 'pending_review';
+    const canGrade = canGradeAttempt('pending_review');
     expect(canGrade).toBe(true);
   });
 });

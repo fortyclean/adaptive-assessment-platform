@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +8,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/router/app_router.dart';
+import '../../../core/utils/download_helper.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -39,6 +42,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   String? _selectedSubject;
   String? _selectedGradeLevel;
   bool _refreshingReports = false;
+  bool _exportingReport = false;
 
   static const List<String> _gradeLevels = [
     '1',
@@ -243,6 +247,40 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     }
   }
 
+  Future<void> _exportSchoolReport() async {
+    if (_exportingReport) return;
+
+    setState(() => _exportingReport = true);
+    try {
+      final report = await ref.read(adminRepositoryProvider).exportSchoolReport(
+            subject: _selectedSubject,
+            gradeLevel: _selectedGradeLevel,
+          );
+      final timestamp =
+          DateTime.now().toIso8601String().replaceAll(RegExp(r'[:.]'), '-');
+      if (!mounted) return;
+      await DownloadHelper.shareTextAsFile(
+        content: const JsonEncoder.withIndent('  ').convert(report),
+        fileName: 'school-report-$timestamp.json',
+        context: context,
+        subject: 'EduAssess school report',
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.error,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _exportingReport = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
@@ -367,6 +405,18 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                       )
                     : const Icon(Icons.refresh_rounded),
                 tooltip: 'تحديث التقارير',
+              ),
+              const SizedBox(width: 8),
+              IconButton.filledTonal(
+                onPressed: _exportingReport ? null : _exportSchoolReport,
+                icon: _exportingReport
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.ios_share_rounded),
+                tooltip: 'تصدير التقرير',
               ),
             ],
           ),

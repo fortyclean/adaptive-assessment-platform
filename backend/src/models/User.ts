@@ -107,7 +107,6 @@ const userSchema = new Schema<IUserDocument>(
 );
 
 // Indexes
-userSchema.index({ username: 1 }, { unique: true });
 userSchema.index({ email: 1 });
 userSchema.index({ googleId: 1 }, { sparse: true });
 userSchema.index({ role: 1, isActive: 1 });

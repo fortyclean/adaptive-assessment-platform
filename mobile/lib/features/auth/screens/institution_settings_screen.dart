@@ -8,6 +8,7 @@ import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../repositories/admin_repository.dart';
 import '../repositories/auth_repository.dart';
 
 /// Screen 69 — إعدادات المؤسسة (Institution Settings)
@@ -40,43 +41,96 @@ class _InstitutionSettingsScreenState
   @override
   void initState() {
     super.initState();
-    _loadSavedInstitutionSettings();
+    _loadInstitutionSettings();
+  }
+
+  bool get _allowLocalOnlySettings {
+    if (AppConstants.useMockData) return true;
+    final authState = ref.read(authProvider);
+    return (authState.accessToken ?? '').startsWith('demo-token-');
+  }
+
+  Future<void> _loadInstitutionSettings() async {
+    await _loadSavedInstitutionSettings();
+
+    if (_allowLocalOnlySettings) return;
+
+    try {
+      final settings =
+          await ref.read(adminRepositoryProvider).getInstitutionSettings();
+      if (!mounted) return;
+      setState(() => _applyInstitutionSettings(settings));
+      await _saveSettingsLocally();
+    } catch (_) {
+      if (!mounted) return;
+      _showMessage(
+        'تعذر تحميل إعدادات المؤسسة من الخادم. تم عرض آخر نسخة محفوظة.',
+        isError: true,
+      );
+    }
   }
 
   Future<void> _loadSavedInstitutionSettings() async {
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
 
-    setState(() {
-      _schoolName =
-          prefs.getString('${_settingsPrefix}schoolName') ?? _schoolName;
-      _schoolPhone =
-          prefs.getString('${_settingsPrefix}schoolPhone') ?? _schoolPhone;
-      _schoolEmail =
-          prefs.getString('${_settingsPrefix}schoolEmail') ?? _schoolEmail;
-      _academicYear =
-          prefs.getString('${_settingsPrefix}academicYear') ?? _academicYear;
-      _term = prefs.getString('${_settingsPrefix}term') ?? _term;
-      _gradeScale =
-          prefs.getString('${_settingsPrefix}gradeScale') ?? _gradeScale;
-      _language = prefs.getString('${_settingsPrefix}language') ?? _language;
-      _timezone = prefs.getString('${_settingsPrefix}timezone') ?? _timezone;
-      _emailNotifications =
-          prefs.getBool('${_settingsPrefix}emailNotifications') ??
-              _emailNotifications;
-      _pushNotifications =
-          prefs.getBool('${_settingsPrefix}pushNotifications') ??
-              _pushNotifications;
-      _weeklyDigest =
-          prefs.getBool('${_settingsPrefix}weeklyDigest') ?? _weeklyDigest;
-      _sisIntegration =
-          prefs.getBool('${_settingsPrefix}sisIntegration') ?? _sisIntegration;
-      _lmsIntegration =
-          prefs.getBool('${_settingsPrefix}lmsIntegration') ?? _lmsIntegration;
-    });
+    setState(
+      () => _applyInstitutionSettings({
+        'schoolName':
+            prefs.getString('${_settingsPrefix}schoolName') ?? _schoolName,
+        'schoolPhone':
+            prefs.getString('${_settingsPrefix}schoolPhone') ?? _schoolPhone,
+        'schoolEmail':
+            prefs.getString('${_settingsPrefix}schoolEmail') ?? _schoolEmail,
+        'academicYear': prefs.getString('${_settingsPrefix}academicYear') ??
+            _academicYear,
+        'term': prefs.getString('${_settingsPrefix}term') ?? _term,
+        'gradeScale':
+            prefs.getString('${_settingsPrefix}gradeScale') ?? _gradeScale,
+        'language': prefs.getString('${_settingsPrefix}language') ?? _language,
+        'timezone': prefs.getString('${_settingsPrefix}timezone') ?? _timezone,
+        'emailNotifications':
+            prefs.getBool('${_settingsPrefix}emailNotifications') ??
+                _emailNotifications,
+        'pushNotifications':
+            prefs.getBool('${_settingsPrefix}pushNotifications') ??
+                _pushNotifications,
+        'weeklyDigest':
+            prefs.getBool('${_settingsPrefix}weeklyDigest') ?? _weeklyDigest,
+        'sisIntegration':
+            prefs.getBool('${_settingsPrefix}sisIntegration') ??
+                _sisIntegration,
+        'lmsIntegration':
+            prefs.getBool('${_settingsPrefix}lmsIntegration') ??
+                _lmsIntegration,
+      }),
+    );
   }
 
   Future<void> _saveInstitutionSettings({String? successMessage}) async {
+    await _saveSettingsLocally();
+
+    if (!_allowLocalOnlySettings) {
+      try {
+        final settings = await ref
+            .read(adminRepositoryProvider)
+            .updateInstitutionSettings(_institutionSettingsPayload());
+        if (mounted) setState(() => _applyInstitutionSettings(settings));
+      } catch (_) {
+        if (!mounted || successMessage == null) return;
+        _showMessage(
+          'تم الحفظ محلياً، لكن تعذر تحديث إعدادات المؤسسة على الخادم.',
+          isError: true,
+        );
+        return;
+      }
+    }
+
+    if (!mounted || successMessage == null) return;
+    _showMessage(successMessage);
+  }
+
+  Future<void> _saveSettingsLocally() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('${_settingsPrefix}schoolName', _schoolName);
     await prefs.setString('${_settingsPrefix}schoolPhone', _schoolPhone);
@@ -93,9 +147,40 @@ class _InstitutionSettingsScreenState
     await prefs.setBool('${_settingsPrefix}weeklyDigest', _weeklyDigest);
     await prefs.setBool('${_settingsPrefix}sisIntegration', _sisIntegration);
     await prefs.setBool('${_settingsPrefix}lmsIntegration', _lmsIntegration);
+  }
 
-    if (!mounted || successMessage == null) return;
-    _showMessage(successMessage);
+  Map<String, dynamic> _institutionSettingsPayload() => {
+        'schoolName': _schoolName,
+        'schoolPhone': _schoolPhone,
+        'schoolEmail': _schoolEmail,
+        'academicYear': _academicYear,
+        'term': _term,
+        'gradeScale': _gradeScale,
+        'language': _language,
+        'timezone': _timezone,
+        'emailNotifications': _emailNotifications,
+        'pushNotifications': _pushNotifications,
+        'weeklyDigest': _weeklyDigest,
+        'sisIntegration': _sisIntegration,
+        'lmsIntegration': _lmsIntegration,
+      };
+
+  void _applyInstitutionSettings(Map<String, dynamic> settings) {
+    _schoolName = settings['schoolName'] as String? ?? _schoolName;
+    _schoolPhone = settings['schoolPhone'] as String? ?? _schoolPhone;
+    _schoolEmail = settings['schoolEmail'] as String? ?? _schoolEmail;
+    _academicYear = settings['academicYear'] as String? ?? _academicYear;
+    _term = settings['term'] as String? ?? _term;
+    _gradeScale = settings['gradeScale'] as String? ?? _gradeScale;
+    _language = settings['language'] as String? ?? _language;
+    _timezone = settings['timezone'] as String? ?? _timezone;
+    _emailNotifications =
+        settings['emailNotifications'] as bool? ?? _emailNotifications;
+    _pushNotifications =
+        settings['pushNotifications'] as bool? ?? _pushNotifications;
+    _weeklyDigest = settings['weeklyDigest'] as bool? ?? _weeklyDigest;
+    _sisIntegration = settings['sisIntegration'] as bool? ?? _sisIntegration;
+    _lmsIntegration = settings['lmsIntegration'] as bool? ?? _lmsIntegration;
   }
 
   void _persistInstitutionSettingsSilently() {

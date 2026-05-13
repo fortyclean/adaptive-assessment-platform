@@ -100,6 +100,9 @@ async function main() {
   await request('/reports/school', { headers: authHeaders });
   console.log('OK school reports');
 
+  await request('/institution-settings', { headers: authHeaders });
+  console.log('OK institution settings');
+
   console.log('Smoke test passed');
 }
 

@@ -119,8 +119,8 @@ describe('Session Management — Unit Tests', () => {
 
   describe('Answer Validation — Server-Side Only', () => {
     it('should validate answer correctness on server', () => {
-      const correctAnswer = 'B';
-      const selectedAnswer = 'B';
+      const correctAnswer: string = 'B';
+      const selectedAnswer: string = 'B';
 
       const isCorrect = correctAnswer === selectedAnswer;
 
@@ -128,8 +128,8 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should mark incorrect answer as incorrect', () => {
-      const correctAnswer = 'B';
-      const selectedAnswer = 'A';
+      const correctAnswer: string = 'B';
+      const selectedAnswer: string = 'A';
 
       const isCorrect = correctAnswer === selectedAnswer;
 
@@ -137,8 +137,8 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should be case-sensitive in answer validation', () => {
-      const correctAnswer = 'B';
-      const selectedAnswer = 'b';
+      const correctAnswer: string = 'B';
+      const selectedAnswer: string = 'b';
 
       const isCorrect = correctAnswer === selectedAnswer;
 
@@ -191,15 +191,17 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should prevent further modifications after auto-submit', () => {
-      const status = 'completed';
-      const canModify = status === 'in_progress';
+      const canModifySession = (status: 'completed' | 'in_progress') =>
+        status === 'in_progress';
+      const canModify = canModifySession('completed');
 
       expect(canModify).toBe(false);
     });
 
     it('should allow modifications while session is in progress', () => {
-      const status = 'in_progress';
-      const canModify = status === 'in_progress';
+      const canModifySession = (status: 'completed' | 'in_progress') =>
+        status === 'in_progress';
+      const canModify = canModifySession('in_progress');
 
       expect(canModify).toBe(true);
     });
@@ -269,8 +271,9 @@ describe('Session Management — Unit Tests', () => {
     });
 
     it('should reject operations on completed session', () => {
-      const status = 'completed';
-      const canSubmitAnswer = status === 'in_progress';
+      const canSubmit = (status: 'completed' | 'in_progress') =>
+        status === 'in_progress';
+      const canSubmitAnswer = canSubmit('completed');
 
       expect(canSubmitAnswer).toBe(false);
     });

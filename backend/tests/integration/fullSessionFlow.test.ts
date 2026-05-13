@@ -54,11 +54,12 @@ function makeQuestion(id: string, difficulty: DifficultyLevel, mainSkill: string
   };
 }
 
-// Build a question bank with 5 questions per difficulty (15 total)
+// Build a question bank with enough questions per difficulty to avoid fallback
+// when a session intentionally keeps escalating or de-escalating.
 const questionBank = [
-  ...Array.from({ length: 5 }, (_, i) => makeQuestion(`easy-${i}`, 'easy', 'Equations')),
-  ...Array.from({ length: 5 }, (_, i) => makeQuestion(`medium-${i}`, 'medium', 'Functions')),
-  ...Array.from({ length: 5 }, (_, i) => makeQuestion(`hard-${i}`, 'hard', 'Calculus')),
+  ...Array.from({ length: 12 }, (_, i) => makeQuestion(`easy-${i}`, 'easy', 'Equations')),
+  ...Array.from({ length: 12 }, (_, i) => makeQuestion(`medium-${i}`, 'medium', 'Functions')),
+  ...Array.from({ length: 12 }, (_, i) => makeQuestion(`hard-${i}`, 'hard', 'Calculus')),
 ];
 
 // ─── Full Session Simulation ──────────────────────────────────────────────────

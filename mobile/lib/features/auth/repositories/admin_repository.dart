@@ -14,6 +14,42 @@ class AdminRepository {
     return response.data as Map<String, dynamic>;
   }
 
+  /// GET /api/v1/reports/school/export
+  Future<Map<String, dynamic>> exportSchoolReport({
+    String? subject,
+    String? gradeLevel,
+  }) async {
+    final response = await _apiService.dio.get<Map<String, dynamic>>(
+      '/reports/school/export',
+      queryParameters: {
+        if (subject != null && subject.isNotEmpty) 'subject': subject,
+        if (gradeLevel != null && gradeLevel.isNotEmpty)
+          'gradeLevel': gradeLevel,
+      },
+    );
+    return response.data ?? <String, dynamic>{};
+  }
+
+  /// GET /api/v1/institution-settings
+  Future<Map<String, dynamic>> getInstitutionSettings() async {
+    final response = await _apiService.dio
+        .get<Map<String, dynamic>>('/institution-settings');
+    final body = response.data ?? <String, dynamic>{};
+    return (body['settings'] as Map<String, dynamic>?) ?? body;
+  }
+
+  /// PATCH /api/v1/institution-settings
+  Future<Map<String, dynamic>> updateInstitutionSettings(
+    Map<String, dynamic> data,
+  ) async {
+    final response = await _apiService.dio.patch<Map<String, dynamic>>(
+      '/institution-settings',
+      data: data,
+    );
+    final body = response.data ?? <String, dynamic>{};
+    return (body['settings'] as Map<String, dynamic>?) ?? body;
+  }
+
   /// GET /api/v1/users
   Future<List<Map<String, dynamic>>> getUsers(
       {String? search, String? role, bool? isActive}) async {
