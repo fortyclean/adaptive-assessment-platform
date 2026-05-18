@@ -257,7 +257,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         ),
         const SizedBox(height: 8),
         SizedBox(
-          height: 110,
+          height: 120,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: collection.length,

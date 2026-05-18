@@ -12,13 +12,16 @@ class AuthUser {
     required this.email,
     required this.role,
     this.classroomIds = const [],
+    this.avatarUrl,
   });
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
-        id: json['_id'] as String,
+        id: (json['_id'] ?? json['id']) as String,
         username: json['username'] as String,
         fullName: json['fullName'] as String,
         email: json['email'] as String,
+        avatarUrl: (json['avatarUrl'] ?? json['photoUrl'] ?? json['picture'])
+            as String?,
         role: UserRole.values.firstWhere(
           (r) => r.name == json['role'],
           orElse: () => UserRole.student,
@@ -35,12 +38,14 @@ class AuthUser {
   final String email;
   final UserRole role;
   final List<String> classroomIds;
+  final String? avatarUrl;
 
   Map<String, dynamic> toJson() => {
         '_id': id,
         'username': username,
         'fullName': fullName,
         'email': email,
+        if (avatarUrl != null && avatarUrl!.isNotEmpty) 'avatarUrl': avatarUrl,
         'role': role.name,
         'classroomIds': classroomIds,
       };
@@ -116,6 +121,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       email: state.user!.email,
       role: state.user!.role,
       classroomIds: state.user!.classroomIds,
+      avatarUrl: state.user!.avatarUrl,
     );
     state = state.copyWith(user: updatedUser);
   }

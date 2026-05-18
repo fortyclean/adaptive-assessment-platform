@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/auth_repository.dart';
 import '../repositories/google_auth_service.dart';
 
@@ -38,7 +42,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   // ─── Demo Login (no backend needed) ──────────────────────────────────────
 
-  void _demoLogin(UserRole role) {
+  Future<void> _demoLogin(UserRole role) async {
+    const storage = FlutterSecureStorage();
     final demoUsers = {
       UserRole.student: const AuthUser(
         id: 'demo-student-001',
@@ -65,7 +70,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     };
 
     final user = demoUsers[role]!;
-    ref.read(authProvider.notifier).setUser(user, 'demo-token-${role.name}');
+    final token = 'demo-token-${role.name}';
+
+    await storage.write(key: AppConstants.accessTokenKey, value: token);
+    await storage.write(
+        key: AppConstants.userDataKey, value: jsonEncode(user.toJson()));
+
+    ref.read(authProvider.notifier).setUser(user, token);
+
+    if (!mounted) return;
 
     switch (role) {
       case UserRole.admin:
@@ -114,6 +127,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       ref.read(authProvider.notifier).setUser(result.user, result.accessToken);
 
+      // If "remember me" is checked, persist session to survive app restarts
+      if (_rememberMe) {
+        const storage = FlutterSecureStorage();
+        await storage.write(
+            key: AppConstants.accessTokenKey, value: result.accessToken);
+        await storage.write(
+            key: AppConstants.userDataKey,
+            value: jsonEncode(result.user.toJson()));
+      }
+
       if (!mounted) return;
 
       switch (result.user.role) {
@@ -158,157 +181,162 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   // ─── Build ────────────────────────────────────────────────────────────────
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: AppColors.surface,
-        body: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 448),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.outlineVariant),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x0A000000),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(32),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildHeader(),
-                      const SizedBox(height: 32),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _buildLabel('اسم المستخدم'),
-                            const SizedBox(height: 6),
-                            _buildUsernameField(),
-                            const SizedBox(height: 16),
-                            _buildLabel('كلمة المرور'),
-                            const SizedBox(height: 6),
-                            _buildPasswordField(),
-                            if (_errorMessage != null) ...[
-                              const SizedBox(height: 12),
-                              _buildErrorBanner(),
-                            ],
-                            const SizedBox(height: 8),
-                            // ── Remember me + Forgot password row ──────────
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Forgot password (RTL: left)
-                                TextButton(
-                                  onPressed: () =>
-                                      context.push(AppRoutes.forgotPassword),
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                  child: const Text(
-                                    'نسيت كلمة المرور؟',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.primary,
-                                      fontFamily: 'Almarai',
-                                    ),
-                                  ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 448),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.outlineVariant),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x0A000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildHeader(),
+                    const SizedBox(height: 32),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildLabel('اسم المستخدم'),
+                          const SizedBox(height: 6),
+                          _buildUsernameField(),
+                          const SizedBox(height: 16),
+                          _buildLabel('كلمة المرور'),
+                          const SizedBox(height: 6),
+                          _buildPasswordField(),
+                          if (_errorMessage != null) ...[
+                            const SizedBox(height: 12),
+                            _buildErrorBanner(),
+                          ],
+                          const SizedBox(height: 8),
+                          // ── Remember me + Forgot password row ──────────
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Forgot password (RTL: left)
+                              TextButton(
+                                onPressed: () =>
+                                    context.push(AppRoutes.forgotPassword),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
-                                // Remember me (RTL: right)
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'تذكرني',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: AppColors.onSurfaceVariant,
-                                        fontFamily: 'Almarai',
-                                      ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Checkbox(
-                                        value: _rememberMe,
-                                        onChanged: (v) => setState(
-                                            () => _rememberMe = v ?? false),
-                                        activeColor: AppColors.primary,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        side: const BorderSide(
-                                            color: AppColors.outlineVariant),
-                                        materialTapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                            _buildLoginButton(),
-                            const SizedBox(height: 16),
-                            // ── Create account link ─────────────────────────
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => context.push(AppRoutes.signup),
-                                  child: const Text(
-                                    'إنشاء حساب جديد',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.primary,
-                                      fontFamily: 'Almarai',
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppColors.primary,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                const Text(
-                                  'ليس لديك حساب؟',
+                                child: const Text(
+                                  'نسيت كلمة المرور؟',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: AppColors.onSurfaceVariant,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.primary,
                                     fontFamily: 'Almarai',
                                   ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            // ── Google Sign-In ──────────────────────────────
-                            _buildGoogleSignIn(),
-                            const SizedBox(height: 24),
-                            _buildDemoSection(),
-                          ],
-                        ),
+                              ),
+                              // Remember me (RTL: right)
+                              Row(
+                                children: [
+                                  const Text(
+                                    'تذكرني',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColors.onSurfaceVariant,
+                                      fontFamily: 'Almarai',
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Checkbox(
+                                      value: _rememberMe,
+                                      onChanged: (v) => setState(
+                                          () => _rememberMe = v ?? false),
+                                      activeColor: AppColors.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      side: const BorderSide(
+                                          color: AppColors.outlineVariant),
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          _buildLoginButton(),
+                          const SizedBox(height: 16),
+                          // ── Create account link ─────────────────────────
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 4,
+                            runSpacing: 6,
+                            children: [
+                              GestureDetector(
+                                onTap: () => context.push(AppRoutes.signup),
+                                child: const Text(
+                                  'إنشاء حساب جديد',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primary,
+                                    fontFamily: 'Almarai',
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                'ليس لديك حساب؟',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.onSurfaceVariant,
+                                  fontFamily: 'Almarai',
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          // ── Google Sign-In ──────────────────────────────
+                          _buildGoogleSignIn(),
+                          const SizedBox(height: 24),
+                          _buildDemoSection(),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   // ─── Widgets ──────────────────────────────────────────────────────────────
 
@@ -369,115 +397,120 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       );
 
-  Widget _buildUsernameField() => TextFormField(
-        controller: _usernameController,
-        textDirection: TextDirection.ltr,
-        keyboardType: TextInputType.text,
-        autocorrect: false,
-        decoration: InputDecoration(
-          hintText: 'أدخل اسم المستخدم',
-          hintStyle: const TextStyle(
-            color: AppColors.onSurfaceVariant,
-            fontSize: 14,
-            fontFamily: 'Almarai',
-          ),
-          prefixIcon: const Icon(
-            Icons.person_outline_rounded,
-            color: AppColors.onSurfaceVariant,
-            size: 20,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.outlineVariant),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.outlineVariant),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.error),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.error, width: 2),
-          ),
+  Widget _buildUsernameField() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return TextFormField(
+      controller: _usernameController,
+      textDirection: TextDirection.ltr,
+      keyboardType: TextInputType.text,
+      autocorrect: false,
+      decoration: InputDecoration(
+        hintText: 'أدخل اسم المستخدم',
+        hintStyle: const TextStyle(
+          color: AppColors.onSurfaceVariant,
+          fontSize: 14,
+          fontFamily: 'Almarai',
         ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'يرجى إدخال اسم المستخدم';
-          }
-          return null;
-        },
-      );
+        prefixIcon: const Icon(
+          Icons.person_outline_rounded,
+          color: AppColors.onSurfaceVariant,
+          size: 20,
+        ),
+        filled: true,
+        fillColor: colorScheme.surface,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.outlineVariant),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.outlineVariant),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.error),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.error, width: 2),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return 'يرجى إدخال اسم المستخدم';
+        }
+        return null;
+      },
+    );
+  }
 
-  Widget _buildPasswordField() => TextFormField(
-        controller: _passwordController,
-        obscureText: _obscurePassword,
-        textDirection: TextDirection.ltr,
-        decoration: InputDecoration(
-          hintText: 'أدخل كلمة المرور',
-          hintStyle: const TextStyle(
-            color: AppColors.onSurfaceVariant,
-            fontSize: 14,
-            fontFamily: 'Almarai',
-          ),
-          prefixIcon: const Icon(
-            Icons.lock_outline_rounded,
+  Widget _buildPasswordField() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: _obscurePassword,
+      textDirection: TextDirection.ltr,
+      decoration: InputDecoration(
+        hintText: 'أدخل كلمة المرور',
+        hintStyle: const TextStyle(
+          color: AppColors.onSurfaceVariant,
+          fontSize: 14,
+          fontFamily: 'Almarai',
+        ),
+        prefixIcon: const Icon(
+          Icons.lock_outline_rounded,
+          color: AppColors.onSurfaceVariant,
+          size: 20,
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscurePassword
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
             color: AppColors.onSurfaceVariant,
             size: 20,
           ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              _obscurePassword
-                  ? Icons.visibility_outlined
-                  : Icons.visibility_off_outlined,
-              color: AppColors.onSurfaceVariant,
-              size: 20,
-            ),
-            onPressed: () =>
-                setState(() => _obscurePassword = !_obscurePassword),
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.outlineVariant),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.outlineVariant),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.error),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.error, width: 2),
-          ),
+          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'يرجى إدخال كلمة المرور';
-          }
-          return null;
-        },
-      );
+        filled: true,
+        fillColor: colorScheme.surface,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.outlineVariant),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.outlineVariant),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.error),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.error, width: 2),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'يرجى إدخال كلمة المرور';
+        }
+        return null;
+      },
+    );
+  }
 
   Widget _buildErrorBanner() => Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -597,37 +630,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFFEA4335),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'G',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: const FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GoogleMark(size: 20),
+                    SizedBox(width: 10),
+                    Text(
+                      'تسجيل الدخول بـ Google',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Almarai',
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    'تسجيل الدخول بـ Google',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Almarai',
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -768,11 +788,13 @@ class _DemoButton extends StatelessWidget {
   final IconData icon;
   final Color color;
   final Color bgColor;
-  final VoidCallback onTap;
+  final Future<void> Function() onTap;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: onTap,
+        onTap: () async {
+          await onTap();
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(

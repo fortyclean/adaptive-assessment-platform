@@ -121,8 +121,8 @@ class _ExamWithImageScreenState extends ConsumerState<ExamWithImageScreen>
 
   Future<void> _goToNext() async {
     if (_isSubmitting) return;
-    setState(() => _questionNumber++);
     await _loadNextQuestion();
+    if (mounted) setState(() => _questionNumber++);
   }
 
   Future<void> _goToPrevious() async {

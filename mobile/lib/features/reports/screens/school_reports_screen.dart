@@ -43,6 +43,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   String? _selectedGradeLevel;
   bool _refreshingReports = false;
   bool _exportingReport = false;
+  DateTime? _lastUpdatedAt;
 
   static const List<String> _gradeLevels = [
     '1',
@@ -152,12 +153,14 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       setState(() {
         _summaryReport = data;
         _summaryLoading = false;
+        _lastUpdatedAt ??= DateTime.now();
       });
     } catch (_) {
       if (_allowMockFallback) {
         setState(() {
           _summaryReport = Map<String, dynamic>.from(_mockSummary);
           _summaryLoading = false;
+          _lastUpdatedAt ??= DateTime.now();
         });
       } else {
         setState(() {
@@ -236,7 +239,10 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     setState(() => _refreshingReports = true);
     await Future.wait([_loadSummary(), _loadComparison(), _loadWeaknesses()]);
     if (!mounted) return;
-    setState(() => _refreshingReports = false);
+    setState(() {
+      _refreshingReports = false;
+      _lastUpdatedAt = DateTime.now();
+    });
     if (showMessage) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -247,7 +253,55 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     }
   }
 
-  Future<void> _exportSchoolReport() async {
+  Future<void> _showExportOptions() async {
+    if (_exportingReport) return;
+    final format = await showModalBottomSheet<_ReportExportFormat>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      ),
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('تصدير التقرير',
+                  style: AppTextStyles.titleMedium.copyWith(fontSize: 18)),
+              const SizedBox(height: 8),
+              Text(
+                _filterSummaryText(),
+                style: AppTextStyles.bodyMedium
+                    .copyWith(color: AppColors.onSurfaceVariant),
+              ),
+              const SizedBox(height: 12),
+              ListTile(
+                leading: const Icon(Icons.data_object_rounded,
+                    color: AppColors.primary),
+                title: const Text('JSON'),
+                subtitle: const Text('ملف منظم يحافظ على كل تفاصيل التقرير'),
+                onTap: () => Navigator.pop(ctx, _ReportExportFormat.json),
+              ),
+              ListTile(
+                leading: const Icon(Icons.table_chart_outlined,
+                    color: AppColors.success),
+                title: const Text('CSV'),
+                subtitle: const Text('جدول مناسب للمراجعة في Excel'),
+                onTap: () => Navigator.pop(ctx, _ReportExportFormat.csv),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (format == null) return;
+    await _exportSchoolReport(format);
+  }
+
+  Future<void> _exportSchoolReport(_ReportExportFormat format) async {
     if (_exportingReport) return;
 
     setState(() => _exportingReport = true);
@@ -260,10 +314,13 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           DateTime.now().toIso8601String().replaceAll(RegExp(r'[:.]'), '-');
       if (!mounted) return;
       await DownloadHelper.shareTextAsFile(
-        content: const JsonEncoder.withIndent('  ').convert(report),
-        fileName: 'school-report-$timestamp.json',
+        content: format == _ReportExportFormat.json
+            ? const JsonEncoder.withIndent('  ').convert(report)
+            : _buildSchoolReportCsv(report),
+        fileName:
+            'school-report-$timestamp.${format == _ReportExportFormat.json ? 'json' : 'csv'}',
         context: context,
-        subject: 'EduAssess school report',
+        subject: 'EduAssess school report (${format.name.toUpperCase()})',
       );
     } catch (_) {
       if (!mounted) return;
@@ -279,6 +336,62 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     } finally {
       if (mounted) setState(() => _exportingReport = false);
     }
+  }
+
+  String _buildSchoolReportCsv(Map<String, dynamic> report) {
+    final buffer = StringBuffer();
+    void row(List<Object?> values) {
+      buffer.writeln(values.map(_csvCell).join(','));
+    }
+
+    row(['القسم', 'المؤشر', 'القيمة']);
+    row(['التقرير', 'تاريخ الإنشاء', report['generatedAt'] ?? '']);
+    row(['التقرير', 'نطاق الفلاتر', _filterSummaryText()]);
+
+    final summary = report['summary'] as Map<String, dynamic>? ?? {};
+    for (final entry in summary.entries) {
+      row(['الملخص', entry.key, entry.value]);
+    }
+
+    final comparisons = report['classroomComparison'] as List? ?? const [];
+    for (final item in comparisons.whereType<Map<String, dynamic>>()) {
+      row([
+        'مقارنة الفصول',
+        item['name'] ?? item['classroomName'] ?? '',
+        'متوسط: ${item['averageScore'] ?? ''} | إكمال: ${item['completionRate'] ?? ''} | مهارة: ${item['topSkill'] ?? ''}',
+      ]);
+    }
+
+    final weaknesses = report['weakestSkills'] as List? ?? const [];
+    for (final item in weaknesses.whereType<Map<String, dynamic>>()) {
+      row([
+        'مهارات تحتاج دعماً',
+        item['mainSkill'] ?? '',
+        item['averagePercentage'] ?? '',
+      ]);
+    }
+    return buffer.toString();
+  }
+
+  String _csvCell(Object? value) {
+    final text = (value ?? '').toString().replaceAll('"', '""');
+    return text.contains(',') || text.contains('\n') ? '"$text"' : text;
+  }
+
+  String _filterSummaryText() {
+    final subject = _selectedSubject ?? 'كل المواد';
+    final grade = _selectedGradeLevel == null
+        ? 'كل المراحل'
+        : 'المرحلة $_selectedGradeLevel';
+    return 'النطاق الحالي: $subject • $grade';
+  }
+
+  String _formatLastUpdated() {
+    final value = _lastUpdatedAt;
+    if (value == null) return 'لم يتم تحديث التقرير بعد';
+    final hour = value.hour.toString().padLeft(2, '0');
+    final minute = value.minute.toString().padLeft(2, '0');
+    return 'آخر تحديث: ${value.year}/${value.month}/${value.day} - $hour:$minute';
   }
 
   @override
@@ -408,7 +521,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
               ),
               const SizedBox(width: 8),
               IconButton.filledTonal(
-                onPressed: _exportingReport ? null : _exportSchoolReport,
+                onPressed: _exportingReport ? null : _showExportOptions,
                 icon: _exportingReport
                     ? const SizedBox(
                         width: 18,
@@ -426,25 +539,23 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
             style: AppTextStyles.bodyMedium
                 .copyWith(color: AppColors.onSurfaceVariant),
           ),
-          if (_selectedSubject != null || _selectedGradeLevel != null) ...[
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                if (_selectedSubject != null)
-                  Chip(
-                    label: Text('المادة: $_selectedSubject'),
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.08),
-                  ),
-                if (_selectedGradeLevel != null)
-                  Chip(
-                    label: Text('المرحلة: $_selectedGradeLevel'),
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.08),
-                  ),
-              ],
-            ),
-          ],
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              Chip(
+                avatar: const Icon(Icons.filter_list_rounded, size: 16),
+                label: Text(_filterSummaryText()),
+                backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+              ),
+              Chip(
+                avatar: const Icon(Icons.update_rounded, size: 16),
+                label: Text(_formatLastUpdated()),
+                backgroundColor: AppColors.surfaceContainer,
+              ),
+            ],
+          ),
         ],
       );
 
@@ -723,7 +834,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
             Center(
               child: TextButton(
                 onPressed: () {
-                  context.push('/admin/classrooms');
+                  context.push(AppRoutes.adminClassrooms);
                 },
                 child: const Text('عرض جميع الفصول',
                     style: TextStyle(
@@ -1064,3 +1175,5 @@ class _FilterDropdown extends StatelessWidget {
         onChanged: onChanged,
       );
 }
+
+enum _ReportExportFormat { json, csv }

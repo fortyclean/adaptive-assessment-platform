@@ -7,6 +7,7 @@ export interface IUser {
   passwordHash: string;
   email: string;
   googleId?: string;
+  avatarUrl?: string;
   fullName: string;
   role: UserRole;
   isActive: boolean;
@@ -48,6 +49,10 @@ const userSchema = new Schema<IUserDocument>(
       match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address'],
     },
     googleId: {
+      type: String,
+      trim: true,
+    },
+    avatarUrl: {
       type: String,
       trim: true,
     },

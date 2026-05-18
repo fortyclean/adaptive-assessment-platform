@@ -8,6 +8,7 @@ const _themeModeKey = 'theme_mode';
 
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   ThemeModeNotifier() : super(ThemeMode.light) {
+    // Restore theme from Hive asynchronously — default is light
     _restoreThemeMode();
   }
 

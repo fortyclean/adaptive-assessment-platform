@@ -27,6 +27,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
   String? _errorMessage;
   String _searchQuery = '';
   String? _roleFilter;
+  String? _classroomFilterId;
+  List<Map<String, dynamic>> _classroomOptions = [];
   final _searchController = TextEditingController();
 
   static const List<Map<String, dynamic>> _mockUsers = [
@@ -38,6 +40,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'subject': 'الرياضيات',
       'classroomCount': 3,
+      'classroomIds': ['c1', 'c2', 'c3'],
     },
     {
       '_id': 'u2',
@@ -47,6 +50,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'grade': 'الثالث الثانوي',
       'lastActive': 'منذ يومين',
+      'classroomIds': ['c3'],
     },
     {
       '_id': 'u3',
@@ -56,6 +60,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': false,
       'subject': 'الفيزياء',
       'classroomCount': 0,
+      'classroomIds': <String>[],
     },
     {
       '_id': 'u4',
@@ -65,6 +70,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'grade': 'الأول الثانوي',
       'lastActive': 'اليوم',
+      'classroomIds': ['c1'],
     },
     {
       '_id': 'u5',
@@ -74,6 +80,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'subject': 'اللغة العربية',
       'classroomCount': 2,
+      'classroomIds': ['c2', 'c4'],
     },
     {
       '_id': 'u6',
@@ -83,6 +90,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'grade': 'الثاني الثانوي',
       'lastActive': 'منذ أسبوع',
+      'classroomIds': ['c2'],
     },
     {
       '_id': 'u7',
@@ -92,6 +100,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'subject': 'اللغة الإنجليزية',
       'classroomCount': 4,
+      'classroomIds': ['c1', 'c2', 'c3', 'c4'],
     },
     {
       '_id': 'u8',
@@ -101,6 +110,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'grade': 'الثاني المتوسط',
       'lastActive': 'منذ 3 ساعات',
+      'classroomIds': ['c4'],
     },
     {
       '_id': 'u9',
@@ -110,6 +120,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': false,
       'subject': 'الكيمياء',
       'classroomCount': 1,
+      'classroomIds': ['c4'],
     },
     {
       '_id': 'u10',
@@ -119,6 +130,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': false,
       'grade': 'الأول المتوسط',
       'lastActive': 'منذ أسبوعين',
+      'classroomIds': ['c1'],
     },
     {
       '_id': 'u11',
@@ -128,6 +140,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'subject': 'الأحياء',
       'classroomCount': 2,
+      'classroomIds': ['c2', 'c3'],
     },
     {
       '_id': 'u12',
@@ -137,6 +150,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       'isActive': true,
       'grade': 'الثالث المتوسط',
       'lastActive': 'اليوم',
+      'classroomIds': ['c3'],
     },
   ];
 
@@ -148,6 +162,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       _roleFilter = widget.initialFilter;
     }
     _loadUsers();
+    _loadClassroomFilterOptions();
   }
 
   @override
@@ -336,15 +351,64 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     }
   }
 
+  Future<void> _loadClassroomFilterOptions() async {
+    final classrooms = await _loadClassroomOptions();
+    if (!mounted) return;
+    setState(() => _classroomOptions = classrooms);
+  }
+
   String _classroomName(Map<String, dynamic> classroom) =>
       classroom['name'] as String? ??
       classroom['classroomName'] as String? ??
       classroom['title'] as String? ??
       'فصل دراسي';
 
+  Set<String> _userClassroomIds(Map<String, dynamic> user) => {
+        for (final item in (user['classroomIds'] as List?) ?? const [])
+          if (item is Map && (item['_id'] ?? item['id']) != null)
+            (item['_id'] ?? item['id']).toString()
+          else if (item is String && item.isNotEmpty)
+            item,
+      };
+
+  List<Map<String, dynamic>> _visibleUsers() {
+    if (_classroomFilterId == null) return _users;
+    return _users
+        .where((user) => _userClassroomIds(user).contains(_classroomFilterId))
+        .toList();
+  }
+
+  String _classroomFilterLabel(String id) {
+    Map<String, dynamic>? classroom;
+    for (final candidate in _classroomOptions) {
+      final classroomId = (candidate['_id'] ?? candidate['id'])?.toString();
+      if (classroomId == id) {
+        classroom = candidate;
+        break;
+      }
+    }
+    if (classroom == null) return 'فصل محدد';
+    return _classroomName(classroom);
+  }
+
+  List<String> _classroomNamesForUser(Map<String, dynamic> user) {
+    final ids = _userClassroomIds(user);
+    if (ids.isEmpty) return const [];
+    final names = <String>[];
+    for (final classroom in _classroomOptions) {
+      final id = (classroom['_id'] ?? classroom['id'])?.toString();
+      if (id != null && ids.contains(id)) {
+        names.add(_classroomName(classroom));
+      }
+    }
+    return names;
+  }
+
   Future<void> _editUser(Map<String, dynamic> user) async {
     final nameController =
         TextEditingController(text: user['fullName'] as String? ?? '');
+    final usernameController =
+        TextEditingController(text: user['username'] as String? ?? '');
     final emailController =
         TextEditingController(text: user['email'] as String? ?? '');
     final classroomOptions = await _loadClassroomOptions();
@@ -361,7 +425,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
@@ -406,6 +470,18 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         labelText: 'الاسم الكامل',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8))),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: usernameController,
+                    readOnly: true,
+                    textDirection: TextDirection.ltr,
+                    decoration: InputDecoration(
+                      labelText: 'اسم المستخدم',
+                      helperText: 'يعرض للتمييز ولا يغير بيانات الدخول',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -565,6 +641,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                             _users[idx] = Map.from(_users[idx])
                               ..['fullName'] = newName
                               ..['email'] = newEmail
+                              ..['username'] = usernameController.text.trim()
                               ..['classroomIds'] = classroomIds;
                           });
                         }
@@ -597,6 +674,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                             _users[idx] = Map.from(_users[idx])
                               ..['fullName'] = newName
                               ..['email'] = newEmail
+                              ..['username'] = usernameController.text.trim()
                               ..['classroomIds'] = classroomIds;
                           });
                         }
@@ -607,7 +685,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.onPrimary,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8))),
@@ -636,17 +714,94 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     );
   }
 
+  Widget _buildClassroomFilter() => DropdownButtonFormField<String>(
+        key: ValueKey(_classroomFilterId),
+        initialValue: _classroomFilterId,
+        isExpanded: true,
+        decoration: InputDecoration(
+          labelText: 'تصفية حسب الفصل',
+          prefixIcon: const Icon(Icons.class_outlined),
+          suffixIcon: _classroomFilterId == null
+              ? null
+              : IconButton(
+                  tooltip: 'مسح فلتر الفصل',
+                  icon: const Icon(Icons.clear_rounded),
+                  onPressed: () => setState(() => _classroomFilterId = null),
+                ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        ),
+        items: [
+          const DropdownMenuItem<String>(
+            child: Text('كل الفصول'),
+          ),
+          ..._classroomOptions.map((classroom) {
+            final id = (classroom['_id'] ?? classroom['id']).toString();
+            return DropdownMenuItem<String>(
+              value: id,
+              child: Text(_classroomName(classroom)),
+            );
+          }),
+        ],
+        selectedItemBuilder: (context) => [
+          const Text('كل الفصول'),
+          ..._classroomOptions.map((classroom) {
+            final id = (classroom['_id'] ?? classroom['id']).toString();
+            return Text(_classroomFilterLabel(id));
+          }),
+        ],
+        onChanged: (value) => setState(() => _classroomFilterId = value),
+      );
+
+  Widget _buildEmpty() => Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: AppColors.surfaceContainer,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.people_outline_rounded,
+                  size: 40, color: AppColors.outlineVariant),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'لا توجد نتائج',
+              style: TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'جرب تغيير معايير البحث',
+              style: TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      );
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFFBF8FF),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Scaffold(
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: colorScheme.surface,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
-          title: const Text(
+          title: Text(
             'إدارة المستخدمين',
             style: TextStyle(
-              color: Color(0xFF1A1B22),
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.w700,
               fontSize: 18,
             ),
@@ -667,7 +822,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                 label: const Text('إضافة مستخدم'),
                 style: TextButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.onPrimary,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                   padding:
@@ -687,7 +842,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
           children: [
             // ── Search & filter bar ───────────────────────────────────────────
             Container(
-              color: Colors.white,
+              color: colorScheme.surface,
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -705,7 +860,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                   // Search field
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppColors.outlineVariant),
                     ),
@@ -785,6 +940,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  _buildClassroomFilter(),
                 ],
               ),
             ),
@@ -823,29 +980,35 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                             ),
                           ),
                         )
-                      : _users.isEmpty
+                      : _visibleUsers().isEmpty
                           ? _buildEmpty()
                           : RefreshIndicator(
                               onRefresh: _loadUsers,
                               color: AppColors.primary,
                               child: ListView.builder(
                                 padding: const EdgeInsets.all(16),
-                                itemCount: _users.length,
-                                itemBuilder: (ctx, i) => _UserCard(
-                                  user: _users[i],
-                                  onDeactivate: _users[i]['isActive'] == true
-                                      ? () => _deactivateUser(
-                                          _users[i]['_id'] as String,
-                                          _users[i]['fullName'] as String)
-                                      : null,
-                                  onEdit: () => _editUser(_users[i]),
-                                  onReactivate: _users[i]['isActive'] == false
-                                      ? () => _reactivateUser(
-                                            _users[i]['_id'] as String,
-                                            _users[i]['fullName'] as String,
-                                          )
-                                      : null,
-                                ),
+                                itemCount: _visibleUsers().length,
+                                itemBuilder: (ctx, i) {
+                                  final users = _visibleUsers();
+                                  final user = users[i];
+                                  return _UserCard(
+                                    user: user,
+                                    classroomNames:
+                                        _classroomNamesForUser(user),
+                                    onDeactivate: user['isActive'] == true
+                                        ? () => _deactivateUser(
+                                            user['_id'] as String,
+                                            user['fullName'] as String)
+                                        : null,
+                                    onEdit: () => _editUser(user),
+                                    onReactivate: user['isActive'] == false
+                                        ? () => _reactivateUser(
+                                              user['_id'] as String,
+                                              user['fullName'] as String,
+                                            )
+                                        : null,
+                                  );
+                                },
                               ),
                             ),
             ),
@@ -853,41 +1016,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
         ),
         bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'admin'),
       );
-
-  Widget _buildEmpty() => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: const BoxDecoration(
-                color: AppColors.surfaceContainer,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.people_outline_rounded,
-                  size: 40, color: AppColors.outlineVariant),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'لا توجد نتائج',
-              style: TextStyle(
-                color: AppColors.onSurface,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'جرب تغيير معايير البحث',
-              style: TextStyle(
-                color: AppColors.onSurfaceVariant,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-      );
+  }
 }
 
 // ── Role filter chip ──────────────────────────────────────────────────────────
@@ -932,14 +1061,20 @@ class _RoleChip extends StatelessWidget {
 
 class _UserCard extends StatelessWidget {
   const _UserCard(
-      {required this.user, this.onDeactivate, this.onEdit, this.onReactivate});
+      {required this.user,
+      required this.classroomNames,
+      this.onDeactivate,
+      this.onEdit,
+      this.onReactivate});
   final Map<String, dynamic> user;
+  final List<String> classroomNames;
   final VoidCallback? onDeactivate;
   final VoidCallback? onEdit;
   final VoidCallback? onReactivate;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isActive = user['isActive'] as bool? ?? true;
     final role = user['role'] as String? ?? '';
     final isTeacher = role == 'teacher';
@@ -947,6 +1082,11 @@ class _UserCard extends StatelessWidget {
     final email = user['email'] as String?;
     final username = user['username'] as String?;
     final subtitle = email ?? (username ?? '');
+    final classroomSummary = classroomNames.isEmpty
+        ? (user['classroomCount'] != null
+            ? '${user['classroomCount']} فصول'
+            : '—')
+        : classroomNames.take(2).join('، ');
 
     // Initials
     final parts = fullName.trim().split(' ');
@@ -961,7 +1101,7 @@ class _UserCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: const [
@@ -1061,15 +1201,42 @@ class _UserCard extends StatelessWidget {
                     child: _InfoCell(
                       label: isTeacher ? 'الفصول' : 'النشاط الأخير',
                       value: isTeacher
-                          ? (user['classroomCount'] != null
-                              ? '${user['classroomCount']} فصول'
-                              : '—')
+                          ? classroomSummary
                           : (user['lastActive'] as String? ?? '—'),
                     ),
                   ),
                 ],
               ),
             ),
+            if (classroomNames.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  for (final name in classroomNames.take(3))
+                    Chip(
+                      avatar: const Icon(Icons.class_outlined, size: 14),
+                      label: Text(name),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      visualDensity: VisualDensity.compact,
+                      backgroundColor:
+                          AppColors.primary.withValues(alpha: 0.06),
+                      labelStyle: const TextStyle(
+                        fontSize: 11,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  if (classroomNames.length > 3)
+                    Chip(
+                      label: Text('+${classroomNames.length - 3}'),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      visualDensity: VisualDensity.compact,
+                      backgroundColor: AppColors.surfaceContainer,
+                    ),
+                ],
+              ),
+            ],
 
             // ── Action buttons ───────────────────────────────────────────
             const SizedBox(height: 12),

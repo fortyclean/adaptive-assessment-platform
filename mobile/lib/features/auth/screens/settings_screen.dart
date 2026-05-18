@@ -1,21 +1,152 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/providers/theme_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/auth_repository.dart';
 
 /// Teacher/Student Settings Screen — Screen 11
 /// Requirements: 1.7
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  Future<void> _persistUpdatedUser(AuthUser user) async {
+    const storage = FlutterSecureStorage();
+    await storage.write(
+      key: AppConstants.userDataKey,
+      value: jsonEncode(user.toJson()),
+    );
+  }
+
+  void _showEditProfileBottomSheet(
+      BuildContext context, WidgetRef ref, AuthUser? user) {
+    if (user == null) return;
+
+    final nameController = TextEditingController(text: user.fullName);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+            left: 16,
+            right: 16,
+            top: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+                child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                        color: AppColors.outlineVariant,
+                        borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 16),
+            const Text('تعديل الملف الشخصي',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: nameController,
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(
+                  labelText: 'الاسم الكامل',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8))),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                final newName = nameController.text.trim();
+                if (newName.length < 2) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
+                        behavior: SnackBarBehavior.floating),
+                  );
+                  return;
+                }
+                try {
+                  final authState = ref.read(authProvider);
+                  final currentUser = authState.user;
+                  final token = authState.accessToken ?? '';
+                  if (currentUser == null) return;
+
+                  final isDemoSession = token.startsWith('demo-token-');
+                  if (!isDemoSession) {
+                    await ref.read(authRepositoryProvider).updateProfile(
+                          userId: currentUser.id,
+                          name: newName,
+                        );
+                  }
+                  ref.read(authProvider.notifier).updateName(newName);
+                  final updatedUser = AuthUser(
+                    id: currentUser.id,
+                    username: currentUser.username,
+                    fullName: newName,
+                    email: currentUser.email,
+                    role: currentUser.role,
+                    classroomIds: currentUser.classroomIds,
+                    avatarUrl: currentUser.avatarUrl,
+                  );
+                  await _persistUpdatedUser(updatedUser);
+                  if (context.mounted) {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('تم تحديث الاسم بنجاح'),
+                          behavior: SnackBarBehavior.floating),
+                    );
+                  }
+                } catch (_) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                              'تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'),
+                          behavior: SnackBarBehavior.floating),
+                    );
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8))),
+              child: const Text('حفظ التغييرات',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     final fullName = user?.fullName ?? 'المستخدم';
     final email = user?.username ?? '';
@@ -34,15 +165,15 @@ class SettingsScreen extends ConsumerWidget {
             : '?';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFBF8FF),
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        title: const Text(
+        title: Text(
           'الإعدادات',
           style: TextStyle(
-            color: Color(0xFF1A1B22),
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.w700,
             fontSize: 18,
           ),
@@ -72,7 +203,7 @@ class SettingsScreen extends ConsumerWidget {
           // ── Profile card ──────────────────────────────────────────────────
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: const [
@@ -167,117 +298,7 @@ class SettingsScreen extends ConsumerWidget {
                         icon: const Icon(Icons.edit_outlined,
                             color: AppColors.primary, size: 20),
                         onPressed: () {
-                          final nameController =
-                              TextEditingController(text: user?.fullName ?? '');
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.white,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20))),
-                            builder: (ctx) => Padding(
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(ctx).viewInsets.bottom + 16,
-                                  left: 16,
-                                  right: 16,
-                                  top: 20),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Center(
-                                      child: Container(
-                                          width: 40,
-                                          height: 4,
-                                          decoration: BoxDecoration(
-                                              color: AppColors.outlineVariant,
-                                              borderRadius:
-                                                  BorderRadius.circular(2)))),
-                                  const SizedBox(height: 16),
-                                  const Text('تعديل الملف الشخصي',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700)),
-                                  const SizedBox(height: 16),
-                                  TextField(
-                                    controller: nameController,
-                                    textDirection: TextDirection.rtl,
-                                    decoration: InputDecoration(
-                                        labelText: 'الاسم الكامل',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8))),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      final newName =
-                                          nameController.text.trim();
-                                      if (newName.length < 2) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'الاسم يجب أن يحتوي على حرفين على الأقل'),
-                                              behavior:
-                                                  SnackBarBehavior.floating),
-                                        );
-                                        return;
-                                      }
-                                      try {
-                                        final userId =
-                                            ref.read(currentUserProvider)?.id ??
-                                                '';
-                                        await ref
-                                            .read(authRepositoryProvider)
-                                            .updateProfile(
-                                                userId: userId, name: newName);
-                                        ref
-                                            .read(authProvider.notifier)
-                                            .updateName(newName);
-                                        if (context.mounted) {
-                                          Navigator.pop(ctx);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'تم تحديث الاسم بنجاح'),
-                                                behavior:
-                                                    SnackBarBehavior.floating),
-                                          );
-                                        }
-                                      } catch (_) {
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'),
-                                                behavior:
-                                                    SnackBarBehavior.floating),
-                                          );
-                                        }
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.primary,
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 14),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8))),
-                                    child: const Text('حفظ التغييرات',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          _showEditProfileBottomSheet(context, ref, user);
                         },
                       ),
                     ],
@@ -309,106 +330,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: 'تعديل الملف الشخصي',
                 subtitle: 'تحديث بياناتك الشخصية',
                 onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20))),
-                    builder: (ctx) {
-                      final nameController =
-                          TextEditingController(text: user?.fullName ?? '');
-                      return Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-                            left: 16,
-                            right: 16,
-                            top: 20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Center(
-                                child: Container(
-                                    width: 40,
-                                    height: 4,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.outlineVariant,
-                                        borderRadius:
-                                            BorderRadius.circular(2)))),
-                            const SizedBox(height: 16),
-                            const Text('تعديل الملف الشخصي',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w700)),
-                            const SizedBox(height: 16),
-                            TextField(
-                              controller: nameController,
-                              textDirection: TextDirection.rtl,
-                              decoration: InputDecoration(
-                                  labelText: 'الاسم الكامل',
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8))),
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () async {
-                                final newName = nameController.text.trim();
-                                if (newName.length < 2) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'الاسم يجب أن يحتوي على حرفين على الأقل'),
-                                        behavior: SnackBarBehavior.floating),
-                                  );
-                                  return;
-                                }
-                                try {
-                                  final userId =
-                                      ref.read(currentUserProvider)?.id ?? '';
-                                  await ref
-                                      .read(authRepositoryProvider)
-                                      .updateProfile(
-                                          userId: userId, name: newName);
-                                  ref
-                                      .read(authProvider.notifier)
-                                      .updateName(newName);
-                                  if (context.mounted) {
-                                    Navigator.pop(ctx);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('تم تحديث الاسم بنجاح'),
-                                          behavior: SnackBarBehavior.floating),
-                                    );
-                                  }
-                                } catch (_) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'),
-                                          behavior: SnackBarBehavior.floating),
-                                    );
-                                  }
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8))),
-                              child: const Text('حفظ التغييرات',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600)),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                  _showEditProfileBottomSheet(context, ref, user);
                 },
               ),
               _Divider(),
@@ -457,6 +379,40 @@ class SettingsScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          // ── Appearance section ──────────────────────────────────────────
+          const _SectionLabel(label: 'المظهر'),
+          const SizedBox(height: 8),
+          _SettingsCard(
+            children: [
+              Consumer(
+                builder: (context, ref, _) {
+                  final isDark = ref.watch(themeModeProvider) == ThemeMode.dark;
+                  return _SettingsTile(
+                    icon: Icons.dark_mode_rounded,
+                    iconColor: const Color(0xFF8B5CF6),
+                    title: 'الوضع الليلي',
+                    subtitle: isDark ? 'مُفعّل حالياً' : 'مُعطّل حالياً',
+                    onTap: () {
+                      ref.read(themeModeProvider.notifier).setDarkMode(
+                            enabled: !isDark,
+                          );
+                    },
+                    trailing: _ToggleSwitch(
+                      value: isDark,
+                      onChanged: (v) {
+                        ref.read(themeModeProvider.notifier).setDarkMode(
+                              enabled: v,
+                            );
+                      },
                     ),
                   );
                 },
@@ -529,7 +485,7 @@ class SettingsScreen extends ConsumerWidget {
           // ── Logout button ─────────────────────────────────────────────────
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
             ),
@@ -628,14 +584,14 @@ class _SectionLabel extends StatelessWidget {
       );
 }
 
-class _SettingsCard extends StatelessWidget {
+class _SettingsCard extends ConsumerWidget {
   const _SettingsCard({required this.children});
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context, WidgetRef ref) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: const [
@@ -727,6 +683,14 @@ class _ToggleSwitchState extends State<_ToggleSwitch> {
   void initState() {
     super.initState();
     _value = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(covariant _ToggleSwitch oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      _value = widget.value;
+    }
   }
 
   @override

@@ -18,6 +18,11 @@ class AppColors {
   static const Color onSurface = Color(0xFF1A1B22);
   static const Color onSurfaceVariant = Color(0xFF44464F);
 
+  // ─── Dark Mode Surface ────────────────────────────────────────────────────
+  static const Color darkSurface = Color(0xFF0F172A);
+  static const Color darkOnSurface = Color(0xFFF1F5F9);
+  static const Color darkOnSurfaceVariant = Color(0xFFCBD5E1);
+
   // ─── Error ────────────────────────────────────────────────────────────────
   static const Color error = Color(0xFFBA1A1A);
   static const Color errorContainer = Color(0xFFFEE2E2);

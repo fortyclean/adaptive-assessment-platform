@@ -1,0 +1,18 @@
+# OAuth / Google client secrets (never commit; keep outside repo or use CI secrets)
+client_secret*.json
+**/client_secret*.json
+
+# Android release signing secrets
+mobile/android/app/key.properties
+mobile/android/app/*.jks
+
+# Generated release artifacts
+adaptive-mastery-v*.apk
+
+# Local Flutter analyzer output
+mobile/analyze*.log
+mobile/*log*.txt
+mobile/pubget_log.txt
+
+# Local Android/Kotlin diagnostics
+mobile/android/.kotlin/errors/*.log

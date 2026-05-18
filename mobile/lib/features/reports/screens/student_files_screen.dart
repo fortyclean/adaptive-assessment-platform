@@ -4,6 +4,26 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
+class _StudentData {
+  const _StudentData({
+    required this.name,
+    required this.fileNumber,
+    required this.performance,
+    required this.isOnline,
+  });
+
+  final String name;
+  final String fileNumber;
+  final int performance;
+  final bool isOnline;
+}
+class _StatItem {
+  const _StatItem({required this.label, required this.value});
+
+  final String label;
+  final String value;
+}
+
 /// Student Files Screen — Screen 63
 /// Teacher view of all student profiles in a classroom with
 /// search/filter, stats overview, and student cards with performance bars.
@@ -96,19 +116,21 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
 
   // ─── App Bar ─────────────────────────────────────────────────────────────
 
-  Widget _buildAppBar(BuildContext context) => Container(
+  Widget _buildAppBar(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
         height: 64 + MediaQuery.of(context).padding.top,
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
           left: 16,
           right: 16,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
+        decoration: BoxDecoration(
+          color: cs.surface,
+          border: const Border(
             bottom: BorderSide(color: Color(0xFFE2E8F0)),
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color(0x0A000000),
               blurRadius: 4,
@@ -153,6 +175,7 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
           ],
         ),
       );
+    }
 
   // ─── Header ──────────────────────────────────────────────────────────────
 
@@ -203,7 +226,7 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
             child: Container(
               height: 48,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.outlineVariant),
               ),
@@ -237,7 +260,7 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
           height: 48,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AppColors.outlineVariant),
           ),
@@ -287,7 +310,7 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
           .map((s) => Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.outlineVariant),
                   boxShadow: [
@@ -368,7 +391,7 @@ class _StudentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -511,7 +534,7 @@ class _StudentCard extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryContainer,
+                        backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         shape: RoundedRectangleBorder(
@@ -534,25 +557,4 @@ class _StudentCard extends StatelessWidget {
           ],
         ),
       );
-}
-
-// ─── Data Models ──────────────────────────────────────────────────────────────
-
-class _StudentData {
-  const _StudentData({
-    required this.name,
-    required this.fileNumber,
-    required this.performance,
-    required this.isOnline,
-  });
-  final String name;
-  final String fileNumber;
-  final int performance;
-  final bool isOnline;
-}
-
-class _StatItem {
-  const _StatItem({required this.label, required this.value});
-  final String label;
-  final String value;
 }

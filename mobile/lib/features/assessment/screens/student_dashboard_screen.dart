@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Student Dashboard Screen — Design _37
@@ -23,6 +24,8 @@ class _StudentDashboardScreenState
   int _totalAssessments = 0;
   double _averageScore = 0;
   int _totalPoints = 0;
+  int _attendancePercentage = 0;
+  Map<String, dynamic> _currentLesson = {};
 
   @override
   void initState() {
@@ -54,6 +57,9 @@ class _StudentDashboardScreenState
           _totalAssessments = history.length;
           _averageScore = avg;
           _totalPoints = points;
+          // Fetch attendance from API instead of hardcoding
+          _attendancePercentage = _fetchAttendanceFromHistory(history);
+          _currentLesson = _extractCurrentLesson(assessments, history);
           _isLoading = false;
         });
       }
@@ -81,23 +87,60 @@ class _StudentDashboardScreenState
           _totalAssessments = 5;
           _averageScore = 78.5;
           _totalPoints = 450;
+          _attendancePercentage = 0;
+          _currentLesson = _extractCurrentLesson(_upcomingAssessments, []);
           _isLoading = false;
         });
       }
     }
   }
 
+  /// Calculate attendance percentage from completed attempts.
+  int _fetchAttendanceFromHistory(List<Map<String, dynamic>> history) {
+    if (history.isEmpty) return 0;
+    final completed = history.where((h) => h['status'] == 'completed').length;
+    return ((completed / history.length) * 100).round();
+  }
+
+  /// Extract the most recent lesson info from upcoming assessments.
+  Map<String, dynamic> _extractCurrentLesson(
+      List<Map<String, dynamic>> assessments,
+      List<Map<String, dynamic>> history) {
+    final active = assessments.where((a) => a['status'] == 'active').toList();
+    if (active.isNotEmpty) {
+      return {
+        'subject': active.first['subject'] ?? 'غير محدد',
+        'title': active.first['title'] ?? 'تابع التعلم',
+        'subtitle': active.first['unit'] ?? '',
+      };
+    }
+    if (history.isNotEmpty) {
+      final last = history.last;
+      return {
+        'subject': last['subject'] ?? 'غير محدد',
+        'title': 'مراجعة ${last['subject'] ?? 'المواد'}',
+        'subtitle': 'آخر اختبار تم',
+      };
+    }
+    return {
+      'subject': 'ابدأ التعلم',
+      'title': 'لا توجد اختبارات بعد',
+      'subtitle': 'بانتظار أول اختبار',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
     final firstName = user?.fullName.split(' ').first ?? 'طالب';
+    final colorScheme = Theme.of(context).colorScheme;
     // XP level calculation
     final level = (_totalPoints ~/ 200) + 1;
     final xpInLevel = _totalPoints % 200;
     final xpProgress = xpInLevel / 200.0;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colorScheme.surface,
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: CustomScrollView(
@@ -138,25 +181,10 @@ class _StudentDashboardScreenState
                         ],
                       ),
                       const SizedBox(width: 12),
-                      // Avatar
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.surfaceContainer,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          ),
-                        ),
-                        child: const ClipOval(
-                          child: Icon(
-                            Icons.person_rounded,
-                            color: AppColors.primary,
-                            size: 24,
-                          ),
-                        ),
+                      UserAvatar(
+                        user: user,
+                        size: 40,
+                        borderColor: colorScheme.surface,
                       ),
                     ],
                   ),
@@ -183,7 +211,7 @@ class _StudentDashboardScreenState
 
                   // Upcoming assessments
                   _buildSectionHeader('الاختبارات القادمة', onSeeAll: () {
-                    context.push('/student/assessments-list');
+                    context.go('/student/assessments-list');
                   }),
                   const SizedBox(height: 12),
 
@@ -315,7 +343,7 @@ class _StudentDashboardScreenState
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF1A1B22),
+                      color: AppColors.onSurface,
                     ),
                   ),
                   const Text(
@@ -373,10 +401,10 @@ class _StudentDashboardScreenState
             ),
           ),
           const SizedBox(width: 8),
-          const Expanded(
+          Expanded(
             child: _StatCard(
               icon: Icons.event_available_outlined,
-              value: '95%',
+              value: '$_attendancePercentage%',
               label: 'حضور',
             ),
           ),
@@ -395,7 +423,7 @@ class _StudentDashboardScreenState
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: AppColors.onSurface,
               ),
               textAlign: TextAlign.right,
             ),
@@ -454,9 +482,10 @@ class _StudentDashboardScreenState
                           color: Colors.white.withValues(alpha: 0.20),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
-                          'الرياضيات المتقدمة',
-                          style: TextStyle(
+                        child: Text(
+                          (_currentLesson['subject'] as String?) ??
+                              'ابدأ التعلم',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -467,22 +496,24 @@ class _StudentDashboardScreenState
                   ),
                   const SizedBox(height: 16),
                   // Lesson title + subtitle
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'المعادلات من الدرجة الثانية',
-                        style: TextStyle(
+                        (_currentLesson['title'] as String?) ??
+                            'لا توجد اختبارات بعد',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
                         textAlign: TextAlign.right,
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'الدرس 4: تطبيقات عملية',
-                        style: TextStyle(
+                        (_currentLesson['subtitle'] as String?) ??
+                            'بانتظار أول اختبار',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -497,8 +528,7 @@ class _StudentDashboardScreenState
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () =>
-                          context.push('/student/assessments-list'),
+                      onPressed: () => context.go('/student/assessments-list'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: AppColors.primaryContainer,
@@ -551,7 +581,7 @@ class _StudentDashboardScreenState
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1B22),
+              color: AppColors.onSurface,
             ),
           ),
         ],
@@ -601,7 +631,7 @@ class _StudentDashboardScreenState
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -622,7 +652,10 @@ class _StudentDashboardScreenState
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF4F2FC),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primaryContainer
+                        .withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.outlineVariant),
                   ),
@@ -662,10 +695,10 @@ class _StudentDashboardScreenState
                         children: [
                           Text(
                             title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF1A1B22),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                             textAlign: TextAlign.right,
                           ),
@@ -717,11 +750,11 @@ class _StudentDashboardScreenState
     required String route,
   }) =>
       GestureDetector(
-        onTap: () => context.push(route),
+        onTap: () => context.go(route),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AppColors.outlineVariant),
             boxShadow: [
@@ -747,10 +780,10 @@ class _StudentDashboardScreenState
               Expanded(
                 child: Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1A1B22),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -797,7 +830,7 @@ class _StatCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -814,10 +847,10 @@ class _StatCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 2),

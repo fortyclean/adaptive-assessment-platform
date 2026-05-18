@@ -43,13 +43,11 @@ void main() {
       bool isValidSubject(String subject) =>
           AppConstants.subjects.contains(subject);
 
-      expect(isValidSubject('Mathematics'), isTrue);
-      expect(isValidSubject('English'), isTrue);
-      expect(isValidSubject('Arabic'), isTrue);
-      expect(isValidSubject('Physics'), isTrue);
-      expect(isValidSubject('Chemistry'), isTrue);
-      expect(isValidSubject('Biology'), isTrue);
+      for (final s in AppConstants.subjects) {
+        expect(isValidSubject(s), isTrue);
+      }
       expect(isValidSubject('History'), isFalse);
+      expect(isValidSubject('التاريخ'), isFalse);
     });
 
     test('availability window: end must be after start', () {

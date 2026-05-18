@@ -4,12 +4,12 @@ class AppConstants {
 
   // ─── API ──────────────────────────────────────────────────────────────────
   // URL is injected at build time via --dart-define=API_URL=...
-  // Production: flutter build apk --dart-define=API_URL=https://your-app.onrender.com/api/v1
+  // Production: flutter build apk --dart-define=API_URL=https://eduassess-backend-8cf4.onrender.com/api/v1
   // Development (Android emulator): http://10.0.2.2:3000/api/v1
   // Development (physical device): http://YOUR_LOCAL_IP:3000/api/v1
   static const String apiBaseUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue: 'https://eduassess-backend-production.up.railway.app/api/v1',
+    defaultValue: 'https://eduassess-backend-8cf4.onrender.com/api/v1',
   );
   // Render Free tier needs up to 60s to wake from sleep
   static const Duration apiTimeout = Duration(seconds: 60);

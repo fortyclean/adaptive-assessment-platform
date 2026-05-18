@@ -55,7 +55,12 @@ const resetPasswordSchema = z.object({
 
 const registerSchema = z.object({
   fullName: z.string().min(2, 'Full name is required').max(100).trim(),
-  username: z.string().min(3, 'Username must be at least 3 characters').max(50).trim().toLowerCase(),
+  username: z
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(50)
+    .trim()
+    .toLowerCase(),
   email: z.string().email('Valid email is required').trim().toLowerCase(),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   role: z.enum(['student', 'teacher']).optional(),
@@ -125,7 +130,10 @@ async function loginDemoAccount(username: string, password: string) {
 }
 
 function createUsernameFromEmail(email: string): string {
-  const localPart = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_');
+  const localPart = email
+    .split('@')[0]
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '_');
   return localPart.slice(0, 50);
 }
 
@@ -149,7 +157,9 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
   try {
     const validation = loginSchema.safeParse(req.body);
     if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+      res
+        .status(400)
+        .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
       return;
     }
 
@@ -220,7 +230,9 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
   try {
     const validation = registerSchema.safeParse(req.body);
     if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+      res
+        .status(400)
+        .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
       return;
     }
 
@@ -269,7 +281,11 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       status: 'pending_approval',
     });
   } catch (error) {
-    if (error instanceof mongoose.Error && 'code' in error && (error as { code?: number }).code === 11000) {
+    if (
+      error instanceof mongoose.Error &&
+      'code' in error &&
+      (error as { code?: number }).code === 11000
+    ) {
       res.status(409).json({ error: 'This username is already taken' });
       return;
     }
@@ -303,7 +319,8 @@ router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
     }
 
     const refreshTokenFromBody = validation.data.refreshToken;
-    const refreshTokenFromCookieObject = (req as Request & { cookies?: { refreshToken?: string } }).cookies?.refreshToken;
+    const refreshTokenFromCookieObject = (req as Request & { cookies?: { refreshToken?: string } })
+      .cookies?.refreshToken;
     const refreshTokenFromHeader = parseRefreshTokenFromCookieHeader(req.headers.cookie);
     const isMobileClient =
       (req.headers['x-client-platform'] as string | undefined)?.toLowerCase() === 'mobile';
@@ -380,7 +397,9 @@ router.post('/reset-password', authenticate, async (req: Request, res: Response)
 
     const validation = resetPasswordSchema.safeParse(req.body);
     if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+      res
+        .status(400)
+        .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
       return;
     }
 
@@ -406,7 +425,9 @@ router.post('/reset-password', authenticate, async (req: Request, res: Response)
     });
 
     // In production, send OTP via email. For now, return it in response (dev only)
-    const response: Record<string, unknown> = { message: 'Password reset successfully. OTP sent to user email.' };
+    const response: Record<string, unknown> = {
+      message: 'Password reset successfully. OTP sent to user email.',
+    };
     if (process.env.NODE_ENV === 'development') {
       response.otp = otp; // Only expose in development
     }
@@ -422,8 +443,9 @@ router.post('/reset-password', authenticate, async (req: Request, res: Response)
 
 router.get('/me', authenticate, async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findById(req.user!.userId)
-      .select('-passwordHash -activeSessions -failedLoginAttempts');
+    const user = await User.findById(req.user!.userId).select(
+      '-passwordHash -activeSessions -failedLoginAttempts',
+    );
 
     if (!user || !user.isActive) {
       res.status(401).json({ error: 'User not found or inactive' });
@@ -471,7 +493,7 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const { email, name, sub: googleId } = payload;
+    const { email, name, picture, sub: googleId } = payload;
 
     // Find or create user
     let user = await User.findOne({ email });
@@ -481,6 +503,7 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
         username: await getUniqueUsername(email),
         email,
         fullName: name || email.split('@')[0],
+        avatarUrl: picture,
         passwordHash: await hashPassword(googleId + process.env.JWT_SECRET),
         role: 'student',
         isActive: false,
@@ -507,9 +530,7 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
     // Generate session
     const { v4: uuidv4 } = await import('uuid');
     const sessionId = uuidv4();
-    const activeSessions = Array.isArray(user.activeSessions)
-      ? [...user.activeSessions]
-      : [];
+    const activeSessions = Array.isArray(user.activeSessions) ? [...user.activeSessions] : [];
     activeSessions.push(sessionId);
     await User.updateOne(
       { _id: user._id },
@@ -517,6 +538,7 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
         $set: {
           activeSessions,
           lastLoginAt: new Date(),
+          ...(picture && !user.avatarUrl ? { avatarUrl: picture } : {}),
         },
       },
     );
@@ -544,6 +566,7 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
         username: user.username,
         fullName: user.fullName,
         email: user.email,
+        avatarUrl: picture || user.avatarUrl,
         role: user.role,
         classroomIds: user.classroomIds,
       },

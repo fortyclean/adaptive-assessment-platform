@@ -55,17 +55,25 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        if (AppConstants.useMockData) {
+      // Auto fallback to demo data when API fails
+      if (AppConstants.useMockData ||
+          widget.assessmentId.startsWith('mock') ||
+          widget.assessmentId.startsWith('demo-') ||
+          widget.assessmentId == '1' ||
+          widget.assessmentId == '2') {
+        setState(() {
           _assessment = _mockAssessment;
           _error = null;
-        } else {
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
           _assessment = null;
           _error =
               'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.';
-        }
-        _isLoading = false;
-      });
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -125,6 +133,23 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         },
       );
     } catch (e) {
+      // Auto fallback to demo when API fails for known IDs
+      if (widget.assessmentId.startsWith('mock') ||
+          widget.assessmentId.startsWith('demo-') ||
+          widget.assessmentId == '1' ||
+          widget.assessmentId == '2' ||
+          AppConstants.useMockData) {
+        if (!mounted) return;
+        context.push(
+          '/student/assessments/${widget.assessmentId}/exam',
+          extra: {
+            'attemptId': 'demo-attempt-${widget.assessmentId}',
+            'questionCount': _assessment!['questionCount'] as int? ?? 10,
+            'timeLimitMinutes': _assessment!['timeLimitMinutes'] as int? ?? 30,
+          },
+        );
+        return;
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -138,24 +163,26 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Scaffold(
+        backgroundColor: cs.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: cs.surface,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
-          title: const Text(
+          title: Text(
             'بدء الاختبار',
             style: TextStyle(
-              color: Color(0xFF1A1B22),
+              color: cs.onSurface,
               fontWeight: FontWeight.w700,
               fontSize: 18,
             ),
           ),
           centerTitle: false,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: AppColors.onSurfaceVariant),
+            icon: Icon(Icons.arrow_back_ios_new_rounded,
+                color: cs.onSurface),
             onPressed: () => context.pop(),
           ),
           bottom: PreferredSize(
@@ -170,6 +197,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                 ? _buildError()
                 : _buildContent(),
       );
+  }
 
   Widget _buildError() => Center(
         child: Padding(
@@ -212,7 +240,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
           // ── Header card ──────────────────────────────────────────────────
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: const [
@@ -301,7 +329,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
           // ── Details grid ─────────────────────────────────────────────────
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: const [

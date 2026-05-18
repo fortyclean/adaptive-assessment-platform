@@ -13,6 +13,7 @@ import reportSchedulesRouter from './reportSchedules';
 import alertsRouter from './alerts';
 import studentsRouter from './students';
 import institutionSettingsRouter from './institutionSettings';
+import pushSubscriptionsRouter from './pushSubscriptions';
 
 const router = Router();
 
@@ -42,6 +43,9 @@ router.use('/reports', reportsRouter);
 
 // Notifications routes
 router.use('/notifications', notificationsRouter);
+
+// Push notification device subscriptions
+router.use('/push-subscriptions', pushSubscriptionsRouter);
 
 // Media upload routes (Post-MVP)
 router.use('/media', mediaRouter);

@@ -2,11 +2,16 @@ import 'package:adaptive_assessment/features/notifications/screens/notification_
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Widget tests for Report Scheduling and Notification Settings
 /// Task: 26.5
 /// Requirements: Test schedule creation and validation, notification settings persistence
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
   // ─── Helper: Build Widget with ProviderScope ─────────────────────────────
 
   Widget buildTestWidget(Widget child) => ProviderScope(

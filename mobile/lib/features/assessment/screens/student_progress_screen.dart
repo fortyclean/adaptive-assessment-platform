@@ -39,7 +39,6 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
     super.initState();
     _loadData();
   }
-
   Future<void> _loadData() async {
     try {
       final history =
@@ -89,9 +88,78 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
     final firstName = user?.fullName.split(' ').first ?? 'طالب';
+    final cs = Theme.of(context).colorScheme;
+
+    // Show empty state when no data loaded and not loading
+    if (!_isLoading && _totalPoints == 0 && _leaderboard.isEmpty) {
+      return Scaffold(
+        backgroundColor: cs.surface,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: cs.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.emoji_events_outlined,
+                    size: 40,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'مرحباً $firstName! 🚀',
+                  style: const TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'لا توجد بيانات تقدم بعد.\nأكمل أول اختبار لك لبدء تتبع أدائك!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 14,
+                    color: AppColors.onSurfaceVariant,
+                    height: 1.6,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: () => context.push('/student/assessments-list'),
+                  icon: const Icon(Icons.quiz_outlined, size: 18),
+                  label: const Text('استعرض الاختبارات المتاحة'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 2, role: 'student'),
+      );
+    }
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: cs.surface,
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: CustomScrollView(
@@ -905,4 +973,4 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
           ),
         ],
       );
-}
+  }

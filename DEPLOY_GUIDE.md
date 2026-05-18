@@ -1,6 +1,6 @@
 # دليل النشر والتشغيل — EduAssess
 
-> الإصدار المرجعي: `1.0.24`
+> الإصدار المرجعي: `1.0.30`
 > آخر تحديث: مايو 2026
 
 ---
@@ -74,6 +74,18 @@ GET /api/v1/health
 
 يجب أن تكون الاستجابة `healthy`.
 
+### إصدار GitHub Release (رفع الـ APK)
+
+بعد بناء وتسمية الملف `adaptive-mastery-v{VERSION}.apk` في جذر المشروع، ومع تثبيت [GitHub CLI](https://cli.github.com/) وتسجيل الدخول (`gh auth login`):
+
+```bash
+cd adaptive-assessment-platform
+gh release create v1.0.33 --title "EduAssess v1.0.33 - تعزيز أمان الإصدار وجاهزية النشر" --generate-notes
+gh release upload v1.0.33 adaptive-mastery-v1.0.33.apk --clobber
+```
+
+إن لم يكن `gh` متاحاً، أنشئ الإصدار يدوياً من صفحة المستودع على GitHub وارفع نفس ملف الـ APK.
+
 ---
 
 ## 6) ربط تطبيق الجوال ببيئة الإنتاج
@@ -125,3 +137,5 @@ flutter build apk --release
 3. راجع مسارات التنقل المحمية (Protected Routes).
 
 الهدف أن تكون تجربة الاختبار الخارجية قريبة جدًا من الإنتاج.
+
+آخر تحديث: مايو 2026 | EduAssess v1.0.33

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../constants/app_constants.dart';
@@ -21,7 +22,9 @@ class ApiService {
     );
 
     _dio.interceptors.add(_AuthInterceptor(_storage, _dio));
-    _dio.interceptors.add(LogInterceptor());
+    if (kDebugMode) {
+      _dio.interceptors.add(LogInterceptor());
+    }
   }
 
   static final ApiService _instance = ApiService._();
@@ -74,7 +77,6 @@ class _AuthInterceptor extends Interceptor {
         final refreshToken =
             await _storage.read(key: AppConstants.refreshTokenKey);
         if (refreshToken == null) {
-          _isRefreshing = false;
           handler.next(err);
           return;
         }
@@ -102,7 +104,6 @@ class _AuthInterceptor extends Interceptor {
           retryOptions.headers['Authorization'] = 'Bearer $newToken';
           final retryResponse =
               await _dio.fetch<Map<String, dynamic>>(retryOptions);
-          _isRefreshing = false;
           handler.resolve(retryResponse);
           return;
         }
@@ -110,8 +111,9 @@ class _AuthInterceptor extends Interceptor {
         // Refresh failed — clear tokens and let the error propagate
         await _storage.delete(key: AppConstants.accessTokenKey);
         await _storage.delete(key: AppConstants.refreshTokenKey);
+      } finally {
+        _isRefreshing = false;
       }
-      _isRefreshing = false;
     }
     handler.next(err);
   }

@@ -53,13 +53,13 @@ version: 1.0.X+X   # رفع PATCH والـ BUILD معاً
 adaptive-mastery-v{VERSION}.apk
 ```
 أمثلة:
-- `adaptive-mastery-v1.0.24.apk` — الإصدار العام المتصل بالـ Backend المعتمد
+- `adaptive-mastery-v1.0.27.apk` — الإصدار العام المتصل بالـ Backend المعتمد
 - ممنوع استخدام كلمة `railway` في اسم ملف APK.
 
 ### الإصدار الحالي
-- **Flutter (mobile):** `1.0.24+24`
-- **Backend (Node.js):** `1.0.24`
-- **آخر APK منشور:** `adaptive-mastery-v1.0.24.apk`
+- **Flutter (mobile):** `1.0.33+33`
+- **Backend (Node.js):** `1.0.33`
+- **آخر APK منشور:** `adaptive-mastery-v1.0.33.apk`
 
 ---
 

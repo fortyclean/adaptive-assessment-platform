@@ -62,6 +62,11 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
             'totalClassrooms': 9,
             'totalAssessments': 38,
             'schoolAverage': 76,
+          },
+          'alerts': {
+            'pendingStudents': 0,
+            'pendingRequests': 0,
+            'improvementPercentage': 0,
           }
         };
         _isLoading = false;
@@ -73,12 +78,14 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
     final summary = _schoolReport?['summary'] as Map<String, dynamic>? ?? {};
+    final alerts = _schoolReport?['alerts'] as Map<String, dynamic>? ?? {};
     final schoolAverage = summary['schoolAverage'] as num?;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.black.withValues(alpha: 0.06),
@@ -157,7 +164,12 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                     children: [
                       // ─── School Performance Banner ──────────────────────────
                       if (schoolAverage != null) ...[
-                        _PerformanceBanner(average: schoolAverage.round()),
+                        _PerformanceBanner(
+                          average: schoolAverage.round(),
+                          improvementPercentage:
+                              (alerts['improvementPercentage'] as num?)
+                                  ?.toInt(),
+                        ),
                         const SizedBox(height: 20),
                       ],
 
@@ -218,10 +230,11 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         iconColor: AppColors.error,
                         iconBgColor: AppColors.errorContainer,
                         title: 'طلاب لم يؤدوا الاختبار',
-                        subtitle: 'يوجد 5 طلاب لم يسلموا الاختبار الأخير',
+                        subtitle:
+                            'يوجد ${alerts['pendingStudents'] ?? 0} طلاب لم يسلموا الاختبار الأخير',
                         onTap: () => context.push(
-                          AppRoutes.adminReports,
-                          extra: {'focus': 'participation'},
+                          AppRoutes.adminUsers,
+                          extra: {'initialFilter': 'student'},
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -230,7 +243,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         iconColor: AppColors.primary,
                         iconBgColor: const Color(0xFFDDE1FF),
                         title: 'طلبات انضمام جديدة',
-                        subtitle: 'يوجد 3 طلبات انضمام تنتظر الموافقة',
+                        subtitle:
+                            'يوجد ${alerts['pendingRequests'] ?? 0} طلبات انضمام تنتظر الموافقة',
                         onTap: () => context.push(
                           AppRoutes.adminUsers,
                           extra: {'initialFilter': 'pending'},
@@ -299,7 +313,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         subtitle: 'إحصائيات وتحليلات تفصيلية',
                         color: AppColors.primaryContainer,
                         bgColor: const Color(0xFFD0E1FB),
-                        onTap: () => context.push('/supervisor'),
+                        onTap: () =>
+                            context.push(AppRoutes.supervisorDashboard),
                       ),
                       const SizedBox(height: 8),
                       _QuickLink(
@@ -309,7 +324,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         color: AppColors.onSurfaceVariant,
                         bgColor: AppColors.surfaceContainer,
                         onTap: () =>
-                            context.push('/admin/institution-settings'),
+                            context.push(AppRoutes.institutionSettings),
                       ),
 
                       const SizedBox(height: 24),
@@ -324,8 +339,9 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
 // ─── Performance Banner ───────────────────────────────────────────────────────
 
 class _PerformanceBanner extends StatelessWidget {
-  const _PerformanceBanner({required this.average});
+  const _PerformanceBanner({required this.average, this.improvementPercentage});
   final int average;
+  final int? improvementPercentage;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -407,15 +423,23 @@ class _PerformanceBanner extends StatelessWidget {
                             color: Colors.white.withValues(alpha: 0.3),
                           ),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.trending_up_rounded,
-                                color: Colors.white, size: 16),
-                            SizedBox(width: 6),
+                            Icon(
+                              improvementPercentage != null &&
+                                      improvementPercentage! < 0
+                                  ? Icons.trending_down_rounded
+                                  : Icons.trending_up_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 6),
                             Text(
-                              'تحسن بنسبة 12% هذا الشهر',
-                              style: TextStyle(
+                              improvementPercentage != null
+                                  ? '${improvementPercentage! >= 0 ? 'تحسن' : 'انخفاض'} بنسبة ${improvementPercentage!.abs()}% هذا الشهر'
+                                  : 'متوسط أداء المدرسة',
+                              style: const TextStyle(
                                 fontFamily: 'Almarai',
                                 fontSize: 12,
                                 color: Colors.white,
@@ -530,7 +554,7 @@ class _BentoCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
                 color: AppColors.outlineVariant.withValues(alpha: 0.6)),
@@ -608,7 +632,7 @@ class _AlertCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
                 color: AppColors.outlineVariant.withValues(alpha: 0.6)),
@@ -692,7 +716,7 @@ class _QuickLink extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
                 color: AppColors.outlineVariant.withValues(alpha: 0.6)),

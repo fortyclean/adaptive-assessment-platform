@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/constants/app_colors.dart';
 
 /// Shared Bottom Navigation Bar matching the design system.
 /// Used across Teacher, Student, and Admin dashboards.
@@ -27,8 +26,8 @@ class AppBottomNav extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        border: const Border(
-          top: BorderSide(color: Color(0xFFE2E8F0)),
+        border: Border(
+          top: BorderSide(color: colorScheme.outlineVariant),
         ),
         boxShadow: const [
           BoxShadow(
@@ -63,7 +62,7 @@ class AppBottomNav extends StatelessWidget {
                     decoration: BoxDecoration(
                       // Active: #EFF6FF pill background
                       color: isActive
-                          ? const Color(0xFFEFF6FF)
+                          ? colorScheme.primaryContainer.withValues(alpha: 0.18)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -74,7 +73,7 @@ class AppBottomNav extends StatelessWidget {
                           isActive ? item.activeIcon : item.icon,
                           // Active: primary container blue, Inactive: gray
                           color: isActive
-                              ? AppColors.primaryContainer
+                              ? colorScheme.primary
                               : colorScheme.onSurface.withValues(alpha: 0.72),
                           size: 24,
                         ),
@@ -86,7 +85,7 @@ class AppBottomNav extends StatelessWidget {
                             fontWeight:
                                 isActive ? FontWeight.w600 : FontWeight.w500,
                             color: isActive
-                                ? AppColors.primaryContainer
+                                ? colorScheme.primary
                                 : colorScheme.onSurface.withValues(alpha: 0.72),
                             fontFamily: 'Almarai',
                           ),

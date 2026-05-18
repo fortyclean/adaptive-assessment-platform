@@ -269,6 +269,16 @@ flutter test test/admin/
 
 ---
 
+## قائمة تحقق الإصدار (قبل النشر)
+
+استخدمها كمرجع سريع بعد كل رفع إصدار؛ تفاصيل أوسع في `.kiro/steering/project-rules.md`.
+
+1. **الصحة:** `curl http://localhost:3000/api/v1/health` (أو `{BASE_URL}/api/v1/health` في الإنتاج) — يجب أن يعيد `status: healthy`.
+2. **الحسابات التجريبية (لا تُغيَّر):** مشرف `admin` / `Admin@123`، معلم `teacher` / `Teacher@123`، طالب `student` / `Student@123`.
+3. **ملفات رفع الإصدار:** `mobile/pubspec.yaml` (`1.0.X+X`)، `backend/package.json` (`1.0.X`)، `lib/core/constants/app_version.dart`، شاشة عن التطبيق، `دليل_استخدام_التطبيق.md`، `DEPLOY_GUIDE.md`، وملفات `project-rules.md` في جذر المشروع وداخل `adaptive-assessment-platform`.
+
+---
+
 ## حل المشاكل الشائعة
 
 ### ❌ `Connection refused` على Android Emulator

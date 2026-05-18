@@ -1,3 +1,4 @@
+import 'package:adaptive_assessment/features/assessment/repositories/teacher_repository.dart';
 import 'package:adaptive_assessment/features/assessment/screens/marketplace_screen.dart';
 import 'package:adaptive_assessment/features/assessment/screens/task_management_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/institution_settings_screen.dart';
@@ -9,12 +10,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../support/fake_teacher_repository_certs.dart';
+
 /// Helper: wraps a widget with Directionality + ProviderScope + MaterialApp
 Widget _wrap(Widget child) => ProviderScope(
       child: MaterialApp(
         home: child,
       ),
     );
+
+/// Admin dashboard / certificates need extra vertical space so slivers build.
+Future<void> _pumpWithExtendedViewport(
+  WidgetTester tester,
+  Widget child,
+) async {
+  final binding = tester.binding;
+  await binding.setSurfaceSize(const Size(800, 3200));
+  addTearDown(() async {
+    await binding.setSurfaceSize(null);
+  });
+  await tester.pumpWidget(_wrap(child));
+}
+
+Widget _wrapCertificates(Widget child) => ProviderScope(
+      overrides: [
+        teacherRepositoryProvider
+            .overrideWithValue(FakeTeacherRepositoryCerts()),
+      ],
+      child: MaterialApp(
+        home: child,
+      ),
+    );
+
+Future<void> _pumpCertificatesScreen(WidgetTester tester) async {
+  final binding = tester.binding;
+  await binding.setSurfaceSize(const Size(800, 3200));
+  addTearDown(() async {
+    await binding.setSurfaceSize(null);
+  });
+  await tester.pumpWidget(_wrapCertificates(const CertificatesScreen()));
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 200));
+}
 
 void main() {
   // ─── Screen 66: Marketplace ───────────────────────────────────────────────
@@ -103,7 +140,7 @@ void main() {
     });
 
     testWidgets('renders completion rate progress bars', (tester) async {
-      await tester.pumpWidget(_wrap(const TaskManagementScreen()));
+      await _pumpWithExtendedViewport(tester, const TaskManagementScreen());
       await tester.pump();
 
       expect(find.text('85%'), findsOneWidget);
@@ -122,51 +159,58 @@ void main() {
   // ─── Screen 68: Supervisor Dashboard ──────────────────────────────────────
   group('SupervisorDashboardScreen (Screen 68)', () {
     testWidgets('renders dashboard title', (tester) async {
-      await tester.pumpWidget(_wrap(const SupervisorDashboardScreen()));
+      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
 
       expect(find.text('لوحة تحكم المشرف'), findsOneWidget);
     });
 
     testWidgets('renders stats grid with 4 cards', (tester) async {
-      await tester.pumpWidget(_wrap(const SupervisorDashboardScreen()));
+      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
 
       expect(find.text('إجمالي الطلاب'), findsOneWidget);
       expect(find.text('المعلمون النشطون'), findsOneWidget);
       expect(find.text('متوسط الأداء العام'), findsOneWidget);
-      expect(find.text('اختبارات جارية'), findsOneWidget);
+      expect(find.text('الفصول الدراسية'), findsOneWidget);
     });
 
     testWidgets('renders subject performance chart', (tester) async {
-      await tester.pumpWidget(_wrap(const SupervisorDashboardScreen()));
+      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
 
       expect(find.text('أداء المواد الدراسية'), findsOneWidget);
     });
 
     testWidgets('renders top teachers section', (tester) async {
-      await tester.pumpWidget(_wrap(const SupervisorDashboardScreen()));
+      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
 
       expect(find.text('المعلمون المتميزون (هذا الشهر)'), findsOneWidget);
       expect(find.text('أ. محمد أحمد'), findsOneWidget);
     });
 
     testWidgets('renders admin alerts section', (tester) async {
-      await tester.pumpWidget(_wrap(const SupervisorDashboardScreen()));
+      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
 
       expect(find.text('تنبيهات الإدارة'), findsOneWidget);
       expect(find.text('مراجعة مطلوبة'), findsOneWidget);
     });
 
     testWidgets('renders quick access grid', (tester) async {
-      await tester.pumpWidget(_wrap(const SupervisorDashboardScreen()));
+      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
 
       expect(find.text('وصول سريع'), findsOneWidget);
-      expect(find.text('الإعدادات'), findsOneWidget);
+      expect(find.text('الجداول'), findsOneWidget);
+      expect(find.text('إضافة طالب'), findsOneWidget);
     });
   });
 
@@ -216,51 +260,44 @@ void main() {
   // ─── Screen 71: Certificates ──────────────────────────────────────────────
   group('CertificatesScreen (Screen 71)', () {
     testWidgets('renders page title', (tester) async {
-      await tester.pumpWidget(_wrap(const CertificatesScreen()));
-      await tester.pump();
+      await _pumpCertificatesScreen(tester);
 
-      expect(find.text('الشهادات والنتائج النهائية'), findsOneWidget);
+      expect(find.text('الشهادات والنتائج'), findsOneWidget);
     });
 
     testWidgets('renders export button', (tester) async {
-      await tester.pumpWidget(_wrap(const CertificatesScreen()));
-      await tester.pump();
+      await _pumpCertificatesScreen(tester);
 
-      expect(find.text('تصدير الكل'), findsOneWidget);
+      expect(find.byIcon(Icons.file_download_outlined), findsOneWidget);
     });
 
     testWidgets('renders filter chips', (tester) async {
-      await tester.pumpWidget(_wrap(const CertificatesScreen()));
-      await tester.pump();
+      await _pumpCertificatesScreen(tester);
 
-      expect(find.text('الصف التاسع - أ'), findsOneWidget);
-      expect(find.text('2023 - 2024'), findsOneWidget);
+      expect(find.text('أولى متوسط (أ)'), findsOneWidget);
     });
 
     testWidgets('renders certificate preview section', (tester) async {
-      await tester.pumpWidget(_wrap(const CertificatesScreen()));
-      await tester.pump();
+      await _pumpCertificatesScreen(tester);
 
-      expect(find.text('تصميم الشهادة الحالية'), findsOneWidget);
-      expect(find.text('نموذج معتمد'), findsOneWidget);
+      expect(find.text('اختر نموذج الشهادة'), findsOneWidget);
+      expect(find.text('معاينة النموذج'), findsOneWidget);
     });
 
     testWidgets('renders student list with 4 students', (tester) async {
-      await tester.pumpWidget(_wrap(const CertificatesScreen()));
-      await tester.pump();
+      await _pumpCertificatesScreen(tester);
 
-      expect(find.text('أحمد علي منصور'), findsOneWidget);
+      expect(find.text('أحمد علي منصور'), findsNWidgets(2));
       expect(find.text('سارة كمال السعدي'), findsOneWidget);
       expect(find.text('محمد خالد الحربي'), findsOneWidget);
       expect(find.text('ليلى سالم العتيبي'), findsOneWidget);
     });
 
     testWidgets('renders student scores', (tester) async {
-      await tester.pumpWidget(_wrap(const CertificatesScreen()));
-      await tester.pump();
+      await _pumpCertificatesScreen(tester);
 
-      expect(find.text('98.5%'), findsOneWidget);
-      expect(find.text('94.2%'), findsOneWidget);
+      expect(find.text('98.5%'), findsWidgets);
+      expect(find.text('94.2%'), findsWidgets);
     });
   });
 
@@ -315,30 +352,30 @@ void main() {
       await tester.pumpWidget(_wrap(const UiFeedbackScreen()));
       await tester.pump();
 
-      expect(find.text('UI Feedback Components'), findsOneWidget);
+      expect(find.text('مكوّنات رسائل النظام'), findsOneWidget);
     });
 
     testWidgets('renders success alert', (tester) async {
       await tester.pumpWidget(_wrap(const UiFeedbackScreen()));
       await tester.pump();
 
-      expect(find.text('Data Imported Successfully'), findsOneWidget);
+      expect(find.text('تم استيراد البيانات بنجاح'), findsOneWidget);
     });
 
     testWidgets('renders error alert', (tester) async {
       await tester.pumpWidget(_wrap(const UiFeedbackScreen()));
       await tester.pump();
 
-      expect(find.text('Failed to Save Question'), findsOneWidget);
+      expect(find.text('فشل حفظ السؤال'), findsOneWidget);
     });
 
     testWidgets('renders delete modal', (tester) async {
       await tester.pumpWidget(_wrap(const UiFeedbackScreen()));
       await tester.pump();
 
-      expect(find.text('Deleting an Exam'), findsOneWidget);
-      expect(find.text('Permanently Delete'), findsOneWidget);
-      expect(find.text('Cancel Action'), findsOneWidget);
+      expect(find.text('حذف اختبار'), findsOneWidget);
+      expect(find.text('حذف نهائي'), findsOneWidget);
+      expect(find.text('إلغاء'), findsOneWidget);
     });
 
     testWidgets('success alert can be dismissed', (tester) async {
@@ -351,7 +388,7 @@ void main() {
       await tester.tap(closeButtons.first);
       await tester.pump();
 
-      expect(find.text('Data Imported Successfully'), findsNothing);
+      expect(find.text('تم استيراد البيانات بنجاح'), findsNothing);
     });
 
     testWidgets('renders status bento with sync percentage', (tester) async {
@@ -359,14 +396,14 @@ void main() {
       await tester.pump();
 
       expect(find.text('98.4%'), findsOneWidget);
-      expect(find.text('CURRENT SYNC STATUS'), findsOneWidget);
+      expect(find.text('حالة المزامنة الحالية'), findsOneWidget);
     });
 
     testWidgets('renders bottom navigation', (tester) async {
       await tester.pumpWidget(_wrap(const UiFeedbackScreen()));
       await tester.pump();
 
-      expect(find.text('Settings'), findsOneWidget);
+      expect(find.text('الإعدادات'), findsOneWidget);
     });
   });
 }

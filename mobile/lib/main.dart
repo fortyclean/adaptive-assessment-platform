@@ -11,6 +11,7 @@ import 'core/theme/app_theme.dart';
 import 'features/auth/repositories/auth_repository.dart';
 import 'shared/providers/auth_provider.dart';
 import 'shared/providers/theme_provider.dart';
+import 'shared/services/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,16 +26,16 @@ Future<void> main() async {
   await Hive.openBox<dynamic>(AppConstants.pendingAnswersBoxName);
   await Hive.openBox<dynamic>(AppConstants.sessionStateBoxName);
 
-  // Lock orientation to portrait
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  // Allow tablets to use landscape while keeping phones naturally responsive.
+  await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
 
   // ── Restore session ───────────────────────────────────────────────────────
   // Keeps the user logged in when switching apps or restarting the device.
   final container = ProviderContainer();
   await _restoreSession(container);
+
+  // ── Initialize notifications ──────────────────────────────────────────────
+  await NotificationService.instance.init();
 
   runApp(
     UncontrolledProviderScope(

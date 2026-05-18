@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -25,6 +26,9 @@ class _ClassroomManagementScreenState
   bool _isLoading = true;
   List<Map<String, dynamic>> _classrooms = [];
   String? _errorMessage;
+  final _searchController = TextEditingController();
+  String _searchQuery = '';
+  String _classroomFilter = 'all';
 
   bool get _isDemoSession {
     final token = ref.read(authProvider).accessToken ?? '';
@@ -328,6 +332,50 @@ class _ClassroomManagementScreenState
     _loadClassrooms();
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<Map<String, dynamic>> _visibleClassrooms() {
+    var items = List<Map<String, dynamic>>.from(_classrooms);
+    if (_searchQuery.trim().isNotEmpty) {
+      final query = _searchQuery.trim().toLowerCase();
+      items = items.where((classroom) {
+        final haystack =
+            '${classroom['name'] ?? ''} ${classroom['gradeLevel'] ?? ''} ${classroom['teacherName'] ?? ''}'
+                .toLowerCase();
+        return haystack.contains(query);
+      }).toList();
+    }
+
+    switch (_classroomFilter) {
+      case 'without_teacher':
+        return items.where((classroom) {
+          final teacherName =
+              (classroom['teacherName'] as String?) ?? 'غير محدد';
+          return classroom['teacherId'] == null ||
+              '${classroom['teacherId']}'.isEmpty ||
+              teacherName == 'غير محدد';
+        }).toList();
+      case 'with_students':
+        return items
+            .where((classroom) =>
+                ((classroom['studentIds'] as List?)?.isNotEmpty ?? false) ||
+                ((classroom['studentCount'] as int?) ?? 0) > 0)
+            .toList();
+      case 'without_students':
+        return items
+            .where((classroom) =>
+                !((classroom['studentIds'] as List?)?.isNotEmpty ?? false) &&
+                ((classroom['studentCount'] as int?) ?? 0) == 0)
+            .toList();
+      default:
+        return items;
+    }
+  }
+
   Future<void> _loadClassrooms() async {
     setState(() {
       _isLoading = true;
@@ -490,32 +538,34 @@ class _ClassroomManagementScreenState
                               const SizedBox(height: 20),
                               // ── KPI Row ──────────────────────────────────────
                               _buildKpiRow(),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 16),
+                              _buildClassroomFilters(),
+                              const SizedBox(height: 20),
                               // ── Classroom Cards ───────────────────────────────
-                              ...List.generate(
-                                  _classrooms.length,
-                                  (i) => Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 12),
-                                        child: _ClassroomCard(
-                                          classroom: _classrooms[i],
-                                          onDelete: () => _deleteClassroom(
-                                              _classrooms[i]['_id']
-                                                      as String? ??
-                                                  '',
-                                              _classrooms[i]['name']
-                                                      as String? ??
-                                                  ''),
-                                          onEdit: () =>
-                                              _showEditDialog(_classrooms[i]),
-                                          onAssignTeacher: () =>
-                                              _showAssignTeacherDialog(
-                                                  _classrooms[i]),
-                                          onAssignStudents: () =>
-                                              _showAssignStudentsDialog(
-                                                  _classrooms[i]),
-                                        ),
-                                      )),
+                              if (_visibleClassrooms().isEmpty)
+                                _buildFilteredEmptyState()
+                              else
+                                ...List.generate(_visibleClassrooms().length,
+                                    (i) {
+                                  final classrooms = _visibleClassrooms();
+                                  final classroom = classrooms[i];
+                                  return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 12),
+                                      child: _ClassroomCard(
+                                        classroom: classroom,
+                                        onDelete: () => _deleteClassroom(
+                                            classroom['_id'] as String? ?? '',
+                                            classroom['name'] as String? ?? ''),
+                                        onEdit: () =>
+                                            _showEditDialog(classroom),
+                                        onAssignTeacher: () =>
+                                            _showAssignTeacherDialog(classroom),
+                                        onAssignStudents: () =>
+                                            _showAssignStudentsDialog(
+                                                classroom),
+                                      ));
+                                }),
                             ],
                           ),
                         ),
@@ -555,7 +605,7 @@ class _ClassroomManagementScreenState
           IconButton(
             icon: const Icon(Icons.notifications_outlined,
                 color: Color(0xFF64748B)),
-            onPressed: () => context.push('/notifications'),
+            onPressed: () => context.push(AppRoutes.notificationCenter),
             tooltip: 'الإشعارات',
           ),
           const SizedBox(width: 4),
@@ -624,6 +674,111 @@ class _ClassroomManagementScreenState
       ],
     );
   }
+
+  Widget _buildClassroomFilters() => Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _searchController,
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(
+                hintText: 'ابحث باسم الفصل أو المرحلة أو المعلم',
+                prefixIcon: const Icon(Icons.search_rounded),
+                suffixIcon: _searchQuery.isEmpty
+                    ? null
+                    : IconButton(
+                        tooltip: 'مسح البحث',
+                        icon: const Icon(Icons.clear_rounded),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _searchQuery = '');
+                        },
+                      ),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              ),
+              onChanged: (value) => setState(() => _searchQuery = value),
+            ),
+            const SizedBox(height: 10),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _FilterChipButton(
+                    label: 'كل الفصول',
+                    selected: _classroomFilter == 'all',
+                    onTap: () => setState(() => _classroomFilter = 'all'),
+                  ),
+                  const SizedBox(width: 8),
+                  _FilterChipButton(
+                    label: 'بدون معلم',
+                    selected: _classroomFilter == 'without_teacher',
+                    onTap: () =>
+                        setState(() => _classroomFilter = 'without_teacher'),
+                  ),
+                  const SizedBox(width: 8),
+                  _FilterChipButton(
+                    label: 'بها طلاب',
+                    selected: _classroomFilter == 'with_students',
+                    onTap: () =>
+                        setState(() => _classroomFilter = 'with_students'),
+                  ),
+                  const SizedBox(width: 8),
+                  _FilterChipButton(
+                    label: 'بدون طلاب',
+                    selected: _classroomFilter == 'without_students',
+                    onTap: () =>
+                        setState(() => _classroomFilter = 'without_students'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildFilteredEmptyState() => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+        ),
+        child: Column(
+          children: [
+            const Icon(Icons.filter_alt_off_outlined,
+                color: AppColors.onSurfaceVariant, size: 34),
+            const SizedBox(height: 8),
+            Text(
+              'لا توجد فصول مطابقة',
+              style: AppTextStyles.titleMedium
+                  .copyWith(color: AppColors.onSurfaceVariant),
+            ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: () {
+                _searchController.clear();
+                setState(() {
+                  _searchQuery = '';
+                  _classroomFilter = 'all';
+                });
+              },
+              icon: const Icon(Icons.restart_alt_rounded),
+              label: const Text('مسح البحث والفلاتر'),
+            ),
+          ],
+        ),
+      );
 
   Widget _buildEmptyState() => Center(
         child: Column(
@@ -1209,6 +1364,42 @@ class _ClassroomManagementScreenState
 
 // ─── KPI Card ─────────────────────────────────────────────────────────────────
 
+class _FilterChipButton extends StatelessWidget {
+  const _FilterChipButton({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: selected ? AppColors.primary : Colors.white,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: selected ? AppColors.primary : AppColors.outlineVariant,
+            ),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: selected ? Colors.white : AppColors.onSurfaceVariant,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      );
+}
+
 class _KpiCard extends StatelessWidget {
   const _KpiCard({
     required this.label,
@@ -1290,6 +1481,7 @@ class _ClassroomCard extends StatelessWidget {
         (classroom['studentCount'] as int?) ??
         0;
     final teacherName = classroom['teacherName'] as String? ?? 'غير محدد';
+    final studentNames = _studentNames(classroom);
     final activeAssessments = classroom['activeAssessments'] as int? ?? 0;
     final averageScore = classroom['averageScore'] as int?;
     final name = classroom['name'] as String? ?? '';
@@ -1443,6 +1635,23 @@ class _ClassroomCard extends StatelessWidget {
                     ),
                   ),
                 ],
+                const SizedBox(height: 12),
+                _ClassroomPreviewRow(
+                  icon: Icons.person_outline_rounded,
+                  label: 'المعلم',
+                  value: teacherName,
+                ),
+                const SizedBox(height: 8),
+                _ClassroomPreviewRow(
+                  icon: Icons.group_outlined,
+                  label: 'الطلاب',
+                  value: studentNames.isEmpty
+                      ? 'لم يتم عرض أسماء الطلاب بعد'
+                      : studentNames.take(3).join('، '),
+                  trailing: studentNames.length > 3
+                      ? '+${studentNames.length - 3}'
+                      : null,
+                ),
                 // ── Assign Teacher Button ─────────────────────────────────────────────
                 const SizedBox(height: 12),
                 Row(
@@ -1489,6 +1698,75 @@ class _ClassroomCard extends StatelessWidget {
       ),
     );
   }
+
+  static List<String> _studentNames(Map<String, dynamic> classroom) {
+    final items = classroom['studentIds'] as List? ?? const [];
+    return [
+      for (final item in items)
+        if (item is Map)
+          (item['fullName'] ?? item['username'] ?? item['name'] ?? '')
+              .toString()
+        else if (item is String && item.trim().contains(' '))
+          item.trim(),
+    ].where((name) => name.isNotEmpty).toList();
+  }
+}
+
+class _ClassroomPreviewRow extends StatelessWidget {
+  const _ClassroomPreviewRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.trailing,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final String? trailing;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer.withValues(alpha: 0.55),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 16, color: AppColors.primary),
+            const SizedBox(width: 8),
+            Text(
+              '$label: ',
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+            if (trailing != null) ...[
+              const SizedBox(width: 6),
+              Text(
+                trailing!,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
 }
 
 class _StatItem extends StatelessWidget {

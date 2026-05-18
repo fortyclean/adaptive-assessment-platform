@@ -37,6 +37,9 @@ class _InstitutionSettingsScreenState
   bool _weeklyDigest = true;
   bool _sisIntegration = false;
   bool _lmsIntegration = false;
+  bool _isSavingSettings = false;
+  DateTime? _lastSyncedAt;
+  String _syncStatusMessage = 'لم تتم مزامنة الإعدادات بعد';
 
   @override
   void initState() {
@@ -53,16 +56,29 @@ class _InstitutionSettingsScreenState
   Future<void> _loadInstitutionSettings() async {
     await _loadSavedInstitutionSettings();
 
-    if (_allowLocalOnlySettings) return;
+    if (_allowLocalOnlySettings) {
+      if (!mounted) return;
+      setState(() {
+        _syncStatusMessage = 'وضع تجريبي: يتم الحفظ على هذا الجهاز';
+      });
+      return;
+    }
 
     try {
       final settings =
           await ref.read(adminRepositoryProvider).getInstitutionSettings();
       if (!mounted) return;
-      setState(() => _applyInstitutionSettings(settings));
+      setState(() {
+        _applyInstitutionSettings(settings);
+        _lastSyncedAt = DateTime.now();
+        _syncStatusMessage = 'تمت المزامنة مع الخادم';
+      });
       await _saveSettingsLocally();
     } catch (_) {
       if (!mounted) return;
+      setState(() {
+        _syncStatusMessage = 'تعذر الاتصال بالخادم';
+      });
       _showMessage(
         'تعذر تحميل إعدادات المؤسسة من الخادم. تم عرض آخر نسخة محفوظة.',
         isError: true,
@@ -82,8 +98,8 @@ class _InstitutionSettingsScreenState
             prefs.getString('${_settingsPrefix}schoolPhone') ?? _schoolPhone,
         'schoolEmail':
             prefs.getString('${_settingsPrefix}schoolEmail') ?? _schoolEmail,
-        'academicYear': prefs.getString('${_settingsPrefix}academicYear') ??
-            _academicYear,
+        'academicYear':
+            prefs.getString('${_settingsPrefix}academicYear') ?? _academicYear,
         'term': prefs.getString('${_settingsPrefix}term') ?? _term,
         'gradeScale':
             prefs.getString('${_settingsPrefix}gradeScale') ?? _gradeScale,
@@ -97,17 +113,28 @@ class _InstitutionSettingsScreenState
                 _pushNotifications,
         'weeklyDigest':
             prefs.getBool('${_settingsPrefix}weeklyDigest') ?? _weeklyDigest,
-        'sisIntegration':
-            prefs.getBool('${_settingsPrefix}sisIntegration') ??
-                _sisIntegration,
-        'lmsIntegration':
-            prefs.getBool('${_settingsPrefix}lmsIntegration') ??
-                _lmsIntegration,
+        'sisIntegration': prefs.getBool('${_settingsPrefix}sisIntegration') ??
+            _sisIntegration,
+        'lmsIntegration': prefs.getBool('${_settingsPrefix}lmsIntegration') ??
+            _lmsIntegration,
       }),
     );
   }
 
   Future<void> _saveInstitutionSettings({String? successMessage}) async {
+    final validationError = _validateContactFields();
+    if (validationError != null) {
+      if (mounted) _showMessage(validationError, isError: true);
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        _isSavingSettings = true;
+        _syncStatusMessage = 'جار حفظ الإعدادات...';
+      });
+    }
+
     await _saveSettingsLocally();
 
     if (!_allowLocalOnlySettings) {
@@ -115,17 +142,33 @@ class _InstitutionSettingsScreenState
         final settings = await ref
             .read(adminRepositoryProvider)
             .updateInstitutionSettings(_institutionSettingsPayload());
-        if (mounted) setState(() => _applyInstitutionSettings(settings));
+        if (mounted) {
+          setState(() {
+            _applyInstitutionSettings(settings);
+            _lastSyncedAt = DateTime.now();
+            _syncStatusMessage = 'تمت المزامنة مع الخادم';
+          });
+        }
       } catch (_) {
-        if (!mounted || successMessage == null) return;
+        if (!mounted) return;
+        setState(() {
+          _syncStatusMessage = 'تم الحفظ محلياً فقط';
+          _isSavingSettings = false;
+        });
         _showMessage(
           'تم الحفظ محلياً، لكن تعذر تحديث إعدادات المؤسسة على الخادم.',
           isError: true,
         );
         return;
       }
+    } else if (mounted) {
+      setState(() {
+        _lastSyncedAt = DateTime.now();
+        _syncStatusMessage = 'تم الحفظ محلياً';
+      });
     }
 
+    if (mounted) setState(() => _isSavingSettings = false);
     if (!mounted || successMessage == null) return;
     _showMessage(successMessage);
   }
@@ -187,6 +230,31 @@ class _InstitutionSettingsScreenState
     _saveInstitutionSettings();
   }
 
+  String? _validateContactFields() {
+    if (_schoolEmail.trim().isEmpty || !_isValidEmail(_schoolEmail)) {
+      return 'البريد الإلكتروني للمؤسسة غير صحيح';
+    }
+    if (_schoolPhone.trim().isEmpty || !_isValidPhone(_schoolPhone)) {
+      return 'رقم التواصل يجب أن يحتوي على 7 أرقام على الأقل';
+    }
+    return null;
+  }
+
+  bool _isValidEmail(String value) =>
+      RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value.trim());
+
+  bool _isValidPhone(String value) {
+    final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
+    return digits.length >= 7 && RegExp(r'^[0-9+\s()-]+$').hasMatch(value);
+  }
+
+  String _formatSyncTime(DateTime? value) {
+    if (value == null) return 'لا يوجد حفظ مسجل';
+    final hour = value.hour.toString().padLeft(2, '0');
+    final minute = value.minute.toString().padLeft(2, '0');
+    return '${value.year}/${value.month}/${value.day} - $hour:$minute';
+  }
+
   @override
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
@@ -201,6 +269,8 @@ class _InstitutionSettingsScreenState
                 _buildHeader(),
                 const SizedBox(height: 20),
                 _buildSchoolProfile(),
+                const SizedBox(height: 16),
+                _buildSyncStatusCard(),
                 const SizedBox(height: 16),
                 _buildSettingsGroup(
                   title: 'الهيكل الأكاديمي',
@@ -300,6 +370,66 @@ class _InstitutionSettingsScreenState
           ),
           bottomNavigationBar:
               const AppBottomNav(currentIndex: 4, role: 'admin'),
+        ),
+      );
+
+  Widget _buildSyncStatusCard() => Container(
+        padding: const EdgeInsets.all(14),
+        decoration: _cardDecoration(),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: _isSavingSettings
+                    ? AppColors.primary.withValues(alpha: 0.08)
+                    : AppColors.success.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: _isSavingSettings
+                  ? const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.cloud_done_outlined,
+                      color: AppColors.success, size: 22),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _syncStatusMessage,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'آخر حفظ: ${_formatSyncTime(_lastSyncedAt)}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              tooltip: 'مزامنة الإعدادات',
+              onPressed: _isSavingSettings
+                  ? null
+                  : () => _saveInstitutionSettings(
+                        successMessage: 'تمت مزامنة إعدادات المؤسسة',
+                      ),
+              icon: const Icon(Icons.sync_rounded),
+              color: AppColors.primary,
+            ),
+          ],
         ),
       );
 
@@ -662,18 +792,22 @@ class _InstitutionSettingsScreenState
           ElevatedButton(
             onPressed: () async {
               final newEmail = emailController.text.trim();
-              if (newEmail.isNotEmpty && !newEmail.contains('@')) {
+              final newPhone = phoneController.text.trim();
+              if (newEmail.isEmpty || !_isValidEmail(newEmail)) {
                 _showMessage('البريد الإلكتروني غير صحيح', isError: true);
+                return;
+              }
+              if (newPhone.isEmpty || !_isValidPhone(newPhone)) {
+                _showMessage('رقم التواصل يجب أن يحتوي على 7 أرقام على الأقل',
+                    isError: true);
                 return;
               }
               setState(() {
                 _schoolName = nameController.text.trim().isEmpty
                     ? _schoolName
                     : nameController.text.trim();
-                _schoolPhone = phoneController.text.trim().isEmpty
-                    ? _schoolPhone
-                    : phoneController.text.trim();
-                _schoolEmail = newEmail.isEmpty ? _schoolEmail : newEmail;
+                _schoolPhone = newPhone;
+                _schoolEmail = newEmail;
               });
               Navigator.pop(ctx);
               await _saveInstitutionSettings(

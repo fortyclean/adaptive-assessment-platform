@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -81,7 +82,8 @@ class _AdminDashboardV2ScreenState
                           IconButton(
                             icon: const Icon(Icons.notifications_outlined),
                             color: AppColors.onSurfaceVariant,
-                            onPressed: () => context.push('/notifications'),
+                            onPressed: () =>
+                                context.push(AppRoutes.notificationCenter),
                           ),
                           Positioned(
                             top: 8,
@@ -100,7 +102,7 @@ class _AdminDashboardV2ScreenState
                       IconButton(
                         icon: const Icon(Icons.search),
                         color: AppColors.onSurfaceVariant,
-                        onPressed: () => context.push('/admin/users'),
+                        onPressed: () => context.push(AppRoutes.adminUsers),
                       ),
                       const AdminTopActions(),
                     ],
@@ -171,7 +173,7 @@ class _AdminDashboardV2ScreenState
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => context.push('/admin/users'),
+          onPressed: () => context.push(AppRoutes.adminUsers),
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           shape: const CircleBorder(),
@@ -233,7 +235,7 @@ class _AdminDashboardV2ScreenState
           badge: 'نشط',
           badgeColor: Colors.green,
           onTap: () => context.push(
-            '/admin/users',
+            AppRoutes.adminUsers,
             extra: {'initialFilter': 'student'},
           ),
         ),
@@ -244,7 +246,7 @@ class _AdminDashboardV2ScreenState
           label: 'المعلمون النشطون',
           value: _isLoadingSummary ? '...' : '$teachers',
           onTap: () => context.push(
-            '/admin/users',
+            AppRoutes.adminUsers,
             extra: {'initialFilter': 'teacher'},
           ),
         ),
@@ -256,7 +258,7 @@ class _AdminDashboardV2ScreenState
           value: _isLoadingSummary ? '...' : '$average%',
           showCircularProgress: true,
           progressValue: averageProgress.toDouble(),
-          onTap: () => context.push('/admin/reports'),
+          onTap: () => context.push(AppRoutes.adminReports),
         ),
         _buildStatCard(
           icon: Icons.timer,
@@ -266,7 +268,7 @@ class _AdminDashboardV2ScreenState
           value: _isLoadingSummary
               ? '...'
               : (classrooms > 0 ? '$classrooms' : '$assessments'),
-          onTap: () => context.push('/admin/classrooms'),
+          onTap: () => context.push(AppRoutes.adminClassrooms),
         ),
       ],
     );
@@ -542,7 +544,7 @@ class _AdminDashboardV2ScreenState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                onPressed: () => context.push('/admin/users'),
+                onPressed: () => context.push(AppRoutes.adminUsers),
                 child: const Text('عرض الكل',
                     style: TextStyle(color: AppColors.primary, fontSize: 13)),
               ),
@@ -722,11 +724,11 @@ class _AdminDashboardV2ScreenState
     VoidCallback onTap;
     final title = alert['title'] as String;
     if (title == 'مراجعة مطلوبة') {
-      onTap = () => context.push('/admin/classrooms');
+      onTap = () => context.push(AppRoutes.adminClassrooms);
     } else if (title == 'تقارير جاهزة') {
-      onTap = () => context.push('/admin/reports');
+      onTap = () => context.push(AppRoutes.adminReports);
     } else {
-      onTap = () => context.push('/admin/classrooms');
+      onTap = () => context.push(AppRoutes.adminClassrooms);
     }
 
     return InkWell(
@@ -817,15 +819,15 @@ class _AdminDashboardV2ScreenState
               final label = item['label'] as String;
               VoidCallback onTap;
               if (label == 'الإعدادات') {
-                onTap = () => context.push('/admin/institution-settings');
+                onTap = () => context.push(AppRoutes.institutionSettings);
               } else if (label == 'الجداول') {
-                onTap = () => context.push('/admin/classrooms');
+                onTap = () => context.push(AppRoutes.adminClassrooms);
               } else if (label == 'إضافة طالب') {
-                onTap = () => context.push('/admin/users');
+                onTap = () => context.push(AppRoutes.adminUsers);
               } else if (label == 'التقارير') {
-                onTap = () => context.push('/admin/reports');
+                onTap = () => context.push(AppRoutes.adminReports);
               } else {
-                onTap = () => context.push('/admin');
+                onTap = () => context.push(AppRoutes.adminDashboard);
               }
               return InkWell(
                 onTap: onTap,

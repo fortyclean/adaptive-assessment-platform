@@ -124,24 +124,27 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final bg = cs.surface;
+    return Scaffold(
+        backgroundColor: bg,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: bg,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
           titleSpacing: 0,
-          title: const Text(
+          title: Text(
             'تقرير الاختبار',
             style: TextStyle(
-              color: AppColors.onSurface,
+              color: cs.onSurface,
               fontWeight: FontWeight.w700,
               fontSize: 18,
             ),
           ),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_forward_ios_rounded,
-                color: AppColors.onSurface, size: 20),
+            icon: Icon(Icons.arrow_forward_ios_rounded,
+                color: cs.onSurface, size: 20),
             onPressed: () => context.pop(),
           ),
           actions: [
@@ -165,6 +168,7 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
                 ? _buildErrorState()
                 : _buildContent(),
       );
+  }
 
   Widget _buildErrorState() => Center(
         child: Column(
@@ -300,7 +304,7 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
   Widget _buildEmptyStudents() => Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.outlineVariant),
         ),
@@ -342,7 +346,7 @@ class _StatCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: const [
@@ -414,7 +418,7 @@ class _DistributionChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.outlineVariant),
         boxShadow: const [
@@ -515,7 +519,7 @@ class _SkillHeatmapCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: const [
@@ -693,7 +697,7 @@ class _StudentResultTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.outlineVariant),
         boxShadow: const [

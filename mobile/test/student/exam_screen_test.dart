@@ -39,10 +39,14 @@ void main() {
       await tester.pumpWidget(buildOption(isSelected: false));
       await tester.pumpAndSettle();
 
-      final container = tester.widget<AnimatedContainer>(
-        find.byType(AnimatedContainer).last,
+      final optionFinder = find.byType(McqOption);
+      final outerContainer = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: optionFinder,
+          matching: find.byType(AnimatedContainer),
+        ).first,
       );
-      final decoration = container.decoration as BoxDecoration;
+      final decoration = outerContainer.decoration as BoxDecoration;
       expect(decoration.color, equals(AppColors.optionUnselectedBackground));
     });
 
@@ -50,10 +54,14 @@ void main() {
       await tester.pumpWidget(buildOption(isSelected: true));
       await tester.pumpAndSettle();
 
-      final container = tester.widget<AnimatedContainer>(
-        find.byType(AnimatedContainer).last,
+      final optionFinder = find.byType(McqOption);
+      final outerContainer = tester.widget<AnimatedContainer>(
+        find.descendant(
+          of: optionFinder,
+          matching: find.byType(AnimatedContainer),
+        ).first,
       );
-      final decoration = container.decoration as BoxDecoration;
+      final decoration = outerContainer.decoration as BoxDecoration;
       expect(
           decoration.border?.top.color, equals(AppColors.optionSelectedBorder));
     });

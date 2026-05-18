@@ -5,6 +5,29 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
+class _SkillData {
+  const _SkillData({required this.name, required this.value});
+  final String name;
+  final double value;
+}
+
+class _ActivityLog {
+  const _ActivityLog({
+    required this.icon,
+    required this.iconColor,
+    required this.bgColor,
+    required this.title,
+    required this.subtitle,
+    required this.time,
+  });
+  final IconData icon;
+  final Color iconColor;
+  final Color bgColor;
+  final String title;
+  final String subtitle;
+  final String time;
+}
+
 /// StudentProfileDetailScreen — Screens 56, 57, 58
 /// Teacher-facing screen showing a student's detailed profile with:
 /// - Skill radar chart (hexagonal/spider chart via CustomPainter)
@@ -149,7 +172,7 @@ class _StudentProfileDetailScreenState
         _studentData?['fullName'] as String? ?? widget.studentName ?? 'الطالب';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : CustomScrollView(
@@ -174,11 +197,13 @@ class _StudentProfileDetailScreenState
 
   // ─── Sliver App Bar ───────────────────────────────────────────────────────
 
-  SliverAppBar _buildSliverAppBar(String name) => SliverAppBar(
+  SliverAppBar _buildSliverAppBar(String name) {
+    final cs = Theme.of(context).colorScheme;
+    return SliverAppBar(
         expandedHeight: 0,
         floating: true,
         snap: true,
-        backgroundColor: Colors.white,
+        backgroundColor: cs.surface,
         elevation: 0,
         scrolledUnderElevation: 1,
         shadowColor: Colors.black12,
@@ -205,6 +230,7 @@ class _StudentProfileDetailScreenState
           ),
         ],
       );
+    }
 
   void _exportReport() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -222,9 +248,10 @@ class _StudentProfileDetailScreenState
     final timeTaken = _studentData?['timeTakenSeconds'] as num?;
     final scoreColor =
         score != null && score >= 70 ? AppColors.success : AppColors.error;
+    final cs = Theme.of(context).colorScheme;
 
     return Container(
-      color: Colors.white,
+      color: cs.surface,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Column(
         children: [
@@ -343,7 +370,7 @@ class _StudentProfileDetailScreenState
   // ─── Tab Bar ──────────────────────────────────────────────────────────────
 
   Widget _buildTabBar() => Container(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         child: TabBar(
           controller: _tabController,
           labelColor: AppColors.primary,
@@ -394,7 +421,7 @@ class _StudentProfileDetailScreenState
           // Radar chart card
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: const [
@@ -476,7 +503,7 @@ class _StudentProfileDetailScreenState
           // Skill breakdown bars
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.outlineVariant),
             ),
@@ -556,7 +583,7 @@ class _StudentProfileDetailScreenState
           // Weekly bar chart
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: const [
@@ -688,7 +715,7 @@ class _StudentProfileDetailScreenState
             const SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.outlineVariant),
                 boxShadow: const [
@@ -779,30 +806,6 @@ class _StudentProfileDetailScreenState
       );
 }
 
-// ─── Data Classes ─────────────────────────────────────────────────────────────
-
-class _SkillData {
-  const _SkillData({required this.name, required this.value});
-  final String name;
-  final double value; // 0.0 – 1.0
-}
-
-class _ActivityLog {
-  const _ActivityLog({
-    required this.icon,
-    required this.iconColor,
-    required this.bgColor,
-    required this.title,
-    required this.subtitle,
-    required this.time,
-  });
-  final IconData icon;
-  final Color iconColor;
-  final Color bgColor;
-  final String title;
-  final String subtitle;
-  final String time;
-}
 
 // ─── Skill Radar Painter ──────────────────────────────────────────────────────
 
@@ -1042,7 +1045,7 @@ class _KpiCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: const [
@@ -1093,7 +1096,7 @@ class _AnswerHistoryCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.outlineVariant),
       ),

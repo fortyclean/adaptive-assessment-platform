@@ -353,6 +353,7 @@ class _NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isRead = notification['isRead'] as bool? ?? true;
     final type = notification['type'] as String?;
     final createdAt = notification['createdAt'] != null
@@ -368,12 +369,14 @@ class _NotificationTile extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: isRead ? Colors.white : AppColors.notificationUnread,
+          color: isRead
+              ? colorScheme.surface
+              : colorScheme.primaryContainer.withValues(alpha: 0.20),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isRead
-                ? AppColors.outlineVariant.withValues(alpha: 0.5)
-                : AppColors.primary.withValues(alpha: 0.2),
+                ? colorScheme.outlineVariant.withValues(alpha: 0.5)
+                : colorScheme.primary.withValues(alpha: 0.2),
           ),
           boxShadow: [
             BoxShadow(
@@ -417,7 +420,7 @@ class _NotificationTile extends StatelessWidget {
                             fontSize: 14,
                             fontWeight:
                                 isRead ? FontWeight.w500 : FontWeight.w700,
-                            color: AppColors.onSurface,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -437,10 +440,10 @@ class _NotificationTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     notification['body'] as String? ?? '',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Almarai',
                       fontSize: 13,
-                      color: AppColors.onSurfaceVariant,
+                      color: colorScheme.onSurfaceVariant,
                       height: 1.5,
                     ),
                     maxLines: 2,
@@ -449,18 +452,18 @@ class _NotificationTile extends StatelessWidget {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.access_time_rounded,
                         size: 12,
-                        color: AppColors.onSurfaceVariant,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         timeStr,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Almarai',
                           fontSize: 11,
-                          color: AppColors.onSurfaceVariant,
+                          color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],

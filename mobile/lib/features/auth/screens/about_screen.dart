@@ -9,10 +9,12 @@ class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Scaffold(
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: colorScheme.surface,
           elevation: 1,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -34,22 +36,24 @@ class AboutScreen extends StatelessWidget {
           children: [
             _buildAppHeader(),
             const SizedBox(height: 24),
-            _buildCurrentVersion(),
+            _buildCurrentVersion(context),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'سجل الإصدارات',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 fontFamily: 'Almarai',
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
-            ...AppVersion.changelog.map(_buildVersionCard),
+            ...AppVersion.changelog.map((entry) => _buildVersionCard(context, entry)),
             const SizedBox(height: 24),
           ],
         ),
       );
+  }
 
   Widget _buildAppHeader() => Container(
         padding: const EdgeInsets.all(24),
@@ -122,12 +126,13 @@ class AboutScreen extends StatelessWidget {
         ),
       );
 
-  Widget _buildCurrentVersion() {
+  Widget _buildCurrentVersion(BuildContext context) {
     final latest = AppVersion.changelog.first;
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
         boxShadow: [
@@ -218,16 +223,17 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildVersionCard(VersionEntry entry) {
+  Widget _buildVersionCard(BuildContext context, VersionEntry entry) {
     final isLatest = entry.version == AppVersion.current;
     final color = _typeColor(entry.type);
     final icon = _typeIcon(entry.type);
     final label = _typeLabel(entry.type);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isLatest

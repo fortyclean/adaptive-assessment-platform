@@ -236,8 +236,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       await Future.delayed(const Duration(milliseconds: 400));
       if (!mounted) return;
       _demoQuestionIndex++;
-      setState(() => _questionNumber++);
       await _loadNextQuestion();
+      if (mounted) setState(() => _questionNumber++);
       return;
     }
 
@@ -252,8 +252,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       // Load next question after short delay for UX
       await Future.delayed(const Duration(milliseconds: 400));
       if (mounted) {
-        setState(() => _questionNumber++);
         await _loadNextQuestion();
+        if (mounted) setState(() => _questionNumber++);
       }
     } catch (_) {
       if (!mounted) return;
@@ -428,9 +428,9 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
 
   Widget _buildHeader() => Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: const Border(
             bottom: BorderSide(color: AppColors.outlineVariant),
           ),
         ),
@@ -500,7 +500,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     final progress =
         widget.questionCount > 0 ? _questionNumber / widget.questionCount : 0.0;
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -527,10 +527,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: AppColors.outlineVariant)),
-        boxShadow: [
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        border: const Border(top: BorderSide(color: AppColors.outlineVariant)),
+        boxShadow: const [
           BoxShadow(
             color: Color(0x0A000000),
             blurRadius: 8,
@@ -549,7 +549,6 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                       if (isLastQuestion) {
                         _autoSubmit();
                       } else {
-                        setState(() => _questionNumber++);
                         _loadNextQuestion();
                       }
                     }
@@ -663,7 +662,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius:
                   BorderRadius.circular(AppConstants.cardBorderRadius),
               border: Border.all(color: AppColors.outlineVariant),

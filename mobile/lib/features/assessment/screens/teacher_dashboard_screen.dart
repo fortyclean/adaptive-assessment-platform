@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/teacher_repository.dart';
 
 /// Teacher Dashboard Screen — Screen 1 & 12
@@ -111,7 +112,7 @@ class _TeacherDashboardScreenState
     );
   }
 
-  PreferredSizeWidget _buildAppBar(dynamic user) => PreferredSize(
+  PreferredSizeWidget _buildAppBar(AuthUser? user) => PreferredSize(
         preferredSize: const Size.fromHeight(64),
         child: Container(
           height: 64 + MediaQuery.of(context).padding.top,
@@ -135,7 +136,7 @@ class _TeacherDashboardScreenState
               textDirection: TextDirection.rtl,
               children: [
                 // Avatar + Name (right side in RTL)
-                _buildAvatar(user),
+                UserAvatar(user: user, size: 40),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -143,7 +144,7 @@ class _TeacherDashboardScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'مرحباً، ${(user?.fullName as String?) ?? 'المعلم'}',
+                        'مرحباً، ${user?.fullName ?? 'المعلم'}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -182,39 +183,6 @@ class _TeacherDashboardScreenState
           ),
         ),
       );
-
-  Widget _buildAvatar(dynamic user) {
-    final initials = _getInitials(user?.fullName as String?);
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.surfaceContainerHigh,
-        border: Border.all(color: AppColors.outlineVariant, width: 1.5),
-      ),
-      child: Center(
-        child: Text(
-          initials,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primaryContainer,
-            fontFamily: 'Almarai',
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _getInitials(String? name) {
-    if (name == null || name.isEmpty) return 'م';
-    final parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return '${parts[0][0]}${parts[1][0]}';
-    }
-    return parts[0][0];
-  }
 
   Widget _buildError() => Center(
         child: Column(

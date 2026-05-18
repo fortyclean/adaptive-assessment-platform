@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_colors.dart';
+
+const _notificationSettingsPrefix = 'notification_settings.';
 
 /// Notification Settings Screen — Screen 35
 /// Matches _35/code.html design exactly.
@@ -33,10 +36,87 @@ class _NotificationSettingsScreenState
 
   bool _isSaving = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _restoreSettings();
+  }
+
+  Future<void> _restoreSettings() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (!mounted) return;
+      setState(() {
+        _studentPerfPush = prefs.getBool(
+              '${_notificationSettingsPrefix}studentPerfPush',
+            ) ??
+            _studentPerfPush;
+        _studentPerfEmail = prefs.getBool(
+              '${_notificationSettingsPrefix}studentPerfEmail',
+            ) ??
+            _studentPerfEmail;
+        _questionBankPush = prefs.getBool(
+              '${_notificationSettingsPrefix}questionBankPush',
+            ) ??
+            _questionBankPush;
+        _questionBankSms = prefs.getBool(
+              '${_notificationSettingsPrefix}questionBankSms',
+            ) ??
+            _questionBankSms;
+        _periodicReportsEmail = prefs.getBool(
+              '${_notificationSettingsPrefix}periodicReportsEmail',
+            ) ??
+            _periodicReportsEmail;
+      });
+    } on Object {
+      // Keep the default in-memory settings when local storage is unavailable.
+    }
+  }
+
+  bool get _settingsAreValid =>
+      (_studentPerfPush || _studentPerfEmail) &&
+      (_questionBankPush || _questionBankSms) &&
+      _periodicReportsEmail;
+
   Future<void> _saveSettings() async {
+    if (!_settingsAreValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'فعّل قناة واحدة على الأقل لكل مجموعة إشعارات',
+            style: TextStyle(fontFamily: 'Almarai'),
+            textDirection: TextDirection.rtl,
+          ),
+          backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     setState(() => _isSaving = true);
     try {
-      // Attempt to save via API (if available)
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(
+        '${_notificationSettingsPrefix}studentPerfPush',
+        _studentPerfPush,
+      );
+      await prefs.setBool(
+        '${_notificationSettingsPrefix}studentPerfEmail',
+        _studentPerfEmail,
+      );
+      await prefs.setBool(
+        '${_notificationSettingsPrefix}questionBankPush',
+        _questionBankPush,
+      );
+      await prefs.setBool(
+        '${_notificationSettingsPrefix}questionBankSms',
+        _questionBankSms,
+      );
+      await prefs.setBool(
+        '${_notificationSettingsPrefix}periodicReportsEmail',
+        _periodicReportsEmail,
+      );
       await Future.delayed(const Duration(milliseconds: 600));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -83,48 +163,51 @@ class _NotificationSettingsScreenState
 
   // ── AppBar ────────────────────────────────────────────────────────────────
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
-        backgroundColor: const Color(0xFFF8FAFC),
-        elevation: 0,
-        shadowColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: const Color(0xFFE2E8F0)),
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppBar(
+      backgroundColor: colorScheme.surface,
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
+        child: Container(height: 1, color: colorScheme.outlineVariant),
+      ),
+      title: const Text(
+        'التقييم الذكي',
+        style: TextStyle(
+          color: Color(0xFF1E40AF),
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Almarai',
         ),
-        title: const Text(
-          'التقييم الذكي',
-          style: TextStyle(
+      ),
+      centerTitle: false,
+      titleSpacing: 0,
+      leading: Padding(
+        padding: const EdgeInsets.all(8),
+        child: CircleAvatar(
+          radius: 18,
+          backgroundColor: const Color(0xFF1E40AF).withValues(alpha: 0.15),
+          child: const Icon(
+            Icons.person_outline_rounded,
             color: Color(0xFF1E40AF),
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Almarai',
+            size: 20,
           ),
         ),
-        centerTitle: false,
-        titleSpacing: 0,
-        leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: CircleAvatar(
-            radius: 18,
-            backgroundColor: const Color(0xFF1E40AF).withValues(alpha: 0.15),
-            child: const Icon(
-              Icons.person_outline_rounded,
-              color: Color(0xFF1E40AF),
-              size: 20,
-            ),
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(
+            Icons.notifications_outlined,
+            color: Color(0xFF64748B),
           ),
+          onPressed: () => context.pop(), // go back
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: Color(0xFF64748B),
-            ),
-            onPressed: () => context.pop(), // go back
-          ),
-        ],
-      );
+      ],
+    );
+  }
 
   // ── Body ──────────────────────────────────────────────────────────────────
 
@@ -200,32 +283,35 @@ class _NotificationSettingsScreenState
 
   // ── Page Header ───────────────────────────────────────────────────────────
 
-  Widget _buildPageHeader() => const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'إعدادات التنبيهات',
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary,
-              height: 1.3,
-            ),
+  Widget _buildPageHeader() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'إعدادات التنبيهات',
+          style: TextStyle(
+            fontFamily: 'Almarai',
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: AppColors.primary,
+            height: 1.3,
           ),
-          SizedBox(height: 4),
-          Text(
-            'خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.',
-            style: TextStyle(
-              fontFamily: 'Almarai',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Color(0xFF505F76),
-              height: 1.6,
-            ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.',
+          style: TextStyle(
+            fontFamily: 'Almarai',
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: colorScheme.onSurfaceVariant,
+            height: 1.6,
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 
   // ── Save Button ───────────────────────────────────────────────────────────
 
@@ -280,63 +366,66 @@ class _NotificationGroup extends StatelessWidget {
   final List<_NotificationToggleRow> rows;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Group Header ─────────────────────────────────────────────────
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF4F2FC),
-                border: Border(
-                  bottom: BorderSide(color: Color(0xFFC4C5D5)),
-                ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 6,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Group Header ─────────────────────────────────────────────────
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer.withValues(alpha: 0.35),
+              border: Border(
+                bottom: BorderSide(color: colorScheme.outlineVariant),
               ),
-              child: Row(
-                children: [
-                  Icon(icon, color: AppColors.primary, size: 22),
-                  const SizedBox(width: 8),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontFamily: 'Almarai',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1B22),
-                    ),
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: AppColors.primary, size: 22),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
                   ),
-                ],
-              ),
-            ),
-            // ── Toggle Rows ──────────────────────────────────────────────────
-            for (int i = 0; i < rows.length; i++) ...[
-              if (i > 0)
-                const Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: Color(0xFFC4C5D5),
-                  indent: 0,
-                  endIndent: 0,
                 ),
-              rows[i],
-            ],
+              ],
+            ),
+          ),
+          // ── Toggle Rows ──────────────────────────────────────────────────
+          for (int i = 0; i < rows.length; i++) ...[
+            if (i > 0)
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: colorScheme.outlineVariant,
+                indent: 0,
+                endIndent: 0,
+              ),
+            rows[i],
           ],
-        ),
-      );
+        ],
+      ),
+    );
+  }
 }
 
 // ─── Notification Toggle Row ──────────────────────────────────────────────────
@@ -355,48 +444,51 @@ class _NotificationToggleRow extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: () => onChanged(!value),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              // ── Text Content ───────────────────────────────────────────────
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontFamily: 'Almarai',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF1A1B22),
-                        height: 1.4,
-                      ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: () => onChanged(!value),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            // ── Text Content ───────────────────────────────────────────────
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: colorScheme.onSurface,
+                      height: 1.4,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        fontFamily: 'Almarai',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF505F76),
-                        height: 1.5,
-                      ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontFamily: 'Almarai',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: colorScheme.onSurfaceVariant,
+                      height: 1.5,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              // ── Toggle Switch ──────────────────────────────────────────────
-              _AppToggle(value: value, onChanged: onChanged),
-            ],
-          ),
+            ),
+            const SizedBox(width: 12),
+            // ── Toggle Switch ──────────────────────────────────────────────
+            _AppToggle(value: value, onChanged: onChanged),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 // ─── Custom Toggle Switch ─────────────────────────────────────────────────────

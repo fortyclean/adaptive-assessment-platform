@@ -1,17 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/providers/theme_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/auth_repository.dart';
 
 /// Account Settings Screen — Screen 49: إعدادات الحساب | EduAssess
-/// Displays profile card, security settings, appearance preferences, and logout.
 class AccountSettingsScreen extends ConsumerStatefulWidget {
   const AccountSettingsScreen({super.key});
 
@@ -21,11 +26,18 @@ class AccountSettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
-  bool _examNotificationsEnabled = true;
+  Future<void> _persistUpdatedUser(AuthUser user) async {
+    const storage = FlutterSecureStorage();
+    await storage.write(
+      key: AppConstants.userDataKey,
+      value: jsonEncode(user.toJson()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -38,38 +50,27 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Header ──────────────────────────────────────────────
-                _buildHeader(),
-                const SizedBox(height: 32),
-
-                // ── Profile Card ─────────────────────────────────────────
-                _buildProfileCard(user),
+                _buildHeader(colorScheme),
+                const SizedBox(height: 24),
+                _buildProfileCard(user, colorScheme),
                 const SizedBox(height: 16),
-
-                // ── Security & Privacy Group ─────────────────────────────
-                _buildSectionLabel('الأمان والخصوصية'),
+                _buildSectionLabel('الأمان والخصوصية', colorScheme),
                 const SizedBox(height: 8),
                 _buildSecurityGroup(context),
                 const SizedBox(height: 16),
-
-                // ── Appearance & Language Group ──────────────────────────
-                _buildSectionLabel('المظهر واللغة'),
+                _buildSectionLabel('المظهر واللغة', colorScheme),
                 const SizedBox(height: 8),
                 _buildAppearanceGroup(),
                 const SizedBox(height: 16),
-
-                // ── Other Group ──────────────────────────────────────────
-                _buildSectionLabel('أخرى'),
+                _buildSectionLabel('أخرى', colorScheme),
                 const SizedBox(height: 8),
                 _buildOtherGroup(context),
                 const SizedBox(height: 24),
-
-                // ── App Version ──────────────────────────────────────────
                 Center(
                   child: Text(
                     'EduAssess v${AppVersion.current}',
                     style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.onSurfaceVariant,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -77,87 +78,86 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: _buildBottomNav(context),
+        bottomNavigationBar: _buildBottomNav(),
       ),
     );
   }
 
-  // ── AppBar ─────────────────────────────────────────────────────────────────
+  PreferredSizeWidget _buildAppBar(AuthUser? user) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-  PreferredSizeWidget _buildAppBar(AuthUser? user) => AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0,
-        scrolledUnderElevation: 1,
-        shadowColor: Colors.black12,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              // Profile avatar
-              Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.surfaceContainer,
-                ),
-                child: ClipOval(
-                  child: _buildAvatarContent(user),
-                ),
+    return AppBar(
+      backgroundColor: colorScheme.surface,
+      foregroundColor: colorScheme.onSurface,
+      elevation: 0,
+      scrolledUnderElevation: 1,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.black12,
+      automaticallyImplyLeading: false,
+      titleSpacing: 0,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            UserAvatar(user: user, size: 40),
+            const SizedBox(width: 12),
+            Text(
+              'EduAssess',
+              style: TextStyle(
+                fontFamily: 'Lexend',
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: colorScheme.primary,
               ),
-              const SizedBox(width: 12),
-              const Text(
-                'EduAssess',
-                style: TextStyle(
-                  fontFamily: 'Lexend',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1E40AF),
-                ),
+            ),
+            const Spacer(),
+            IconButton(
+              tooltip: 'مركز الإشعارات',
+              icon: Icon(
+                Icons.notifications_outlined,
+                color: colorScheme.onSurfaceVariant,
               ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined,
-                    color: Color(0xFF64748B)),
-                onPressed: () => context.push(AppRoutes.notificationCenter),
-              ),
-            ],
-          ),
+              onPressed: () => context.push(AppRoutes.notificationCenter),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
-  // ── Header Section ─────────────────────────────────────────────────────────
-
-  Widget _buildHeader() => Column(
+  Widget _buildHeader(ColorScheme colorScheme) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'إعدادات الحساب',
-            style: AppTextStyles.displayMedium,
+            style: AppTextStyles.displayMedium.copyWith(
+              color: colorScheme.onSurface,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
-            'تحكم في ملفك الشخصي وتفضيلات التطبيق',
+            'تحكم في ملفك الشخصي وتفضيلات التطبيق من مكان واحد.',
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ],
       );
 
-  // ── Profile Card ───────────────────────────────────────────────────────────
-
-  Widget _buildProfileCard(AuthUser? user) {
-    final initials = _getInitials(user?.fullName);
+  Widget _buildProfileCard(AuthUser? user, ColorScheme colorScheme) {
+    final roleLabel = switch (user?.role) {
+      UserRole.admin => 'مشرف',
+      UserRole.teacher => 'معلم',
+      UserRole.student => 'طالب',
+      null => 'مستخدم',
+    };
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: colorScheme.outlineVariant),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0A000000),
@@ -168,49 +168,43 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
       ),
       child: Row(
         children: [
-          // Avatar with edit button
           Stack(
             clipBehavior: Clip.none,
             children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.primaryContainer,
-                    width: 2,
-                  ),
-                ),
-                child: ClipOval(
-                  child:
-                      _buildAvatarContent(user, size: 64, initials: initials),
-                ),
+              UserAvatar(
+                user: user,
+                size: 64,
+                borderColor: AppColors.primaryContainer,
               ),
               Positioned(
                 bottom: -4,
                 left: -4,
-                child: GestureDetector(
-                  onTap: _onEditPhoto,
-                  child: Container(
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x33000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.edit_rounded,
-                      color: Colors.white,
-                      size: 14,
+                child: Tooltip(
+                  message: 'تعديل الاسم',
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: _showEditProfileDialog,
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                        border:
+                            Border.all(color: colorScheme.surface, width: 2),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x33000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.edit_rounded,
+                        color: Colors.white,
+                        size: 14,
+                      ),
                     ),
                   ),
                 ),
@@ -218,20 +212,39 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             ],
           ),
           const SizedBox(width: 16),
-          // Name & email
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  user?.fullName ?? 'أحمد محمد علي',
-                  style: AppTextStyles.titleMedium,
+                  user?.fullName ?? 'المستخدم',
+                  style: AppTextStyles.titleMedium.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  user?.email ?? 'ahmed.ali@eduassess.com',
+                  user?.email ?? user?.username ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.onSurfaceVariant,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    roleLabel,
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -242,109 +255,97 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     );
   }
 
-  // ── Section Label ──────────────────────────────────────────────────────────
-
-  Widget _buildSectionLabel(String label) => Padding(
+  Widget _buildSectionLabel(String label, ColorScheme colorScheme) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Text(
-          label.toUpperCase(),
+          label,
           style: AppTextStyles.labelSmall.copyWith(
-            color: AppColors.onSurfaceVariant,
-            letterSpacing: 1.2,
+            color: colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w700,
           ),
         ),
       );
-
-  // ── Security Group ─────────────────────────────────────────────────────────
 
   Widget _buildSecurityGroup(BuildContext context) => _SettingsCard(
         children: [
           _SettingsRowTile(
             icon: Icons.lock_outline_rounded,
             title: 'تغيير كلمة المرور',
+            subtitle: 'تحديث كلمة مرور الحساب الحالي',
             onTap: () => context.push(AppRoutes.changePassword),
           ),
           const _Divider(),
-          _SettingsToggleTile(
+          _SettingsRowTile(
             icon: Icons.notifications_active_outlined,
-            title: 'تنبيهات الاختبارات',
-            subtitle: 'تفعيل التذكير بالاختبارات القادمة',
-            value: _examNotificationsEnabled,
-            onChanged: (v) => setState(() => _examNotificationsEnabled = v),
+            title: 'إعدادات الإشعارات',
+            subtitle: 'الاختبارات، النتائج، التقارير والتنبيهات الفورية',
+            onTap: () => context.push(AppRoutes.notificationSettings),
           ),
         ],
       );
 
-  // ── Appearance Group ───────────────────────────────────────────────────────
+  Widget _buildAppearanceGroup() {
+    final isDarkMode = ref.watch(themeModeProvider) == ThemeMode.dark;
 
-  Widget _buildAppearanceGroup() => _SettingsCard(
-        children: [
-          // Language row — static badge
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                const Icon(Icons.language_rounded,
-                    color: AppColors.primary, size: 24),
-                const SizedBox(width: 16),
-                const Expanded(
-                  child: Text(
-                    'لغة التطبيق',
-                    style: AppTextStyles.bodyLarge,
-                  ),
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFDDE1FF),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    'العربية',
-                    style: AppTextStyles.labelLarge.copyWith(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+    return _SettingsCard(
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(Icons.language_rounded, color: AppColors.primary, size: 24),
+              SizedBox(width: 16),
+              Expanded(
+                child: Text('لغة التطبيق', style: AppTextStyles.bodyLarge),
+              ),
+              _LanguageBadge(label: 'العربية'),
+            ],
           ),
-          const _Divider(),
-          // Dark mode toggle
-          const _SettingsRowTile(
-            icon: Icons.dark_mode_outlined,
-            title: 'الوضع الليلي (غير متاح مؤقتًا)',
-            subtitle: 'سيتم تفعيله بعد ضبطه على جميع الشاشات.',
-            showChevron: false,
-            onTap: null,
-          ),
-        ],
-      );
-
-  // ── Other Group ────────────────────────────────────────────────────────────
+        ),
+        const _Divider(),
+        _SettingsToggleTile(
+          icon: Icons.dark_mode_outlined,
+          title: 'الوضع الليلي',
+          subtitle: isDarkMode
+              ? 'مفعل على كل الشاشات المدعومة'
+              : 'تطبيق المظهر الداكن على واجهات التطبيق',
+          value: isDarkMode,
+          onChanged: (enabled) =>
+              ref.read(themeModeProvider.notifier).setDarkMode(
+                    enabled: enabled,
+                  ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildOtherGroup(BuildContext context) => _SettingsCard(
         children: [
           _SettingsRowTile(
+            icon: Icons.info_outline_rounded,
+            title: 'عن التطبيق وسجل الإصدارات',
+            subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
+            onTap: () => context.push('/about'),
+          ),
+          const _Divider(),
+          _SettingsRowTile(
             icon: Icons.help_outline_rounded,
             title: 'مركز المساعدة',
+            subtitle: 'الدعم الفني ومعلومات التطبيق',
             onTap: () => _showHelpCenter(context),
           ),
           const _Divider(),
-          // Logout row
           InkWell(
             onTap: () => _handleLogout(context),
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(12),
-              bottomRight: Radius.circular(12),
-            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               child: Row(
                 children: [
-                  const Icon(Icons.logout_rounded,
-                      color: AppColors.error, size: 24),
+                  const Icon(
+                    Icons.logout_rounded,
+                    color: AppColors.error,
+                    size: 24,
+                  ),
                   const SizedBox(width: 16),
                   Text(
                     'تسجيل الخروج',
@@ -360,59 +361,23 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
         ],
       );
 
-  // ── Bottom Navigation ──────────────────────────────────────────────────────
-
-  Widget _buildBottomNav(BuildContext context) {
+  Widget _buildBottomNav() {
     final role = ref.watch(currentUserProvider)?.role;
-    if (role == null) {
-      // Avoid rendering a potentially wrong role nav while auth state is still restoring.
-      return const SizedBox.shrink();
-    }
+    if (role == null) return const SizedBox.shrink();
 
-    if (role == UserRole.admin) {
-      return const AppBottomNav(currentIndex: 4, role: 'admin');
-    }
-    if (role == UserRole.student) {
-      return const AppBottomNav(currentIndex: 3, role: 'student');
-    }
-    return const AppBottomNav(currentIndex: 4, role: 'teacher');
+    return switch (role) {
+      UserRole.admin => const AppBottomNav(currentIndex: 4, role: 'admin'),
+      UserRole.student => const AppBottomNav(currentIndex: 3, role: 'student'),
+      UserRole.teacher => const AppBottomNav(currentIndex: 4, role: 'teacher'),
+    };
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
+  Future<void> _showEditProfileDialog() async {
+    final authState = ref.read(authProvider);
+    final user = authState.user;
+    if (user == null) return;
 
-  Widget _buildAvatarContent(AuthUser? user,
-      {double size = 40, String? initials}) {
-    final text = initials ?? _getInitials(user?.fullName);
-    return Container(
-      width: size,
-      height: size,
-      color: AppColors.surfaceContainer,
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: size * 0.35,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primary,
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _getInitials(String? name) {
-    if (name == null || name.isEmpty) return '؟';
-    final parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return '${parts[0][0]}${parts[1][0]}';
-    }
-    return parts[0][0];
-  }
-
-  Future<void> _onEditPhoto() async {
-    // Show dialog to edit name
-    final user = ref.read(currentUserProvider);
-    final nameController = TextEditingController(text: user?.fullName ?? '');
+    final nameController = TextEditingController(text: user.fullName);
 
     final result = await showDialog<String>(
       context: context,
@@ -425,6 +390,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
           content: TextField(
             controller: nameController,
             textDirection: TextDirection.rtl,
+            autofocus: true,
             decoration: InputDecoration(
               labelText: 'الاسم الكامل',
               border:
@@ -436,7 +402,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
               onPressed: () => Navigator.pop(ctx),
               child: const Text('إلغاء'),
             ),
-            TextButton(
+            FilledButton(
               onPressed: () => Navigator.pop(ctx, nameController.text.trim()),
               child: const Text('حفظ'),
             ),
@@ -445,33 +411,61 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
       ),
     );
 
-    if (result != null && result.isNotEmpty && mounted) {
-      // Call API to update user profile
-      try {
-        final userId = user?.id ?? '';
+    nameController.dispose();
+
+    if (!mounted || result == null) return;
+    if (result.length < 2) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final latestState = ref.read(authProvider);
+      final currentUser = latestState.user;
+      if (currentUser == null) return;
+
+      final token = latestState.accessToken ?? '';
+      final isDemoSession = token.startsWith('demo-token-');
+      if (!isDemoSession) {
         await ref.read(authRepositoryProvider).updateProfile(
-              userId: userId,
+              userId: currentUser.id,
               name: result,
             );
-        // Update local state
-        ref.read(authProvider.notifier).updateName(result);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم حفظ التعديلات بنجاح'),
-              backgroundColor: Color(0xFF2E7D32),
-            ),
-          );
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('فشل حفظ التعديلات: $e'),
-              backgroundColor: AppColors.error,
-            ),
-          );
-        }
+      }
+
+      ref.read(authProvider.notifier).updateName(result);
+      final updatedUser = AuthUser(
+        id: currentUser.id,
+        username: currentUser.username,
+        fullName: result,
+        email: currentUser.email,
+        role: currentUser.role,
+        classroomIds: currentUser.classroomIds,
+        avatarUrl: currentUser.avatarUrl,
+      );
+      await _persistUpdatedUser(updatedUser);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تم تحديث الاسم بنجاح'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     }
   }
@@ -480,8 +474,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     showAboutDialog(
       context: context,
       applicationName: 'EduAssess',
-      applicationVersion: '2.4.0',
-      applicationLegalese: '© 2024 EduAssess. جميع الحقوق محفوظة.',
+      applicationVersion: AppVersion.current,
+      applicationLegalese: '© 2026 EduAssess. جميع الحقوق محفوظة.',
     );
   }
 
@@ -511,102 +505,102 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     );
 
     if ((confirmed ?? false) && mounted) {
-      await ref.read(authRepositoryProvider).logout();
       ref.read(authProvider.notifier).logout();
+      ref.read(authRepositoryProvider).logout().catchError((_) {});
       if (context.mounted) context.go(AppRoutes.login);
     }
   }
 }
 
-// ── Reusable Widgets ──────────────────────────────────────────────────────────
-
-/// A card container for a group of settings rows.
 class _SettingsCard extends StatelessWidget {
   const _SettingsCard({required this.children});
+
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: children,
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
           ),
-        ),
-      );
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Column(mainAxisSize: MainAxisSize.min, children: children),
+      ),
+    );
+  }
 }
 
-/// A tappable settings row with icon, title, and chevron.
 class _SettingsRowTile extends StatelessWidget {
   const _SettingsRowTile({
     required this.icon,
     required this.title,
     required this.onTap,
     this.subtitle,
-    this.showChevron = true,
   });
 
   final IconData icon;
   final String title;
   final String? subtitle;
-  final bool showChevron;
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.primary, size: 24),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.bodyLarge,
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Icon(icon, color: colorScheme.primary, size: 24),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: colorScheme.onSurface,
                     ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle!,
-                        style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.onSurfaceVariant,
-                        ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle!,
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                       ),
-                    ],
+                    ),
                   ],
-                ),
+                ],
               ),
-              if (showChevron)
-                const Icon(
-                  Icons.chevron_left_rounded,
-                  color: AppColors.onSurfaceVariant,
-                  size: 24,
-                ),
-            ],
-          ),
+            ),
+            Icon(
+              Icons.chevron_left_rounded,
+              color: colorScheme.onSurfaceVariant,
+              size: 24,
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
-/// A settings row with icon, title, optional subtitle, and a toggle switch.
 class _SettingsToggleTile extends StatelessWidget {
   const _SettingsToggleTile({
     required this.icon,
@@ -623,57 +617,90 @@ class _SettingsToggleTile extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Icon(icon, color: AppColors.primary, size: 24),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: AppTextStyles.bodyLarge),
-                  if (subtitle != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle!,
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Icon(icon, color: colorScheme.primary, size: 24),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle!,
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                     ),
-                  ],
+                  ),
                 ],
-              ),
+              ],
             ),
-            Switch(
-              value: value,
-              onChanged: onChanged,
-              activeThumbColor: Colors.white,
-              activeTrackColor: AppColors.primaryContainer,
-              inactiveThumbColor: Colors.white,
-              inactiveTrackColor: AppColors.surfaceContainerHigh,
-              trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-                if (states.contains(WidgetState.selected)) {
-                  return Colors.transparent;
-                }
-                return AppColors.outlineVariant;
-              }),
-            ),
-          ],
-        ),
-      );
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeThumbColor: Colors.white,
+            activeTrackColor: colorScheme.primary,
+            inactiveThumbColor: Colors.white,
+            inactiveTrackColor: colorScheme.surfaceContainerHighest,
+            trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) {
+                return Colors.transparent;
+              }
+              return colorScheme.outlineVariant;
+            }),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-/// A thin horizontal divider matching the design system.
+class _LanguageBadge extends StatelessWidget {
+  const _LanguageBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: AppTextStyles.labelLarge.copyWith(
+          color: colorScheme.onPrimaryContainer,
+        ),
+      ),
+    );
+  }
+}
+
 class _Divider extends StatelessWidget {
   const _Divider();
 
   @override
-  Widget build(BuildContext context) => const Divider(
+  Widget build(BuildContext context) => Divider(
         height: 1,
         thickness: 1,
-        color: AppColors.outlineVariant,
+        color: Theme.of(context).colorScheme.outlineVariant,
         indent: 0,
         endIndent: 0,
       );
