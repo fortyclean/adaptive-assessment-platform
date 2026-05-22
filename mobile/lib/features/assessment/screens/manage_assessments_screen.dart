@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../repositories/teacher_repository.dart';
 
 /// Manage Assessments Screen — Screen 10
@@ -20,6 +22,7 @@ class _ManageAssessmentsScreenState
   bool _isLoading = true;
   List<Map<String, dynamic>> _assessments = [];
   String _statusFilter = 'all';
+  String? _errorMessage;
 
   static const List<Map<String, dynamic>> _mockAssessments = [
     {
@@ -131,19 +134,32 @@ class _ManageAssessmentsScreenState
   }
 
   Future<void> _loadAssessments() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final data = await ref.read(teacherRepositoryProvider).getAssessments();
       setState(() {
-        _assessments = data.isNotEmpty ? data : _mockAssessments;
+        _assessments = data.isNotEmpty || !_shouldUseDemoFallback
+            ? data
+            : _mockAssessments;
         _isLoading = false;
       });
     } catch (_) {
       setState(() {
-        _assessments = _mockAssessments;
+        _assessments = _shouldUseDemoFallback ? _mockAssessments : [];
+        _errorMessage = _shouldUseDemoFallback
+            ? null
+            : 'تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.';
         _isLoading = false;
       });
     }
+  }
+
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return AppConstants.useMockData || token.startsWith('demo-token-');
   }
 
   List<Map<String, dynamic>> get _filtered {
@@ -356,14 +372,24 @@ class _ManageAssessmentsScreenState
       }
     } catch (_) {
       if (mounted) {
-        // Mock publish for demo
-        setState(() {
-          final idx = _assessments.indexWhere((a) => a['_id'] == id);
-          if (idx != -1) {
-            _assessments[idx] = Map.from(_assessments[idx])
-              ..['status'] = 'active';
-          }
-        });
+        if (_shouldUseDemoFallback) {
+          setState(() {
+            final idx = _assessments.indexWhere((a) => a['_id'] == id);
+            if (idx != -1) {
+              _assessments[idx] = Map.from(_assessments[idx])
+                ..['status'] = 'active';
+            }
+          });
+        }
+        if (!_shouldUseDemoFallback) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('تعذر نشر الاختبار. تحقق من الاتصال ثم حاول مرة أخرى.'),
+            ),
+          );
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('تم نشر الاختبار بنجاح')),
         );
@@ -485,27 +511,62 @@ class _ManageAssessmentsScreenState
                   ? const Center(
                       child:
                           CircularProgressIndicator(color: AppColors.primary))
-                  : _filtered.isEmpty
-                      ? _buildEmpty()
-                      : RefreshIndicator(
-                          onRefresh: _loadAssessments,
-                          color: AppColors.primary,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
-                            itemCount: _filtered.length,
-                            itemBuilder: (ctx, i) => _AssessmentCard(
-                              assessment: _filtered[i],
-                              onPublish: _filtered[i]['status'] == 'draft'
-                                  ? () => _publishAssessment(
-                                      _filtered[i]['_id'] as String)
-                                  : null,
-                              onEdit: () =>
-                                  _showEditDialog(context, _filtered[i]),
+                  : _errorMessage != null
+                      ? _buildError()
+                      : _filtered.isEmpty
+                          ? _buildEmpty()
+                          : RefreshIndicator(
+                              onRefresh: _loadAssessments,
+                              color: AppColors.primary,
+                              child: ListView.builder(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 0, 16, 100),
+                                itemCount: _filtered.length,
+                                itemBuilder: (ctx, i) => _AssessmentCard(
+                                  assessment: _filtered[i],
+                                  onPublish: _filtered[i]['status'] == 'draft'
+                                      ? () => _publishAssessment(
+                                          _filtered[i]['_id'] as String)
+                                      : null,
+                                  onEdit: () =>
+                                      _showEditDialog(context, _filtered[i]),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
             ),
           ],
+        ),
+      );
+
+  Widget _buildError() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.wifi_off_rounded,
+                size: 56,
+                color: AppColors.error,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: AppColors.onSurfaceVariant,
+                  fontSize: 15,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 20),
+              FilledButton.icon(
+                onPressed: _loadAssessments,
+                icon: const Icon(Icons.refresh_rounded),
+                label: const Text('إعادة المحاولة'),
+              ),
+            ],
+          ),
         ),
       );
 

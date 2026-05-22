@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.41';
-  static const int buildNumber = 41;
+  static const String current = '1.0.42';
+  static const int buildNumber = 42;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.42',
+      buildNumber: 42,
+      date: 'مايو 2026',
+      title: 'بدء خطة جاهزية الإنتاج',
+      changes: [
+        'إضافة خطة مهام Phase 4 للوصول إلى جاهزية إنتاج كاملة بنسبة 100%.',
+        'منع شاشة إدارة الاختبارات من عرض بيانات وهمية في الإنتاج عند فشل API.',
+        'إبقاء بيانات الديمو محصورة في وضع الديمو أو عند تفعيل mock data صراحة.',
+        'إضافة حالة خطأ واضحة مع زر إعادة المحاولة عند تعذر تحميل اختبارات المعلم.',
+        'إضافة اختبار يحرس شاشة إدارة الاختبارات من رجوع fallback الوهمي في الإنتاج.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.41',
       buildNumber: 41,
