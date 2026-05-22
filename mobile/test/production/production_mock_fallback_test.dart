@@ -91,5 +91,22 @@ void main() {
       expect(
           studentMarketplaceSource, isNot(contains('Mock marketplace items')));
     });
+
+    test('StudentChallengesScreen uses visible challenge states, not SnackBars',
+        () {
+      final source = File(
+        'lib/features/assessment/screens/student_challenges_screen.dart',
+      ).readAsStringSync();
+
+      expect(source, contains('enum ChallengeStatus'));
+      expect(source, contains('ChallengeStatus.joinable'));
+      expect(source, contains('ChallengeStatus.joined'));
+      expect(source, contains('ChallengeStatus.completed'));
+      expect(source, contains('ChallengeStatus.locked'));
+      expect(source, contains('_joinChallenge'));
+      expect(source, contains('_showCreateChallengeSheet'));
+      expect(source, isNot(contains('ScaffoldMessenger.of')));
+      expect(source, isNot(contains('SnackBar(')));
+    });
   });
 }

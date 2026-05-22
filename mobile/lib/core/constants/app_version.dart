@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.45';
-  static const int buildNumber = 45;
+  static const String current = '1.0.46';
+  static const int buildNumber = 46;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.46',
+      buildNumber: 46,
+      date: 'مايو 2026',
+      title: 'تحسين تحديات الطالب',
+      changes: [
+        'استبدال أزرار التحديات التي كانت تنتهي برسائل فقط بحالات تحدي مرئية.',
+        'إضافة حالات واضحة للتحدي: متاح للانضمام، منضم، مكتمل، ومغلق بسبب محدد.',
+        'إضافة إنشاء تحدي محلي واضح مع تنبيه أن الحفظ الدائم يحتاج API لاحقًا.',
+        'إصلاح النصوص العربية التالفة في شاشة التحديات وتحسين لوحة المتصدرين والأوسمة.',
+        'إضافة اختبار يحرس عدم رجوع شاشة التحديات إلى تدفقات SnackBar-only.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.45',
       buildNumber: 45,
