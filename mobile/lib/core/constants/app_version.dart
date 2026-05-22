@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.43';
-  static const int buildNumber = 43;
+  static const String current = '1.0.44';
+  static const int buildNumber = 44;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.44',
+      buildNumber: 44,
+      date: 'مايو 2026',
+      title: 'تنظيف لوحة المعلم للإنتاج',
+      changes: [
+        'منع لوحة المعلم من إخفاء فشل API خلف اختبارات أو إحصاءات وهمية في وضع الإنتاج.',
+        'حصر بيانات لوحة المعلم التجريبية في وضع الديمو أو mock data فقط.',
+        'استبدال صفحة Teacher Home الثابتة باللوحة الحقيقية لمنع ظهور أرقام ورسوم placeholder.',
+        'إصلاح نصوص عربية تالفة في لوحة المعلم وتحسين حالة الخطأ وزر إعادة المحاولة.',
+        'توسيع اختبارات حماية fallback الإنتاجي لتغطي شاشات المعلم.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.43',
       buildNumber: 43,

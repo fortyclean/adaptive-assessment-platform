@@ -45,5 +45,33 @@ void main() {
             "_upcomingAssessments = [\n            {\n              '_id': '1'")),
       );
     });
+
+    test(
+        'TeacherDashboardScreen and TeacherHomeScreen do not expose static production placeholders',
+        () {
+      final dashboardSource = File(
+        'lib/features/assessment/screens/teacher_dashboard_screen.dart',
+      ).readAsStringSync();
+      final homeSource = File(
+        'lib/features/assessment/screens/teacher_home_screen.dart',
+      ).readAsStringSync();
+
+      expect(dashboardSource, contains('_shouldUseDemoFallback'));
+      expect(dashboardSource, contains('_errorMessage'));
+      expect(dashboardSource, contains('_demoAssessments'));
+      expect(
+        dashboardSource,
+        isNot(contains(
+            "_assessments = [\n            {\n              '_id': '1'")),
+      );
+      expect(
+        dashboardSource,
+        isNot(contains("value: '\${_assessments.length * 5}'")),
+      );
+      expect(homeSource, contains('TeacherDashboardScreen'));
+      expect(homeSource, isNot(contains("'8 فصول'")));
+      expect(homeSource, isNot(contains("'12'")));
+      expect(homeSource, isNot(contains("'5'")));
+    });
   });
 }

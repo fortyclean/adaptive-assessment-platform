@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/teacher_repository.dart';
 
-/// Teacher Dashboard Screen — Screen 1 & 12
-/// Requirements: 10.1–10.6
+/// Teacher dashboard.
+///
+/// Production mode must never hide API failures behind demo numbers. Demo data is
+/// allowed only when mock mode is explicitly enabled or the current session is a
+/// demo-token session.
 class TeacherDashboardScreen extends ConsumerStatefulWidget {
   const TeacherDashboardScreen({super.key});
 
@@ -20,9 +25,35 @@ class TeacherDashboardScreen extends ConsumerStatefulWidget {
 
 class _TeacherDashboardScreenState
     extends ConsumerState<TeacherDashboardScreen> {
+  static const List<Map<String, dynamic>> _demoAssessments = [
+    {
+      '_id': 'demo-teacher-assessment-1',
+      'title': 'اختبار الوحدة الأولى',
+      'subject': 'رياضيات',
+      'status': 'active',
+      'averageScore': 82,
+      'studentCount': 28,
+    },
+    {
+      '_id': 'demo-teacher-assessment-2',
+      'title': 'اختبار النحو',
+      'subject': 'لغة عربية',
+      'status': 'completed',
+      'averageScore': 75,
+      'studentCount': 24,
+    },
+    {
+      '_id': 'demo-teacher-assessment-3',
+      'title': 'اختبار الفيزياء',
+      'subject': 'فيزياء',
+      'status': 'draft',
+      'studentCount': 20,
+    },
+  ];
+
   bool _isLoading = true;
   List<Map<String, dynamic>> _assessments = [];
-  String? _error;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -31,56 +62,70 @@ class _TeacherDashboardScreenState
   }
 
   Future<void> _loadData() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
     try {
       final assessments =
           await ref.read(teacherRepositoryProvider).getAssessments();
+      if (!mounted) return;
       setState(() {
         _assessments = assessments;
         _isLoading = false;
       });
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _assessments = [
-            {
-              '_id': '1',
-              'title': 'اختبار الوحدة الأولى',
-              'subject': 'رياضيات',
-              'status': 'active',
-              'averageScore': 82
-            },
-            {
-              '_id': '2',
-              'title': 'اختبار النحو',
-              'subject': 'لغة عربية',
-              'status': 'completed',
-              'averageScore': 75
-            },
-            {
-              '_id': '3',
-              'title': 'اختبار الفيزياء',
-              'subject': 'فيزياء',
-              'status': 'draft'
-            },
-          ];
-          _isLoading = false;
-        });
-      }
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _assessments = _shouldUseDemoFallback ? _demoAssessments : [];
+        _errorMessage = _shouldUseDemoFallback
+            ? null
+            : 'تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.';
+        _isLoading = false;
+      });
     }
+  }
+
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return AppConstants.useMockData || token.startsWith('demo-token-');
   }
 
   int get _activeCount =>
       _assessments.where((a) => a['status'] == 'active').length;
+
   int get _completedCount =>
       _assessments.where((a) => a['status'] == 'completed').length;
+
+  int get _studentCount {
+    var total = 0;
+    var hasRealCount = false;
+
+    for (final assessment in _assessments) {
+      final value = assessment['studentCount'] ??
+          assessment['studentsCount'] ??
+          assessment['assignedStudentCount'] ??
+          assessment['participantsCount'];
+      if (value is num) {
+        total += value.toInt();
+        hasRealCount = true;
+      }
+    }
+
+    return hasRealCount ? total : 0;
+  }
+
+  String get _studentCountLabel => _studentCount > 0 ? '$_studentCount' : '--';
 
   double get _averageScore {
     final withScore =
         _assessments.where((a) => a['averageScore'] != null).toList();
     if (withScore.isEmpty) return 0;
     final sum = withScore.fold<double>(
-        0, (acc, a) => acc + (a['averageScore'] as num).toDouble());
+      0,
+      (acc, a) => acc + (a['averageScore'] as num).toDouble(),
+    );
     return sum / withScore.length;
   }
 
@@ -95,21 +140,23 @@ class _TeacherDashboardScreenState
       bottomNavigationBar: const AppBottomNav(currentIndex: 0, role: 'teacher'),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _error != null
-              ? _buildError()
-              : RefreshIndicator(
-                  onRefresh: _loadData,
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                    children: [
-                      _buildStatsRow(),
-                      const SizedBox(height: 20),
-                      _buildCreateButton(),
-                      const SizedBox(height: 20),
-                      _buildRecentAssessments(),
-                    ],
-                  ),
-                ),
+          : RefreshIndicator(
+              onRefresh: _loadData,
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                children: [
+                  if (_errorMessage != null) ...[
+                    _buildErrorCard(),
+                    const SizedBox(height: 20),
+                  ],
+                  _buildStatsRow(),
+                  const SizedBox(height: 20),
+                  _buildCreateButton(),
+                  const SizedBox(height: 20),
+                  _buildRecentAssessments(),
+                ],
+              ),
+            ),
     );
   }
 
@@ -138,7 +185,6 @@ class _TeacherDashboardScreenState
           child: Row(
             textDirection: TextDirection.rtl,
             children: [
-              // Avatar + Name (right side in RTL)
               UserAvatar(user: user, size: 40),
               const SizedBox(width: 10),
               Expanded(
@@ -147,7 +193,7 @@ class _TeacherDashboardScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'مرحباً، ${user?.fullName ?? 'المعلم'}',
+                      'مرحبًا، ${user?.fullName ?? 'المعلم'}',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -168,11 +214,10 @@ class _TeacherDashboardScreenState
                   ],
                 ),
               ),
-              // Action icons (left side in RTL)
               IconButton(
                 icon: const Icon(Icons.search_rounded),
                 color: colorScheme.primary,
-                onPressed: () => context.push('/teacher/assessments'),
+                onPressed: () => context.push(AppRoutes.teacherAssessments),
                 tooltip: 'بحث',
               ),
               IconButton(
@@ -188,23 +233,45 @@ class _TeacherDashboardScreenState
     );
   }
 
-  Widget _buildError() => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-            const SizedBox(height: 12),
-            Text(_error!,
-                style: const TextStyle(
-                    color: AppColors.onSurfaceVariant, fontFamily: 'Almarai')),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadData,
-              child: const Text('إعادة المحاولة'),
+  Widget _buildErrorCard() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.error),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Icon(Icons.wifi_off_rounded, color: colorScheme.error, size: 32),
+          const SizedBox(height: 12),
+          Text(
+            _errorMessage!,
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              height: 1.5,
+              fontFamily: 'Almarai',
             ),
-          ],
-        ),
-      );
+            textAlign: TextAlign.right,
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: _loadData,
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('إعادة المحاولة'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildStatsRow() => Row(
         textDirection: TextDirection.rtl,
@@ -212,7 +279,7 @@ class _TeacherDashboardScreenState
           Expanded(
             child: _StatCard(
               label: 'إجمالي الطلاب',
-              value: '${_assessments.length * 5}',
+              value: _studentCountLabel,
               icon: Icons.groups_rounded,
               iconColor: AppColors.primaryContainer,
               iconBg: const Color(0xFFEFF6FF),
@@ -317,10 +384,12 @@ class _TeacherDashboardScreenState
         if (recent.isEmpty)
           const _EmptyState(message: 'لم تنشئ أي اختبار بعد')
         else
-          ...recent.map((a) => _AssessmentTile(
-                assessment: a,
-                onTap: () => context.push(AppRoutes.teacherAssessments),
-              )),
+          ...recent.map(
+            (a) => _AssessmentTile(
+              assessment: a,
+              onTap: () => context.push(AppRoutes.teacherAssessments),
+            ),
+          ),
         const SizedBox(height: 20),
         const Text(
           'أدوات إضافية',
@@ -335,22 +404,22 @@ class _TeacherDashboardScreenState
         _buildQuickLink(
           icon: Icons.task_alt_rounded,
           label: 'إدارة المهام',
-          onTap: () => context.push('/teacher/tasks'),
+          onTap: () => context.push(AppRoutes.taskManagement),
         ),
         _buildQuickLink(
           icon: Icons.workspace_premium_rounded,
           label: 'الشهادات',
-          onTap: () => context.push('/teacher/certificates'),
+          onTap: () => context.push(AppRoutes.certificates),
         ),
         _buildQuickLink(
           icon: Icons.calendar_month_rounded,
           label: 'الجدول الدراسي',
-          onTap: () => context.push('/teacher/class-schedule'),
+          onTap: () => context.push(AppRoutes.classSchedule),
         ),
         _buildQuickLink(
           icon: Icons.class_rounded,
           label: 'فصولي',
-          onTap: () => context.push('/teacher/my-classes'),
+          onTap: () => context.push(AppRoutes.myClasses),
         ),
         const SizedBox(height: 24),
       ],
@@ -556,7 +625,6 @@ class _AssessmentTile extends StatelessWidget {
           child: Row(
             textDirection: TextDirection.rtl,
             children: [
-              // Status indicator
               Container(
                 width: 4,
                 height: 44,
@@ -566,7 +634,6 @@ class _AssessmentTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              // Content
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -597,7 +664,6 @@ class _AssessmentTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              // Status badge
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
