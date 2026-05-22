@@ -57,9 +57,9 @@ adaptive-mastery-v{VERSION}.apk
 - ممنوع استخدام كلمة `railway` في اسم ملف APK.
 
 ### الإصدار الحالي
-- **Flutter (mobile):** `1.0.39+39`
-- **Backend (Node.js):** `1.0.39`
-- **آخر APK منشور:** `adaptive-mastery-v1.0.39.apk`
+- **Flutter (mobile):** `1.0.40+40`
+- **Backend (Node.js):** `1.0.40`
+- **آخر APK منشور:** `adaptive-mastery-v1.0.40.apk`
 
 ---
 
@@ -237,6 +237,8 @@ lib/
 6. تحديث `دليل_استخدام_التطبيق.md` بسجل التحديثات
 7. تحديث `DEPLOY_GUIDE.md`
 8. رفع APK على GitHub Releases
+9. **إلزامي من 2026-05-22:** بعد نجاح الاختبارات والبناء، يجب عمل `git commit` ثم `git push` إلى GitHub لنفس الفرع قبل اعتبار أي إصدار أو تحسين مكتملًا.
+10. إذا تعذر تنفيذ `push` بسبب مشكلة مصادقة أو تعارض مع الريموت، يجب ذكر السبب بوضوح في التقرير النهائي وعدم اعتبار المهمة منشورة.
 
 ### GitHub Releases
 - Tag: `v{VERSION}` (مثل `v1.0.7`)

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.39';
-  static const int buildNumber = 39;
+  static const String current = '1.0.40';
+  static const int buildNumber = 40;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.40',
+      buildNumber: 40,
+      date: 'مايو 2026',
+      title: 'توسيع بيانات حسابات الديمو',
+      changes: [
+        'إضافة seed شامل لحسابات الديمو على الخادم يشمل معلمين وطلابًا إضافيين وفصولًا مرتبطة.',
+        'إضافة اختبارات وأسئلة ومحاولات مكتملة لتجربة الطالب والمعلم ولوحة الترتيب والتقارير.',
+        'إضافة إشعارات وتنبيهات أداء وجداول تقارير وإعدادات مؤسسة تجريبية لاختبار شاشات المشرف.',
+        'إضافة اختبار وحدة يضمن اكتمال بيانات الديمو وتغطية تدفقات المشرف والمعلم والطالب.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.39',
       buildNumber: 39,

@@ -5,6 +5,7 @@ import { config } from './config';
 import { connectMongoDB } from './config/database';
 import { connectRedis } from './config/redis';
 import { ensureDemoAccounts } from './services/demoAccountsService';
+import { ensureDemoSeedData } from './services/demoSeedService';
 import { logger } from './utils/logger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { apiRateLimiter } from './middleware/rateLimiter';
@@ -37,7 +38,10 @@ const corsOrigin = process.env.CORS_ORIGIN || process.env.ALLOWED_ORIGINS || '*'
 const isWildcardCors = corsOrigin.trim() === '*';
 const allowedOrigins = isWildcardCors
   ? true
-  : corsOrigin.split(',').map(o => o.trim()).filter(Boolean);
+  : corsOrigin
+      .split(',')
+      .map((o) => o.trim())
+      .filter(Boolean);
 
 if (config.app.env === 'production' && isWildcardCors) {
   logger.warn(
@@ -79,6 +83,7 @@ async function startServer(): Promise<void> {
     // Connect to MongoDB
     await connectMongoDB();
     await ensureDemoAccounts();
+    await ensureDemoSeedData();
 
     // Connect to Redis
     await connectRedis();
