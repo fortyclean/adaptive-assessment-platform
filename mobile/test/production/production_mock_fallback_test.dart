@@ -73,5 +73,23 @@ void main() {
       expect(homeSource, isNot(contains("'12'")));
       expect(homeSource, isNot(contains("'5'")));
     });
+
+    test('Marketplace purchase flow updates local redemption state', () {
+      final marketplaceSource = File(
+        'lib/features/assessment/screens/marketplace_screen.dart',
+      ).readAsStringSync();
+      final studentMarketplaceSource = File(
+        'lib/features/assessment/screens/student_marketplace_screen.dart',
+      ).readAsStringSync();
+
+      expect(marketplaceSource, contains('_confirmPurchase'));
+      expect(marketplaceSource, contains('_pointsBalance -= item.price'));
+      expect(marketplaceSource, contains('_ownedItemIds.add(item.id)'));
+      expect(marketplaceSource, contains('_showCollectionSheet'));
+      expect(marketplaceSource, isNot(contains('ScaffoldMessenger.of')));
+      expect(studentMarketplaceSource, contains('MarketplaceScreen'));
+      expect(
+          studentMarketplaceSource, isNot(contains('Mock marketplace items')));
+    });
   });
 }

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.44';
-  static const int buildNumber = 44;
+  static const String current = '1.0.45';
+  static const int buildNumber = 45;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.45',
+      buildNumber: 45,
+      date: 'مايو 2026',
+      title: 'تحسين متجر النقاط',
+      changes: [
+        'استبدال تدفقات الشراء التي تنتهي برسالة فقط بحالة شراء محلية واضحة.',
+        'خصم النقاط بعد تأكيد الشراء وإضافة العنصر مباشرة إلى مجموعة الطالب.',
+        'إضافة حالة رصيد غير كافٍ بدل تنفيذ وهمي للشراء.',
+        'توحيد Student Marketplace مع شاشة المتجر الأساسية لمنع التكرار والبيانات القديمة.',
+        'إصلاح نصوص عربية تالفة في المتجر وإضافة اختبار يحرس تدفق الاستبدال.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.44',
       buildNumber: 44,

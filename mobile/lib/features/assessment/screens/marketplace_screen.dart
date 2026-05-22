@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
+import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
-/// Screen 66 — متجر النقاط والمكافآت (Points Marketplace)
-/// Matches design: _66/code.html
+/// Points marketplace.
+///
+/// Until the backend exposes a redemption endpoint, this screen uses a clear
+/// local redemption state instead of SnackBar-only actions. Purchases deduct
+/// points, move the item to the collection, and show a confirmation dialog.
 class MarketplaceScreen extends StatefulWidget {
   const MarketplaceScreen({super.key});
 
@@ -13,55 +19,88 @@ class MarketplaceScreen extends StatefulWidget {
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
   int _selectedTab = 0;
+  int _pointsBalance = 2450;
+  final Set<String> _ownedItemIds = {'extra-time'};
+  final Set<String> _activeItemIds = {'extra-time'};
 
-  final List<String> _tabs = ['الكل', 'الأفاتار', 'القوالب', 'الأدلة'];
+  static const List<String> _tabs = ['الكل', 'الأفاتار', 'القوالب', 'الأدلة'];
 
-  final List<_MarketItem> _items = [
-    const _MarketItem(
+  static const List<_MarketItem> _items = [
+    _MarketItem(
+      id: 'explorer-avatar',
       title: 'أفاتار: المستكشف',
       price: 850,
       badge: 'نادر',
-      badgeColor: Colors.black54,
       type: MarketItemType.avatar,
       icon: Icons.face,
       iconColor: Color(0xFF1E40AF),
+      description: 'أفاتار مميز يظهر في ملفك الشخصي ولوحة التحديات.',
     ),
-    const _MarketItem(
+    _MarketItem(
+      id: 'golden-sunset-theme',
       title: 'قالب: الغروب الذهبي',
       price: 1200,
       badge: 'حصري',
-      badgeColor: Color(0xFF611E00),
       type: MarketItemType.theme,
       icon: Icons.palette,
       iconColor: Color(0xFF611E00),
+      description: 'قالب لوني خاص لتخصيص تجربة التعلم.',
     ),
-    const _MarketItem(
+    _MarketItem(
+      id: 'advanced-algebra-guide',
       title: 'أسرار الجبر المتقدم',
       price: 450,
       badge: 'دليل دراسي',
-      badgeColor: AppColors.primary,
       type: MarketItemType.guide,
       icon: Icons.auto_stories,
       iconColor: AppColors.primary,
       isWide: true,
-      description: 'دليل شامل مع تمارين تفاعلية وحلول مبتكرة.',
+      description: 'دليل شامل مع تمارين تفاعلية وحلول مختصرة.',
     ),
-    const _MarketItem(
+    _MarketItem(
+      id: 'top-student-avatar',
       title: 'أفاتار: المتفوقة',
       price: 600,
       type: MarketItemType.avatar,
       icon: Icons.face_3,
       iconColor: Color(0xFF1E40AF),
+      description: 'أفاتار احتفالي للطلاب أصحاب الإنجازات العالية.',
     ),
-    const _MarketItem(
-      title: 'مضاعف XP (ساعة)',
+    _MarketItem(
+      id: 'xp-booster',
+      title: 'مضاعف XP لمدة ساعة',
       price: 250,
       type: MarketItemType.powerup,
       icon: Icons.rocket_launch,
       iconColor: Colors.white,
       iconBg: AppColors.error,
+      description: 'يزيد نقاط الخبرة المكتسبة في الجلسة القادمة.',
+    ),
+    _MarketItem(
+      id: 'extra-time',
+      title: 'مكافأة وقت إضافي',
+      price: 300,
+      type: MarketItemType.powerup,
+      icon: Icons.timer,
+      iconColor: Colors.green,
+      description: 'مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة.',
     ),
   ];
+
+  List<_MarketItem> get _filteredItems {
+    if (_selectedTab == 0) return _items;
+    final typeMap = {
+      1: MarketItemType.avatar,
+      2: MarketItemType.theme,
+      3: MarketItemType.guide,
+    };
+    final selectedType = typeMap[_selectedTab];
+    if (selectedType == null) return _items;
+    return _items.where((item) => item.type == selectedType).toList();
+  }
+
+  List<_MarketItem> get _collection =>
+      _items.where((item) => _ownedItemIds.contains(item.id)).toList();
 
   @override
   Widget build(BuildContext context) => Directionality(
@@ -69,10 +108,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          body: RefreshIndicator(
+            onRefresh: () async => setState(() {}),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
               children: [
                 _buildHeroBalance(),
                 const SizedBox(height: 24),
@@ -80,47 +119,50 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 const SizedBox(height: 24),
                 _buildMarketplaceTabs(),
                 const SizedBox(height: 16),
-                _buildItemsGrid(),
-                const SizedBox(height: 80),
+                _buildItemsList(),
               ],
             ),
           ),
           bottomNavigationBar:
-              const AppBottomNav(currentIndex: 1, role: 'student'),
+              const AppBottomNav(currentIndex: 0, role: 'student'),
         ),
       );
 
-  PreferredSizeWidget _buildAppBar() => AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 1,
-        shadowColor: Colors.black12,
-        automaticallyImplyLeading: false,
-        title: const Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: Color(0xFFD3E4FE),
-              child: Icon(Icons.person, color: AppColors.primary, size: 20),
+  PreferredSizeWidget _buildAppBar() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppBar(
+      backgroundColor: colorScheme.surface,
+      elevation: 1,
+      shadowColor: Colors.black12,
+      automaticallyImplyLeading: false,
+      title: const Row(
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: Color(0xFFD3E4FE),
+            child: Icon(Icons.person, color: AppColors.primary, size: 20),
+          ),
+          SizedBox(width: 12),
+          Text(
+            'EduAssess',
+            style: TextStyle(
+              color: AppColors.primary,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
             ),
-            SizedBox(width: 12),
-            Text(
-              'EduAssess',
-              style: TextStyle(
-                color: Color(0xFF1E40AF),
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Color(0xFF1E40AF)),
-            onPressed: () {},
           ),
         ],
-      );
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.notifications_outlined),
+          color: colorScheme.primary,
+          tooltip: 'الإشعارات',
+          onPressed: () => context.push(AppRoutes.studentNotifications),
+        ),
+      ],
+    );
+  }
 
   Widget _buildHeroBalance() => Container(
         decoration: BoxDecoration(
@@ -141,25 +183,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             const Text(
               'الرصيد الحالي',
               style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500),
+                color: Colors.white70,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const SizedBox(height: 8),
-            const Row(
+            Row(
               children: [
-                Icon(Icons.diamond, color: Color(0xFFFFDBCE), size: 36),
-                SizedBox(width: 8),
+                const Icon(Icons.diamond, color: Color(0xFFFFDBCE), size: 36),
+                const SizedBox(width: 8),
                 Text(
-                  '2,450',
-                  style: TextStyle(
+                  _formatPoints(_pointsBalance),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 32,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(width: 16),
-                Row(
+                const SizedBox(width: 16),
+                const Row(
                   children: [
                     Icon(Icons.bolt, color: Colors.white70, size: 18),
                     SizedBox(width: 4),
@@ -178,10 +221,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 color: Colors.black12,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'المستوى 14: عبقري رياضيات',
                     style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
@@ -189,8 +232,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     width: 80,
                     height: 6,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(3),
-                      child: const LinearProgressIndicator(
+                      borderRadius: BorderRadius.all(Radius.circular(3)),
+                      child: LinearProgressIndicator(
                         value: 0.75,
                         backgroundColor: Colors.white24,
                         valueColor:
@@ -206,30 +249,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       );
 
   Widget _buildMyCollection() {
-    final collection = [
-      {
-        'icon': Icons.timer,
-        'label': 'وقت إضافي',
-        'badge': 'نشط',
-        'bg': const Color(0xFFF0FDF4),
-        'color': Colors.green
-      },
-      {
-        'icon': Icons.workspace_premium,
-        'label': 'أول 100',
-        'badge': null,
-        'bg': const Color(0xFFFFFBEB),
-        'color': Colors.amber
-      },
-      {
-        'icon': Icons.face_6,
-        'label': 'قبعة الحكيم',
-        'badge': null,
-        'bg': const Color(0xFFEFF6FF),
-        'color': const Color(0xFF1E40AF)
-      },
-    ];
-
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -244,123 +264,121 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('عرض جميع مقتنياتك'),
-                      behavior: SnackBarBehavior.floating),
-                );
-              },
-              child: const Text('عرض الكل',
-                  style: TextStyle(color: AppColors.outline, fontSize: 12)),
+            TextButton.icon(
+              onPressed: _showCollectionSheet,
+              icon: const Icon(Icons.inventory_2_outlined, size: 16),
+              label: const Text('عرض الكل'),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        SizedBox(
-          height: 120,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: collection.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, i) {
-              final item = collection[i];
-              return Container(
-                width: 100,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                  boxShadow: [
-                    BoxShadow(
+        if (_collection.isEmpty)
+          _buildEmptyCollection()
+        else
+          SizedBox(
+            height: 120,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: _collection.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final item = _collection[index];
+                return Container(
+                  width: 112,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: colorScheme.outlineVariant),
+                    boxShadow: [
+                      BoxShadow(
                         color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 4)
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: item['bg'] as Color,
-                        shape: BoxShape.circle,
+                        blurRadius: 4,
                       ),
-                      child: Icon(item['icon'] as IconData,
-                          color: item['color'] as Color, size: 24),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      item['label'] as String,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.onSurface,
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor:
+                            item.effectiveIconColor.withValues(alpha: 0.12),
+                        child: Icon(item.icon, color: item.effectiveIconColor),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    if (item['badge'] != null)
+                      const SizedBox(height: 8),
                       Text(
-                        item['badge'] as String,
-                        style: const TextStyle(
+                        item.shortTitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (_activeItemIds.contains(item.id)) ...[
+                        const SizedBox(height: 4),
+                        const Text(
+                          'نشط',
+                          style: TextStyle(
                             fontSize: 10,
                             color: Colors.green,
-                            fontWeight: FontWeight.w700),
-                      ),
-                  ],
-                ),
-              );
-            },
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
-        ),
       ],
+    );
+  }
+
+  Widget _buildEmptyCollection() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Text(
+        'لم تضف أي مقتنيات بعد. اشترِ أول مكافأة وستظهر هنا.',
+        style: TextStyle(color: colorScheme.onSurfaceVariant),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
   Widget _buildMarketplaceTabs() => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: List.generate(_tabs.length, (i) {
-            final selected = _selectedTab == i;
+          children: List.generate(_tabs.length, (index) {
+            final selected = _selectedTab == index;
             return Padding(
               padding: const EdgeInsets.only(left: 8),
-              child: GestureDetector(
-                onTap: () => setState(() => _selectedTab = i),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: selected
-                        ? AppColors.primary
-                        : Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: selected
-                          ? AppColors.primary
-                          : Theme.of(context).colorScheme.outline,
-                    ),
-                    boxShadow: selected
-                        ? [
-                            BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.2),
-                                blurRadius: 6)
-                          ]
-                        : [],
-                  ),
-                  child: Text(
-                    _tabs[i],
-                    style: TextStyle(
-                      color: selected
-                          ? Colors.white
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+              child: ChoiceChip(
+                label: Text(_tabs[index]),
+                selected: selected,
+                onSelected: (_) => setState(() => _selectedTab = index),
+                selectedColor: AppColors.primary,
+                labelStyle: TextStyle(
+                  color: selected
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+                side: BorderSide(
+                  color: selected
+                      ? AppColors.primary
+                      : Theme.of(context).colorScheme.outlineVariant,
                 ),
               ),
             );
@@ -368,211 +386,423 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         ),
       );
 
-  Widget _buildItemsGrid() => GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 0.75,
-        ),
-        itemCount: _items.length,
-        itemBuilder: (context, i) {
-          final item = _items[i];
-          if (item.isWide) {
-            return const SizedBox.shrink(); // handled separately
-          }
-          return _buildItemCard(item);
-        },
+  Widget _buildItemsList() {
+    final items = _filteredItems;
+    if (items.isEmpty) {
+      return const _InfoState(
+        icon: Icons.storefront_outlined,
+        title: 'لا توجد عناصر في هذا القسم',
+        message: 'جرّب قسمًا آخر أو عد لاحقًا عند إضافة مكافآت جديدة.',
       );
+    }
 
-  Widget _buildItemCard(_MarketItem item) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color:
-                          Theme.of(context).colorScheme.surfaceContainerHighest,
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(16)),
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: 56,
-                        height: 56,
-                        decoration: BoxDecoration(
-                          color: item.iconBg ?? const Color(0xFFEFF6FF),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(item.icon, color: item.iconColor, size: 28),
-                      ),
-                    ),
-                  ),
-                  if (item.badge != null)
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: item.badgeColor ?? Colors.black54,
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          item.badge!,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 10),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isNarrow = constraints.maxWidth < 390;
+        return Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: items
+              .map(
+                (item) => SizedBox(
+                  width: item.isWide || isNarrow
+                      ? constraints.maxWidth
+                      : (constraints.maxWidth - 12) / 2,
+                  child: _buildItemCard(item),
+                ),
+              )
+              .toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildItemCard(_MarketItem item) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final owned = _ownedItemIds.contains(item.id);
+    final canAfford = _pointsBalance >= item.price;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 6,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: item.isWide ? 112 : 132,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.onSurface,
+            child: Stack(
+              children: [
+                Center(
+                  child: CircleAvatar(
+                    radius: 34,
+                    backgroundColor: (item.iconBg ?? const Color(0xFFEFF6FF)),
+                    child: Icon(
+                      item.icon,
+                      color: item.effectiveIconColor,
+                      size: 32,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.diamond,
-                          color: AppColors.primary, size: 14),
-                      const SizedBox(width: 4),
+                ),
+                if (item.badge != null)
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: _Badge(label: item.badge!),
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  item.description,
+                  style: TextStyle(
+                    fontSize: 12,
+                    height: 1.4,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  maxLines: item.isWide ? 2 : 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(Icons.diamond,
+                        color: AppColors.primary, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${item.price}',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const Spacer(),
+                    if (owned)
+                      const _OwnedLabel()
+                    else if (!canAfford)
                       Text(
-                        item.price.toString(),
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 12,
+                        'رصيد غير كافٍ',
+                        style: TextStyle(
+                          color: colorScheme.error,
+                          fontSize: 11,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                    ],
+                  ],
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: owned
+                        ? () => _activateItem(item)
+                        : () => _confirmPurchase(item),
+                    icon: Icon(
+                      owned
+                          ? Icons.check_circle_outline
+                          : Icons.shopping_bag_outlined,
+                      size: 18,
+                    ),
+                    label: Text(owned ? 'تفعيل' : 'شراء'),
                   ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            title: Text('شراء: ${item.title}'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.diamond,
-                                        color: AppColors.primary, size: 32),
-                                    const SizedBox(width: 8),
-                                    Text('${item.price} نقطة',
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColors.primary)),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                const Text('هل تريد شراء هذا العنصر؟',
-                                    textAlign: TextAlign.center),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(ctx),
-                                  child: const Text('إلغاء')),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(ctx);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'تم شراء "${item.title}" بنجاح!'),
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor: AppColors.success),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.primary,
-                                    foregroundColor: Colors.white),
-                                child: const Text('تأكيد الشراء'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        elevation: 0,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _confirmPurchase(_MarketItem item) async {
+    final canAfford = _pointsBalance >= item.price;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: Text(canAfford ? 'تأكيد الشراء' : 'رصيد غير كافٍ'),
+          content: Text(
+            canAfford
+                ? 'سيتم خصم ${item.price} نقطة من رصيدك لشراء "${item.title}".'
+                : 'تحتاج إلى ${item.price - _pointsBalance} نقطة إضافية لشراء "${item.title}".',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(canAfford ? 'إلغاء' : 'حسنًا'),
+            ),
+            if (canAfford)
+              FilledButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text('تأكيد الشراء'),
+              ),
+          ],
+        ),
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() {
+      _pointsBalance -= item.price;
+      _ownedItemIds.add(item.id);
+      if (item.type == MarketItemType.powerup ||
+          item.type == MarketItemType.avatar ||
+          item.type == MarketItemType.theme) {
+        _activeItemIds.add(item.id);
+      }
+    });
+
+    _showResultDialog(
+      title: 'تمت الإضافة إلى مجموعتك',
+      message:
+          'تم شراء "${item.title}" بنجاح. الرصيد المتبقي: ${_formatPoints(_pointsBalance)} نقطة.',
+    );
+  }
+
+  void _activateItem(_MarketItem item) {
+    setState(() => _activeItemIds.add(item.id));
+    _showResultDialog(
+      title: 'تم التفعيل',
+      message: 'تم تفعيل "${item.title}" داخل مجموعتك.',
+    );
+  }
+
+  void _showCollectionSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'مجموعتي',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.right,
+                ),
+                const SizedBox(height: 12),
+                if (_collection.isEmpty)
+                  const _InfoState(
+                    icon: Icons.inventory_2_outlined,
+                    title: 'لا توجد مقتنيات',
+                    message: 'اشترِ عنصرًا من المتجر ليظهر هنا.',
+                  )
+                else
+                  ..._collection.map(
+                    (item) => ListTile(
+                      leading: Icon(item.icon, color: item.effectiveIconColor),
+                      title: Text(item.title),
+                      subtitle: Text(
+                        _activeItemIds.contains(item.id)
+                            ? 'نشط الآن'
+                            : 'متاح للتفعيل',
                       ),
-                      child: const Text('شراء', style: TextStyle(fontSize: 12)),
+                      trailing: _activeItemIds.contains(item.id)
+                          ? const Icon(Icons.check_circle,
+                              color: AppColors.success)
+                          : TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                                _activateItem(item);
+                              },
+                              child: const Text('تفعيل'),
+                            ),
                     ),
                   ),
-                ],
-              ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showResultDialog({required String title, required String message}) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('تم'),
             ),
           ],
         ),
-      );
+      ),
+    );
+  }
+
+  String _formatPoints(int value) {
+    final text = value.toString();
+    final buffer = StringBuffer();
+    for (var index = 0; index < text.length; index++) {
+      final remaining = text.length - index;
+      buffer.write(text[index]);
+      if (remaining > 1 && remaining % 3 == 1) {
+        buffer.write(',');
+      }
+    }
+    return buffer.toString();
+  }
 }
 
 enum MarketItemType { avatar, theme, guide, powerup }
 
 class _MarketItem {
   const _MarketItem({
+    required this.id,
     required this.title,
     required this.price,
     required this.type,
     required this.icon,
     required this.iconColor,
+    required this.description,
     this.badge,
-    this.badgeColor,
     this.iconBg,
     this.isWide = false,
-    this.description,
   });
+
+  final String id;
   final String title;
   final int price;
-  final String? badge;
-  final Color? badgeColor;
   final MarketItemType type;
   final IconData icon;
   final Color iconColor;
+  final String description;
+  final String? badge;
   final Color? iconBg;
   final bool isWide;
-  final String? description;
+
+  Color get effectiveIconColor => iconColor;
+
+  String get shortTitle {
+    if (id == 'extra-time') return 'وقت إضافي';
+    return title.contains(':') ? title.split(':').last.trim() : title;
+  }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(color: Colors.white, fontSize: 10),
+        ),
+      );
+}
+
+class _OwnedLabel extends StatelessWidget {
+  const _OwnedLabel();
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: AppColors.successContainer,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: const Text(
+          'مملوك',
+          style: TextStyle(
+            color: AppColors.success,
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      );
+}
+
+class _InfoState extends StatelessWidget {
+  const _InfoState({
+    required this.icon,
+    required this.title,
+    required this.message,
+  });
+
+  final IconData icon;
+  final String title;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, size: 36, color: colorScheme.primary),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            message,
+            style: TextStyle(color: colorScheme.onSurfaceVariant),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
 }
