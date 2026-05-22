@@ -73,7 +73,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: Column(
             children: [
               _buildHeader(),
@@ -103,7 +103,6 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
   // ─── Header ──────────────────────────────────────────────────────────────
 
   Widget _buildHeader() => Container(
-        color: AppColors.surface,
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top + 8,
           bottom: 8,
@@ -111,9 +110,11 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
           left: 16,
         ),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: const Border(
-            bottom: BorderSide(color: AppColors.outlineVariant),
+          color: Theme.of(context).colorScheme.surface,
+          border: Border(
+            bottom: BorderSide(
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
           ),
           boxShadow: [
             BoxShadow(
@@ -176,7 +177,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
   Widget _buildWeeklyCalendar() => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -237,7 +238,9 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                       margin: const EdgeInsets.symmetric(horizontal: 4),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
-                        color: isActive ? AppColors.primary : Colors.white,
+                        color: isActive
+                            ? AppColors.primary
+                            : Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                         border: isActive
                             ? null
@@ -385,7 +388,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.outlineVariant),
                 boxShadow: [
@@ -522,7 +525,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
@@ -616,7 +619,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                               decoration: BoxDecoration(
                                 color: selectedTime == t
                                     ? AppColors.primary
-                                    : Colors.white,
+                                    : Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                     color: selectedTime == t

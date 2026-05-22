@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/student_state_view.dart';
+import '../../../shared/widgets/user_avatar.dart';
+import '../repositories/assessment_repository.dart';
 
 /// StudentAnalyticsScreen — Screen 50
 /// Comprehensive student performance analytics with bento grid metrics,
@@ -19,92 +22,288 @@ class StudentAnalyticsScreen extends ConsumerStatefulWidget {
 
 class _StudentAnalyticsScreenState
     extends ConsumerState<StudentAnalyticsScreen> {
-  // Mock data — replace with real API calls
-  final double _overallPerformance = 88.5;
-  final int _learningHours = 124;
-  final int _filesOpened = 48;
+  bool _isLoading = true;
+  String? _errorMessage;
+  double _overallPerformance = 0;
+  double _trendPercent = 0;
+  int _completedAttempts = 0;
+  int _totalPoints = 0;
 
-  final List<_SubjectProgress> _subjects = const [
-    _SubjectProgress(name: 'اللغة العربية', percentage: 0.92),
-    _SubjectProgress(name: 'الرياضيات', percentage: 0.78),
-    _SubjectProgress(name: 'العلوم', percentage: 0.85),
-  ];
+  List<_SubjectProgress> _subjects = const [];
 
-  final List<double> _weeklyData = const [0.40, 0.60, 0.85, 0.70, 0.50];
+  List<double> _weeklyData = const [0, 0, 0, 0, 0, 0, 0];
   final List<String> _weekDays = const [
     'أحد',
     'اثنين',
     'ثلاثاء',
     'أربعاء',
     'خميس',
+    'جمعة',
+    'سبت',
   ];
 
-  final List<_AttachmentStat> _attachments = const [
-    _AttachmentStat(
-      icon: Icons.video_library_outlined,
-      iconColor: AppColors.primary,
-      bgColor: Color(0xFFEFF6FF),
-      borderColor: Color(0xFFBFDBFE),
-      title: 'الفيديوهات التعليمية',
-      subtitle: '42 ساعة مشاهدة هادفة',
-      percentage: 85,
-      percentageColor: AppColors.primary,
-    ),
-    _AttachmentStat(
-      icon: Icons.folder_open_outlined,
-      iconColor: Color(0xFF611E00),
-      bgColor: Color(0xFFFFF7ED),
-      borderColor: Color(0xFFFFDBC8),
-      title: 'الملازم والملفات',
-      subtitle: 'تمت مراجعة 15 من أصل 20',
-      percentage: 75,
-      percentageColor: Color(0xFF611E00),
-    ),
-  ];
+  List<_AttachmentStat> _attachments = const [];
 
-  final List<_Badge> _badges = const [
-    _Badge(
-      icon: Icons.workspace_premium_rounded,
-      iconColor: Color(0xFFD97706),
-      bgColor: Color(0xFFFEF3C7),
-      borderColor: Color(0xFFFDE68A),
-      label: 'الأول دائماً',
-      isEarned: true,
-      count: 3,
-    ),
-    _Badge(
-      icon: Icons.speed_rounded,
-      iconColor: AppColors.primary,
-      bgColor: Color(0xFFEFF6FF),
-      borderColor: Color(0xFFBFDBFE),
-      label: 'سريع البديهة',
-      isEarned: true,
-    ),
-    _Badge(
-      icon: Icons.auto_stories_outlined,
-      iconColor: Color(0xFF9CA3AF),
-      bgColor: Color(0xFFF9FAFB),
-      borderColor: Color(0xFFE5E7EB),
-      label: 'قارئ نهم',
-      isEarned: false,
-    ),
-    _Badge(
-      icon: Icons.verified_rounded,
-      iconColor: AppColors.success,
-      bgColor: Color(0xFFECFDF5),
-      borderColor: Color(0xFFA7F3D0),
-      label: 'ملتزم بالوقت',
-      isEarned: true,
-    ),
-  ];
+  List<_Badge> _badges = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAnalytics();
+  }
+
+  Future<void> _loadAnalytics() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final history =
+          await ref.read(assessmentRepositoryProvider).getAttemptHistory();
+      final completed = history
+          .where((h) =>
+              h['status'] == 'completed' && (h['scorePercentage'] is num))
+          .toList();
+
+      if (!mounted) return;
+      setState(() {
+        _applyHistory(completed);
+        _isLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage =
+            'تعذر تحميل تحليلاتك الآن. تحقق من الاتصال ثم حاول مرة أخرى.';
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _applyHistory(List<Map<String, dynamic>> history) {
+    _completedAttempts = history.length;
+    _totalPoints = history.fold<int>(
+      0,
+      (sum, h) => sum + ((h['pointsEarned'] as num?)?.toInt() ?? 0),
+    );
+
+    final scores =
+        history.map((h) => (h['scorePercentage'] as num).toDouble()).toList();
+    _overallPerformance =
+        scores.isEmpty ? 0 : scores.reduce((a, b) => a + b) / scores.length;
+    _trendPercent = _calculateRecentTrend(scores);
+
+    _subjects = _buildSubjectProgressFromHistory(history);
+    _weeklyData = _buildWeeklyData(history);
+    _attachments = _buildSkillInsights(history);
+    _badges = _buildEarnedBadges();
+  }
+
+  double _calculateRecentTrend(List<double> scores) {
+    if (scores.length < 2) return 0;
+    final latest = scores.last;
+    final previous = scores[scores.length - 2];
+    return latest - previous;
+  }
+
+  String get _performanceLabel {
+    if (_overallPerformance >= 90) return 'ممتاز';
+    if (_overallPerformance >= 75) return 'جيد جداً';
+    if (_overallPerformance >= 60) return 'جيد';
+    return 'يحتاج دعم';
+  }
+
+  String get _trendText {
+    if (_completedAttempts < 2 || _trendPercent.abs() < 0.1) {
+      return 'لا يوجد تغير واضح بعد';
+    }
+    final sign = _trendPercent > 0 ? '+' : '';
+    return '$sign${_trendPercent.toStringAsFixed(1)}% عن آخر اختبار';
+  }
+
+  List<_SubjectProgress> _buildSubjectProgressFromHistory(
+    List<Map<String, dynamic>> history,
+  ) {
+    final grouped = <String, List<double>>{};
+    for (final attempt in history) {
+      final subject = _extractSubject(attempt);
+      final score = (attempt['scorePercentage'] as num?)?.toDouble();
+      if (subject == null || score == null) continue;
+      grouped.putIfAbsent(subject, () => []).add(score);
+    }
+
+    final subjects = grouped.entries.map((entry) {
+      final avg = entry.value.reduce((a, b) => a + b) / entry.value.length;
+      return _SubjectProgress(name: entry.key, percentage: avg / 100);
+    }).toList()
+      ..sort((a, b) => b.percentage.compareTo(a.percentage));
+
+    return subjects.take(4).toList();
+  }
+
+  List<double> _buildWeeklyData(List<Map<String, dynamic>> history) {
+    final buckets = List.generate(7, (_) => <double>[]);
+    final now = DateTime.now();
+
+    for (final attempt in history) {
+      final score = (attempt['scorePercentage'] as num?)?.toDouble();
+      final createdAt = DateTime.tryParse(
+        (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
+      );
+      if (score == null || createdAt == null) continue;
+
+      final diff = now.difference(createdAt).inDays;
+      if (diff < 0 || diff > 6) continue;
+      buckets[6 - diff].add(score / 100);
+    }
+
+    return buckets
+        .map((items) =>
+            items.isEmpty ? 0.0 : items.reduce((a, b) => a + b) / items.length)
+        .toList();
+  }
+
+  List<_AttachmentStat> _buildSkillInsights(
+    List<Map<String, dynamic>> history,
+  ) {
+    final skillScores = <String, List<double>>{};
+    for (final attempt in history) {
+      final breakdown = attempt['skillBreakdown'];
+      if (breakdown is! List) continue;
+      for (final item in breakdown) {
+        if (item is! Map) continue;
+        final total = (item['totalQuestions'] as num?)?.toDouble() ?? 0;
+        final correct = (item['correctAnswers'] as num?)?.toDouble() ?? 0;
+        final skill = (item['mainSkill'] ?? item['skill'] ?? '').toString();
+        if (skill.isEmpty || total <= 0) continue;
+        skillScores.putIfAbsent(skill, () => []).add(correct / total);
+      }
+    }
+
+    final ranked = skillScores.entries.map((entry) {
+      final avg = entry.value.reduce((a, b) => a + b) / entry.value.length;
+      return MapEntry(entry.key, avg);
+    }).toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    if (ranked.isEmpty) return const [];
+
+    final strongest = ranked.first;
+    final weakest = ranked.last;
+    return [
+      _AttachmentStat(
+        icon: Icons.trending_up_rounded,
+        iconColor: AppColors.success,
+        bgColor: const Color(0xFFECFDF5),
+        borderColor: const Color(0xFFA7F3D0),
+        title: 'أقوى مهارة',
+        subtitle: strongest.key,
+        percentage: (strongest.value * 100).round(),
+        percentageColor: AppColors.success,
+      ),
+      _AttachmentStat(
+        icon: Icons.tips_and_updates_outlined,
+        iconColor: AppColors.warning,
+        bgColor: const Color(0xFFFFF7ED),
+        borderColor: const Color(0xFFFFDBC8),
+        title: 'تحتاج مراجعة',
+        subtitle: weakest.key,
+        percentage: (weakest.value * 100).round(),
+        percentageColor: AppColors.warning,
+      ),
+    ];
+  }
+
+  List<_Badge> _buildEarnedBadges() => [
+        _Badge(
+          icon: Icons.workspace_premium_rounded,
+          iconColor: const Color(0xFFD97706),
+          bgColor: const Color(0xFFFEF3C7),
+          borderColor: const Color(0xFFFDE68A),
+          label: 'اختبارات مكتملة',
+          isEarned: _completedAttempts > 0,
+          count: _completedAttempts == 0 ? null : _completedAttempts,
+        ),
+        _Badge(
+          icon: Icons.speed_rounded,
+          iconColor: AppColors.primary,
+          bgColor: const Color(0xFFEFF6FF),
+          borderColor: const Color(0xFFBFDBFE),
+          label: 'أداء مرتفع',
+          isEarned: _overallPerformance >= 85,
+        ),
+        _Badge(
+          icon: Icons.verified_rounded,
+          iconColor: AppColors.success,
+          bgColor: const Color(0xFFECFDF5),
+          borderColor: const Color(0xFFA7F3D0),
+          label: 'ملتزم',
+          isEarned: _completedAttempts >= 3,
+        ),
+      ];
+
+  String? _extractSubject(Map<String, dynamic> attempt) {
+    final direct = attempt['subject'] as String?;
+    if (direct != null && direct.trim().isNotEmpty) return direct;
+
+    final assessment = attempt['assessmentId'];
+    if (assessment is Map && assessment['subject'] is String) {
+      return assessment['subject'] as String;
+    }
+    if (attempt['assessment'] is Map &&
+        (attempt['assessment'] as Map)['subject'] is String) {
+      return (attempt['assessment'] as Map)['subject'] as String;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final firstName = user?.fullName.split(' ').first ?? 'أحمد';
+    final firstName = user?.fullName.split(' ').first ?? 'طالب';
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: colorScheme.surface,
+        body: const Center(child: CircularProgressIndicator()),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 2, role: 'student'),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Scaffold(
+        backgroundColor: colorScheme.surface,
+        body: StudentStateView(
+          icon: Icons.wifi_off_rounded,
+          title: 'تعذر تحميل التحليلات',
+          message: _errorMessage!,
+          actionLabel: 'إعادة المحاولة',
+          onAction: _loadAnalytics,
+        ),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 2, role: 'student'),
+      );
+    }
+
+    if (_completedAttempts == 0) {
+      return Scaffold(
+        backgroundColor: colorScheme.surface,
+        body: StudentStateView(
+          icon: Icons.insights_outlined,
+          title: 'لا توجد تحليلات بعد',
+          message: 'ستظهر مؤشرات الأداء والمهارات بعد إكمال أول اختبار.',
+          actionLabel: 'عرض الاختبارات',
+          onAction: () => context.go('/student/assessments-list'),
+        ),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 2, role: 'student'),
+      );
+    }
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colorScheme.surface,
       body: CustomScrollView(
         slivers: [
           // ─── Top App Bar ─────────────────────────────────────────────
@@ -138,27 +337,10 @@ class _StudentAnalyticsScreenState
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.surfaceContainer,
-                        border: Border.all(
-                          color: AppColors.outlineVariant,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          firstName.isNotEmpty ? firstName[0] : 'أ',
-                          style: const TextStyle(
-                            fontFamily: 'Almarai',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.onSurface,
-                          ),
-                        ),
-                      ),
+                    UserAvatar(
+                      user: user,
+                      size: 40,
+                      borderColor: colorScheme.outlineVariant,
                     ),
                   ],
                 ),
@@ -240,16 +422,16 @@ class _StudentAnalyticsScreenState
                   child: _buildSmallMetricCard(
                 icon: Icons.schedule_outlined,
                 iconColor: const Color(0xFF611E00),
-                value: '$_learningHours',
-                label: 'ساعة تعليمية',
+                value: '$_completedAttempts',
+                label: 'اختبار مكتمل',
               )),
               const SizedBox(width: 12),
               Expanded(
                   child: _buildSmallMetricCard(
                 icon: Icons.description_outlined,
                 iconColor: AppColors.primary,
-                value: '$_filesOpened',
-                label: 'ملف تم فتحه',
+                value: '$_totalPoints',
+                label: 'نقطة مكتسبة',
               )),
             ],
           ),
@@ -259,7 +441,7 @@ class _StudentAnalyticsScreenState
   Widget _buildPerformanceCard() => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -286,15 +468,16 @@ class _StudentAnalyticsScreenState
                     child: CircularProgressIndicator(
                       value: _overallPerformance / 100,
                       strokeWidth: 8,
-                      backgroundColor: const Color(0xFFF1F5F9),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         AppColors.primaryContainer,
                       ),
                     ),
                   ),
-                  const Text(
-                    'جيد جداً',
-                    style: TextStyle(
+                  Text(
+                    _performanceLabel,
+                    style: const TextStyle(
                       fontFamily: 'Almarai',
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -333,23 +516,29 @@ class _StudentAnalyticsScreenState
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '+4.2% عن الشهر الماضي',
+                          _trendText,
                           style: TextStyle(
                             fontFamily: 'Almarai',
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.success,
+                            color: _trendPercent < 0
+                                ? AppColors.error
+                                : AppColors.success,
                           ),
                         ),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         Icon(
-                          Icons.trending_up,
+                          _trendPercent < 0
+                              ? Icons.trending_down
+                              : Icons.trending_up,
                           size: 16,
-                          color: AppColors.success,
+                          color: _trendPercent < 0
+                              ? AppColors.error
+                              : AppColors.success,
                         ),
                       ],
                     ),
@@ -370,7 +559,7 @@ class _StudentAnalyticsScreenState
       Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -448,7 +637,7 @@ class _StudentAnalyticsScreenState
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: [
@@ -505,7 +694,8 @@ class _StudentAnalyticsScreenState
               child: LinearProgressIndicator(
                 value: subject.percentage,
                 minHeight: 8,
-                backgroundColor: const Color(0xFFF1F5F9),
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerHighest,
                 valueColor:
                     const AlwaysStoppedAnimation<Color>(AppColors.primary),
               ),
@@ -516,7 +706,8 @@ class _StudentAnalyticsScreenState
 
   Widget _buildWeeklyChart() => Column(
         children: [
-          const Divider(color: Color(0xFFF1F5F9), height: 1),
+          Divider(
+              color: Theme.of(context).colorScheme.outlineVariant, height: 1),
           const SizedBox(height: 16),
           SizedBox(
             height: 128,
@@ -575,7 +766,7 @@ class _StudentAnalyticsScreenState
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           const Text(
-            'استهلاك المرفقات التعليمية',
+            'رؤى المهارات من الاختبارات',
             style: TextStyle(
               fontFamily: 'Almarai',
               fontSize: 18,
@@ -641,7 +832,7 @@ class _StudentAnalyticsScreenState
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
@@ -691,7 +882,7 @@ class _StudentAnalyticsScreenState
           width: 120,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AppColors.outlineVariant),
             boxShadow: [

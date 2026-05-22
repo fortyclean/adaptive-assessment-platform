@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/student_state_view.dart';
+import '../repositories/assessment_repository.dart';
 
 /// Micro-Learning Screen — Design _62
 /// "التعلم المصغر الذكي" — Smart Micro-Learning
 /// Short learning cards per skill weakness with progress tracking.
-class MicroLearningScreen extends StatefulWidget {
+class MicroLearningScreen extends ConsumerStatefulWidget {
   const MicroLearningScreen({super.key});
 
   @override
-  State<MicroLearningScreen> createState() => _MicroLearningScreenState();
+  ConsumerState<MicroLearningScreen> createState() =>
+      _MicroLearningScreenState();
 }
 
-class _MicroLearningScreenState extends State<MicroLearningScreen> {
+class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
+  bool _isLoading = true;
+  String? _errorMessage;
+
   // Daily goal progress (0.0 – 1.0)
-  final double _dailyGoalProgress = 0.75;
+  double _dailyGoalProgress = 0;
 
   // Streak days
-  final int _streakDays = 5;
+  int _streakDays = 0;
 
   // XP points
-  final int _xpPoints = 450;
+  int _xpPoints = 0;
 
   // Daily micro-lessons
-  final List<_MicroLesson> _lessons = const [
+  List<_MicroLesson> _lessons = const [
     _MicroLesson(
-      title: 'أساسيات الخوارزميات',
-      subtitle: '2 دقيقة • مهارة جديدة',
+      title: 'ابدأ بأول اختبار تشخيصي',
+      subtitle: '3 دقائق • يفتح توصياتك الشخصية',
       icon: Icons.psychology_outlined,
       isLocked: false,
     ),
@@ -40,7 +48,7 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
   ];
 
   // AI-recommended weak areas
-  final List<_WeakArea> _weakAreas = const [
+  List<_WeakArea> _weakAreas = const [
     _WeakArea(
       title: 'قواعد اللغة',
       description: 'تحتاج لتعزيز مهاراتك هنا',
@@ -58,96 +66,276 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        body: CustomScrollView(
-          slivers: [
-            // ─── App Bar ────────────────────────────────────────────────────
-            SliverAppBar(
-              floating: true,
-              snap: true,
-              backgroundColor: const Color(0xFFF8FAFC),
-              elevation: 0,
-              scrolledUnderElevation: 1,
-              automaticallyImplyLeading: false,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Save button (RTL: left)
-                  TextButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('تم حفظ التقدم'),
-                            behavior: SnackBarBehavior.floating),
-                      );
-                    },
-                    child: const Text(
-                      'حفظ',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  // Title + back (RTL: right)
-                  Row(
-                    children: [
-                      const Text(
-                        'التعلم المصغر',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      GestureDetector(
-                        onTap: () => context.pop(),
-                        child: const Icon(
-                          Icons.arrow_forward_rounded,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+  void initState() {
+    super.initState();
+    _loadLearningPlan();
+  }
 
-            // ─── Content ────────────────────────────────────────────────────
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  // Hero Section
-                  _buildHeroSection(),
-                  const SizedBox(height: 24),
+  Future<void> _loadLearningPlan() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final history =
+          await ref.read(assessmentRepositoryProvider).getAttemptHistory();
+      final completed = history
+          .where((h) =>
+              h['status'] == 'completed' && (h['scorePercentage'] is num))
+          .toList();
 
-                  // Daily Goal Progress
-                  _buildDailyGoal(),
-                  const SizedBox(height: 24),
+      if (!mounted) return;
+      setState(() {
+        _xpPoints = completed.fold<int>(
+          0,
+          (sum, h) => sum + ((h['pointsEarned'] as num?)?.toInt() ?? 0),
+        );
+        _dailyGoalProgress =
+            (_todayAttemptCount(completed) / 3).clamp(0.0, 1.0);
+        _streakDays = _calculateStreakDays(completed);
+        _weakAreas = _buildWeakAreas(completed);
+        _lessons = _buildLessonsFromWeakAreas(_weakAreas, completed.isEmpty);
+        _isLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage =
+            'تعذر تحميل خطة التعلم المصغر. تحقق من الاتصال ثم حاول مرة أخرى.';
+        _isLoading = false;
+      });
+    }
+  }
 
-                  // Daily Micro-lessons
-                  _buildDailyLessons(),
-                  const SizedBox(height: 24),
+  int _todayAttemptCount(List<Map<String, dynamic>> history) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return history.where((attempt) {
+      final date = DateTime.tryParse(
+        (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
+      );
+      if (date == null) return false;
+      return DateTime(date.year, date.month, date.day) == today;
+    }).length;
+  }
 
-                  // AI Recommendations Bento Grid
-                  _buildAIRecommendations(),
-                  const SizedBox(height: 24),
+  int _calculateStreakDays(List<Map<String, dynamic>> history) {
+    final days = history
+        .map((attempt) => DateTime.tryParse(
+              (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
+            ))
+        .whereType<DateTime>()
+        .map((date) => DateTime(date.year, date.month, date.day))
+        .toSet();
+    var cursor = DateTime.now();
+    cursor = DateTime(cursor.year, cursor.month, cursor.day);
+    var streak = 0;
+    while (days.contains(cursor)) {
+      streak++;
+      cursor = cursor.subtract(const Duration(days: 1));
+    }
+    return streak;
+  }
 
-                  // Featured Video Card
-                  _buildFeaturedVideo(),
-                  const SizedBox(height: 16),
-                ]),
-              ),
-            ),
-          ],
+  List<_WeakArea> _buildWeakAreas(List<Map<String, dynamic>> history) {
+    final skills = <String, List<double>>{};
+    for (final attempt in history) {
+      final breakdown = attempt['skillBreakdown'];
+      if (breakdown is! List) continue;
+      for (final item in breakdown) {
+        if (item is! Map) continue;
+        final total = (item['totalQuestions'] as num?)?.toDouble() ?? 0;
+        final correct = (item['correctAnswers'] as num?)?.toDouble() ?? 0;
+        final skill = (item['mainSkill'] ?? item['skill'] ?? '').toString();
+        if (skill.isEmpty || total <= 0) continue;
+        skills.putIfAbsent(skill, () => []).add(correct / total);
+      }
+    }
+
+    if (skills.isEmpty) {
+      return const [
+        _WeakArea(
+          title: 'اختبار تشخيصي',
+          description: 'ابدأ اختباراً لفتح توصيات مبنية على أدائك',
+          progress: 0,
+          color: AppColors.primary,
+          icon: Icons.route_outlined,
+        ),
+      ];
+    }
+
+    final ranked = skills.entries.map((entry) {
+      final avg = entry.value.reduce((a, b) => a + b) / entry.value.length;
+      return MapEntry(entry.key, avg);
+    }).toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+
+    return ranked.take(2).map((entry) {
+      final progress = entry.value.clamp(0.0, 1.0);
+      return _WeakArea(
+        title: entry.key,
+        description: progress >= 0.75
+            ? 'مهارة قوية، حافظ على مستواك'
+            : 'تحتاج مراجعة قصيرة اليوم',
+        progress: progress,
+        color: progress >= 0.75 ? AppColors.success : AppColors.warning,
+        icon: progress >= 0.75
+            ? Icons.auto_awesome_rounded
+            : Icons.trending_down_rounded,
+      );
+    }).toList();
+  }
+
+  List<_MicroLesson> _buildLessonsFromWeakAreas(
+    List<_WeakArea> weakAreas,
+    bool isEmptyHistory,
+  ) {
+    if (isEmptyHistory) {
+      return const [
+        _MicroLesson(
+          title: 'ابدأ بأول اختبار تشخيصي',
+          subtitle: '3 دقائق • يفتح توصياتك الشخصية',
+          icon: Icons.psychology_outlined,
+          isLocked: false,
+        ),
+        _MicroLesson(
+          title: 'راجع نتائجك بعد الاختبار',
+          subtitle: 'مغلق حتى تظهر أول نتيجة',
+          icon: Icons.insights_outlined,
+          isLocked: true,
+        ),
+      ];
+    }
+
+    return weakAreas.map((area) {
+      final percent = (area.progress * 100).round();
+      return _MicroLesson(
+        title: 'مراجعة قصيرة: ${area.title}',
+        subtitle: '4 دقائق • مستوى الإتقان $percent%',
+        icon: area.icon,
+        isLocked: false,
+      );
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: colorScheme.surface,
+        body: const Center(child: CircularProgressIndicator()),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 1, role: 'student'),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Scaffold(
+        backgroundColor: colorScheme.surface,
+        body: StudentStateView(
+          icon: Icons.wifi_off_rounded,
+          title: 'تعذر تحميل خطة التعلم',
+          message: _errorMessage!,
+          actionLabel: 'إعادة المحاولة',
+          onAction: _loadLearningPlan,
         ),
         bottomNavigationBar:
             const AppBottomNav(currentIndex: 1, role: 'student'),
       );
+    }
+
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: CustomScrollView(
+        slivers: [
+          // ─── App Bar ────────────────────────────────────────────────────
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            elevation: 0,
+            scrolledUnderElevation: 1,
+            automaticallyImplyLeading: false,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Save button (RTL: left)
+                TextButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('تم حفظ التقدم'),
+                          behavior: SnackBarBehavior.floating),
+                    );
+                  },
+                  child: const Text(
+                    'حفظ',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                // Title + back (RTL: right)
+                Row(
+                  children: [
+                    const Text(
+                      'التعلم المصغر',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () => context.pop(),
+                      child: const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // ─── Content ────────────────────────────────────────────────────
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                // Hero Section
+                _buildHeroSection(),
+                const SizedBox(height: 24),
+
+                // Daily Goal Progress
+                _buildDailyGoal(),
+                const SizedBox(height: 24),
+
+                // Daily Micro-lessons
+                _buildDailyLessons(),
+                const SizedBox(height: 24),
+
+                // AI Recommendations Bento Grid
+                _buildAIRecommendations(),
+                const SizedBox(height: 24),
+
+                // Featured Video Card
+                _buildFeaturedVideo(),
+                const SizedBox(height: 16),
+              ]),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'student'),
+    );
+  }
 
   // ─── Hero Section ──────────────────────────────────────────────────────
 
@@ -186,19 +374,24 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
                 ),
               ),
               // Greeting + title (RTL: right)
-              const Column(
+              Column(
+                key: ValueKey(
+                  ref.watch(authProvider).user?.fullName ?? 'student',
+                ),
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'أهلاً بك مجدداً، أحمد',
-                    style: TextStyle(
+                    'أهلاً بك مجدداً، ${ref.watch(authProvider).user?.fullName.split(' ').first ?? 'طالب'}',
+                    semanticsLabel:
+                        ref.watch(authProvider).user?.fullName ?? 'student',
+                    style: const TextStyle(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 4),
-                  Text(
+                  const SizedBox(height: 4),
+                  const Text(
                     'التعلم المصغر الذكي',
                     style: TextStyle(
                       color: AppColors.primary,
@@ -220,10 +413,10 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
   Widget _buildStreakCard() => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.7),
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border:
-              Border.all(color: const Color(0xFFE2E8F0).withValues(alpha: 0.5)),
+              Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
@@ -239,12 +432,12 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text(
+                  Text(
                     'سلسلة تعلمك الحالية',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1B22),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -308,12 +501,12 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const Text(
+            Text(
               'هدف اليوم',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],
@@ -339,12 +532,12 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
   Widget _buildDailyLessons() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          Text(
             'دروس اليوم السريعة',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1B22),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             textAlign: TextAlign.right,
           ),
@@ -359,7 +552,7 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: const Color(0xFFE2E8F0)),
             boxShadow: [
@@ -388,26 +581,34 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          lesson.title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF1A1B22),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            lesson.title,
+                            textAlign: TextAlign.right,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          lesson.subtitle,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: AppColors.onSurfaceVariant,
+                          const SizedBox(height: 4),
+                          Text(
+                            lesson.subtitle,
+                            textAlign: TextAlign.right,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.onSurfaceVariant,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Container(
@@ -440,12 +641,12 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
   Widget _buildAIRecommendations() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          Text(
             'توصيات الذكاء الاصطناعي لك',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1B22),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
             textAlign: TextAlign.right,
           ),
@@ -475,7 +676,7 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
   Widget _buildFlashcardChallenge() => Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.7),
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: AppColors.primaryContainer.withValues(alpha: 0.2),
@@ -513,12 +714,12 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               'تحدي البطاقات الخاطفة',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.center,
             ),
@@ -569,7 +770,7 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
   Widget _buildWeakAreaCard(_WeakArea area) => Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFE2E8F0)),
           boxShadow: [
@@ -587,10 +788,10 @@ class _MicroLearningScreenState extends State<MicroLearningScreen> {
             const SizedBox(height: 8),
             Text(
               area.title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.right,
             ),

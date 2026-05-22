@@ -71,7 +71,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0xFFFBF8FF),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +131,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
       );
 
   PreferredSizeWidget _buildAppBar() => AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 1,
         shadowColor: Colors.black12,
         automaticallyImplyLeading: false,
@@ -174,7 +174,9 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
-                    color: selected ? const Color(0xFF1E40AF) : Colors.white,
+                    color: selected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(
                       color: selected
@@ -233,7 +235,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
   Widget _buildAssignmentCard(_AssignmentCard card) => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFE2E8F0)),
           boxShadow: [
@@ -284,7 +286,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen>
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      backgroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       shape: const RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(20))),

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/constants/app_constants.dart';
+import 'core/network/api_service.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/repositories/auth_repository.dart';
@@ -36,12 +37,23 @@ Future<void> main() async {
 
   // ── Initialize notifications ──────────────────────────────────────────────
   await NotificationService.instance.init();
+  await _syncRestoredPushUser(container);
 
   runApp(
     UncontrolledProviderScope(
       container: container,
       child: const AdaptiveAssessmentApp(),
     ),
+  );
+}
+
+Future<void> _syncRestoredPushUser(ProviderContainer container) async {
+  final user = container.read(authProvider).user;
+  if (user == null) return;
+
+  await NotificationService.instance.identifyPushUser(
+    dio: container.read(apiServiceProvider).dio,
+    user: user,
   );
 }
 
@@ -93,6 +105,20 @@ class AdaptiveAssessmentApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
+
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      final previousUserId = previous?.user?.id;
+      final nextUser = next.user;
+
+      if (nextUser != null && previousUserId != nextUser.id) {
+        NotificationService.instance.identifyPushUser(
+          dio: ref.read(apiServiceProvider).dio,
+          user: nextUser,
+        );
+      } else if (previousUserId != null && nextUser == null) {
+        NotificationService.instance.clearPushUser();
+      }
+    });
 
     return MaterialApp.router(
       title: 'منصة التقييم التكيفي',

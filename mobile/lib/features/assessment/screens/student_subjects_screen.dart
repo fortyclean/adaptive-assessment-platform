@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/user_avatar.dart';
 
 /// Student Subjects Screen — Design _39
 /// Shows a searchable, filterable grid of enrolled subjects with progress.
@@ -116,14 +117,15 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
     final firstName = user?.fullName.split(' ').first ?? 'طالب';
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
             // ─── App Bar ────────────────────────────────────────────────
-            _buildAppBar(firstName),
+            _buildAppBar(user),
 
             // ─── Content ────────────────────────────────────────────────
             Expanded(
@@ -167,13 +169,14 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
 
   // ─── App Bar ─────────────────────────────────────────────────────────────
 
-  Widget _buildAppBar(String firstName) => Container(
+  Widget _buildAppBar(AuthUser? user) => Container(
         height: 64,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          border: const Border(
-            bottom: BorderSide(color: Color(0xFFE2E8F0)),
+          border: Border(
+            bottom:
+                BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           ),
         ),
         child: Row(
@@ -197,21 +200,10 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.surfaceContainer,
-                    border: Border.all(color: AppColors.outlineVariant),
-                  ),
-                  child: const ClipOval(
-                    child: Icon(
-                      Icons.person_rounded,
-                      color: AppColors.primary,
-                      size: 24,
-                    ),
-                  ),
+                UserAvatar(
+                  user: user,
+                  size: 40,
+                  borderColor: Theme.of(context).colorScheme.outlineVariant,
                 ),
               ],
             ),
@@ -226,10 +218,10 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
         children: [
           Text(
             'مرحباً بك، $firstName',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1A1B22),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 4),
@@ -255,16 +247,18 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
           prefixIcon: const Icon(Icons.search_rounded),
           prefixIconColor: AppColors.outline,
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Theme.of(context).colorScheme.surface,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.outline),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.outline),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -373,9 +367,10 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
+          border:
+              Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
@@ -429,10 +424,10 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
             // Title
             Text(
               subject['title'] as String,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.right,
               maxLines: 2,

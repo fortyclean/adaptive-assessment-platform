@@ -87,9 +87,10 @@ class _TeacherDashboardScreenState
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: colorScheme.surface,
       appBar: _buildAppBar(user),
       bottomNavigationBar: const AppBottomNav(currentIndex: 0, role: 'teacher'),
       body: _isLoading
@@ -112,77 +113,80 @@ class _TeacherDashboardScreenState
     );
   }
 
-  PreferredSizeWidget _buildAppBar(AuthUser? user) => PreferredSize(
-        preferredSize: const Size.fromHeight(64),
-        child: Container(
-          height: 64 + MediaQuery.of(context).padding.top,
-          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          decoration: const BoxDecoration(
-            color: Color(0xFFF8FAFC),
-            border: Border(
-              bottom: BorderSide(color: Color(0xFFE2E8F0)),
+  PreferredSizeWidget _buildAppBar(AuthUser? user) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(64),
+      child: Container(
+        height: 64 + MediaQuery.of(context).padding.top,
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          border: Border(
+            bottom: BorderSide(color: colorScheme.outlineVariant),
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0A000000),
+              blurRadius: 4,
+              offset: Offset(0, 2),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x0A000000),
-                blurRadius: 4,
-                offset: Offset(0, 2),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            textDirection: TextDirection.rtl,
+            children: [
+              // Avatar + Name (right side in RTL)
+              UserAvatar(user: user, size: 40),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'مرحباً، ${user?.fullName ?? 'المعلم'}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.primary,
+                        fontFamily: 'Almarai',
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'لوحة التحكم',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: colorScheme.onSurfaceVariant,
+                        fontFamily: 'Almarai',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Action icons (left side in RTL)
+              IconButton(
+                icon: const Icon(Icons.search_rounded),
+                color: colorScheme.primary,
+                onPressed: () => context.push('/teacher/assessments'),
+                tooltip: 'بحث',
+              ),
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                color: colorScheme.primary,
+                onPressed: () => context.push(AppRoutes.teacherNotifications),
+                tooltip: 'الإشعارات',
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: [
-                // Avatar + Name (right side in RTL)
-                UserAvatar(user: user, size: 40),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'مرحباً، ${user?.fullName ?? 'المعلم'}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1E40AF),
-                          fontFamily: 'Almarai',
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Text(
-                        'لوحة التحكم',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.onSurfaceVariant,
-                          fontFamily: 'Almarai',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Action icons (left side in RTL)
-                IconButton(
-                  icon: const Icon(Icons.search_rounded),
-                  color: const Color(0xFF1E40AF),
-                  onPressed: () => context.push('/teacher/assessments'),
-                  tooltip: 'بحث',
-                ),
-                IconButton(
-                  icon: const Icon(Icons.notifications_outlined),
-                  color: const Color(0xFF1E40AF),
-                  onPressed: () => context.push(AppRoutes.teacherNotifications),
-                  tooltip: 'الإشعارات',
-                ),
-              ],
-            ),
-          ),
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildError() => Center(
         child: Column(
@@ -357,61 +361,62 @@ class _TeacherDashboardScreenState
     required IconData icon,
     required String label,
     required VoidCallback onTap,
-  }) =>
-      Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEFF6FF),
-                    borderRadius: BorderRadius.circular(8),
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            textDirection: TextDirection.rtl,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: AppColors.primaryContainer, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
+                    fontFamily: 'Almarai',
                   ),
-                  child:
-                      Icon(icon, color: AppColors.primaryContainer, size: 20),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.onSurface,
-                      fontFamily: 'Almarai',
-                    ),
-                  ),
-                ),
-                const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 16,
-                  color: AppColors.onSurfaceVariant,
-                ),
-              ],
-            ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _StatCard extends StatelessWidget {
@@ -430,58 +435,61 @@ class _StatCard extends StatelessWidget {
   final Color iconBg;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: iconBg,
+              shape: BoxShape.circle,
             ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: iconBg,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: iconColor, size: 20),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: iconColor,
+              fontFamily: 'Lexend',
             ),
-            const SizedBox(height: 6),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: iconColor,
-                fontFamily: 'Lexend',
-              ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onSurfaceVariant,
+              fontFamily: 'Almarai',
             ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-                color: AppColors.onSurfaceVariant,
-                fontFamily: 'Almarai',
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      );
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _AssessmentTile extends StatelessWidget {
@@ -524,94 +532,97 @@ class _AssessmentTile extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: [
-                // Status indicator
-                Container(
-                  width: 4,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: _statusColor,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            textDirection: TextDirection.rtl,
+            children: [
+              // Status indicator
+              Container(
+                width: 4,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: _statusColor,
+                  borderRadius: BorderRadius.circular(2),
                 ),
-                const SizedBox(width: 12),
-                // Content
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    textDirection: TextDirection.rtl,
-                    children: [
-                      Text(
-                        assessment['title'] as String? ?? '',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.onSurface,
-                          fontFamily: 'Almarai',
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(width: 12),
+              // Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    Text(
+                      assessment['title'] as String? ?? '',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                        fontFamily: 'Almarai',
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        assessment['subject'] as String? ?? '',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.onSurfaceVariant,
-                          fontFamily: 'Almarai',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 10),
-                // Status badge
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: _statusBg,
-                    borderRadius: BorderRadius.circular(20),
-                    border:
-                        Border.all(color: _statusColor.withValues(alpha: 0.4)),
-                  ),
-                  child: Text(
-                    _statusLabel,
-                    style: TextStyle(
-                      color: _statusColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Almarai',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    const SizedBox(height: 4),
+                    Text(
+                      assessment['subject'] as String? ?? '',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: colorScheme.onSurfaceVariant,
+                        fontFamily: 'Almarai',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              // Status badge
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: _statusBg,
+                  borderRadius: BorderRadius.circular(20),
+                  border:
+                      Border.all(color: _statusColor.withValues(alpha: 0.4)),
+                ),
+                child: Text(
+                  _statusLabel,
+                  style: TextStyle(
+                    color: _statusColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Almarai',
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _EmptyState extends StatelessWidget {
@@ -620,31 +631,34 @@ class _EmptyState extends StatelessWidget {
   final String message;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-        ),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.assignment_outlined,
-              size: 48,
-              color: AppColors.outlineVariant,
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          const Icon(
+            Icons.assignment_outlined,
+            size: 48,
+            color: AppColors.outlineVariant,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            message,
+            style: TextStyle(
+              color: colorScheme.onSurfaceVariant,
+              fontSize: 14,
+              fontFamily: 'Almarai',
             ),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              style: const TextStyle(
-                color: AppColors.onSurfaceVariant,
-                fontSize: 14,
-                fontFamily: 'Almarai',
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
 }

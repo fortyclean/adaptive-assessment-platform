@@ -89,6 +89,15 @@ class AssessmentRepository {
         .get<Map<String, dynamic>>('/notifications/points');
     return response.data ?? {};
   }
+
+  /// GET /api/v1/students/leaderboard — real student leaderboard.
+  Future<Map<String, dynamic>> getStudentLeaderboard({int limit = 10}) async {
+    final response = await _apiService.dio.get<Map<String, dynamic>>(
+      '/students/leaderboard',
+      queryParameters: {'limit': limit},
+    );
+    return response.data ?? {};
+  }
 }
 
 final assessmentRepositoryProvider = Provider<AssessmentRepository>(

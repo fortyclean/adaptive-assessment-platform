@@ -106,7 +106,7 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => Padding(
@@ -210,7 +210,7 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -231,9 +231,9 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
           shadowColor: Colors.black12,
           surfaceTintColor: Colors.transparent,
@@ -252,7 +252,10 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
-            child: Container(height: 1, color: const Color(0xFFE2E8F0)),
+            child: Container(
+              height: 1,
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
           ),
         ),
         body: Column(

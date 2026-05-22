@@ -159,9 +159,9 @@ class _CreateAssessmentScreenState
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
           shadowColor: Colors.black12,
           surfaceTintColor: Colors.transparent,
@@ -180,7 +180,10 @@ class _CreateAssessmentScreenState
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
-            child: Container(height: 1, color: const Color(0xFFE2E8F0)),
+            child: Container(
+              height: 1,
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
           ),
         ),
         body: Form(
@@ -316,7 +319,7 @@ class _CreateAssessmentScreenState
                 const SizedBox(height: 8),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.outlineVariant),
                     boxShadow: const [
@@ -516,7 +519,7 @@ class _StyledTextFormField extends StatelessWidget {
             color: AppColors.onSurfaceVariant,
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Theme.of(context).colorScheme.surface,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           border: OutlineInputBorder(
@@ -576,7 +579,7 @@ class _StyledDropdown<T> extends StatelessWidget {
             color: AppColors.onSurfaceVariant,
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Theme.of(context).colorScheme.surface,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           border: OutlineInputBorder(
@@ -624,7 +627,12 @@ class _TypeCard extends StatelessWidget {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: selected ? const Color(0xFFEFF6FF) : Colors.white,
+            color: selected
+                ? Theme.of(context)
+                    .colorScheme
+                    .primaryContainer
+                    .withValues(alpha: 0.14)
+                : Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: selected
@@ -727,7 +735,7 @@ class _CounterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: const [
@@ -828,7 +836,7 @@ class _DateButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: hasValue

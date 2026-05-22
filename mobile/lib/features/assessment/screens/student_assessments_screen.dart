@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Student Assessments List Screen — Design _40
@@ -183,9 +184,10 @@ class _StudentAssessmentsScreenState
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
     final firstName = user?.fullName.split(' ').first ?? 'أحمد';
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: colorScheme.surface,
       body: CustomScrollView(
         slivers: [
           // ─── App Bar ──────────────────────────────────────────────────
@@ -217,26 +219,10 @@ class _StudentAssessmentsScreenState
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.surfaceContainer,
-                        border: Border.all(
-                          color: AppColors.outlineVariant,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          firstName.isNotEmpty ? firstName[0] : 'أ',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.onSurface,
-                          ),
-                        ),
-                      ),
+                    UserAvatar(
+                      user: user,
+                      size: 40,
+                      borderColor: colorScheme.outlineVariant,
                     ),
                   ],
                 ),
@@ -350,7 +336,9 @@ class _StudentAssessmentsScreenState
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
           decoration: BoxDecoration(
-            color: isActive ? Colors.white : Colors.transparent,
+            color: isActive
+                ? Theme.of(context).colorScheme.surface
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             boxShadow: isActive
                 ? [
@@ -445,9 +433,9 @@ class _StudentAssessmentsScreenState
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -476,7 +464,8 @@ class _StudentAssessmentsScreenState
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF1F5F9),
+                    color:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: const Color(0xFFE2E8F0)),
                   ),
@@ -495,10 +484,10 @@ class _StudentAssessmentsScreenState
             // Title
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.right,
             ),
@@ -684,9 +673,9 @@ class _StudentAssessmentsScreenState
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -709,10 +698,10 @@ class _StudentAssessmentsScreenState
               children: [
                 Text(
                   '$daysUntil',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1B22),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const Text(
@@ -729,10 +718,10 @@ class _StudentAssessmentsScreenState
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.right,
             ),
@@ -760,9 +749,9 @@ class _StudentAssessmentsScreenState
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -795,10 +784,10 @@ class _StudentAssessmentsScreenState
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF1A1B22),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   textAlign: TextAlign.right,
                 ),
@@ -856,8 +845,8 @@ class _StudentAssessmentsScreenState
               Container(
                 width: 80,
                 height: 80,
-                decoration: const BoxDecoration(
-                  color: AppColors.surfaceContainer,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, size: 36, color: AppColors.onSurfaceVariant),
@@ -865,10 +854,10 @@ class _StudentAssessmentsScreenState
               const SizedBox(height: 16),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 textAlign: TextAlign.center,
               ),

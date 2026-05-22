@@ -18,7 +18,7 @@ class _StudentChallengesScreenState
     extends ConsumerState<StudentChallengesScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: AppColors.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
             _buildAppBar(context),
@@ -42,7 +42,7 @@ class _StudentChallengesScreenState
           onPressed: () {
             showModalBottomSheet(
               context: context,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               shape: const RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(20))),
@@ -95,12 +95,13 @@ class _StudentChallengesScreenState
           left: 16,
           right: 16,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
           border: Border(
-            bottom: BorderSide(color: Color(0xFFE2E8F0)),
+            bottom:
+                BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color(0x0A000000),
               blurRadius: 4,
@@ -140,8 +141,8 @@ class _StudentChallengesScreenState
                     ),
                     color: AppColors.surfaceContainer,
                   ),
-                  child: const Icon(Icons.person,
-                      size: 22, color: Color(0xFF444653)),
+                  child: Icon(Icons.person,
+                      size: 22, color: Theme.of(context).colorScheme.onSurface),
                 ),
               ],
             ),
@@ -174,18 +175,18 @@ class _StudentChallengesScreenState
                 ),
               ),
               // Title (RTL: right)
-              const Row(
+              Row(
                 children: [
                   Text(
                     'تحديات مباشرة',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1B22),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Icon(
+                  const SizedBox(width: 8),
+                  const Icon(
                     Icons.rocket_launch_outlined,
                     color: AppColors.error,
                     size: 22,
@@ -241,7 +242,7 @@ class _StudentChallengesScreenState
       Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -300,18 +301,20 @@ class _StudentChallengesScreenState
                         children: [
                           Text(
                             title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF1A1B22),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                             textAlign: TextAlign.right,
                           ),
                           Text(
                             subtitle,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: Color(0xFF444653),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
                             ),
                             textAlign: TextAlign.right,
                           ),
@@ -344,14 +347,17 @@ class _StudentChallengesScreenState
                       children: [
                         Text(
                           participants,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: Color(0xFF444653),
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Icon(Icons.group_outlined,
-                            size: 18, color: Color(0xFF444653)),
+                        Icon(Icons.group_outlined,
+                            size: 18,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                       ],
                     ),
                   ],
@@ -728,7 +734,7 @@ class _StudentChallengesScreenState
   Widget _buildMyChallenges() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
@@ -736,11 +742,11 @@ class _StudentChallengesScreenState
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              SizedBox(width: 8),
-              Icon(
+              const SizedBox(width: 8),
+              const Icon(
                 Icons.assignment_outlined,
                 color: AppColors.primary,
                 size: 22,
@@ -806,7 +812,7 @@ class _StudentChallengesScreenState
       Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF4F2FC),
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
         ),
@@ -817,10 +823,10 @@ class _StudentChallengesScreenState
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             Text(
@@ -849,9 +855,10 @@ class _StudentChallengesScreenState
       Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFF1F5F9)),
+          border:
+              Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
@@ -873,10 +880,10 @@ class _StudentChallengesScreenState
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1B22),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                     textAlign: TextAlign.right,
                   ),
@@ -912,18 +919,18 @@ class _StudentChallengesScreenState
   Widget _buildBadges() => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerHigh,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const Text(
+            Text(
               'الأوسمة المحققة',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1B22),
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.right,
             ),
@@ -1016,8 +1023,9 @@ class _StudentChallengesScreenState
             style: TextStyle(
               fontSize: 12,
               fontWeight: isLocked ? FontWeight.w400 : FontWeight.w600,
-              color:
-                  isLocked ? const Color(0xFF94A3B8) : const Color(0xFF1A1B22),
+              color: isLocked
+                  ? const Color(0xFF94A3B8)
+                  : Theme.of(context).colorScheme.onSurface,
             ),
             textAlign: TextAlign.center,
           ),

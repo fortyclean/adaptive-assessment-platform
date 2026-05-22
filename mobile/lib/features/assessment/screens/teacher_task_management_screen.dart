@@ -71,14 +71,14 @@ class _TeacherTaskManagementScreenState
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: AppColors.surface,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: CustomScrollView(
             slivers: [
               // ─── App Bar ────────────────────────────────────────────────
               SliverAppBar(
                 floating: true,
                 snap: true,
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 elevation: 0,
                 scrolledUnderElevation: 1,
                 automaticallyImplyLeading: false,
@@ -146,7 +146,7 @@ class _TeacherTaskManagementScreenState
             onPressed: () {
               showModalBottomSheet(
                 context: context,
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 shape: const RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20))),

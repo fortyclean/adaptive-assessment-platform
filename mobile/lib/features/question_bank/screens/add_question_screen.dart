@@ -114,9 +114,9 @@ class _AddQuestionScreenState extends ConsumerState<AddQuestionScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFFBF8FF),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
           title: const Text(

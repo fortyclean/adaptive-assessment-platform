@@ -46,11 +46,11 @@ class _AdvancedNotificationCenterScreenState
         _isLoading = false;
       });
     } catch (_) {
-      // Use sample data for preview when API is unavailable
+      // Keep the center honest in production: show an empty state instead of
+      // fabricated notifications when the API is unavailable.
       setState(() {
-        _notifications = _sampleNotifications();
-        _unreadCount =
-            _notifications.where((n) => !(n['isRead'] as bool? ?? true)).length;
+        _notifications = [];
+        _unreadCount = 0;
         _isLoading = false;
       });
     }
@@ -311,6 +311,7 @@ class _AdvancedNotificationCenterScreenState
   }
 
   // ── Sample data for offline/preview ──────────────────────────────────────
+  // ignore: unused_element
   List<Map<String, dynamic>> _sampleNotifications() {
     final now = DateTime.now();
     final yesterday = now.subtract(const Duration(days: 1));

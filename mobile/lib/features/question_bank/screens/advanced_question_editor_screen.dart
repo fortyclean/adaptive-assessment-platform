@@ -51,7 +51,7 @@ class _AdvancedQuestionEditorScreenState
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
             _buildHeader(context),

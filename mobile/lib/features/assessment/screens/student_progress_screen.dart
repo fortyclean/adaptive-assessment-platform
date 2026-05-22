@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/student_state_view.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Student Progress Screen — Design _38
@@ -19,11 +21,14 @@ class StudentProgressScreen extends ConsumerStatefulWidget {
 
 class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
   bool _isLoading = true;
+  String? _errorMessage;
   int _totalPoints = 0;
+  int _attemptCount = 0;
+  int _streakDays = 0;
   double _masteryPercent = 0;
   List<Map<String, dynamic>> _leaderboard = [];
   // Weekly performance data (0.0–1.0 per day)
-  final List<double> _weeklyData = [0.40, 0.60, 0.35, 0.85, 0.55, 0.70, 0.45];
+  List<double> _weeklyData = const [0, 0, 0, 0, 0, 0, 0];
   final List<String> _weekDays = [
     'أحد',
     'اثنين',
@@ -39,49 +44,127 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
     super.initState();
     _loadData();
   }
+
   Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final history =
           await ref.read(assessmentRepositoryProvider).getAttemptHistory();
+      final completed = history
+          .where((h) =>
+              h['status'] == 'completed' && (h['scorePercentage'] is num))
+          .toList();
       final points = history.fold<int>(
           0, (sum, h) => sum + ((h['pointsEarned'] as num?)?.toInt() ?? 0));
-      final scores = history
-          .map((h) => (h['scorePercentage'] as num?)?.toDouble() ?? 0.0)
+      final scores = completed
+          .map((h) => (h['scorePercentage'] as num).toDouble())
           .toList();
       final avg =
           scores.isEmpty ? 0.0 : scores.reduce((a, b) => a + b) / scores.length;
+      final leaderboard = completed.isEmpty
+          ? <Map<String, dynamic>>[]
+          : await _loadLeaderboardFallback(points);
 
       if (mounted) {
         setState(() {
           _totalPoints = points;
+          _attemptCount = completed.length;
           _masteryPercent = avg;
+          _weeklyData = _buildWeeklyData(completed);
+          _streakDays = _calculateStreakDays(completed);
           _isLoading = false;
-          // Mock leaderboard — replace with real API when available
-          _leaderboard = [
-            {'name': 'سارة محمد', 'points': 2450, 'rank': 1, 'isMe': false},
-            {'name': 'محمد علي', 'points': 2100, 'rank': 2, 'isMe': false},
-            {'name': 'فاطمة أحمد', 'points': 1850, 'rank': 3, 'isMe': false},
-            {'name': 'أنت', 'points': points, 'rank': 4, 'isMe': true},
-            {'name': 'نورا علي', 'points': 1180, 'rank': 5, 'isMe': false},
-          ];
+          _leaderboard = leaderboard;
         });
       }
     } catch (_) {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _totalPoints = 1250;
-          _masteryPercent = 72.0;
-          _leaderboard = [
-            {'name': 'سارة محمد', 'points': 2450, 'rank': 1, 'isMe': false},
-            {'name': 'محمد علي', 'points': 2100, 'rank': 2, 'isMe': false},
-            {'name': 'فاطمة أحمد', 'points': 1850, 'rank': 3, 'isMe': false},
-            {'name': 'أنت', 'points': 1250, 'rank': 4, 'isMe': true},
-            {'name': 'نورا علي', 'points': 1180, 'rank': 5, 'isMe': false},
-          ];
+          _errorMessage =
+              'تعذر تحميل تقدمك الآن. تحقق من الاتصال ثم أعد المحاولة.';
+          _leaderboard = [];
         });
       }
     }
+  }
+
+  Future<List<Map<String, dynamic>>> _loadLeaderboardFallback(
+    int currentPoints,
+  ) async {
+    try {
+      final data = await ref
+          .read(assessmentRepositoryProvider)
+          .getStudentLeaderboard(limit: 10);
+      final rawItems = (data['leaderboard'] as List?) ?? const [];
+      final items = rawItems.whereType<Map>().map((item) {
+        final isCurrentUser = item['isCurrentUser'] == true;
+        return {
+          'name': (item['fullName'] ?? '').toString().trim().isEmpty
+              ? (isCurrentUser ? 'أنت' : 'طالب')
+              : item['fullName'].toString(),
+          'points': (item['totalPoints'] as num?)?.toInt() ?? 0,
+          'rank': (item['rank'] as num?)?.toInt(),
+          'isMe': isCurrentUser,
+        };
+      }).toList();
+      if (items.isNotEmpty) return items;
+    } catch (_) {
+      // Keep the screen usable when the deployed backend does not yet expose
+      // the leaderboard endpoint.
+    }
+
+    return [
+      {
+        'name': 'أنت',
+        'points': currentPoints,
+        'rank': null,
+        'isMe': true,
+      },
+    ];
+  }
+
+  List<double> _buildWeeklyData(List<Map<String, dynamic>> history) {
+    final buckets = List.generate(7, (_) => <double>[]);
+    final now = DateTime.now();
+
+    for (final attempt in history) {
+      final score = (attempt['scorePercentage'] as num?)?.toDouble();
+      final submittedAt = DateTime.tryParse(
+        (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
+      );
+      if (score == null || submittedAt == null) continue;
+      final diff = now.difference(submittedAt).inDays;
+      if (diff < 0 || diff > 6) continue;
+      buckets[6 - diff].add((score / 100).clamp(0.0, 1.0));
+    }
+
+    return buckets
+        .map((items) =>
+            items.isEmpty ? 0.0 : items.reduce((a, b) => a + b) / items.length)
+        .toList();
+  }
+
+  int _calculateStreakDays(List<Map<String, dynamic>> history) {
+    final days = history
+        .map((attempt) => DateTime.tryParse(
+              (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
+            ))
+        .whereType<DateTime>()
+        .map((date) => DateTime(date.year, date.month, date.day))
+        .toSet();
+    if (days.isEmpty) return 0;
+
+    var streak = 0;
+    var cursor = DateTime.now();
+    cursor = DateTime(cursor.year, cursor.month, cursor.day);
+    while (days.contains(cursor)) {
+      streak++;
+      cursor = cursor.subtract(const Duration(days: 1));
+    }
+    return streak;
   }
 
   @override
@@ -90,68 +173,41 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
     final firstName = user?.fullName.split(' ').first ?? 'طالب';
     final cs = Theme.of(context).colorScheme;
 
-    // Show empty state when no data loaded and not loading
-    if (!_isLoading && _totalPoints == 0 && _leaderboard.isEmpty) {
+    if (_isLoading) {
       return Scaffold(
         backgroundColor: cs.surface,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: cs.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.emoji_events_outlined,
-                    size: 40,
-                    color: AppColors.primary,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'مرحباً $firstName! 🚀',
-                  style: const TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'لا توجد بيانات تقدم بعد.\nأكمل أول اختبار لك لبدء تتبع أدائك!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Almarai',
-                    fontSize: 14,
-                    color: AppColors.onSurfaceVariant,
-                    height: 1.6,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  onPressed: () => context.push('/student/assessments-list'),
-                  icon: const Icon(Icons.quiz_outlined, size: 18),
-                  label: const Text('استعرض الاختبارات المتاحة'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        body: const Center(child: CircularProgressIndicator()),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 2, role: 'student'),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Scaffold(
+        backgroundColor: cs.surface,
+        body: StudentStateView(
+          icon: Icons.wifi_off_rounded,
+          title: 'تعذر تحميل التقدم',
+          message: _errorMessage!,
+          actionLabel: 'إعادة المحاولة',
+          onAction: _loadData,
+        ),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 2, role: 'student'),
+      );
+    }
+
+    // Show empty state when no data loaded and not loading
+    if (_attemptCount == 0) {
+      return Scaffold(
+        backgroundColor: cs.surface,
+        body: StudentStateView(
+          icon: Icons.emoji_events_outlined,
+          title: 'مرحباً $firstName',
+          message:
+              'لا توجد بيانات تقدم بعد. أكمل أول اختبار لبدء تتبع النقاط والإتقان والأوسمة.',
+          actionLabel: 'استعرض الاختبارات المتاحة',
+          onAction: () => context.push('/student/assessments-list'),
         ),
         bottomNavigationBar:
             const AppBottomNav(currentIndex: 2, role: 'student'),
@@ -193,22 +249,10 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.surfaceContainer,
-                          border:
-                              Border.all(color: AppColors.primary, width: 2),
-                        ),
-                        child: const ClipOval(
-                          child: Icon(
-                            Icons.person_rounded,
-                            color: AppColors.primary,
-                            size: 24,
-                          ),
-                        ),
+                      UserAvatar(
+                        user: user,
+                        size: 40,
+                        borderColor: cs.primary,
                       ),
                     ],
                   ),
@@ -263,8 +307,11 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
@@ -273,17 +320,17 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                 ),
               ],
             ),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.local_fire_department_rounded,
+                const Icon(Icons.local_fire_department_rounded,
                     color: Colors.orange, size: 20),
-                SizedBox(width: 6),
+                const SizedBox(width: 6),
                 Text(
-                  '15 يوم',
+                  '$_streakDays يوم',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1A1B22),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -295,10 +342,10 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
             children: [
               Text(
                 'أهلاً بك، $firstName! 👋',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF00288E),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               const Text(
@@ -355,7 +402,7 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'استمر في التقدم، لقد أنجزت 80% من هدفك الأسبوعي!',
+                  'استمر في التقدم، متوسط إتقانك الحالي ${_masteryPercent.round()}%.',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 12,
@@ -378,7 +425,7 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.outlineVariant),
                 boxShadow: [
@@ -410,10 +457,10 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                         ),
                         Text(
                           '${_masteryPercent.round()}%',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF00288E),
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ],
@@ -438,7 +485,7 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.outlineVariant),
                 boxShadow: [
@@ -453,8 +500,9 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: AppColors.surfaceContainer,
+                    decoration: BoxDecoration(
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -466,10 +514,10 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                   const SizedBox(height: 8),
                   Text(
                     _isLoading ? '...' : '$_totalPoints',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF00288E),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const Text(
@@ -506,7 +554,7 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: [
@@ -570,28 +618,28 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
       {
         'icon': Icons.workspace_premium_rounded,
         'label': 'المنضبط',
-        'earned': true,
+        'earned': _streakDays >= 7,
         'color': Colors.amber,
         'desc': 'أكملت 7 أيام متتالية',
       },
       {
         'icon': Icons.rocket_launch_rounded,
         'label': 'المنطلق',
-        'earned': true,
+        'earned': _attemptCount >= 1,
         'color': Colors.blue,
         'desc': 'أنهيت أول اختبار',
       },
       {
         'icon': Icons.psychology_rounded,
         'label': 'المثابر',
-        'earned': false,
+        'earned': _attemptCount >= 10,
         'color': Colors.grey,
         'desc': 'أكمل 10 اختبارات',
       },
       {
         'icon': Icons.star_rounded,
         'label': 'النجم',
-        'earned': false,
+        'earned': _masteryPercent >= 90,
         'color': Colors.orange,
         'desc': 'احصل على 90% في اختبار',
       },
@@ -605,7 +653,7 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
       {
         'icon': Icons.local_fire_department_rounded,
         'label': 'المتقد',
-        'earned': false,
+        'earned': _streakDays >= 30,
         'color': Colors.red,
         'desc': 'أكمل 30 يوماً متتالية',
       },
@@ -634,9 +682,9 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
         maxChildSize: 0.9,
         minChildSize: 0.5,
         builder: (_, controller) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             children: [
@@ -683,7 +731,9 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                               shape: BoxShape.circle,
                               color: earned
                                   ? color.withValues(alpha: 0.15)
-                                  : Colors.grey[100],
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHighest,
                             ),
                             child: Icon(
                               earned
@@ -703,7 +753,11 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                           Text(
                             badge['desc'] as String,
                             style: TextStyle(
-                                fontSize: 10, color: Colors.grey[600]),
+                              fontSize: 10,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
                             textAlign: TextAlign.center,
                             maxLines: 2,
                           ),
@@ -725,19 +779,19 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
       {
         'icon': Icons.workspace_premium_rounded,
         'label': 'المنضبط',
-        'earned': true,
+        'earned': _streakDays >= 7,
         'color': Colors.amber
       },
       {
         'icon': Icons.rocket_launch_rounded,
         'label': 'المنطلق',
-        'earned': true,
+        'earned': _attemptCount >= 1,
         'color': Colors.blue
       },
       {
         'icon': Icons.psychology_rounded,
         'label': 'المثابر',
-        'earned': false,
+        'earned': _attemptCount >= 10,
         'color': Colors.grey
       },
     ];
@@ -764,12 +818,12 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                 ),
               ),
             ),
-            const Text(
+            Text(
               'الأوسمة المكتسبة',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF00288E),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ],
@@ -787,7 +841,7 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: earned
@@ -827,10 +881,10 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                       const SizedBox(height: 8),
                       Text(
                         label,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.onSurface,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -850,20 +904,20 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
   Widget _buildLeaderboard() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(right: 4, bottom: 12),
+          Padding(
+            padding: const EdgeInsets.only(right: 4, bottom: 12),
             child: Text(
-              'لوحة المتصدرين',
+              'ملخص النقاط',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF00288E),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.outlineVariant),
               boxShadow: [
@@ -874,103 +928,136 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                 ),
               ],
             ),
-            child: Column(
-              children: _leaderboard.asMap().entries.map((entry) {
-                final i = entry.key;
-                final item = entry.value;
-                final isMe = item['isMe'] as bool;
-                final isLast = i == _leaderboard.length - 1;
+            child: _leaderboard.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      'سيظهر ترتيبك عندما يوفر الخادم بيانات لوحة المتصدرين.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  )
+                : Column(
+                    children: _leaderboard.asMap().entries.map((entry) {
+                      final i = entry.key;
+                      final item = entry.value;
+                      final isMe = item['isMe'] as bool;
+                      final isLast = i == _leaderboard.length - 1;
 
-                return Container(
-                  decoration: BoxDecoration(
-                    color: isMe
-                        ? AppColors.primaryContainer.withValues(alpha: 0.05)
-                        : Colors.transparent,
-                    border: !isLast
-                        ? const Border(
-                            bottom: BorderSide(color: Color(0xFFF1F0FA)))
-                        : null,
-                    borderRadius: BorderRadius.vertical(
-                      top: i == 0 ? const Radius.circular(16) : Radius.zero,
-                      bottom: isLast ? const Radius.circular(16) : Radius.zero,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Points (RTL: left)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              '${item['points']}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: isMe
-                                    ? AppColors.primary
-                                    : AppColors.onSurface,
-                              ),
-                            ),
-                            if (isMe)
-                              const Text(
-                                '↑ 2 مركز',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xFF047857),
-                                ),
-                              ),
-                          ],
-                        ),
-                        // Name + avatar (RTL: right)
-                        Row(
-                          children: [
-                            Text(
-                              isMe
-                                  ? 'أنت (${item['name']})'
-                                  : item['name'] as String,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight:
-                                    isMe ? FontWeight.w700 : FontWeight.w400,
-                                color: isMe
-                                    ? AppColors.primary
-                                    : AppColors.onSurface,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Container(
-                              width: 32,
-                              height: 32,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.surfaceContainer,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '${item['rank']}',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: isMe
-                                        ? AppColors.primary
-                                        : AppColors.outline,
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: isMe
+                              ? AppColors.primaryContainer
+                                  .withValues(alpha: 0.05)
+                              : Colors.transparent,
+                          border: !isLast
+                              ? Border(
+                                  bottom: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
                                   ),
-                                ),
-                              ),
-                            ),
-                          ],
+                                )
+                              : null,
+                          borderRadius: BorderRadius.vertical(
+                            top: i == 0
+                                ? const Radius.circular(16)
+                                : Radius.zero,
+                            bottom: isLast
+                                ? const Radius.circular(16)
+                                : Radius.zero,
+                          ),
                         ),
-                      ],
-                    ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Points (RTL: left)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${item['points']}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: isMe
+                                          ? AppColors.primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                    ),
+                                  ),
+                                  if (isMe)
+                                    Text(
+                                      'نقاطك المكتسبة',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              // Name + avatar (RTL: right)
+                              Row(
+                                children: [
+                                  Text(
+                                    isMe
+                                        ? 'أنت (${item['name']})'
+                                        : item['name'] as String,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: isMe
+                                          ? FontWeight.w700
+                                          : FontWeight.w400,
+                                      color: isMe
+                                          ? AppColors.primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .surfaceContainerHighest,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        item['rank'] == null
+                                            ? '•'
+                                            : '${item['rank']}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: isMe
+                                              ? AppColors.primary
+                                              : AppColors.outline,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                );
-              }).toList(),
-            ),
           ),
         ],
       );
-  }
+}

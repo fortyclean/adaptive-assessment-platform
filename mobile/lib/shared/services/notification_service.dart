@@ -1,15 +1,21 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
+
+import '../providers/auth_provider.dart';
 
 /// يدير الإشعارات المحلية ويجهز التطبيق للتوسع لاحقا عبر API.
 class NotificationService {
   NotificationService._internal();
   static final NotificationService instance = NotificationService._internal();
+
+  static const String _oneSignalAppId =
+      String.fromEnvironment('ONESIGNAL_APP_ID');
 
   static const AndroidNotificationDetails _instantAndroidDetails =
       AndroidNotificationDetails(
@@ -34,6 +40,12 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
+  bool _remoteInitialized = false;
+  bool _pushObserverAttached = false;
+  bool _registeringPushToken = false;
+  String? _lastRegisteredSubscriptionId;
+  Dio? _pushDio;
+  AuthUser? _pushUser;
 
   Future<void> init() async {
     if (_initialized) return;
@@ -53,6 +65,8 @@ class NotificationService {
 
     await requestNotificationPermission();
     _initialized = true;
+
+    await _initOneSignalIfConfigured();
   }
 
   Future<void> _ensureInitialized() async {
@@ -123,6 +137,51 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  bool get isRemotePushConfigured => _oneSignalAppId.trim().isNotEmpty;
+
+  Future<void> identifyPushUser({
+    required Dio dio,
+    required AuthUser user,
+  }) async {
+    _pushDio = dio;
+    _pushUser = user;
+
+    if (!isRemotePushConfigured) return;
+
+    await _ensureInitialized();
+    await _initOneSignalIfConfigured();
+
+    try {
+      await OneSignal.login(user.id);
+      await OneSignal.User.addTags({
+        'role': user.role.name,
+        'username': user.username,
+      });
+      await OneSignal.User.pushSubscription.optIn();
+      await _registerCurrentOneSignalSubscription();
+    } catch (error, stackTrace) {
+      debugPrint('OneSignal user identification failed: $error');
+      if (kDebugMode) {
+        debugPrintStack(stackTrace: stackTrace);
+      }
+    }
+  }
+
+  Future<void> clearPushUser() async {
+    _pushUser = null;
+    _pushDio = null;
+    _lastRegisteredSubscriptionId = null;
+
+    if (!isRemotePushConfigured || !_remoteInitialized) return;
+
+    try {
+      await OneSignal.User.pushSubscription.optOut();
+      await OneSignal.logout();
+    } catch (error) {
+      debugPrint('OneSignal logout failed: $error');
+    }
+  }
+
   Future<void> registerPushToken({
     required Dio dio,
     required String deviceToken,
@@ -137,6 +196,71 @@ class NotificationService {
         'platform': Platform.isIOS ? 'ios' : 'android',
       },
     );
+  }
+
+  Future<void> _initOneSignalIfConfigured() async {
+    if (_remoteInitialized || !isRemotePushConfigured) return;
+
+    try {
+      if (kDebugMode) {
+        OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+      }
+
+      await OneSignal.initialize(_oneSignalAppId.trim());
+      OneSignal.Notifications.addClickListener((event) {
+        debugPrint(
+          'OneSignal notification tapped: '
+          '${event.notification.additionalData ?? event.notification.title}',
+        );
+      });
+      await OneSignal.Notifications.requestPermission(false);
+      _attachPushSubscriptionObserver();
+      _remoteInitialized = true;
+    } catch (error, stackTrace) {
+      debugPrint('OneSignal initialization failed: $error');
+      if (kDebugMode) {
+        debugPrintStack(stackTrace: stackTrace);
+      }
+    }
+  }
+
+  void _attachPushSubscriptionObserver() {
+    if (_pushObserverAttached) return;
+    OneSignal.User.pushSubscription.addObserver((stateChanges) {
+      _registerCurrentOneSignalSubscription(
+        subscriptionId: stateChanges.current.id,
+      );
+    });
+    _pushObserverAttached = true;
+  }
+
+  Future<void> _registerCurrentOneSignalSubscription({
+    String? subscriptionId,
+  }) async {
+    final dio = _pushDio;
+    final user = _pushUser;
+    final id = subscriptionId ?? OneSignal.User.pushSubscription.id;
+
+    if (dio == null || user == null || id == null || id.trim().isEmpty) {
+      return;
+    }
+    if (_registeringPushToken || _lastRegisteredSubscriptionId == id) {
+      return;
+    }
+
+    _registeringPushToken = true;
+    try {
+      await registerPushToken(dio: dio, deviceToken: id);
+      _lastRegisteredSubscriptionId = id;
+      debugPrint('Registered OneSignal subscription for ${user.role.name}.');
+    } catch (error, stackTrace) {
+      debugPrint('Registering OneSignal subscription failed: $error');
+      if (kDebugMode) {
+        debugPrintStack(stackTrace: stackTrace);
+      }
+    } finally {
+      _registeringPushToken = false;
+    }
   }
 
   Future<void> sendEmailNotification({

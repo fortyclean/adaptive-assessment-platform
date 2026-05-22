@@ -301,9 +301,9 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
     final user = ref.watch(currentUserProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 1,
         shadowColor: Colors.black12,
         leading: IconButton(
@@ -400,7 +400,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
       Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.outlineVariant),
           boxShadow: [
@@ -442,7 +442,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.outlineVariant),
             boxShadow: [

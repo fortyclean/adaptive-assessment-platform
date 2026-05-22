@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/user_avatar.dart';
 
 /// Teacher Home Screen — Screen 59
 /// Alternative teacher dashboard with greeting, summary cards,
@@ -23,10 +24,10 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
     final firstName = user?.fullName.split(' ').first ?? 'نورة';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         children: [
-          _buildAppBar(context, user?.fullName ?? 'أ. نورة'),
+          _buildAppBar(context, user),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
@@ -51,72 +52,57 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
 
   // ─── App Bar ─────────────────────────────────────────────────────────────
 
-  Widget _buildAppBar(BuildContext context, String teacherName) => Container(
-        height: 64 + MediaQuery.of(context).padding.top,
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top,
-          left: 16,
-          right: 16,
+  Widget _buildAppBar(BuildContext context, AuthUser? user) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      height: 64 + MediaQuery.of(context).padding.top,
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top,
+        left: 16,
+        right: 16,
+      ),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border(
+          bottom: BorderSide(color: colorScheme.outlineVariant),
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(color: Color(0xFFE2E8F0)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 4,
+            offset: Offset(0, 2),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Notifications (RTL: left)
-            IconButton(
-              icon: const Icon(Icons.notifications_outlined),
-              color: const Color(0xFF475569),
-              onPressed: () => context.push(AppRoutes.teacherNotifications),
-            ),
-            // Logo + avatar (RTL: right)
-            Row(
-              children: [
-                const Text(
-                  'EduAssess',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1E40AF),
-                    fontFamily: 'Lexend',
-                  ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Notifications (RTL: left)
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            color: colorScheme.onSurfaceVariant,
+            onPressed: () => context.push(AppRoutes.teacherNotifications),
+          ),
+          // Logo + avatar (RTL: right)
+          Row(
+            children: [
+              Text(
+                'EduAssess',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: colorScheme.primary,
+                  fontFamily: 'Lexend',
                 ),
-                const SizedBox(width: 12),
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.outlineVariant,
-                      width: 2,
-                    ),
-                    color: AppColors.surfaceContainer,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.person,
-                      size: 22,
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+              ),
+              const SizedBox(width: 12),
+              UserAvatar(user: user, size: 40),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   // ─── Greeting ────────────────────────────────────────────────────────────
 

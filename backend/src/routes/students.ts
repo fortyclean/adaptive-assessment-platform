@@ -11,9 +11,80 @@ import { StudentAttempt } from '../models/StudentAttempt';
 import { User } from '../models/User';
 import { authenticate, authorize } from '../middleware/authenticate';
 import { logger } from '../utils/logger';
+import { buildLeaderboardResponse, LeaderboardRow } from '../services/leaderboardService';
 
 const router = Router();
 router.use(authenticate);
+
+// ─── GET /api/v1/students/leaderboard ───────────────────────────────────────
+//
+// Returns a real student leaderboard based on completed/timed-out attempts.
+// The endpoint intentionally exposes only display-safe student fields.
+
+router.get(
+  '/leaderboard',
+  authorize('student', 'teacher', 'admin'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const limitRaw = Number(req.query.limit ?? 10);
+      const limit = Number.isFinite(limitRaw)
+        ? Math.min(Math.max(Math.trunc(limitRaw), 1), 50)
+        : 10;
+
+      const rows = await StudentAttempt.aggregate([
+        {
+          $match: {
+            status: { $in: ['completed', 'timed_out'] },
+            pointsEarned: { $type: 'number' },
+          },
+        },
+        {
+          $group: {
+            _id: '$studentId',
+            totalPoints: { $sum: '$pointsEarned' },
+            averageScore: { $avg: '$scorePercentage' },
+            completedAttempts: { $sum: 1 },
+            latestSubmittedAt: { $max: '$submittedAt' },
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: '_id',
+            foreignField: '_id',
+            as: 'student',
+          },
+        },
+        { $unwind: '$student' },
+        {
+          $match: {
+            'student.role': 'student',
+            'student.isActive': true,
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            studentId: { $toString: '$_id' },
+            fullName: '$student.fullName',
+            avatarUrl: '$student.avatarUrl',
+            totalPoints: 1,
+            averageScore: 1,
+            completedAttempts: 1,
+            latestSubmittedAt: 1,
+          },
+        },
+      ]);
+
+      const response = buildLeaderboardResponse(rows as LeaderboardRow[], req.user!.userId, limit);
+
+      res.status(200).json(response);
+    } catch (error) {
+      logger.error('Student leaderboard error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
+    }
+  },
+);
 
 // ─── GET /api/v1/students/:id/profile ────────────────────────────────────────
 //
@@ -44,7 +115,9 @@ router.get(
       const studentObjectId = new mongoose.Types.ObjectId(id);
 
       // Verify the student exists and is actually a student
-      const student = await User.findById(studentObjectId).select('fullName username role isActive').lean();
+      const student = await User.findById(studentObjectId)
+        .select('fullName username role isActive')
+        .lean();
       if (!student) {
         res.status(404).json({ error: 'Student not found' });
         return;
@@ -81,10 +154,7 @@ router.get(
             percentage: {
               $round: [
                 {
-                  $multiply: [
-                    { $divide: ['$correctAnswers', '$totalQuestions'] },
-                    100,
-                  ],
+                  $multiply: [{ $divide: ['$correctAnswers', '$totalQuestions'] }, 100],
                 },
                 1,
               ],
@@ -112,7 +182,9 @@ router.get(
         .sort({ submittedAt: -1 })
         .limit(10)
         .populate('assessmentId', 'title subject')
-        .select('assessmentId status scorePercentage pointsEarned submittedAt timeTakenSeconds antiCheatLog')
+        .select(
+          'assessmentId status scorePercentage pointsEarned submittedAt timeTakenSeconds antiCheatLog',
+        )
         .lean();
 
       const behaviorLog = recentAttempts.map((attempt) => {
@@ -177,7 +249,10 @@ router.get(
 
       // Build a full 7-day array, filling missing days with null
       const dailyMap = new Map<string, { averageScore: number; attemptCount: number }>(
-        dailyAgg.map((d) => [d.date as string, { averageScore: d.averageScore as number, attemptCount: d.attemptCount as number }]),
+        dailyAgg.map((d) => [
+          d.date as string,
+          { averageScore: d.averageScore as number, attemptCount: d.attemptCount as number },
+        ]),
       );
 
       const weeklyTrend: { date: string; averageScore: number | null; attemptCount: number }[] = [];

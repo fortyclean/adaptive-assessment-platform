@@ -105,7 +105,7 @@ class PerformanceAlertScreen extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         shadowColor: Colors.black12,
         surfaceTintColor: Colors.transparent,
@@ -163,7 +163,7 @@ class PerformanceAlertScreen extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => Padding(

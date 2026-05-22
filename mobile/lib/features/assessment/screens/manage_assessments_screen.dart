@@ -161,7 +161,7 @@ class _ManageAssessmentsScreenState
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
@@ -373,9 +373,9 @@ class _ManageAssessmentsScreenState
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFFBF8FF),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
           title: const Text(
@@ -396,7 +396,7 @@ class _ManageAssessmentsScreenState
             IconButton(
               icon: const Icon(Icons.notifications_outlined,
                   color: Color(0xFF00288E)),
-              onPressed: () => context.push('/teacher/notifications'),
+              onPressed: () => context.push(AppRoutes.teacherNotifications),
             ),
           ],
           bottom: PreferredSize(
@@ -610,9 +610,9 @@ class _AssessmentCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0A000000),

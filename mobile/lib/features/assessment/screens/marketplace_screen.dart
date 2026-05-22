@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// Screen 66 — متجر النقاط والمكافآت (Points Marketplace)
 /// Matches design: _66/code.html
@@ -66,7 +67,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -84,12 +85,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               ],
             ),
           ),
-          bottomNavigationBar: _buildBottomNav(),
+          bottomNavigationBar:
+              const AppBottomNav(currentIndex: 1, role: 'student'),
         ),
       );
 
   PreferredSizeWidget _buildAppBar() => AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 1,
         shadowColor: Colors.black12,
         automaticallyImplyLeading: false,
@@ -268,7 +270,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 width: 100,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: const Color(0xFFE2E8F0)),
                   boxShadow: [
@@ -293,8 +295,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     const SizedBox(height: 6),
                     Text(
                       item['label'] as String,
-                      style: const TextStyle(
-                          fontSize: 11, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     if (item['badge'] != null)
@@ -329,12 +334,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: selected ? AppColors.primary : Colors.white,
+                    color: selected
+                        ? AppColors.primary
+                        : Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(
                       color: selected
                           ? AppColors.primary
-                          : const Color(0xFFC4C5D5),
+                          : Theme.of(context).colorScheme.outline,
                     ),
                     boxShadow: selected
                         ? [
@@ -347,7 +354,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   child: Text(
                     _tabs[i],
                     style: TextStyle(
-                      color: selected ? Colors.white : const Color(0xFF444653),
+                      color: selected
+                          ? Colors.white
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -380,7 +389,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   Widget _buildItemCard(_MarketItem item) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFE2E8F0)),
           boxShadow: [
@@ -396,10 +405,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 children: [
                   Container(
                     width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFEEEDF7),
+                    decoration: BoxDecoration(
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(16)),
+                          const BorderRadius.vertical(top: Radius.circular(16)),
                     ),
                     child: Center(
                       child: Container(
@@ -441,8 +451,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 children: [
                   Text(
                     item.title,
-                    style: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -534,46 +547,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             ),
           ],
         ),
-      );
-
-  Widget _buildBottomNav() => Container(
-        height: 64,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Colors.grey.shade200)),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 10,
-                offset: const Offset(0, -2))
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _navItem(Icons.home, 'الرئيسية', true),
-            _navItem(Icons.quiz_outlined, 'الاختبارات', false),
-            _navItem(Icons.bar_chart_outlined, 'التقارير', false),
-            _navItem(Icons.settings_outlined, 'الإعدادات', false),
-          ],
-        ),
-      );
-
-  Widget _navItem(IconData icon, String label, bool active) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon,
-              color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              color: active ? const Color(0xFF1E40AF) : Colors.grey,
-              fontWeight: active ? FontWeight.w600 : FontWeight.w400,
-            ),
-          ),
-        ],
       );
 }
 

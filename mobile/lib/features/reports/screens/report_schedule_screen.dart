@@ -451,7 +451,7 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(context),
           body: RefreshIndicator(
             onRefresh: _loadSchedules,
@@ -509,7 +509,7 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
       );
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         shadowColor: Colors.black12,
         surfaceTintColor: Colors.transparent,

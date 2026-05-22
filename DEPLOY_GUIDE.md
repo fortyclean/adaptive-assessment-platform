@@ -1,6 +1,6 @@
 # دليل النشر والتشغيل — EduAssess
 
-> الإصدار المرجعي: `1.0.30`
+> الإصدار المرجعي: `1.0.39`
 > آخر تحديث: مايو 2026
 
 ---
@@ -80,8 +80,8 @@ GET /api/v1/health
 
 ```bash
 cd adaptive-assessment-platform
-gh release create v1.0.33 --title "EduAssess v1.0.33 - تعزيز أمان الإصدار وجاهزية النشر" --generate-notes
-gh release upload v1.0.33 adaptive-mastery-v1.0.33.apk --clobber
+gh release create v1.0.39 --title "EduAssess v1.0.39 - لوحة ترتيب الطالب" --generate-notes
+gh release upload v1.0.39 adaptive-mastery-v1.0.39.apk --clobber
 ```
 
 إن لم يكن `gh` متاحاً، أنشئ الإصدار يدوياً من صفحة المستودع على GitHub وارفع نفس ملف الـ APK.
@@ -102,6 +102,12 @@ gh release upload v1.0.33 adaptive-mastery-v1.0.33.apk --clobber
 flutter clean
 flutter pub get
 flutter build apk --release
+```
+
+لتفعيل Push Notifications الحقيقي في نسخة الإنتاج، أضف OneSignal App ID أثناء البناء:
+
+```bash
+flutter build apk --release --dart-define=ONESIGNAL_APP_ID=your_onesignal_app_id
 ```
 
 ---
@@ -138,4 +144,4 @@ flutter build apk --release
 
 الهدف أن تكون تجربة الاختبار الخارجية قريبة جدًا من الإنتاج.
 
-آخر تحديث: مايو 2026 | EduAssess v1.0.33
+آخر تحديث: مايو 2026 | EduAssess v1.0.39
