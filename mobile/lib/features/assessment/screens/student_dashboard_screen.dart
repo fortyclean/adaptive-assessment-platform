@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/user_avatar.dart';
@@ -26,6 +27,7 @@ class _StudentDashboardScreenState
   int _totalPoints = 0;
   int _attendancePercentage = 0;
   Map<String, dynamic> _currentLesson = {};
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -34,6 +36,10 @@ class _StudentDashboardScreenState
   }
 
   Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final assessments =
           await ref.read(assessmentRepositoryProvider).getAssessments();
@@ -65,34 +71,45 @@ class _StudentDashboardScreenState
       }
     } catch (_) {
       if (mounted) {
+        final fallbackAssessments = _shouldUseDemoFallback
+            ? [
+                {
+                  '_id': '1',
+                  'title': 'اختبار الرياضيات',
+                  'subject': 'رياضيات',
+                  'questionCount': 20,
+                  'timeLimitMinutes': 45,
+                  'status': 'active'
+                },
+                {
+                  '_id': '2',
+                  'title': 'اختبار العلوم',
+                  'subject': 'علوم',
+                  'questionCount': 15,
+                  'timeLimitMinutes': 30,
+                  'status': 'active'
+                },
+              ]
+            : <Map<String, dynamic>>[];
         setState(() {
-          _upcomingAssessments = [
-            {
-              '_id': '1',
-              'title': 'اختبار الرياضيات',
-              'subject': 'رياضيات',
-              'questionCount': 20,
-              'timeLimitMinutes': 45,
-              'status': 'active'
-            },
-            {
-              '_id': '2',
-              'title': 'اختبار العلوم',
-              'subject': 'علوم',
-              'questionCount': 15,
-              'timeLimitMinutes': 30,
-              'status': 'active'
-            },
-          ];
-          _totalAssessments = 5;
-          _averageScore = 78.5;
-          _totalPoints = 450;
+          _upcomingAssessments = fallbackAssessments;
+          _totalAssessments = _shouldUseDemoFallback ? 5 : 0;
+          _averageScore = _shouldUseDemoFallback ? 78.5 : 0;
+          _totalPoints = _shouldUseDemoFallback ? 450 : 0;
           _attendancePercentage = 0;
           _currentLesson = _extractCurrentLesson(_upcomingAssessments, []);
+          _errorMessage = _shouldUseDemoFallback
+              ? null
+              : 'تعذر تحميل بيانات لوحة الطالب. تحقق من الاتصال ثم أعد المحاولة.';
           _isLoading = false;
         });
       }
     }
+  }
+
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return AppConstants.useMockData || token.startsWith('demo-token-');
   }
 
   /// Calculate attendance percentage from completed attempts.
@@ -222,6 +239,8 @@ class _StudentDashboardScreenState
                         child: CircularProgressIndicator(),
                       ),
                     )
+                  else if (_errorMessage != null)
+                    _buildDashboardError()
                   else if (_upcomingAssessments.isEmpty)
                     _buildEmptyUpcoming()
                   else
@@ -604,6 +623,46 @@ class _StudentDashboardScreenState
               style: TextStyle(
                 fontSize: 14,
                 color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildDashboardError() => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Theme.of(context).colorScheme.error),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Icon(
+              Icons.wifi_off_rounded,
+              color: Theme.of(context).colorScheme.error,
+              size: 32,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              _errorMessage!,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: _loadData,
+                icon: const Icon(Icons.refresh_rounded),
+                label: const Text('إعادة المحاولة'),
               ),
             ),
           ],

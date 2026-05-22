@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.42';
-  static const int buildNumber = 42;
+  static const String current = '1.0.43';
+  static const int buildNumber = 43;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.43',
+      buildNumber: 43,
+      date: 'مايو 2026',
+      title: 'تنظيف لوحة الطالب للإنتاج',
+      changes: [
+        'منع لوحة الطالب من عرض اختبارات أو نقاط أو متوسطات وهمية عند فشل API في وضع الإنتاج.',
+        'إبقاء fallback لوحة الطالب محصورًا في وضع الديمو أو عند تفعيل mock data صراحة.',
+        'إضافة حالة خطأ واضحة في قسم الاختبارات القادمة مع زر إعادة المحاولة.',
+        'توسيع اختبار حماية fallback الإنتاجي ليغطي لوحة الطالب بجانب إدارة الاختبارات.',
+        'تحديث خطة Phase 4 وتعليم مهمة تنظيف لوحة الطالب كمكتملة.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.42',
       buildNumber: 42,
