@@ -248,90 +248,94 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: CustomScrollView(
-        slivers: [
-          // ─── App Bar ────────────────────────────────────────────────────
-          SliverAppBar(
-            floating: true,
-            snap: true,
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            elevation: 0,
-            scrolledUnderElevation: 1,
-            automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Save button (RTL: left)
-                TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('تم حفظ التقدم'),
-                          behavior: SnackBarBehavior.floating),
-                    );
-                  },
-                  child: const Text(
-                    'حفظ',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
+      body: RefreshIndicator(
+        onRefresh: _loadLearningPlan,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            // ─── App Bar ────────────────────────────────────────────────────
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              elevation: 0,
+              scrolledUnderElevation: 1,
+              automaticallyImplyLeading: false,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Refresh button (RTL: left)
+                  TextButton.icon(
+                    onPressed: _isLoading ? null : _loadLearningPlan,
+                    icon: const Icon(Icons.refresh_rounded, size: 18),
+                    label: const Text(
+                      'تحديث',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
-                ),
-                // Title + back (RTL: right)
-                Row(
-                  children: [
-                    const Text(
-                      'التعلم المصغر',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                  // Title + back (RTL: right)
+                  Row(
+                    children: [
+                      const Text(
+                        'التعلم المصغر',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    GestureDetector(
-                      onTap: () => context.pop(),
-                      child: const Icon(
-                        Icons.arrow_forward_rounded,
-                        color: AppColors.primary,
+                      const SizedBox(width: 8),
+                      GestureDetector(
+                        onTap: () {
+                          if (context.canPop()) {
+                            context.pop();
+                          } else {
+                            context.go('/student');
+                          }
+                        },
+                        child: const Icon(
+                          Icons.arrow_forward_rounded,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // ─── Content ────────────────────────────────────────────────────
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                // Hero Section
-                _buildHeroSection(),
-                const SizedBox(height: 24),
+            // ─── Content ────────────────────────────────────────────────────
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  // Hero Section
+                  _buildHeroSection(),
+                  const SizedBox(height: 24),
 
-                // Daily Goal Progress
-                _buildDailyGoal(),
-                const SizedBox(height: 24),
+                  // Daily Goal Progress
+                  _buildDailyGoal(),
+                  const SizedBox(height: 24),
 
-                // Daily Micro-lessons
-                _buildDailyLessons(),
-                const SizedBox(height: 24),
+                  // Daily Micro-lessons
+                  _buildDailyLessons(),
+                  const SizedBox(height: 24),
 
-                // AI Recommendations Bento Grid
-                _buildAIRecommendations(),
-                const SizedBox(height: 24),
+                  // AI Recommendations Bento Grid
+                  _buildAIRecommendations(),
+                  const SizedBox(height: 24),
 
-                // Featured Video Card
-                _buildFeaturedVideo(),
-                const SizedBox(height: 16),
-              ]),
+                  // Actionable learning path
+                  _buildLearningPathCard(),
+                  const SizedBox(height: 16),
+                ]),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'student'),
     );
@@ -486,6 +490,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
   // ─── Daily Goal ────────────────────────────────────────────────────────
 
   Widget _buildDailyGoal() {
+    final colorScheme = Theme.of(context).colorScheme;
     final percent = (_dailyGoalProgress * 100).round();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -517,7 +522,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
           child: LinearProgressIndicator(
             value: _dailyGoalProgress,
             minHeight: 12,
-            backgroundColor: const Color(0xFFE2E8F0),
+            backgroundColor: colorScheme.surfaceContainerHighest,
             valueColor: const AlwaysStoppedAnimation<Color>(
               Color(0xFF10B981),
             ),
@@ -546,95 +551,113 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         ],
       );
 
-  Widget _buildLessonCard(_MicroLesson lesson) => Opacity(
-        opacity: lesson.isLocked ? 0.6 : 1.0,
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // Lock / Play icon (RTL: left)
-              Icon(
-                lesson.isLocked
-                    ? Icons.lock_outline_rounded
-                    : Icons.play_circle_outline_rounded,
-                color: lesson.isLocked
-                    ? const Color(0xFFCBD5E1)
-                    : AppColors.primary,
-                size: 28,
-              ),
-              const SizedBox(width: 12),
-              // Info (RTL: right)
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            lesson.title,
-                            textAlign: TextAlign.right,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            lesson.subtitle,
-                            textAlign: TextAlign.right,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: lesson.isLocked
-                            ? const Color(0xFFF1F5F9)
-                            : const Color(0xFFEFF6FF),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        lesson.icon,
-                        color: lesson.isLocked
-                            ? const Color(0xFF94A3B8)
-                            : AppColors.primary,
-                        size: 24,
-                      ),
-                    ),
-                  ],
+  Widget _buildLessonCard(_MicroLesson lesson) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Semantics(
+      button: !lesson.isLocked,
+      enabled: !lesson.isLocked,
+      label: lesson.isLocked
+          ? '${lesson.title}. درس مغلق حتى تنهي الدرس السابق.'
+          : '${lesson.title}. افتح تدريبًا قصيرًا لهذا الدرس.',
+      child: Opacity(
+        opacity: lesson.isLocked ? 0.62 : 1.0,
+        child: InkWell(
+          onTap: lesson.isLocked
+              ? null
+              : () => context.push('/student/assessments-list'),
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: colorScheme.outlineVariant),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-              ),
-            ],
+              ],
+            ),
+            child: Row(
+              children: [
+                // Lock / Play icon (RTL: left)
+                Icon(
+                  lesson.isLocked
+                      ? Icons.lock_outline_rounded
+                      : Icons.play_circle_outline_rounded,
+                  color: lesson.isLocked
+                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.55)
+                      : AppColors.primary,
+                  size: 28,
+                ),
+                const SizedBox(width: 12),
+                // Info (RTL: right)
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              lesson.title,
+                              textAlign: TextAlign.right,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              lesson.subtitle,
+                              textAlign: TextAlign.right,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: lesson.isLocked
+                              ? colorScheme.surfaceContainerHighest
+                              : colorScheme.primaryContainer
+                                  .withValues(alpha: 0.35),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          lesson.icon,
+                          color: lesson.isLocked
+                              ? colorScheme.onSurfaceVariant
+                                  .withValues(alpha: 0.65)
+                              : AppColors.primary,
+                          size: 24,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   // ─── AI Recommendations ────────────────────────────────────────────────
 
@@ -736,15 +759,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('جاري تحميل تحدي البطاقات الخاطفة...'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: AppColors.primaryContainer,
-                    ),
-                  );
-                },
+                onPressed: () => context.push('/student/assessments-list'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryContainer,
                   foregroundColor: Colors.white,
@@ -767,175 +782,180 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         ),
       );
 
-  Widget _buildWeakAreaCard(_WeakArea area) => Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+  Widget _buildWeakAreaCard(_WeakArea area) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Icon(area.icon, color: area.color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            area.title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Icon(area.icon, color: area.color, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              area.title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-              textAlign: TextAlign.right,
+            textAlign: TextAlign.right,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            area.description,
+            style: TextStyle(
+              fontSize: 12,
+              color: colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(height: 4),
-            Text(
-              area.description,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF64748B),
-              ),
-              textAlign: TextAlign.right,
+            textAlign: TextAlign.right,
+          ),
+          const SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: area.progress,
+              minHeight: 6,
+              backgroundColor: colorScheme.surfaceContainerHighest,
+              valueColor: AlwaysStoppedAnimation<Color>(area.color),
             ),
-            const SizedBox(height: 10),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: area.progress,
-                minHeight: 6,
-                backgroundColor: const Color(0xFFF1F5F9),
-                valueColor: AlwaysStoppedAnimation<Color>(area.color),
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
 
   // ─── Featured Video ────────────────────────────────────────────────────
 
-  Widget _buildFeaturedVideo() => Container(
-        height: 200,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.primaryContainer.withValues(alpha: 0.6),
-              AppColors.primary,
+  Widget _buildLearningPathCard() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final focusArea =
+        _weakAreas.isEmpty ? 'المهارة الأضعف' : _weakAreas.first.title;
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.22)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.route_rounded, color: colorScheme.primary),
+              const Spacer(),
+              Text(
+                'مسار تعلم مقترح',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: colorScheme.onSurface,
+                ),
+                textAlign: TextAlign.right,
+              ),
             ],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.3),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
+          const SizedBox(height: 12),
+          _buildLearningStep(
+            number: '1',
+            title: 'راجع $focusArea',
+            subtitle: 'ابدأ بأقصر درس متاح قبل الانتقال للاختبار.',
+          ),
+          _buildLearningStep(
+            number: '2',
+            title: 'حل تدريبًا قصيرًا',
+            subtitle: 'اختبار واحد كافٍ لمعرفة إن كان الفهم تحسن.',
+          ),
+          _buildLearningStep(
+            number: '3',
+            title: 'افتح التحليلات',
+            subtitle: 'قارن النتيجة الجديدة مع آخر محاولة وحدد الخطوة التالية.',
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => context.push('/student/analytics'),
+              icon: const Icon(Icons.insights_rounded),
+              label: const Text('راجع تحليلاتك'),
             ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            // Decorative circles
-            Positioned(
-              top: -30,
-              left: -30,
-              child: Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.08),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: -20,
-              right: -20,
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.06),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            // Play button overlay
-            Center(
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.5),
-                    width: 2,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLearningStep({
+    required String number,
+    required String title,
+    required String subtitle,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
                   ),
+                  textAlign: TextAlign.right,
                 ),
-                child: const Icon(
-                  Icons.play_arrow_rounded,
-                  color: Colors.white,
-                  size: 32,
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.35,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.right,
                 ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Container(
+            width: 28,
+            height: 28,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              number,
+              style: TextStyle(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            // Bottom text overlay
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.6),
-                    ],
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                  ),
-                ),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'فيديو تعليمي مقترح',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'لماذا نفشل في تذكر القوانين؟',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 // ─── Data Models ────────────────────────────────────────────────────────────

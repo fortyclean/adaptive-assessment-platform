@@ -277,6 +277,10 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                   _buildProgressGrid(),
                   const SizedBox(height: 24),
 
+                  // Recommended next action
+                  _buildNextActionCard(),
+                  const SizedBox(height: 24),
+
                   // Weekly growth chart
                   _buildWeeklyChart(),
                   const SizedBox(height: 24),
@@ -900,6 +904,90 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
   }
 
   // ─── Leaderboard ─────────────────────────────────────────────────────────
+
+  Widget _buildNextActionCard() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final needsPractice = _masteryPercent < 75;
+    final title = needsPractice ? 'ماذا تفعل الآن؟' : 'استمر بنفس الإيقاع';
+    final message = _attemptCount == 0
+        ? 'ابدأ أول اختبار حتى تظهر لك نقاط القوة والضعف بوضوح.'
+        : needsPractice
+            ? 'مستوى الإتقان يحتاج جلسة مراجعة قصيرة قبل الاختبار القادم.'
+            : 'تقدمك جيد. افتح التحليلات لمعرفة المهارة التي ترفع نتيجتك أكثر.';
+    final label = _attemptCount == 0
+        ? 'ابدأ اختبارًا'
+        : needsPractice
+            ? 'افتح التعلم المصغر'
+            : 'افتح التحليلات';
+    final route = _attemptCount == 0
+        ? '/student/assessments-list'
+        : needsPractice
+            ? '/student/micro-learning'
+            : '/student/analytics';
+
+    return Semantics(
+      label: '$title. $message',
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: colorScheme.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  needsPractice
+                      ? Icons.school_outlined
+                      : Icons.analytics_outlined,
+                  color: colorScheme.primary,
+                ),
+                const Spacer(),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.45,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => context.push(route),
+                icon: const Icon(Icons.arrow_back_rounded),
+                label: Text(label),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildLeaderboard() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,

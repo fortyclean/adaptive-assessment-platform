@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.40';
-  static const int buildNumber = 40;
+  static const String current = '1.0.41';
+  static const int buildNumber = 41;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.41',
+      buildNumber: 41,
+      date: 'مايو 2026',
+      title: 'تحسين رحلة تعلم الطالب',
+      changes: [
+        'إصلاح حساب اتجاه التحسن في التحليلات بترتيب المحاولات زمنيًا قبل مقارنة آخر نتيجتين.',
+        'إضافة بطاقة خطوة تالية في التحليلات تربط النتائج بخطة تعلم أو اختبار قصير.',
+        'إضافة بطاقة إجراء واضحة في شاشة التقدم لتوجيه الطالب إلى التعلم المصغر أو التحليلات.',
+        'تحويل شاشة التعلم المصغر إلى مسار تعلم قابل للتنفيذ مع تحديث حقيقي وتنقل آمن.',
+        'تحسين توافق بطاقات التعلم المصغر مع الوضع الليلي وإضافة دلالات وصول للعناصر المهمة.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.40',
       buildNumber: 40,

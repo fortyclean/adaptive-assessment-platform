@@ -87,8 +87,10 @@ class _StudentAnalyticsScreenState
       (sum, h) => sum + ((h['pointsEarned'] as num?)?.toInt() ?? 0),
     );
 
-    final scores =
-        history.map((h) => (h['scorePercentage'] as num).toDouble()).toList();
+    final chronologicalHistory = _sortAttemptsByDate(history);
+    final scores = chronologicalHistory
+        .map((h) => (h['scorePercentage'] as num).toDouble())
+        .toList();
     _overallPerformance =
         scores.isEmpty ? 0 : scores.reduce((a, b) => a + b) / scores.length;
     _trendPercent = _calculateRecentTrend(scores);
@@ -97,6 +99,21 @@ class _StudentAnalyticsScreenState
     _weeklyData = _buildWeeklyData(history);
     _attachments = _buildSkillInsights(history);
     _badges = _buildEarnedBadges();
+  }
+
+  List<Map<String, dynamic>> _sortAttemptsByDate(
+    List<Map<String, dynamic>> history,
+  ) {
+    final sorted = [...history];
+    sorted.sort((a, b) => _attemptDate(a).compareTo(_attemptDate(b)));
+    return sorted;
+  }
+
+  DateTime _attemptDate(Map<String, dynamic> attempt) {
+    return DateTime.tryParse(
+          (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
+        ) ??
+        DateTime.fromMillisecondsSinceEpoch(0);
   }
 
   double _calculateRecentTrend(List<double> scores) {
@@ -367,6 +384,10 @@ class _StudentAnalyticsScreenState
 
                 // Attachment Stats
                 _buildAttachmentStats(),
+                const SizedBox(height: 24),
+
+                // Recommended next action
+                _buildNextStepCard(),
                 const SizedBox(height: 24),
 
                 // Achievements & Badges
@@ -849,6 +870,83 @@ class _StudentAnalyticsScreenState
       );
 
   // ─── Achievements & Badges ────────────────────────────────────────────────
+
+  Widget _buildNextStepCard() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final weakestArea = _attachments.isEmpty ? null : _attachments.last;
+    final needsSupport = _overallPerformance < 75 || _trendPercent < 0;
+    final title = needsSupport ? 'خطوتك التالية' : 'حافظ على تقدمك';
+    final message = weakestArea == null
+        ? 'ابدأ باختبار قصير حتى نستطيع بناء توصيات تعلم دقيقة لك.'
+        : needsSupport
+            ? 'راجع ${weakestArea.title} في جلسة قصيرة، ثم أعد اختبارًا واحدًا لقياس التحسن.'
+            : 'نتائجك مستقرة. اختر تدريبًا قصيرًا للحفاظ على المستوى ورفع النقاط.';
+    final actionLabel =
+        weakestArea == null ? 'ابدأ اختبارًا' : 'افتح خطة التعلم';
+    final route = weakestArea == null
+        ? '/student/assessments-list'
+        : '/student/micro-learning';
+
+    return Semantics(
+      label: '$title. $message',
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: colorScheme.primaryContainer.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: colorScheme.primary.withValues(alpha: 0.22),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  needsSupport
+                      ? Icons.auto_awesome_motion_rounded
+                      : Icons.trending_up_rounded,
+                  color: colorScheme.primary,
+                ),
+                const Spacer(),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontFamily: 'Almarai',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 14,
+                height: 1.45,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => context.push(route),
+                icon: const Icon(Icons.arrow_back_rounded),
+                label: Text(actionLabel),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildAchievements() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
