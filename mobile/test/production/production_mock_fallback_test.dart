@@ -87,8 +87,10 @@ void main() {
       ).readAsStringSync();
 
       expect(marketplaceSource, contains('_confirmPurchase'));
+      expect(marketplaceSource, contains('StudentPointsStore'));
       expect(marketplaceSource, contains('_pointsBalance -= item.price'));
-      expect(marketplaceSource, contains('_ownedItemIds.add(item.id)'));
+      expect(marketplaceSource,
+          contains('_ownedItemIds = {..._ownedItemIds, item.id}'));
       expect(marketplaceSource, contains('_showCollectionSheet'));
       expect(marketplaceSource, isNot(contains('ScaffoldMessenger.of')));
       expect(studentMarketplaceSource, contains('MarketplaceScreen'));

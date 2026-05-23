@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../models/student_challenge_plan.dart';
+import '../repositories/assessment_repository.dart';
 
 /// Student challenges screen.
 ///
@@ -75,12 +77,59 @@ class _StudentChallengesScreenState
 
   final int _completedCount = 12;
   int _createdCount = 0;
+  int _streakDays = 0;
+  int _completedThisWeek = 0;
 
   List<_Challenge> get _liveChallenges =>
       _challenges.where((c) => c.status != ChallengeStatus.completed).toList();
 
   List<_Challenge> get _myChallenges =>
       _challenges.where((c) => c.status != ChallengeStatus.joinable).toList();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadChallengePlan();
+  }
+
+  Future<void> _loadChallengePlan() async {
+    try {
+      final history =
+          await ref.read(assessmentRepositoryProvider).getAttemptHistory();
+      final plan = const StudentChallengePlanSource().fromAttemptHistory(
+        history,
+      );
+      if (!mounted) return;
+      setState(() {
+        _streakDays = plan.streakDays;
+        _completedThisWeek = plan.completedThisWeek;
+        for (var index = 0; index < _challenges.length; index++) {
+          final state = plan.states[_challenges[index].id];
+          if (state == null) continue;
+          _challenges[index] = _challenges[index].copyWith(
+            status: _mapStatus(state.status),
+            progress: state.progress,
+            lockedReason: state.lockedReason,
+          );
+        }
+      });
+    } catch (_) {
+      // Keep the local demo challenges visible when history cannot be loaded.
+    }
+  }
+
+  ChallengeStatus _mapStatus(StudentChallengeStatus status) {
+    switch (status) {
+      case StudentChallengeStatus.joinable:
+        return ChallengeStatus.joinable;
+      case StudentChallengeStatus.joined:
+        return ChallengeStatus.joined;
+      case StudentChallengeStatus.completed:
+        return ChallengeStatus.completed;
+      case StudentChallengeStatus.locked:
+        return ChallengeStatus.locked;
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Directionality(
@@ -93,6 +142,8 @@ class _StudentChallengesScreenState
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
               children: [
+                _buildStreakSummary(),
+                const SizedBox(height: 24),
                 _buildLiveChallenges(),
                 const SizedBox(height: 24),
                 _buildLeaderboard(),
@@ -114,6 +165,44 @@ class _StudentChallengesScreenState
               const AppBottomNav(currentIndex: 1, role: 'student'),
         ),
       );
+
+  Widget _buildStreakSummary() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        children: [
+          _MiniMetric(
+            icon: Icons.local_fire_department_rounded,
+            value: '$_streakDays',
+            label: 'سلسلة أيام',
+          ),
+          const SizedBox(width: 12),
+          _MiniMetric(
+            icon: Icons.task_alt_rounded,
+            value: '$_completedThisWeek',
+            label: 'اختبارات هذا الأسبوع',
+          ),
+          const Spacer(),
+          Text(
+            _streakDays >= 2
+                ? 'تحديات جديدة مفتوحة حسب نشاطك.'
+                : 'أكمل اختبارين في يومين متتاليين لفتح تحديات أكثر.',
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   PreferredSizeWidget _buildAppBar() {
     final colorScheme = Theme.of(context).colorScheme;
@@ -581,18 +670,23 @@ class _Challenge {
   final IconData subjectIcon;
   final String? lockedReason;
 
-  _Challenge copyWith({ChallengeStatus? status}) => _Challenge(
+  _Challenge copyWith({
+    ChallengeStatus? status,
+    double? progress,
+    String? lockedReason,
+  }) =>
+      _Challenge(
         id: id,
         title: title,
         subtitle: subtitle,
         reward: reward,
         participants: participants,
         timeLeft: timeLeft,
-        progress: progress,
+        progress: progress ?? this.progress,
         status: status ?? this.status,
         accentColor: accentColor,
         subjectIcon: subjectIcon,
-        lockedReason: lockedReason,
+        lockedReason: lockedReason ?? this.lockedReason,
       );
 }
 
@@ -1099,4 +1193,42 @@ class _LiveBadge extends StatelessWidget {
           ),
         ),
       );
+}
+
+class _MiniMetric extends StatelessWidget {
+  const _MiniMetric({
+    required this.icon,
+    required this.value,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      children: [
+        Icon(icon, color: colorScheme.primary),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: TextStyle(
+            color: colorScheme.onSurface,
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            color: colorScheme.onSurfaceVariant,
+            fontSize: 11,
+          ),
+        ),
+      ],
+    );
+  }
 }

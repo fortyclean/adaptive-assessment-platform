@@ -6,6 +6,7 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
 import '../../../shared/widgets/user_avatar.dart';
+import '../models/weekly_student_report.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Student Progress Screen — Design _38
@@ -19,6 +20,53 @@ class StudentProgressScreen extends ConsumerStatefulWidget {
       _StudentProgressScreenState();
 }
 
+class _WeeklyReportChip extends StatelessWidget {
+  const _WeeklyReportChip({
+    required this.label,
+    required this.value,
+  });
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      constraints: const BoxConstraints(minWidth: 112),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            value,
+            textAlign: TextAlign.right,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              color: colorScheme.onSurfaceVariant,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
   bool _isLoading = true;
   String? _errorMessage;
@@ -27,6 +75,8 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
   int _streakDays = 0;
   double _masteryPercent = 0;
   List<Map<String, dynamic>> _leaderboard = [];
+  WeeklyStudentReport _weeklyReport =
+      const WeeklyStudentReportSource().fromAttemptHistory([]);
   // Weekly performance data (0.0–1.0 per day)
   List<double> _weeklyData = const [0, 0, 0, 0, 0, 0, 0];
   final List<String> _weekDays = [
@@ -74,6 +124,8 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
           _attemptCount = completed.length;
           _masteryPercent = avg;
           _weeklyData = _buildWeeklyData(completed);
+          _weeklyReport =
+              const WeeklyStudentReportSource().fromAttemptHistory(history);
           _streakDays = _calculateStreakDays(completed);
           _isLoading = false;
           _leaderboard = leaderboard;
@@ -285,6 +337,9 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
                   _buildWeeklyChart(),
                   const SizedBox(height: 24),
 
+                  _buildWeeklyReportCard(),
+                  const SizedBox(height: 24),
+
                   // Badges section
                   _buildBadgesSection(),
                   const SizedBox(height: 24),
@@ -363,6 +418,77 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
           ),
         ],
       );
+
+  Widget _buildWeeklyReportCard() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colorScheme.outlineVariant),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.summarize_outlined, color: colorScheme.primary),
+              const Spacer(),
+              Text(
+                'تقريرك الأسبوعي',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            _weeklyReport.summary,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              color: colorScheme.onSurfaceVariant,
+              height: 1.45,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _WeeklyReportChip(
+                label: 'اختبارات',
+                value: '${_weeklyReport.completedAttempts}',
+              ),
+              _WeeklyReportChip(
+                label: 'المتوسط',
+                value: '${_weeklyReport.averageScore.round()}%',
+              ),
+              _WeeklyReportChip(
+                label: 'النقاط',
+                value: '${_weeklyReport.pointsEarned}',
+              ),
+              _WeeklyReportChip(
+                label: 'للتركيز',
+                value: _weeklyReport.focusSkill ?? 'ابدأ اختبارًا',
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   // ─── Motivational Card ───────────────────────────────────────────────────
 

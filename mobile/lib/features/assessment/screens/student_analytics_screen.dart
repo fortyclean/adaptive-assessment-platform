@@ -6,6 +6,7 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
 import '../../../shared/widgets/user_avatar.dart';
+import '../models/student_learning_insights.dart';
 import '../repositories/assessment_repository.dart';
 
 /// StudentAnalyticsScreen — Screen 50
@@ -45,6 +46,8 @@ class _StudentAnalyticsScreenState
   List<_AttachmentStat> _attachments = const [];
 
   List<_Badge> _badges = const [];
+  LearningRecommendation _recommendation =
+      const StudentLearningInsightsSource().recommendationFor([]);
 
   @override
   void initState() {
@@ -98,6 +101,8 @@ class _StudentAnalyticsScreenState
     _subjects = _buildSubjectProgressFromHistory(history);
     _weeklyData = _buildWeeklyData(history);
     _attachments = _buildSkillInsights(history);
+    _recommendation =
+        const StudentLearningInsightsSource().recommendationFor(history);
     _badges = _buildEarnedBadges();
   }
 
@@ -873,19 +878,11 @@ class _StudentAnalyticsScreenState
 
   Widget _buildNextStepCard() {
     final colorScheme = Theme.of(context).colorScheme;
-    final weakestArea = _attachments.isEmpty ? null : _attachments.last;
     final needsSupport = _overallPerformance < 75 || _trendPercent < 0;
-    final title = needsSupport ? 'خطوتك التالية' : 'حافظ على تقدمك';
-    final message = weakestArea == null
-        ? 'ابدأ باختبار قصير حتى نستطيع بناء توصيات تعلم دقيقة لك.'
-        : needsSupport
-            ? 'راجع ${weakestArea.title} في جلسة قصيرة، ثم أعد اختبارًا واحدًا لقياس التحسن.'
-            : 'نتائجك مستقرة. اختر تدريبًا قصيرًا للحفاظ على المستوى ورفع النقاط.';
-    final actionLabel =
-        weakestArea == null ? 'ابدأ اختبارًا' : 'افتح خطة التعلم';
-    final route = weakestArea == null
-        ? '/student/assessments-list'
-        : '/student/micro-learning';
+    final title = _recommendation.title;
+    final message = _recommendation.message;
+    final actionLabel = _recommendation.actionLabel;
+    final route = _recommendation.route;
 
     return Semantics(
       label: '$title. $message',

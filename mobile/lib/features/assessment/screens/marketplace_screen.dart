@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../repositories/student_points_store.dart';
 
 /// Points marketplace.
 ///
@@ -20,8 +23,9 @@ class MarketplaceScreen extends StatefulWidget {
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
   int _selectedTab = 0;
   int _pointsBalance = 2450;
-  final Set<String> _ownedItemIds = {'extra-time'};
-  final Set<String> _activeItemIds = {'extra-time'};
+  Set<String> _ownedItemIds = {'extra-time'};
+  Set<String> _activeItemIds = {'extra-time'};
+  List<Map<String, dynamic>> _transactions = const [];
 
   static const List<String> _tabs = ['الكل', 'الأفاتار', 'القوالب', 'الأدلة'];
 
@@ -101,6 +105,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   List<_MarketItem> get _collection =>
       _items.where((item) => _ownedItemIds.contains(item.id)).toList();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStoreState();
+  }
+
+  void _loadStoreState() {
+    final store = _tryPointsStore;
+    if (store == null) return;
+    final state = store.load(null);
+    _pointsBalance = state.balance;
+    _ownedItemIds = state.ownedItemIds;
+    _activeItemIds = state.activeItemIds;
+    _transactions = state.transactions;
+  }
 
   @override
   Widget build(BuildContext context) => Directionality(
@@ -574,13 +594,36 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
     if (confirmed != true || !mounted) return;
 
-    setState(() {
-      _pointsBalance -= item.price;
-      _ownedItemIds.add(item.id);
+    final store = _tryPointsStore;
+    StudentPointsState? state;
+    if (store != null) {
+      state = await store.purchase(
+        userId: null,
+        itemId: item.id,
+        price: item.price,
+        title: item.title,
+      );
       if (item.type == MarketItemType.powerup ||
           item.type == MarketItemType.avatar ||
           item.type == MarketItemType.theme) {
-        _activeItemIds.add(item.id);
+        state = await store.activate(
+          userId: null,
+          itemId: item.id,
+          title: item.title,
+        );
+      }
+    }
+    if (!mounted) return;
+    setState(() {
+      if (state == null) {
+        _pointsBalance -= item.price;
+        _ownedItemIds = {..._ownedItemIds, item.id};
+        _activeItemIds = {..._activeItemIds, item.id};
+      } else {
+        _pointsBalance = state.balance;
+        _ownedItemIds = state.ownedItemIds;
+        _activeItemIds = state.activeItemIds;
+        _transactions = state.transactions;
       }
     });
 
@@ -591,8 +634,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     );
   }
 
-  void _activateItem(_MarketItem item) {
-    setState(() => _activeItemIds.add(item.id));
+  Future<void> _activateItem(_MarketItem item) async {
+    final state = await _tryPointsStore?.activate(
+      userId: null,
+      itemId: item.id,
+      title: item.title,
+    );
+    if (!mounted) return;
+    setState(() {
+      if (state == null) {
+        _activeItemIds = {..._activeItemIds, item.id};
+      } else {
+        _activeItemIds = state.activeItemIds;
+        _transactions = state.transactions;
+      }
+    });
     _showResultDialog(
       title: 'تم التفعيل',
       message: 'تم تفعيل "${item.title}" داخل مجموعتك.',
@@ -646,6 +702,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                             ),
                     ),
                   ),
+                if (_transactions.isNotEmpty) ...[
+                  const Divider(),
+                  const Text(
+                    'آخر العمليات',
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                    textAlign: TextAlign.right,
+                  ),
+                  ..._transactions.reversed.take(3).map(
+                        (tx) => ListTile(
+                          leading: Icon(
+                            tx['type'] == 'purchase'
+                                ? Icons.shopping_bag_outlined
+                                : Icons.check_circle_outline,
+                          ),
+                          title: Text((tx['title'] ?? '').toString()),
+                          subtitle: Text((tx['type'] ?? '').toString()),
+                          trailing: Text('${tx['points'] ?? 0}'),
+                        ),
+                      ),
+                ],
               ],
             ),
           ),
@@ -684,6 +760,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       }
     }
     return buffer.toString();
+  }
+
+  StudentPointsStore? get _tryPointsStore {
+    try {
+      return StudentPointsStore(
+        Hive.box<dynamic>(AppConstants.sessionStateBoxName),
+      );
+    } catch (_) {
+      return null;
+    }
   }
 }
 

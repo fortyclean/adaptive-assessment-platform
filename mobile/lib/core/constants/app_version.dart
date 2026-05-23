@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.51';
-  static const int buildNumber = 51;
+  static const String current = '1.0.52';
+  static const int buildNumber = 52;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.52',
+      buildNumber: 52,
+      date: 'مايو 2026',
+      title: 'إكمال حزمة تحسينات الطالب',
+      changes: [
+        'ربط توصيات التحليلات بأحدث skillBreakdown بدل الاعتماد على متوسطات عامة فقط.',
+        'إضافة حفظ محلي لمشتريات متجر النقاط والعناصر النشطة وسجل العمليات.',
+        'إضافة منطق تحديات يومية/أسبوعية يعتمد على النشاط والسلسلة الأسبوعية.',
+        'إضافة بطاقة تقرير أسبوعي داخل شاشة تقدم الطالب.',
+        'إضافة اختبارات تغطي التوصيات والمتجر والتحديات والتقرير الأسبوعي.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.51',
       buildNumber: 51,
