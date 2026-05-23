@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../models/create_assessment_draft.dart';
 import '../repositories/teacher_repository.dart';
 
 /// Create Assessment Screen — Screen 5
@@ -30,6 +31,7 @@ class _CreateAssessmentScreenState
   final List<String> _classroomIds = [];
   DateTime? _availableFrom;
   DateTime? _availableUntil;
+  bool _publishImmediately = false;
 
   bool _isLoading = false;
   bool _isLoadingClassrooms = true;
@@ -68,11 +70,13 @@ class _CreateAssessmentScreenState
     try {
       final classrooms =
           await ref.read(teacherRepositoryProvider).getClassrooms();
+      if (!mounted) return;
       setState(() {
         _classrooms = classrooms;
         _isLoadingClassrooms = false;
       });
     } catch (_) {
+      if (!mounted) return;
       setState(() => _isLoadingClassrooms = false);
     }
   }
@@ -87,24 +91,48 @@ class _CreateAssessmentScreenState
     });
 
     try {
-      await ref.read(teacherRepositoryProvider).createAssessment({
-        'title': _title,
-        'assessmentType': _assessmentType,
-        'subject': _subject,
-        'gradeLevel': _gradeLevel,
-        'units': [_unit],
-        'questionCount': _questionCount,
-        'timeLimitMinutes': _timeLimitMinutes,
-        'classroomIds': _classroomIds,
-        if (_availableFrom != null)
-          'availableFrom': _availableFrom!.toIso8601String(),
-        if (_availableUntil != null)
-          'availableUntil': _availableUntil!.toIso8601String(),
-      });
+      final draft = CreateAssessmentDraft(
+        title: _title,
+        assessmentType: _assessmentType,
+        subject: _subject,
+        gradeLevel: _gradeLevel,
+        unit: _unit,
+        questionCount: _questionCount,
+        timeLimitMinutes: _timeLimitMinutes,
+        classroomIds: List.unmodifiable(_classroomIds),
+        availableFrom: _availableFrom,
+        availableUntil: _availableUntil,
+      );
+      final validationMessage = _publishImmediately
+          ? draft.validateForPublish()
+          : draft.validateAvailabilityWindow();
+      if (validationMessage != null) {
+        setState(() {
+          _warningMessage = validationMessage;
+          _isLoading = false;
+        });
+        return;
+      }
+
+      final repository = ref.read(teacherRepositoryProvider);
+      final assessment = await repository.createAssessment(draft.toPayload());
+      if (_publishImmediately) {
+        final assessmentId = extractCreatedAssessmentId(assessment);
+        if (assessmentId == null) {
+          throw StateError('missing-created-assessment-id');
+        }
+        await repository.publishAssessment(assessmentId);
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم إنشاء الاختبار بنجاح')),
+          SnackBar(
+            content: Text(
+              _publishImmediately
+                  ? 'تم إنشاء الاختبار ونشره بنجاح'
+                  : 'تم حفظ الاختبار كمسودة بنجاح',
+            ),
+          ),
         );
         context.pop();
       }
@@ -114,8 +142,7 @@ class _CreateAssessmentScreenState
         setState(() =>
             _warningMessage = 'تحذير: عدد الأسئلة المتاحة أقل من المطلوب');
       } else {
-        // Demo mode: simulate success
-        if (mounted) {
+        if (mounted && AppConstants.useMockData) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('تم إنشاء الاختبار بنجاح (وضع تجريبي)'),
@@ -124,6 +151,11 @@ class _CreateAssessmentScreenState
             ),
           );
           context.pop();
+        } else if (mounted) {
+          setState(() {
+            _warningMessage =
+                'تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.';
+          });
         }
       }
     } finally {
@@ -374,6 +406,14 @@ class _CreateAssessmentScreenState
                 ),
                 const SizedBox(height: 20),
               ],
+              if (!_isLoadingClassrooms && _classrooms.isEmpty) ...[
+                const _InfoBanner(
+                  icon: Icons.info_outline_rounded,
+                  text:
+                      'لا توجد فصول مرتبطة بعد. يمكنك حفظ الاختبار كمسودة، لكن النشر يحتاج فصلًا واحدًا على الأقل.',
+                ),
+                const SizedBox(height: 20),
+              ],
 
               // ── Availability Window ────────────────────────────────────────
               const _FormLabel(label: 'نافذة التوفر'),
@@ -402,6 +442,23 @@ class _CreateAssessmentScreenState
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 20),
+
+              SwitchListTile.adaptive(
+                value: _publishImmediately,
+                onChanged: (value) =>
+                    setState(() => _publishImmediately = value),
+                activeThumbColor: AppColors.primaryContainer,
+                contentPadding: EdgeInsets.zero,
+                secondary: const Icon(Icons.publish_rounded),
+                title: const Text(
+                  'نشر الاختبار مباشرة بعد الإنشاء',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                subtitle: const Text(
+                  'يتطلب اختيار فصل واحد على الأقل حتى تصل الإشعارات للطلاب.',
+                ),
               ),
 
               // ── Warning ────────────────────────────────────────────────────
@@ -462,9 +519,11 @@ class _CreateAssessmentScreenState
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          'تأكيد وإنشاء الاختبار',
-                          style: TextStyle(
+                      : Text(
+                          _publishImmediately
+                              ? 'تأكيد وإنشاء ونشر الاختبار'
+                              : 'حفظ الاختبار كمسودة',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
@@ -495,6 +554,44 @@ class _FormLabel extends StatelessWidget {
 }
 
 // ─── Styled Text Form Field ───────────────────────────────────────────────────
+
+class _InfoBanner extends StatelessWidget {
+  const _InfoBanner({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context)
+              .colorScheme
+              .primaryContainer
+              .withValues(alpha: 0.14),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Theme.of(context).colorScheme.primary, size: 18),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 13,
+                  height: 1.35,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+}
 
 class _StyledTextFormField extends StatelessWidget {
   const _StyledTextFormField({

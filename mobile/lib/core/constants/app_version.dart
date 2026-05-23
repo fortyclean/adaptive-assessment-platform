@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.52';
-  static const int buildNumber = 52;
+  static const String current = '1.0.53';
+  static const int buildNumber = 53;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.53',
+      buildNumber: 53,
+      date: 'مايو 2026',
+      title: 'تدقيق إنشاء ونشر الاختبار',
+      changes: [
+        'فصل بيانات إنشاء الاختبار في نموذج typed قابل للاختبار قبل إرسالها للـ API.',
+        'إضافة خيار واضح لنشر الاختبار مباشرة بعد الإنشاء أو حفظه كمسودة.',
+        'منع النشر دون اختيار فصل واحد على الأقل أو عند وجود نافذة زمنية غير صحيحة.',
+        'حصر نجاح الديمو عند فشل API في وضع mock الصريح فقط.',
+        'إضافة اختبارات تغطي payload الإنشاء والتحقق من النشر واستخراج معرف الاختبار.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.52',
       buildNumber: 52,
