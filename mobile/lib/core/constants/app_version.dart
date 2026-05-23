@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.56';
-  static const int buildNumber = 56;
+  static const String current = '1.0.57';
+  static const int buildNumber = 57;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.57',
+      buildNumber: 57,
+      date: 'مايو 2026',
+      title: 'ضبط حالة مساعد توليد الأسئلة',
+      changes: [
+        'تحويل مساعد الذكاء الاصطناعي في محرر الأسئلة المتقدم إلى حالة مخططة واضحة بدل زر توليد غير مكتمل.',
+        'تعطيل إجراء التوليد التلقائي حتى يتم ربط خدمة آمنة ومراجعة جودة السؤال وتسجيل مصدره.',
+        'استخدام ألوان الثيم داخل نافذة المساعد حتى لا تكسر الوضع الليلي.',
+        'إضافة اختبار Widget يثبت أن الميزة تظهر كحالة قيد التخطيط ولا تسمح بتوليد غير فعلي.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.56',
       buildNumber: 56,

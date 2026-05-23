@@ -113,16 +113,15 @@ class _AdvancedQuestionEditorScreenState
   // ─── Header ──────────────────────────────────────────────────────────────
 
   Widget _buildHeader(BuildContext context) => Container(
-        color: Colors.white,
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
         ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
           border: Border(
-            bottom: BorderSide(color: Color(0xFFE2E8F0)),
+            bottom: BorderSide(color: Theme.of(context).dividerColor),
           ),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color(0x0A000000),
               blurRadius: 4,
@@ -860,54 +859,71 @@ class _AdvancedQuestionEditorScreenState
 
   // ─── AI FAB ──────────────────────────────────────────────────────────────
 
-  Widget _buildAIFAB() => FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.white,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-            builder: (ctx) => Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.auto_awesome_rounded,
-                      color: Color(0xFF611E00), size: 40),
-                  const SizedBox(height: 12),
-                  const Text('مساعد الذكاء الاصطناعي',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 8),
-                  const Text(
-                      'يمكن للذكاء الاصطناعي مساعدتك في توليد أسئلة تلقائياً بناءً على الموضوع والمستوى.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.onSurfaceVariant)),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('ميزة الذكاء الاصطناعي قيد التطوير'),
-                            behavior: SnackBarBehavior.floating),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF611E00),
-                        foregroundColor: Colors.white),
-                    child: const Text('توليد سؤال تلقائياً'),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-        backgroundColor: const Color(0xFF611E00),
-        foregroundColor: Colors.white,
-        elevation: 6,
-        child: const Icon(Icons.auto_awesome_rounded, size: 26),
+  Widget _buildAIFAB() => FloatingActionButton.extended(
+        onPressed: _showAiAssistantPlannedSheet,
+        tooltip: 'AI question assistant planned',
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+        foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        elevation: 2,
+        icon: const Icon(Icons.auto_awesome_rounded, size: 22),
+        label: const Text('قيد التخطيط'),
       );
+
+  void _showAiAssistantPlannedSheet() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(
+                Icons.auto_awesome_rounded,
+                color: colorScheme.primary,
+                size: 40,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'مساعد توليد الأسئلة',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'هذه الميزة غير مفعلة في هذا الإصدار حتى يتم ربط خدمة توليد آمنة، مراجعة جودة السؤال، وتسجيل مصدر السؤال قبل نشره.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      height: 1.6,
+                    ),
+              ),
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                onPressed: null,
+                icon: const Icon(Icons.lock_clock_rounded),
+                label: const Text('التوليد التلقائي قيد التخطيط'),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('حسنًا'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 // ─── Data Model ──────────────────────────────────────────────────────────────

@@ -6,6 +6,7 @@ import 'package:adaptive_assessment/features/auth/screens/institution_settings_s
 import 'package:adaptive_assessment/features/auth/screens/supervisor_dashboard_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/support_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/ui_feedback_screen.dart';
+import 'package:adaptive_assessment/features/question_bank/screens/advanced_question_editor_screen.dart';
 import 'package:adaptive_assessment/features/reports/screens/certificates_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -234,6 +235,34 @@ void main() {
   });
 
   // ─── Screen 68: Supervisor Dashboard ──────────────────────────────────────
+  group('AdvancedQuestionEditorScreen (Screen 75)', () {
+    testWidgets('shows AI assistant as a planned disabled feature',
+        (tester) async {
+      await tester.pumpWidget(_wrap(const AdvancedQuestionEditorScreen()));
+      await tester.pump();
+
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+      expect(find.text('قيد التخطيط'), findsOneWidget);
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.text('مساعد توليد الأسئلة'), findsOneWidget);
+      expect(find.text('التوليد التلقائي قيد التخطيط'), findsOneWidget);
+      expect(
+        tester
+            .widget<OutlinedButton>(
+              find.widgetWithText(
+                OutlinedButton,
+                'التوليد التلقائي قيد التخطيط',
+              ),
+            )
+            .onPressed,
+        isNull,
+      );
+    });
+  });
+
   group('SupervisorDashboardScreen (Screen 68)', () {
     testWidgets('renders dashboard title', (tester) async {
       await _pumpWithExtendedViewport(
