@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.49';
-  static const int buildNumber = 49;
+  static const String current = '1.0.50';
+  static const int buildNumber = 50;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.50',
+      buildNumber: 50,
+      date: 'مايو 2026',
+      title: 'حفظ تقدم التعلم المصغر',
+      changes: [
+        'إضافة حالة مكتمل لدروس التعلم المصغر مع زر واضح لتعليم الدرس كمكتمل.',
+        'حفظ الدروس المكتملة محليًا لكل طالب باستخدام Hive داخل صندوق الجلسة الموجود.',
+        'دمج الدروس المكتملة مع خطة التعلم عند إعادة فتح الشاشة حتى لا تضيع الحالة.',
+        'إضافة اختبارات تغطي حفظ التقدم وعدم تكرار معرفات الدروس المكتملة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.49',
       buildNumber: 49,

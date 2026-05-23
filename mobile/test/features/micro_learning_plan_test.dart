@@ -48,6 +48,31 @@ void main() {
       expect(plan.lessons.first.mastery, closeTo(0.2, 0.001));
     });
 
+    test('marks persisted lessons as completed', () {
+      final plan = const MicroLearningPlanSource().fromAttemptHistory(
+        [
+          {
+            'status': 'completed',
+            'scorePercentage': 80,
+            'pointsEarned': 40,
+            'submittedAt': DateTime.now().toIso8601String(),
+            'skillBreakdown': [
+              {
+                'mainSkill': 'الجبر',
+                'correctAnswers': 2,
+                'totalQuestions': 5,
+              },
+            ],
+          },
+        ],
+        completedLessonIds: {'skill-الجبر'},
+      );
+
+      expect(plan.lessons.single.status, MicroLessonStatus.completed);
+      expect(plan.lessons.single.isCompleted, isTrue);
+      expect(plan.lessons.single.subtitle, contains('مكتمل'));
+    });
+
     test('ignores incomplete attempts and malformed skill entries', () {
       final plan = const MicroLearningPlanSource().fromAttemptHistory([
         {

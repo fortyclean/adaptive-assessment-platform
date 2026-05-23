@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
 
-enum MicroLessonStatus { available, locked }
+enum MicroLessonStatus { available, locked, completed }
 
 class MicroLearningLesson {
   const MicroLearningLesson({
@@ -26,6 +26,22 @@ class MicroLearningLesson {
   final double mastery;
 
   bool get isLocked => status == MicroLessonStatus.locked;
+  bool get isCompleted => status == MicroLessonStatus.completed;
+
+  MicroLearningLesson copyWith({
+    MicroLessonStatus? status,
+    String? subtitle,
+  }) =>
+      MicroLearningLesson(
+        id: id,
+        title: title,
+        subtitle: subtitle ?? this.subtitle,
+        icon: icon,
+        status: status ?? this.status,
+        skill: skill,
+        estimatedMinutes: estimatedMinutes,
+        mastery: mastery,
+      );
 }
 
 class MicroLearningFocusArea {
@@ -63,7 +79,10 @@ class MicroLearningPlan {
 class MicroLearningPlanSource {
   const MicroLearningPlanSource();
 
-  MicroLearningPlan fromAttemptHistory(List<Map<String, dynamic>> history) {
+  MicroLearningPlan fromAttemptHistory(
+    List<Map<String, dynamic>> history, {
+    Set<String> completedLessonIds = const {},
+  }) {
     final completed = history
         .where((attempt) =>
             attempt['status'] == 'completed' &&
@@ -80,7 +99,14 @@ class MicroLearningPlanSource {
       dailyGoalProgress: (_todayAttemptCount(completed) / 3).clamp(0.0, 1.0),
       streakDays: _calculateStreakDays(completed),
       focusAreas: focusAreas,
-      lessons: _buildLessons(focusAreas, completed.isEmpty),
+      lessons: _buildLessons(focusAreas, completed.isEmpty)
+          .map((lesson) => completedLessonIds.contains(lesson.id)
+              ? lesson.copyWith(
+                  status: MicroLessonStatus.completed,
+                  subtitle: '${lesson.subtitle} - مكتمل',
+                )
+              : lesson)
+          .toList(),
     );
   }
 
@@ -198,7 +224,7 @@ class MicroLearningPlanSource {
     return focusAreas.map((area) {
       final percent = (area.progress * 100).round();
       return MicroLearningLesson(
-        id: 'skill-${area.title.hashCode}',
+        id: 'skill-${area.title}',
         title: 'مراجعة قصيرة: ${area.title}',
         subtitle: '4 دقائق - مستوى الإتقان $percent%',
         icon: area.icon,

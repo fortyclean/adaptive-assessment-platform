@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
 import '../models/micro_learning_plan.dart';
 import '../repositories/assessment_repository.dart';
+import '../repositories/micro_learning_progress_store.dart';
 
 /// Micro-Learning Screen — Design _62
 /// "التعلم المصغر الذكي" — Smart Micro-Learning
@@ -31,6 +34,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
 
   // XP points
   int _xpPoints = 0;
+  Set<String> _completedLessonIds = {};
 
   // Daily micro-lessons
   List<MicroLearningLesson> _lessons = const [
@@ -86,14 +90,23 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
       _errorMessage = null;
     });
     try {
+      _completedLessonIds = _loadCompletedLessonIds();
       final history =
           await ref.read(assessmentRepositoryProvider).getAttemptHistory();
-      final plan = const MicroLearningPlanSource().fromAttemptHistory(history);
+      final plan = const MicroLearningPlanSource().fromAttemptHistory(
+        history,
+        completedLessonIds: _completedLessonIds,
+      );
+      final completionProgress = plan.lessons.isEmpty
+          ? 0.0
+          : (_completedLessonIds.length / plan.lessons.length).clamp(0.0, 1.0);
 
       if (!mounted) return;
       setState(() {
         _xpPoints = plan.xpPoints;
-        _dailyGoalProgress = plan.dailyGoalProgress;
+        _dailyGoalProgress = plan.dailyGoalProgress > completionProgress
+            ? plan.dailyGoalProgress
+            : completionProgress;
         _streakDays = plan.streakDays;
         _weakAreas = plan.focusAreas;
         _lessons = plan.lessons;
@@ -108,6 +121,42 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
       });
     }
   }
+
+  Set<String> _loadCompletedLessonIds() {
+    return _progressStore.loadCompletedLessonIds(_studentId);
+  }
+
+  Future<void> _markLessonCompleted(MicroLearningLesson lesson) async {
+    if (lesson.isLocked || lesson.isCompleted) return;
+    final nextCompleted =
+        await _progressStore.markCompleted(_studentId, lesson.id);
+    if (!mounted) return;
+    setState(() {
+      _completedLessonIds = nextCompleted;
+      _lessons = _lessons
+          .map((item) => item.id == lesson.id
+              ? item.copyWith(
+                  status: MicroLessonStatus.completed,
+                  subtitle: '${item.subtitle} - مكتمل',
+                )
+              : item)
+          .toList();
+      _dailyGoalProgress =
+          (_completedLessonIds.length / _lessons.length).clamp(0.0, 1.0);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('تم حفظ إكمال الدرس'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  MicroLearningProgressStore get _progressStore => MicroLearningProgressStore(
+        Hive.box<dynamic>(AppConstants.sessionStateBoxName),
+      );
+
+  String? get _studentId => ref.read(authProvider).user?.id;
 
   @override
   Widget build(BuildContext context) {
@@ -449,7 +498,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
       enabled: !lesson.isLocked,
       label: lesson.isLocked
           ? '${lesson.title}. درس مغلق حتى تنهي الدرس السابق.'
-          : '${lesson.title}. افتح تدريبًا قصيرًا لهذا الدرس.',
+          : lesson.isCompleted
+              ? '${lesson.title}. درس مكتمل ومحفوظ.'
+              : '${lesson.title}. افتح تدريبًا قصيرًا لهذا الدرس.',
       child: Opacity(
         opacity: lesson.isLocked ? 0.62 : 1.0,
         child: InkWell(
@@ -463,7 +514,11 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: colorScheme.outlineVariant),
+              border: Border.all(
+                color: lesson.isCompleted
+                    ? AppColors.success
+                    : colorScheme.outlineVariant,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
@@ -475,14 +530,26 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             child: Row(
               children: [
                 // Lock / Play icon (RTL: left)
-                Icon(
-                  lesson.isLocked
-                      ? Icons.lock_outline_rounded
-                      : Icons.play_circle_outline_rounded,
-                  color: lesson.isLocked
-                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.55)
-                      : AppColors.primary,
-                  size: 28,
+                IconButton(
+                  tooltip:
+                      lesson.isCompleted ? 'درس مكتمل' : 'تعليم الدرس كمكتمل',
+                  onPressed: lesson.isLocked || lesson.isCompleted
+                      ? null
+                      : () => _markLessonCompleted(lesson),
+                  icon: Icon(
+                    lesson.isLocked
+                        ? Icons.lock_outline_rounded
+                        : lesson.isCompleted
+                            ? Icons.check_circle_rounded
+                            : Icons.check_circle_outline_rounded,
+                    color: lesson.isCompleted
+                        ? AppColors.success
+                        : lesson.isLocked
+                            ? colorScheme.onSurfaceVariant
+                                .withValues(alpha: 0.55)
+                            : AppColors.primary,
+                    size: 28,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 // Info (RTL: right)
