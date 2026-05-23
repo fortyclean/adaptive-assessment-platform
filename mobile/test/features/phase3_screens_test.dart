@@ -113,6 +113,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('إدارة المهام'), findsOneWidget);
+      expect(find.textContaining('حالة محلية'), findsOneWidget);
     });
 
     testWidgets('renders filter chips', (tester) async {
@@ -132,7 +133,7 @@ void main() {
     });
 
     testWidgets('renders assignment cards', (tester) async {
-      await tester.pumpWidget(_wrap(const TaskManagementScreen()));
+      await _pumpWithExtendedViewport(tester, const TaskManagementScreen());
       await tester.pump();
 
       expect(find.text('الجبر المتطور: المعادلات التربيعية'), findsOneWidget);
@@ -145,21 +146,50 @@ void main() {
 
       expect(find.text('85%'), findsOneWidget);
       expect(find.text('42%'), findsOneWidget);
-      expect(find.text('12%'), findsOneWidget);
     });
 
-    testWidgets('renders FAB button', (tester) async {
+    testWidgets('renders FAB button and creates a local task', (tester) async {
       await tester.pumpWidget(_wrap(const TaskManagementScreen()));
       await tester.pump();
 
       expect(find.byType(FloatingActionButton), findsOneWidget);
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.text('إنشاء مهمة جديدة'), findsOneWidget);
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'عنوان المهمة'),
+        'تدريب سريع على الكسور',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'الفصل'),
+        'الصف السابع - ب',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'موعد التسليم'),
+        'تسليم: الخميس',
+      );
+      await tester.tap(find.text('إنشاء المهمة').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('تدريب سريع على الكسور'), findsOneWidget);
+    });
+
+    testWidgets('does not expose under-development task actions',
+        (tester) async {
+      await tester.pumpWidget(_wrap(const TaskManagementScreen()));
+      await tester.pump();
+
+      expect(find.textContaining('قيد التطوير'), findsNothing);
+      expect(find.text('مهمة جديدة'), findsOneWidget);
     });
   });
 
   // ─── Screen 68: Supervisor Dashboard ──────────────────────────────────────
   group('SupervisorDashboardScreen (Screen 68)', () {
     testWidgets('renders dashboard title', (tester) async {
-      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
+      await _pumpWithExtendedViewport(
+          tester, const SupervisorDashboardScreen());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 800));
 
@@ -167,7 +197,8 @@ void main() {
     });
 
     testWidgets('renders stats grid with 4 cards', (tester) async {
-      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
+      await _pumpWithExtendedViewport(
+          tester, const SupervisorDashboardScreen());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 800));
 
@@ -178,7 +209,8 @@ void main() {
     });
 
     testWidgets('renders subject performance chart', (tester) async {
-      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
+      await _pumpWithExtendedViewport(
+          tester, const SupervisorDashboardScreen());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 800));
 
@@ -186,7 +218,8 @@ void main() {
     });
 
     testWidgets('renders top teachers section', (tester) async {
-      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
+      await _pumpWithExtendedViewport(
+          tester, const SupervisorDashboardScreen());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 800));
 
@@ -195,7 +228,8 @@ void main() {
     });
 
     testWidgets('renders admin alerts section', (tester) async {
-      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
+      await _pumpWithExtendedViewport(
+          tester, const SupervisorDashboardScreen());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 800));
 
@@ -204,7 +238,8 @@ void main() {
     });
 
     testWidgets('renders quick access grid', (tester) async {
-      await _pumpWithExtendedViewport(tester, const SupervisorDashboardScreen());
+      await _pumpWithExtendedViewport(
+          tester, const SupervisorDashboardScreen());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 800));
 

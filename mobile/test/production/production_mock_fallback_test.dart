@@ -108,5 +108,26 @@ void main() {
       expect(source, isNot(contains('ScaffoldMessenger.of')));
       expect(source, isNot(contains('SnackBar(')));
     });
+
+    test('TaskManagementScreen replaces unfinished actions with local state',
+        () {
+      final taskSource = File(
+        'lib/features/assessment/screens/task_management_screen.dart',
+      ).readAsStringSync();
+      final teacherTaskSource = File(
+        'lib/features/assessment/screens/teacher_task_management_screen.dart',
+      ).readAsStringSync();
+
+      expect(taskSource, contains('_showTaskEditor'));
+      expect(taskSource, contains('_confirmDelete'));
+      expect(taskSource, contains('_publishDraft'));
+      expect(taskSource, contains('_completeTask'));
+      expect(taskSource, contains('_TaskStatus'));
+      expect(taskSource, contains('local state model'));
+      expect(taskSource, isNot(contains('قيد التطوير')));
+      expect(taskSource, isNot(contains('ScaffoldMessenger.of')));
+      expect(taskSource, isNot(contains('SnackBar(')));
+      expect(teacherTaskSource, contains('extends TaskManagementScreen'));
+    });
   });
 }

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.46';
-  static const int buildNumber = 46;
+  static const String current = '1.0.47';
+  static const int buildNumber = 47;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.47',
+      buildNumber: 47,
+      date: 'مايو 2026',
+      title: 'تفعيل إدارة مهام المعلم',
+      changes: [
+        'استبدال رسائل قيد التطوير في إدارة المهام بتدفق محلي واضح لإنشاء المهام.',
+        'إضافة تعديل وحذف ونشر المسودات وتعليم المهام كمكتملة داخل شاشة المعلم.',
+        'توحيد Teacher Task Management مع الشاشة الأساسية لمنع تكرار واجهات قديمة.',
+        'إضافة حالات فارغة وملخص نشطة/مسودات/مكتملة مع توضيح أن الحفظ الدائم يحتاج API لاحقًا.',
+        'إضافة اختبارات تمنع رجوع إدارة المهام إلى تدفقات SnackBar-only أو رسائل قيد التطوير.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.46',
       buildNumber: 46,
