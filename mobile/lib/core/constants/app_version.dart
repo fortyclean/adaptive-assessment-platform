@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.50';
-  static const int buildNumber = 50;
+  static const String current = '1.0.51';
+  static const int buildNumber = 51;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.51',
+      buildNumber: 51,
+      date: 'مايو 2026',
+      title: 'تدريب البطاقات الخاطفة',
+      changes: [
+        'إضافة مصدر بطاقات خاطفة يبني التدريب من أضعف المهارات في سجل المحاولات.',
+        'إضافة شاشة تدريب تفاعلية تعرض السؤال ثم الإجابة مع أزرار أتقنتها وأحتاج مراجعة.',
+        'حفظ ملخص جلسات البطاقات محليًا لكل طالب باستخدام Hive.',
+        'ربط تحدي البطاقات داخل التعلم المصغر بتدفق تدريب فعلي بدل فتح قائمة الاختبارات.',
+        'إضافة اختبارات تغطي توليد البطاقات وحفظ جلسات التدريب.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.50',
       buildNumber: 50,

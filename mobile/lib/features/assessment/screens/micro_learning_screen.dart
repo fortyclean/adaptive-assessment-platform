@@ -705,9 +705,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 6),
-            const Text(
-              'بناءً على أخطائك الأخيرة في الرياضيات',
-              style: TextStyle(
+            Text(
+              'بناءً على ${_weakAreas.isEmpty ? 'آخر نتائجك' : _weakAreas.first.title}',
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.onSurfaceVariant,
               ),
@@ -717,7 +717,8 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => context.push('/student/assessments-list'),
+                onPressed: () =>
+                    context.push('/student/micro-learning/flashcards'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryContainer,
                   foregroundColor: Colors.white,

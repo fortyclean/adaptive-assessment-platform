@@ -13,6 +13,7 @@ import '../../features/assessment/screens/exam_screen.dart';
 import '../../features/assessment/screens/manage_assessments_screen.dart';
 // Screens 66–69, 71–73
 import '../../features/assessment/screens/marketplace_screen.dart';
+import '../../features/assessment/screens/micro_learning_flashcard_screen.dart';
 import '../../features/assessment/screens/micro_learning_screen.dart';
 import '../../features/assessment/screens/my_classes_screen.dart';
 import '../../features/assessment/screens/result_screen.dart';
@@ -167,6 +168,8 @@ class AppRoutes {
   static const String studentDashboard = '/student';
   static const String eduAssessStudentDashboard = '/student/edu-assess';
   static const String microLearning = '/student/micro-learning';
+  static const String microLearningFlashcards =
+      '/student/micro-learning/flashcards';
   static const String studentAssessments = '/student/assessments';
   static const String studentAssessmentsList = '/student/assessments-list';
   static const String studentResults = '/student/results';
@@ -531,6 +534,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'micro-learning',
             name: 'microLearning',
             builder: (_, __) => const MicroLearningScreen(),
+          ),
+          GoRoute(
+            path: 'micro-learning/flashcards',
+            name: 'microLearningFlashcards',
+            builder: (_, __) => const MicroLearningFlashcardScreen(),
           ),
           GoRoute(
             path: 'assessments-list',
