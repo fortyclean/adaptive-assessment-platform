@@ -6,6 +6,7 @@ import { Question, SUBJECTS } from '../models/Question';
 import { Notification } from '../models/Notification';
 import { Classroom } from '../models/Classroom';
 import { authenticate, authorize } from '../middleware/authenticate';
+import { buildAssessmentPublishNotifications } from '../services/assessmentPublishNotificationService';
 import { sendPushNotification } from '../services/pushNotificationService';
 import { logger } from '../utils/logger';
 
@@ -225,11 +226,9 @@ router.post(
       }
 
       if (assessment.classroomIds.length === 0) {
-        res
-          .status(400)
-          .json({
-            error: 'Assessment must be assigned to at least one classroom before publishing',
-          });
+        res.status(400).json({
+          error: 'Assessment must be assigned to at least one classroom before publishing',
+        });
         return;
       }
 
@@ -241,18 +240,14 @@ router.post(
         'studentIds',
       );
       const allStudentIds = classrooms.flatMap((c) => c.studentIds);
+      const notifications = buildAssessmentPublishNotifications({
+        assessmentId: assessment._id as mongoose.Types.ObjectId,
+        assessmentTitle: assessment.title,
+        availableUntil: assessment.availableUntil,
+        studentIds: allStudentIds,
+      });
 
-      if (allStudentIds.length > 0) {
-        const notifications = allStudentIds.map((studentId) => ({
-          userId: studentId,
-          type: 'new_assessment' as const,
-          title: 'اختبار جديد متاح',
-          body: `تم تعيين اختبار "${assessment.title}" لك${assessment.availableUntil ? `. الموعد النهائي: ${assessment.availableUntil.toLocaleDateString('ar')}` : ''}`,
-          relatedId: assessment._id,
-          relatedType: 'assessment' as const,
-          isRead: false,
-        }));
-
+      if (notifications.length > 0) {
         await Notification.insertMany(notifications);
         await Promise.all(
           notifications.map((notification) =>
@@ -270,7 +265,7 @@ router.post(
         );
         logger.info('Notifications sent to students', {
           assessmentId: assessment._id,
-          studentCount: allStudentIds.length,
+          studentCount: notifications.length,
         });
       }
 

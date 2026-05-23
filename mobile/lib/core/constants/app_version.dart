@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.53';
-  static const int buildNumber = 53;
+  static const String current = '1.0.54';
+  static const int buildNumber = 54;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.54',
+      buildNumber: 54,
+      date: 'مايو 2026',
+      title: 'إشعارات نشر الاختبار للفصول',
+      changes: [
+        'توحيد بناء إشعارات نشر الاختبار داخل خدمة backend قابلة للاختبار.',
+        'منع تكرار إشعار نفس الاختبار للطالب إذا كان موجودًا في أكثر من فصل مخصص.',
+        'الحفاظ على محتوى الإشعار وموعد النهاية وربطه بمعرف الاختبار.',
+        'إضافة اختبارات تغطي الطلاب الفريدين وحالة الفصول الفارغة وموعد النهاية.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.53',
       buildNumber: 53,
