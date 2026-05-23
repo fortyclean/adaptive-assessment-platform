@@ -22,12 +22,21 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
   int _selectedFilter = 0;
   int _createdCount = 0;
 
+  static const List<_LocalClassroom> _localClassrooms = [
+    _LocalClassroom(name: 'الصف السابع - ب', studentCount: 24),
+    _LocalClassroom(name: 'الصف التاسع - أ', studentCount: 27),
+    _LocalClassroom(name: 'الصف العاشر - أ', studentCount: 28),
+    _LocalClassroom(name: 'الصف العاشر - ب', studentCount: 25),
+    _LocalClassroom(name: 'الصف الحادي عشر - ج', studentCount: 22),
+  ];
+
   final List<_TeacherTask> _tasks = [
     const _TeacherTask(
       id: 'algebra-10-a',
       subject: 'رياضيات',
       title: 'الجبر المتطور: المعادلات التربيعية',
       className: 'الصف العاشر - أ',
+      assignedStudentCount: 28,
       dueDate: 'تسليم: 15 أكتوبر',
       completionRate: 0.85,
       status: _TaskStatus.active,
@@ -39,6 +48,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
       subject: 'فيزياء',
       title: 'مقدمة في قوانين نيوتن',
       className: 'الصف الحادي عشر - ج',
+      assignedStudentCount: 22,
       dueDate: 'تسليم: غدًا',
       completionRate: 0.42,
       status: _TaskStatus.active,
@@ -51,6 +61,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
       subject: 'رياضيات',
       title: 'الاحتمالات والإحصاء الوصفي',
       className: 'الصف العاشر - ب',
+      assignedStudentCount: 25,
       dueDate: 'تسليم: 20 أكتوبر',
       completionRate: 0.12,
       status: _TaskStatus.draft,
@@ -62,6 +73,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
       subject: 'لغة عربية',
       title: 'مراجعة البلاغة والتشبيه',
       className: 'الصف التاسع - أ',
+      assignedStudentCount: 27,
       dueDate: 'مكتملة',
       completionRate: 1,
       status: _TaskStatus.completed,
@@ -352,7 +364,10 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => _TaskEditorSheet(task: task),
+      builder: (ctx) => _TaskEditorSheet(
+        task: task,
+        classrooms: _localClassrooms,
+      ),
     );
 
     if (result == null || !mounted) return;
@@ -566,6 +581,10 @@ class _TaskCard extends StatelessWidget {
             children: [
               _Meta(icon: Icons.groups_outlined, label: task.className),
               _Meta(
+                icon: Icons.person_outline,
+                label: '${task.assignedStudentCount} طالب',
+              ),
+              _Meta(
                 icon: Icons.event_outlined,
                 label: task.dueDate,
                 color: task.isUrgent
@@ -610,9 +629,10 @@ class _TaskCard extends StatelessWidget {
 }
 
 class _TaskEditorSheet extends StatefulWidget {
-  const _TaskEditorSheet({this.task});
+  const _TaskEditorSheet({required this.classrooms, this.task});
 
   final _TeacherTask? task;
+  final List<_LocalClassroom> classrooms;
 
   @override
   State<_TaskEditorSheet> createState() => _TaskEditorSheetState();
@@ -669,7 +689,7 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
                 ),
                 const SizedBox(height: 6),
                 const Text(
-                  'سيتم حفظ التغيير داخل هذه الجلسة فقط حتى يتم ربط API المهام.',
+                  'اختر الفصل المستهدف حتى تكون المهمة مرتبطة بعدد الطلاب المتوقع، وسيتم حفظ التغيير داخل هذه الجلسة فقط حتى يتم ربط API المهام.',
                   style: TextStyle(color: AppColors.onSurfaceVariant),
                 ),
                 const SizedBox(height: 16),
@@ -698,9 +718,33 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
                 TextFormField(
                   controller: _classController,
                   decoration: const InputDecoration(labelText: 'الفصل'),
-                  validator: (value) => value == null || value.trim().isEmpty
-                      ? 'حدد الفصل المستهدف'
-                      : null,
+                  validator: (value) {
+                    final text = value?.trim() ?? '';
+                    if (text.isEmpty) return 'حدد الفصل المستهدف';
+                    final isKnown =
+                        widget.classrooms.any((item) => item.name == text);
+                    return isKnown
+                        ? null
+                        : 'اختر فصلًا من الفصول المقترحة حتى يتم تعيين الطلاب بدقة';
+                  },
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: widget.classrooms
+                      .map(
+                        (classroom) => ActionChip(
+                          avatar: const Icon(Icons.groups_outlined, size: 16),
+                          label: Text(
+                            '${classroom.name} · ${classroom.studentCount} طالب',
+                          ),
+                          onPressed: () => setState(
+                            () => _classController.text = classroom.name,
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
@@ -751,11 +795,19 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
         title: _titleController.text.trim(),
         subject: _subject,
         className: _classController.text.trim(),
+        assignedStudentCount: _studentCountFor(_classController.text.trim()),
         dueDate: _dueDateController.text.trim(),
         status: _status,
       ),
     );
   }
+
+  int _studentCountFor(String className) => widget.classrooms
+      .firstWhere(
+        (classroom) => classroom.name == className,
+        orElse: () => const _LocalClassroom(name: '', studentCount: 0),
+      )
+      .studentCount;
 }
 
 class _SummaryTile extends StatelessWidget {
@@ -904,6 +956,7 @@ class _TaskFormResult {
     required this.title,
     required this.subject,
     required this.className,
+    required this.assignedStudentCount,
     required this.dueDate,
     required this.status,
   });
@@ -911,6 +964,7 @@ class _TaskFormResult {
   final String title;
   final String subject;
   final String className;
+  final int assignedStudentCount;
   final String dueDate;
   final _TaskStatus status;
 
@@ -925,6 +979,7 @@ class _TaskFormResult {
         subject: subject,
         title: title,
         className: className,
+        assignedStudentCount: assignedStudentCount,
         dueDate: dueDate,
         status: status,
         completionRate: completionRate,
@@ -939,6 +994,7 @@ class _TeacherTask {
     required this.subject,
     required this.title,
     required this.className,
+    required this.assignedStudentCount,
     required this.dueDate,
     required this.completionRate,
     required this.status,
@@ -951,6 +1007,7 @@ class _TeacherTask {
   final String subject;
   final String title;
   final String className;
+  final int assignedStudentCount;
   final String dueDate;
   final double completionRate;
   final _TaskStatus status;
@@ -967,6 +1024,7 @@ class _TeacherTask {
         subject: subject,
         title: title,
         className: className,
+        assignedStudentCount: assignedStudentCount,
         dueDate: dueDate,
         completionRate: completionRate ?? this.completionRate,
         status: status ?? this.status,
@@ -974,6 +1032,13 @@ class _TeacherTask {
         subjectTextColor: subjectTextColor,
         isUrgent: isUrgent,
       );
+}
+
+class _LocalClassroom {
+  const _LocalClassroom({required this.name, required this.studentCount});
+
+  final String name;
+  final int studentCount;
 }
 
 enum _TaskStatus {

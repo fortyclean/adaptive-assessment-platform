@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.54';
-  static const int buildNumber = 54;
+  static const String current = '1.0.55';
+  static const int buildNumber = 55;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.55',
+      buildNumber: 55,
+      date: 'مايو 2026',
+      title: 'تحسين تعيين مهام المعلم',
+      changes: [
+        'تحويل تعيين المهمة من نص حر فقط إلى تدفق يربط المهمة بفصل محلي معروف.',
+        'إظهار عدد الطلاب المستهدفين داخل بطاقة المهمة لزيادة وضوح التعيين.',
+        'إضافة فصول مقترحة داخل محرر المهمة لتقليل أخطاء الإدخال.',
+        'منع حفظ مهمة بفصل غير معروف حتى لا تبدو وكأنها عُيّنت لطلاب فعليين.',
+        'توسيع اختبارات شاشة المهام لتغطي عدد الطلاب عند العرض والإنشاء.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.54',
       buildNumber: 54,

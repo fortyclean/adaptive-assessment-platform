@@ -137,6 +137,8 @@ void main() {
 
       expect(find.text('الجبر المتطور: المعادلات التربيعية'), findsOneWidget);
       expect(find.text('مقدمة في قوانين نيوتن'), findsOneWidget);
+      expect(find.text('28 طالب'), findsOneWidget);
+      expect(find.text('22 طالب'), findsOneWidget);
     });
 
     testWidgets('renders completion rate progress bars', (tester) async {
@@ -168,10 +170,12 @@ void main() {
         find.widgetWithText(TextFormField, 'موعد التسليم'),
         'تسليم: الخميس',
       );
+      await tester.ensureVisible(find.text('إنشاء المهمة').last);
       await tester.tap(find.text('إنشاء المهمة').last);
       await tester.pumpAndSettle();
 
       expect(find.text('تدريب سريع على الكسور'), findsOneWidget);
+      expect(find.text('24 طالب'), findsOneWidget);
     });
 
     testWidgets('does not expose under-development task actions',
