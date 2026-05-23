@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
+import '../models/micro_learning_plan.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Micro-Learning Screen — Design _62
@@ -32,31 +33,39 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
   int _xpPoints = 0;
 
   // Daily micro-lessons
-  List<_MicroLesson> _lessons = const [
-    _MicroLesson(
+  List<MicroLearningLesson> _lessons = const [
+    MicroLearningLesson(
+      id: 'initial-diagnostic',
       title: 'ابدأ بأول اختبار تشخيصي',
       subtitle: '3 دقائق • يفتح توصياتك الشخصية',
       icon: Icons.psychology_outlined,
-      isLocked: false,
+      status: MicroLessonStatus.available,
+      skill: 'تشخيص',
+      estimatedMinutes: 3,
+      mastery: 0,
     ),
-    _MicroLesson(
+    MicroLearningLesson(
+      id: 'locked-review',
       title: 'التفاعلات الكيميائية',
       subtitle: '3 دقيقة • مراجعة',
       icon: Icons.science_outlined,
-      isLocked: true,
+      status: MicroLessonStatus.locked,
+      skill: 'تحليل النتائج',
+      estimatedMinutes: 4,
+      mastery: 0,
     ),
   ];
 
   // AI-recommended weak areas
-  List<_WeakArea> _weakAreas = const [
-    _WeakArea(
+  List<MicroLearningFocusArea> _weakAreas = const [
+    MicroLearningFocusArea(
       title: 'قواعد اللغة',
       description: 'تحتاج لتعزيز مهاراتك هنا',
       progress: 0.33,
       color: Color(0xFFF59E0B),
       icon: Icons.trending_down_rounded,
     ),
-    _WeakArea(
+    MicroLearningFocusArea(
       title: 'المنطق الصوري',
       description: 'أداء متميز في التطور',
       progress: 0.85,
@@ -79,22 +88,15 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
     try {
       final history =
           await ref.read(assessmentRepositoryProvider).getAttemptHistory();
-      final completed = history
-          .where((h) =>
-              h['status'] == 'completed' && (h['scorePercentage'] is num))
-          .toList();
+      final plan = const MicroLearningPlanSource().fromAttemptHistory(history);
 
       if (!mounted) return;
       setState(() {
-        _xpPoints = completed.fold<int>(
-          0,
-          (sum, h) => sum + ((h['pointsEarned'] as num?)?.toInt() ?? 0),
-        );
-        _dailyGoalProgress =
-            (_todayAttemptCount(completed) / 3).clamp(0.0, 1.0);
-        _streakDays = _calculateStreakDays(completed);
-        _weakAreas = _buildWeakAreas(completed);
-        _lessons = _buildLessonsFromWeakAreas(_weakAreas, completed.isEmpty);
+        _xpPoints = plan.xpPoints;
+        _dailyGoalProgress = plan.dailyGoalProgress;
+        _streakDays = plan.streakDays;
+        _weakAreas = plan.focusAreas;
+        _lessons = plan.lessons;
         _isLoading = false;
       });
     } catch (_) {
@@ -105,117 +107,6 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         _isLoading = false;
       });
     }
-  }
-
-  int _todayAttemptCount(List<Map<String, dynamic>> history) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    return history.where((attempt) {
-      final date = DateTime.tryParse(
-        (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
-      );
-      if (date == null) return false;
-      return DateTime(date.year, date.month, date.day) == today;
-    }).length;
-  }
-
-  int _calculateStreakDays(List<Map<String, dynamic>> history) {
-    final days = history
-        .map((attempt) => DateTime.tryParse(
-              (attempt['submittedAt'] ?? attempt['createdAt'] ?? '').toString(),
-            ))
-        .whereType<DateTime>()
-        .map((date) => DateTime(date.year, date.month, date.day))
-        .toSet();
-    var cursor = DateTime.now();
-    cursor = DateTime(cursor.year, cursor.month, cursor.day);
-    var streak = 0;
-    while (days.contains(cursor)) {
-      streak++;
-      cursor = cursor.subtract(const Duration(days: 1));
-    }
-    return streak;
-  }
-
-  List<_WeakArea> _buildWeakAreas(List<Map<String, dynamic>> history) {
-    final skills = <String, List<double>>{};
-    for (final attempt in history) {
-      final breakdown = attempt['skillBreakdown'];
-      if (breakdown is! List) continue;
-      for (final item in breakdown) {
-        if (item is! Map) continue;
-        final total = (item['totalQuestions'] as num?)?.toDouble() ?? 0;
-        final correct = (item['correctAnswers'] as num?)?.toDouble() ?? 0;
-        final skill = (item['mainSkill'] ?? item['skill'] ?? '').toString();
-        if (skill.isEmpty || total <= 0) continue;
-        skills.putIfAbsent(skill, () => []).add(correct / total);
-      }
-    }
-
-    if (skills.isEmpty) {
-      return const [
-        _WeakArea(
-          title: 'اختبار تشخيصي',
-          description: 'ابدأ اختباراً لفتح توصيات مبنية على أدائك',
-          progress: 0,
-          color: AppColors.primary,
-          icon: Icons.route_outlined,
-        ),
-      ];
-    }
-
-    final ranked = skills.entries.map((entry) {
-      final avg = entry.value.reduce((a, b) => a + b) / entry.value.length;
-      return MapEntry(entry.key, avg);
-    }).toList()
-      ..sort((a, b) => a.value.compareTo(b.value));
-
-    return ranked.take(2).map((entry) {
-      final progress = entry.value.clamp(0.0, 1.0);
-      return _WeakArea(
-        title: entry.key,
-        description: progress >= 0.75
-            ? 'مهارة قوية، حافظ على مستواك'
-            : 'تحتاج مراجعة قصيرة اليوم',
-        progress: progress,
-        color: progress >= 0.75 ? AppColors.success : AppColors.warning,
-        icon: progress >= 0.75
-            ? Icons.auto_awesome_rounded
-            : Icons.trending_down_rounded,
-      );
-    }).toList();
-  }
-
-  List<_MicroLesson> _buildLessonsFromWeakAreas(
-    List<_WeakArea> weakAreas,
-    bool isEmptyHistory,
-  ) {
-    if (isEmptyHistory) {
-      return const [
-        _MicroLesson(
-          title: 'ابدأ بأول اختبار تشخيصي',
-          subtitle: '3 دقائق • يفتح توصياتك الشخصية',
-          icon: Icons.psychology_outlined,
-          isLocked: false,
-        ),
-        _MicroLesson(
-          title: 'راجع نتائجك بعد الاختبار',
-          subtitle: 'مغلق حتى تظهر أول نتيجة',
-          icon: Icons.insights_outlined,
-          isLocked: true,
-        ),
-      ];
-    }
-
-    return weakAreas.map((area) {
-      final percent = (area.progress * 100).round();
-      return _MicroLesson(
-        title: 'مراجعة قصيرة: ${area.title}',
-        subtitle: '4 دقائق • مستوى الإتقان $percent%',
-        icon: area.icon,
-        isLocked: false,
-      );
-    }).toList();
   }
 
   @override
@@ -551,7 +442,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         ],
       );
 
-  Widget _buildLessonCard(_MicroLesson lesson) {
+  Widget _buildLessonCard(MicroLearningLesson lesson) {
     final colorScheme = Theme.of(context).colorScheme;
     return Semantics(
       button: !lesson.isLocked,
@@ -782,7 +673,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         ),
       );
 
-  Widget _buildWeakAreaCard(_WeakArea area) {
+  Widget _buildWeakAreaCard(MicroLearningFocusArea area) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(14),
@@ -959,33 +850,3 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
 }
 
 // ─── Data Models ────────────────────────────────────────────────────────────
-
-class _MicroLesson {
-  const _MicroLesson({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.isLocked,
-  });
-
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final bool isLocked;
-}
-
-class _WeakArea {
-  const _WeakArea({
-    required this.title,
-    required this.description,
-    required this.progress,
-    required this.color,
-    required this.icon,
-  });
-
-  final String title;
-  final String description;
-  final double progress;
-  final Color color;
-  final IconData icon;
-}

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.48';
-  static const int buildNumber = 48;
+  static const String current = '1.0.49';
+  static const int buildNumber = 49;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.49',
+      buildNumber: 49,
+      date: 'مايو 2026',
+      title: 'مصدر typed للتعلم المصغر',
+      changes: [
+        'فصل نموذج خطة التعلم المصغر عن الشاشة داخل مصدر typed قابل للاختبار.',
+        'بناء الدروس اليومية ومناطق التركيز من سجل محاولات الطالب بدل منطق placeholder داخل الواجهة.',
+        'إضافة اختبارات تغطي حالة عدم وجود نتائج وحالة ترتيب المهارات الأضعف.',
+        'تجهيز شاشة التعلم المصغر للخطوات التالية مثل حفظ إكمال الدروس والبطاقات الخاطفة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.48',
       buildNumber: 48,
