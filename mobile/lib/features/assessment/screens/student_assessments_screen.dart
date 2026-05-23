@@ -26,6 +26,12 @@ class _StudentAssessmentsScreenState
   late final TabController _tabController;
   bool _isLoading = true;
   String? _errorMessage;
+
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return AppConstants.useMockData || token.startsWith('demo-token-');
+  }
+
   List<Map<String, dynamic>> _available = [];
   List<Map<String, dynamic>> _upcoming = [];
   List<Map<String, dynamic>> _past = [];
@@ -80,7 +86,7 @@ class _StudentAssessmentsScreenState
       }
     } catch (_) {
       if (mounted) {
-        if (!AppConstants.useMockData) {
+        if (!_shouldUseDemoFallback) {
           setState(() {
             _isLoading = false;
             _errorMessage =

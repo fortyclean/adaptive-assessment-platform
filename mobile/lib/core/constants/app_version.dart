@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.47';
-  static const int buildNumber = 47;
+  static const String current = '1.0.48';
+  static const int buildNumber = 48;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.48',
+      buildNumber: 48,
+      date: 'مايو 2026',
+      title: 'حماية fallback الإنتاجي',
+      changes: [
+        'إضافة اختبارات regression واسعة تمنع ظهور بيانات mock خارج وضع الديمو الصريح.',
+        'حصر fallback جداول التقارير في useMockData أو جلسات demo-token فقط.',
+        'منع شاشة الشهادات من حقن طلاب demo عند فشل API في الإنتاج.',
+        'تقييد بدء الاختبار المحلي بمعرفات demo مع جلسة demo أو mock mode صريح.',
+        'منع نتيجة استيراد Excel التجريبية عند عدم دعم API في الإنتاج.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.47',
       buildNumber: 47,

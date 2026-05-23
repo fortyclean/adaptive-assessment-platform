@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/download_helper.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -23,6 +24,11 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
   String? _selectedClassroomName;
   String _sortBy = 'score';
   int _selectedTemplate = 0; // 0=classic, 1=modern, 2=elegant
+
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return AppConstants.useMockData || token.startsWith('demo-token-');
+  }
 
   // ── Certificate templates ─────────────────────────────────────────────────
   final List<Map<String, dynamic>> _templates = [
@@ -80,16 +86,23 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
     } catch (_) {
       if (mounted) {
         setState(() {
-          _classrooms = [
-            {
-              '_id': 'cls-001',
-              'name': 'أولى متوسط (أ)',
-              'gradeLevel': 'الصف الأول المتوسط'
-            },
-          ];
-          _selectedClassroomId = 'cls-001';
-          _selectedClassroomName = 'أولى متوسط (أ)';
-          _students = _demoStudents();
+          if (_shouldUseDemoFallback) {
+            _classrooms = [
+              {
+                '_id': 'cls-001',
+                'name': 'أولى متوسط (أ)',
+                'gradeLevel': 'الصف الأول المتوسط'
+              },
+            ];
+            _selectedClassroomId = 'cls-001';
+            _selectedClassroomName = 'أولى متوسط (أ)';
+            _students = _demoStudents();
+          } else {
+            _classrooms = [];
+            _selectedClassroomId = null;
+            _selectedClassroomName = null;
+            _students = [];
+          }
           _isLoading = false;
         });
       }
@@ -113,7 +126,7 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
     } catch (_) {
       if (mounted) {
         setState(() {
-          _students = _demoStudents();
+          _students = _shouldUseDemoFallback ? _demoStudents() : [];
           _isLoading = false;
         });
       }

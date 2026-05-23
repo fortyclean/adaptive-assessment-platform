@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../../auth/repositories/admin_repository.dart';
 
 /// Report Schedule Screen — Screens 32 & 33 (combined)
@@ -191,6 +193,11 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
   final _emailController = TextEditingController();
   final List<String> _recipients = [];
 
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return AppConstants.useMockData || token.startsWith('demo-token-');
+  }
+
   // Classroom chips (Screen 33 variant)
   final List<String> _availableClassrooms = [
     'أولى متوسط (أ)',
@@ -267,11 +274,14 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
       setState(() {
         _schedules = data.map(_ScheduleItem.fromJson).toList();
       });
-    } catch (e) {
-      // Fallback to mock data so the screen is always usable
+    } catch (_) {
       setState(() {
-        _schedules = _mockSchedules.map(_ScheduleItem.fromJson).toList();
-        _errorMessage = null;
+        _schedules = _shouldUseDemoFallback
+            ? _mockSchedules.map(_ScheduleItem.fromJson).toList()
+            : [];
+        _errorMessage = _shouldUseDemoFallback
+            ? null
+            : 'تعذر تحميل جداول التقارير. تحقق من الاتصال ثم أعد المحاولة.';
       });
     } finally {
       setState(() => _loadingSchedules = false);
@@ -319,7 +329,18 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
         ),
       );
     } catch (e) {
-      // Demo mode: simulate success
+      if (!_shouldUseDemoFallback) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('تعذر حفظ الجدول الزمني: ${e.toString()}'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
+
       final timeStr =
           '${_deliveryTime.hour.toString().padLeft(2, '0')}:${_deliveryTime.minute.toString().padLeft(2, '0')}';
       final demoSchedule = _ScheduleItem(

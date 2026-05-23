@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Assessment Start Screen — Screen 14
@@ -38,6 +39,20 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
     'previousScore': null,
   };
 
+  bool get _isDemoAssessmentId {
+    final id = widget.assessmentId;
+    return id.startsWith('mock') ||
+        id.startsWith('demo-') ||
+        id == '1' ||
+        id == '2';
+  }
+
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return _isDemoAssessmentId &&
+        (AppConstants.useMockData || token.startsWith('demo-token-'));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -55,12 +70,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      // Auto fallback to demo data when API fails
-      if (AppConstants.useMockData ||
-          widget.assessmentId.startsWith('mock') ||
-          widget.assessmentId.startsWith('demo-') ||
-          widget.assessmentId == '1' ||
-          widget.assessmentId == '2') {
+      if (_shouldUseDemoFallback) {
         setState(() {
           _assessment = _mockAssessment;
           _error = null;
@@ -100,12 +110,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
           ? classroomIds!.first as String
           : '';
 
-      // Demo mode must be explicitly enabled.
-      if (AppConstants.useMockData &&
-          (widget.assessmentId.startsWith('mock') ||
-              widget.assessmentId.startsWith('demo-') ||
-              widget.assessmentId == '1' ||
-              widget.assessmentId == '2')) {
+      if (_shouldUseDemoFallback) {
         if (!mounted) return;
         context.push(
           '/student/assessments/${widget.assessmentId}/exam',
@@ -133,12 +138,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         },
       );
     } catch (e) {
-      // Auto fallback to demo when API fails for known IDs
-      if (widget.assessmentId.startsWith('mock') ||
-          widget.assessmentId.startsWith('demo-') ||
-          widget.assessmentId == '1' ||
-          widget.assessmentId == '2' ||
-          AppConstants.useMockData) {
+      if (_shouldUseDemoFallback) {
         if (!mounted) return;
         context.push(
           '/student/assessments/${widget.assessmentId}/exam',
@@ -166,37 +166,36 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Scaffold(
+      backgroundColor: cs.surface,
+      appBar: AppBar(
         backgroundColor: cs.surface,
-        appBar: AppBar(
-          backgroundColor: cs.surface,
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          title: Text(
-            'بدء الاختبار',
-            style: TextStyle(
-              color: cs.onSurface,
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-            ),
-          ),
-          centerTitle: false,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new_rounded,
-                color: cs.onSurface),
-            onPressed: () => context.pop(),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(height: 1, color: AppColors.outlineVariant),
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+          'بدء الاختبار',
+          style: TextStyle(
+            color: cs.onSurface,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
           ),
         ),
-        body: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: AppColors.primary))
-            : _error != null
-                ? _buildError()
-                : _buildContent(),
-      );
+        centerTitle: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: cs.onSurface),
+          onPressed: () => context.pop(),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: AppColors.outlineVariant),
+        ),
+      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primary))
+          : _error != null
+              ? _buildError()
+              : _buildContent(),
+    );
   }
 
   Widget _buildError() => Center(

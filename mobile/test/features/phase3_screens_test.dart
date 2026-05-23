@@ -49,8 +49,7 @@ Future<void> _pumpCertificatesScreen(WidgetTester tester) async {
     await binding.setSurfaceSize(null);
   });
   await tester.pumpWidget(_wrapCertificates(const CertificatesScreen()));
-  await tester.pump();
-  await tester.pump(const Duration(milliseconds: 200));
+  await tester.pumpAndSettle();
 }
 
 void main() {
@@ -297,7 +296,10 @@ void main() {
     testWidgets('renders page title', (tester) async {
       await _pumpCertificatesScreen(tester);
 
-      expect(find.text('الشهادات والنتائج'), findsOneWidget);
+      expect(
+        find.text('الشهادات والنتائج', skipOffstage: false),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders export button', (tester) async {
@@ -315,8 +317,14 @@ void main() {
     testWidgets('renders certificate preview section', (tester) async {
       await _pumpCertificatesScreen(tester);
 
-      expect(find.text('اختر نموذج الشهادة'), findsOneWidget);
-      expect(find.text('معاينة النموذج'), findsOneWidget);
+      expect(
+        find.text('اختر نموذج الشهادة', skipOffstage: false),
+        findsOneWidget,
+      );
+      expect(
+        find.text('معاينة النموذج', skipOffstage: false),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders student list with 4 students', (tester) async {

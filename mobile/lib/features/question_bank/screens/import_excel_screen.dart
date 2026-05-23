@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/network/api_service.dart';
 import '../../../core/utils/download_helper.dart';
 import '../../../shared/providers/auth_provider.dart';
@@ -24,6 +25,11 @@ class _ImportExcelScreenState extends ConsumerState<ImportExcelScreen> {
   String? _error;
   String? _selectedFileName;
   final List<Map<String, dynamic>> _importHistory = [];
+
+  bool get _shouldUseDemoFallback {
+    final token = ref.read(authProvider).accessToken ?? '';
+    return AppConstants.useMockData || token.startsWith('demo-token-');
+  }
 
   // ── Pick file and upload ──────────────────────────────────────────────────
   Future<void> _pickAndUpload() async {
@@ -102,8 +108,8 @@ class _ImportExcelScreenState extends ConsumerState<ImportExcelScreen> {
       }
     } on DioException catch (e) {
       if (!mounted) return;
-      // If backend doesn't support import yet, show demo result
-      if (e.response?.statusCode == 404 || e.response?.statusCode == 405) {
+      if (_shouldUseDemoFallback &&
+          (e.response?.statusCode == 404 || e.response?.statusCode == 405)) {
         setState(() {
           _isUploading = false;
           _importResult = _demoResult(file.name);
