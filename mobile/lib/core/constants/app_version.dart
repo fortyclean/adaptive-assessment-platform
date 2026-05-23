@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.57';
-  static const int buildNumber = 57;
+  static const String current = '1.0.58';
+  static const int buildNumber = 58;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.58',
+      buildNumber: 58,
+      date: 'مايو 2026',
+      title: 'اختبارات رحلة المعلم',
+      changes: [
+        'إضافة اختبارات Widget/Integration تغطي انتقال المعلم بين لوحة التحكم والاختبارات والمهام والجدول وبنك الأسئلة.',
+        'إضافة Repository وهمي قابل للقياس لاختبار إنشاء اختبار ونشره مع تعيين فصل دون الاتصال بالشبكة.',
+        'التحقق من أن إنشاء الاختبار يرسل payload صحيحًا وينفذ publish بعد الحصول على معرف الاختبار.',
+        'تثبيت سلوك مساعد توليد الأسئلة كميزة قيد التخطيط ضمن رحلة المعلم.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.57',
       buildNumber: 57,
