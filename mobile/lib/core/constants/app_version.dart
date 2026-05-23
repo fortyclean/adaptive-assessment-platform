@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.55';
-  static const int buildNumber = 55;
+  static const String current = '1.0.56';
+  static const int buildNumber = 56;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.56',
+      buildNumber: 56,
+      date: 'مايو 2026',
+      title: 'تنظيف الجدول الدراسي',
+      changes: [
+        'استبدال الحصص الوهمية في الجدول الدراسي بحالة فارغة صريحة عند عدم وجود API.',
+        'جعل الحصص المحلية مرتبطة باليوم المحدد بدل ظهور نفس البيانات في كل الأيام.',
+        'إضافة تنبيه واضح بأن الجدول المحلي للمراجعة فقط حتى يتم ربط API الجدول.',
+        'إضافة اختبارات تمنع رجوع بيانات الجدول الوهمية وتتحقق من إضافة حصة محلية.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.55',
       buildNumber: 55,

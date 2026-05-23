@@ -22,52 +22,12 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
     _DayItem(name: 'الخميس', date: '19'),
   ];
 
-  final List<_ScheduleItem> _schedule = [
-    const _ScheduleItem(
-      time: '08:00',
-      subject: 'الرياضيات',
-      teacher: 'أ. أحمد المنصور',
-      location: 'مختبر 4 - الطابق الثاني',
-      tag: 'المستوى المتقدم',
-      accentColor: AppColors.primary,
-      tagBg: Color(0xFFDDE1FF),
-      tagFg: Color(0xFF001453),
-      isBreak: false,
-    ),
-    const _ScheduleItem(
-      time: '09:30',
-      subject: 'العلوم الطبيعية',
-      teacher: 'د. سارة العتيبي',
-      location: 'القاعة الكبرى',
-      tag: 'فيزياء',
-      accentColor: Color(0xFF611E00),
-      tagBg: Color(0xFFFFDBCE),
-      tagFg: Color(0xFF380D00),
-      isBreak: false,
-    ),
-    const _ScheduleItem(
-      time: '11:00',
-      subject: 'استراحة الصلاة والغداء',
-      teacher: '',
-      location: '',
-      tag: '',
-      accentColor: Colors.transparent,
-      tagBg: Colors.transparent,
-      tagFg: Colors.transparent,
-      isBreak: true,
-    ),
-    const _ScheduleItem(
-      time: '12:30',
-      subject: 'اللغة العربية',
-      teacher: 'أ. فاطمة الزهراء',
-      location: 'فصل 302',
-      tag: 'أدب ونصوص',
-      accentColor: Color(0xFF802A00),
-      tagBg: Color(0xFFD3E4FE),
-      tagFg: Color(0xFF0B1C30),
-      isBreak: false,
-    ),
-  ];
+  final Map<int, List<_ScheduleItem>> _scheduleByDay = {
+    for (var i = 0; i < 5; i++) i: <_ScheduleItem>[],
+  };
+
+  List<_ScheduleItem> get _selectedDaySchedule =>
+      _scheduleByDay[_selectedDayIndex] ?? const <_ScheduleItem>[];
 
   @override
   Widget build(BuildContext context) => Directionality(
@@ -201,7 +161,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: const Text(
-                    'سبتمبر 2024',
+                    'الأسبوع الحالي',
                     style: TextStyle(
                       fontFamily: 'Almarai',
                       fontSize: 12,
@@ -295,7 +255,44 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
   // ─── Timeline ────────────────────────────────────────────────────────────
 
   Widget _buildTimeline() => Column(
-        children: _schedule.map(_buildTimelineItem).toList(),
+        children: [
+          _buildScheduleStateBanner(),
+          const SizedBox(height: 16),
+          if (_selectedDaySchedule.isEmpty)
+            _EmptyScheduleState(
+              dayName: _days[_selectedDayIndex].name,
+              onAddLesson: _showAddLessonDialog,
+            )
+          else
+            ..._selectedDaySchedule.map(_buildTimelineItem),
+        ],
+      );
+
+  Widget _buildScheduleStateBanner() => Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.18)),
+        ),
+        child: const Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'لا يوجد API للجدول الدراسي بعد. ستظهر الحصص الحقيقية هنا عند الربط، ويمكنك الآن إضافة حصص محلية لليوم المحدد بدون عرض بيانات وهمية.',
+                style: TextStyle(
+                  fontFamily: 'Almarai',
+                  color: AppColors.onSurface,
+                  fontSize: 13,
+                  height: 1.45,
+                ),
+              ),
+            ),
+          ],
+        ),
       );
 
   Widget _buildTimelineItem(_ScheduleItem item) {
@@ -648,7 +645,11 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                     }
                     Navigator.pop(ctx);
                     setState(() {
-                      _schedule.add(_ScheduleItem(
+                      final schedule = _scheduleByDay.putIfAbsent(
+                        _selectedDayIndex,
+                        () => <_ScheduleItem>[],
+                      );
+                      schedule.add(_ScheduleItem(
                         time: selectedTime,
                         subject: subjectCtrl.text.trim(),
                         teacher: teacherCtrl.text.trim().isEmpty
@@ -663,7 +664,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                         tagFg: const Color(0xFF001453),
                         isBreak: false,
                       ));
-                      _schedule.sort((a, b) => a.time.compareTo(b.time));
+                      schedule.sort((a, b) => a.time.compareTo(b.time));
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -699,6 +700,64 @@ class _DayItem {
   const _DayItem({required this.name, required this.date});
   final String name;
   final String date;
+}
+
+class _EmptyScheduleState extends StatelessWidget {
+  const _EmptyScheduleState({
+    required this.dayName,
+    required this.onAddLesson,
+  });
+
+  final String dayName;
+  final VoidCallback onAddLesson;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+        ),
+        child: Column(
+          children: [
+            const Icon(
+              Icons.event_busy_outlined,
+              color: AppColors.onSurfaceVariant,
+              size: 44,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'لا توجد حصص ليوم $dayName',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Almarai',
+                color: AppColors.onSurface,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'عند ربط API الجدول الدراسي ستظهر الحصص هنا تلقائيًا. يمكنك إضافة حصة محلية الآن للمراجعة والتجربة.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                color: AppColors.onSurfaceVariant,
+                fontSize: 13,
+                height: 1.45,
+              ),
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: onAddLesson,
+              icon: const Icon(Icons.add),
+              label: const Text('إضافة حصة لهذا اليوم'),
+            ),
+          ],
+        ),
+      );
 }
 
 class _ScheduleItem {

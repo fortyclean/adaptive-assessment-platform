@@ -1,4 +1,5 @@
 import 'package:adaptive_assessment/features/assessment/repositories/teacher_repository.dart';
+import 'package:adaptive_assessment/features/assessment/screens/class_schedule_screen.dart';
 import 'package:adaptive_assessment/features/assessment/screens/marketplace_screen.dart';
 import 'package:adaptive_assessment/features/assessment/screens/task_management_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/institution_settings_screen.dart';
@@ -185,6 +186,50 @@ void main() {
 
       expect(find.textContaining('قيد التطوير'), findsNothing);
       expect(find.text('مهمة جديدة'), findsOneWidget);
+    });
+  });
+
+  group('ClassScheduleScreen (Screen 70)', () {
+    testWidgets('renders explicit empty state instead of fake lessons',
+        (tester) async {
+      await tester.pumpWidget(_wrap(const ClassScheduleScreen()));
+      await tester.pump();
+
+      expect(find.text('الجداول الدراسية'), findsOneWidget);
+      expect(find.textContaining('لا يوجد API للجدول الدراسي بعد'),
+          findsOneWidget);
+      expect(find.text('لا توجد حصص ليوم الأحد'), findsOneWidget);
+      expect(find.text('الرياضيات'), findsNothing);
+      expect(find.text('أ. أحمد المنصور'), findsNothing);
+    });
+
+    testWidgets('adds a local lesson to the selected day', (tester) async {
+      await tester.pumpWidget(_wrap(const ClassScheduleScreen()));
+      await tester.pump();
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.widgetWithText(TextField, 'المادة الدراسية *'),
+        'رياضيات تطبيقية',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextField, 'اسم المعلم'),
+        'أ. علي',
+      );
+      await tester.enterText(
+        find.widgetWithText(TextField, 'القاعة / الموقع'),
+        'فصل 201',
+      );
+      await tester.ensureVisible(find.text('إضافة الحصة').last);
+      await tester.tap(find.text('إضافة الحصة').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('رياضيات تطبيقية'), findsWidgets);
+      expect(find.text('أ. علي'), findsOneWidget);
+      expect(find.text('فصل 201'), findsOneWidget);
+      expect(find.text('لا توجد حصص ليوم الأحد'), findsNothing);
     });
   });
 
