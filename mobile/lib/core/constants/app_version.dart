@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.58';
-  static const int buildNumber = 58;
+  static const String current = '1.0.59';
+  static const int buildNumber = 59;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.59',
+      buildNumber: 59,
+      date: 'مايو 2026',
+      title: 'تدقيق تدفق إدارة المستخدمين',
+      changes: [
+        'إضافة اختبارات Widget لتدفق إنشاء مستخدم جديد من شاشة إدارة المستخدمين.',
+        'تغطية تعديل بيانات المستخدم وحفظ الاسم والبريد والفصول المرتبطة عبر AdminRepository.',
+        'تغطية تعطيل الحساب النشط مع نافذة تأكيد واضحة.',
+        'تغطية فلتر الحسابات بانتظار الاعتماد والتأكد من طلب المستخدمين غير النشطين واعتمادهم.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.58',
       buildNumber: 58,
