@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/app_section_card.dart';
 
 /// Screen 72 — الدعم الفني والمساعدة (Technical Support & Help)
 /// Matches design: _72/code.html
@@ -24,7 +25,7 @@ class _SupportScreenState extends State<SupportScreen> {
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0xFFFBF8FF),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -49,9 +50,10 @@ class _SupportScreenState extends State<SupportScreen> {
       );
 
   PreferredSizeWidget _buildAppBar() => AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 1,
-        shadowColor: Colors.black12,
+        shadowColor:
+            Theme.of(context).colorScheme.shadow.withValues(alpha: 0.12),
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,14 +114,19 @@ class _SupportScreenState extends State<SupportScreen> {
           hintStyle: const TextStyle(color: AppColors.outline, fontSize: 14),
           prefixIcon: const Icon(Icons.search, color: AppColors.outline),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Theme.of(context)
+              .colorScheme
+              .surfaceContainerHighest
+              .withValues(alpha: 0.42),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Color(0xFFC4C5D5)),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -306,17 +313,8 @@ class _SupportScreenState extends State<SupportScreen> {
           {VoidCallback? onTap}) =>
       GestureDetector(
         onTap: onTap,
-        child: Container(
+        child: AppSectionCard(
           padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFC4C5D5)),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)
-            ],
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -425,7 +423,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    backgroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     shape: const RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20))),
@@ -618,18 +616,8 @@ class _SupportScreenState extends State<SupportScreen> {
                     ),
                   );
                 },
-                child: Container(
+                child: AppSectionCard(
                   padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFC4C5D5)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
-                          blurRadius: 6)
-                    ],
-                  ),
                   child: Row(
                     children: [
                       Container(
@@ -670,11 +658,14 @@ class _SupportScreenState extends State<SupportScreen> {
   Widget _buildBottomNav() => Container(
         height: 64,
         decoration: BoxDecoration(
-          color: const Color(0xFFEEEDF7),
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: Theme.of(context)
+                    .colorScheme
+                    .shadow
+                    .withValues(alpha: 0.08),
                 blurRadius: 8,
                 offset: const Offset(0, -2))
           ],

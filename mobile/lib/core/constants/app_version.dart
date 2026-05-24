@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.65';
-  static const int buildNumber = 65;
+  static const String current = '1.0.66';
+  static const int buildNumber = 66;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.66',
+      buildNumber: 66,
+      date: 'مايو 2026',
+      title: 'تنظيف ألوان لوحة المشرف والدعم',
+      changes: [
+        'تحويل بطاقات لوحة المشرف v2 والرسوم والتنبيهات والوصول السريع إلى أسطح متوافقة مع الثيم.',
+        'تحويل شاشة الدعم إلى خلفيات وبطاقات وبحث وتنقل سفلي متوافق مع الوضع الليلي.',
+        'تقليل ديون ألوان لوحة المشرف v2 من 38 إلى 15 نقطة.',
+        'تقليل ديون ألوان شاشة الدعم من 33 إلى 18 نقطة.',
+        'تحديث checklist وتشغيل اختبارات رحلة المشرف وشاشات المرحلة الثالثة بعد التنظيف.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.65',
       buildNumber: 65,

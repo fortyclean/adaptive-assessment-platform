@@ -21,9 +21,9 @@ Highest-impact files from the latest scan:
 | 1 | `mobile/lib/features/reports/screens/student_academic_profile_screen.dart` | 3 | 0 | 59 | Medium risk | Main shells now use `AppSectionCard`; continue converting chart/badge semantic colors carefully. |
 | 2 | `mobile/lib/features/reports/screens/report_schedule_screen.dart` | 4 | 0 | 8 | Low risk | Main cards, form fields, chips, app bar, and empty states now use theme-aware surfaces; remaining colors are brand/status accents. |
 | 3 | `mobile/lib/features/auth/screens/ui_feedback_screen.dart` | 9 | 0 | 16 | Medium risk | Demo surface now uses theme-aware scaffold, app bar, modal, cards, and bottom nav; remaining colors are brand/status examples. |
-| 4 | `mobile/lib/features/auth/screens/admin_dashboard_v2_screen.dart` | 8 | 5 | 25 | Medium risk | Preserve bento design, but move card/surface colors to colorScheme. |
+| 4 | `mobile/lib/features/auth/screens/admin_dashboard_v2_screen.dart` | 2 | 0 | 13 | Low risk | Main bento cards, chart, teacher list, alerts, quick access, app bar, and scaffold now use theme-aware surfaces. |
 | 5 | `mobile/lib/features/reports/screens/school_reports_screen.dart` | 10 | 1 | 22 | Medium risk | Continue replacing white report cards after export validation work. |
-| 6 | `mobile/lib/features/auth/screens/support_screen.dart` | 10 | 4 | 19 | Medium risk | Replace form/card backgrounds and keep CTA contrast. |
+| 6 | `mobile/lib/features/auth/screens/support_screen.dart` | 5 | 0 | 13 | Low risk | Search, app bar, category/tutorial cards, modal sheet, and bottom nav now use theme-aware surfaces; remaining colors are CTA/status accents. |
 | 7 | `mobile/lib/features/assessment/screens/student_challenges_screen.dart` | 17 | 2 | 14 | Medium risk | Distinguish intentional badge colors from hardcoded surfaces. |
 | 8 | `mobile/lib/features/auth/screens/classroom_management_screen.dart` | 17 | 1 | 12 | Medium risk | Use shared admin cards once 37.3 starts. |
 | 9 | `mobile/lib/features/reports/screens/certificates_screen.dart` | 16 | 1 | 13 | Medium risk | Keep certificate template colors intentional; convert only shell surfaces. |
@@ -57,4 +57,4 @@ Before building a release APK:
 
 ## Next Recommended Batch
 
-Continue with `admin_dashboard_v2_screen.dart`, `school_reports_screen.dart`, and `support_screen.dart`; `student_academic_profile_screen.dart`, `report_schedule_screen.dart`, and `ui_feedback_screen.dart` now have shared card/theme-aware baselines.
+Continue with `school_reports_screen.dart`, `student_challenges_screen.dart`, and `classroom_management_screen.dart`; `student_academic_profile_screen.dart`, `report_schedule_screen.dart`, `ui_feedback_screen.dart`, `admin_dashboard_v2_screen.dart`, and `support_screen.dart` now have shared card/theme-aware baselines.

@@ -7,6 +7,7 @@ import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/app_section_card.dart';
 import '../repositories/admin_repository.dart';
 
 /// Screen 68 — Admin Dashboard v2 (لوحة تحكم المشرف — نسخة محسّنة)
@@ -60,14 +61,14 @@ class _AdminDashboardV2ScreenState
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: AppColors.surface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: CustomScrollView(
           slivers: [
             // ─── App Bar ──────────────────────────────────────────────────
             SliverAppBar(
               floating: true,
               snap: true,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               elevation: 0,
               scrolledUnderElevation: 1,
               automaticallyImplyLeading: false,
@@ -81,7 +82,8 @@ class _AdminDashboardV2ScreenState
                         children: [
                           IconButton(
                             icon: const Icon(Icons.notifications_outlined),
-                            color: AppColors.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                             onPressed: () =>
                                 context.push(AppRoutes.notificationCenter),
                           ),
@@ -101,7 +103,7 @@ class _AdminDashboardV2ScreenState
                       ),
                       IconButton(
                         icon: const Icon(Icons.search),
-                        color: AppColors.onSurfaceVariant,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         onPressed: () => context.push(AppRoutes.adminUsers),
                       ),
                       const AdminTopActions(),
@@ -288,20 +290,8 @@ class _AdminDashboardV2ScreenState
   }) =>
       GestureDetector(
         onTap: onTap,
-        child: Container(
+        child: AppSectionCard(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -392,20 +382,9 @@ class _AdminDashboardV2ScreenState
       {'label': 'التاريخ', 'value': 0.80},
     ];
 
-    return Container(
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppSectionCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -429,12 +408,12 @@ class _AdminDashboardV2ScreenState
                   ),
                 ),
               ),
-              const Text(
+              Text(
                 'أداء المواد الدراسية',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
+                  color: colorScheme.onSurface,
                 ),
               ),
             ],
@@ -523,20 +502,9 @@ class _AdminDashboardV2ScreenState
       },
     ];
 
-    return Container(
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppSectionCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -548,12 +516,12 @@ class _AdminDashboardV2ScreenState
                 child: const Text('عرض الكل',
                     style: TextStyle(color: AppColors.primary, fontSize: 13)),
               ),
-              const Text(
+              Text(
                 'المعلمون المتميزون (هذا الشهر)',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
+                  color: colorScheme.onSurface,
                 ),
                 textAlign: TextAlign.right,
               ),
@@ -600,7 +568,7 @@ class _AdminDashboardV2ScreenState
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1B22),
+                      color: AppColors.onSurface,
                     ),
                     textAlign: TextAlign.right,
                   ),
@@ -660,24 +628,13 @@ class _AdminDashboardV2ScreenState
       },
     ];
 
-    return Container(
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppSectionCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
@@ -685,11 +642,11 @@ class _AdminDashboardV2ScreenState
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
+                  color: colorScheme.onSurface,
                 ),
               ),
-              SizedBox(width: 8),
-              Icon(Icons.campaign, color: AppColors.error),
+              const SizedBox(width: 8),
+              const Icon(Icons.campaign, color: AppColors.error),
             ],
           ),
           const SizedBox(height: 16),
@@ -781,29 +738,18 @@ class _AdminDashboardV2ScreenState
       {'icon': Icons.cloud_download, 'label': 'التقارير'},
     ];
 
-    return Container(
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppSectionCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Text(
+          Text(
             'وصول سريع',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1A1B22),
+              color: colorScheme.onSurface,
             ),
             textAlign: TextAlign.right,
           ),
@@ -836,17 +782,17 @@ class _AdminDashboardV2ScreenState
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFF1F5F9)),
+                    border: Border.all(color: colorScheme.outlineVariant),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
                         label,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xFF1A1B22),
+                          color: colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(width: 8),
