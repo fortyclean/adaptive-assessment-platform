@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.59';
-  static const int buildNumber = 59;
+  static const String current = '1.0.60';
+  static const int buildNumber = 60;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.60',
+      buildNumber: 60,
+      date: 'مايو 2026',
+      title: 'تدقيق ربط الفصول',
+      changes: [
+        'إضافة اختبارات Widget لتدفق إنشاء فصل من شاشة إدارة الفصول.',
+        'تغطية ربط معلم نشط بفصل والتأكد من استدعاء AdminRepository بالمعرفات الصحيحة.',
+        'تغطية تحديث مجموعة الطلاب المرتبطين بالفصل مع الحفاظ على الطالب الموجود وإضافة طالب جديد.',
+        'تغطية حذف الفصل بعد نافذة التأكيد فقط لمنع الحذف العرضي.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.59',
       buildNumber: 59,
