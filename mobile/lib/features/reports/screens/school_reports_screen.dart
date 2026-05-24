@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +11,7 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../auth/repositories/admin_repository.dart';
+import '../utils/school_report_export_utils.dart';
 
 /// School Reports Screen — Screen 29
 /// Requirements: 19.1–19.5
@@ -135,12 +134,6 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     _loadSummary();
     _loadComparison();
     _loadWeaknesses();
-    // Call _onFiltersChanged after setting initial filters to load filtered data
-    if (widget.initialGradeLevel != null || widget.initialSubject != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _onFiltersChanged();
-      });
-    }
   }
 
   Future<void> _loadSummary() async {
@@ -255,7 +248,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
 
   Future<void> _showExportOptions() async {
     if (_exportingReport) return;
-    final format = await showModalBottomSheet<_ReportExportFormat>(
+    final format = await showModalBottomSheet<SchoolReportExportFormat>(
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
@@ -283,14 +276,14 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                     color: AppColors.primary),
                 title: const Text('JSON'),
                 subtitle: const Text('ملف منظم يحافظ على كل تفاصيل التقرير'),
-                onTap: () => Navigator.pop(ctx, _ReportExportFormat.json),
+                onTap: () => Navigator.pop(ctx, SchoolReportExportFormat.json),
               ),
               ListTile(
                 leading: const Icon(Icons.table_chart_outlined,
                     color: AppColors.success),
                 title: const Text('CSV'),
                 subtitle: const Text('جدول مناسب للمراجعة في Excel'),
-                onTap: () => Navigator.pop(ctx, _ReportExportFormat.csv),
+                onTap: () => Navigator.pop(ctx, SchoolReportExportFormat.csv),
               ),
             ],
           ),
@@ -301,7 +294,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     await _exportSchoolReport(format);
   }
 
-  Future<void> _exportSchoolReport(_ReportExportFormat format) async {
+  Future<void> _exportSchoolReport(SchoolReportExportFormat format) async {
     if (_exportingReport) return;
 
     setState(() => _exportingReport = true);
@@ -310,15 +303,20 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
             subject: _selectedSubject,
             gradeLevel: _selectedGradeLevel,
           );
-      final timestamp =
-          DateTime.now().toIso8601String().replaceAll(RegExp(r'[:.]'), '-');
+      if (!SchoolReportExportUtils.hasExportableData(report)) {
+        throw const FormatException('School report has no exportable data');
+      }
       if (!mounted) return;
       await DownloadHelper.shareTextAsFile(
-        content: format == _ReportExportFormat.json
-            ? const JsonEncoder.withIndent('  ').convert(report)
-            : _buildSchoolReportCsv(report),
-        fileName:
-            'school-report-$timestamp.${format == _ReportExportFormat.json ? 'json' : 'csv'}',
+        content: SchoolReportExportUtils.buildContent(
+          report: report,
+          format: format,
+          filterSummary: _filterSummaryText(),
+        ),
+        fileName: SchoolReportExportUtils.buildFileName(
+          timestamp: DateTime.now(),
+          format: format,
+        ),
         context: context,
         subject: 'EduAssess school report (${format.name.toUpperCase()})',
       );
@@ -336,46 +334,6 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     } finally {
       if (mounted) setState(() => _exportingReport = false);
     }
-  }
-
-  String _buildSchoolReportCsv(Map<String, dynamic> report) {
-    final buffer = StringBuffer();
-    void row(List<Object?> values) {
-      buffer.writeln(values.map(_csvCell).join(','));
-    }
-
-    row(['القسم', 'المؤشر', 'القيمة']);
-    row(['التقرير', 'تاريخ الإنشاء', report['generatedAt'] ?? '']);
-    row(['التقرير', 'نطاق الفلاتر', _filterSummaryText()]);
-
-    final summary = report['summary'] as Map<String, dynamic>? ?? {};
-    for (final entry in summary.entries) {
-      row(['الملخص', entry.key, entry.value]);
-    }
-
-    final comparisons = report['classroomComparison'] as List? ?? const [];
-    for (final item in comparisons.whereType<Map<String, dynamic>>()) {
-      row([
-        'مقارنة الفصول',
-        item['name'] ?? item['classroomName'] ?? '',
-        'متوسط: ${item['averageScore'] ?? ''} | إكمال: ${item['completionRate'] ?? ''} | مهارة: ${item['topSkill'] ?? ''}',
-      ]);
-    }
-
-    final weaknesses = report['weakestSkills'] as List? ?? const [];
-    for (final item in weaknesses.whereType<Map<String, dynamic>>()) {
-      row([
-        'مهارات تحتاج دعماً',
-        item['mainSkill'] ?? '',
-        item['averagePercentage'] ?? '',
-      ]);
-    }
-    return buffer.toString();
-  }
-
-  String _csvCell(Object? value) {
-    final text = (value ?? '').toString().replaceAll('"', '""');
-    return text.contains(',') || text.contains('\n') ? '"$text"' : text;
   }
 
   String _filterSummaryText() {
@@ -1175,5 +1133,3 @@ class _FilterDropdown extends StatelessWidget {
         onChanged: onChanged,
       );
 }
-
-enum _ReportExportFormat { json, csv }

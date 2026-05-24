@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.61';
-  static const int buildNumber = 61;
+  static const String current = '1.0.62';
+  static const int buildNumber = 62;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.62',
+      buildNumber: 62,
+      date: 'مايو 2026',
+      title: 'تحسين تقارير المدرسة ورحلة المشرف',
+      changes: [
+        'فصل منطق تصدير تقارير المدرسة إلى أداة قابلة للاختبار مع دعم JSON وCSV.',
+        'إضافة تحقق يمنع تصدير تقرير فارغ ويوضح الخطأ بدل إنشاء ملف بلا قيمة.',
+        'تحسين CSV ليحافظ على الخلايا التي تحتوي فواصل أو اقتباسات أو أسطر متعددة.',
+        'منع التحميل المزدوج غير الضروري عند فتح تقارير المدرسة بفلاتر أولية.',
+        'إضافة اختبارات لرحلة الإدارة والمشرف من التقارير إلى الفصول ولوحة المشرف.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.61',
       buildNumber: 61,
