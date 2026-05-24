@@ -6,6 +6,7 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/download_helper.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/app_section_card.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
 /// Screen 71 — الشهادات والنتائج النهائية
@@ -357,9 +358,9 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setModalState) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           padding: EdgeInsets.only(
             left: 20,
@@ -699,12 +700,8 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
     );
   }
 
-  Widget _buildClassroomSelector() => Container(
+  Widget _buildClassroomSelector() => AppSectionCard(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.outlineVariant)),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
             value: _selectedClassroomId,
@@ -755,11 +752,14 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
                     padding:
                         const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     decoration: BoxDecoration(
-                      color: isSelected ? accent : Colors.white,
+                      color: isSelected
+                          ? accent
+                          : Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          color:
-                              isSelected ? primary : AppColors.outlineVariant,
+                          color: isSelected
+                              ? primary
+                              : Theme.of(context).colorScheme.outlineVariant,
                           width: isSelected ? 2 : 1),
                     ),
                     child: Column(
@@ -803,12 +803,8 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
       );
 
   Widget _statCard(String label, String value, Color color, IconData icon) =>
-      Container(
+      AppSectionCard(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.outlineVariant)),
         child: Column(
           children: [
             Icon(icon, color: color, size: 22),
@@ -884,17 +880,9 @@ class _CertificatesScreenState extends ConsumerState<CertificatesScreen> {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Container(
+      child: AppSectionCard(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04), blurRadius: 8)
-          ],
-        ),
+        borderRadius: 16,
         child: Row(
           children: [
             // Issue certificate button

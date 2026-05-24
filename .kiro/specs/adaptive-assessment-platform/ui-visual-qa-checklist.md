@@ -26,8 +26,8 @@ Highest-impact files from the latest scan:
 | 6 | `mobile/lib/features/auth/screens/support_screen.dart` | 5 | 0 | 13 | Low risk | Search, app bar, category/tutorial cards, modal sheet, and bottom nav now use theme-aware surfaces; remaining colors are CTA/status accents. |
 | 7 | `mobile/lib/features/assessment/screens/student_challenges_screen.dart` | 17 | 0 | 9 | Low risk | Challenge cards, reward chips, shadows, and locked badges now use theme-aware surfaces; remaining whites are intentional leaderboard/CTA contrast. |
 | 8 | `mobile/lib/features/auth/screens/classroom_management_screen.dart` | 8 | 0 | 3 | Low risk | App shell, app bar, KPI cards, filters, modal sheets, empty states, classroom cards, and preview rows now use shared/theme-aware surfaces. |
-| 9 | `mobile/lib/features/reports/screens/certificates_screen.dart` | 16 | 1 | 13 | Medium risk | Keep certificate template colors intentional; convert only shell surfaces. |
-| 10 | `mobile/lib/features/auth/screens/admin_dashboard_screen.dart` | 12 | 4 | 11 | Medium risk | Legacy admin dashboard needs gradual theme migration. |
+| 9 | `mobile/lib/features/reports/screens/certificates_screen.dart` | 11 | 0 | 13 | Low risk | Shell surfaces, selector, stats, student cards, and modal sheet now use theme-aware surfaces; remaining colors are certificate template/status contrast. |
+| 10 | `mobile/lib/features/auth/screens/admin_dashboard_screen.dart` | 12 | 0 | 11 | Low risk | Legacy admin cards, alerts, and quick links now use shared/theme-aware cards; remaining colors are icon badges and banner contrast. |
 
 ## Classification Rules
 
@@ -57,4 +57,4 @@ Before building a release APK:
 
 ## Next Recommended Batch
 
-Continue with `certificates_screen.dart` and legacy `admin_dashboard_screen.dart`; `student_academic_profile_screen.dart`, `report_schedule_screen.dart`, `ui_feedback_screen.dart`, `admin_dashboard_v2_screen.dart`, `school_reports_screen.dart`, `support_screen.dart`, `student_challenges_screen.dart`, and `classroom_management_screen.dart` now have shared card/theme-aware baselines.
+UI theme debt task 37.2 is complete for the current high-impact scan. Continue with task 38 localization work; future visual passes should focus on true localization/RTL regressions rather than intentional brand, status, certificate, and leaderboard contrast colors.

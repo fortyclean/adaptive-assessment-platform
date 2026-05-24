@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.67';
-  static const int buildNumber = 67;
+  static const String current = '1.0.68';
+  static const int buildNumber = 68;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,21 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.68',
+      buildNumber: 68,
+      date: 'مايو 2026',
+      title: 'إكمال تنظيف الثيم للشهادات ولوحة المشرف',
+      changes: [
+        'تحويل أسطح الشهادات العامة وقائمة الطلاب والإحصاءات إلى بطاقات متوافقة مع الثيم.',
+        'تحويل بطاقات لوحة المشرف القديمة والتنبيهات والروابط السريعة إلى AppSectionCard.',
+        'تنظيف ألوان bottom sheet في الشهادات لتتوافق مع الوضع الليلي.',
+        'تقليل ديون ألوان الشهادات من 30 إلى 24 نقطة مع إبقاء ألوان قوالب الشهادات مقصودة.',
+        'تقليل ديون ألوان لوحة المشرف القديمة من 27 إلى 23 نقطة مع إزالة الأسود الثابت.',
+        'تعليم مهمة 37.2 ومرحلة تحسين الثيم والاستجابة كمكتملة في ملف المهام.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.67',
       buildNumber: 67,
