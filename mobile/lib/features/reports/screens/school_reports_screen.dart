@@ -407,39 +407,43 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         ),
       );
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
-        backgroundColor: const Color(0xFFF8FAFC),
-        elevation: 0,
-        shadowColor: Colors.black12,
-        surfaceTintColor: Colors.transparent,
-        shape: const Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0)),
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final isCompact = MediaQuery.sizeOf(context).width < 430;
+    return AppBar(
+      backgroundColor: const Color(0xFFF8FAFC),
+      elevation: 0,
+      shadowColor: Colors.black12,
+      surfaceTintColor: Colors.transparent,
+      shape: const Border(
+        bottom: BorderSide(color: Color(0xFFE2E8F0)),
+      ),
+      leading: context.canPop()
+          ? IconButton(
+              icon: const Icon(Icons.arrow_forward_rounded,
+                  color: Color(0xFF64748B)),
+              onPressed: () => context.pop(),
+              tooltip: 'رجوع',
+            )
+          : null,
+      title: Text(
+        'التقييم الذكي',
+        style: TextStyle(
+          fontFamily: 'Almarai',
+          fontSize: isCompact ? 16 : 20,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF1E40AF),
         ),
-        leading: context.canPop()
-            ? IconButton(
-                icon: const Icon(Icons.arrow_forward_rounded,
-                    color: Color(0xFF64748B)),
-                onPressed: () => context.pop(),
-                tooltip: 'رجوع',
-              )
-            : null,
-        title: const Text(
-          'التقييم الذكي',
-          style: TextStyle(
-            fontFamily: 'Almarai',
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF1E40AF),
-          ),
+        overflow: TextOverflow.ellipsis,
+      ),
+      centerTitle: false,
+      actions: [
+        const AdminTopActions(),
+        IconButton(
+          icon: const Icon(Icons.notifications_outlined,
+              color: Color(0xFF64748B)),
+          onPressed: () => context.push(AppRoutes.notificationCenter),
         ),
-        centerTitle: false,
-        actions: [
-          const AdminTopActions(),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Color(0xFF64748B)),
-            onPressed: () => context.push(AppRoutes.notificationCenter),
-          ),
+        if (!isCompact) ...[
           const SizedBox(width: 4),
           const Padding(
             padding: EdgeInsets.only(left: 12),
@@ -450,7 +454,9 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
             ),
           ),
         ],
-      );
+      ],
+    );
+  }
 
   Widget _buildPageHeader() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -522,57 +528,67 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     final avg = summary['schoolAverage'] ?? summary['averageScore'] ?? 84;
     final participation = summary['participationRate'] ?? 91;
     final topClass = summary['topClassroom'] as String? ?? 'أولى متوسط (أ)';
+    final averageCard = _BentoCard(
+      label: 'متوسط الدرجات العام',
+      value: '$avg%',
+      valueColor: AppColors.primary,
+      trailing: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.trending_up_rounded, size: 14, color: AppColors.primary),
+          SizedBox(width: 2),
+          Text('+1.5%',
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 12,
+                color: AppColors.primary,
+                fontWeight: FontWeight.w500,
+              )),
+        ],
+      ),
+    );
+    final participationCard = _BentoCard(
+      label: 'نسبة المشاركة',
+      value: '$participation%',
+      valueColor: AppColors.onSurface,
+      trailing: const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.horizontal_rule_rounded,
+              size: 14, color: AppColors.outline),
+          SizedBox(width: 2),
+          Text('مستقر',
+              style: TextStyle(
+                fontFamily: 'Almarai',
+                fontSize: 12,
+                color: AppColors.outline,
+                fontWeight: FontWeight.w500,
+              )),
+        ],
+      ),
+    );
 
     return Column(
       children: [
-        Row(
-          children: [
-            // Card 1: Average score
-            Expanded(
-              child: _BentoCard(
-                label: 'متوسط الدرجات العام',
-                value: '$avg%',
-                valueColor: AppColors.primary,
-                trailing: const Row(
-                  children: [
-                    Icon(Icons.trending_up_rounded,
-                        size: 14, color: AppColors.primary),
-                    SizedBox(width: 2),
-                    Text('+1.5%',
-                        style: TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 12,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w500,
-                        )),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            // Card 2: Participation
-            Expanded(
-              child: _BentoCard(
-                label: 'نسبة المشاركة',
-                value: '$participation%',
-                valueColor: AppColors.onSurface,
-                trailing: const Row(
-                  children: [
-                    Icon(Icons.horizontal_rule_rounded,
-                        size: 14, color: AppColors.outline),
-                    SizedBox(width: 2),
-                    Text('مستقر',
-                        style: TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 12,
-                          color: AppColors.outline,
-                          fontWeight: FontWeight.w500,
-                        )),
-                  ],
-                ),
-              ),
-            ),
-          ],
+        LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 520) {
+              return Column(
+                children: [
+                  averageCard,
+                  const SizedBox(height: 12),
+                  participationCard,
+                ],
+              );
+            }
+            return Row(
+              children: [
+                Expanded(child: averageCard),
+                const SizedBox(width: 12),
+                Expanded(child: participationCard),
+              ],
+            );
+          },
         ),
         const SizedBox(height: 12),
         // Card 3: Top classroom (full width)
@@ -642,23 +658,9 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainer,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.bar_chart_rounded,
-                      color: AppColors.primary, size: 20),
-                ),
-                const SizedBox(width: 8),
-                const Text('مقارنة متوسط الدرجات',
-                    style: AppTextStyles.titleMedium),
-                const Spacer(),
-                TextButton.icon(
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final filterButton = TextButton.icon(
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
@@ -715,14 +717,39 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                     );
                   },
                   icon: const Icon(Icons.filter_list_rounded, size: 16),
-                  label: const Text('تصفية'),
+                  label: Text(constraints.maxWidth < 360 ? '' : 'تصفية'),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.onSurfaceVariant,
                     textStyle:
                         const TextStyle(fontFamily: 'Almarai', fontSize: 12),
                   ),
-                ),
-              ],
+                );
+
+                return Row(
+                  children: [
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainer,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.bar_chart_rounded,
+                          color: AppColors.primary, size: 20),
+                    ),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: Text(
+                        'مقارنة متوسط الدرجات',
+                        style: AppTextStyles.titleMedium,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    filterButton,
+                  ],
+                );
+              },
             ),
             const SizedBox(height: 16),
             // Comparison bars
@@ -952,47 +979,68 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
               ],
             ),
             const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _FilterDropdown(
-                    hint: 'المادة',
-                    value: _selectedSubject,
-                    items: AppConstants.subjects,
-                    onChanged: (v) {
-                      setState(() => _selectedSubject = v);
-                      _onFiltersChanged();
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _FilterDropdown(
-                    hint: 'المرحلة',
-                    value: _selectedGradeLevel,
-                    items: _gradeLevels,
-                    onChanged: (v) {
-                      setState(() => _selectedGradeLevel = v);
-                      _onFiltersChanged();
-                    },
-                  ),
-                ),
-                if (_selectedSubject != null ||
-                    _selectedGradeLevel != null) ...[
-                  const SizedBox(width: 4),
-                  IconButton(
-                    icon: const Icon(Icons.clear_rounded, size: 18),
-                    tooltip: 'مسح الفلاتر',
-                    onPressed: () {
-                      setState(() {
-                        _selectedSubject = null;
-                        _selectedGradeLevel = null;
-                      });
-                      _onFiltersChanged();
-                    },
-                  ),
-                ],
-              ],
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final subjectDropdown = _FilterDropdown(
+                  hint: 'المادة',
+                  value: _selectedSubject,
+                  items: AppConstants.subjects,
+                  onChanged: (v) {
+                    setState(() => _selectedSubject = v);
+                    _onFiltersChanged();
+                  },
+                );
+                final gradeDropdown = _FilterDropdown(
+                  hint: 'المرحلة',
+                  value: _selectedGradeLevel,
+                  items: _gradeLevels,
+                  onChanged: (v) {
+                    setState(() => _selectedGradeLevel = v);
+                    _onFiltersChanged();
+                  },
+                );
+                final clearButton =
+                    (_selectedSubject != null || _selectedGradeLevel != null)
+                        ? IconButton(
+                            icon: const Icon(Icons.clear_rounded, size: 18),
+                            tooltip: 'مسح الفلاتر',
+                            onPressed: () {
+                              setState(() {
+                                _selectedSubject = null;
+                                _selectedGradeLevel = null;
+                              });
+                              _onFiltersChanged();
+                            },
+                          )
+                        : null;
+
+                if (constraints.maxWidth < 440) {
+                  return Column(
+                    children: [
+                      subjectDropdown,
+                      const SizedBox(height: 8),
+                      gradeDropdown,
+                      if (clearButton != null)
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: clearButton,
+                        ),
+                    ],
+                  );
+                }
+
+                return Row(
+                  children: [
+                    Expanded(child: subjectDropdown),
+                    const SizedBox(width: 8),
+                    Expanded(child: gradeDropdown),
+                    if (clearButton != null) ...[
+                      const SizedBox(width: 4),
+                      clearButton,
+                    ],
+                  ],
+                );
+              },
             ),
           ],
         ),

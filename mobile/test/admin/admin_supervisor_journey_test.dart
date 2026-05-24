@@ -70,8 +70,9 @@ Future<GoRouter> _pumpJourney(
   WidgetTester tester,
   AdminSupervisorJourneyFakeRepository repository, {
   String initialLocation = AppRoutes.adminReports,
+  Size viewportSize = const Size(900, 1800),
 }) async {
-  tester.view.physicalSize = const Size(900, 1800);
+  tester.view.physicalSize = viewportSize;
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
@@ -165,6 +166,36 @@ void main() {
       expect(find.text('تنبيهات الإدارة'), findsWidgets);
       await _dragDownUntilTextIsBuilt(tester, 'وصول سريع');
       expect(find.text('وصول سريع'), findsWidgets);
+    });
+
+    testWidgets('renders school reports on a small phone viewport',
+        (tester) async {
+      final repository = AdminSupervisorJourneyFakeRepository();
+      await _pumpJourney(
+        tester,
+        repository,
+        viewportSize: const Size(390, 844),
+      );
+
+      expect(find.text('تقارير المدرسة الكلية'), findsOneWidget);
+      expect(find.textContaining('الرياضيات'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('renders supervisor dashboard on tablet landscape',
+        (tester) async {
+      final repository = AdminSupervisorJourneyFakeRepository();
+      await _pumpJourney(
+        tester,
+        repository,
+        initialLocation: AppRoutes.supervisorDashboard,
+        viewportSize: const Size(1280, 800),
+      );
+
+      expect(find.text('لوحة تحكم المشرف'), findsOneWidget);
+      await _dragDownUntilTextIsBuilt(tester, 'وصول سريع');
+      expect(find.text('وصول سريع'), findsWidgets);
+      expect(tester.takeException(), isNull);
     });
   });
 }

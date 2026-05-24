@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.62';
-  static const int buildNumber = 62;
+  static const String current = '1.0.63';
+  static const int buildNumber = 63;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.63',
+      buildNumber: 63,
+      date: 'مايو 2026',
+      title: 'تدقيق بصري واستجابة الشاشات',
+      changes: [
+        'تعليم مهمة تنظيف بيانات الإنتاج 33 كمكتملة بعد اكتمال كل فروعها.',
+        'إضافة checklist رسمي لجودة الواجهة والثيم الليلي والـ responsive قبل كل إصدار.',
+        'توثيق أعلى ملفات الديون البصرية المتبقية وتصنيف ألوان white/black/hex حسب المخاطر.',
+        'إضافة اختبارات شاشة صغيرة وتقنية tablet landscape لمسار الإدارة والمشرف.',
+        'إصلاح overflow في شاشة تقارير المدرسة على الهواتف الصغيرة.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.62',
       buildNumber: 62,
