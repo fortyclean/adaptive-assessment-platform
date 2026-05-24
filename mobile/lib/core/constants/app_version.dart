@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.66';
-  static const int buildNumber = 66;
+  static const String current = '1.0.67';
+  static const int buildNumber = 67;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.67',
+      buildNumber: 67,
+      date: 'مايو 2026',
+      title: 'تنظيف ألوان التقارير والتحديات والفصول',
+      changes: [
+        'تحويل شاشة تقارير المدرسة إلى أسطح وبطاقات متوافقة مع الثيم.',
+        'تحويل بطاقات إدارة الفصول والفلاتر والحالات الفارغة إلى AppSectionCard.',
+        'تحسين بطاقات تحديات الطالب والنقاط والأوسمة المغلقة لتحترم الوضع الليلي.',
+        'تقليل ديون ألوان تقارير المدرسة من 33 إلى 10 نقاط.',
+        'تقليل ديون ألوان إدارة الفصول من 30 إلى 11 نقطة مع إزالة الأسود الثابت.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.66',
       buildNumber: 66,

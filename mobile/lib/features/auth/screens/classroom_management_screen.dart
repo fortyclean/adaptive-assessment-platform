@@ -8,6 +8,7 @@ import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/app_section_card.dart';
 import '../repositories/admin_repository.dart';
 
 /// Classroom Management Screen — Screen 18
@@ -485,7 +486,7 @@ class _ClassroomManagementScreenState
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(context),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: _showCreateDialog,
@@ -575,36 +576,38 @@ class _ClassroomManagementScreenState
       );
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
-        backgroundColor: const Color(0xFFF8FAFC),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
-        shadowColor: Colors.black12,
+        shadowColor:
+            Theme.of(context).colorScheme.shadow.withValues(alpha: 0.12),
         surfaceTintColor: Colors.transparent,
-        shape: const Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0)),
+        shape: Border(
+          bottom:
+              BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
         ),
         leading: context.canPop()
             ? IconButton(
-                icon: const Icon(Icons.arrow_forward_rounded,
-                    color: Color(0xFF64748B)),
+                icon: Icon(Icons.arrow_forward_rounded,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
                 onPressed: () => context.pop(),
                 tooltip: 'رجوع',
               )
             : null,
-        title: const Text(
+        title: Text(
           'التقييم الذكي',
           style: TextStyle(
             fontFamily: 'Almarai',
             fontSize: 20,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF1E40AF),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         centerTitle: false,
         actions: [
           const AdminTopActions(),
           IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Color(0xFF64748B)),
+            icon: Icon(Icons.notifications_outlined,
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
             onPressed: () => context.push(AppRoutes.notificationCenter),
             tooltip: 'الإشعارات',
           ),
@@ -675,13 +678,8 @@ class _ClassroomManagementScreenState
     );
   }
 
-  Widget _buildClassroomFilters() => Container(
+  Widget _buildClassroomFilters() => AppSectionCard(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -746,37 +744,34 @@ class _ClassroomManagementScreenState
         ),
       );
 
-  Widget _buildFilteredEmptyState() => Container(
+  Widget _buildFilteredEmptyState() => SizedBox(
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-        ),
-        child: Column(
-          children: [
-            const Icon(Icons.filter_alt_off_outlined,
-                color: AppColors.onSurfaceVariant, size: 34),
-            const SizedBox(height: 8),
-            Text(
-              'لا توجد فصول مطابقة',
-              style: AppTextStyles.titleMedium
-                  .copyWith(color: AppColors.onSurfaceVariant),
-            ),
-            const SizedBox(height: 8),
-            TextButton.icon(
-              onPressed: () {
-                _searchController.clear();
-                setState(() {
-                  _searchQuery = '';
-                  _classroomFilter = 'all';
-                });
-              },
-              icon: const Icon(Icons.restart_alt_rounded),
-              label: const Text('مسح البحث والفلاتر'),
-            ),
-          ],
+        child: AppSectionCard(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              const Icon(Icons.filter_alt_off_outlined,
+                  color: AppColors.onSurfaceVariant, size: 34),
+              const SizedBox(height: 8),
+              Text(
+                'لا توجد فصول مطابقة',
+                style: AppTextStyles.titleMedium
+                    .copyWith(color: AppColors.onSurfaceVariant),
+              ),
+              const SizedBox(height: 8),
+              TextButton.icon(
+                onPressed: () {
+                  _searchController.clear();
+                  setState(() {
+                    _searchQuery = '';
+                    _classroomFilter = 'all';
+                  });
+                },
+                icon: const Icon(Icons.restart_alt_rounded),
+                label: const Text('مسح البحث والفلاتر'),
+              ),
+            ],
+          ),
         ),
       );
 
@@ -883,7 +878,7 @@ class _ClassroomManagementScreenState
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
@@ -1070,7 +1065,7 @@ class _ClassroomManagementScreenState
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
@@ -1272,7 +1267,7 @@ class _ClassroomManagementScreenState
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => Padding(
@@ -1376,28 +1371,32 @@ class _FilterChipButton extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: selected ? AppColors.primary : Colors.white,
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: selected ? AppColors.primary : AppColors.outlineVariant,
-            ),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: selected ? Colors.white : AppColors.onSurfaceVariant,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-            ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(999),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? colorScheme.primary : colorScheme.surface,
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+            color: selected ? colorScheme.primary : colorScheme.outlineVariant,
           ),
         ),
-      );
+        child: Text(
+          label,
+          style: TextStyle(
+            color:
+                selected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _KpiCard extends StatelessWidget {
@@ -1414,20 +1413,8 @@ class _KpiCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => AppSectionCard(
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFDAD9E3)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1446,11 +1433,11 @@ class _KpiCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
-                color: AppColors.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
           ],
@@ -1488,28 +1475,20 @@ class _ClassroomCard extends StatelessWidget {
     final gradeLevel = classroom['gradeLevel'] as String? ?? '';
     final academicYear = classroom['academicYear'] as String? ?? '';
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFC4C5D5)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppSectionCard(
+      padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── Card Header ──────────────────────────────────────────────────
           Container(
             padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
-            decoration: const BoxDecoration(
-              color: Color(0xFFF4F2FC),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.7),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12),
+              ),
             ),
             child: Row(
               children: [
@@ -1726,47 +1705,50 @@ class _ClassroomPreviewRow extends StatelessWidget {
   final String? trailing;
 
   @override
-  Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainer.withValues(alpha: 0.55),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 16, color: AppColors.primary),
-            const SizedBox(width: 8),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: AppColors.primary),
+          const SizedBox(width: 8),
+          Text(
+            '$label: ',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 12, color: colorScheme.onSurface),
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: 6),
             Text(
-              '$label: ',
+              trailing!,
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.primary,
               ),
             ),
-            Expanded(
-              child: Text(
-                value,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-            if (trailing != null) ...[
-              const SizedBox(width: 6),
-              Text(
-                trailing!,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
-                ),
-              ),
-            ],
           ],
-        ),
-      );
+        ],
+      ),
+    );
+  }
 }
 
 class _StatItem extends StatelessWidget {
@@ -1797,10 +1779,10 @@ class _StatItem extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Almarai',
                       fontSize: 11,
-                      color: AppColors.onSurfaceVariant,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                   Text(

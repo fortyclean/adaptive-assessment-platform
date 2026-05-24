@@ -10,6 +10,7 @@ import '../../../core/utils/download_helper.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/app_section_card.dart';
 import '../../auth/repositories/admin_repository.dart';
 import '../utils/school_report_export_utils.dart';
 
@@ -250,7 +251,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     if (_exportingReport) return;
     final format = await showModalBottomSheet<SchoolReportExportFormat>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -356,7 +357,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0xFFFBF8FF),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(context),
           body: RefreshIndicator(
             onRefresh: _refreshReports,
@@ -409,18 +410,21 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     final isCompact = MediaQuery.sizeOf(context).width < 430;
+    final colorScheme = Theme.of(context).colorScheme;
     return AppBar(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: colorScheme.surface,
       elevation: 0,
-      shadowColor: Colors.black12,
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.12),
       surfaceTintColor: Colors.transparent,
-      shape: const Border(
-        bottom: BorderSide(color: Color(0xFFE2E8F0)),
+      shape: Border(
+        bottom: BorderSide(color: colorScheme.outlineVariant),
       ),
       leading: context.canPop()
           ? IconButton(
-              icon: const Icon(Icons.arrow_forward_rounded,
-                  color: Color(0xFF64748B)),
+              icon: Icon(
+                Icons.arrow_forward_rounded,
+                color: colorScheme.onSurfaceVariant,
+              ),
               onPressed: () => context.pop(),
               tooltip: 'رجوع',
             )
@@ -431,7 +435,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           fontFamily: 'Almarai',
           fontSize: isCompact ? 16 : 20,
           fontWeight: FontWeight.w700,
-          color: const Color(0xFF1E40AF),
+          color: colorScheme.primary,
         ),
         overflow: TextOverflow.ellipsis,
       ),
@@ -439,8 +443,10 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       actions: [
         const AdminTopActions(),
         IconButton(
-          icon: const Icon(Icons.notifications_outlined,
-              color: Color(0xFF64748B)),
+          icon: Icon(
+            Icons.notifications_outlined,
+            color: colorScheme.onSurfaceVariant,
+          ),
           onPressed: () => context.push(AppRoutes.notificationCenter),
         ),
         if (!isCompact) ...[
@@ -592,68 +598,51 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         ),
         const SizedBox(height: 12),
         // Card 3: Top classroom (full width)
-        Container(
+        SizedBox(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFDAD9E3)),
-            boxShadow: const [
-              BoxShadow(
-                  color: Color(0x0A000000), blurRadius: 8, offset: Offset(0, 2))
-            ],
-          ),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('الفصل المتصدر', style: AppTextStyles.labelSmall),
-                  const SizedBox(height: 4),
-                  Text(topClass,
-                      style: AppTextStyles.titleLarge
-                          .copyWith(color: AppColors.primary)),
-                  const SizedBox(height: 4),
-                  const Text('بمتوسط درجات 92% ومشاركة كاملة',
-                      style: AppTextStyles.bodyMedium),
-                ],
-              ),
-              Positioned(
-                bottom: -8,
-                left: -8,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        const Color(0xFFD0E1FB).withValues(alpha: 0.5),
-                        Colors.transparent,
-                      ],
+          child: AppSectionCard(
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('الفصل المتصدر',
+                        style: AppTextStyles.labelSmall),
+                    const SizedBox(height: 4),
+                    Text(topClass,
+                        style: AppTextStyles.titleLarge
+                            .copyWith(color: AppColors.primary)),
+                    const SizedBox(height: 4),
+                    const Text('بمتوسط درجات 92% ومشاركة كاملة',
+                        style: AppTextStyles.bodyMedium),
+                  ],
+                ),
+                Positioned(
+                  bottom: -8,
+                  left: -8,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          const Color(0xFFD0E1FB).withValues(alpha: 0.5),
+                          Colors.transparent,
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildComparisonSection() => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFDAD9E3)),
-          boxShadow: const [
-            BoxShadow(
-                color: Color(0x0A000000), blurRadius: 8, offset: Offset(0, 2))
-          ],
-        ),
+  Widget _buildComparisonSection() => AppSectionCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -664,7 +653,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      backgroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       shape: const RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(20))),
@@ -806,7 +795,9 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                         child: LinearProgressIndicator(
                           value: score / 100,
                           minHeight: 12,
-                          backgroundColor: const Color(0xFFE3E1EB),
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
                           color: barColor,
                         ),
                       ),
@@ -815,7 +806,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
                 );
               }),
             // Footer
-            const Divider(color: Color(0xFFDAD9E3)),
+            Divider(color: Theme.of(context).colorScheme.outlineVariant),
             Center(
               child: TextButton(
                 onPressed: () {
@@ -837,19 +828,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         children: [
           // Strengths card
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFDAD9E3)),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color(0x0A000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 2))
-                ],
-              ),
+            child: AppSectionCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -894,19 +873,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           const SizedBox(width: 12),
           // Weaknesses card
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFFFDAD6)),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Color(0x0A000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 2))
-                ],
-              ),
+            child: AppSectionCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -959,13 +926,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
         ],
       );
 
-  Widget _buildFilterRow() => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-        ),
+  Widget _buildFilterRow() => AppSectionCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1063,17 +1024,7 @@ class _BentoCard extends StatelessWidget {
   final Widget trailing;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFDAD9E3)),
-          boxShadow: const [
-            BoxShadow(
-                color: Color(0x0A000000), blurRadius: 8, offset: Offset(0, 2))
-          ],
-        ),
+  Widget build(BuildContext context) => AppSectionCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

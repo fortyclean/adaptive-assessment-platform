@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../shared/widgets/app_section_card.dart';
 import '../models/student_challenge_plan.dart';
 import '../repositories/assessment_repository.dart';
 
@@ -703,20 +704,7 @@ class _ChallengeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final locked = challenge.status == ChallengeStatus.locked;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
+    return AppSectionCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -842,21 +830,24 @@ class _RewardBadge extends StatelessWidget {
   final int points;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        decoration: BoxDecoration(
-          color: const Color(0xFFDDE1FF),
-          borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '$points نقطة',
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: colorScheme.onPrimaryContainer,
         ),
-        child: Text(
-          '$points نقطة',
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF173BAB),
-          ),
-        ),
-      );
+      ),
+    );
+  }
 }
 
 class _Leader {
@@ -1021,20 +1012,8 @@ class _MyChallengeTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: colorScheme.outlineVariant),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 4,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
+      child: AppSectionCard(
+        borderRadius: 8,
         child: Row(
           children: [
             Icon(
@@ -1133,45 +1112,46 @@ class _Badge extends StatelessWidget {
   final bool isLocked;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-        width: 72,
-        child: Column(
-          children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: isLocked
-                    ? null
-                    : const LinearGradient(
-                        colors: [Color(0xFF60A5FA), Color(0xFF4F46E5)],
-                      ),
-                border: isLocked
-                    ? Border.all(color: const Color(0xFFCBD5E1), width: 2)
-                    : null,
-              ),
-              child: Icon(
-                icon,
-                size: 28,
-                color: isLocked ? const Color(0xFF94A3B8) : Colors.white,
-              ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      width: 72,
+      child: Column(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: isLocked
+                  ? null
+                  : const LinearGradient(
+                      colors: [Color(0xFF60A5FA), Color(0xFF4F46E5)],
+                    ),
+              border: isLocked
+                  ? Border.all(color: colorScheme.outlineVariant, width: 2)
+                  : null,
             ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isLocked ? FontWeight.w400 : FontWeight.w700,
-                color: isLocked
-                    ? const Color(0xFF94A3B8)
-                    : Theme.of(context).colorScheme.onSurface,
-              ),
-              textAlign: TextAlign.center,
+            child: Icon(
+              icon,
+              size: 28,
+              color: isLocked ? colorScheme.outline : Colors.white,
             ),
-          ],
-        ),
-      );
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: isLocked ? FontWeight.w400 : FontWeight.w700,
+              color: isLocked ? colorScheme.outline : colorScheme.onSurface,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _LiveBadge extends StatelessWidget {
