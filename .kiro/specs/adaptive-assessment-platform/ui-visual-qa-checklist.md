@@ -19,8 +19,8 @@ Highest-impact files from the latest scan:
 | Priority | File | White | Black | Hex | Classification | Recommendation |
 |---:|---|---:|---:|---:|---|---|
 | 1 | `mobile/lib/features/reports/screens/student_academic_profile_screen.dart` | 3 | 0 | 59 | Medium risk | Main shells now use `AppSectionCard`; continue converting chart/badge semantic colors carefully. |
-| 2 | `mobile/lib/features/reports/screens/report_schedule_screen.dart` | 14 | 1 | 46 | High risk | Replace non-branded cards and form fields with theme-aware surfaces. |
-| 3 | `mobile/lib/features/auth/screens/ui_feedback_screen.dart` | 14 | 6 | 27 | High risk | Treat as visual QA/demo surface; align overlays, cards, and modal colors with theme. |
+| 2 | `mobile/lib/features/reports/screens/report_schedule_screen.dart` | 4 | 0 | 8 | Low risk | Main cards, form fields, chips, app bar, and empty states now use theme-aware surfaces; remaining colors are brand/status accents. |
+| 3 | `mobile/lib/features/auth/screens/ui_feedback_screen.dart` | 9 | 0 | 16 | Medium risk | Demo surface now uses theme-aware scaffold, app bar, modal, cards, and bottom nav; remaining colors are brand/status examples. |
 | 4 | `mobile/lib/features/auth/screens/admin_dashboard_v2_screen.dart` | 8 | 5 | 25 | Medium risk | Preserve bento design, but move card/surface colors to colorScheme. |
 | 5 | `mobile/lib/features/reports/screens/school_reports_screen.dart` | 10 | 1 | 22 | Medium risk | Continue replacing white report cards after export validation work. |
 | 6 | `mobile/lib/features/auth/screens/support_screen.dart` | 10 | 4 | 19 | Medium risk | Replace form/card backgrounds and keep CTA contrast. |
@@ -57,4 +57,4 @@ Before building a release APK:
 
 ## Next Recommended Batch
 
-Continue with `report_schedule_screen.dart` and `ui_feedback_screen.dart`; `student_academic_profile_screen.dart` now has a shared card baseline and a small-phone dark-mode regression test.
+Continue with `admin_dashboard_v2_screen.dart`, `school_reports_screen.dart`, and `support_screen.dart`; `student_academic_profile_screen.dart`, `report_schedule_screen.dart`, and `ui_feedback_screen.dart` now have shared card/theme-aware baselines.

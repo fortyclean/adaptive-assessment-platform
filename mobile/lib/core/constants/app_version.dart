@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.64';
-  static const int buildNumber = 64;
+  static const String current = '1.0.65';
+  static const int buildNumber = 65;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.65',
+      buildNumber: 65,
+      date: 'مايو 2026',
+      title: 'تنظيف ألوان التقارير ومكوّنات التنبيه',
+      changes: [
+        'تحويل شاشة جدولة التقارير إلى بطاقات وحقول متوافقة مع الثيم والوضع الليلي.',
+        'تحويل شاشة مكوّنات التنبيه إلى أسطح ونوافذ وبطاقات تعتمد على colorScheme.',
+        'تقليل ديون ألوان جدولة التقارير من 61 إلى 12 نقطة مع بقاء ألوان الحالة والبراند فقط.',
+        'تقليل ديون ألوان مكوّنات التنبيه من 47 إلى 25 نقطة وحذف الاعتماد على الأسود الثابت.',
+        'تحديث checklist وتثبيت اختبارات الشاشات والـ production fallback بعد التنظيف.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.64',
       buildNumber: 64,

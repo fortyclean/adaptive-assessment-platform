@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/app_section_card.dart';
 
 /// Screen 73 — UI Feedback Components (Alerts, Modals, Status)
 /// Matches design: _73/code.html
@@ -18,7 +19,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFFBF8FF),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: _buildAppBar(),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -41,67 +42,66 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
         bottomNavigationBar: _buildBottomNav(),
       );
 
-  PreferredSizeWidget _buildAppBar() => AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        shadowColor: Colors.black12,
-        automaticallyImplyLeading: false,
-        title: const Row(
-          children: [
-            Icon(Icons.school, color: Color(0xFF1E40AF), size: 24),
-            SizedBox(width: 8),
-            Text(
-              'EduAssess',
-              style: TextStyle(
-                  color: Color(0xFF1E40AF),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18),
-            ),
-          ],
-        ),
-        actions: [
-          const CircleAvatar(
-            radius: 16,
-            backgroundColor: Color(0xFF1E40AF),
-            child: Icon(Icons.person, color: Colors.white, size: 16),
-          ),
-          const SizedBox(width: 8),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
-            onPressed: () => context.push('/notifications'),
-          ),
-        ],
-      );
-
-  Widget _buildPageIntro() => const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  PreferredSizeWidget _buildAppBar() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppBar(
+      backgroundColor: colorScheme.surface,
+      elevation: 1,
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.12),
+      automaticallyImplyLeading: false,
+      title: const Row(
         children: [
+          Icon(Icons.school, color: Color(0xFF1E40AF), size: 24),
+          SizedBox(width: 8),
           Text(
-            'مكوّنات رسائل النظام',
+            'EduAssess',
             style: TextStyle(
-                fontSize: 24,
+                color: Color(0xFF1E40AF),
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1A1B22)),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'راجع تصميم التنبيهات والنوافذ المنبثقة داخل واجهة المنصة.',
-            style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14),
+                fontSize: 18),
           ),
         ],
-      );
-
-  Widget _buildSuccessAlert() => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)
-          ],
+      ),
+      actions: [
+        const CircleAvatar(
+          radius: 16,
+          backgroundColor: Color(0xFF1E40AF),
+          child: Icon(Icons.person, color: Colors.white, size: 16),
         ),
+        const SizedBox(width: 8),
+        IconButton(
+          icon: Icon(
+            Icons.notifications_outlined,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          onPressed: () => context.push('/notifications'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPageIntro() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'مكوّنات رسائل النظام',
+          style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurface),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'راجع تصميم التنبيهات والنوافذ المنبثقة داخل واجهة المنصة.',
+          style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 14),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSuccessAlert() => AppSectionCard(
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -148,17 +148,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
         ),
       );
 
-  Widget _buildErrorAlert() => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04), blurRadius: 6)
-          ],
-        ),
+  Widget _buildErrorAlert() => AppSectionCard(
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -206,86 +196,79 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
         ),
       );
 
-  Widget _buildDeleteModal() => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.black38,
-        ),
-        padding: const EdgeInsets.all(24),
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFC4C5D5)),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.15), blurRadius: 20)
-              ],
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFEE2E2),
-                    shape: BoxShape.circle,
+  Widget _buildDeleteModal() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: colorScheme.scrim.withValues(alpha: 0.45),
+      ),
+      padding: const EdgeInsets.all(24),
+      child: Center(
+        child: AppSectionCard(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFEE2E2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.delete_forever_outlined,
+                    color: AppColors.error, size: 24),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'حذف اختبار',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'لا يمكن التراجع عن هذا الإجراء. سيتم حذف بيانات تقدم الطلاب والتحليلات المرتبطة باختبار فيزياء منتصف الفصل نهائيًا.',
+                style: TextStyle(fontSize: 13),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => setState(() => _showDeleteModal = false),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
                   ),
-                  child: const Icon(Icons.delete_forever_outlined,
-                      color: AppColors.error, size: 24),
+                  child: const Text('حذف نهائي',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'حذف اختبار',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'لا يمكن التراجع عن هذا الإجراء. سيتم حذف بيانات تقدم الطلاب والتحليلات المرتبطة باختبار فيزياء منتصف الفصل نهائيًا.',
-                  style: TextStyle(
-                      color: AppColors.onSurfaceVariant, fontSize: 13),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => setState(() => _showDeleteModal = false),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.error,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      elevation: 0,
-                    ),
-                    child: const Text('حذف نهائي',
-                        style: TextStyle(fontWeight: FontWeight.w600)),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () => setState(() => _showDeleteModal = false),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colorScheme.onSurfaceVariant,
+                    side: BorderSide(color: colorScheme.outlineVariant),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
+                  child: const Text('إلغاء'),
                 ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () => setState(() => _showDeleteModal = false),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.onSurfaceVariant,
-                      side: const BorderSide(color: Color(0xFFC4C5D5)),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: const Text('إلغاء'),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildStatusBento() => Column(
         children: [
@@ -332,17 +315,12 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          Row(
+          const Row(
             children: [
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF4F2FC),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFC4C5D5)),
-                  ),
-                  child: const Column(
+                child: AppSectionCard(
+                  padding: EdgeInsets.all(14),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Icon(Icons.history_outlined,
@@ -358,16 +336,11 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF4F2FC),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFC4C5D5)),
-                  ),
-                  child: const Column(
+                child: AppSectionCard(
+                  padding: EdgeInsets.all(14),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Icon(Icons.security_outlined,
@@ -388,39 +361,43 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
         ],
       );
 
-  Widget _buildBottomNav() => Container(
-        height: 64,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Colors.grey.shade200)),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 10,
-                offset: const Offset(0, -2))
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _navItem(Icons.home_outlined, 'الرئيسية', false),
-            _navItem(Icons.quiz_outlined, 'الاختبارات', false),
-            _navItem(Icons.bar_chart_outlined, 'التقارير', false),
-            _navItem(Icons.settings, 'الإعدادات', true),
-          ],
-        ),
-      );
-
-  Widget _navItem(IconData icon, String label, bool active) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon,
-              color: active ? const Color(0xFF1E40AF) : Colors.grey, size: 24),
-          const SizedBox(height: 2),
-          Text(label,
-              style: TextStyle(
-                  fontSize: 11,
-                  color: active ? const Color(0xFF1E40AF) : Colors.grey)),
+  Widget _buildBottomNav() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      height: 64,
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border(top: BorderSide(color: colorScheme.outlineVariant)),
+        boxShadow: [
+          BoxShadow(
+              color: colorScheme.shadow.withValues(alpha: 0.08),
+              blurRadius: 10,
+              offset: const Offset(0, -2))
         ],
-      );
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _navItem(Icons.home_outlined, 'الرئيسية', false),
+          _navItem(Icons.quiz_outlined, 'الاختبارات', false),
+          _navItem(Icons.bar_chart_outlined, 'التقارير', false),
+          _navItem(Icons.settings, 'الإعدادات', true),
+        ],
+      ),
+    );
+  }
+
+  Widget _navItem(IconData icon, String label, bool active) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final color =
+        active ? const Color(0xFF1E40AF) : colorScheme.onSurfaceVariant;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: color, size: 24),
+        const SizedBox(height: 2),
+        Text(label, style: TextStyle(fontSize: 11, color: color)),
+      ],
+    );
+  }
 }

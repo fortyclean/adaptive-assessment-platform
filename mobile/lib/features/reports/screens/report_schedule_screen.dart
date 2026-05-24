@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/widgets/app_section_card.dart';
 import '../../auth/repositories/admin_repository.dart';
 
 /// Report Schedule Screen — Screens 32 & 33 (combined)
@@ -532,14 +533,18 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
-        shadowColor: Colors.black12,
+        shadowColor:
+            Theme.of(context).colorScheme.shadow.withValues(alpha: 0.12),
         surfaceTintColor: Colors.transparent,
-        shape: const Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0)),
+        shape: Border(
+          bottom:
+              BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
         ),
         leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_forward_rounded, color: Color(0xFF64748B)),
+          icon: Icon(
+            Icons.arrow_forward_rounded,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
           onPressed: () => context.pop(),
           tooltip: 'رجوع',
         ),
@@ -555,8 +560,10 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
         centerTitle: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Color(0xFF64748B)),
+            icon: Icon(
+              Icons.notifications_outlined,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
             onPressed: () => context.push('/teacher/notifications'),
             tooltip: 'الإشعارات',
           ),
@@ -579,24 +586,27 @@ class _HeroSection extends StatelessWidget {
   const _HeroSection();
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'جدولة التقارير',
-            style: AppTextStyles.displayMedium.copyWith(
-              color: AppColors.primary,
-            ),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'جدولة التقارير',
+          style: AppTextStyles.displayMedium.copyWith(
+            color: AppColors.primary,
           ),
-          const SizedBox(height: 4),
-          Text(
-            'قم بإعداد تقارير دورية يتم إرسالها تلقائياً إلى بريدك الإلكتروني.',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: const Color(0xFF505F76),
-            ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'قم بإعداد تقارير دورية يتم إرسالها تلقائياً إلى بريدك الإلكتروني.',
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: colorScheme.onSurfaceVariant,
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 }
 
 // ─── Create Form Card ─────────────────────────────────────────────────────────
@@ -645,19 +655,7 @@ class _CreateFormCard extends StatelessWidget {
   final VoidCallback onSave;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
+  Widget build(BuildContext context) => AppSectionCard(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -800,9 +798,23 @@ class _FormLabel extends StatelessWidget {
   Widget build(BuildContext context) => Text(
         label,
         style: AppTextStyles.labelLarge.copyWith(
-          color: const Color(0xFF444653),
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       );
+}
+
+BoxDecoration _fieldDecoration(BuildContext context, {bool selected = false}) {
+  final colorScheme = Theme.of(context).colorScheme;
+  return BoxDecoration(
+    color: selected
+        ? colorScheme.primaryContainer.withValues(alpha: 0.45)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
+    borderRadius: BorderRadius.circular(8),
+    border: Border.all(
+      color: selected ? colorScheme.primary : colorScheme.outlineVariant,
+      width: selected ? 2 : 1,
+    ),
+  );
 }
 
 class _ActiveToggle extends StatelessWidget {
@@ -817,7 +829,7 @@ class _ActiveToggle extends StatelessWidget {
           Text(
             'تفعيل',
             style: AppTextStyles.labelLarge.copyWith(
-              color: const Color(0xFF505F76),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(width: 8),
@@ -837,34 +849,35 @@ class _ReportTypeDropdown extends StatelessWidget {
   final ValueChanged<_ReportType> onChanged;
 
   @override
-  Widget build(BuildContext context) => Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<_ReportType>(
-            value: value,
-            isExpanded: true,
-            icon:
-                const Icon(Icons.expand_more_rounded, color: Color(0xFF505F76)),
-            style: AppTextStyles.bodyMedium
-                .copyWith(color: const Color(0xFF1A1B22)),
-            onChanged: (v) {
-              if (v != null) onChanged(v);
-            },
-            items: _ReportType.values
-                .map((rt) => DropdownMenuItem(
-                      value: rt,
-                      child: Text(rt.label),
-                    ))
-                .toList(),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      height: 48,
+      decoration: _fieldDecoration(context),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<_ReportType>(
+          value: value,
+          isExpanded: true,
+          icon: Icon(
+            Icons.expand_more_rounded,
+            color: colorScheme.onSurfaceVariant,
           ),
+          style:
+              AppTextStyles.bodyMedium.copyWith(color: colorScheme.onSurface),
+          onChanged: (v) {
+            if (v != null) onChanged(v);
+          },
+          items: _ReportType.values
+              .map((rt) => DropdownMenuItem(
+                    value: rt,
+                    child: Text(rt.label),
+                  ))
+              .toList(),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _ClassroomChips extends StatelessWidget {
@@ -878,86 +891,83 @@ class _ClassroomChips extends StatelessWidget {
   final ValueChanged<String> onToggle;
 
   @override
-  Widget build(BuildContext context) => Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          ...available.map((classroom) {
-            final isSelected = selected.contains(classroom);
-            return GestureDetector(
-              onTap: () => onToggle(classroom),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFFDDE1FF) : Colors.white,
-                  borderRadius: BorderRadius.circular(999),
-                  border: Border.all(
-                    color: isSelected
-                        ? AppColors.primary
-                        : const Color(0xFFC4C5D5),
-                    width: isSelected ? 2 : 1,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (isSelected) ...[
-                      const Icon(
-                        Icons.check_circle_rounded,
-                        size: 18,
-                        color: AppColors.primary,
-                      ),
-                      const SizedBox(width: 6),
-                    ],
-                    Text(
-                      classroom,
-                      style: AppTextStyles.labelLarge.copyWith(
-                        color: isSelected
-                            ? AppColors.primary
-                            : const Color(0xFF505F76),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-          // Add classroom chip
-          GestureDetector(
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('إضافة فصل جديد قريباً')),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        ...available.map((classroom) {
+          final isSelected = selected.contains(classroom);
+          return GestureDetector(
+            onTap: () => onToggle(classroom),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration:
+                  _fieldDecoration(context, selected: isSelected).copyWith(
                 borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: const Color(0xFFC4C5D5),
-                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.add_rounded,
-                      size: 18, color: Color(0xFF505F76)),
-                  const SizedBox(width: 4),
+                  if (isSelected) ...[
+                    const Icon(
+                      Icons.check_circle_rounded,
+                      size: 18,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 6),
+                  ],
                   Text(
-                    'إضافة فصل',
+                    classroom,
                     style: AppTextStyles.labelLarge.copyWith(
-                      color: const Color(0xFF505F76),
+                      color: isSelected
+                          ? AppColors.primary
+                          : colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
             ),
+          );
+        }),
+        // Add classroom chip
+        GestureDetector(
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('إضافة فصل جديد قريباً')),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color:
+                  colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: colorScheme.outlineVariant,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.add_rounded,
+                    size: 18, color: colorScheme.onSurfaceVariant),
+                const SizedBox(width: 4),
+                Text(
+                  'إضافة فصل',
+                  style: AppTextStyles.labelLarge.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 }
 
 class _FrequencyDropdown extends StatelessWidget {
@@ -966,34 +976,35 @@ class _FrequencyDropdown extends StatelessWidget {
   final ValueChanged<_Frequency> onChanged;
 
   @override
-  Widget build(BuildContext context) => Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<_Frequency>(
-            value: value,
-            isExpanded: true,
-            icon:
-                const Icon(Icons.expand_more_rounded, color: Color(0xFF505F76)),
-            style: AppTextStyles.bodyMedium
-                .copyWith(color: const Color(0xFF1A1B22)),
-            onChanged: (v) {
-              if (v != null) onChanged(v);
-            },
-            items: _Frequency.values
-                .map((f) => DropdownMenuItem(
-                      value: f,
-                      child: Text(f.label),
-                    ))
-                .toList(),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      height: 48,
+      decoration: _fieldDecoration(context),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<_Frequency>(
+          value: value,
+          isExpanded: true,
+          icon: Icon(
+            Icons.expand_more_rounded,
+            color: colorScheme.onSurfaceVariant,
           ),
+          style:
+              AppTextStyles.bodyMedium.copyWith(color: colorScheme.onSurface),
+          onChanged: (v) {
+            if (v != null) onChanged(v);
+          },
+          items: _Frequency.values
+              .map((f) => DropdownMenuItem(
+                    value: f,
+                    child: Text(f.label),
+                  ))
+              .toList(),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _TimePickerField extends StatelessWidget {
@@ -1003,27 +1014,24 @@ class _TimePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');
     return GestureDetector(
       onTap: onTap,
       child: Container(
         height: 48,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-        ),
+        decoration: _fieldDecoration(context),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           children: [
-            const Icon(Icons.access_time_rounded,
-                size: 20, color: Color(0xFF505F76)),
+            Icon(Icons.access_time_rounded,
+                size: 20, color: colorScheme.onSurfaceVariant),
             const SizedBox(width: 8),
             Text(
               '$hour:$minute',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: const Color(0xFF1A1B22),
+                color: colorScheme.onSurface,
               ),
             ),
           ],
@@ -1046,96 +1054,95 @@ class _RecipientsInput extends StatelessWidget {
   final ValueChanged<String> onRemove;
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFFC4C5D5)),
-                  ),
-                  child: TextField(
-                    controller: controller,
-                    keyboardType: TextInputType.emailAddress,
-                    textDirection: TextDirection.ltr,
-                    decoration: InputDecoration(
-                      hintText: 'example@school.edu',
-                      hintStyle: AppTextStyles.bodyMedium.copyWith(
-                        color: const Color(0xFF9CA3AF),
-                      ),
-                      border: InputBorder.none,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 12),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 48,
+                decoration: _fieldDecoration(context),
+                child: TextField(
+                  controller: controller,
+                  keyboardType: TextInputType.emailAddress,
+                  textDirection: TextDirection.ltr,
+                  decoration: InputDecoration(
+                    hintText: 'example@school.edu',
+                    hintStyle: AppTextStyles.bodyMedium.copyWith(
+                      color:
+                          colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
                     ),
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: const Color(0xFF1A1B22),
-                    ),
-                    onSubmitted: (_) => onAdd(),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   ),
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
+                  onSubmitted: (_) => onAdd(),
                 ),
               ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: onAdd,
-                child: Container(
-                  height: 48,
-                  width: 48,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD0E1FB),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.add_rounded,
-                    color: Color(0xFF54647A),
-                  ),
+            ),
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: onAdd,
+              child: Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  Icons.add_rounded,
+                  color: colorScheme.onPrimaryContainer,
                 ),
               ),
-            ],
-          ),
-          if (recipients.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: recipients
-                  .map((email) => Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE8E7F1),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              email,
-                              style: AppTextStyles.labelSmall.copyWith(
-                                color: const Color(0xFF444653),
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            GestureDetector(
-                              onTap: () => onRemove(email),
-                              child: const Icon(
-                                Icons.close_rounded,
-                                size: 14,
-                                color: Color(0xFF444653),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ))
-                  .toList(),
             ),
           ],
+        ),
+        if (recipients.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: recipients
+                .map((email) => Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            email,
+                            style: AppTextStyles.labelSmall.copyWith(
+                              color: colorScheme.onSurface,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: () => onRemove(email),
+                            child: Icon(
+                              Icons.close_rounded,
+                              size: 14,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ))
+                .toList(),
+          ),
         ],
-      );
+      ],
+    );
+  }
 }
 
 class _FileFormatSelector extends StatelessWidget {
@@ -1144,59 +1151,56 @@ class _FileFormatSelector extends StatelessWidget {
   final ValueChanged<_FileFormat> onChanged;
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: _FileFormat.values.map((fmt) {
-          final isSelected = value == fmt;
-          return Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: fmt == _FileFormat.pdf ? 0 : 8,
-                right: fmt == _FileFormat.pdf ? 8 : 0,
-              ),
-              child: GestureDetector(
-                onTap: () => onChanged(fmt),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Row(
+      children: _FileFormat.values.map((fmt) {
+        final isSelected = value == fmt;
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: fmt == _FileFormat.pdf ? 0 : 8,
+              right: fmt == _FileFormat.pdf ? 8 : 0,
+            ),
+            child: GestureDetector(
+              onTap: () => onChanged(fmt),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration:
+                    _fieldDecoration(context, selected: isSelected).copyWith(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      fmt.icon,
+                      size: 20,
                       color: isSelected
                           ? AppColors.primary
-                          : const Color(0xFFC4C5D5),
-                      width: isSelected ? 2 : 1,
+                          : colorScheme.onSurfaceVariant,
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        fmt.icon,
-                        size: 20,
+                    const SizedBox(width: 8),
+                    Text(
+                      fmt.label,
+                      style: AppTextStyles.labelLarge.copyWith(
                         color: isSelected
                             ? AppColors.primary
-                            : const Color(0xFF505F76),
+                            : colorScheme.onSurfaceVariant,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w500,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        fmt.label,
-                        style: AppTextStyles.labelLarge.copyWith(
-                          color: isSelected
-                              ? AppColors.primary
-                              : const Color(0xFF505F76),
-                          fontWeight:
-                              isSelected ? FontWeight.w700 : FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        }).toList(),
-      );
+          ),
+        );
+      }).toList(),
+    );
+  }
 }
 
 // ─── Active Schedules Section ─────────────────────────────────────────────────
@@ -1319,13 +1323,8 @@ class _EmptySchedulesCard extends StatelessWidget {
   const _EmptySchedulesCard();
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => AppSectionCard(
         padding: const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-        ),
         child: Column(
           children: [
             Icon(
@@ -1365,107 +1364,99 @@ class _ScheduleCard extends StatelessWidget {
   final VoidCallback onToggle;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFC4C5D5)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x08000000),
-              blurRadius: 4,
-              offset: Offset(0, 1),
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppSectionCard(
+      padding: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            // Icon container
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: const Color(0xFFEEEDF7),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                schedule.reportType.icon,
+                color: AppColors.primary,
+                size: 24,
+              ),
             ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              // Icon container
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEEEDF7),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  schedule.reportType.icon,
-                  color: AppColors.primary,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
+            const SizedBox(width: 16),
 
-              // Info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      schedule.title,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${schedule.frequency.label} • ${schedule.deliveryTime} • ${schedule.fileFormat.label}',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: const Color(0xFF505F76),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-
-              // Status + actions
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+            // Info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Active badge
-                  GestureDetector(
-                    onTap: onToggle,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: schedule.isActive
-                            ? const Color(0xFFD1FAE5)
-                            : const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        schedule.isActive ? 'نشط' : 'متوقف',
-                        style: TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: schedule.isActive
-                              ? const Color(0xFF047857)
-                              : const Color(0xFF64748B),
-                        ),
-                      ),
+                  Text(
+                    schedule.title,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
-                  // Delete button
-                  GestureDetector(
-                    onTap: onDelete,
-                    child: const Icon(
-                      Icons.delete_outline_rounded,
-                      size: 20,
-                      color: Color(0xFF505F76),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${schedule.frequency.label} • ${schedule.deliveryTime} • ${schedule.fileFormat.label}',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+
+            // Status + actions
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // Active badge
+                GestureDetector(
+                  onTap: onToggle,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: schedule.isActive
+                          ? const Color(0xFFD1FAE5)
+                          : const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      schedule.isActive ? 'نشط' : 'متوقف',
+                      style: TextStyle(
+                        fontFamily: 'Almarai',
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: schedule.isActive
+                            ? const Color(0xFF047857)
+                            : const Color(0xFF64748B),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Delete button
+                GestureDetector(
+                  onTap: onDelete,
+                  child: Icon(
+                    Icons.delete_outline_rounded,
+                    size: 20,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
