@@ -53,6 +53,37 @@ class _InstitutionSettingsScreenState
     return (authState.accessToken ?? '').startsWith('demo-token-');
   }
 
+  List<Map<String, dynamic>> get _demoAuditLogs => [
+        {
+          'action': 'تعطيل حساب مستخدم',
+          'actorName': 'مدير النظام',
+          'targetName': 'حساب طالب غير نشط',
+          'createdAt': DateTime.now().subtract(const Duration(minutes: 18)),
+          'severity': 'high',
+        },
+        {
+          'action': 'ربط معلم بفصل',
+          'actorName': 'مدير النظام',
+          'targetName': 'الأول المتوسط (أ)',
+          'createdAt': DateTime.now().subtract(const Duration(hours: 2)),
+          'severity': 'medium',
+        },
+        {
+          'action': 'تحديث إعدادات المؤسسة',
+          'actorName': 'مدير النظام',
+          'targetName': _schoolName,
+          'createdAt': DateTime.now().subtract(const Duration(days: 1)),
+          'severity': 'low',
+        },
+        {
+          'action': 'طلب أرشفة بيانات',
+          'actorName': 'مدير النظام',
+          'targetName': 'بيانات المؤسسة',
+          'createdAt': DateTime.now().subtract(const Duration(days: 2)),
+          'severity': 'critical',
+        },
+      ];
+
   Future<void> _loadInstitutionSettings() async {
     await _loadSavedInstitutionSettings();
 
@@ -173,6 +204,18 @@ class _InstitutionSettingsScreenState
     _showMessage(successMessage);
   }
 
+  Future<List<Map<String, dynamic>>> _loadAuditLogs() async {
+    if (_allowLocalOnlySettings) return _demoAuditLogs;
+    try {
+      final logs = await ref.read(adminRepositoryProvider).getAuditLogs();
+      return logs;
+    } catch (_) {
+      return const [
+        {'__loadError': true},
+      ];
+    }
+  }
+
   Future<void> _saveSettingsLocally() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('${_settingsPrefix}schoolName', _schoolName);
@@ -253,6 +296,17 @@ class _InstitutionSettingsScreenState
     final hour = value.hour.toString().padLeft(2, '0');
     final minute = value.minute.toString().padLeft(2, '0');
     return '${value.year}/${value.month}/${value.day} - $hour:$minute';
+  }
+
+  String _formatAuditTime(dynamic value) {
+    DateTime? date;
+    if (value is DateTime) {
+      date = value;
+    } else if (value is String) {
+      date = DateTime.tryParse(value);
+    }
+    if (date == null) return 'وقت غير محدد';
+    return _formatSyncTime(date);
   }
 
   @override
@@ -925,23 +979,72 @@ class _InstitutionSettingsScreenState
 
   void _showActivityLogSheet() {
     _showSettingsSheet(
-      title: 'سجلات الأنشطة',
+      title: 'سجل التدقيق',
       icon: Icons.history_edu_outlined,
-      child: Column(
-        children: [
-          _activityRow('تحديث إعدادات المؤسسة', 'منذ قليل'),
-          _activityRow('فتح إدارة المستخدمين', 'اليوم'),
-          _activityRow('مراجعة تقارير المدرسة', 'هذا الأسبوع'),
-          const SizedBox(height: 16),
-          _primaryButton(
-            label: 'فتح لوحة المشرف المتقدمة',
-            icon: Icons.dashboard_customize_outlined,
-            onPressed: () {
-              Navigator.pop(context);
-              context.push(AppRoutes.supervisorDashboard);
-            },
-          ),
-        ],
+      child: FutureBuilder<List<Map<String, dynamic>>>(
+        future: Future<List<Map<String, dynamic>>>.delayed(
+          Duration.zero,
+          _loadAuditLogs,
+        ),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return _auditState(
+              icon: Icons.warning_amber_rounded,
+              title: 'تعذر تحميل سجل التدقيق',
+              message:
+                  'تحقق من الاتصال أو صلاحيات المشرف ثم أعد المحاولة. لا يتم عرض بيانات وهمية خارج وضع الديمو.',
+              isError: true,
+            );
+          }
+
+          final logs = snapshot.data ?? const <Map<String, dynamic>>[];
+          if (logs.isNotEmpty && logs.first['__loadError'] == true) {
+            return _auditState(
+              icon: Icons.warning_amber_rounded,
+              title: 'تعذر تحميل سجل التدقيق',
+              message:
+                  'تحقق من الاتصال أو صلاحيات المشرف ثم أعد المحاولة. لا يتم عرض بيانات وهمية خارج وضع الديمو.',
+              isError: true,
+            );
+          }
+
+          if (logs.isEmpty) {
+            return _auditState(
+              icon: Icons.manage_search_outlined,
+              title: 'لا توجد أحداث تدقيق بعد',
+              message:
+                  'ستظهر هنا إجراءات مثل تعطيل الحسابات، تغيير الصلاحيات، ربط الفصول، وطلبات الأرشفة.',
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _infoTile(
+                'إجراءات حساسة',
+                'يعرض آخر تغييرات المشرف التي تؤثر على الحسابات والفصول والإعدادات.',
+              ),
+              const SizedBox(height: 12),
+              ...logs.map(_auditLogRow),
+              const SizedBox(height: 16),
+              _primaryButton(
+                label: 'فتح لوحة المشرف المتقدمة',
+                icon: Icons.dashboard_customize_outlined,
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.push(AppRoutes.supervisorDashboard);
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -1237,15 +1340,111 @@ class _InstitutionSettingsScreenState
         ),
       );
 
-  Widget _activityRow(String title, String time) => ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: const CircleAvatar(
-          backgroundColor: Color(0xFFEFF6FF),
-          child: Icon(Icons.check_circle_outline, color: AppColors.primary),
+  Widget _auditState({
+    required IconData icon,
+    required String title,
+    required String message,
+    bool isError = false,
+  }) =>
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isError ? const Color(0xFFFFF1F1) : const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isError ? AppColors.error : const Color(0xFFE2E8F0),
+          ),
         ),
-        title: Text(title),
-        subtitle: Text(time),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              size: 34,
+              color: isError ? AppColors.error : AppColors.primary,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                color: isError ? AppColors.error : AppColors.onSurface,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppColors.onSurfaceVariant,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       );
+
+  Widget _auditLogRow(Map<String, dynamic> log) {
+    final severity = (log['severity'] ?? log['level'] ?? 'medium').toString();
+    final color = switch (severity) {
+      'critical' => AppColors.error,
+      'high' => AppColors.warning,
+      'low' => AppColors.success,
+      _ => AppColors.primary,
+    };
+    final action = (log['action'] ?? 'إجراء غير محدد').toString();
+    final actor = (log['actorName'] ?? 'مشرف').toString();
+    final target = (log['targetName'] ?? 'النظام').toString();
+    final time = _formatAuditTime(log['createdAt']);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: color.withValues(alpha: 0.1),
+            child: Icon(Icons.verified_user_outlined, color: color, size: 18),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  action,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  '$actor • $target',
+                  style: const TextStyle(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  time,
+                  style: const TextStyle(
+                    color: AppColors.outline,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   BoxDecoration _cardDecoration() => BoxDecoration(
         color: Colors.white,

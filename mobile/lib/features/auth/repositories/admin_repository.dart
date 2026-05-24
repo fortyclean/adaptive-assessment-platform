@@ -50,6 +50,58 @@ class AdminRepository {
     return (body['settings'] as Map<String, dynamic>?) ?? body;
   }
 
+  /// GET /api/v1/audit-logs
+  Future<List<Map<String, dynamic>>> getAuditLogs({int limit = 25}) async {
+    try {
+      final response = await _apiService.dio.get<Map<String, dynamic>>(
+        '/audit-logs',
+        queryParameters: {'limit': limit},
+      );
+      return _parseAuditLogsResponse(response.data);
+    } on DioException {
+      final response = await _apiService.dio.get<Map<String, dynamic>>(
+        '/admin/audit-logs',
+        queryParameters: {'limit': limit},
+      );
+      return _parseAuditLogsResponse(response.data);
+    }
+  }
+
+  List<Map<String, dynamic>> _parseAuditLogsResponse(dynamic data) {
+    List<Map<String, dynamic>> normalizeList(List<dynamic> items) =>
+        items.whereType<Map<String, dynamic>>().map((item) {
+          final normalized = Map<String, dynamic>.from(item);
+          normalized['action'] =
+              normalized['action'] ?? normalized['event'] ?? normalized['type'];
+          normalized['actorName'] = normalized['actorName'] ??
+              normalized['adminName'] ??
+              normalized['userName'] ??
+              normalized['actor'];
+          normalized['targetName'] =
+              normalized['targetName'] ?? normalized['target'];
+          normalized['createdAt'] = normalized['createdAt'] ??
+              normalized['timestamp'] ??
+              normalized['date'];
+          return normalized;
+        }).toList();
+
+    if (data is List) return normalizeList(data);
+    if (data is Map<String, dynamic>) {
+      final directLogs = data['logs'] ?? data['auditLogs'] ?? data['events'];
+      if (directLogs is List) return normalizeList(directLogs);
+
+      final nestedData = data['data'];
+      if (nestedData is List) return normalizeList(nestedData);
+      if (nestedData is Map<String, dynamic>) {
+        final nestedLogs = nestedData['logs'] ??
+            nestedData['auditLogs'] ??
+            nestedData['events'];
+        if (nestedLogs is List) return normalizeList(nestedLogs);
+      }
+    }
+    return <Map<String, dynamic>>[];
+  }
+
   /// GET /api/v1/users
   Future<List<Map<String, dynamic>>> getUsers(
       {String? search, String? role, bool? isActive}) async {

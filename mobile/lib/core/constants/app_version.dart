@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.60';
-  static const int buildNumber = 60;
+  static const String current = '1.0.61';
+  static const int buildNumber = 61;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.61',
+      buildNumber: 61,
+      date: 'مايو 2026',
+      title: 'إظهار سجل التدقيق للمشرف',
+      changes: [
+        'إضافة جلب سجل التدقيق من AdminRepository مع دعم /audit-logs و /admin/audit-logs.',
+        'تحويل سجلات الأنشطة في إعدادات المؤسسة إلى سجل تدقيق واضح للإجراءات الحساسة.',
+        'إضافة حالات تحميل وفراغ وخطأ تمنع إخفاء فشل الإنتاج خلف بيانات وهمية.',
+        'إضافة اختبارات Widget للتحقق من عرض السجلات الحساسة والفراغ وفشل التحميل.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.60',
       buildNumber: 60,
