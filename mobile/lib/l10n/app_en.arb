@@ -1,0 +1,15 @@
+{
+  "@@locale": "en",
+  "appTitle": "Adaptive Assessment Platform",
+  "appLanguage": "App language",
+  "arabic": "Arabic",
+  "english": "English",
+  "chooseLanguage": "Choose language",
+  "languageArabicSelected": "Language: Arabic",
+  "languageEnglishSelected": "Language: English",
+  "languageChanged": "App language changed",
+  "languageAndAppearance": "Appearance and language",
+  "darkMode": "Dark mode",
+  "darkModeEnabled": "Enabled across supported screens",
+  "darkModeDisabled": "Apply dark appearance to app screens"
+}

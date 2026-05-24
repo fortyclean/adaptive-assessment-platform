@@ -1,7 +1,9 @@
 import 'package:adaptive_assessment/core/theme/app_theme.dart';
 import 'package:adaptive_assessment/features/auth/screens/settings_screen.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
 import 'package:adaptive_assessment/shared/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +31,13 @@ void main() {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: container.read(themeModeProvider),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
           routerConfig: router,
         ),
       ),
@@ -50,6 +59,13 @@ void main() {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: ref.watch(themeModeProvider),
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
             routerConfig: router,
           ),
         ),
@@ -58,9 +74,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      tester
-          .widget<MaterialApp>(find.byType(MaterialApp))
-          .themeMode,
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
       ThemeMode.dark,
     );
   });

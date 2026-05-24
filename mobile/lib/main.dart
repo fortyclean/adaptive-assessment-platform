@@ -10,7 +10,9 @@ import 'core/network/api_service.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/repositories/auth_repository.dart';
+import 'l10n/app_localizations.dart';
 import 'shared/providers/auth_provider.dart';
+import 'shared/providers/locale_provider.dart';
 import 'shared/providers/theme_provider.dart';
 import 'shared/services/notification_service.dart';
 
@@ -105,6 +107,7 @@ class AdaptiveAssessmentApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
 
     ref.listen<AuthState>(authProvider, (previous, next) {
       final previousUserId = previous?.user?.id;
@@ -121,7 +124,7 @@ class AdaptiveAssessmentApp extends ConsumerWidget {
     });
 
     return MaterialApp.router(
-      title: 'منصة التقييم التكيفي',
+      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       debugShowCheckedModeBanner: false,
 
       // ─── Theme ──────────────────────────────────────────────────────────
@@ -133,12 +136,13 @@ class AdaptiveAssessmentApp extends ConsumerWidget {
       routerConfig: router,
 
       // ─── Localization ────────────────────────────────────────────────────
-      locale: const Locale('ar', 'SA'),
+      locale: locale,
       supportedLocales: const [
         Locale('ar', 'SA'),
         Locale('en', 'US'),
       ],
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -146,7 +150,8 @@ class AdaptiveAssessmentApp extends ConsumerWidget {
 
       // ─── RTL Text Direction ───────────────────────────────────────────────
       builder: (context, child) => Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection:
+            locale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
         child: child ?? const SizedBox.shrink(),
       ),
     );

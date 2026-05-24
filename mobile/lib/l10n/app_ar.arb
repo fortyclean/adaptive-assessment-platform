@@ -1,0 +1,15 @@
+{
+  "@@locale": "ar",
+  "appTitle": "منصة التقييم التكيفي",
+  "appLanguage": "لغة التطبيق",
+  "arabic": "العربية",
+  "english": "الإنجليزية",
+  "chooseLanguage": "اختيار اللغة",
+  "languageArabicSelected": "اللغة: العربية",
+  "languageEnglishSelected": "Language: English",
+  "languageChanged": "تم تغيير لغة التطبيق",
+  "languageAndAppearance": "المظهر واللغة",
+  "darkMode": "الوضع الليلي",
+  "darkModeEnabled": "مفعل على كل الشاشات المدعومة",
+  "darkModeDisabled": "تطبيق المظهر الداكن على واجهات التطبيق"
+}

@@ -8,7 +8,9 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/providers/locale_provider.dart';
 import '../../../shared/providers/theme_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/auth_repository.dart';
@@ -28,6 +30,62 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     await storage.write(
       key: AppConstants.userDataKey,
       value: jsonEncode(user.toJson()),
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final currentLocale = ref.read(localeProvider);
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(l10n.chooseLanguage),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Text('AR', style: TextStyle(fontSize: 14)),
+              title: Text(l10n.arabic),
+              trailing: currentLocale.languageCode == 'ar'
+                  ? const Icon(Icons.check_rounded)
+                  : null,
+              onTap: () {
+                ref
+                    .read(localeProvider.notifier)
+                    .setLocale(const Locale('ar', 'SA'));
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.languageArabicSelected),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Text('EN', style: TextStyle(fontSize: 14)),
+              title: Text(l10n.english),
+              trailing: currentLocale.languageCode == 'en'
+                  ? const Icon(Icons.check_rounded)
+                  : null,
+              onTap: () {
+                ref
+                    .read(localeProvider.notifier)
+                    .setLocale(const Locale('en', 'US'));
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.languageEnglishSelected),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -147,6 +205,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
+    final locale = ref.watch(localeProvider);
 
     final fullName = user?.fullName ?? 'المستخدم';
     final email = user?.username ?? '';
@@ -337,51 +397,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               _SettingsTile(
                 icon: Icons.language_rounded,
                 iconColor: AppColors.primary,
-                title: 'اللغة',
-                subtitle: 'العربية',
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      title: const Text('اختيار اللغة'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            leading: const Text('🇸🇦',
-                                style: TextStyle(fontSize: 24)),
-                            title: const Text('العربية'),
-                            trailing: const Icon(Icons.check,
-                                color: AppColors.primary),
-                            onTap: () {
-                              Navigator.pop(ctx);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('اللغة: العربية'),
-                                    behavior: SnackBarBehavior.floating),
-                              );
-                            },
-                          ),
-                          ListTile(
-                            leading: const Text('🇺🇸',
-                                style: TextStyle(fontSize: 24)),
-                            title: const Text('الإنجليزية'),
-                            onTap: () {
-                              Navigator.pop(ctx);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('اللغة الإنجليزية (قريبًا)'),
-                                    behavior: SnackBarBehavior.floating),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                title: l10n.appLanguage,
+                subtitle:
+                    locale.languageCode == 'ar' ? l10n.arabic : l10n.english,
+                onTap: () => _showLanguageDialog(context, ref),
               ),
             ],
           ),

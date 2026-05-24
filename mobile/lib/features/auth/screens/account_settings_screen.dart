@@ -10,7 +10,9 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
+import '../../../shared/providers/locale_provider.dart';
 import '../../../shared/providers/theme_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/user_avatar.dart';
@@ -34,13 +36,86 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     );
   }
 
+  void _showLanguageDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final currentLocale = ref.read(localeProvider);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: colorScheme.outlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                l10n.chooseLanguage,
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ListTile(
+                leading: const Text('AR', style: TextStyle(fontSize: 14)),
+                title: Text(l10n.arabic),
+                trailing: currentLocale.languageCode == 'ar'
+                    ? const Icon(Icons.check_rounded)
+                    : null,
+                onTap: () {
+                  ref
+                      .read(localeProvider.notifier)
+                      .setLocale(const Locale('ar', 'SA'));
+                  Navigator.pop(sheetContext);
+                },
+              ),
+              ListTile(
+                leading: const Text('EN', style: TextStyle(fontSize: 14)),
+                title: Text(l10n.english),
+                trailing: currentLocale.languageCode == 'en'
+                    ? const Icon(Icons.check_rounded)
+                    : null,
+                onTap: () {
+                  ref
+                      .read(localeProvider.notifier)
+                      .setLocale(const Locale('en', 'US'));
+                  Navigator.pop(sheetContext);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
     final colorScheme = Theme.of(context).colorScheme;
+    final locale = ref.watch(localeProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection:
+          locale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: _buildAppBar(user),
@@ -58,7 +133,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 const SizedBox(height: 8),
                 _buildSecurityGroup(context),
                 const SizedBox(height: 16),
-                _buildSectionLabel('المظهر واللغة', colorScheme),
+                _buildSectionLabel(l10n.languageAndAppearance, colorScheme),
                 const SizedBox(height: 8),
                 _buildAppearanceGroup(),
                 const SizedBox(height: 16),
@@ -286,29 +361,36 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
 
   Widget _buildAppearanceGroup() {
     final isDarkMode = ref.watch(themeModeProvider) == ThemeMode.dark;
+    final l10n = AppLocalizations.of(context);
+    final locale = ref.watch(localeProvider);
+    final languageLabel =
+        locale.languageCode == 'ar' ? l10n.arabic : l10n.english;
 
     return _SettingsCard(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(Icons.language_rounded, color: AppColors.primary, size: 24),
-              SizedBox(width: 16),
-              Expanded(
-                child: Text('لغة التطبيق', style: AppTextStyles.bodyLarge),
-              ),
-              _LanguageBadge(label: 'العربية'),
-            ],
+        InkWell(
+          onTap: () => _showLanguageDialog(context),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                const Icon(Icons.language_rounded,
+                    color: AppColors.primary, size: 24),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(l10n.appLanguage, style: AppTextStyles.bodyLarge),
+                ),
+                _LanguageBadge(label: languageLabel),
+              ],
+            ),
           ),
         ),
         const _Divider(),
         _SettingsToggleTile(
           icon: Icons.dark_mode_outlined,
-          title: 'الوضع الليلي',
-          subtitle: isDarkMode
-              ? 'مفعل على كل الشاشات المدعومة'
-              : 'تطبيق المظهر الداكن على واجهات التطبيق',
+          title: l10n.darkMode,
+          subtitle: isDarkMode ? l10n.darkModeEnabled : l10n.darkModeDisabled,
           value: isDarkMode,
           onChanged: (enabled) =>
               ref.read(themeModeProvider.notifier).setDarkMode(

@@ -57,9 +57,9 @@ adaptive-mastery-v{VERSION}.apk
 - ممنوع استخدام كلمة `railway` في اسم ملف APK.
 
 ### الإصدار الحالي
-- **Flutter (mobile):** `1.0.68+68`
-- **Backend (Node.js):** `1.0.68`
-- **آخر APK منشور:** `adaptive-mastery-v1.0.68.apk`
+- **Flutter (mobile):** `1.0.69+69`
+- **Backend (Node.js):** `1.0.69`
+- **آخر APK منشور:** `adaptive-mastery-v1.0.69.apk`
 
 ---
 

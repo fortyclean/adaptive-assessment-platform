@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.68';
-  static const int buildNumber = 68;
+  static const String current = '1.0.69';
+  static const int buildNumber = 69;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.69',
+      buildNumber: 69,
+      date: 'مايو 2026',
+      title: 'بدء دعم الترجمة وتبديل اللغة',
+      changes: [
+        'إضافة ملفات ARB رسمية للعربية والإنجليزية مع توليد AppLocalizations داخل Flutter.',
+        'إضافة مزود LocaleProvider لحفظ لغة التطبيق واستعادتها من حالة الجلسة.',
+        'ربط MaterialApp باللغة المختارة مع دعم RTL للعربية وLTR للإنجليزية.',
+        'تفعيل اختيار اللغة من شاشة الإعدادات العامة وإعدادات الحساب.',
+        'إضافة اختبارات smoke للترجمة واختبار تبديل مزود اللغة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.68',
       buildNumber: 68,
