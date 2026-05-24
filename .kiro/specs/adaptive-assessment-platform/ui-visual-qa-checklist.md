@@ -18,7 +18,7 @@ Highest-impact files from the latest scan:
 
 | Priority | File | White | Black | Hex | Classification | Recommendation |
 |---:|---|---:|---:|---:|---|---|
-| 1 | `mobile/lib/features/reports/screens/student_academic_profile_screen.dart` | 13 | 6 | 83 | High risk | Convert container/card/text colors to `Theme.of(context).colorScheme` in small batches. |
+| 1 | `mobile/lib/features/reports/screens/student_academic_profile_screen.dart` | 3 | 0 | 59 | Medium risk | Main shells now use `AppSectionCard`; continue converting chart/badge semantic colors carefully. |
 | 2 | `mobile/lib/features/reports/screens/report_schedule_screen.dart` | 14 | 1 | 46 | High risk | Replace non-branded cards and form fields with theme-aware surfaces. |
 | 3 | `mobile/lib/features/auth/screens/ui_feedback_screen.dart` | 14 | 6 | 27 | High risk | Treat as visual QA/demo surface; align overlays, cards, and modal colors with theme. |
 | 4 | `mobile/lib/features/auth/screens/admin_dashboard_v2_screen.dart` | 8 | 5 | 25 | Medium risk | Preserve bento design, but move card/surface colors to colorScheme. |
@@ -57,4 +57,4 @@ Before building a release APK:
 
 ## Next Recommended Batch
 
-Start with `student_academic_profile_screen.dart`, `report_schedule_screen.dart`, and `ui_feedback_screen.dart` because they have the highest remaining hardcoded color concentration and the widest visual blast radius.
+Continue with `report_schedule_screen.dart` and `ui_feedback_screen.dart`; `student_academic_profile_screen.dart` now has a shared card baseline and a small-phone dark-mode regression test.

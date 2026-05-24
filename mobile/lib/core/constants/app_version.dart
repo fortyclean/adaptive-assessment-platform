@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.63';
-  static const int buildNumber = 63;
+  static const String current = '1.0.64';
+  static const int buildNumber = 64;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.64',
+      buildNumber: 64,
+      date: 'مايو 2026',
+      title: 'توحيد بطاقات الثيم وإصلاح ملف الطالب',
+      changes: [
+        'إضافة AppSectionCard كحاوية مشتركة تستخدم ألوان الثيم تلقائيًا.',
+        'تحويل أسطح الملف الأكاديمي للطالب إلى بطاقات مشتركة متوافقة مع الوضع الليلي.',
+        'إصلاح احتمالات overflow في الملف الأكاديمي على الهاتف الصغير والوضع الليلي.',
+        'إضافة اختبار regression للملف الأكاديمي في الوضع الليلي على عرض 390px.',
+        'تحديث checklist وتقليل ديون الألوان في شاشة الملف الأكاديمي من 102 إلى 62 نقطة.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.63',
       buildNumber: 63,
