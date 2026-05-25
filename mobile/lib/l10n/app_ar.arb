@@ -123,5 +123,29 @@
   "mastery": "الإتقان",
   "forReview": "للمراجعة",
   "restartPractice": "أعد التدريب",
-  "backToLearningPlan": "العودة لخطة التعلم"
+  "backToLearningPlan": "العودة لخطة التعلم",
+  "teacherFallbackName": "المعلم",
+  "teacherWelcome": "مرحبًا، {name}",
+  "@teacherWelcome": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "dashboard": "لوحة التحكم",
+  "search": "بحث",
+  "teacherDashboardLoadFailed": "تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.",
+  "totalStudents": "إجمالي الطلاب",
+  "active": "نشط",
+  "completed": "مكتمل",
+  "draft": "مسودة",
+  "average": "المتوسط",
+  "createNewAssessment": "إنشاء اختبار جديد",
+  "recentAssessments": "آخر الاختبارات",
+  "viewAll": "عرض الكل",
+  "noAssessmentsCreatedYet": "لم تنشئ أي اختبار بعد",
+  "additionalTools": "أدوات إضافية",
+  "taskManagement": "إدارة المهام",
+  "certificates": "الشهادات",
+  "classSchedule": "الجدول الدراسي",
+  "myClasses": "فصولي"
 }

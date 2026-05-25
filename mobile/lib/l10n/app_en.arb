@@ -123,5 +123,29 @@
   "mastery": "Mastery",
   "forReview": "For review",
   "restartPractice": "Restart practice",
-  "backToLearningPlan": "Back to learning plan"
+  "backToLearningPlan": "Back to learning plan",
+  "teacherFallbackName": "Teacher",
+  "teacherWelcome": "Welcome, {name}",
+  "@teacherWelcome": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "dashboard": "Dashboard",
+  "search": "Search",
+  "teacherDashboardLoadFailed": "Could not load the teacher dashboard. Check your connection and try again.",
+  "totalStudents": "Total students",
+  "active": "Active",
+  "completed": "Completed",
+  "draft": "Draft",
+  "average": "Average",
+  "createNewAssessment": "Create new assessment",
+  "recentAssessments": "Recent assessments",
+  "viewAll": "View all",
+  "noAssessmentsCreatedYet": "You have not created any assessment yet",
+  "additionalTools": "Additional tools",
+  "taskManagement": "Task management",
+  "certificates": "Certificates",
+  "classSchedule": "Class schedule",
+  "myClasses": "My classes"
 }

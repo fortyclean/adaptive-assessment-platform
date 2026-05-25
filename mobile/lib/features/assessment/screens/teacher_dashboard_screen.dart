@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/user_avatar.dart';
@@ -55,6 +57,10 @@ class _TeacherDashboardScreenState
   List<Map<String, dynamic>> _assessments = [];
   String? _errorMessage;
 
+  AppLocalizations _l10n(BuildContext context) =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+      AppLocalizationsAr();
+
   @override
   void initState() {
     super.initState();
@@ -77,11 +83,11 @@ class _TeacherDashboardScreenState
       });
     } catch (_) {
       if (!mounted) return;
+      final l10n = _l10n(context);
       setState(() {
         _assessments = _shouldUseDemoFallback ? _demoAssessments : [];
-        _errorMessage = _shouldUseDemoFallback
-            ? null
-            : 'تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.';
+        _errorMessage =
+            _shouldUseDemoFallback ? null : l10n.teacherDashboardLoadFailed;
         _isLoading = false;
       });
     }
@@ -162,6 +168,8 @@ class _TeacherDashboardScreenState
 
   PreferredSizeWidget _buildAppBar(AuthUser? user) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = _l10n(context);
+    final textDirection = Directionality.of(context);
     return PreferredSize(
       preferredSize: const Size.fromHeight(64),
       child: Container(
@@ -183,7 +191,7 @@ class _TeacherDashboardScreenState
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
-            textDirection: TextDirection.rtl,
+            textDirection: textDirection,
             children: [
               UserAvatar(user: user, size: 40),
               const SizedBox(width: 10),
@@ -193,7 +201,9 @@ class _TeacherDashboardScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'مرحبًا، ${user?.fullName ?? 'المعلم'}',
+                      l10n.teacherWelcome(
+                        user?.fullName ?? l10n.teacherFallbackName,
+                      ),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -203,7 +213,7 @@ class _TeacherDashboardScreenState
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'لوحة التحكم',
+                      l10n.dashboard,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -218,13 +228,13 @@ class _TeacherDashboardScreenState
                 icon: const Icon(Icons.search_rounded),
                 color: colorScheme.primary,
                 onPressed: () => context.push(AppRoutes.teacherAssessments),
-                tooltip: 'بحث',
+                tooltip: l10n.search,
               ),
               IconButton(
                 icon: const Icon(Icons.notifications_outlined),
                 color: colorScheme.primary,
                 onPressed: () => context.push(AppRoutes.teacherNotifications),
-                tooltip: 'الإشعارات',
+                tooltip: l10n.notifications,
               ),
             ],
           ),
@@ -235,6 +245,7 @@ class _TeacherDashboardScreenState
 
   Widget _buildErrorCard() {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = _l10n(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -265,7 +276,7 @@ class _TeacherDashboardScreenState
             child: FilledButton.icon(
               onPressed: _loadData,
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text('إعادة المحاولة'),
+              label: Text(l10n.retry),
             ),
           ),
         ],
@@ -273,93 +284,101 @@ class _TeacherDashboardScreenState
     );
   }
 
-  Widget _buildStatsRow() => Row(
-        textDirection: TextDirection.rtl,
-        children: [
-          Expanded(
-            child: _StatCard(
-              label: 'إجمالي الطلاب',
-              value: _studentCountLabel,
-              icon: Icons.groups_rounded,
-              iconColor: AppColors.primaryContainer,
-              iconBg: const Color(0xFFEFF6FF),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _StatCard(
-              label: 'نشط',
-              value: '$_activeCount',
-              icon: Icons.play_circle_rounded,
-              iconColor: AppColors.success,
-              iconBg: AppColors.successContainer,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _StatCard(
-              label: 'مكتمل',
-              value: '$_completedCount',
-              icon: Icons.check_circle_rounded,
-              iconColor: AppColors.primaryContainer,
-              iconBg: const Color(0xFFEFF6FF),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _StatCard(
-              label: 'المتوسط',
-              value: _averageScore > 0
-                  ? '${_averageScore.toStringAsFixed(0)}%'
-                  : '--',
-              icon: Icons.analytics_rounded,
-              iconColor: AppColors.primaryContainer,
-              iconBg: const Color(0xFFEFF6FF),
-            ),
-          ),
-        ],
-      );
-
-  Widget _buildCreateButton() => SizedBox(
-        width: double.infinity,
-        height: 52,
-        child: ElevatedButton.icon(
-          onPressed: () => context.push(AppRoutes.teacherCreateAssessment),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            elevation: 2,
-            shadowColor: AppColors.primary.withValues(alpha: 0.3),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          icon: const Icon(Icons.add_rounded, size: 22),
-          label: const Text(
-            'إنشاء اختبار جديد',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Almarai',
-            ),
+  Widget _buildStatsRow() {
+    final l10n = _l10n(context);
+    return Row(
+      textDirection: Directionality.of(context),
+      children: [
+        Expanded(
+          child: _StatCard(
+            label: l10n.totalStudents,
+            value: _studentCountLabel,
+            icon: Icons.groups_rounded,
+            iconColor: AppColors.primaryContainer,
+            iconBg: const Color(0xFFEFF6FF),
           ),
         ),
-      );
+        const SizedBox(width: 10),
+        Expanded(
+          child: _StatCard(
+            label: l10n.active,
+            value: '$_activeCount',
+            icon: Icons.play_circle_rounded,
+            iconColor: AppColors.success,
+            iconBg: AppColors.successContainer,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _StatCard(
+            label: l10n.completed,
+            value: '$_completedCount',
+            icon: Icons.check_circle_rounded,
+            iconColor: AppColors.primaryContainer,
+            iconBg: const Color(0xFFEFF6FF),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _StatCard(
+            label: l10n.average,
+            value: _averageScore > 0
+                ? '${_averageScore.toStringAsFixed(0)}%'
+                : '--',
+            icon: Icons.analytics_rounded,
+            iconColor: AppColors.primaryContainer,
+            iconBg: const Color(0xFFEFF6FF),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCreateButton() {
+    final l10n = _l10n(context);
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: ElevatedButton.icon(
+        onPressed: () => context.push(AppRoutes.teacherCreateAssessment),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          elevation: 2,
+          shadowColor: AppColors.primary.withValues(alpha: 0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        icon: const Icon(Icons.add_rounded, size: 22),
+        label: Text(
+          l10n.createNewAssessment,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Almarai',
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildRecentAssessments() {
+    final l10n = _l10n(context);
+    final textDirection = Directionality.of(context);
     final recent = _assessments.take(5).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      textDirection: TextDirection.rtl,
+      textDirection: textDirection,
       children: [
         Row(
-          textDirection: TextDirection.rtl,
+          textDirection: textDirection,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'آخر الاختبارات',
-              style: TextStyle(
+            Text(
+              l10n.recentAssessments,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: AppColors.onSurface,
@@ -368,9 +387,9 @@ class _TeacherDashboardScreenState
             ),
             TextButton(
               onPressed: () => context.push(AppRoutes.teacherAssessments),
-              child: const Text(
-                'عرض الكل',
-                style: TextStyle(
+              child: Text(
+                l10n.viewAll,
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColors.primaryContainer,
@@ -382,7 +401,7 @@ class _TeacherDashboardScreenState
         ),
         const SizedBox(height: 8),
         if (recent.isEmpty)
-          const _EmptyState(message: 'لم تنشئ أي اختبار بعد')
+          _EmptyState(message: l10n.noAssessmentsCreatedYet)
         else
           ...recent.map(
             (a) => _AssessmentTile(
@@ -391,9 +410,9 @@ class _TeacherDashboardScreenState
             ),
           ),
         const SizedBox(height: 20),
-        const Text(
-          'أدوات إضافية',
-          style: TextStyle(
+        Text(
+          l10n.additionalTools,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppColors.onSurface,
@@ -403,22 +422,22 @@ class _TeacherDashboardScreenState
         const SizedBox(height: 12),
         _buildQuickLink(
           icon: Icons.task_alt_rounded,
-          label: 'إدارة المهام',
+          label: l10n.taskManagement,
           onTap: () => context.push(AppRoutes.taskManagement),
         ),
         _buildQuickLink(
           icon: Icons.workspace_premium_rounded,
-          label: 'الشهادات',
+          label: l10n.certificates,
           onTap: () => context.push(AppRoutes.certificates),
         ),
         _buildQuickLink(
           icon: Icons.calendar_month_rounded,
-          label: 'الجدول الدراسي',
+          label: l10n.classSchedule,
           onTap: () => context.push(AppRoutes.classSchedule),
         ),
         _buildQuickLink(
           icon: Icons.class_rounded,
-          label: 'فصولي',
+          label: l10n.myClasses,
           onTap: () => context.push(AppRoutes.myClasses),
         ),
         const SizedBox(height: 24),
@@ -452,7 +471,7 @@ class _TeacherDashboardScreenState
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
-            textDirection: TextDirection.rtl,
+            textDirection: Directionality.of(context),
             children: [
               Container(
                 width: 36,
@@ -589,14 +608,17 @@ class _AssessmentTile extends StatelessWidget {
     }
   }
 
-  String get _statusLabel {
+  String _statusLabel(BuildContext context) {
+    final l10n =
+        Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+            AppLocalizationsAr();
     switch (assessment['status']) {
       case 'active':
-        return 'نشط';
+        return l10n.active;
       case 'completed':
-        return 'مكتمل';
+        return l10n.completed;
       default:
-        return 'مسودة';
+        return l10n.draft;
     }
   }
 
@@ -623,7 +645,7 @@ class _AssessmentTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(14),
           child: Row(
-            textDirection: TextDirection.rtl,
+            textDirection: Directionality.of(context),
             children: [
               Container(
                 width: 4,
@@ -637,7 +659,7 @@ class _AssessmentTile extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  textDirection: TextDirection.rtl,
+                  textDirection: Directionality.of(context),
                   children: [
                     Text(
                       assessment['title'] as String? ?? '',
@@ -674,7 +696,7 @@ class _AssessmentTile extends StatelessWidget {
                       Border.all(color: _statusColor.withValues(alpha: 0.4)),
                 ),
                 child: Text(
-                  _statusLabel,
+                  _statusLabel(context),
                   style: TextStyle(
                     color: _statusColor,
                     fontSize: 12,

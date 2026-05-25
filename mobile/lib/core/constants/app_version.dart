@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.75';
-  static const int buildNumber = 75;
+  static const String current = '1.0.76';
+  static const int buildNumber = 76;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.76',
+      buildNumber: 76,
+      date: 'May 2026',
+      title: 'Teacher dashboard localization',
+      changes: [
+        'Moved teacher dashboard labels, retry copy, stats, quick links, and status chips into localization keys.',
+        'Improved dashboard text direction behavior by using the active locale direction instead of a hardcoded RTL row.',
+        'Added Arabic and English localization coverage for teacher dashboard labels.',
+        'Added a localization test for the teacher dashboard strings.',
+        'Added progress under task 38.2b for teacher-facing screens.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.75',
       buildNumber: 75,

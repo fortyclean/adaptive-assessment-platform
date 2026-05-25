@@ -303,4 +303,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToLearningPlan => 'Back to learning plan';
+
+  @override
+  String get teacherFallbackName => 'Teacher';
+
+  @override
+  String teacherWelcome(Object name) {
+    return 'Welcome, $name';
+  }
+
+  @override
+  String get dashboard => 'Dashboard';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get teacherDashboardLoadFailed =>
+      'Could not load the teacher dashboard. Check your connection and try again.';
+
+  @override
+  String get totalStudents => 'Total students';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get draft => 'Draft';
+
+  @override
+  String get average => 'Average';
+
+  @override
+  String get createNewAssessment => 'Create new assessment';
+
+  @override
+  String get recentAssessments => 'Recent assessments';
+
+  @override
+  String get viewAll => 'View all';
+
+  @override
+  String get noAssessmentsCreatedYet =>
+      'You have not created any assessment yet';
+
+  @override
+  String get additionalTools => 'Additional tools';
+
+  @override
+  String get taskManagement => 'Task management';
+
+  @override
+  String get certificates => 'Certificates';
+
+  @override
+  String get classSchedule => 'Class schedule';
+
+  @override
+  String get myClasses => 'My classes';
 }

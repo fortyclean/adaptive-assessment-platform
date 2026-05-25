@@ -303,4 +303,64 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backToLearningPlan => 'العودة لخطة التعلم';
+
+  @override
+  String get teacherFallbackName => 'المعلم';
+
+  @override
+  String teacherWelcome(Object name) {
+    return 'مرحبًا، $name';
+  }
+
+  @override
+  String get dashboard => 'لوحة التحكم';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get teacherDashboardLoadFailed =>
+      'تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get totalStudents => 'إجمالي الطلاب';
+
+  @override
+  String get active => 'نشط';
+
+  @override
+  String get completed => 'مكتمل';
+
+  @override
+  String get draft => 'مسودة';
+
+  @override
+  String get average => 'المتوسط';
+
+  @override
+  String get createNewAssessment => 'إنشاء اختبار جديد';
+
+  @override
+  String get recentAssessments => 'آخر الاختبارات';
+
+  @override
+  String get viewAll => 'عرض الكل';
+
+  @override
+  String get noAssessmentsCreatedYet => 'لم تنشئ أي اختبار بعد';
+
+  @override
+  String get additionalTools => 'أدوات إضافية';
+
+  @override
+  String get taskManagement => 'إدارة المهام';
+
+  @override
+  String get certificates => 'الشهادات';
+
+  @override
+  String get classSchedule => 'الجدول الدراسي';
+
+  @override
+  String get myClasses => 'فصولي';
 }

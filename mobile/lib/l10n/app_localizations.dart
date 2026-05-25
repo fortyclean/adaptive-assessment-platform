@@ -655,6 +655,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'العودة لخطة التعلم'**
   String get backToLearningPlan;
+
+  /// No description provided for @teacherFallbackName.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلم'**
+  String get teacherFallbackName;
+
+  /// No description provided for @teacherWelcome.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحبًا، {name}'**
+  String teacherWelcome(Object name);
+
+  /// No description provided for @dashboard.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة التحكم'**
+  String get dashboard;
+
+  /// No description provided for @search.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث'**
+  String get search;
+
+  /// No description provided for @teacherDashboardLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get teacherDashboardLoadFailed;
+
+  /// No description provided for @totalStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الطلاب'**
+  String get totalStudents;
+
+  /// No description provided for @active.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get active;
+
+  /// No description provided for @completed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get completed;
+
+  /// No description provided for @draft.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسودة'**
+  String get draft;
+
+  /// No description provided for @average.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتوسط'**
+  String get average;
+
+  /// No description provided for @createNewAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء اختبار جديد'**
+  String get createNewAssessment;
+
+  /// No description provided for @recentAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر الاختبارات'**
+  String get recentAssessments;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الكل'**
+  String get viewAll;
+
+  /// No description provided for @noAssessmentsCreatedYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تنشئ أي اختبار بعد'**
+  String get noAssessmentsCreatedYet;
+
+  /// No description provided for @additionalTools.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدوات إضافية'**
+  String get additionalTools;
+
+  /// No description provided for @taskManagement.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة المهام'**
+  String get taskManagement;
+
+  /// No description provided for @certificates.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهادات'**
+  String get certificates;
+
+  /// No description provided for @classSchedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجدول الدراسي'**
+  String get classSchedule;
+
+  /// No description provided for @myClasses.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصولي'**
+  String get myClasses;
 }
 
 class _AppLocalizationsDelegate
