@@ -87,5 +87,41 @@
   "progressAchieved": "Progress achieved",
   "finalExamsPrepTitle": "Get ready for final exams!",
   "finalExamsPrepSubtitle": "Review previous lessons and assess your level through smart assessments.",
-  "startNow": "Start now"
+  "startNow": "Start now",
+  "back": "Back",
+  "retry": "Retry",
+  "openAssessments": "Open assessments",
+  "flashcardPracticeTitle": "Flashcard practice",
+  "flashcardLoadFailedTitle": "Could not load flashcards",
+  "flashcardLoadFailedMessage": "Could not prepare practice cards. Check your connection and try again.",
+  "flashcardEmptyTitle": "No flashcards yet",
+  "flashcardEmptyMessage": "Complete one assessment so we can build cards based on your performance.",
+  "flashcardSemanticsAnswerVisible": "{skill} card. The answer is visible.",
+  "@flashcardSemanticsAnswerVisible": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "flashcardSemanticsTapToReveal": "{skill} card. Tap to reveal the answer.",
+  "@flashcardSemanticsTapToReveal": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "needReview": "Need review",
+  "masteredIt": "Mastered it",
+  "showAnswer": "Show answer",
+  "answer": "Answer",
+  "flashcardSummaryTitle": "Flashcard practice complete",
+  "flashcardSummaryMessage": "You mastered {correctCount} of {totalCount} cards. Schedule a short review for the cards you repeated.",
+  "@flashcardSummaryMessage": {
+    "placeholders": {
+      "correctCount": {},
+      "totalCount": {}
+    }
+  },
+  "mastery": "Mastery",
+  "forReview": "For review",
+  "restartPractice": "Restart practice",
+  "backToLearningPlan": "Back to learning plan"
 }

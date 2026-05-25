@@ -87,5 +87,41 @@
   "progressAchieved": "التقدم المحرز",
   "finalExamsPrepTitle": "استعد للاختبارات النهائية!",
   "finalExamsPrepSubtitle": "راجع دروسك السابقة وقم بتقييم مستواك الآن من خلال قسم الاختبارات الذكية.",
-  "startNow": "ابدأ الآن"
+  "startNow": "ابدأ الآن",
+  "back": "رجوع",
+  "retry": "إعادة المحاولة",
+  "openAssessments": "افتح الاختبارات",
+  "flashcardPracticeTitle": "تدريب البطاقات",
+  "flashcardLoadFailedTitle": "تعذر تحميل البطاقات",
+  "flashcardLoadFailedMessage": "تعذر تجهيز بطاقات التدريب. تحقق من الاتصال ثم حاول مرة أخرى.",
+  "flashcardEmptyTitle": "لا توجد بطاقات بعد",
+  "flashcardEmptyMessage": "أكمل اختبارًا واحدًا حتى نبني لك بطاقات مبنية على أدائك.",
+  "flashcardSemanticsAnswerVisible": "بطاقة {skill}. الإجابة ظاهرة.",
+  "@flashcardSemanticsAnswerVisible": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "flashcardSemanticsTapToReveal": "بطاقة {skill}. اضغط لإظهار الإجابة.",
+  "@flashcardSemanticsTapToReveal": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "needReview": "أحتاج مراجعة",
+  "masteredIt": "أتقنتها",
+  "showAnswer": "أظهر الإجابة",
+  "answer": "الإجابة",
+  "flashcardSummaryTitle": "أنهيت تدريب البطاقات",
+  "flashcardSummaryMessage": "أتقنت {correctCount} من {totalCount} بطاقات. خصص مراجعة قصيرة للبطاقات التي احتجت فيها إلى إعادة.",
+  "@flashcardSummaryMessage": {
+    "placeholders": {
+      "correctCount": {},
+      "totalCount": {}
+    }
+  },
+  "mastery": "الإتقان",
+  "forReview": "للمراجعة",
+  "restartPractice": "أعد التدريب",
+  "backToLearningPlan": "العودة لخطة التعلم"
 }

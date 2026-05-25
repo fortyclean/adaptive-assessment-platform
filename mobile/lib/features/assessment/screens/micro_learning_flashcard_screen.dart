@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
@@ -61,9 +62,9 @@ class _MicroLearningFlashcardScreenState
       });
     } catch (_) {
       if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
       setState(() {
-        _errorMessage =
-            'تعذر تجهيز بطاقات التدريب. تحقق من الاتصال ثم حاول مرة أخرى.';
+        _errorMessage = l10n.flashcardLoadFailedMessage;
         _isLoading = false;
       });
     }
@@ -109,14 +110,15 @@ class _MicroLearningFlashcardScreenState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
         elevation: 0,
-        title: const Text('تدريب البطاقات'),
+        title: Text(l10n.flashcardPracticeTitle),
         leading: IconButton(
-          tooltip: 'رجوع',
+          tooltip: l10n.back,
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -133,6 +135,7 @@ class _MicroLearningFlashcardScreenState
   }
 
   Widget _buildBody() {
+    final l10n = AppLocalizations.of(context);
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -140,9 +143,9 @@ class _MicroLearningFlashcardScreenState
     if (_errorMessage != null) {
       return StudentStateView(
         icon: Icons.wifi_off_rounded,
-        title: 'تعذر تحميل البطاقات',
+        title: l10n.flashcardLoadFailedTitle,
         message: _errorMessage!,
-        actionLabel: 'إعادة المحاولة',
+        actionLabel: l10n.retry,
         onAction: _loadDeck,
       );
     }
@@ -151,9 +154,9 @@ class _MicroLearningFlashcardScreenState
     if (deck == null || deck.cards.isEmpty) {
       return StudentStateView(
         icon: Icons.style_outlined,
-        title: 'لا توجد بطاقات بعد',
-        message: 'أكمل اختبارًا واحدًا حتى نبني لك بطاقات مبنية على أدائك.',
-        actionLabel: 'افتح الاختبارات',
+        title: l10n.flashcardEmptyTitle,
+        message: l10n.flashcardEmptyMessage,
+        actionLabel: l10n.openAssessments,
         onAction: () => context.go('/student/assessments-list'),
       );
     }
@@ -168,6 +171,7 @@ class _MicroLearningFlashcardScreenState
   Widget _buildPractice(MicroLearningFlashcardDeck deck) {
     final card = deck.cards[_currentIndex];
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     final progress = (_currentIndex + 1) / deck.cards.length;
 
     return SafeArea(
@@ -221,8 +225,8 @@ class _MicroLearningFlashcardScreenState
             Semantics(
               button: true,
               label: _isRevealed
-                  ? 'بطاقة ${card.skill}. الإجابة ظاهرة.'
-                  : 'بطاقة ${card.skill}. اضغط لإظهار الإجابة.',
+                  ? l10n.flashcardSemanticsAnswerVisible(card.skill)
+                  : l10n.flashcardSemanticsTapToReveal(card.skill),
               child: InkWell(
                 onTap: () => setState(() => _isRevealed = true),
                 borderRadius: BorderRadius.circular(18),
@@ -308,7 +312,7 @@ class _MicroLearningFlashcardScreenState
                     child: OutlinedButton.icon(
                       onPressed: () => _answerCard(isCorrect: false),
                       icon: const Icon(Icons.replay_rounded),
-                      label: const Text('أحتاج مراجعة'),
+                      label: Text(l10n.needReview),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -316,7 +320,7 @@ class _MicroLearningFlashcardScreenState
                     child: ElevatedButton.icon(
                       onPressed: () => _answerCard(isCorrect: true),
                       icon: const Icon(Icons.check_rounded),
-                      label: const Text('أتقنتها'),
+                      label: Text(l10n.masteredIt),
                     ),
                   ),
                 ],
@@ -325,7 +329,7 @@ class _MicroLearningFlashcardScreenState
               ElevatedButton.icon(
                 onPressed: () => setState(() => _isRevealed = true),
                 icon: const Icon(Icons.visibility_rounded),
-                label: const Text('أظهر الإجابة'),
+                label: Text(l10n.showAnswer),
               ),
           ],
         ),
@@ -335,6 +339,7 @@ class _MicroLearningFlashcardScreenState
 
   Widget _buildAnswerBlock(MicroLearningFlashcard card) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -346,7 +351,7 @@ class _MicroLearningFlashcardScreenState
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            'الإجابة',
+            l10n.answer,
             style: TextStyle(
               color: colorScheme.primary,
               fontWeight: FontWeight.w800,
@@ -370,6 +375,7 @@ class _MicroLearningFlashcardScreenState
 
   Widget _buildSummary(MicroLearningFlashcardDeck deck) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     final percent = ((_correctCount / deck.cards.length) * 100).round();
     return SafeArea(
       child: SingleChildScrollView(
@@ -408,7 +414,7 @@ class _MicroLearningFlashcardScreenState
                   ),
                   const SizedBox(height: 14),
                   Text(
-                    'أنهيت تدريب البطاقات',
+                    l10n.flashcardSummaryTitle,
                     style: TextStyle(
                       color: colorScheme.onSurface,
                       fontSize: 23,
@@ -417,7 +423,10 @@ class _MicroLearningFlashcardScreenState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'أتقنت $_correctCount من ${deck.cards.length} بطاقات. خصص مراجعة قصيرة للبطاقات التي احتجت فيها إلى إعادة.',
+                    l10n.flashcardSummaryMessage(
+                      _correctCount,
+                      deck.cards.length,
+                    ),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: colorScheme.onSurfaceVariant,
@@ -429,7 +438,7 @@ class _MicroLearningFlashcardScreenState
                     children: [
                       Expanded(
                         child: _buildSummaryStat(
-                          label: 'الإتقان',
+                          label: l10n.mastery,
                           value: '$percent%',
                           icon: Icons.insights_rounded,
                         ),
@@ -437,7 +446,7 @@ class _MicroLearningFlashcardScreenState
                       const SizedBox(width: 10),
                       Expanded(
                         child: _buildSummaryStat(
-                          label: 'للمراجعة',
+                          label: l10n.forReview,
                           value: '$_reviewCount',
                           icon: Icons.replay_rounded,
                         ),
@@ -451,13 +460,13 @@ class _MicroLearningFlashcardScreenState
             ElevatedButton.icon(
               onPressed: _loadDeck,
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text('أعد التدريب'),
+              label: Text(l10n.restartPractice),
             ),
             const SizedBox(height: 10),
             OutlinedButton.icon(
               onPressed: () => context.go('/student/micro-learning'),
               icon: const Icon(Icons.route_rounded),
-              label: const Text('العودة لخطة التعلم'),
+              label: Text(l10n.backToLearningPlan),
             ),
           ],
         ),

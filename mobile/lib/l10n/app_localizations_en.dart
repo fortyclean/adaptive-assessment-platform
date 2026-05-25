@@ -235,4 +235,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startNow => 'Start now';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get openAssessments => 'Open assessments';
+
+  @override
+  String get flashcardPracticeTitle => 'Flashcard practice';
+
+  @override
+  String get flashcardLoadFailedTitle => 'Could not load flashcards';
+
+  @override
+  String get flashcardLoadFailedMessage =>
+      'Could not prepare practice cards. Check your connection and try again.';
+
+  @override
+  String get flashcardEmptyTitle => 'No flashcards yet';
+
+  @override
+  String get flashcardEmptyMessage =>
+      'Complete one assessment so we can build cards based on your performance.';
+
+  @override
+  String flashcardSemanticsAnswerVisible(Object skill) {
+    return '$skill card. The answer is visible.';
+  }
+
+  @override
+  String flashcardSemanticsTapToReveal(Object skill) {
+    return '$skill card. Tap to reveal the answer.';
+  }
+
+  @override
+  String get needReview => 'Need review';
+
+  @override
+  String get masteredIt => 'Mastered it';
+
+  @override
+  String get showAnswer => 'Show answer';
+
+  @override
+  String get answer => 'Answer';
+
+  @override
+  String get flashcardSummaryTitle => 'Flashcard practice complete';
+
+  @override
+  String flashcardSummaryMessage(Object correctCount, Object totalCount) {
+    return 'You mastered $correctCount of $totalCount cards. Schedule a short review for the cards you repeated.';
+  }
+
+  @override
+  String get mastery => 'Mastery';
+
+  @override
+  String get forReview => 'For review';
+
+  @override
+  String get restartPractice => 'Restart practice';
+
+  @override
+  String get backToLearningPlan => 'Back to learning plan';
 }

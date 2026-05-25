@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.74';
-  static const int buildNumber = 74;
+  static const String current = '1.0.75';
+  static const int buildNumber = 75;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.75',
+      buildNumber: 75,
+      date: 'May 2026',
+      title: 'Flashcard localization and device QA plan',
+      changes: [
+        'Moved micro learning flashcard screen labels, empty states, errors, and accessibility semantics into localization keys.',
+        'Added Arabic and English localization coverage for flashcard practice actions and summary text.',
+        'Added a localization test for the flashcard practice strings.',
+        'Documented the real-device OneSignal and APK update verification plan.',
+        'Added progress under task 38.2b while keeping physical device tasks open until tested on hardware.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.74',
       buildNumber: 74,

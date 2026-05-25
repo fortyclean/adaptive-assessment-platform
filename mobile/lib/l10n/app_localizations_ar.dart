@@ -235,4 +235,72 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get startNow => 'ابدأ الآن';
+
+  @override
+  String get back => 'رجوع';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get openAssessments => 'افتح الاختبارات';
+
+  @override
+  String get flashcardPracticeTitle => 'تدريب البطاقات';
+
+  @override
+  String get flashcardLoadFailedTitle => 'تعذر تحميل البطاقات';
+
+  @override
+  String get flashcardLoadFailedMessage =>
+      'تعذر تجهيز بطاقات التدريب. تحقق من الاتصال ثم حاول مرة أخرى.';
+
+  @override
+  String get flashcardEmptyTitle => 'لا توجد بطاقات بعد';
+
+  @override
+  String get flashcardEmptyMessage =>
+      'أكمل اختبارًا واحدًا حتى نبني لك بطاقات مبنية على أدائك.';
+
+  @override
+  String flashcardSemanticsAnswerVisible(Object skill) {
+    return 'بطاقة $skill. الإجابة ظاهرة.';
+  }
+
+  @override
+  String flashcardSemanticsTapToReveal(Object skill) {
+    return 'بطاقة $skill. اضغط لإظهار الإجابة.';
+  }
+
+  @override
+  String get needReview => 'أحتاج مراجعة';
+
+  @override
+  String get masteredIt => 'أتقنتها';
+
+  @override
+  String get showAnswer => 'أظهر الإجابة';
+
+  @override
+  String get answer => 'الإجابة';
+
+  @override
+  String get flashcardSummaryTitle => 'أنهيت تدريب البطاقات';
+
+  @override
+  String flashcardSummaryMessage(Object correctCount, Object totalCount) {
+    return 'أتقنت $correctCount من $totalCount بطاقات. خصص مراجعة قصيرة للبطاقات التي احتجت فيها إلى إعادة.';
+  }
+
+  @override
+  String get mastery => 'الإتقان';
+
+  @override
+  String get forReview => 'للمراجعة';
+
+  @override
+  String get restartPractice => 'أعد التدريب';
+
+  @override
+  String get backToLearningPlan => 'العودة لخطة التعلم';
 }

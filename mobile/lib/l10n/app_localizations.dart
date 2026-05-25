@@ -535,6 +535,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ابدأ الآن'**
   String get startNow;
+
+  /// No description provided for @back.
+  ///
+  /// In ar, this message translates to:
+  /// **'رجوع'**
+  String get back;
+
+  /// No description provided for @retry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get retry;
+
+  /// No description provided for @openAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح الاختبارات'**
+  String get openAssessments;
+
+  /// No description provided for @flashcardPracticeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تدريب البطاقات'**
+  String get flashcardPracticeTitle;
+
+  /// No description provided for @flashcardLoadFailedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل البطاقات'**
+  String get flashcardLoadFailedTitle;
+
+  /// No description provided for @flashcardLoadFailedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تجهيز بطاقات التدريب. تحقق من الاتصال ثم حاول مرة أخرى.'**
+  String get flashcardLoadFailedMessage;
+
+  /// No description provided for @flashcardEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد بطاقات بعد'**
+  String get flashcardEmptyTitle;
+
+  /// No description provided for @flashcardEmptyMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل اختبارًا واحدًا حتى نبني لك بطاقات مبنية على أدائك.'**
+  String get flashcardEmptyMessage;
+
+  /// No description provided for @flashcardSemanticsAnswerVisible.
+  ///
+  /// In ar, this message translates to:
+  /// **'بطاقة {skill}. الإجابة ظاهرة.'**
+  String flashcardSemanticsAnswerVisible(Object skill);
+
+  /// No description provided for @flashcardSemanticsTapToReveal.
+  ///
+  /// In ar, this message translates to:
+  /// **'بطاقة {skill}. اضغط لإظهار الإجابة.'**
+  String flashcardSemanticsTapToReveal(Object skill);
+
+  /// No description provided for @needReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحتاج مراجعة'**
+  String get needReview;
+
+  /// No description provided for @masteredIt.
+  ///
+  /// In ar, this message translates to:
+  /// **'أتقنتها'**
+  String get masteredIt;
+
+  /// No description provided for @showAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر الإجابة'**
+  String get showAnswer;
+
+  /// No description provided for @answer.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجابة'**
+  String get answer;
+
+  /// No description provided for @flashcardSummaryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنهيت تدريب البطاقات'**
+  String get flashcardSummaryTitle;
+
+  /// No description provided for @flashcardSummaryMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أتقنت {correctCount} من {totalCount} بطاقات. خصص مراجعة قصيرة للبطاقات التي احتجت فيها إلى إعادة.'**
+  String flashcardSummaryMessage(Object correctCount, Object totalCount);
+
+  /// No description provided for @mastery.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإتقان'**
+  String get mastery;
+
+  /// No description provided for @forReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمراجعة'**
+  String get forReview;
+
+  /// No description provided for @restartPractice.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعد التدريب'**
+  String get restartPractice;
+
+  /// No description provided for @backToLearningPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة لخطة التعلم'**
+  String get backToLearningPlan;
 }
 
 class _AppLocalizationsDelegate
