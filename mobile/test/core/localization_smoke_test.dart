@@ -39,6 +39,34 @@ void main() {
 
     expect(find.text('Version 1.0.70 — EduAssess'), findsOneWidget);
   });
+
+  testWidgets('loads shared admin and question localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.adminAccount,
+            l10n.home,
+            l10n.fillBlankAnswerHint,
+            l10n.essayManualReviewNotice,
+            l10n.passwordRequirementMin8,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Admin account / Home / Type your answer here... / '
+        'This question requires manual review by the teacher / '
+        'At least 8 characters',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

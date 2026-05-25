@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_constants.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/app_localizations_ar.dart';
 import 'mcq_option.dart';
 import 'question_image.dart';
 
@@ -273,28 +275,33 @@ class _FillBlankWidgetState extends State<_FillBlankWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Semantics(
-        label: 'أدخل إجابتك',
-        textField: true,
-        child: TextField(
-          controller: _controller,
-          enabled: !widget.isDisabled,
-          decoration: InputDecoration(
-            hintText: 'اكتب إجابتك هنا...',
-            border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.inputBorderRadius),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.inputBorderRadius),
-              borderSide: const BorderSide(color: AppColors.primary, width: 2),
-            ),
+  Widget build(BuildContext context) {
+    final l10n = Localizations.of<AppLocalizations>(
+          context,
+          AppLocalizations,
+        ) ??
+        AppLocalizationsAr();
+    return Semantics(
+      label: l10n.fillBlankAnswerSemantics,
+      textField: true,
+      child: TextField(
+        controller: _controller,
+        enabled: !widget.isDisabled,
+        decoration: InputDecoration(
+          hintText: l10n.fillBlankAnswerHint,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.inputBorderRadius),
           ),
-          onChanged: widget.onChanged,
-          textDirection: TextDirection.rtl,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.inputBorderRadius),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          ),
         ),
-      );
+        onChanged: widget.onChanged,
+        textDirection: TextDirection.rtl,
+      ),
+    );
+  }
 }
 
 // ─── Essay Widget (Req 18.4) ──────────────────────────────────────────────────
@@ -330,56 +337,63 @@ class _EssayWidgetState extends State<_EssayWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.warningContainer,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.warning),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.info_outline,
-                    color: AppColors.warning, size: 16),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'هذا السؤال يتطلب مراجعة يدوية من المعلم',
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                ),
-              ],
-            ),
+  Widget build(BuildContext context) {
+    final l10n = Localizations.of<AppLocalizations>(
+          context,
+          AppLocalizations,
+        ) ??
+        AppLocalizationsAr();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.warningContainer,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.warning),
           ),
-          const SizedBox(height: 12),
-          Semantics(
-            label: 'اكتب إجابتك المقالية',
-            textField: true,
-            child: TextField(
-              controller: _controller,
-              enabled: !widget.isDisabled,
-              maxLines: 6,
-              decoration: InputDecoration(
-                hintText: 'اكتب إجابتك هنا...',
-                alignLabelWithHint: true,
-                border: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppConstants.inputBorderRadius),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppConstants.inputBorderRadius),
-                  borderSide:
-                      const BorderSide(color: AppColors.primary, width: 2),
+          child: Row(
+            children: [
+              const Icon(Icons.info_outline,
+                  color: AppColors.warning, size: 16),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l10n.essayManualReviewNotice,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
-              onChanged: widget.onChanged,
-              textDirection: TextDirection.rtl,
-            ),
+            ],
           ),
-        ],
-      );
+        ),
+        const SizedBox(height: 12),
+        Semantics(
+          label: l10n.essayAnswerSemantics,
+          textField: true,
+          child: TextField(
+            controller: _controller,
+            enabled: !widget.isDisabled,
+            maxLines: 6,
+            decoration: InputDecoration(
+              hintText: l10n.fillBlankAnswerHint,
+              alignLabelWithHint: true,
+              border: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.inputBorderRadius),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius:
+                    BorderRadius.circular(AppConstants.inputBorderRadius),
+                borderSide:
+                    const BorderSide(color: AppColors.primary, width: 2),
+              ),
+            ),
+            onChanged: widget.onChanged,
+            textDirection: TextDirection.rtl,
+          ),
+        ),
+      ],
+    );
+  }
 }

@@ -224,6 +224,102 @@ abstract class AppLocalizations {
   /// **'تحديث كلمة مرور الحساب الحالي'**
   String get changePasswordSubtitle;
 
+  /// No description provided for @currentPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور الحالية'**
+  String get currentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور الجديدة'**
+  String get newPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد كلمة المرور الجديدة'**
+  String get confirmNewPassword;
+
+  /// No description provided for @enterCurrentPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال كلمة المرور الحالية'**
+  String get enterCurrentPassword;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال كلمة المرور الجديدة'**
+  String get enterNewPassword;
+
+  /// No description provided for @confirmPasswordRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى تأكيد كلمة المرور'**
+  String get confirmPasswordRequired;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمتا المرور غير متطابقتين'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordMinLength.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن تكون 8 أحرف على الأقل'**
+  String get passwordMinLength;
+
+  /// No description provided for @passwordNeedsUppercase.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن تحتوي على حرف كبير'**
+  String get passwordNeedsUppercase;
+
+  /// No description provided for @passwordNeedsDigit.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن تحتوي على رقم'**
+  String get passwordNeedsDigit;
+
+  /// No description provided for @passwordRequirements.
+  ///
+  /// In ar, this message translates to:
+  /// **'متطلبات كلمة المرور:'**
+  String get passwordRequirements;
+
+  /// No description provided for @passwordRequirementMin8.
+  ///
+  /// In ar, this message translates to:
+  /// **'8 أحرف على الأقل'**
+  String get passwordRequirementMin8;
+
+  /// No description provided for @passwordRequirementUppercase.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرف كبير واحد على الأقل'**
+  String get passwordRequirementUppercase;
+
+  /// No description provided for @passwordRequirementDigit.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم واحد على الأقل'**
+  String get passwordRequirementDigit;
+
+  /// No description provided for @passwordChangedSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تغيير كلمة المرور بنجاح'**
+  String get passwordChangedSuccessfully;
+
+  /// No description provided for @genericRetryError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ. يرجى المحاولة مرة أخرى'**
+  String get genericRetryError;
+
   /// No description provided for @editProfile.
   ///
   /// In ar, this message translates to:
@@ -547,6 +643,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إعادة المحاولة'**
   String get retry;
+
+  /// No description provided for @home.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
+  String get home;
+
+  /// No description provided for @adminAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساب المشرف'**
+  String get adminAccount;
+
+  /// No description provided for @fillBlankAnswerSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل إجابتك'**
+  String get fillBlankAnswerSemantics;
+
+  /// No description provided for @fillBlankAnswerHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب إجابتك هنا...'**
+  String get fillBlankAnswerHint;
+
+  /// No description provided for @essayAnswerSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب إجابتك المقالية'**
+  String get essayAnswerSemantics;
+
+  /// No description provided for @essayManualReviewNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا السؤال يتطلب مراجعة يدوية من المعلم'**
+  String get essayManualReviewNotice;
 
   /// No description provided for @openAssessments.
   ///

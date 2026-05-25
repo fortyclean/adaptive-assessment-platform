@@ -72,6 +72,54 @@ class AppLocalizationsAr extends AppLocalizations {
   String get changePasswordSubtitle => 'تحديث كلمة مرور الحساب الحالي';
 
   @override
+  String get currentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get enterCurrentPassword => 'يرجى إدخال كلمة المرور الحالية';
+
+  @override
+  String get enterNewPassword => 'يرجى إدخال كلمة المرور الجديدة';
+
+  @override
+  String get confirmPasswordRequired => 'يرجى تأكيد كلمة المرور';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get passwordMinLength => 'يجب أن تكون 8 أحرف على الأقل';
+
+  @override
+  String get passwordNeedsUppercase => 'يجب أن تحتوي على حرف كبير';
+
+  @override
+  String get passwordNeedsDigit => 'يجب أن تحتوي على رقم';
+
+  @override
+  String get passwordRequirements => 'متطلبات كلمة المرور:';
+
+  @override
+  String get passwordRequirementMin8 => '8 أحرف على الأقل';
+
+  @override
+  String get passwordRequirementUppercase => 'حرف كبير واحد على الأقل';
+
+  @override
+  String get passwordRequirementDigit => 'رقم واحد على الأقل';
+
+  @override
+  String get passwordChangedSuccessfully => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
+  String get genericRetryError => 'حدث خطأ. يرجى المحاولة مرة أخرى';
+
+  @override
   String get editProfile => 'تعديل الملف الشخصي';
 
   @override
@@ -241,6 +289,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get retry => 'إعادة المحاولة';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get adminAccount => 'حساب المشرف';
+
+  @override
+  String get fillBlankAnswerSemantics => 'أدخل إجابتك';
+
+  @override
+  String get fillBlankAnswerHint => 'اكتب إجابتك هنا...';
+
+  @override
+  String get essayAnswerSemantics => 'اكتب إجابتك المقالية';
+
+  @override
+  String get essayManualReviewNotice =>
+      'هذا السؤال يتطلب مراجعة يدوية من المعلم';
 
   @override
   String get openAssessments => 'افتح الاختبارات';

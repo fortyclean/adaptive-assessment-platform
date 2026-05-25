@@ -72,6 +72,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changePasswordSubtitle => 'Update the current account password';
 
   @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get confirmNewPassword => 'Confirm new password';
+
+  @override
+  String get enterCurrentPassword => 'Please enter your current password';
+
+  @override
+  String get enterNewPassword => 'Please enter your new password';
+
+  @override
+  String get confirmPasswordRequired => 'Please confirm your password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordMinLength => 'Must be at least 8 characters';
+
+  @override
+  String get passwordNeedsUppercase => 'Must contain an uppercase letter';
+
+  @override
+  String get passwordNeedsDigit => 'Must contain a number';
+
+  @override
+  String get passwordRequirements => 'Password requirements:';
+
+  @override
+  String get passwordRequirementMin8 => 'At least 8 characters';
+
+  @override
+  String get passwordRequirementUppercase => 'At least one uppercase letter';
+
+  @override
+  String get passwordRequirementDigit => 'At least one number';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
+  String get genericRetryError => 'Something went wrong. Please try again';
+
+  @override
   String get editProfile => 'Edit profile';
 
   @override
@@ -241,6 +289,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get adminAccount => 'Admin account';
+
+  @override
+  String get fillBlankAnswerSemantics => 'Enter your answer';
+
+  @override
+  String get fillBlankAnswerHint => 'Type your answer here...';
+
+  @override
+  String get essayAnswerSemantics => 'Write your essay answer';
+
+  @override
+  String get essayManualReviewNotice =>
+      'This question requires manual review by the teacher';
 
   @override
   String get openAssessments => 'Open assessments';

@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/router/app_router.dart';
 import '../../features/auth/repositories/auth_repository.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/app_localizations_ar.dart';
 import '../providers/auth_provider.dart';
 
 /// Common admin actions shown on every admin-facing screen.
@@ -14,40 +16,44 @@ class AdminTopActions extends ConsumerWidget {
   const AdminTopActions({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) =>
-      PopupMenuButton<_AdminAction>(
-        tooltip: 'حساب المشرف',
-        icon:
-            const Icon(Icons.account_circle_outlined, color: AppColors.primary),
-        onSelected: (action) => _handleAction(context, ref, action),
-        itemBuilder: (context) => const [
-          PopupMenuItem(
-            value: _AdminAction.home,
-            child: _AdminMenuItem(icon: Icons.home_outlined, label: 'الرئيسية'),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = Localizations.of<AppLocalizations>(
+          context,
+          AppLocalizations,
+        ) ??
+        AppLocalizationsAr();
+    return PopupMenuButton<_AdminAction>(
+      tooltip: l10n.adminAccount,
+      icon: const Icon(Icons.account_circle_outlined, color: AppColors.primary),
+      onSelected: (action) => _handleAction(context, ref, action),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: _AdminAction.home,
+          child: _AdminMenuItem(icon: Icons.home_outlined, label: l10n.home),
+        ),
+        PopupMenuItem(
+          value: _AdminAction.settings,
+          child: _AdminMenuItem(
+            icon: Icons.settings_outlined,
+            label: l10n.settings,
           ),
-          PopupMenuItem(
-            value: _AdminAction.settings,
-            child: _AdminMenuItem(
-              icon: Icons.settings_outlined,
-              label: 'الإعدادات',
-            ),
+        ),
+        PopupMenuItem(
+          value: _AdminAction.about,
+          child: _AdminMenuItem(icon: Icons.info_outline, label: l10n.aboutApp),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem(
+          value: _AdminAction.logout,
+          child: _AdminMenuItem(
+            icon: Icons.logout_rounded,
+            label: l10n.logout,
+            color: AppColors.error,
           ),
-          PopupMenuItem(
-            value: _AdminAction.about,
-            child:
-                _AdminMenuItem(icon: Icons.info_outline, label: 'عن التطبيق'),
-          ),
-          PopupMenuDivider(),
-          PopupMenuItem(
-            value: _AdminAction.logout,
-            child: _AdminMenuItem(
-              icon: Icons.logout_rounded,
-              label: 'تسجيل الخروج',
-              color: AppColors.error,
-            ),
-          ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 
   Future<void> _handleAction(
     BuildContext context,
@@ -62,24 +68,29 @@ class AdminTopActions extends ConsumerWidget {
       case _AdminAction.about:
         await context.push(AppRoutes.about);
       case _AdminAction.logout:
+        final l10n = Localizations.of<AppLocalizations>(
+              context,
+              AppLocalizations,
+            ) ??
+            AppLocalizationsAr();
         final confirmed = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            title: const Text('تسجيل الخروج'),
-            content: const Text('هل تريد تسجيل الخروج من حسابك؟'),
+            title: Text(l10n.logout),
+            content: Text(l10n.logoutAccountQuestion),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('إلغاء'),
+                child: Text(l10n.cancel),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text(
-                  'خروج',
-                  style: TextStyle(color: AppColors.error),
+                child: Text(
+                  l10n.logoutConfirm,
+                  style: const TextStyle(color: AppColors.error),
                 ),
               ),
             ],
