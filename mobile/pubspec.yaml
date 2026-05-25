@@ -1,7 +1,7 @@
 name: adaptive_assessment
 description: Adaptive Mastery Platform - Mobile App (Flutter)
 publish_to: 'none'
-version: 1.0.73+73
+version: 1.0.74+74
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -54,6 +54,7 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   timezone: ^0.10.1
   onesignal_flutter: 5.5.4
+  sentry_flutter: 9.20.0
 
 dev_dependencies:
   flutter_test:

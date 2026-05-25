@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,39 +15,45 @@ import 'l10n/app_localizations.dart';
 import 'shared/providers/auth_provider.dart';
 import 'shared/providers/locale_provider.dart';
 import 'shared/providers/theme_provider.dart';
+import 'shared/services/crash_reporting_service.dart';
 import 'shared/services/notification_service.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  await runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  // Global Flutter error handler
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-  };
+    await CrashReportingService.instance.init();
+    CrashReportingService.instance.installGlobalHandlers();
 
-  // Initialize Hive for offline storage
-  await Hive.initFlutter();
-  await Hive.openBox<dynamic>(AppConstants.pendingAnswersBoxName);
-  await Hive.openBox<dynamic>(AppConstants.sessionStateBoxName);
+    // Initialize Hive for offline storage
+    await Hive.initFlutter();
+    await Hive.openBox<dynamic>(AppConstants.pendingAnswersBoxName);
+    await Hive.openBox<dynamic>(AppConstants.sessionStateBoxName);
 
-  // Allow tablets to use landscape while keeping phones naturally responsive.
-  await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+    // Allow tablets to use landscape while keeping phones naturally responsive.
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
 
-  // ── Restore session ───────────────────────────────────────────────────────
-  // Keeps the user logged in when switching apps or restarting the device.
-  final container = ProviderContainer();
-  await _restoreSession(container);
+    // ── Restore session ───────────────────────────────────────────────────────
+    // Keeps the user logged in when switching apps or restarting the device.
+    final container = ProviderContainer();
+    await _restoreSession(container);
 
-  // ── Initialize notifications ──────────────────────────────────────────────
-  await NotificationService.instance.init();
-  await _syncRestoredPushUser(container);
+    // ── Initialize notifications ──────────────────────────────────────────────
+    await NotificationService.instance.init();
+    await _syncRestoredPushUser(container);
 
-  runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const AdaptiveAssessmentApp(),
-    ),
-  );
+    runApp(
+      UncontrolledProviderScope(
+        container: container,
+        child: const AdaptiveAssessmentApp(),
+      ),
+    );
+  }, (error, stack) async {
+    await CrashReportingService.instance.captureException(
+      error,
+      stackTrace: stack,
+    );
+  });
 }
 
 Future<void> _syncRestoredPushUser(ProviderContainer container) async {

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.73';
-  static const int buildNumber = 73;
+  static const String current = '1.0.74';
+  static const int buildNumber = 74;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.74',
+      buildNumber: 74,
+      date: 'May 2026',
+      title: 'Production crash reporting',
+      changes: [
+        'Added optional Sentry crash reporting through SENTRY_DSN without hardcoded secrets.',
+        'Installed global Flutter and zone error handlers before app startup services run.',
+        'Disabled PII, screenshots, and performance tracing by default.',
+        'Added a crash reporting service test to keep local and CI runs safe without a DSN.',
+        'Marked task 39.3 as complete in the implementation plan.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.73',
       buildNumber: 73,
