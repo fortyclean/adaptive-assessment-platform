@@ -11,6 +11,14 @@ or CI alone. Run it on at least one real Android phone before marking tasks
 
 Goal: verify real push notification delivery on an installed production APK.
 
+Firebase/OneSignal ownership note:
+
+- The Android Firebase project configured in this repo is `eduassess-495917`.
+- The Firebase project number is `444318033747`.
+- The Android package is `com.adaptivemastery.app`.
+- The repo cannot tell which Gmail owns the Firebase project. To find it, open Firebase Console with your likely Google accounts and search for project `eduassess-495917`.
+- OneSignal uses its own dashboard/app id. For Android push delivery, the OneSignal app must be connected to the same Firebase project through FCM settings.
+
 Steps:
 
 1. Use the latest signed release APK for `1.0.76`. If you are validating
@@ -44,6 +52,12 @@ Pass criteria:
 ## 2. Install, Version, Signing, And Update Flow
 
 Goal: verify the APK installs and updates correctly on real hardware.
+
+Build rule:
+
+- For every code/UI fix that needs physical-device validation, rebuild a fresh APK.
+- Do not increase `versionCode`/`versionName` unless the test requires update-flow validation through a higher version or the APK is a formal release.
+- If the version is unchanged, identify the APK by file timestamp and commit hash.
 
 Steps:
 
