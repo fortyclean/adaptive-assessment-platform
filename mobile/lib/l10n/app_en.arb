@@ -237,5 +237,17 @@
   },
   "noActiveSchedules": "No active schedules",
   "createScheduleUsingForm": "Create a new schedule using the form above",
-  "paused": "Paused"
+  "paused": "Paused",
+  "pendingEssaysTitle": "Essay questions — pending grading",
+  "pendingEssaysLoadFailed": "Could not load pending sessions",
+  "noPendingEssaysTitle": "No essay questions pending grading",
+  "noPendingEssaysMessage": "All essay sessions have been graded",
+  "assessmentFallbackTitle": "Assessment",
+  "startGrading": "Start grading",
+  "questionsCount": "{count} questions",
+  "@questionsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  }
 }

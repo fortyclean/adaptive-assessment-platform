@@ -556,4 +556,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get paused => 'متوقف';
+
+  @override
+  String get pendingEssaysTitle => 'الأسئلة المقالية — بانتظار التصحيح';
+
+  @override
+  String get pendingEssaysLoadFailed => 'تعذر تحميل الجلسات المعلقة';
+
+  @override
+  String get noPendingEssaysTitle => 'لا توجد أسئلة مقالية بانتظار التصحيح';
+
+  @override
+  String get noPendingEssaysMessage => 'جميع الجلسات المقالية تم تصحيحها';
+
+  @override
+  String get assessmentFallbackTitle => 'اختبار';
+
+  @override
+  String get startGrading => 'بدء التصحيح';
+
+  @override
+  String questionsCount(Object count) {
+    return '$count سؤال';
+  }
 }

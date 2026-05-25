@@ -3,7 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../assessment/repositories/teacher_repository.dart';
+
+AppLocalizations _pendingEssaysL10n(BuildContext context) =>
+    Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+    AppLocalizationsAr();
 
 /// Pending Essays Screen — lists all student attempts awaiting essay grading.
 /// Requirements: 18.5, 18.6
@@ -30,6 +36,7 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
   }
 
   Future<void> _loadAttempts() async {
+    final l10n = _pendingEssaysL10n(context);
     setState(() {
       _isLoading = true;
       _error = null;
@@ -43,7 +50,7 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = 'تعذر تحميل الجلسات المعلقة';
+        _error = l10n.pendingEssaysLoadFailed;
         _isLoading = false;
       });
     }
@@ -52,11 +59,11 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('الأسئلة المقالية — بانتظار التصحيح'),
+          title: Text(_pendingEssaysL10n(context).pendingEssaysTitle),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () => context.pop(),
-            tooltip: 'رجوع',
+            tooltip: _pendingEssaysL10n(context).back,
           ),
         ),
         body: _isLoading
@@ -80,7 +87,7 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
             ElevatedButton.icon(
               onPressed: _loadAttempts,
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text('إعادة المحاولة'),
+              label: Text(_pendingEssaysL10n(context).retry),
             ),
           ],
         ),
@@ -101,13 +108,13 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'لا توجد أسئلة مقالية بانتظار التصحيح',
+                  _pendingEssaysL10n(context).noPendingEssaysTitle,
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'جميع الجلسات المقالية تم تصحيحها',
+                  _pendingEssaysL10n(context).noPendingEssaysMessage,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.onSurfaceVariant,
                       ),
@@ -128,7 +135,8 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
             attempt: attempt,
             onGrade: () {
               final attemptId = attempt['_id'] as String? ?? '';
-              final studentName = attempt['studentName'] as String? ?? 'طالب';
+              final studentName = attempt['studentName'] as String? ??
+                  _pendingEssaysL10n(context).studentFallbackName;
               context.push(
                 '/teacher/pending-essays/$attemptId',
                 extra: {'studentName': studentName},
@@ -151,8 +159,11 @@ class _PendingAttemptCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final studentName = attempt['studentName'] as String? ?? 'طالب';
-    final assessmentTitle = attempt['assessmentTitle'] as String? ?? 'اختبار';
+    final l10n = _pendingEssaysL10n(context);
+    final studentName =
+        attempt['studentName'] as String? ?? l10n.studentFallbackName;
+    final assessmentTitle =
+        attempt['assessmentTitle'] as String? ?? l10n.assessmentFallbackTitle;
     final subject = attempt['subject'] as String? ?? '';
     final submittedAt = attempt['submittedAt'] as String?;
     final essayCount = attempt['pendingEssayCount'] as int? ?? 0;
@@ -241,7 +252,7 @@ class _PendingAttemptCard extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: onGrade,
                 icon: const Icon(Icons.rate_review_rounded, size: 18),
-                label: const Text('بدء التصحيح'),
+                label: Text(l10n.startGrading),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -280,7 +291,7 @@ class _PendingBadge extends StatelessWidget {
                 size: 14, color: AppColors.warning),
             const SizedBox(width: 4),
             Text(
-              '$count سؤال',
+              _pendingEssaysL10n(context).questionsCount(count),
               style: const TextStyle(
                 color: AppColors.warning,
                 fontSize: 12,

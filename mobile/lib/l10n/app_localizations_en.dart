@@ -557,4 +557,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paused => 'Paused';
+
+  @override
+  String get pendingEssaysTitle => 'Essay questions — pending grading';
+
+  @override
+  String get pendingEssaysLoadFailed => 'Could not load pending sessions';
+
+  @override
+  String get noPendingEssaysTitle => 'No essay questions pending grading';
+
+  @override
+  String get noPendingEssaysMessage => 'All essay sessions have been graded';
+
+  @override
+  String get assessmentFallbackTitle => 'Assessment';
+
+  @override
+  String get startGrading => 'Start grading';
+
+  @override
+  String questionsCount(Object count) {
+    return '$count questions';
+  }
 }

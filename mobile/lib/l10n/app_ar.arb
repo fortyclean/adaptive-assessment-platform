@@ -237,5 +237,17 @@
   },
   "noActiveSchedules": "لا توجد جداول نشطة",
   "createScheduleUsingForm": "أنشئ جدولاً جديداً باستخدام النموذج أعلاه",
-  "paused": "متوقف"
+  "paused": "متوقف",
+  "pendingEssaysTitle": "الأسئلة المقالية — بانتظار التصحيح",
+  "pendingEssaysLoadFailed": "تعذر تحميل الجلسات المعلقة",
+  "noPendingEssaysTitle": "لا توجد أسئلة مقالية بانتظار التصحيح",
+  "noPendingEssaysMessage": "جميع الجلسات المقالية تم تصحيحها",
+  "assessmentFallbackTitle": "اختبار",
+  "startGrading": "بدء التصحيح",
+  "questionsCount": "{count} سؤال",
+  "@questionsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  }
 }

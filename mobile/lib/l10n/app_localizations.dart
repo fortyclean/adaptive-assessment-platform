@@ -1123,6 +1123,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'متوقف'**
   String get paused;
+
+  /// No description provided for @pendingEssaysTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسئلة المقالية — بانتظار التصحيح'**
+  String get pendingEssaysTitle;
+
+  /// No description provided for @pendingEssaysLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الجلسات المعلقة'**
+  String get pendingEssaysLoadFailed;
+
+  /// No description provided for @noPendingEssaysTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أسئلة مقالية بانتظار التصحيح'**
+  String get noPendingEssaysTitle;
+
+  /// No description provided for @noPendingEssaysMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'جميع الجلسات المقالية تم تصحيحها'**
+  String get noPendingEssaysMessage;
+
+  /// No description provided for @assessmentFallbackTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار'**
+  String get assessmentFallbackTitle;
+
+  /// No description provided for @startGrading.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء التصحيح'**
+  String get startGrading;
+
+  /// No description provided for @questionsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} سؤال'**
+  String questionsCount(Object count);
 }
 
 class _AppLocalizationsDelegate
