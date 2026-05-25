@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.72';
-  static const int buildNumber = 72;
+  static const String current = '1.0.73';
+  static const int buildNumber = 73;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.73',
+      buildNumber: 73,
+      date: 'مايو 2026',
+      title: 'اختبارات رحلات الأدوار الأساسية',
+      changes: [
+        'إضافة اختبار E2E لرحلة الطالب من تسجيل الدخول التجريبي إلى الاختبار والنتيجة والتحليلات والتعلم المصغر.',
+        'إضافة اختبار E2E لرحلة المعلم من إنشاء الاختبار إلى النشر مع فصل محدد.',
+        'إضافة اختبار E2E لرحلة المشرف من إدارة المستخدمين إلى الفصول ثم التقارير.',
+        'تغطية تدفقات الطالب والمعلم والمشرف بمستودعات اختبار معزولة تمنع الاعتماد على API خارجي أثناء CI.',
+        'تعليم مهام 40.2 و40.3 و40.4 كمكتملة في خطة التنفيذ.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.72',
       buildNumber: 72,
