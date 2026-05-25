@@ -5,6 +5,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/student_points_store.dart';
 
@@ -26,8 +28,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   Set<String> _ownedItemIds = {'extra-time'};
   Set<String> _activeItemIds = {'extra-time'};
   List<Map<String, dynamic>> _transactions = const [];
-
-  static const List<String> _tabs = ['الكل', 'الأفاتار', 'القوالب', 'الأدلة'];
 
   static const List<_MarketItem> _items = [
     _MarketItem(
@@ -106,6 +106,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   List<_MarketItem> get _collection =>
       _items.where((item) => _ownedItemIds.contains(item.id)).toList();
 
+  AppLocalizations get _l10n =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+      AppLocalizationsAr();
+
+  List<String> get _tabs => [
+        _l10n.marketplaceTabAll,
+        _l10n.marketplaceTabAvatars,
+        _l10n.marketplaceTabThemes,
+        _l10n.marketplaceTabGuides,
+      ];
+
   @override
   void initState() {
     super.initState();
@@ -177,7 +188,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         IconButton(
           icon: const Icon(Icons.notifications_outlined),
           color: colorScheme.primary,
-          tooltip: 'الإشعارات',
+          tooltip: _l10n.marketplaceNotificationsTooltip,
           onPressed: () => context.push(AppRoutes.studentNotifications),
         ),
       ],
@@ -200,9 +211,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'الرصيد الحالي',
-              style: TextStyle(
+            Text(
+              _l10n.currentBalance,
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -241,14 +252,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 color: Colors.black12,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'المستوى 14: عبقري رياضيات',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    _l10n.marketplaceLevelLabel,
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 80,
                     height: 6,
                     child: ClipRRect(
@@ -276,9 +287,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'مجموعتي',
-              style: TextStyle(
+            Text(
+              _l10n.myCollection,
+              style: const TextStyle(
                 color: AppColors.primary,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -287,7 +298,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             TextButton.icon(
               onPressed: _showCollectionSheet,
               icon: const Icon(Icons.inventory_2_outlined, size: 16),
-              label: const Text('عرض الكل'),
+              label: Text(_l10n.viewAll),
             ),
           ],
         ),
@@ -328,7 +339,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        item.shortTitle,
+                        _itemShortTitle(item),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -340,9 +351,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       ),
                       if (_activeItemIds.contains(item.id)) ...[
                         const SizedBox(height: 4),
-                        const Text(
-                          'نشط',
-                          style: TextStyle(
+                        Text(
+                          _l10n.ownedActive,
+                          style: const TextStyle(
                             fontSize: 10,
                             color: Colors.green,
                             fontWeight: FontWeight.w700,
@@ -370,7 +381,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         border: Border.all(color: colorScheme.outlineVariant),
       ),
       child: Text(
-        'لم تضف أي مقتنيات بعد. اشترِ أول مكافأة وستظهر هنا.',
+        _l10n.emptyCollectionMessage,
         style: TextStyle(color: colorScheme.onSurfaceVariant),
         textAlign: TextAlign.center,
       ),
@@ -409,10 +420,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   Widget _buildItemsList() {
     final items = _filteredItems;
     if (items.isEmpty) {
-      return const _InfoState(
+      return _InfoState(
         icon: Icons.storefront_outlined,
-        title: 'لا توجد عناصر في هذا القسم',
-        message: 'جرّب قسمًا آخر أو عد لاحقًا عند إضافة مكافآت جديدة.',
+        title: _l10n.marketplaceEmptyTitle,
+        message: _l10n.marketplaceEmptyMessage,
       );
     }
 
@@ -481,7 +492,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   Positioned(
                     top: 10,
                     right: 10,
-                    child: _Badge(label: item.badge!),
+                    child: _Badge(label: _itemBadge(item)),
                   ),
               ],
             ),
@@ -492,7 +503,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
+                  _itemTitle(item),
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -503,7 +514,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  item.description,
+                  _itemDescription(item),
                   style: TextStyle(
                     fontSize: 12,
                     height: 1.4,
@@ -528,10 +539,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     ),
                     const Spacer(),
                     if (owned)
-                      const _OwnedLabel()
+                      _OwnedLabel(label: _l10n.owned)
                     else if (!canAfford)
                       Text(
-                        'رصيد غير كافٍ',
+                        _l10n.insufficientBalance,
                         style: TextStyle(
                           color: colorScheme.error,
                           fontSize: 11,
@@ -553,7 +564,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                           : Icons.shopping_bag_outlined,
                       size: 18,
                     ),
-                    label: Text(owned ? 'تفعيل' : 'شراء'),
+                    label: Text(owned ? _l10n.activate : _l10n.purchase),
                   ),
                 ),
               ],
@@ -571,21 +582,25 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       builder: (ctx) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          title: Text(canAfford ? 'تأكيد الشراء' : 'رصيد غير كافٍ'),
+          title: Text(
+              canAfford ? _l10n.confirmPurchase : _l10n.insufficientBalance),
           content: Text(
             canAfford
-                ? 'سيتم خصم ${item.price} نقطة من رصيدك لشراء "${item.title}".'
-                : 'تحتاج إلى ${item.price - _pointsBalance} نقطة إضافية لشراء "${item.title}".',
+                ? _l10n.purchaseConfirmMessage(item.price, _itemTitle(item))
+                : _l10n.purchaseNeedMorePoints(
+                    item.price - _pointsBalance,
+                    _itemTitle(item),
+                  ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text(canAfford ? 'إلغاء' : 'حسنًا'),
+              child: Text(canAfford ? _l10n.cancel : _l10n.ok),
             ),
             if (canAfford)
               FilledButton(
                 onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text('تأكيد الشراء'),
+                child: Text(_l10n.confirmPurchase),
               ),
           ],
         ),
@@ -601,7 +616,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         userId: null,
         itemId: item.id,
         price: item.price,
-        title: item.title,
+        title: _itemTitle(item),
       );
       if (item.type == MarketItemType.powerup ||
           item.type == MarketItemType.avatar ||
@@ -609,7 +624,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         state = await store.activate(
           userId: null,
           itemId: item.id,
-          title: item.title,
+          title: _itemTitle(item),
         );
       }
     }
@@ -628,9 +643,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     });
 
     _showResultDialog(
-      title: 'تمت الإضافة إلى مجموعتك',
-      message:
-          'تم شراء "${item.title}" بنجاح. الرصيد المتبقي: ${_formatPoints(_pointsBalance)} نقطة.',
+      title: _l10n.addedToCollection,
+      message: _l10n.purchaseSuccessMessage(
+        _itemTitle(item),
+        _formatPoints(_pointsBalance),
+      ),
     );
   }
 
@@ -638,7 +655,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     final state = await _tryPointsStore?.activate(
       userId: null,
       itemId: item.id,
-      title: item.title,
+      title: _itemTitle(item),
     );
     if (!mounted) return;
     setState(() {
@@ -650,8 +667,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       }
     });
     _showResultDialog(
-      title: 'تم التفعيل',
-      message: 'تم تفعيل "${item.title}" داخل مجموعتك.',
+      title: _l10n.activated,
+      message: _l10n.activationSuccessMessage(_itemTitle(item)),
     );
   }
 
@@ -668,27 +685,28 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'مجموعتي',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                Text(
+                  _l10n.myCollection,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w800),
                   textAlign: TextAlign.right,
                 ),
                 const SizedBox(height: 12),
                 if (_collection.isEmpty)
-                  const _InfoState(
+                  _InfoState(
                     icon: Icons.inventory_2_outlined,
-                    title: 'لا توجد مقتنيات',
-                    message: 'اشترِ عنصرًا من المتجر ليظهر هنا.',
+                    title: _l10n.emptyCollectionTitle,
+                    message: _l10n.emptyCollectionSheetMessage,
                   )
                 else
                   ..._collection.map(
                     (item) => ListTile(
                       leading: Icon(item.icon, color: item.effectiveIconColor),
-                      title: Text(item.title),
+                      title: Text(_itemTitle(item)),
                       subtitle: Text(
                         _activeItemIds.contains(item.id)
-                            ? 'نشط الآن'
-                            : 'متاح للتفعيل',
+                            ? _l10n.activeNow
+                            : _l10n.availableToActivate,
                       ),
                       trailing: _activeItemIds.contains(item.id)
                           ? const Icon(Icons.check_circle,
@@ -698,15 +716,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 Navigator.of(ctx).pop();
                                 _activateItem(item);
                               },
-                              child: const Text('تفعيل'),
+                              child: Text(_l10n.activate),
                             ),
                     ),
                   ),
                 if (_transactions.isNotEmpty) ...[
                   const Divider(),
-                  const Text(
-                    'آخر العمليات',
-                    style: TextStyle(fontWeight: FontWeight.w800),
+                  Text(
+                    _l10n.recentTransactions,
+                    style: const TextStyle(fontWeight: FontWeight.w800),
                     textAlign: TextAlign.right,
                   ),
                   ..._transactions.reversed.take(3).map(
@@ -741,7 +759,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           actions: [
             FilledButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('تم'),
+              child: Text(_l10n.done),
             ),
           ],
         ),
@@ -770,6 +788,39 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     } catch (_) {
       return null;
     }
+  }
+
+  String _itemTitle(_MarketItem item) => switch (item.id) {
+        'explorer-avatar' => _l10n.marketItemExplorerAvatarTitle,
+        'golden-sunset-theme' => _l10n.marketItemGoldenThemeTitle,
+        'advanced-algebra-guide' => _l10n.marketItemAlgebraGuideTitle,
+        'top-student-avatar' => _l10n.marketItemTopStudentAvatarTitle,
+        'xp-booster' => _l10n.marketItemXpBoosterTitle,
+        'extra-time' => _l10n.marketItemExtraTimeTitle,
+        _ => item.title,
+      };
+
+  String _itemDescription(_MarketItem item) => switch (item.id) {
+        'explorer-avatar' => _l10n.marketItemExplorerAvatarDescription,
+        'golden-sunset-theme' => _l10n.marketItemGoldenThemeDescription,
+        'advanced-algebra-guide' => _l10n.marketItemAlgebraGuideDescription,
+        'top-student-avatar' => _l10n.marketItemTopStudentAvatarDescription,
+        'xp-booster' => _l10n.marketItemXpBoosterDescription,
+        'extra-time' => _l10n.marketItemExtraTimeDescription,
+        _ => item.description,
+      };
+
+  String _itemBadge(_MarketItem item) => switch (item.id) {
+        'explorer-avatar' => _l10n.marketItemRareBadge,
+        'golden-sunset-theme' => _l10n.marketItemExclusiveBadge,
+        'advanced-algebra-guide' => _l10n.marketItemStudyGuideBadge,
+        _ => item.badge ?? '',
+      };
+
+  String _itemShortTitle(_MarketItem item) {
+    if (item.id == 'extra-time') return _l10n.extraTimeShortTitle;
+    final title = _itemTitle(item);
+    return title.contains(':') ? title.split(':').last.trim() : title;
   }
 }
 
@@ -801,11 +852,6 @@ class _MarketItem {
   final bool isWide;
 
   Color get effectiveIconColor => iconColor;
-
-  String get shortTitle {
-    if (id == 'extra-time') return 'وقت إضافي';
-    return title.contains(':') ? title.split(':').last.trim() : title;
-  }
 }
 
 class _Badge extends StatelessWidget {
@@ -828,7 +874,9 @@ class _Badge extends StatelessWidget {
 }
 
 class _OwnedLabel extends StatelessWidget {
-  const _OwnedLabel();
+  const _OwnedLabel({required this.label});
+
+  final String label;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -837,9 +885,9 @@ class _OwnedLabel extends StatelessWidget {
           color: AppColors.successContainer,
           borderRadius: BorderRadius.circular(999),
         ),
-        child: const Text(
-          'مملوك',
-          style: TextStyle(
+        child: Text(
+          label,
+          style: const TextStyle(
             color: AppColors.success,
             fontSize: 11,
             fontWeight: FontWeight.w800,

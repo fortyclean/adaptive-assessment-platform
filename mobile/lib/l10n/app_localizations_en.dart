@@ -951,4 +951,159 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submitAnswer => 'Submit answer';
+
+  @override
+  String get marketplaceTabAll => 'All';
+
+  @override
+  String get marketplaceTabAvatars => 'Avatars';
+
+  @override
+  String get marketplaceTabThemes => 'Themes';
+
+  @override
+  String get marketplaceTabGuides => 'Guides';
+
+  @override
+  String get marketplaceNotificationsTooltip => 'Notifications';
+
+  @override
+  String get currentBalance => 'Current balance';
+
+  @override
+  String get marketplaceLevelLabel => 'Level 14: Math genius';
+
+  @override
+  String get myCollection => 'My collection';
+
+  @override
+  String get ownedActive => 'Active';
+
+  @override
+  String get emptyCollectionMessage =>
+      'You have not added any collectibles yet. Buy your first reward and it will appear here.';
+
+  @override
+  String get marketplaceEmptyTitle => 'No items in this section';
+
+  @override
+  String get marketplaceEmptyMessage =>
+      'Try another section or come back later when new rewards are added.';
+
+  @override
+  String get insufficientBalance => 'Insufficient balance';
+
+  @override
+  String get activate => 'Activate';
+
+  @override
+  String get purchase => 'Buy';
+
+  @override
+  String get confirmPurchase => 'Confirm purchase';
+
+  @override
+  String purchaseConfirmMessage(Object price, Object title) {
+    return '$price points will be deducted from your balance to buy \"$title\".';
+  }
+
+  @override
+  String purchaseNeedMorePoints(Object points, Object title) {
+    return 'You need $points more points to buy \"$title\".';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get addedToCollection => 'Added to your collection';
+
+  @override
+  String purchaseSuccessMessage(Object title, Object balance) {
+    return '\"$title\" was purchased successfully. Remaining balance: $balance points.';
+  }
+
+  @override
+  String get activated => 'Activated';
+
+  @override
+  String activationSuccessMessage(Object title) {
+    return '\"$title\" has been activated in your collection.';
+  }
+
+  @override
+  String get emptyCollectionTitle => 'No collectibles';
+
+  @override
+  String get emptyCollectionSheetMessage =>
+      'Buy an item from the marketplace to see it here.';
+
+  @override
+  String get activeNow => 'Active now';
+
+  @override
+  String get availableToActivate => 'Available to activate';
+
+  @override
+  String get recentTransactions => 'Recent transactions';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get owned => 'Owned';
+
+  @override
+  String get extraTimeShortTitle => 'Extra time';
+
+  @override
+  String get marketItemExplorerAvatarTitle => 'Avatar: Explorer';
+
+  @override
+  String get marketItemExplorerAvatarDescription =>
+      'A special avatar shown in your profile and challenge board.';
+
+  @override
+  String get marketItemRareBadge => 'Rare';
+
+  @override
+  String get marketItemGoldenThemeTitle => 'Theme: Golden sunset';
+
+  @override
+  String get marketItemGoldenThemeDescription =>
+      'A special color theme to personalize your learning experience.';
+
+  @override
+  String get marketItemExclusiveBadge => 'Exclusive';
+
+  @override
+  String get marketItemAlgebraGuideTitle => 'Advanced algebra secrets';
+
+  @override
+  String get marketItemAlgebraGuideDescription =>
+      'A complete guide with interactive exercises and concise solutions.';
+
+  @override
+  String get marketItemStudyGuideBadge => 'Study guide';
+
+  @override
+  String get marketItemTopStudentAvatarTitle => 'Avatar: Top student';
+
+  @override
+  String get marketItemTopStudentAvatarDescription =>
+      'A celebratory avatar for high-achieving students.';
+
+  @override
+  String get marketItemXpBoosterTitle => '1-hour XP booster';
+
+  @override
+  String get marketItemXpBoosterDescription =>
+      'Increases experience points earned in your next session.';
+
+  @override
+  String get marketItemExtraTimeTitle => 'Extra time reward';
+
+  @override
+  String get marketItemExtraTimeDescription =>
+      'An active demo collectible that shows how owned items appear.';
 }

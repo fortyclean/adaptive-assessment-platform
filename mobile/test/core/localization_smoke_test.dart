@@ -148,6 +148,34 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads marketplace localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.marketplaceTabAll,
+            l10n.myCollection,
+            l10n.insufficientBalance,
+            l10n.purchaseConfirmMessage(250, l10n.marketItemXpBoosterTitle),
+            l10n.activationSuccessMessage(l10n.marketItemExtraTimeTitle),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'All / My collection / Insufficient balance / '
+        '250 points will be deducted from your balance to buy '
+        '"1-hour XP booster". / '
+        '"Extra time reward" has been activated in your collection.',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

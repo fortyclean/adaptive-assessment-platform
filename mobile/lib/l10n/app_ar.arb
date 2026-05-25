@@ -410,5 +410,75 @@
   "confirmAnswer": "تأكيد الإجابة",
   "essayReviewNotice": "سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً",
   "writeEssayAnswerHere": "اكتب إجابتك المقالية هنا...",
-  "submitAnswer": "تسليم الإجابة"
+  "submitAnswer": "تسليم الإجابة",
+  "marketplaceTabAll": "الكل",
+  "marketplaceTabAvatars": "الأفاتار",
+  "marketplaceTabThemes": "القوالب",
+  "marketplaceTabGuides": "الأدلة",
+  "marketplaceNotificationsTooltip": "الإشعارات",
+  "currentBalance": "الرصيد الحالي",
+  "marketplaceLevelLabel": "المستوى 14: عبقري رياضيات",
+  "myCollection": "مجموعتي",
+  "viewAll": "عرض الكل",
+  "ownedActive": "نشط",
+  "emptyCollectionMessage": "لم تضف أي مقتنيات بعد. اشترِ أول مكافأة وستظهر هنا.",
+  "marketplaceEmptyTitle": "لا توجد عناصر في هذا القسم",
+  "marketplaceEmptyMessage": "جرّب قسمًا آخر أو عد لاحقًا عند إضافة مكافآت جديدة.",
+  "insufficientBalance": "رصيد غير كافٍ",
+  "activate": "تفعيل",
+  "purchase": "شراء",
+  "confirmPurchase": "تأكيد الشراء",
+  "purchaseConfirmMessage": "سيتم خصم {price} نقطة من رصيدك لشراء \"{title}\".",
+  "@purchaseConfirmMessage": {
+    "placeholders": {
+      "price": {},
+      "title": {}
+    }
+  },
+  "purchaseNeedMorePoints": "تحتاج إلى {points} نقطة إضافية لشراء \"{title}\".",
+  "@purchaseNeedMorePoints": {
+    "placeholders": {
+      "points": {},
+      "title": {}
+    }
+  },
+  "ok": "حسنًا",
+  "addedToCollection": "تمت الإضافة إلى مجموعتك",
+  "purchaseSuccessMessage": "تم شراء \"{title}\" بنجاح. الرصيد المتبقي: {balance} نقطة.",
+  "@purchaseSuccessMessage": {
+    "placeholders": {
+      "title": {},
+      "balance": {}
+    }
+  },
+  "activated": "تم التفعيل",
+  "activationSuccessMessage": "تم تفعيل \"{title}\" داخل مجموعتك.",
+  "@activationSuccessMessage": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "emptyCollectionTitle": "لا توجد مقتنيات",
+  "emptyCollectionSheetMessage": "اشترِ عنصرًا من المتجر ليظهر هنا.",
+  "activeNow": "نشط الآن",
+  "availableToActivate": "متاح للتفعيل",
+  "recentTransactions": "آخر العمليات",
+  "done": "تم",
+  "owned": "مملوك",
+  "extraTimeShortTitle": "وقت إضافي",
+  "marketItemExplorerAvatarTitle": "أفاتار: المستكشف",
+  "marketItemExplorerAvatarDescription": "أفاتار مميز يظهر في ملفك الشخصي ولوحة التحديات.",
+  "marketItemRareBadge": "نادر",
+  "marketItemGoldenThemeTitle": "قالب: الغروب الذهبي",
+  "marketItemGoldenThemeDescription": "قالب لوني خاص لتخصيص تجربة التعلم.",
+  "marketItemExclusiveBadge": "حصري",
+  "marketItemAlgebraGuideTitle": "أسرار الجبر المتقدم",
+  "marketItemAlgebraGuideDescription": "دليل شامل مع تمارين تفاعلية وحلول مختصرة.",
+  "marketItemStudyGuideBadge": "دليل دراسي",
+  "marketItemTopStudentAvatarTitle": "أفاتار: المتفوقة",
+  "marketItemTopStudentAvatarDescription": "أفاتار احتفالي للطلاب أصحاب الإنجازات العالية.",
+  "marketItemXpBoosterTitle": "مضاعف XP لمدة ساعة",
+  "marketItemXpBoosterDescription": "يزيد نقاط الخبرة المكتسبة في الجلسة القادمة.",
+  "marketItemExtraTimeTitle": "مكافأة وقت إضافي",
+  "marketItemExtraTimeDescription": "مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة."
 }

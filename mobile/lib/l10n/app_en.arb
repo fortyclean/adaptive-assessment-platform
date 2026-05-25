@@ -410,5 +410,75 @@
   "confirmAnswer": "Confirm answer",
   "essayReviewNotice": "Your answer will be reviewed by the teacher and graded later",
   "writeEssayAnswerHere": "Type your essay answer here...",
-  "submitAnswer": "Submit answer"
+  "submitAnswer": "Submit answer",
+  "marketplaceTabAll": "All",
+  "marketplaceTabAvatars": "Avatars",
+  "marketplaceTabThemes": "Themes",
+  "marketplaceTabGuides": "Guides",
+  "marketplaceNotificationsTooltip": "Notifications",
+  "currentBalance": "Current balance",
+  "marketplaceLevelLabel": "Level 14: Math genius",
+  "myCollection": "My collection",
+  "viewAll": "View all",
+  "ownedActive": "Active",
+  "emptyCollectionMessage": "You have not added any collectibles yet. Buy your first reward and it will appear here.",
+  "marketplaceEmptyTitle": "No items in this section",
+  "marketplaceEmptyMessage": "Try another section or come back later when new rewards are added.",
+  "insufficientBalance": "Insufficient balance",
+  "activate": "Activate",
+  "purchase": "Buy",
+  "confirmPurchase": "Confirm purchase",
+  "purchaseConfirmMessage": "{price} points will be deducted from your balance to buy \"{title}\".",
+  "@purchaseConfirmMessage": {
+    "placeholders": {
+      "price": {},
+      "title": {}
+    }
+  },
+  "purchaseNeedMorePoints": "You need {points} more points to buy \"{title}\".",
+  "@purchaseNeedMorePoints": {
+    "placeholders": {
+      "points": {},
+      "title": {}
+    }
+  },
+  "ok": "OK",
+  "addedToCollection": "Added to your collection",
+  "purchaseSuccessMessage": "\"{title}\" was purchased successfully. Remaining balance: {balance} points.",
+  "@purchaseSuccessMessage": {
+    "placeholders": {
+      "title": {},
+      "balance": {}
+    }
+  },
+  "activated": "Activated",
+  "activationSuccessMessage": "\"{title}\" has been activated in your collection.",
+  "@activationSuccessMessage": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "emptyCollectionTitle": "No collectibles",
+  "emptyCollectionSheetMessage": "Buy an item from the marketplace to see it here.",
+  "activeNow": "Active now",
+  "availableToActivate": "Available to activate",
+  "recentTransactions": "Recent transactions",
+  "done": "Done",
+  "owned": "Owned",
+  "extraTimeShortTitle": "Extra time",
+  "marketItemExplorerAvatarTitle": "Avatar: Explorer",
+  "marketItemExplorerAvatarDescription": "A special avatar shown in your profile and challenge board.",
+  "marketItemRareBadge": "Rare",
+  "marketItemGoldenThemeTitle": "Theme: Golden sunset",
+  "marketItemGoldenThemeDescription": "A special color theme to personalize your learning experience.",
+  "marketItemExclusiveBadge": "Exclusive",
+  "marketItemAlgebraGuideTitle": "Advanced algebra secrets",
+  "marketItemAlgebraGuideDescription": "A complete guide with interactive exercises and concise solutions.",
+  "marketItemStudyGuideBadge": "Study guide",
+  "marketItemTopStudentAvatarTitle": "Avatar: Top student",
+  "marketItemTopStudentAvatarDescription": "A celebratory avatar for high-achieving students.",
+  "marketItemXpBoosterTitle": "1-hour XP booster",
+  "marketItemXpBoosterDescription": "Increases experience points earned in your next session.",
+  "marketItemExtraTimeTitle": "Extra time reward",
+  "marketItemExtraTimeDescription": "An active demo collectible that shows how owned items appear."
 }

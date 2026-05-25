@@ -1843,6 +1843,282 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تسليم الإجابة'**
   String get submitAnswer;
+
+  /// No description provided for @marketplaceTabAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get marketplaceTabAll;
+
+  /// No description provided for @marketplaceTabAvatars.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأفاتار'**
+  String get marketplaceTabAvatars;
+
+  /// No description provided for @marketplaceTabThemes.
+  ///
+  /// In ar, this message translates to:
+  /// **'القوالب'**
+  String get marketplaceTabThemes;
+
+  /// No description provided for @marketplaceTabGuides.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأدلة'**
+  String get marketplaceTabGuides;
+
+  /// No description provided for @marketplaceNotificationsTooltip.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get marketplaceNotificationsTooltip;
+
+  /// No description provided for @currentBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرصيد الحالي'**
+  String get currentBalance;
+
+  /// No description provided for @marketplaceLevelLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستوى 14: عبقري رياضيات'**
+  String get marketplaceLevelLabel;
+
+  /// No description provided for @myCollection.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعتي'**
+  String get myCollection;
+
+  /// No description provided for @ownedActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get ownedActive;
+
+  /// No description provided for @emptyCollectionMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تضف أي مقتنيات بعد. اشترِ أول مكافأة وستظهر هنا.'**
+  String get emptyCollectionMessage;
+
+  /// No description provided for @marketplaceEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عناصر في هذا القسم'**
+  String get marketplaceEmptyTitle;
+
+  /// No description provided for @marketplaceEmptyMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب قسمًا آخر أو عد لاحقًا عند إضافة مكافآت جديدة.'**
+  String get marketplaceEmptyMessage;
+
+  /// No description provided for @insufficientBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد غير كافٍ'**
+  String get insufficientBalance;
+
+  /// No description provided for @activate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل'**
+  String get activate;
+
+  /// No description provided for @purchase.
+  ///
+  /// In ar, this message translates to:
+  /// **'شراء'**
+  String get purchase;
+
+  /// No description provided for @confirmPurchase.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الشراء'**
+  String get confirmPurchase;
+
+  /// No description provided for @purchaseConfirmMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم خصم {price} نقطة من رصيدك لشراء \"{title}\".'**
+  String purchaseConfirmMessage(Object price, Object title);
+
+  /// No description provided for @purchaseNeedMorePoints.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج إلى {points} نقطة إضافية لشراء \"{title}\".'**
+  String purchaseNeedMorePoints(Object points, Object title);
+
+  /// No description provided for @ok.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسنًا'**
+  String get ok;
+
+  /// No description provided for @addedToCollection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت الإضافة إلى مجموعتك'**
+  String get addedToCollection;
+
+  /// No description provided for @purchaseSuccessMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم شراء \"{title}\" بنجاح. الرصيد المتبقي: {balance} نقطة.'**
+  String purchaseSuccessMessage(Object title, Object balance);
+
+  /// No description provided for @activated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التفعيل'**
+  String get activated;
+
+  /// No description provided for @activationSuccessMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تفعيل \"{title}\" داخل مجموعتك.'**
+  String activationSuccessMessage(Object title);
+
+  /// No description provided for @emptyCollectionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مقتنيات'**
+  String get emptyCollectionTitle;
+
+  /// No description provided for @emptyCollectionSheetMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ عنصرًا من المتجر ليظهر هنا.'**
+  String get emptyCollectionSheetMessage;
+
+  /// No description provided for @activeNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط الآن'**
+  String get activeNow;
+
+  /// No description provided for @availableToActivate.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح للتفعيل'**
+  String get availableToActivate;
+
+  /// No description provided for @recentTransactions.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر العمليات'**
+  String get recentTransactions;
+
+  /// No description provided for @done.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get done;
+
+  /// No description provided for @owned.
+  ///
+  /// In ar, this message translates to:
+  /// **'مملوك'**
+  String get owned;
+
+  /// No description provided for @extraTimeShortTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت إضافي'**
+  String get extraTimeShortTitle;
+
+  /// No description provided for @marketItemExplorerAvatarTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفاتار: المستكشف'**
+  String get marketItemExplorerAvatarTitle;
+
+  /// No description provided for @marketItemExplorerAvatarDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفاتار مميز يظهر في ملفك الشخصي ولوحة التحديات.'**
+  String get marketItemExplorerAvatarDescription;
+
+  /// No description provided for @marketItemRareBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'نادر'**
+  String get marketItemRareBadge;
+
+  /// No description provided for @marketItemGoldenThemeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قالب: الغروب الذهبي'**
+  String get marketItemGoldenThemeTitle;
+
+  /// No description provided for @marketItemGoldenThemeDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'قالب لوني خاص لتخصيص تجربة التعلم.'**
+  String get marketItemGoldenThemeDescription;
+
+  /// No description provided for @marketItemExclusiveBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصري'**
+  String get marketItemExclusiveBadge;
+
+  /// No description provided for @marketItemAlgebraGuideTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسرار الجبر المتقدم'**
+  String get marketItemAlgebraGuideTitle;
+
+  /// No description provided for @marketItemAlgebraGuideDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'دليل شامل مع تمارين تفاعلية وحلول مختصرة.'**
+  String get marketItemAlgebraGuideDescription;
+
+  /// No description provided for @marketItemStudyGuideBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'دليل دراسي'**
+  String get marketItemStudyGuideBadge;
+
+  /// No description provided for @marketItemTopStudentAvatarTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفاتار: المتفوقة'**
+  String get marketItemTopStudentAvatarTitle;
+
+  /// No description provided for @marketItemTopStudentAvatarDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفاتار احتفالي للطلاب أصحاب الإنجازات العالية.'**
+  String get marketItemTopStudentAvatarDescription;
+
+  /// No description provided for @marketItemXpBoosterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مضاعف XP لمدة ساعة'**
+  String get marketItemXpBoosterTitle;
+
+  /// No description provided for @marketItemXpBoosterDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'يزيد نقاط الخبرة المكتسبة في الجلسة القادمة.'**
+  String get marketItemXpBoosterDescription;
+
+  /// No description provided for @marketItemExtraTimeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكافأة وقت إضافي'**
+  String get marketItemExtraTimeTitle;
+
+  /// No description provided for @marketItemExtraTimeDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة.'**
+  String get marketItemExtraTimeDescription;
 }
 
 class _AppLocalizationsDelegate

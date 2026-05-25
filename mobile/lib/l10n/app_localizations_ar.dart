@@ -949,4 +949,158 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get submitAnswer => 'تسليم الإجابة';
+
+  @override
+  String get marketplaceTabAll => 'الكل';
+
+  @override
+  String get marketplaceTabAvatars => 'الأفاتار';
+
+  @override
+  String get marketplaceTabThemes => 'القوالب';
+
+  @override
+  String get marketplaceTabGuides => 'الأدلة';
+
+  @override
+  String get marketplaceNotificationsTooltip => 'الإشعارات';
+
+  @override
+  String get currentBalance => 'الرصيد الحالي';
+
+  @override
+  String get marketplaceLevelLabel => 'المستوى 14: عبقري رياضيات';
+
+  @override
+  String get myCollection => 'مجموعتي';
+
+  @override
+  String get ownedActive => 'نشط';
+
+  @override
+  String get emptyCollectionMessage =>
+      'لم تضف أي مقتنيات بعد. اشترِ أول مكافأة وستظهر هنا.';
+
+  @override
+  String get marketplaceEmptyTitle => 'لا توجد عناصر في هذا القسم';
+
+  @override
+  String get marketplaceEmptyMessage =>
+      'جرّب قسمًا آخر أو عد لاحقًا عند إضافة مكافآت جديدة.';
+
+  @override
+  String get insufficientBalance => 'رصيد غير كافٍ';
+
+  @override
+  String get activate => 'تفعيل';
+
+  @override
+  String get purchase => 'شراء';
+
+  @override
+  String get confirmPurchase => 'تأكيد الشراء';
+
+  @override
+  String purchaseConfirmMessage(Object price, Object title) {
+    return 'سيتم خصم $price نقطة من رصيدك لشراء \"$title\".';
+  }
+
+  @override
+  String purchaseNeedMorePoints(Object points, Object title) {
+    return 'تحتاج إلى $points نقطة إضافية لشراء \"$title\".';
+  }
+
+  @override
+  String get ok => 'حسنًا';
+
+  @override
+  String get addedToCollection => 'تمت الإضافة إلى مجموعتك';
+
+  @override
+  String purchaseSuccessMessage(Object title, Object balance) {
+    return 'تم شراء \"$title\" بنجاح. الرصيد المتبقي: $balance نقطة.';
+  }
+
+  @override
+  String get activated => 'تم التفعيل';
+
+  @override
+  String activationSuccessMessage(Object title) {
+    return 'تم تفعيل \"$title\" داخل مجموعتك.';
+  }
+
+  @override
+  String get emptyCollectionTitle => 'لا توجد مقتنيات';
+
+  @override
+  String get emptyCollectionSheetMessage => 'اشترِ عنصرًا من المتجر ليظهر هنا.';
+
+  @override
+  String get activeNow => 'نشط الآن';
+
+  @override
+  String get availableToActivate => 'متاح للتفعيل';
+
+  @override
+  String get recentTransactions => 'آخر العمليات';
+
+  @override
+  String get done => 'تم';
+
+  @override
+  String get owned => 'مملوك';
+
+  @override
+  String get extraTimeShortTitle => 'وقت إضافي';
+
+  @override
+  String get marketItemExplorerAvatarTitle => 'أفاتار: المستكشف';
+
+  @override
+  String get marketItemExplorerAvatarDescription =>
+      'أفاتار مميز يظهر في ملفك الشخصي ولوحة التحديات.';
+
+  @override
+  String get marketItemRareBadge => 'نادر';
+
+  @override
+  String get marketItemGoldenThemeTitle => 'قالب: الغروب الذهبي';
+
+  @override
+  String get marketItemGoldenThemeDescription =>
+      'قالب لوني خاص لتخصيص تجربة التعلم.';
+
+  @override
+  String get marketItemExclusiveBadge => 'حصري';
+
+  @override
+  String get marketItemAlgebraGuideTitle => 'أسرار الجبر المتقدم';
+
+  @override
+  String get marketItemAlgebraGuideDescription =>
+      'دليل شامل مع تمارين تفاعلية وحلول مختصرة.';
+
+  @override
+  String get marketItemStudyGuideBadge => 'دليل دراسي';
+
+  @override
+  String get marketItemTopStudentAvatarTitle => 'أفاتار: المتفوقة';
+
+  @override
+  String get marketItemTopStudentAvatarDescription =>
+      'أفاتار احتفالي للطلاب أصحاب الإنجازات العالية.';
+
+  @override
+  String get marketItemXpBoosterTitle => 'مضاعف XP لمدة ساعة';
+
+  @override
+  String get marketItemXpBoosterDescription =>
+      'يزيد نقاط الخبرة المكتسبة في الجلسة القادمة.';
+
+  @override
+  String get marketItemExtraTimeTitle => 'مكافأة وقت إضافي';
+
+  @override
+  String get marketItemExtraTimeDescription =>
+      'مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة.';
 }
