@@ -16,5 +16,23 @@ void main() {
       expect(latest.version, AppVersion.current);
       expect(latest.buildNumber, AppVersion.buildNumber);
     });
+
+    test('latest changelog entries are Arabic-facing', () {
+      final latestEntries = AppVersion.changelog.take(3);
+
+      for (final entry in latestEntries) {
+        expect(entry.date, contains('مايو'));
+        expect(entry.title, isNot(contains('localization')));
+        expect(entry.title, isNot(contains('dashboard')));
+        expect(entry.title, isNot(contains('crash reporting')));
+
+        for (final change in entry.changes) {
+          expect(change, isNot(contains('Moved ')));
+          expect(change, isNot(contains('Added ')));
+          expect(change, isNot(contains('Improved ')));
+          expect(change, isNot(contains('Documented ')));
+        }
+      }
+    });
   });
 }

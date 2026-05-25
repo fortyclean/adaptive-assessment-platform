@@ -313,7 +313,7 @@ class _InstitutionSettingsScreenState
   Widget build(BuildContext context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          backgroundColor: const Color(0xFFFBF8FF),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _buildAppBar(),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -456,18 +456,18 @@ class _InstitutionSettingsScreenState
                 children: [
                   Text(
                     _syncStatusMessage,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.onSurface,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     'آخر حفظ: ${_formatSyncTime(_lastSyncedAt)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.onSurfaceVariant,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -487,42 +487,48 @@ class _InstitutionSettingsScreenState
         ),
       );
 
-  PreferredSizeWidget _buildAppBar() => AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        shadowColor: Colors.black12,
-        automaticallyImplyLeading: false,
-        title: const Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: Color(0xFF1E40AF),
-              child: Icon(Icons.person, color: Colors.white, size: 20),
+  PreferredSizeWidget _buildAppBar() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return AppBar(
+      backgroundColor: colorScheme.surface,
+      elevation: 1,
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.12),
+      automaticallyImplyLeading: false,
+      title: Row(
+        children: [
+          const CircleAvatar(
+            radius: 20,
+            backgroundColor: Color(0xFF1E40AF),
+            child: Icon(Icons.person, color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            'EduAssess',
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
             ),
-            SizedBox(width: 12),
-            Text(
-              'EduAssess',
-              style: TextStyle(
-                color: Color(0xFF1E40AF),
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            tooltip: 'الإشعارات',
-            icon: const Icon(Icons.notifications_outlined, color: Colors.grey),
-            onPressed: () => context.push(AppRoutes.notificationCenter),
           ),
         ],
-      );
+      ),
+      actions: [
+        IconButton(
+          tooltip: 'الإشعارات',
+          icon: Icon(
+            Icons.notifications_outlined,
+            color: colorScheme.onSurfaceVariant,
+          ),
+          onPressed: () => context.push(AppRoutes.notificationCenter),
+        ),
+      ],
+    );
+  }
 
-  Widget _buildHeader() => const Column(
+  Widget _buildHeader() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'إعدادات المؤسسة',
             style: TextStyle(
               color: AppColors.primary,
@@ -530,10 +536,13 @@ class _InstitutionSettingsScreenState
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             'إدارة الهوية الأكاديمية وصلاحيات النظام',
-            style: TextStyle(color: AppColors.outline, fontSize: 14),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 14,
+            ),
           ),
         ],
       );
@@ -579,19 +588,26 @@ class _InstitutionSettingsScreenState
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF4F2FC),
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFC4C5D5)),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                      ),
                     ),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.school, color: AppColors.primary, size: 32),
-                        SizedBox(height: 4),
+                        const Icon(Icons.school,
+                            color: AppColors.primary, size: 32),
+                        const SizedBox(height: 4),
                         Text(
                           'الشعار',
-                          style:
-                              TextStyle(fontSize: 10, color: AppColors.outline),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ],
                     ),
@@ -602,9 +618,12 @@ class _InstitutionSettingsScreenState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('اسم المؤسسة',
+                      Text('اسم المؤسسة',
                           style: TextStyle(
-                              color: AppColors.outline, fontSize: 12)),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontSize: 12)),
                       Text(
                         _schoolName,
                         style: const TextStyle(
@@ -613,9 +632,12 @@ class _InstitutionSettingsScreenState
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text('معلومات التواصل',
+                      Text('معلومات التواصل',
                           style: TextStyle(
-                              color: AppColors.outline, fontSize: 12)),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontSize: 12)),
                       Text(_schoolPhone, style: const TextStyle(fontSize: 13)),
                       Text(_schoolEmail, style: const TextStyle(fontSize: 13)),
                     ],
@@ -630,95 +652,99 @@ class _InstitutionSettingsScreenState
   Widget _buildSettingsGroup({
     required String title,
     required List<_SettingsItem> items,
-  }) =>
-      Container(
-        decoration: _cardDecoration(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF4F2FC),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                border: Border(bottom: BorderSide(color: Color(0xFFC4C5D5))),
-              ),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: AppColors.onSurfaceVariant,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                ),
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
+              border: Border(
+                bottom: BorderSide(color: colorScheme.outlineVariant),
               ),
             ),
-            ...items.asMap().entries.map((entry) {
-              final i = entry.key;
-              final item = entry.value;
-              return Column(
-                children: [
-                  InkWell(
-                    onTap: () => _handleSettingsAction(item.action),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: (item.color ?? AppColors.primary)
-                                  .withValues(alpha: 0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(item.icon,
-                                color: item.color ?? AppColors.primary,
-                                size: 20),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: colorScheme.onSurfaceVariant,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          ...items.asMap().entries.map((entry) {
+            final i = entry.key;
+            final item = entry.value;
+            return Column(
+              children: [
+                InkWell(
+                  onTap: () => _handleSettingsAction(item.action),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: (item.color ?? AppColors.primary)
+                                .withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item.title,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: item.color ?? AppColors.onSurface,
-                                  ),
+                          child: Icon(item.icon,
+                              color: item.color ?? AppColors.primary, size: 20),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.title,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: item.color ?? colorScheme.onSurface,
                                 ),
-                                Text(
-                                  item.subtitle,
-                                  style: const TextStyle(
-                                    color: AppColors.outline,
-                                    fontSize: 12,
-                                  ),
+                              ),
+                              Text(
+                                item.subtitle,
+                                style: TextStyle(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontSize: 12,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          Icon(
-                            Icons.chevron_left,
-                            color: item.color ?? AppColors.outline,
-                          ),
-                        ],
-                      ),
+                        ),
+                        Icon(
+                          Icons.chevron_left,
+                          color: item.color ?? colorScheme.onSurfaceVariant,
+                        ),
+                      ],
                     ),
                   ),
-                  if (i < items.length - 1)
-                    const Divider(
-                      height: 1,
-                      color: Color(0xFFC4C5D5),
-                      indent: 16,
-                      endIndent: 16,
-                    ),
-                ],
-              );
-            }),
-          ],
-        ),
-      );
+                ),
+                if (i < items.length - 1)
+                  Divider(
+                    height: 1,
+                    color: colorScheme.outlineVariant,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
+              ],
+            );
+          }),
+        ],
+      ),
+    );
+  }
 
   Widget _buildDangerZone() => OutlinedButton.icon(
         onPressed: _showArchiveDialog,
@@ -1312,23 +1338,35 @@ class _InstitutionSettingsScreenState
         ),
       );
 
-  Widget _infoTile(String title, String subtitle) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF8FAFC),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-            const SizedBox(height: 4),
-            Text(subtitle, style: const TextStyle(color: AppColors.outline)),
-          ],
-        ),
-      );
+  Widget _infoTile(String title, String subtitle) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: TextStyle(color: colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _scaleRow(String label, String value) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -1345,46 +1383,51 @@ class _InstitutionSettingsScreenState
     required String title,
     required String message,
     bool isError = false,
-  }) =>
-      Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isError ? const Color(0xFFFFF1F1) : const Color(0xFFF8FAFC),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isError ? AppColors.error : const Color(0xFFE2E8F0),
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isError
+            ? AppColors.error.withValues(alpha: 0.10)
+            : colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isError ? AppColors.error : colorScheme.outlineVariant,
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            size: 34,
+            color: isError ? AppColors.error : AppColors.primary,
           ),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              size: 34,
-              color: isError ? AppColors.error : AppColors.primary,
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: isError ? AppColors.error : colorScheme.onSurface,
             ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: isError ? AppColors.error : AppColors.onSurface,
-              ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: colorScheme.onSurfaceVariant,
+              fontSize: 12,
             ),
-            const SizedBox(height: 6),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.onSurfaceVariant,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _auditLogRow(Map<String, dynamic> log) {
+    final colorScheme = Theme.of(context).colorScheme;
     final severity = (log['severity'] ?? log['level'] ?? 'medium').toString();
     final color = switch (severity) {
       'critical' => AppColors.error,
@@ -1401,9 +1444,9 @@ class _InstitutionSettingsScreenState
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
+        color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: colorScheme.outlineVariant),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1420,21 +1463,24 @@ class _InstitutionSettingsScreenState
               children: [
                 Text(
                   action,
-                  style: const TextStyle(fontWeight: FontWeight.w800),
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 3),
                 Text(
                   '$actor • $target',
-                  style: const TextStyle(
-                    color: AppColors.onSurfaceVariant,
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
                     fontSize: 12,
                   ),
                 ),
                 const SizedBox(height: 3),
                 Text(
                   time,
-                  style: const TextStyle(
-                    color: AppColors.outline,
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.82),
                     fontSize: 11,
                   ),
                 ),
@@ -1446,14 +1492,20 @@ class _InstitutionSettingsScreenState
     );
   }
 
-  BoxDecoration _cardDecoration() => BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFC4C5D5)),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6),
-        ],
-      );
+  BoxDecoration _cardDecoration() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return BoxDecoration(
+      color: colorScheme.surface,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: colorScheme.outlineVariant),
+      boxShadow: [
+        BoxShadow(
+          color: colorScheme.shadow.withValues(alpha: 0.08),
+          blurRadius: 6,
+        ),
+      ],
+    );
+  }
 
   void _showMessage(String message, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(

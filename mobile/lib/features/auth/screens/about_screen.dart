@@ -12,47 +12,48 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
+      backgroundColor: colorScheme.surface,
+      appBar: AppBar(
         backgroundColor: colorScheme.surface,
-        appBar: AppBar(
-          backgroundColor: colorScheme.surface,
-          elevation: 1,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded),
+        elevation: 1,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_rounded),
+          color: AppColors.primary,
+          onPressed: () => context.pop(),
+        ),
+        title: const Text(
+          'عن التطبيق',
+          style: TextStyle(
             color: AppColors.primary,
-            onPressed: () => context.pop(),
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            fontFamily: 'Almarai',
           ),
-          title: const Text(
-            'عن التطبيق',
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildAppHeader(),
+          const SizedBox(height: 24),
+          _buildCurrentVersion(context),
+          const SizedBox(height: 24),
+          Text(
+            'سجل الإصدارات',
             style: TextStyle(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w700,
               fontSize: 18,
+              fontWeight: FontWeight.w700,
               fontFamily: 'Almarai',
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _buildAppHeader(),
-            const SizedBox(height: 24),
-            _buildCurrentVersion(context),
-            const SizedBox(height: 24),
-            Text(
-              'سجل الإصدارات',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Almarai',
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...AppVersion.changelog.map((entry) => _buildVersionCard(context, entry)),
-            const SizedBox(height: 24),
-          ],
-        ),
-      );
+          const SizedBox(height: 12),
+          ...AppVersion.changelog
+              .map((entry) => _buildVersionCard(context, entry)),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
   }
 
   Widget _buildAppHeader() => Container(
@@ -185,10 +186,11 @@ class AboutScreen extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             latest.title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               fontFamily: 'Almarai',
+              color: colorScheme.onSurface,
             ),
             textAlign: TextAlign.right,
           ),
@@ -207,10 +209,10 @@ class AboutScreen extends StatelessWidget {
                       c,
                       textAlign: TextAlign.right,
                       softWrap: true,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         fontFamily: 'Almarai',
-                        color: AppColors.onSurfaceVariant,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -238,7 +240,7 @@ class AboutScreen extends StatelessWidget {
         border: Border.all(
           color: isLatest
               ? AppColors.primary.withValues(alpha: 0.4)
-              : AppColors.outlineVariant,
+              : colorScheme.outlineVariant,
         ),
       ),
       child: Theme(
@@ -262,8 +264,9 @@ class AboutScreen extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Almarai',
-                        color:
-                            isLatest ? AppColors.primary : AppColors.onSurface,
+                        color: isLatest
+                            ? AppColors.primary
+                            : colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -274,9 +277,9 @@ class AboutScreen extends StatelessWidget {
                 children: [
                   Text(
                     entry.date,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.onSurfaceVariant,
+                      color: colorScheme.onSurfaceVariant,
                       fontFamily: 'Almarai',
                     ),
                   ),
@@ -321,10 +324,10 @@ class AboutScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         c,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
                           fontFamily: 'Almarai',
-                          color: AppColors.onSurfaceVariant,
+                          color: colorScheme.onSurfaceVariant,
                         ),
                         textAlign: TextAlign.right,
                       ),
