@@ -179,5 +179,63 @@
       "minutes": {},
       "seconds": {}
     }
-  }
+  },
+  "studentPerformanceReportType": "Student performance",
+  "questionQualityReportType": "Question bank quality",
+  "classroomComparisonReportType": "Classroom comparison",
+  "skillAnalysisReportType": "Skill analysis report",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "reportSchedulesLoadFailed": "Could not load report schedules. Check your connection and try again.",
+  "addAtLeastOneEmail": "Add at least one email address",
+  "scheduleSavedSuccessfully": "Schedule saved successfully",
+  "scheduleSaveFailed": "Could not save schedule: {error}",
+  "@scheduleSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "scheduleSavedDemo": "Schedule saved successfully (demo mode)",
+  "deleteScheduleTitle": "Delete schedule",
+  "deleteScheduleConfirmation": "Are you sure you want to delete this schedule?",
+  "delete": "Delete",
+  "scheduleDeletedSuccessfully": "Schedule deleted successfully",
+  "scheduleDeleteFailed": "Could not delete: {error}",
+  "@scheduleDeleteFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "scheduleToggleFailed": "Could not change status: {error}",
+  "@scheduleToggleFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "enterValidEmail": "Enter a valid email address",
+  "reportScheduling": "Report scheduling",
+  "reportSchedulingSubtitle": "Set up recurring reports that are sent automatically to your email.",
+  "newScheduleSetup": "Set up a new schedule",
+  "reportType": "Report type",
+  "selectClasses": "Select classes",
+  "frequency": "Frequency",
+  "deliveryTime": "Delivery time",
+  "recipientEmails": "Recipient email addresses",
+  "fileFormat": "File format",
+  "saving": "Saving...",
+  "saveSchedule": "Save schedule",
+  "enable": "Enable",
+  "addClassSoon": "Adding a new class will be available soon",
+  "addClass": "Add class",
+  "activeSchedules": "Active schedules",
+  "reportsCount": "{count} reports",
+  "@reportsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "noActiveSchedules": "No active schedules",
+  "createScheduleUsingForm": "Create a new schedule using the form above",
+  "paused": "Paused"
 }

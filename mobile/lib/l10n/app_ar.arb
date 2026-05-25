@@ -179,5 +179,63 @@
       "minutes": {},
       "seconds": {}
     }
-  }
+  },
+  "studentPerformanceReportType": "أداء الطلاب العام",
+  "questionQualityReportType": "جودة بنك الأسئلة",
+  "classroomComparisonReportType": "مقارنة الفصول الدراسية",
+  "skillAnalysisReportType": "تقرير تحليل المهارات",
+  "daily": "يومي",
+  "weekly": "أسبوعي",
+  "monthly": "شهري",
+  "reportSchedulesLoadFailed": "تعذر تحميل جداول التقارير. تحقق من الاتصال ثم أعد المحاولة.",
+  "addAtLeastOneEmail": "يرجى إضافة بريد إلكتروني واحد على الأقل",
+  "scheduleSavedSuccessfully": "تم حفظ الجدول الزمني بنجاح",
+  "scheduleSaveFailed": "تعذر حفظ الجدول الزمني: {error}",
+  "@scheduleSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "scheduleSavedDemo": "تم حفظ الجدول الزمني بنجاح (وضع تجريبي)",
+  "deleteScheduleTitle": "حذف الجدول",
+  "deleteScheduleConfirmation": "هل أنت متأكد من حذف هذا الجدول الزمني؟",
+  "delete": "حذف",
+  "scheduleDeletedSuccessfully": "تم حذف الجدول بنجاح",
+  "scheduleDeleteFailed": "تعذّر الحذف: {error}",
+  "@scheduleDeleteFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "scheduleToggleFailed": "تعذّر تغيير الحالة: {error}",
+  "@scheduleToggleFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "enterValidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+  "reportScheduling": "جدولة التقارير",
+  "reportSchedulingSubtitle": "قم بإعداد تقارير دورية يتم إرسالها تلقائياً إلى بريدك الإلكتروني.",
+  "newScheduleSetup": "إعداد جدول جديد",
+  "reportType": "نوع التقرير",
+  "selectClasses": "اختيار الفصول",
+  "frequency": "التكرار",
+  "deliveryTime": "وقت التسليم",
+  "recipientEmails": "البريد الإلكتروني للمستلمين",
+  "fileFormat": "صيغة الملف",
+  "saving": "جاري الحفظ...",
+  "saveSchedule": "حفظ الجدول الزمني",
+  "enable": "تفعيل",
+  "addClassSoon": "إضافة فصل جديد قريباً",
+  "addClass": "إضافة فصل",
+  "activeSchedules": "الجداول النشطة",
+  "reportsCount": "{count} تقارير",
+  "@reportsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "noActiveSchedules": "لا توجد جداول نشطة",
+  "createScheduleUsingForm": "أنشئ جدولاً جديداً باستخدام النموذج أعلاه",
+  "paused": "متوقف"
 }

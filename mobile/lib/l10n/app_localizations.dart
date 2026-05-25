@@ -895,6 +895,234 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{minutes} دقيقة {seconds} ثانية'**
   String minutesSeconds(Object minutes, Object seconds);
+
+  /// No description provided for @studentPerformanceReportType.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء الطلاب العام'**
+  String get studentPerformanceReportType;
+
+  /// No description provided for @questionQualityReportType.
+  ///
+  /// In ar, this message translates to:
+  /// **'جودة بنك الأسئلة'**
+  String get questionQualityReportType;
+
+  /// No description provided for @classroomComparisonReportType.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة الفصول الدراسية'**
+  String get classroomComparisonReportType;
+
+  /// No description provided for @skillAnalysisReportType.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقرير تحليل المهارات'**
+  String get skillAnalysisReportType;
+
+  /// No description provided for @daily.
+  ///
+  /// In ar, this message translates to:
+  /// **'يومي'**
+  String get daily;
+
+  /// No description provided for @weekly.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعي'**
+  String get weekly;
+
+  /// No description provided for @monthly.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهري'**
+  String get monthly;
+
+  /// No description provided for @reportSchedulesLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل جداول التقارير. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get reportSchedulesLoadFailed;
+
+  /// No description provided for @addAtLeastOneEmail.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إضافة بريد إلكتروني واحد على الأقل'**
+  String get addAtLeastOneEmail;
+
+  /// No description provided for @scheduleSavedSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ الجدول الزمني بنجاح'**
+  String get scheduleSavedSuccessfully;
+
+  /// No description provided for @scheduleSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حفظ الجدول الزمني: {error}'**
+  String scheduleSaveFailed(Object error);
+
+  /// No description provided for @scheduleSavedDemo.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ الجدول الزمني بنجاح (وضع تجريبي)'**
+  String get scheduleSavedDemo;
+
+  /// No description provided for @deleteScheduleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الجدول'**
+  String get deleteScheduleTitle;
+
+  /// No description provided for @deleteScheduleConfirmation.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل أنت متأكد من حذف هذا الجدول الزمني؟'**
+  String get deleteScheduleConfirmation;
+
+  /// No description provided for @delete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get delete;
+
+  /// No description provided for @scheduleDeletedSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف الجدول بنجاح'**
+  String get scheduleDeletedSuccessfully;
+
+  /// No description provided for @scheduleDeleteFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر الحذف: {error}'**
+  String scheduleDeleteFailed(Object error);
+
+  /// No description provided for @scheduleToggleFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تغيير الحالة: {error}'**
+  String scheduleToggleFailed(Object error);
+
+  /// No description provided for @enterValidEmail.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال بريد إلكتروني صحيح'**
+  String get enterValidEmail;
+
+  /// No description provided for @reportScheduling.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدولة التقارير'**
+  String get reportScheduling;
+
+  /// No description provided for @reportSchedulingSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قم بإعداد تقارير دورية يتم إرسالها تلقائياً إلى بريدك الإلكتروني.'**
+  String get reportSchedulingSubtitle;
+
+  /// No description provided for @newScheduleSetup.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعداد جدول جديد'**
+  String get newScheduleSetup;
+
+  /// No description provided for @reportType.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع التقرير'**
+  String get reportType;
+
+  /// No description provided for @selectClasses.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار الفصول'**
+  String get selectClasses;
+
+  /// No description provided for @frequency.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرار'**
+  String get frequency;
+
+  /// No description provided for @deliveryTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت التسليم'**
+  String get deliveryTime;
+
+  /// No description provided for @recipientEmails.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني للمستلمين'**
+  String get recipientEmails;
+
+  /// No description provided for @fileFormat.
+  ///
+  /// In ar, this message translates to:
+  /// **'صيغة الملف'**
+  String get fileFormat;
+
+  /// No description provided for @saving.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري الحفظ...'**
+  String get saving;
+
+  /// No description provided for @saveSchedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الجدول الزمني'**
+  String get saveSchedule;
+
+  /// No description provided for @enable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل'**
+  String get enable;
+
+  /// No description provided for @addClassSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فصل جديد قريباً'**
+  String get addClassSoon;
+
+  /// No description provided for @addClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فصل'**
+  String get addClass;
+
+  /// No description provided for @activeSchedules.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجداول النشطة'**
+  String get activeSchedules;
+
+  /// No description provided for @reportsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} تقارير'**
+  String reportsCount(Object count);
+
+  /// No description provided for @noActiveSchedules.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد جداول نشطة'**
+  String get noActiveSchedules;
+
+  /// No description provided for @createScheduleUsingForm.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنشئ جدولاً جديداً باستخدام النموذج أعلاه'**
+  String get createScheduleUsingForm;
+
+  /// No description provided for @paused.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوقف'**
+  String get paused;
 }
 
 class _AppLocalizationsDelegate

@@ -431,4 +431,130 @@ class AppLocalizationsEn extends AppLocalizations {
   String minutesSeconds(Object minutes, Object seconds) {
     return '$minutes min $seconds sec';
   }
+
+  @override
+  String get studentPerformanceReportType => 'Student performance';
+
+  @override
+  String get questionQualityReportType => 'Question bank quality';
+
+  @override
+  String get classroomComparisonReportType => 'Classroom comparison';
+
+  @override
+  String get skillAnalysisReportType => 'Skill analysis report';
+
+  @override
+  String get daily => 'Daily';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String get reportSchedulesLoadFailed =>
+      'Could not load report schedules. Check your connection and try again.';
+
+  @override
+  String get addAtLeastOneEmail => 'Add at least one email address';
+
+  @override
+  String get scheduleSavedSuccessfully => 'Schedule saved successfully';
+
+  @override
+  String scheduleSaveFailed(Object error) {
+    return 'Could not save schedule: $error';
+  }
+
+  @override
+  String get scheduleSavedDemo => 'Schedule saved successfully (demo mode)';
+
+  @override
+  String get deleteScheduleTitle => 'Delete schedule';
+
+  @override
+  String get deleteScheduleConfirmation =>
+      'Are you sure you want to delete this schedule?';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get scheduleDeletedSuccessfully => 'Schedule deleted successfully';
+
+  @override
+  String scheduleDeleteFailed(Object error) {
+    return 'Could not delete: $error';
+  }
+
+  @override
+  String scheduleToggleFailed(Object error) {
+    return 'Could not change status: $error';
+  }
+
+  @override
+  String get enterValidEmail => 'Enter a valid email address';
+
+  @override
+  String get reportScheduling => 'Report scheduling';
+
+  @override
+  String get reportSchedulingSubtitle =>
+      'Set up recurring reports that are sent automatically to your email.';
+
+  @override
+  String get newScheduleSetup => 'Set up a new schedule';
+
+  @override
+  String get reportType => 'Report type';
+
+  @override
+  String get selectClasses => 'Select classes';
+
+  @override
+  String get frequency => 'Frequency';
+
+  @override
+  String get deliveryTime => 'Delivery time';
+
+  @override
+  String get recipientEmails => 'Recipient email addresses';
+
+  @override
+  String get fileFormat => 'File format';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get saveSchedule => 'Save schedule';
+
+  @override
+  String get enable => 'Enable';
+
+  @override
+  String get addClassSoon => 'Adding a new class will be available soon';
+
+  @override
+  String get addClass => 'Add class';
+
+  @override
+  String get activeSchedules => 'Active schedules';
+
+  @override
+  String reportsCount(Object count) {
+    return '$count reports';
+  }
+
+  @override
+  String get noActiveSchedules => 'No active schedules';
+
+  @override
+  String get createScheduleUsingForm =>
+      'Create a new schedule using the form above';
+
+  @override
+  String get paused => 'Paused';
 }

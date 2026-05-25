@@ -430,4 +430,130 @@ class AppLocalizationsAr extends AppLocalizations {
   String minutesSeconds(Object minutes, Object seconds) {
     return '$minutes دقيقة $seconds ثانية';
   }
+
+  @override
+  String get studentPerformanceReportType => 'أداء الطلاب العام';
+
+  @override
+  String get questionQualityReportType => 'جودة بنك الأسئلة';
+
+  @override
+  String get classroomComparisonReportType => 'مقارنة الفصول الدراسية';
+
+  @override
+  String get skillAnalysisReportType => 'تقرير تحليل المهارات';
+
+  @override
+  String get daily => 'يومي';
+
+  @override
+  String get weekly => 'أسبوعي';
+
+  @override
+  String get monthly => 'شهري';
+
+  @override
+  String get reportSchedulesLoadFailed =>
+      'تعذر تحميل جداول التقارير. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get addAtLeastOneEmail => 'يرجى إضافة بريد إلكتروني واحد على الأقل';
+
+  @override
+  String get scheduleSavedSuccessfully => 'تم حفظ الجدول الزمني بنجاح';
+
+  @override
+  String scheduleSaveFailed(Object error) {
+    return 'تعذر حفظ الجدول الزمني: $error';
+  }
+
+  @override
+  String get scheduleSavedDemo => 'تم حفظ الجدول الزمني بنجاح (وضع تجريبي)';
+
+  @override
+  String get deleteScheduleTitle => 'حذف الجدول';
+
+  @override
+  String get deleteScheduleConfirmation =>
+      'هل أنت متأكد من حذف هذا الجدول الزمني؟';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get scheduleDeletedSuccessfully => 'تم حذف الجدول بنجاح';
+
+  @override
+  String scheduleDeleteFailed(Object error) {
+    return 'تعذّر الحذف: $error';
+  }
+
+  @override
+  String scheduleToggleFailed(Object error) {
+    return 'تعذّر تغيير الحالة: $error';
+  }
+
+  @override
+  String get enterValidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get reportScheduling => 'جدولة التقارير';
+
+  @override
+  String get reportSchedulingSubtitle =>
+      'قم بإعداد تقارير دورية يتم إرسالها تلقائياً إلى بريدك الإلكتروني.';
+
+  @override
+  String get newScheduleSetup => 'إعداد جدول جديد';
+
+  @override
+  String get reportType => 'نوع التقرير';
+
+  @override
+  String get selectClasses => 'اختيار الفصول';
+
+  @override
+  String get frequency => 'التكرار';
+
+  @override
+  String get deliveryTime => 'وقت التسليم';
+
+  @override
+  String get recipientEmails => 'البريد الإلكتروني للمستلمين';
+
+  @override
+  String get fileFormat => 'صيغة الملف';
+
+  @override
+  String get saving => 'جاري الحفظ...';
+
+  @override
+  String get saveSchedule => 'حفظ الجدول الزمني';
+
+  @override
+  String get enable => 'تفعيل';
+
+  @override
+  String get addClassSoon => 'إضافة فصل جديد قريباً';
+
+  @override
+  String get addClass => 'إضافة فصل';
+
+  @override
+  String get activeSchedules => 'الجداول النشطة';
+
+  @override
+  String reportsCount(Object count) {
+    return '$count تقارير';
+  }
+
+  @override
+  String get noActiveSchedules => 'لا توجد جداول نشطة';
+
+  @override
+  String get createScheduleUsingForm =>
+      'أنشئ جدولاً جديداً باستخدام النموذج أعلاه';
+
+  @override
+  String get paused => 'متوقف';
 }
