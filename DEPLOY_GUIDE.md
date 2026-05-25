@@ -1,6 +1,6 @@
 # دليل النشر والتشغيل — EduAssess
 
-> الإصدار المرجعي: `1.0.71`
+> الإصدار المرجعي: `1.0.72`
 > آخر تحديث: مايو 2026
 
 ---
@@ -80,8 +80,8 @@ GET /api/v1/health
 
 ```bash
 cd adaptive-assessment-platform
-gh release create v1.0.71 --title "EduAssess v1.0.71 - ترجمة شاشة مواد الطالب" --generate-notes
-gh release upload v1.0.71 adaptive-mastery-v1.0.71.apk --clobber
+gh release create v1.0.72 --title "EduAssess v1.0.72 - جاهزية الأمان والخصوصية والمتجر" --generate-notes
+gh release upload v1.0.72 adaptive-mastery-v1.0.72.apk --clobber
 ```
 
 إن لم يكن `gh` متاحاً، أنشئ الإصدار يدوياً من صفحة المستودع على GitHub وارفع نفس ملف الـ APK.
@@ -144,4 +144,4 @@ flutter build apk --release --dart-define=ONESIGNAL_APP_ID=your_onesignal_app_id
 
 الهدف أن تكون تجربة الاختبار الخارجية قريبة جدًا من الإنتاج.
 
-آخر تحديث: مايو 2026 | EduAssess v1.0.71
+آخر تحديث: مايو 2026 | EduAssess v1.0.72

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.71';
-  static const int buildNumber = 71;
+  static const String current = '1.0.72';
+  static const int buildNumber = 72;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,23 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.72',
+      buildNumber: 72,
+      date: 'مايو 2026',
+      title: 'جاهزية الأمان والخصوصية والمتجر',
+      changes: [
+        'إضافة سياسة خصوصية وشروط استخدام مبدئية قابلة للنشر بعد استبدال بيانات التواصل النهائية.',
+        'توثيق مراجعة صلاحيات Android والتأكد من أن نسخة الإنتاج لا تطلب صلاحيات خطرة غير لازمة.',
+        'إضافة قائمة OWASP Mobile عملية تشمل التوكنات، النقل الآمن، CORS، التسجيل، الإشعارات، وتتبع الأعطال.',
+        'توثيق مراجعة CORS وحدود الطلبات في الإنتاج مع قيم وقيود واضحة قبل الإطلاق.',
+        'إضافة checklist إصدار رسمي يغطي الاختبارات، بناء APK، التوقيع، التحقق من الحزمة، والرفع إلى GitHub.',
+        'إضافة GitHub Actions لتشغيل اختبارات وتحليل Flutter وبناء/اختبارات Backend تلقائيًا.',
+        'تجهيز مسودة Google Play وخطة screenshots/video وصفحة دعم واتصال لاستكمال مهام المتجر.',
+        'تعريف أحداث ومقاييس الاحتفاظ الأساسية للطالب والمعلم والمشرف بدون إرسال بيانات حساسة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.71',
       buildNumber: 71,
