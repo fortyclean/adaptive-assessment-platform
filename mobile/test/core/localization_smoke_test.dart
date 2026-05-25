@@ -93,6 +93,33 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads student assessments localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.availableAssessments,
+            l10n.upcomingAssessments,
+            l10n.previousResults,
+            l10n.noAvailableAssessmentsTitle,
+            l10n.questionCountLabel(10),
+            l10n.minuteCountLabel(30),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Available assessments / Upcoming / Previous results / '
+        'No available assessments / 10 questions / 30 minutes',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

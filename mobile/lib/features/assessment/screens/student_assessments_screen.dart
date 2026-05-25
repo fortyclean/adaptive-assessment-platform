@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/user_avatar.dart';
@@ -90,7 +91,7 @@ class _StudentAssessmentsScreenState
           setState(() {
             _isLoading = false;
             _errorMessage =
-                'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.';
+                AppLocalizations.of(context).studentAssessmentsLoadFailed;
           });
           return;
         }
@@ -189,7 +190,9 @@ class _StudentAssessmentsScreenState
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final firstName = user?.fullName.split(' ').first ?? 'أحمد';
+    final l10n = AppLocalizations.of(context);
+    final firstName =
+        user?.fullName.split(' ').first ?? l10n.studentFallbackName;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -216,9 +219,9 @@ class _StudentAssessmentsScreenState
                 // App title + avatar (RTL: right side)
                 Row(
                   children: [
-                    const Text(
-                      'التقييم الذكي',
-                      style: TextStyle(
+                    Text(
+                      l10n.smartAssessment,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         color: AppColors.primary,
@@ -276,7 +279,7 @@ class _StudentAssessmentsScreenState
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            'مرحباً بك، $name',
+            AppLocalizations.of(context).studentAssessmentsGreeting(name),
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
@@ -286,7 +289,12 @@ class _StudentAssessmentsScreenState
           ),
           const SizedBox(height: 8),
           Text(
-            'لديك ${_available.length} ${_available.length == 1 ? 'اختبار متاح' : 'اختبارات متاحة'} اليوم للبدء بها.',
+            AppLocalizations.of(context).studentAssessmentsAvailableToday(
+              _available.length,
+              _available.length == 1
+                  ? AppLocalizations.of(context).availableAssessmentSingular
+                  : AppLocalizations.of(context).availableAssessmentPlural,
+            ),
             style: const TextStyle(
               fontSize: 14,
               color: AppColors.onSurfaceVariant,
@@ -308,21 +316,21 @@ class _StudentAssessmentsScreenState
           children: [
             Expanded(
               child: _buildTabButton(
-                label: 'الاختبارات المتاحة',
+                label: AppLocalizations.of(context).availableAssessments,
                 isActive: _tabController.index == 0,
                 onTap: () => setState(() => _tabController.index = 0),
               ),
             ),
             Expanded(
               child: _buildTabButton(
-                label: 'القادمة',
+                label: AppLocalizations.of(context).upcomingAssessments,
                 isActive: _tabController.index == 1,
                 onTap: () => setState(() => _tabController.index = 1),
               ),
             ),
             Expanded(
               child: _buildTabButton(
-                label: 'النتائج السابقة',
+                label: AppLocalizations.of(context).previousResults,
                 isActive: _tabController.index == 2,
                 onTap: () => setState(() => _tabController.index = 2),
               ),
@@ -387,8 +395,8 @@ class _StudentAssessmentsScreenState
     if (_available.isEmpty) {
       return _buildEmptyState(
         icon: Icons.quiz_outlined,
-        title: 'لا توجد اختبارات متاحة',
-        subtitle: 'ستظهر الاختبارات المتاحة هنا عند نشرها من قِبل المعلم',
+        title: AppLocalizations.of(context).noAvailableAssessmentsTitle,
+        subtitle: AppLocalizations.of(context).noAvailableAssessmentsMessage,
       );
     }
 
@@ -407,8 +415,8 @@ class _StudentAssessmentsScreenState
     if (_upcoming.isEmpty) {
       return _buildEmptyState(
         icon: Icons.event_outlined,
-        title: 'لا توجد اختبارات قادمة',
-        subtitle: 'ستظهر الاختبارات المجدولة مستقبلاً هنا',
+        title: AppLocalizations.of(context).noUpcomingAssessmentsTitle,
+        subtitle: AppLocalizations.of(context).noUpcomingAssessmentsMessage,
       );
     }
     return Column(
@@ -420,8 +428,8 @@ class _StudentAssessmentsScreenState
     if (_past.isEmpty) {
       return _buildEmptyState(
         icon: Icons.history_rounded,
-        title: 'لا توجد نتائج سابقة',
-        subtitle: 'ستظهر نتائج اختباراتك المكتملة هنا',
+        title: AppLocalizations.of(context).noPreviousResultsTitle,
+        subtitle: AppLocalizations.of(context).noPreviousResultsMessage,
       );
     }
     return Column(
@@ -432,7 +440,8 @@ class _StudentAssessmentsScreenState
   // ─── Available Assessment Card ───────────────────────────────────────────
 
   Widget _buildAvailableCard(Map<String, dynamic> assessment) {
-    final title = assessment['title'] as String? ?? 'اختبار';
+    final title = assessment['title'] as String? ??
+        AppLocalizations.of(context).assessmentFallback;
     final questionCount = assessment['questionCount'] as int? ?? 0;
     final timeLimitMinutes = assessment['timeLimitMinutes'] as int? ?? 0;
 
@@ -475,9 +484,9 @@ class _StudentAssessmentsScreenState
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: const Color(0xFFE2E8F0)),
                   ),
-                  child: const Text(
-                    'لم يبدأ بعد',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context).notStartedYet,
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF64748B),
@@ -503,7 +512,8 @@ class _StudentAssessmentsScreenState
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  '$questionCount سؤال',
+                  AppLocalizations.of(context)
+                      .questionCountLabel(questionCount),
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.onSurfaceVariant,
@@ -517,7 +527,8 @@ class _StudentAssessmentsScreenState
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  '$timeLimitMinutes دقيقة',
+                  AppLocalizations.of(context)
+                      .minuteCountLabel(timeLimitMinutes),
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.onSurfaceVariant,
@@ -548,9 +559,9 @@ class _StudentAssessmentsScreenState
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'ابدأ الآن',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context).startNow,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -597,25 +608,25 @@ class _StudentAssessmentsScreenState
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(24),
+            Padding(
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'المراجعة النهائية',
-                    style: TextStyle(
+                    AppLocalizations.of(context).finalReviewTitle,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.right,
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
-                    'استعد لاختبارات نهاية العام مع نماذجنا الذكية',
-                    style: TextStyle(
+                    AppLocalizations.of(context).finalReviewSubtitle,
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.white,
                     ),
@@ -642,18 +653,18 @@ class _StudentAssessmentsScreenState
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Text(
-                  'عرض الكل',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context).viewAll,
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: AppColors.primary,
                   ),
                 ),
               ),
-              const Text(
-                'النتائج الأخيرة',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context).recentResults,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: AppColors.onSurfaceVariant,
@@ -669,7 +680,8 @@ class _StudentAssessmentsScreenState
   // ─── Upcoming Assessment Card ────────────────────────────────────────────
 
   Widget _buildUpcomingCard(Map<String, dynamic> assessment) {
-    final title = assessment['title'] as String? ?? 'اختبار';
+    final title = assessment['title'] as String? ??
+        AppLocalizations.of(context).assessmentFallback;
     final from = assessment['availableFrom'] != null
         ? DateTime.tryParse(assessment['availableFrom'] as String)
         : null;
@@ -710,9 +722,9 @@ class _StudentAssessmentsScreenState
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
-                const Text(
-                  'يوم',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).day,
+                  style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -741,13 +753,17 @@ class _StudentAssessmentsScreenState
 
   Widget _buildPastCard(Map<String, dynamic> attempt) {
     final assessment = attempt['assessmentId'] as Map<String, dynamic>?;
-    final title = assessment?['title'] as String? ?? 'اختبار';
+    final title = assessment?['title'] as String? ??
+        AppLocalizations.of(context).assessmentFallback;
     final score = (attempt['scorePercentage'] as num?)?.toDouble() ?? 0.0;
     final submittedAt = attempt['submittedAt'] != null
         ? DateTime.tryParse(attempt['submittedAt'] as String)
         : null;
     final dateStr = submittedAt != null
-        ? 'تم الانتهاء: ${submittedAt.day} ${_getMonthName(submittedAt.month)}'
+        ? AppLocalizations.of(context).completedOn(
+            submittedAt.day,
+            _getMonthName(submittedAt.month),
+          )
         : '';
     final scoreColor = score >= 70 ? AppColors.success : AppColors.error;
 
@@ -778,9 +794,9 @@ class _StudentAssessmentsScreenState
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text(
-              'مراجعة',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            child: Text(
+              AppLocalizations.of(context).review,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
           const SizedBox(width: 12),
@@ -890,7 +906,7 @@ class _StudentAssessmentsScreenState
               const Icon(Icons.error_outline, color: AppColors.error, size: 42),
               const SizedBox(height: 12),
               Text(
-                _errorMessage ?? 'حدث خطأ غير متوقع',
+                _errorMessage ?? AppLocalizations.of(context).unexpectedError,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 14,
@@ -901,7 +917,7 @@ class _StudentAssessmentsScreenState
               ElevatedButton.icon(
                 onPressed: _loadData,
                 icon: const Icon(Icons.refresh),
-                label: const Text('إعادة المحاولة'),
+                label: Text(AppLocalizations.of(context).retry),
               ),
             ],
           ),
@@ -912,19 +928,33 @@ class _StudentAssessmentsScreenState
 
   String _getMonthName(int month) {
     const months = [
-      'يناير',
-      'فبراير',
-      'مارس',
-      'أبريل',
-      'مايو',
-      'يونيو',
-      'يوليو',
-      'أغسطس',
-      'سبتمبر',
-      'أكتوبر',
-      'نوفمبر',
-      'ديسمبر',
+      'monthJanuary',
+      'monthFebruary',
+      'monthMarch',
+      'monthApril',
+      'monthMay',
+      'monthJune',
+      'monthJuly',
+      'monthAugust',
+      'monthSeptember',
+      'monthOctober',
+      'monthNovember',
+      'monthDecember',
     ];
-    return months[month - 1];
+    final l10n = AppLocalizations.of(context);
+    return switch (months[month - 1]) {
+      'monthJanuary' => l10n.monthJanuary,
+      'monthFebruary' => l10n.monthFebruary,
+      'monthMarch' => l10n.monthMarch,
+      'monthApril' => l10n.monthApril,
+      'monthMay' => l10n.monthMay,
+      'monthJune' => l10n.monthJune,
+      'monthJuly' => l10n.monthJuly,
+      'monthAugust' => l10n.monthAugust,
+      'monthSeptember' => l10n.monthSeptember,
+      'monthOctober' => l10n.monthOctober,
+      'monthNovember' => l10n.monthNovember,
+      _ => l10n.monthDecember,
+    };
   }
 }

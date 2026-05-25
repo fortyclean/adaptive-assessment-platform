@@ -707,4 +707,130 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get correctAnswer => 'Correct answer';
+
+  @override
+  String get studentAssessmentsLoadFailed =>
+      'Could not load assessments. Check your connection and try again.';
+
+  @override
+  String studentAssessmentsGreeting(Object name) {
+    return 'Welcome, $name';
+  }
+
+  @override
+  String studentAssessmentsAvailableToday(Object count, Object label) {
+    return 'You have $count $label available today.';
+  }
+
+  @override
+  String get availableAssessmentSingular => 'assessment';
+
+  @override
+  String get availableAssessmentPlural => 'assessments';
+
+  @override
+  String get availableAssessments => 'Available assessments';
+
+  @override
+  String get upcomingAssessments => 'Upcoming';
+
+  @override
+  String get previousResults => 'Previous results';
+
+  @override
+  String get noAvailableAssessmentsTitle => 'No available assessments';
+
+  @override
+  String get noAvailableAssessmentsMessage =>
+      'Available assessments will appear here when your teacher publishes them.';
+
+  @override
+  String get noUpcomingAssessmentsTitle => 'No upcoming assessments';
+
+  @override
+  String get noUpcomingAssessmentsMessage =>
+      'Scheduled future assessments will appear here.';
+
+  @override
+  String get noPreviousResultsTitle => 'No previous results';
+
+  @override
+  String get noPreviousResultsMessage =>
+      'Your completed assessment results will appear here.';
+
+  @override
+  String get assessmentFallback => 'Assessment';
+
+  @override
+  String get notStartedYet => 'Not started yet';
+
+  @override
+  String questionCountLabel(Object count) {
+    return '$count questions';
+  }
+
+  @override
+  String minuteCountLabel(Object count) {
+    return '$count minutes';
+  }
+
+  @override
+  String get finalReviewTitle => 'Final review';
+
+  @override
+  String get finalReviewSubtitle =>
+      'Get ready for end-of-year exams with our smart practice models.';
+
+  @override
+  String get recentResults => 'Recent results';
+
+  @override
+  String get day => 'day';
+
+  @override
+  String completedOn(Object day, Object month) {
+    return 'Completed: $day $month';
+  }
+
+  @override
+  String get review => 'Review';
+
+  @override
+  String get unexpectedError => 'Something went wrong';
+
+  @override
+  String get monthJanuary => 'January';
+
+  @override
+  String get monthFebruary => 'February';
+
+  @override
+  String get monthMarch => 'March';
+
+  @override
+  String get monthApril => 'April';
+
+  @override
+  String get monthMay => 'May';
+
+  @override
+  String get monthJune => 'June';
+
+  @override
+  String get monthJuly => 'July';
+
+  @override
+  String get monthAugust => 'August';
+
+  @override
+  String get monthSeptember => 'September';
+
+  @override
+  String get monthOctober => 'October';
+
+  @override
+  String get monthNovember => 'November';
+
+  @override
+  String get monthDecember => 'December';
 }

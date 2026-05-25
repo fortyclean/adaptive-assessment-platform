@@ -304,5 +304,69 @@
   },
   "strengthPoint": "Strength",
   "yourAnswer": "Your answer",
-  "correctAnswer": "Correct answer"
+  "correctAnswer": "Correct answer",
+  "studentAssessmentsLoadFailed": "Could not load assessments. Check your connection and try again.",
+  "studentAssessmentsGreeting": "Welcome, {name}",
+  "@studentAssessmentsGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "studentAssessmentsAvailableToday": "You have {count} {label} available today.",
+  "@studentAssessmentsAvailableToday": {
+    "placeholders": {
+      "count": {},
+      "label": {}
+    }
+  },
+  "availableAssessmentSingular": "assessment",
+  "availableAssessmentPlural": "assessments",
+  "availableAssessments": "Available assessments",
+  "upcomingAssessments": "Upcoming",
+  "previousResults": "Previous results",
+  "noAvailableAssessmentsTitle": "No available assessments",
+  "noAvailableAssessmentsMessage": "Available assessments will appear here when your teacher publishes them.",
+  "noUpcomingAssessmentsTitle": "No upcoming assessments",
+  "noUpcomingAssessmentsMessage": "Scheduled future assessments will appear here.",
+  "noPreviousResultsTitle": "No previous results",
+  "noPreviousResultsMessage": "Your completed assessment results will appear here.",
+  "assessmentFallback": "Assessment",
+  "notStartedYet": "Not started yet",
+  "questionCountLabel": "{count} questions",
+  "@questionCountLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "minuteCountLabel": "{count} minutes",
+  "@minuteCountLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "finalReviewTitle": "Final review",
+  "finalReviewSubtitle": "Get ready for end-of-year exams with our smart practice models.",
+  "recentResults": "Recent results",
+  "day": "day",
+  "completedOn": "Completed: {day} {month}",
+  "@completedOn": {
+    "placeholders": {
+      "day": {},
+      "month": {}
+    }
+  },
+  "review": "Review",
+  "unexpectedError": "Something went wrong",
+  "monthJanuary": "January",
+  "monthFebruary": "February",
+  "monthMarch": "March",
+  "monthApril": "April",
+  "monthMay": "May",
+  "monthJune": "June",
+  "monthJuly": "July",
+  "monthAugust": "August",
+  "monthSeptember": "September",
+  "monthOctober": "October",
+  "monthNovember": "November",
+  "monthDecember": "December"
 }

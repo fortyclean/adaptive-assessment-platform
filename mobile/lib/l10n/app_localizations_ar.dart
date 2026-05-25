@@ -706,4 +706,129 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get correctAnswer => 'الإجابة الصحيحة';
+
+  @override
+  String get studentAssessmentsLoadFailed =>
+      'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String studentAssessmentsGreeting(Object name) {
+    return 'مرحباً بك، $name';
+  }
+
+  @override
+  String studentAssessmentsAvailableToday(Object count, Object label) {
+    return 'لديك $count $label اليوم للبدء بها.';
+  }
+
+  @override
+  String get availableAssessmentSingular => 'اختبار متاح';
+
+  @override
+  String get availableAssessmentPlural => 'اختبارات متاحة';
+
+  @override
+  String get availableAssessments => 'الاختبارات المتاحة';
+
+  @override
+  String get upcomingAssessments => 'القادمة';
+
+  @override
+  String get previousResults => 'النتائج السابقة';
+
+  @override
+  String get noAvailableAssessmentsTitle => 'لا توجد اختبارات متاحة';
+
+  @override
+  String get noAvailableAssessmentsMessage =>
+      'ستظهر الاختبارات المتاحة هنا عند نشرها من قِبل المعلم';
+
+  @override
+  String get noUpcomingAssessmentsTitle => 'لا توجد اختبارات قادمة';
+
+  @override
+  String get noUpcomingAssessmentsMessage =>
+      'ستظهر الاختبارات المجدولة مستقبلاً هنا';
+
+  @override
+  String get noPreviousResultsTitle => 'لا توجد نتائج سابقة';
+
+  @override
+  String get noPreviousResultsMessage => 'ستظهر نتائج اختباراتك المكتملة هنا';
+
+  @override
+  String get assessmentFallback => 'اختبار';
+
+  @override
+  String get notStartedYet => 'لم يبدأ بعد';
+
+  @override
+  String questionCountLabel(Object count) {
+    return '$count سؤال';
+  }
+
+  @override
+  String minuteCountLabel(Object count) {
+    return '$count دقيقة';
+  }
+
+  @override
+  String get finalReviewTitle => 'المراجعة النهائية';
+
+  @override
+  String get finalReviewSubtitle =>
+      'استعد لاختبارات نهاية العام مع نماذجنا الذكية';
+
+  @override
+  String get recentResults => 'النتائج الأخيرة';
+
+  @override
+  String get day => 'يوم';
+
+  @override
+  String completedOn(Object day, Object month) {
+    return 'تم الانتهاء: $day $month';
+  }
+
+  @override
+  String get review => 'مراجعة';
+
+  @override
+  String get unexpectedError => 'حدث خطأ غير متوقع';
+
+  @override
+  String get monthJanuary => 'يناير';
+
+  @override
+  String get monthFebruary => 'فبراير';
+
+  @override
+  String get monthMarch => 'مارس';
+
+  @override
+  String get monthApril => 'أبريل';
+
+  @override
+  String get monthMay => 'مايو';
+
+  @override
+  String get monthJune => 'يونيو';
+
+  @override
+  String get monthJuly => 'يوليو';
+
+  @override
+  String get monthAugust => 'أغسطس';
+
+  @override
+  String get monthSeptember => 'سبتمبر';
+
+  @override
+  String get monthOctober => 'أكتوبر';
+
+  @override
+  String get monthNovember => 'نوفمبر';
+
+  @override
+  String get monthDecember => 'ديسمبر';
 }

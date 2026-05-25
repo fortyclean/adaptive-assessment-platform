@@ -304,5 +304,69 @@
   },
   "strengthPoint": "نقطة قوة",
   "yourAnswer": "إجابتك",
-  "correctAnswer": "الإجابة الصحيحة"
+  "correctAnswer": "الإجابة الصحيحة",
+  "studentAssessmentsLoadFailed": "تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.",
+  "studentAssessmentsGreeting": "مرحباً بك، {name}",
+  "@studentAssessmentsGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "studentAssessmentsAvailableToday": "لديك {count} {label} اليوم للبدء بها.",
+  "@studentAssessmentsAvailableToday": {
+    "placeholders": {
+      "count": {},
+      "label": {}
+    }
+  },
+  "availableAssessmentSingular": "اختبار متاح",
+  "availableAssessmentPlural": "اختبارات متاحة",
+  "availableAssessments": "الاختبارات المتاحة",
+  "upcomingAssessments": "القادمة",
+  "previousResults": "النتائج السابقة",
+  "noAvailableAssessmentsTitle": "لا توجد اختبارات متاحة",
+  "noAvailableAssessmentsMessage": "ستظهر الاختبارات المتاحة هنا عند نشرها من قِبل المعلم",
+  "noUpcomingAssessmentsTitle": "لا توجد اختبارات قادمة",
+  "noUpcomingAssessmentsMessage": "ستظهر الاختبارات المجدولة مستقبلاً هنا",
+  "noPreviousResultsTitle": "لا توجد نتائج سابقة",
+  "noPreviousResultsMessage": "ستظهر نتائج اختباراتك المكتملة هنا",
+  "assessmentFallback": "اختبار",
+  "notStartedYet": "لم يبدأ بعد",
+  "questionCountLabel": "{count} سؤال",
+  "@questionCountLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "minuteCountLabel": "{count} دقيقة",
+  "@minuteCountLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "finalReviewTitle": "المراجعة النهائية",
+  "finalReviewSubtitle": "استعد لاختبارات نهاية العام مع نماذجنا الذكية",
+  "recentResults": "النتائج الأخيرة",
+  "day": "يوم",
+  "completedOn": "تم الانتهاء: {day} {month}",
+  "@completedOn": {
+    "placeholders": {
+      "day": {},
+      "month": {}
+    }
+  },
+  "review": "مراجعة",
+  "unexpectedError": "حدث خطأ غير متوقع",
+  "monthJanuary": "يناير",
+  "monthFebruary": "فبراير",
+  "monthMarch": "مارس",
+  "monthApril": "أبريل",
+  "monthMay": "مايو",
+  "monthJune": "يونيو",
+  "monthJuly": "يوليو",
+  "monthAugust": "أغسطس",
+  "monthSeptember": "سبتمبر",
+  "monthOctober": "أكتوبر",
+  "monthNovember": "نوفمبر",
+  "monthDecember": "ديسمبر"
 }

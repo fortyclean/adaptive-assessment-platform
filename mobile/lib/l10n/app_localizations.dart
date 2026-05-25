@@ -1405,6 +1405,228 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الإجابة الصحيحة'**
   String get correctAnswer;
+
+  /// No description provided for @studentAssessmentsLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get studentAssessmentsLoadFailed;
+
+  /// No description provided for @studentAssessmentsGreeting.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحباً بك، {name}'**
+  String studentAssessmentsGreeting(Object name);
+
+  /// No description provided for @studentAssessmentsAvailableToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'لديك {count} {label} اليوم للبدء بها.'**
+  String studentAssessmentsAvailableToday(Object count, Object label);
+
+  /// No description provided for @availableAssessmentSingular.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار متاح'**
+  String get availableAssessmentSingular;
+
+  /// No description provided for @availableAssessmentPlural.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبارات متاحة'**
+  String get availableAssessmentPlural;
+
+  /// No description provided for @availableAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبارات المتاحة'**
+  String get availableAssessments;
+
+  /// No description provided for @upcomingAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'القادمة'**
+  String get upcomingAssessments;
+
+  /// No description provided for @previousResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتائج السابقة'**
+  String get previousResults;
+
+  /// No description provided for @noAvailableAssessmentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد اختبارات متاحة'**
+  String get noAvailableAssessmentsTitle;
+
+  /// No description provided for @noAvailableAssessmentsMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر الاختبارات المتاحة هنا عند نشرها من قِبل المعلم'**
+  String get noAvailableAssessmentsMessage;
+
+  /// No description provided for @noUpcomingAssessmentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد اختبارات قادمة'**
+  String get noUpcomingAssessmentsTitle;
+
+  /// No description provided for @noUpcomingAssessmentsMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر الاختبارات المجدولة مستقبلاً هنا'**
+  String get noUpcomingAssessmentsMessage;
+
+  /// No description provided for @noPreviousResultsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج سابقة'**
+  String get noPreviousResultsTitle;
+
+  /// No description provided for @noPreviousResultsMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر نتائج اختباراتك المكتملة هنا'**
+  String get noPreviousResultsMessage;
+
+  /// No description provided for @assessmentFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار'**
+  String get assessmentFallback;
+
+  /// No description provided for @notStartedYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يبدأ بعد'**
+  String get notStartedYet;
+
+  /// No description provided for @questionCountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} سؤال'**
+  String questionCountLabel(Object count);
+
+  /// No description provided for @minuteCountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} دقيقة'**
+  String minuteCountLabel(Object count);
+
+  /// No description provided for @finalReviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المراجعة النهائية'**
+  String get finalReviewTitle;
+
+  /// No description provided for @finalReviewSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعد لاختبارات نهاية العام مع نماذجنا الذكية'**
+  String get finalReviewSubtitle;
+
+  /// No description provided for @recentResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتائج الأخيرة'**
+  String get recentResults;
+
+  /// No description provided for @day.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم'**
+  String get day;
+
+  /// No description provided for @completedOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الانتهاء: {day} {month}'**
+  String completedOn(Object day, Object month);
+
+  /// No description provided for @review.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة'**
+  String get review;
+
+  /// No description provided for @unexpectedError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ غير متوقع'**
+  String get unexpectedError;
+
+  /// No description provided for @monthJanuary.
+  ///
+  /// In ar, this message translates to:
+  /// **'يناير'**
+  String get monthJanuary;
+
+  /// No description provided for @monthFebruary.
+  ///
+  /// In ar, this message translates to:
+  /// **'فبراير'**
+  String get monthFebruary;
+
+  /// No description provided for @monthMarch.
+  ///
+  /// In ar, this message translates to:
+  /// **'مارس'**
+  String get monthMarch;
+
+  /// No description provided for @monthApril.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبريل'**
+  String get monthApril;
+
+  /// No description provided for @monthMay.
+  ///
+  /// In ar, this message translates to:
+  /// **'مايو'**
+  String get monthMay;
+
+  /// No description provided for @monthJune.
+  ///
+  /// In ar, this message translates to:
+  /// **'يونيو'**
+  String get monthJune;
+
+  /// No description provided for @monthJuly.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوليو'**
+  String get monthJuly;
+
+  /// No description provided for @monthAugust.
+  ///
+  /// In ar, this message translates to:
+  /// **'أغسطس'**
+  String get monthAugust;
+
+  /// No description provided for @monthSeptember.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبتمبر'**
+  String get monthSeptember;
+
+  /// No description provided for @monthOctober.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكتوبر'**
+  String get monthOctober;
+
+  /// No description provided for @monthNovember.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوفمبر'**
+  String get monthNovember;
+
+  /// No description provided for @monthDecember.
+  ///
+  /// In ar, this message translates to:
+  /// **'ديسمبر'**
+  String get monthDecember;
 }
 
 class _AppLocalizationsDelegate
