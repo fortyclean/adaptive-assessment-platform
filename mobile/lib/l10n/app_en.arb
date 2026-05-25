@@ -147,5 +147,37 @@
   "taskManagement": "Task management",
   "certificates": "Certificates",
   "classSchedule": "Class schedule",
-  "myClasses": "My classes"
+  "myClasses": "My classes",
+  "assessmentReport": "Assessment report",
+  "exportCsv": "Export CSV",
+  "teacherReportLoadFailed": "Could not load the report",
+  "nameHeader": "Name",
+  "scoreHeader": "Score",
+  "statusHeader": "Status",
+  "timeMinutesHeader": "Time (minutes)",
+  "timeout": "Timed out",
+  "resultsSummary": "Results summary",
+  "classAverage": "Class average",
+  "highestScore": "Highest score",
+  "lowestScore": "Lowest score",
+  "scoreDistribution": "Score distribution",
+  "skillMasteryLevels": "Skill mastery levels",
+  "studentResults": "Student results",
+  "noResultsYet": "No results yet",
+  "coreConceptAnalysis": "Detailed core concept analysis",
+  "goodMastery": "Good mastery",
+  "needsImprovement": "Needs improvement",
+  "targetPercent": "Target: {percent}%",
+  "@targetPercent": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "minutesSeconds": "{minutes} min {seconds} sec",
+  "@minutesSeconds": {
+    "placeholders": {
+      "minutes": {},
+      "seconds": {}
+    }
+  }
 }

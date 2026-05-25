@@ -364,4 +364,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myClasses => 'My classes';
+
+  @override
+  String get assessmentReport => 'Assessment report';
+
+  @override
+  String get exportCsv => 'Export CSV';
+
+  @override
+  String get teacherReportLoadFailed => 'Could not load the report';
+
+  @override
+  String get nameHeader => 'Name';
+
+  @override
+  String get scoreHeader => 'Score';
+
+  @override
+  String get statusHeader => 'Status';
+
+  @override
+  String get timeMinutesHeader => 'Time (minutes)';
+
+  @override
+  String get timeout => 'Timed out';
+
+  @override
+  String get resultsSummary => 'Results summary';
+
+  @override
+  String get classAverage => 'Class average';
+
+  @override
+  String get highestScore => 'Highest score';
+
+  @override
+  String get lowestScore => 'Lowest score';
+
+  @override
+  String get scoreDistribution => 'Score distribution';
+
+  @override
+  String get skillMasteryLevels => 'Skill mastery levels';
+
+  @override
+  String get studentResults => 'Student results';
+
+  @override
+  String get noResultsYet => 'No results yet';
+
+  @override
+  String get coreConceptAnalysis => 'Detailed core concept analysis';
+
+  @override
+  String get goodMastery => 'Good mastery';
+
+  @override
+  String get needsImprovement => 'Needs improvement';
+
+  @override
+  String targetPercent(Object percent) {
+    return 'Target: $percent%';
+  }
+
+  @override
+  String minutesSeconds(Object minutes, Object seconds) {
+    return '$minutes min $seconds sec';
+  }
 }

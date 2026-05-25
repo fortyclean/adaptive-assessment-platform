@@ -3,7 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/download_helper.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../assessment/repositories/teacher_repository.dart';
+
+AppLocalizations _reportL10n(BuildContext context) =>
+    Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+    AppLocalizationsAr();
 
 /// Teacher Analytics Report Screen — Screen 9, 28, 22
 /// Requirements: 9.1–9.6
@@ -92,8 +98,10 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
+      final l10n = _reportL10n(context);
       setState(() {
-        _error = 'تعذر تحميل التقرير';
+        _error = l10n.teacherReportLoadFailed;
         _isLoading = false;
       });
     }
@@ -105,12 +113,18 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
     final students =
         (_report!['studentResults'] as List?)?.cast<Map<String, dynamic>>() ??
             [];
-    final headers = ['الاسم', 'النتيجة', 'الحالة', 'الوقت (دقيقة)'];
+    final l10n = _reportL10n(context);
+    final headers = [
+      l10n.nameHeader,
+      l10n.scoreHeader,
+      l10n.statusHeader,
+      l10n.timeMinutesHeader,
+    ];
     final rows = students
         .map((s) => [
               s['fullName'] as String? ?? '',
               '${s['scorePercentage']}%',
-              if (s['status'] == 'completed') 'مكتمل' else 'انتهى الوقت',
+              if (s['status'] == 'completed') l10n.completed else l10n.timeout,
               '${(s['timeTakenSeconds'] as int? ?? 0) ~/ 60}',
             ])
         .toList();
@@ -128,46 +142,45 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
     final cs = Theme.of(context).colorScheme;
     final bg = cs.surface;
     return Scaffold(
+      backgroundColor: bg,
+      appBar: AppBar(
         backgroundColor: bg,
-        appBar: AppBar(
-          backgroundColor: bg,
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          titleSpacing: 0,
-          title: Text(
-            'تقرير الاختبار',
-            style: TextStyle(
-              color: cs.onSurface,
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-            ),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_forward_ios_rounded,
-                color: cs.onSurface, size: 20),
-            onPressed: () => context.pop(),
-          ),
-          actions: [
-            IconButton(
-              icon:
-                  const Icon(Icons.download_rounded, color: AppColors.primary),
-              onPressed: () => _exportReport(context),
-              tooltip: 'تصدير CSV',
-            ),
-            const SizedBox(width: 4),
-          ],
-          bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(1),
-            child: Divider(height: 1, color: AppColors.outlineVariant),
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        titleSpacing: 0,
+        title: Text(
+          _reportL10n(context).assessmentReport,
+          style: TextStyle(
+            color: cs.onSurface,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
           ),
         ),
-        body: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: AppColors.primary))
-            : _error != null
-                ? _buildErrorState()
-                : _buildContent(),
-      );
+        leading: IconButton(
+          icon: Icon(Icons.arrow_forward_ios_rounded,
+              color: cs.onSurface, size: 20),
+          onPressed: () => context.pop(),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.download_rounded, color: AppColors.primary),
+            onPressed: () => _exportReport(context),
+            tooltip: _reportL10n(context).exportCsv,
+          ),
+          const SizedBox(width: 4),
+        ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, color: AppColors.outlineVariant),
+        ),
+      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primary))
+          : _error != null
+              ? _buildErrorState()
+              : _buildContent(),
+    );
   }
 
   Widget _buildErrorState() => Center(
@@ -202,13 +215,14 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
                 });
                 _loadReport();
               },
-              child: const Text('إعادة المحاولة'),
+              child: Text(_reportL10n(context).retry),
             ),
           ],
         ),
       );
 
   Widget _buildContent() {
+    final l10n = _reportL10n(context);
     final r = _report!;
     final avg = r['classAverage'] as num?;
     final highest = r['highestScore'] as num?;
@@ -223,13 +237,13 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
       padding: const EdgeInsets.all(16),
       children: [
         // ── Summary Stats ──────────────────────────────────────────────────
-        _buildSectionLabel('ملخص النتائج'),
+        _buildSectionLabel(l10n.resultsSummary),
         const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
               child: _StatCard(
-                label: 'متوسط الصف',
+                label: l10n.classAverage,
                 value: avg != null ? '${avg.round()}%' : '-',
                 icon: Icons.bar_chart_rounded,
                 color: AppColors.primary,
@@ -239,7 +253,7 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
             const SizedBox(width: 10),
             Expanded(
               child: _StatCard(
-                label: 'أعلى درجة',
+                label: l10n.highestScore,
                 value: highest != null ? '${highest.round()}%' : '-',
                 icon: Icons.trending_up_rounded,
                 color: AppColors.success,
@@ -249,7 +263,7 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
             const SizedBox(width: 10),
             Expanded(
               child: _StatCard(
-                label: 'أدنى درجة',
+                label: l10n.lowestScore,
                 value: lowest != null ? '${lowest.round()}%' : '-',
                 icon: Icons.trending_down_rounded,
                 color: AppColors.error,
@@ -261,21 +275,21 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
         const SizedBox(height: 24),
 
         // ── Score Distribution ─────────────────────────────────────────────
-        _buildSectionLabel('توزيع الدرجات'),
+        _buildSectionLabel(l10n.scoreDistribution),
         const SizedBox(height: 10),
         _DistributionChart(distribution: dist),
         const SizedBox(height: 24),
 
         // ── Skill Heatmap ──────────────────────────────────────────────────
         if (heatmap.isNotEmpty) ...[
-          _buildSectionLabel('مستويات إتقان المهارات'),
+          _buildSectionLabel(l10n.skillMasteryLevels),
           const SizedBox(height: 10),
           _SkillHeatmapCard(heatmap: heatmap),
           const SizedBox(height: 24),
         ],
 
         // ── Student Results ────────────────────────────────────────────────
-        _buildSectionLabel('نتائج الطلاب'),
+        _buildSectionLabel(l10n.studentResults),
         const SizedBox(height: 10),
         if (students.isEmpty)
           _buildEmptyStudents()
@@ -308,14 +322,14 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.outlineVariant),
         ),
-        child: const Column(
+        child: Column(
           children: [
-            Icon(Icons.people_outline_rounded,
+            const Icon(Icons.people_outline_rounded,
                 color: AppColors.outlineVariant, size: 40),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
-              'لا توجد نتائج بعد',
-              style: TextStyle(
+              _reportL10n(context).noResultsYet,
+              style: const TextStyle(
                 color: AppColors.onSurfaceVariant,
                 fontSize: 14,
               ),
@@ -517,69 +531,72 @@ class _SkillHeatmapCard extends StatelessWidget {
   final List<Map<String, dynamic>> heatmap;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x05000000),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF4F2FC),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                border: Border(
-                  bottom: BorderSide(color: AppColors.outlineVariant),
-                ),
+  Widget build(BuildContext context) {
+    final l10n = _reportL10n(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outlineVariant),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x05000000),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF4F2FC),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              border: Border(
+                bottom: BorderSide(color: AppColors.outlineVariant),
               ),
-              child: const Row(
-                children: [
-                  Icon(Icons.psychology_rounded,
-                      color: AppColors.primary, size: 18),
-                  SizedBox(width: 8),
-                  Text(
-                    'تحليل مفصل للمفاهيم الأساسية',
-                    style: TextStyle(
-                      color: AppColors.onSurfaceVariant,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.psychology_rounded,
+                    color: AppColors.primary, size: 18),
+                const SizedBox(width: 8),
+                Text(
+                  l10n.coreConceptAnalysis,
+                  style: const TextStyle(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // Skills list
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: heatmap.asMap().entries.map((e) {
-                  final isLast = e.key == heatmap.length - 1;
-                  return Column(
-                    children: [
-                      _SkillHeatmapRow(skill: e.value),
-                      if (!isLast) ...[
-                        const SizedBox(height: 4),
-                        const Divider(
-                            height: 16, color: AppColors.outlineVariant),
-                      ],
+          ),
+          // Skills list
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: heatmap.asMap().entries.map((e) {
+                final isLast = e.key == heatmap.length - 1;
+                return Column(
+                  children: [
+                    _SkillHeatmapRow(skill: e.value),
+                    if (!isLast) ...[
+                      const SizedBox(height: 4),
+                      const Divider(
+                          height: 16, color: AppColors.outlineVariant),
                     ],
-                  );
-                }).toList(),
-              ),
+                  ],
+                );
+              }).toList(),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _SkillHeatmapRow extends StatelessWidget {
@@ -593,7 +610,8 @@ class _SkillHeatmapRow extends StatelessWidget {
     final color = isStrong ? AppColors.success : AppColors.error;
     final bgColor =
         isStrong ? AppColors.successContainer : AppColors.errorContainer;
-    final label = isStrong ? 'إتقان جيد' : 'يحتاج تطوير';
+    final l10n = _reportL10n(context);
+    final label = isStrong ? l10n.goodMastery : l10n.needsImprovement;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -654,18 +672,18 @@ class _SkillHeatmapRow extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'الهدف: 80%',
-              style: TextStyle(
+              l10n.targetPercent(80),
+              style: const TextStyle(
                 color: AppColors.onSurfaceVariant,
                 fontSize: 10,
               ),
               textDirection: TextDirection.rtl,
             ),
-            SizedBox.shrink(),
+            const SizedBox.shrink(),
           ],
         ),
       ],
@@ -689,7 +707,10 @@ class _StudentResultTile extends StatelessWidget {
         isPass ? AppColors.successContainer : AppColors.errorContainer;
     final timeSecs = student['timeTakenSeconds'] as int?;
     final timeStr = timeSecs != null
-        ? '${timeSecs ~/ 60} دقيقة ${timeSecs % 60} ثانية'
+        ? _reportL10n(context).minutesSeconds(
+            timeSecs ~/ 60,
+            timeSecs % 60,
+          )
         : null;
     final isCompleted = student['status'] == 'completed';
 
@@ -740,7 +761,8 @@ class _StudentResultTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  student['fullName'] as String? ?? 'طالب',
+                  student['fullName'] as String? ??
+                      _reportL10n(context).studentFallbackName,
                   style: const TextStyle(
                     color: AppColors.onSurface,
                     fontSize: 14,
@@ -762,7 +784,9 @@ class _StudentResultTile extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        isCompleted ? 'مكتمل' : 'انتهى الوقت',
+                        isCompleted
+                            ? _reportL10n(context).completed
+                            : _reportL10n(context).timeout,
                         style: TextStyle(
                           color: isCompleted
                               ? AppColors.success

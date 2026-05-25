@@ -363,4 +363,71 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get myClasses => 'فصولي';
+
+  @override
+  String get assessmentReport => 'تقرير الاختبار';
+
+  @override
+  String get exportCsv => 'تصدير CSV';
+
+  @override
+  String get teacherReportLoadFailed => 'تعذر تحميل التقرير';
+
+  @override
+  String get nameHeader => 'الاسم';
+
+  @override
+  String get scoreHeader => 'النتيجة';
+
+  @override
+  String get statusHeader => 'الحالة';
+
+  @override
+  String get timeMinutesHeader => 'الوقت (دقيقة)';
+
+  @override
+  String get timeout => 'انتهى الوقت';
+
+  @override
+  String get resultsSummary => 'ملخص النتائج';
+
+  @override
+  String get classAverage => 'متوسط الصف';
+
+  @override
+  String get highestScore => 'أعلى درجة';
+
+  @override
+  String get lowestScore => 'أدنى درجة';
+
+  @override
+  String get scoreDistribution => 'توزيع الدرجات';
+
+  @override
+  String get skillMasteryLevels => 'مستويات إتقان المهارات';
+
+  @override
+  String get studentResults => 'نتائج الطلاب';
+
+  @override
+  String get noResultsYet => 'لا توجد نتائج بعد';
+
+  @override
+  String get coreConceptAnalysis => 'تحليل مفصل للمفاهيم الأساسية';
+
+  @override
+  String get goodMastery => 'إتقان جيد';
+
+  @override
+  String get needsImprovement => 'يحتاج تطوير';
+
+  @override
+  String targetPercent(Object percent) {
+    return 'الهدف: $percent%';
+  }
+
+  @override
+  String minutesSeconds(Object minutes, Object seconds) {
+    return '$minutes دقيقة $seconds ثانية';
+  }
 }

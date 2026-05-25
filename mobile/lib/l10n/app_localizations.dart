@@ -769,6 +769,132 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'فصولي'**
   String get myClasses;
+
+  /// No description provided for @assessmentReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقرير الاختبار'**
+  String get assessmentReport;
+
+  /// No description provided for @exportCsv.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير CSV'**
+  String get exportCsv;
+
+  /// No description provided for @teacherReportLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل التقرير'**
+  String get teacherReportLoadFailed;
+
+  /// No description provided for @nameHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get nameHeader;
+
+  /// No description provided for @scoreHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتيجة'**
+  String get scoreHeader;
+
+  /// No description provided for @statusHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة'**
+  String get statusHeader;
+
+  /// No description provided for @timeMinutesHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت (دقيقة)'**
+  String get timeMinutesHeader;
+
+  /// No description provided for @timeout.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى الوقت'**
+  String get timeout;
+
+  /// No description provided for @resultsSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص النتائج'**
+  String get resultsSummary;
+
+  /// No description provided for @classAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط الصف'**
+  String get classAverage;
+
+  /// No description provided for @highestScore.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعلى درجة'**
+  String get highestScore;
+
+  /// No description provided for @lowestScore.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدنى درجة'**
+  String get lowestScore;
+
+  /// No description provided for @scoreDistribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'توزيع الدرجات'**
+  String get scoreDistribution;
+
+  /// No description provided for @skillMasteryLevels.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستويات إتقان المهارات'**
+  String get skillMasteryLevels;
+
+  /// No description provided for @studentResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتائج الطلاب'**
+  String get studentResults;
+
+  /// No description provided for @noResultsYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج بعد'**
+  String get noResultsYet;
+
+  /// No description provided for @coreConceptAnalysis.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحليل مفصل للمفاهيم الأساسية'**
+  String get coreConceptAnalysis;
+
+  /// No description provided for @goodMastery.
+  ///
+  /// In ar, this message translates to:
+  /// **'إتقان جيد'**
+  String get goodMastery;
+
+  /// No description provided for @needsImprovement.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحتاج تطوير'**
+  String get needsImprovement;
+
+  /// No description provided for @targetPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهدف: {percent}%'**
+  String targetPercent(Object percent);
+
+  /// No description provided for @minutesSeconds.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes} دقيقة {seconds} ثانية'**
+  String minutesSeconds(Object minutes, Object seconds);
 }
 
 class _AppLocalizationsDelegate

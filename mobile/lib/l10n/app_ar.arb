@@ -147,5 +147,37 @@
   "taskManagement": "إدارة المهام",
   "certificates": "الشهادات",
   "classSchedule": "الجدول الدراسي",
-  "myClasses": "فصولي"
+  "myClasses": "فصولي",
+  "assessmentReport": "تقرير الاختبار",
+  "exportCsv": "تصدير CSV",
+  "teacherReportLoadFailed": "تعذر تحميل التقرير",
+  "nameHeader": "الاسم",
+  "scoreHeader": "النتيجة",
+  "statusHeader": "الحالة",
+  "timeMinutesHeader": "الوقت (دقيقة)",
+  "timeout": "انتهى الوقت",
+  "resultsSummary": "ملخص النتائج",
+  "classAverage": "متوسط الصف",
+  "highestScore": "أعلى درجة",
+  "lowestScore": "أدنى درجة",
+  "scoreDistribution": "توزيع الدرجات",
+  "skillMasteryLevels": "مستويات إتقان المهارات",
+  "studentResults": "نتائج الطلاب",
+  "noResultsYet": "لا توجد نتائج بعد",
+  "coreConceptAnalysis": "تحليل مفصل للمفاهيم الأساسية",
+  "goodMastery": "إتقان جيد",
+  "needsImprovement": "يحتاج تطوير",
+  "targetPercent": "الهدف: {percent}%",
+  "@targetPercent": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "minutesSeconds": "{minutes} دقيقة {seconds} ثانية",
+  "@minutesSeconds": {
+    "placeholders": {
+      "minutes": {},
+      "seconds": {}
+    }
+  }
 }
