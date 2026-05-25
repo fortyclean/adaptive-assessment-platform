@@ -4,10 +4,14 @@
 > Package: `com.adaptivemastery.app`
 
 This checklist covers the tasks that cannot be fully verified by code, emulator,
-or CI alone. Run it on at least one real Android phone before marking tasks
-`39.4` and `41.4` as complete.
+or CI alone. OneSignal verification is currently deferred by product decision;
+run section 1 only when external push notifications become part of the active
+release scope. Run section 2 on at least one real Android phone before marking
+task `41.4` as complete.
 
 ## 1. OneSignal Production Verification
+
+Status: deferred for now.
 
 Goal: verify real push notification delivery on an installed production APK.
 
