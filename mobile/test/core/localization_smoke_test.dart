@@ -120,6 +120,34 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads assessment start and exam localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.assessmentStartTitle,
+            l10n.assessmentTypeAdaptive,
+            l10n.questionProgress(3, 10),
+            l10n.submitAssessment,
+            l10n.questionTypeTrueFalse,
+            l10n.writeEssayAnswerHere,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Start assessment / Adaptive / Question 3 of 10 / '
+        'Submit assessment / True or false / Type your essay answer here...',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

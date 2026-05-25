@@ -1627,6 +1627,222 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ديسمبر'**
   String get monthDecember;
+
+  /// No description provided for @assessmentStartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء الاختبار'**
+  String get assessmentStartTitle;
+
+  /// No description provided for @assessmentLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get assessmentLoadFailed;
+
+  /// No description provided for @assessmentStartFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.'**
+  String get assessmentStartFailed;
+
+  /// No description provided for @assessmentTypeAdaptive.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكيفي'**
+  String get assessmentTypeAdaptive;
+
+  /// No description provided for @assessmentTypeRandom.
+  ///
+  /// In ar, this message translates to:
+  /// **'عشوائي'**
+  String get assessmentTypeRandom;
+
+  /// No description provided for @questionCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأسئلة'**
+  String get questionCount;
+
+  /// No description provided for @timeLimit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت المحدد'**
+  String get timeLimit;
+
+  /// No description provided for @teacher.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلم'**
+  String get teacher;
+
+  /// No description provided for @previousScore.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجتك السابقة'**
+  String get previousScore;
+
+  /// No description provided for @navigationWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم تسجيل أي محاولة للخروج من شاشة الاختبار'**
+  String get navigationWarning;
+
+  /// No description provided for @startAssessmentNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ الاختبار الآن'**
+  String get startAssessmentNow;
+
+  /// No description provided for @assessmentUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبار غير متاح'**
+  String get assessmentUnavailable;
+
+  /// No description provided for @answerSubmitFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إرسال الإجابة. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get answerSubmitFailed;
+
+  /// No description provided for @assessmentSubmitFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تسليم الاختبار. يرجى المحاولة مرة أخرى.'**
+  String get assessmentSubmitFailed;
+
+  /// No description provided for @questionLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل السؤال من الخادم. يرجى إعادة المحاولة أو الرجوع.'**
+  String get questionLoadFailed;
+
+  /// No description provided for @confirmExit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الخروج'**
+  String get confirmExit;
+
+  /// No description provided for @exitAssessmentPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'**
+  String get exitAssessmentPrompt;
+
+  /// No description provided for @exit.
+  ///
+  /// In ar, this message translates to:
+  /// **'خروج'**
+  String get exit;
+
+  /// No description provided for @questionProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'السؤال {current} من {total}'**
+  String questionProgress(Object current, Object total);
+
+  /// No description provided for @submitAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم الاختبار'**
+  String get submitAssessment;
+
+  /// No description provided for @next.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالي'**
+  String get next;
+
+  /// No description provided for @previous.
+  ///
+  /// In ar, this message translates to:
+  /// **'السابق'**
+  String get previous;
+
+  /// No description provided for @noQuestions.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أسئلة'**
+  String get noQuestions;
+
+  /// No description provided for @chooseCorrectAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الإجابة الصحيحة:'**
+  String get chooseCorrectAnswer;
+
+  /// No description provided for @trueLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'صح'**
+  String get trueLabel;
+
+  /// No description provided for @falseLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطأ'**
+  String get falseLabel;
+
+  /// No description provided for @questionTypeMcq.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار من متعدد'**
+  String get questionTypeMcq;
+
+  /// No description provided for @questionTypeTrueFalse.
+  ///
+  /// In ar, this message translates to:
+  /// **'صح أو خطأ'**
+  String get questionTypeTrueFalse;
+
+  /// No description provided for @questionTypeFillBlank.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملء الفراغ'**
+  String get questionTypeFillBlank;
+
+  /// No description provided for @questionTypeEssay.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقالي'**
+  String get questionTypeEssay;
+
+  /// No description provided for @questionTypeGeneric.
+  ///
+  /// In ar, this message translates to:
+  /// **'سؤال'**
+  String get questionTypeGeneric;
+
+  /// No description provided for @writeAnswerHere.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب إجابتك هنا...'**
+  String get writeAnswerHere;
+
+  /// No description provided for @confirmAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الإجابة'**
+  String get confirmAnswer;
+
+  /// No description provided for @essayReviewNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً'**
+  String get essayReviewNotice;
+
+  /// No description provided for @writeEssayAnswerHere.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب إجابتك المقالية هنا...'**
+  String get writeEssayAnswerHere;
+
+  /// No description provided for @submitAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم الإجابة'**
+  String get submitAnswer;
 }
 
 class _AppLocalizationsDelegate

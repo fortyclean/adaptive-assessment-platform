@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../shared/providers/auth_provider.dart';
@@ -38,6 +39,9 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
     'createdBy': {'fullName': 'أ. محمد أحمد'},
     'previousScore': null,
   };
+
+  AppLocalizations? _l10nOrNull(BuildContext context) =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations);
 
   bool get _isDemoAssessmentId {
     final id = widget.assessmentId;
@@ -77,9 +81,10 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
           _isLoading = false;
         });
       } else {
+        if (!mounted) return;
         setState(() {
           _assessment = null;
-          _error =
+          _error = _l10nOrNull(context)?.assessmentLoadFailed ??
               'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.';
           _isLoading = false;
         });
@@ -151,9 +156,11 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         return;
       }
       if (!mounted) return;
+      final l10n = _l10nOrNull(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.'),
+        SnackBar(
+          content: Text(l10n?.assessmentStartFailed ??
+              'تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -165,6 +172,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final l10n = _l10nOrNull(context);
     return Scaffold(
       backgroundColor: cs.surface,
       appBar: AppBar(
@@ -172,7 +180,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          'بدء الاختبار',
+          l10n?.assessmentStartTitle ?? 'بدء الاختبار',
           style: TextStyle(
             color: cs.onSurface,
             fontWeight: FontWeight.w700,
@@ -216,7 +224,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
               const SizedBox(height: 24),
               OutlinedButton(
                 onPressed: _loadAssessment,
-                child: const Text('إعادة المحاولة'),
+                child: Text(_l10nOrNull(context)?.retry ?? 'إعادة المحاولة'),
               ),
             ],
           ),
@@ -225,7 +233,10 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
 
   Widget _buildContent() {
     final a = _assessment!;
-    final type = a['assessmentType'] == 'adaptive' ? 'تكيفي' : 'عشوائي';
+    final l10n = _l10nOrNull(context);
+    final type = a['assessmentType'] == 'adaptive'
+        ? l10n?.assessmentTypeAdaptive ?? 'تكيفي'
+        : l10n?.assessmentTypeRandom ?? 'عشوائي';
     final isAdaptive = a['assessmentType'] == 'adaptive';
     final teacherName = (a['createdBy'] as Map?)?['fullName'] as String? ?? '';
     final previousScore = a['previousScore'] as num?;
@@ -347,8 +358,8 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                     Expanded(
                       child: _DetailItem(
                         icon: Icons.quiz_outlined,
-                        label: 'عدد الأسئلة',
-                        value: '${a['questionCount'] ?? '--'} سؤال',
+                        label: l10n?.questionCount ?? 'عدد الأسئلة',
+                        value: _questionCountValue(a['questionCount']),
                       ),
                     ),
                     Container(
@@ -356,8 +367,8 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                     Expanded(
                       child: _DetailItem(
                         icon: Icons.timer_outlined,
-                        label: 'الوقت المحدد',
-                        value: '${a['timeLimitMinutes'] ?? '--'} دقيقة',
+                        label: l10n?.timeLimit ?? 'الوقت المحدد',
+                        value: _minuteValue(a['timeLimitMinutes']),
                       ),
                     ),
                   ],
@@ -366,7 +377,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                   const Divider(height: 24, color: AppColors.outlineVariant),
                   _DetailRow(
                     icon: Icons.person_outline_rounded,
-                    label: 'المعلم',
+                    label: l10n?.teacher ?? 'المعلم',
                     value: teacherName,
                   ),
                 ],
@@ -393,9 +404,9 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'نتيجتك السابقة',
-                        style: TextStyle(
+                      Text(
+                        l10n?.previousScore ?? 'نتيجتك السابقة',
+                        style: const TextStyle(
                           color: AppColors.success,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -427,16 +438,17 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                   Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
             ),
             padding: const EdgeInsets.all(14),
-            child: const Row(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.info_outline_rounded,
+                const Icon(Icons.info_outline_rounded,
                     color: AppColors.warning, size: 20),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'سيتم تسجيل أي محاولة للخروج من شاشة الاختبار',
-                    style: TextStyle(
+                    l10n?.navigationWarning ??
+                        'سيتم تسجيل أي محاولة للخروج من شاشة الاختبار',
+                    style: const TextStyle(
                       color: Color(0xFF92400E),
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
@@ -481,8 +493,9 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                         const SizedBox(width: 8),
                         Text(
                           _isAvailable
-                              ? 'ابدأ الاختبار الآن'
-                              : 'الاختبار غير متاح',
+                              ? l10n?.startAssessmentNow ?? 'ابدأ الاختبار الآن'
+                              : l10n?.assessmentUnavailable ??
+                                  'الاختبار غير متاح',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -507,9 +520,10 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                'رجوع',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              child: Text(
+                l10n?.back ?? 'رجوع',
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -518,6 +532,22 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         ],
       ),
     );
+  }
+
+  String _questionCountValue(Object? count) {
+    final l10n = _l10nOrNull(context);
+    if (count is num) {
+      return l10n?.questionCountLabel(count.toInt()) ?? '${count.toInt()} سؤال';
+    }
+    return l10n?.questionCountLabel(0).replaceFirst('0', '--') ?? '-- سؤال';
+  }
+
+  String _minuteValue(Object? count) {
+    final l10n = _l10nOrNull(context);
+    if (count is num) {
+      return l10n?.minuteCountLabel(count.toInt()) ?? '${count.toInt()} دقيقة';
+    }
+    return l10n?.minuteCountLabel(0).replaceFirst('0', '--') ?? '-- دقيقة';
   }
 }
 

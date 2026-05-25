@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/demo_questions.dart';
+import '../../../l10n/app_localizations.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Supported question types returned by the backend.
@@ -26,6 +27,9 @@ _QuestionType _parseQuestionType(String? raw) {
       return _QuestionType.unknown;
   }
 }
+
+AppLocalizations? _l10nOrNull(BuildContext context) =>
+    Localizations.of<AppLocalizations>(context, AppLocalizations);
 
 /// Exam Screen — Screen 15 & 2
 /// Requirements: 7.1–7.11
@@ -179,9 +183,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
         await _loadNextQuestion(retryCount: retryCount + 1);
         return;
       }
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
-        _fatalError =
+        _fatalError = _l10nOrNull(context)?.questionLoadFailed ??
             'تعذر تحميل السؤال من الخادم. يرجى إعادة المحاولة أو الرجوع.';
       });
     }
@@ -257,9 +262,11 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       }
     } catch (_) {
       if (!mounted) return;
+      final l10n = _l10nOrNull(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تعذر إرسال الإجابة. تحقق من الاتصال ثم أعد المحاولة.'),
+        SnackBar(
+          content: Text(l10n?.answerSubmitFailed ??
+              'تعذر إرسال الإجابة. تحقق من الاتصال ثم أعد المحاولة.'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -283,9 +290,11 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       } catch (_) {
         if (!mounted) return;
         setState(() => _isSubmitting = false);
+        final l10n = _l10nOrNull(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تعذر تسليم الاختبار. يرجى المحاولة مرة أخرى.'),
+          SnackBar(
+            content: Text(l10n?.assessmentSubmitFailed ??
+                'تعذر تسليم الاختبار. يرجى المحاولة مرة أخرى.'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -306,16 +315,17 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('تأكيد الخروج'),
-        content: const Text('هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
+        title: Text(_l10nOrNull(ctx)?.confirmExit ?? 'تأكيد الخروج'),
+        content: Text(_l10nOrNull(ctx)?.exitAssessmentPrompt ??
+            'هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('إلغاء')),
+              child: Text(_l10nOrNull(ctx)?.cancel ?? 'إلغاء')),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child:
-                  const Text('خروج', style: TextStyle(color: AppColors.error))),
+              child: Text(_l10nOrNull(ctx)?.exit ?? 'خروج',
+                  style: const TextStyle(color: AppColors.error))),
         ],
       ),
     );
@@ -414,12 +424,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
               const SizedBox(height: 16),
               FilledButton(
                 onPressed: _loadNextQuestion,
-                child: const Text('إعادة المحاولة'),
+                child: Text(_l10nOrNull(context)?.retry ?? 'إعادة المحاولة'),
               ),
               const SizedBox(height: 8),
               TextButton(
                 onPressed: () => context.pop(),
-                child: const Text('رجوع'),
+                child: Text(_l10nOrNull(context)?.back ?? 'رجوع'),
               ),
             ],
           ),
@@ -485,7 +495,9 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'السؤال $_questionNumber من ${widget.questionCount}',
+                _l10nOrNull(context)?.questionProgress(
+                        _questionNumber, widget.questionCount) ??
+                    'السؤال $_questionNumber من ${widget.questionCount}',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontWeight: FontWeight.w600,
@@ -566,7 +578,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    isLastQuestion ? 'تسليم الاختبار' : 'التالي',
+                    isLastQuestion
+                        ? _l10nOrNull(context)?.submitAssessment ??
+                            'تسليم الاختبار'
+                        : _l10nOrNull(context)?.next ?? 'التالي',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: canGoNext
                               ? Colors.white
@@ -624,7 +639,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                     const Icon(Icons.arrow_forward_rounded, size: 18),
                     const SizedBox(width: 6),
                     Text(
-                      'السابق',
+                      _l10nOrNull(context)?.previous ?? 'السابق',
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
@@ -643,7 +658,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
 
   Widget _buildQuestionBody() {
     if (_currentQuestion == null) {
-      return const Center(child: Text('لا توجد أسئلة'));
+      return Center(
+          child: Text(_l10nOrNull(context)?.noQuestions ?? 'لا توجد أسئلة'));
     }
 
     final qType =
@@ -688,7 +704,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        _questionTypeName(qType),
+                        _questionTypeName(context, qType),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: AppColors.onSurfaceVariant,
                               fontWeight: FontWeight.w500,
@@ -721,7 +737,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Text(
-              'اختر الإجابة الصحيحة:',
+              _l10nOrNull(context)?.chooseCorrectAnswer ??
+                  'اختر الإجابة الصحيحة:',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
@@ -757,13 +774,13 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 : [
                     _McqOption(
                       optionKey: 'true',
-                      value: 'صح',
+                      value: _l10nOrNull(context)?.trueLabel ?? 'صح',
                       isSelected: _selectedAnswer == 'true',
                       onTap: () => _selectAnswer('true'),
                     ),
                     _McqOption(
                       optionKey: 'false',
-                      value: 'خطأ',
+                      value: _l10nOrNull(context)?.falseLabel ?? 'خطأ',
                       isSelected: _selectedAnswer == 'false',
                       onTap: () => _selectAnswer('false'),
                     ),
@@ -789,18 +806,19 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     );
   }
 
-  String _questionTypeName(_QuestionType type) {
+  String _questionTypeName(BuildContext context, _QuestionType type) {
+    final l10n = _l10nOrNull(context);
     switch (type) {
       case _QuestionType.mcq:
-        return 'اختيار من متعدد';
+        return l10n?.questionTypeMcq ?? 'اختيار من متعدد';
       case _QuestionType.trueFalse:
-        return 'صح أو خطأ';
+        return l10n?.questionTypeTrueFalse ?? 'صح أو خطأ';
       case _QuestionType.fillBlank:
-        return 'ملء الفراغ';
+        return l10n?.questionTypeFillBlank ?? 'ملء الفراغ';
       case _QuestionType.essay:
-        return 'مقالي';
+        return l10n?.questionTypeEssay ?? 'مقالي';
       case _QuestionType.unknown:
-        return 'سؤال';
+        return l10n?.questionTypeGeneric ?? 'سؤال';
     }
   }
 }
@@ -969,7 +987,8 @@ class _FillBlankInputState extends State<_FillBlankInput> {
               if (_hasText) widget.onSubmit(widget.controller.text.trim());
             },
             decoration: InputDecoration(
-              hintText: 'اكتب إجابتك هنا...',
+              hintText:
+                  _l10nOrNull(context)?.writeAnswerHere ?? 'اكتب إجابتك هنا...',
               hintTextDirection: TextDirection.rtl,
               filled: true,
               fillColor: AppColors.surfaceContainer,
@@ -1015,7 +1034,7 @@ class _FillBlankInputState extends State<_FillBlankInput> {
               ),
             ),
             child: Text(
-              'تأكيد الإجابة',
+              _l10nOrNull(context)?.confirmAnswer ?? 'تأكيد الإجابة',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: _hasText ? Colors.white : AppColors.onSurface,
                     fontWeight: FontWeight.w600,
@@ -1084,7 +1103,8 @@ class _EssayInputState extends State<_EssayInput> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً',
+                    _l10nOrNull(context)?.essayReviewNotice ??
+                        'سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً',
                     textDirection: TextDirection.rtl,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: AppColors.onSurfaceVariant,
@@ -1105,7 +1125,8 @@ class _EssayInputState extends State<_EssayInput> {
             keyboardType: TextInputType.multiline,
             textInputAction: TextInputAction.newline,
             decoration: InputDecoration(
-              hintText: 'اكتب إجابتك المقالية هنا...',
+              hintText: _l10nOrNull(context)?.writeEssayAnswerHere ??
+                  'اكتب إجابتك المقالية هنا...',
               hintTextDirection: TextDirection.rtl,
               filled: true,
               fillColor: AppColors.surfaceContainer,
@@ -1152,7 +1173,7 @@ class _EssayInputState extends State<_EssayInput> {
               ),
             ),
             child: Text(
-              'تسليم الإجابة',
+              _l10nOrNull(context)?.submitAnswer ?? 'تسليم الإجابة',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: _hasText ? Colors.white : AppColors.onSurface,
                     fontWeight: FontWeight.w600,

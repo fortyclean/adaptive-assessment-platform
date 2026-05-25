@@ -833,4 +833,122 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get monthDecember => 'December';
+
+  @override
+  String get assessmentStartTitle => 'Start assessment';
+
+  @override
+  String get assessmentLoadFailed =>
+      'Could not load assessment details. Check your connection and try again.';
+
+  @override
+  String get assessmentStartFailed =>
+      'Could not start the assessment. Please try again.';
+
+  @override
+  String get assessmentTypeAdaptive => 'Adaptive';
+
+  @override
+  String get assessmentTypeRandom => 'Random';
+
+  @override
+  String get questionCount => 'Question count';
+
+  @override
+  String get timeLimit => 'Time limit';
+
+  @override
+  String get teacher => 'Teacher';
+
+  @override
+  String get previousScore => 'Previous score';
+
+  @override
+  String get navigationWarning =>
+      'Any attempt to leave the assessment screen will be logged';
+
+  @override
+  String get startAssessmentNow => 'Start assessment now';
+
+  @override
+  String get assessmentUnavailable => 'Assessment unavailable';
+
+  @override
+  String get answerSubmitFailed =>
+      'Could not submit the answer. Check your connection and try again.';
+
+  @override
+  String get assessmentSubmitFailed =>
+      'Could not submit the assessment. Please try again.';
+
+  @override
+  String get questionLoadFailed =>
+      'Could not load the question from the server. Please retry or go back.';
+
+  @override
+  String get confirmExit => 'Confirm exit';
+
+  @override
+  String get exitAssessmentPrompt =>
+      'Do you want to leave the assessment? Your answers will be saved.';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String questionProgress(Object current, Object total) {
+    return 'Question $current of $total';
+  }
+
+  @override
+  String get submitAssessment => 'Submit assessment';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get noQuestions => 'No questions available';
+
+  @override
+  String get chooseCorrectAnswer => 'Choose the correct answer:';
+
+  @override
+  String get trueLabel => 'True';
+
+  @override
+  String get falseLabel => 'False';
+
+  @override
+  String get questionTypeMcq => 'Multiple choice';
+
+  @override
+  String get questionTypeTrueFalse => 'True or false';
+
+  @override
+  String get questionTypeFillBlank => 'Fill in the blank';
+
+  @override
+  String get questionTypeEssay => 'Essay';
+
+  @override
+  String get questionTypeGeneric => 'Question';
+
+  @override
+  String get writeAnswerHere => 'Type your answer here...';
+
+  @override
+  String get confirmAnswer => 'Confirm answer';
+
+  @override
+  String get essayReviewNotice =>
+      'Your answer will be reviewed by the teacher and graded later';
+
+  @override
+  String get writeEssayAnswerHere => 'Type your essay answer here...';
+
+  @override
+  String get submitAnswer => 'Submit answer';
 }

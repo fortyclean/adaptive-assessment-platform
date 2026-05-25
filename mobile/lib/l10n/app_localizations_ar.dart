@@ -831,4 +831,122 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get monthDecember => 'ديسمبر';
+
+  @override
+  String get assessmentStartTitle => 'بدء الاختبار';
+
+  @override
+  String get assessmentLoadFailed =>
+      'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get assessmentStartFailed =>
+      'تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get assessmentTypeAdaptive => 'تكيفي';
+
+  @override
+  String get assessmentTypeRandom => 'عشوائي';
+
+  @override
+  String get questionCount => 'عدد الأسئلة';
+
+  @override
+  String get timeLimit => 'الوقت المحدد';
+
+  @override
+  String get teacher => 'المعلم';
+
+  @override
+  String get previousScore => 'نتيجتك السابقة';
+
+  @override
+  String get navigationWarning =>
+      'سيتم تسجيل أي محاولة للخروج من شاشة الاختبار';
+
+  @override
+  String get startAssessmentNow => 'ابدأ الاختبار الآن';
+
+  @override
+  String get assessmentUnavailable => 'الاختبار غير متاح';
+
+  @override
+  String get answerSubmitFailed =>
+      'تعذر إرسال الإجابة. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get assessmentSubmitFailed =>
+      'تعذر تسليم الاختبار. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get questionLoadFailed =>
+      'تعذر تحميل السؤال من الخادم. يرجى إعادة المحاولة أو الرجوع.';
+
+  @override
+  String get confirmExit => 'تأكيد الخروج';
+
+  @override
+  String get exitAssessmentPrompt =>
+      'هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.';
+
+  @override
+  String get exit => 'خروج';
+
+  @override
+  String questionProgress(Object current, Object total) {
+    return 'السؤال $current من $total';
+  }
+
+  @override
+  String get submitAssessment => 'تسليم الاختبار';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get previous => 'السابق';
+
+  @override
+  String get noQuestions => 'لا توجد أسئلة';
+
+  @override
+  String get chooseCorrectAnswer => 'اختر الإجابة الصحيحة:';
+
+  @override
+  String get trueLabel => 'صح';
+
+  @override
+  String get falseLabel => 'خطأ';
+
+  @override
+  String get questionTypeMcq => 'اختيار من متعدد';
+
+  @override
+  String get questionTypeTrueFalse => 'صح أو خطأ';
+
+  @override
+  String get questionTypeFillBlank => 'ملء الفراغ';
+
+  @override
+  String get questionTypeEssay => 'مقالي';
+
+  @override
+  String get questionTypeGeneric => 'سؤال';
+
+  @override
+  String get writeAnswerHere => 'اكتب إجابتك هنا...';
+
+  @override
+  String get confirmAnswer => 'تأكيد الإجابة';
+
+  @override
+  String get essayReviewNotice =>
+      'سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً';
+
+  @override
+  String get writeEssayAnswerHere => 'اكتب إجابتك المقالية هنا...';
+
+  @override
+  String get submitAnswer => 'تسليم الإجابة';
 }
