@@ -182,4 +182,57 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get legalese => '© 2026 EduAssess. جميع الحقوق محفوظة.';
+
+  @override
+  String get smartAssessment => 'التقييم الذكي';
+
+  @override
+  String get studentFallbackName => 'طالب';
+
+  @override
+  String welcomeName(Object name) {
+    return 'مرحباً بك، $name';
+  }
+
+  @override
+  String registeredSubjectsCount(Object count) {
+    return 'لديك $count مواد دراسية مسجلة لهذا الفصل';
+  }
+
+  @override
+  String get searchSubjectHint => 'البحث عن مادة...';
+
+  @override
+  String get filterAll => 'الكل';
+
+  @override
+  String get filterFirstTerm => 'الفصل الأول';
+
+  @override
+  String get filterScience => 'علمي';
+
+  @override
+  String get filterLiterary => 'أدبي';
+
+  @override
+  String get filterAcademic => 'أكاديمي';
+
+  @override
+  String get filterPractical => 'عملي';
+
+  @override
+  String get noMatchingSubjects => 'لا توجد مواد مطابقة';
+
+  @override
+  String get progressAchieved => 'التقدم المحرز';
+
+  @override
+  String get finalExamsPrepTitle => 'استعد للاختبارات النهائية!';
+
+  @override
+  String get finalExamsPrepSubtitle =>
+      'راجع دروسك السابقة وقم بتقييم مستواك الآن من خلال قسم الاختبارات الذكية.';
+
+  @override
+  String get startNow => 'ابدأ الآن';
 }

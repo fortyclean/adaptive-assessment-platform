@@ -439,6 +439,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'© 2026 EduAssess. جميع الحقوق محفوظة.'**
   String get legalese;
+
+  /// No description provided for @smartAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم الذكي'**
+  String get smartAssessment;
+
+  /// No description provided for @studentFallbackName.
+  ///
+  /// In ar, this message translates to:
+  /// **'طالب'**
+  String get studentFallbackName;
+
+  /// No description provided for @welcomeName.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحباً بك، {name}'**
+  String welcomeName(Object name);
+
+  /// No description provided for @registeredSubjectsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'لديك {count} مواد دراسية مسجلة لهذا الفصل'**
+  String registeredSubjectsCount(Object count);
+
+  /// No description provided for @searchSubjectHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث عن مادة...'**
+  String get searchSubjectHint;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get filterAll;
+
+  /// No description provided for @filterFirstTerm.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصل الأول'**
+  String get filterFirstTerm;
+
+  /// No description provided for @filterScience.
+  ///
+  /// In ar, this message translates to:
+  /// **'علمي'**
+  String get filterScience;
+
+  /// No description provided for @filterLiterary.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدبي'**
+  String get filterLiterary;
+
+  /// No description provided for @filterAcademic.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكاديمي'**
+  String get filterAcademic;
+
+  /// No description provided for @filterPractical.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملي'**
+  String get filterPractical;
+
+  /// No description provided for @noMatchingSubjects.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مواد مطابقة'**
+  String get noMatchingSubjects;
+
+  /// No description provided for @progressAchieved.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقدم المحرز'**
+  String get progressAchieved;
+
+  /// No description provided for @finalExamsPrepTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعد للاختبارات النهائية!'**
+  String get finalExamsPrepTitle;
+
+  /// No description provided for @finalExamsPrepSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع دروسك السابقة وقم بتقييم مستواك الآن من خلال قسم الاختبارات الذكية.'**
+  String get finalExamsPrepSubtitle;
+
+  /// No description provided for @startNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ الآن'**
+  String get startNow;
 }
 
 class _AppLocalizationsDelegate

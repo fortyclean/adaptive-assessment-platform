@@ -61,5 +61,31 @@
   "logoutQuestion": "هل تريد تسجيل الخروج؟",
   "logoutAccountQuestion": "هل تريد تسجيل الخروج من حسابك؟",
   "logoutConfirm": "خروج",
-  "legalese": "© 2026 EduAssess. جميع الحقوق محفوظة."
+  "legalese": "© 2026 EduAssess. جميع الحقوق محفوظة.",
+  "smartAssessment": "التقييم الذكي",
+  "studentFallbackName": "طالب",
+  "welcomeName": "مرحباً بك، {name}",
+  "@welcomeName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "registeredSubjectsCount": "لديك {count} مواد دراسية مسجلة لهذا الفصل",
+  "@registeredSubjectsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "searchSubjectHint": "البحث عن مادة...",
+  "filterAll": "الكل",
+  "filterFirstTerm": "الفصل الأول",
+  "filterScience": "علمي",
+  "filterLiterary": "أدبي",
+  "filterAcademic": "أكاديمي",
+  "filterPractical": "عملي",
+  "noMatchingSubjects": "لا توجد مواد مطابقة",
+  "progressAchieved": "التقدم المحرز",
+  "finalExamsPrepTitle": "استعد للاختبارات النهائية!",
+  "finalExamsPrepSubtitle": "راجع دروسك السابقة وقم بتقييم مستواك الآن من خلال قسم الاختبارات الذكية.",
+  "startNow": "ابدأ الآن"
 }

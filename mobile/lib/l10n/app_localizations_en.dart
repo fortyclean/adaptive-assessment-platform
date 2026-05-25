@@ -182,4 +182,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalese => '© 2026 EduAssess. All rights reserved.';
+
+  @override
+  String get smartAssessment => 'Smart assessment';
+
+  @override
+  String get studentFallbackName => 'Student';
+
+  @override
+  String welcomeName(Object name) {
+    return 'Welcome, $name';
+  }
+
+  @override
+  String registeredSubjectsCount(Object count) {
+    return 'You have $count registered subjects this term';
+  }
+
+  @override
+  String get searchSubjectHint => 'Search for a subject...';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterFirstTerm => 'First term';
+
+  @override
+  String get filterScience => 'Science';
+
+  @override
+  String get filterLiterary => 'Literary';
+
+  @override
+  String get filterAcademic => 'Academic';
+
+  @override
+  String get filterPractical => 'Practical';
+
+  @override
+  String get noMatchingSubjects => 'No matching subjects';
+
+  @override
+  String get progressAchieved => 'Progress achieved';
+
+  @override
+  String get finalExamsPrepTitle => 'Get ready for final exams!';
+
+  @override
+  String get finalExamsPrepSubtitle =>
+      'Review previous lessons and assess your level through smart assessments.';
+
+  @override
+  String get startNow => 'Start now';
 }

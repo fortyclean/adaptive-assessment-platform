@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.70';
-  static const int buildNumber = 70;
+  static const String current = '1.0.71';
+  static const int buildNumber = 71;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.71',
+      buildNumber: 71,
+      date: 'مايو 2026',
+      title: 'ترجمة شاشة مواد الطالب',
+      changes: [
+        'نقل عناوين وبحث وفلاتر شاشة مواد الطالب إلى مفاتيح ARB عربية وإنجليزية.',
+        'تحويل فلاتر المواد إلى أكواد ثابتة تفصل منطق الفلترة عن نص العرض.',
+        'دعم عرض التصنيفات والفلاتر حسب اللغة المختارة مع الحفاظ على بيانات الديمو.',
+        'إضافة اختبار Widget يؤكد ظهور نصوص شاشة مواد الطالب باللغة الإنجليزية.',
+        'إضافة تقدم فرعي جديد داخل 38.2b لاستكمال باقي شاشات الطالب لاحقًا.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.70',
       buildNumber: 70,

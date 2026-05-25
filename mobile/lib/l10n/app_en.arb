@@ -61,5 +61,31 @@
   "logoutQuestion": "Do you want to log out?",
   "logoutAccountQuestion": "Do you want to log out of your account?",
   "logoutConfirm": "Log out",
-  "legalese": "© 2026 EduAssess. All rights reserved."
+  "legalese": "© 2026 EduAssess. All rights reserved.",
+  "smartAssessment": "Smart assessment",
+  "studentFallbackName": "Student",
+  "welcomeName": "Welcome, {name}",
+  "@welcomeName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "registeredSubjectsCount": "You have {count} registered subjects this term",
+  "@registeredSubjectsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "searchSubjectHint": "Search for a subject...",
+  "filterAll": "All",
+  "filterFirstTerm": "First term",
+  "filterScience": "Science",
+  "filterLiterary": "Literary",
+  "filterAcademic": "Academic",
+  "filterPractical": "Practical",
+  "noMatchingSubjects": "No matching subjects",
+  "progressAchieved": "Progress achieved",
+  "finalExamsPrepTitle": "Get ready for final exams!",
+  "finalExamsPrepSubtitle": "Review previous lessons and assess your level through smart assessments.",
+  "startNow": "Start now"
 }
