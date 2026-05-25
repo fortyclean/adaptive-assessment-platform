@@ -646,4 +646,64 @@ class AppLocalizationsAr extends AppLocalizations {
   String questionsCount(Object count) {
     return '$count سؤال';
   }
+
+  @override
+  String get resultScreenTitle => 'نتيجة الاختبار';
+
+  @override
+  String get resultLoadFailed => 'تعذر تحميل النتيجة. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get skillAnalysis => 'تحليل المهارات';
+
+  @override
+  String get wrongQuestions => 'الأسئلة الخاطئة';
+
+  @override
+  String get pendingReviewTitle => 'في انتظار المراجعة';
+
+  @override
+  String pendingReviewMessage(Object countText) {
+    return 'تم تسليم اختبارك بنجاح. يحتوي على $countText أسئلة مقالية تحتاج إلى مراجعة يدوية من المعلم.\n\nستصلك إشعاراً عند اكتمال التصحيح.';
+  }
+
+  @override
+  String get someQuestions => 'بعض';
+
+  @override
+  String get backToHome => 'العودة للرئيسية';
+
+  @override
+  String get scoreExcellent => 'ممتاز';
+
+  @override
+  String get scoreGood => 'جيد';
+
+  @override
+  String get scoreNeedsImprovement => 'يحتاج تحسين';
+
+  @override
+  String get greatAchievement => 'إنجاز رائع!';
+
+  @override
+  String get earnedExcellenceBadge => 'حصلت على شارة التميز';
+
+  @override
+  String pointsEarnedLabel(Object points) {
+    return '+$points نقطة';
+  }
+
+  @override
+  String bonusPointsLabel(Object points) {
+    return '+$points مكافأة';
+  }
+
+  @override
+  String get strengthPoint => 'نقطة قوة';
+
+  @override
+  String get yourAnswer => 'إجابتك';
+
+  @override
+  String get correctAnswer => 'الإجابة الصحيحة';
 }

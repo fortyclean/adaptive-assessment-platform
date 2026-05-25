@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Results Screen — Screen 4 & 16
@@ -100,61 +101,71 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
     } on Exception {
       if (!mounted) return;
       setState(() {
-        _error = 'تعذر تحميل النتيجة. يرجى المحاولة مرة أخرى.';
+        _error = _localized(
+          context,
+          (l10n) => l10n.resultLoadFailed,
+          'تعذر تحميل النتيجة. يرجى المحاولة مرة أخرى.',
+        );
         _isLoading = false;
       });
     }
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          shadowColor: Colors.black12,
-          surfaceTintColor: Colors.transparent,
-          title: const Text(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: Colors.black12,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+          _localized(
+            context,
+            (l10n) => l10n.resultScreenTitle,
             'نتيجة الاختبار',
-            style: TextStyle(
-              color: AppColors.primaryContainer,
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
-            ),
           ),
-          automaticallyImplyLeading: false,
-          actions: [
-            TextButton(
-              onPressed: () => context.go('/student'),
-              child: const Text(
-                'الرئيسية',
-                style: TextStyle(
-                  color: AppColors.primaryContainer,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(height: 1, color: const Color(0xFFE2E8F0)),
+          style: const TextStyle(
+            color: AppColors.primaryContainer,
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
           ),
         ),
-        body: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryContainer,
-                ),
-              )
-            : _error != null
-                ? Center(
-                    child: Text(
-                      _error!,
-                      style: const TextStyle(color: AppColors.onSurfaceVariant),
-                    ),
-                  )
-                : _buildContent(),
-      );
+        automaticallyImplyLeading: false,
+        actions: [
+          TextButton(
+            onPressed: () => context.go('/student'),
+            child: Text(
+              _localized(context, (l10n) => l10n.home, 'الرئيسية'),
+              style: const TextStyle(
+                color: AppColors.primaryContainer,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: const Color(0xFFE2E8F0)),
+        ),
+      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryContainer,
+              ),
+            )
+          : _error != null
+              ? Center(
+                  child: Text(
+                    _error!,
+                    style: const TextStyle(color: AppColors.onSurfaceVariant),
+                  ),
+                )
+              : _buildContent(),
+    );
+  }
 
   Widget _buildContent() {
     final r = _result!;
@@ -189,7 +200,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
 
           // Achievement badge for >= 90%
           if (score >= 90) ...[
-            _AchievementBadge(),
+            const _AchievementBadge(),
             const SizedBox(height: 16),
           ],
 
@@ -199,7 +210,13 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
 
           // Skill breakdown
           if (skillBreakdown.isNotEmpty) ...[
-            const _SectionHeader(title: 'تحليل المهارات'),
+            _SectionHeader(
+              title: _localized(
+                context,
+                (l10n) => l10n.skillAnalysis,
+                'تحليل المهارات',
+              ),
+            ),
             const SizedBox(height: 12),
             _SkillBreakdownCard(skills: skillBreakdown),
             const SizedBox(height: 24),
@@ -207,7 +224,13 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
 
           // Wrong answers
           if (wrongAnswers.isNotEmpty) ...[
-            const _SectionHeader(title: 'الأسئلة الخاطئة'),
+            _SectionHeader(
+              title: _localized(
+                context,
+                (l10n) => l10n.wrongQuestions,
+                'الأسئلة الخاطئة',
+              ),
+            ),
             const SizedBox(height: 12),
             ...wrongAnswers.map((a) => _WrongAnswerCard(answer: a)),
           ],
@@ -237,9 +260,13 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
-                'في انتظار المراجعة',
-                style: TextStyle(
+              Text(
+                _localized(
+                  context,
+                  (l10n) => l10n.pendingReviewTitle,
+                  'في انتظار المراجعة',
+                ),
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: AppColors.onSurface,
@@ -248,10 +275,18 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
               ),
               const SizedBox(height: 12),
               Text(
-                'تم تسليم اختبارك بنجاح. يحتوي على '
-                '${pendingCount > 0 ? pendingCount : 'بعض'} '
-                'أسئلة مقالية تحتاج إلى مراجعة يدوية من المعلم.\n\n'
-                'ستصلك إشعاراً عند اكتمال التصحيح.',
+                _localized(
+                  context,
+                  (l10n) => l10n.pendingReviewMessage(
+                    pendingCount > 0
+                        ? pendingCount.toString()
+                        : l10n.someQuestions,
+                  ),
+                  'تم تسليم اختبارك بنجاح. يحتوي على '
+                  '${pendingCount > 0 ? pendingCount : 'بعض'} '
+                  'أسئلة مقالية تحتاج إلى مراجعة يدوية من المعلم.\n\n'
+                  'ستصلك إشعاراً عند اكتمال التصحيح.',
+                ),
                 style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.onSurfaceVariant,
@@ -263,7 +298,13 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
               OutlinedButton.icon(
                 onPressed: () => context.go('/student'),
                 icon: const Icon(Icons.home_rounded),
-                label: const Text('العودة للرئيسية'),
+                label: Text(
+                  _localized(
+                    context,
+                    (l10n) => l10n.backToHome,
+                    'العودة للرئيسية',
+                  ),
+                ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.primaryContainer,
                   side: const BorderSide(color: AppColors.primaryContainer),
@@ -294,10 +335,14 @@ class _ScoreRing extends StatelessWidget {
     final bgColor =
         isGood ? AppColors.successContainer : AppColors.errorContainer;
     final label = score >= 90
-        ? 'ممتاز'
+        ? _localized(context, (l10n) => l10n.scoreExcellent, 'ممتاز')
         : score >= 70
-            ? 'جيد'
-            : 'يحتاج تحسين';
+            ? _localized(context, (l10n) => l10n.scoreGood, 'جيد')
+            : _localized(
+                context,
+                (l10n) => l10n.scoreNeedsImprovement,
+                'يحتاج تحسين',
+              );
 
     return Center(
       child: Column(
@@ -404,6 +449,8 @@ class _RingPainter extends CustomPainter {
 // ─── Achievement Badge ────────────────────────────────────────────────────────
 
 class _AchievementBadge extends StatelessWidget {
+  const _AchievementBadge();
+
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -416,26 +463,34 @@ class _AchievementBadge extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: const Color(0xFFF59E0B), width: 1.5),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.emoji_events_rounded,
+            const Icon(Icons.emoji_events_rounded,
                 color: Color(0xFFD97706), size: 28),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'إنجاز رائع!',
-                  style: TextStyle(
+                  _localized(
+                    context,
+                    (l10n) => l10n.greatAchievement,
+                    'إنجاز رائع!',
+                  ),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF92400E),
                   ),
                 ),
                 Text(
-                  'حصلت على شارة التميز',
-                  style: TextStyle(
+                  _localized(
+                    context,
+                    (l10n) => l10n.earnedExcellenceBadge,
+                    'حصلت على شارة التميز',
+                  ),
+                  style: const TextStyle(
                     fontSize: 12,
                     color: Color(0xFFB45309),
                   ),
@@ -476,7 +531,11 @@ class _PointsCard extends StatelessWidget {
                 color: AppColors.pointsGold, size: 28),
             const SizedBox(width: 8),
             Text(
-              '+$points نقطة',
+              _localized(
+                context,
+                (l10n) => l10n.pointsEarnedLabel(points),
+                '+$points نقطة',
+              ),
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -492,9 +551,15 @@ class _PointsCard extends StatelessWidget {
                   color: AppColors.pointsGold,
                   borderRadius: BorderRadius.circular(999),
                 ),
-                child: const Text(
-                  '+${AppConstants.bonusPoints} مكافأة',
-                  style: TextStyle(
+                child: Text(
+                  _localized(
+                    context,
+                    (l10n) => l10n.bonusPointsLabel(
+                      AppConstants.bonusPoints,
+                    ),
+                    '+${AppConstants.bonusPoints} مكافأة',
+                  ),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -616,7 +681,17 @@ class _SkillRow extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(999),
                               ),
                               child: Text(
-                                isStrength ? 'نقطة قوة' : 'يحتاج تحسين',
+                                isStrength
+                                    ? _localized(
+                                        context,
+                                        (l10n) => l10n.strengthPoint,
+                                        'نقطة قوة',
+                                      )
+                                    : _localized(
+                                        context,
+                                        (l10n) => l10n.scoreNeedsImprovement,
+                                        'يحتاج تحسين',
+                                      ),
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
@@ -701,7 +776,11 @@ class _WrongAnswerCard extends StatelessWidget {
               // Your answer
               _AnswerRow(
                 icon: Icons.close_rounded,
-                label: 'إجابتك',
+                label: _localized(
+                  context,
+                  (l10n) => l10n.yourAnswer,
+                  'إجابتك',
+                ),
                 value: answer['selectedAnswer'] as String? ?? '',
                 color: AppColors.error,
                 bgColor: AppColors.errorContainer,
@@ -710,7 +789,11 @@ class _WrongAnswerCard extends StatelessWidget {
               // Correct answer
               _AnswerRow(
                 icon: Icons.check_rounded,
-                label: 'الإجابة الصحيحة',
+                label: _localized(
+                  context,
+                  (l10n) => l10n.correctAnswer,
+                  'الإجابة الصحيحة',
+                ),
                 value: answer['correctAnswer'] as String? ?? '',
                 color: AppColors.success,
                 bgColor: AppColors.successContainer,
@@ -774,4 +857,13 @@ class _AnswerRow extends StatelessWidget {
           ),
         ],
       );
+}
+
+String _localized(
+  BuildContext context,
+  String Function(AppLocalizations l10n) value,
+  String fallback,
+) {
+  final l10n = Localizations.of<AppLocalizations>(context, AppLocalizations);
+  return l10n == null ? fallback : value(l10n);
 }

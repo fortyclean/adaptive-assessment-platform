@@ -67,6 +67,32 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads result screen localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.resultScreenTitle,
+            l10n.skillAnalysis,
+            l10n.wrongQuestions,
+            l10n.pointsEarnedLabel(42),
+            l10n.bonusPointsLabel(50),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Assessment result / Skill analysis / Wrong questions / '
+        '+42 points / +50 bonus',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

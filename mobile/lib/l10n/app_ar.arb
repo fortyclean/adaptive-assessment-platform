@@ -271,5 +271,38 @@
     "placeholders": {
       "count": {}
     }
-  }
+  },
+  "resultScreenTitle": "نتيجة الاختبار",
+  "resultLoadFailed": "تعذر تحميل النتيجة. يرجى المحاولة مرة أخرى.",
+  "skillAnalysis": "تحليل المهارات",
+  "wrongQuestions": "الأسئلة الخاطئة",
+  "pendingReviewTitle": "في انتظار المراجعة",
+  "pendingReviewMessage": "تم تسليم اختبارك بنجاح. يحتوي على {countText} أسئلة مقالية تحتاج إلى مراجعة يدوية من المعلم.\n\nستصلك إشعاراً عند اكتمال التصحيح.",
+  "@pendingReviewMessage": {
+    "placeholders": {
+      "countText": {}
+    }
+  },
+  "someQuestions": "بعض",
+  "backToHome": "العودة للرئيسية",
+  "scoreExcellent": "ممتاز",
+  "scoreGood": "جيد",
+  "scoreNeedsImprovement": "يحتاج تحسين",
+  "greatAchievement": "إنجاز رائع!",
+  "earnedExcellenceBadge": "حصلت على شارة التميز",
+  "pointsEarnedLabel": "+{points} نقطة",
+  "@pointsEarnedLabel": {
+    "placeholders": {
+      "points": {}
+    }
+  },
+  "bonusPointsLabel": "+{points} مكافأة",
+  "@bonusPointsLabel": {
+    "placeholders": {
+      "points": {}
+    }
+  },
+  "strengthPoint": "نقطة قوة",
+  "yourAnswer": "إجابتك",
+  "correctAnswer": "الإجابة الصحيحة"
 }

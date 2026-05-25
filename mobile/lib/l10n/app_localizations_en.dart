@@ -647,4 +647,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String questionsCount(Object count) {
     return '$count questions';
   }
+
+  @override
+  String get resultScreenTitle => 'Assessment result';
+
+  @override
+  String get resultLoadFailed => 'Could not load the result. Please try again.';
+
+  @override
+  String get skillAnalysis => 'Skill analysis';
+
+  @override
+  String get wrongQuestions => 'Wrong questions';
+
+  @override
+  String get pendingReviewTitle => 'Pending review';
+
+  @override
+  String pendingReviewMessage(Object countText) {
+    return 'Your assessment was submitted successfully. It includes $countText essay questions that need manual teacher review.\n\nYou will receive a notification when grading is complete.';
+  }
+
+  @override
+  String get someQuestions => 'some';
+
+  @override
+  String get backToHome => 'Back to home';
+
+  @override
+  String get scoreExcellent => 'Excellent';
+
+  @override
+  String get scoreGood => 'Good';
+
+  @override
+  String get scoreNeedsImprovement => 'Needs improvement';
+
+  @override
+  String get greatAchievement => 'Great achievement!';
+
+  @override
+  String get earnedExcellenceBadge => 'You earned the excellence badge';
+
+  @override
+  String pointsEarnedLabel(Object points) {
+    return '+$points points';
+  }
+
+  @override
+  String bonusPointsLabel(Object points) {
+    return '+$points bonus';
+  }
+
+  @override
+  String get strengthPoint => 'Strength';
+
+  @override
+  String get yourAnswer => 'Your answer';
+
+  @override
+  String get correctAnswer => 'Correct answer';
 }

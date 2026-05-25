@@ -1297,6 +1297,114 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{count} سؤال'**
   String questionsCount(Object count);
+
+  /// No description provided for @resultScreenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة الاختبار'**
+  String get resultScreenTitle;
+
+  /// No description provided for @resultLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل النتيجة. يرجى المحاولة مرة أخرى.'**
+  String get resultLoadFailed;
+
+  /// No description provided for @skillAnalysis.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحليل المهارات'**
+  String get skillAnalysis;
+
+  /// No description provided for @wrongQuestions.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسئلة الخاطئة'**
+  String get wrongQuestions;
+
+  /// No description provided for @pendingReviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار المراجعة'**
+  String get pendingReviewTitle;
+
+  /// No description provided for @pendingReviewMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسليم اختبارك بنجاح. يحتوي على {countText} أسئلة مقالية تحتاج إلى مراجعة يدوية من المعلم.\n\nستصلك إشعاراً عند اكتمال التصحيح.'**
+  String pendingReviewMessage(Object countText);
+
+  /// No description provided for @someQuestions.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعض'**
+  String get someQuestions;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة للرئيسية'**
+  String get backToHome;
+
+  /// No description provided for @scoreExcellent.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممتاز'**
+  String get scoreExcellent;
+
+  /// No description provided for @scoreGood.
+  ///
+  /// In ar, this message translates to:
+  /// **'جيد'**
+  String get scoreGood;
+
+  /// No description provided for @scoreNeedsImprovement.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحتاج تحسين'**
+  String get scoreNeedsImprovement;
+
+  /// No description provided for @greatAchievement.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنجاز رائع!'**
+  String get greatAchievement;
+
+  /// No description provided for @earnedExcellenceBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصلت على شارة التميز'**
+  String get earnedExcellenceBadge;
+
+  /// No description provided for @pointsEarnedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'+{points} نقطة'**
+  String pointsEarnedLabel(Object points);
+
+  /// No description provided for @bonusPointsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'+{points} مكافأة'**
+  String bonusPointsLabel(Object points);
+
+  /// No description provided for @strengthPoint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة قوة'**
+  String get strengthPoint;
+
+  /// No description provided for @yourAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجابتك'**
+  String get yourAnswer;
+
+  /// No description provided for @correctAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجابة الصحيحة'**
+  String get correctAnswer;
 }
 
 class _AppLocalizationsDelegate

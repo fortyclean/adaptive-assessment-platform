@@ -271,5 +271,38 @@
     "placeholders": {
       "count": {}
     }
-  }
+  },
+  "resultScreenTitle": "Assessment result",
+  "resultLoadFailed": "Could not load the result. Please try again.",
+  "skillAnalysis": "Skill analysis",
+  "wrongQuestions": "Wrong questions",
+  "pendingReviewTitle": "Pending review",
+  "pendingReviewMessage": "Your assessment was submitted successfully. It includes {countText} essay questions that need manual teacher review.\n\nYou will receive a notification when grading is complete.",
+  "@pendingReviewMessage": {
+    "placeholders": {
+      "countText": {}
+    }
+  },
+  "someQuestions": "some",
+  "backToHome": "Back to home",
+  "scoreExcellent": "Excellent",
+  "scoreGood": "Good",
+  "scoreNeedsImprovement": "Needs improvement",
+  "greatAchievement": "Great achievement!",
+  "earnedExcellenceBadge": "You earned the excellence badge",
+  "pointsEarnedLabel": "+{points} points",
+  "@pointsEarnedLabel": {
+    "placeholders": {
+      "points": {}
+    }
+  },
+  "bonusPointsLabel": "+{points} bonus",
+  "@bonusPointsLabel": {
+    "placeholders": {
+      "points": {}
+    }
+  },
+  "strengthPoint": "Strength",
+  "yourAnswer": "Your answer",
+  "correctAnswer": "Correct answer"
 }
