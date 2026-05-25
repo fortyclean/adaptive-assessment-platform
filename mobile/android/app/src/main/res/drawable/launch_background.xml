@@ -7,9 +7,12 @@
         </shape>
     </item>
 
-    <item>
+    <item
+        android:width="112dp"
+        android:height="112dp"
+        android:gravity="center">
         <bitmap
-            android:gravity="center"
+            android:gravity="fill"
             android:src="@mipmap/ic_launcher" />
     </item>
 </layer-list>

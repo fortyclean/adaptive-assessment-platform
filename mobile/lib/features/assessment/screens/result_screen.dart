@@ -524,12 +524,14 @@ class _PointsCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 8,
+          runSpacing: 8,
           children: [
             const Icon(Icons.star_rounded,
                 color: AppColors.pointsGold, size: 28),
-            const SizedBox(width: 8),
             Text(
               _localized(
                 context,
@@ -543,7 +545,6 @@ class _PointsCard extends StatelessWidget {
               ),
             ),
             if (bonusAwarded) ...[
-              const SizedBox(width: 10),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -630,6 +631,8 @@ class _SkillRow extends StatelessWidget {
     final color = isStrength ? AppColors.success : AppColors.error;
     final bgColor =
         isStrength ? AppColors.successContainer : AppColors.errorContainer;
+    final skillLabelWidth =
+        (MediaQuery.sizeOf(context).width - 170).clamp(120.0, 220.0);
 
     return Padding(
       padding: EdgeInsets.only(bottom: isLast ? 0 : 14),
@@ -637,21 +640,24 @@ class _SkillRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Skill icon
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Icon(
-                  isStrength
-                      ? Icons.trending_up_rounded
-                      : Icons.trending_down_rounded,
-                  size: 18,
-                  color: color,
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Icon(
+                    isStrength
+                        ? Icons.trending_up_rounded
+                        : Icons.trending_down_rounded,
+                    size: 18,
+                    color: color,
+                  ),
                 ),
               ),
               const SizedBox(width: 10),
@@ -659,18 +665,28 @@ class _SkillRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 6,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Text(
-                          skill['mainSkill'] as String? ?? '',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.onSurface,
+                        SizedBox(
+                          width: skillLabelWidth,
+                          child: Text(
+                            skill['mainSkill'] as String? ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.onSurface,
+                              height: 1.35,
+                            ),
                           ),
                         ),
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             // Strength/weakness badge
                             Container(
