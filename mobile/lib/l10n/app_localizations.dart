@@ -169,6 +169,276 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تطبيق المظهر الداكن على واجهات التطبيق'**
   String get darkModeDisabled;
+
+  /// No description provided for @settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get settings;
+
+  /// No description provided for @accountSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات الحساب'**
+  String get accountSettings;
+
+  /// No description provided for @securityAndPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأمان والخصوصية'**
+  String get securityAndPrivacy;
+
+  /// No description provided for @other.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخرى'**
+  String get other;
+
+  /// No description provided for @appearance.
+  ///
+  /// In ar, this message translates to:
+  /// **'المظهر'**
+  String get appearance;
+
+  /// No description provided for @notifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notifications;
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن التطبيق'**
+  String get aboutApp;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير كلمة المرور'**
+  String get changePassword;
+
+  /// No description provided for @changePasswordSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث كلمة مرور الحساب الحالي'**
+  String get changePasswordSubtitle;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الملف الشخصي'**
+  String get editProfile;
+
+  /// No description provided for @editName.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الاسم'**
+  String get editName;
+
+  /// No description provided for @editNameTooltip.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الاسم'**
+  String get editNameTooltip;
+
+  /// No description provided for @profileSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحكم في ملفك الشخصي وتفضيلات التطبيق من مكان واحد.'**
+  String get profileSubtitle;
+
+  /// No description provided for @fullName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم الكامل'**
+  String get fullName;
+
+  /// No description provided for @nameTooShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم يجب أن يحتوي على حرفين على الأقل'**
+  String get nameTooShort;
+
+  /// No description provided for @nameUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث الاسم بنجاح'**
+  String get nameUpdated;
+
+  /// No description provided for @saveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'**
+  String get saveFailed;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ التغييرات'**
+  String get saveChanges;
+
+  /// No description provided for @save.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get save;
+
+  /// No description provided for @cancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get cancel;
+
+  /// No description provided for @adminRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشرف'**
+  String get adminRole;
+
+  /// No description provided for @teacherRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلم'**
+  String get teacherRole;
+
+  /// No description provided for @studentRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'طالب'**
+  String get studentRole;
+
+  /// No description provided for @userRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستخدم'**
+  String get userRole;
+
+  /// No description provided for @notificationCenter.
+  ///
+  /// In ar, this message translates to:
+  /// **'مركز الإشعارات'**
+  String get notificationCenter;
+
+  /// No description provided for @notificationSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات الإشعارات'**
+  String get notificationSettings;
+
+  /// No description provided for @notificationSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبارات، النتائج، التقارير والتنبيهات الفورية'**
+  String get notificationSettingsSubtitle;
+
+  /// No description provided for @assessmentNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات الاختبارات'**
+  String get assessmentNotifications;
+
+  /// No description provided for @assessmentNotificationsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات الاختبارات الجديدة'**
+  String get assessmentNotificationsSubtitle;
+
+  /// No description provided for @resultNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات النتائج'**
+  String get resultNotifications;
+
+  /// No description provided for @resultNotificationsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات عند صدور النتائج'**
+  String get resultNotificationsSubtitle;
+
+  /// No description provided for @resultNotificationSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات إشعارات النتائج'**
+  String get resultNotificationSettings;
+
+  /// No description provided for @darkModeCurrentlyEnabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'مُفعّل حالياً'**
+  String get darkModeCurrentlyEnabled;
+
+  /// No description provided for @darkModeCurrentlyDisabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'مُعطّل حالياً'**
+  String get darkModeCurrentlyDisabled;
+
+  /// No description provided for @aboutAndChangelog.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن التطبيق وسجل الإصدارات'**
+  String get aboutAndChangelog;
+
+  /// No description provided for @versionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإصدار {version} — EduAssess'**
+  String versionLabel(Object version);
+
+  /// No description provided for @support.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم الفني'**
+  String get support;
+
+  /// No description provided for @supportSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواصل مع فريق الدعم'**
+  String get supportSubtitle;
+
+  /// No description provided for @helpCenter.
+  ///
+  /// In ar, this message translates to:
+  /// **'مركز المساعدة'**
+  String get helpCenter;
+
+  /// No description provided for @helpCenterSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم الفني ومعلومات التطبيق'**
+  String get helpCenterSubtitle;
+
+  /// No description provided for @logout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get logout;
+
+  /// No description provided for @logoutQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد تسجيل الخروج؟'**
+  String get logoutQuestion;
+
+  /// No description provided for @logoutAccountQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد تسجيل الخروج من حسابك؟'**
+  String get logoutAccountQuestion;
+
+  /// No description provided for @logoutConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'خروج'**
+  String get logoutConfirm;
+
+  /// No description provided for @legalese.
+  ///
+  /// In ar, this message translates to:
+  /// **'© 2026 EduAssess. جميع الحقوق محفوظة.'**
+  String get legalese;
 }
 
 class _AppLocalizationsDelegate

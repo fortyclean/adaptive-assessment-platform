@@ -95,6 +95,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     final nameController = TextEditingController(text: user.fullName);
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
+    final locale = ref.read(localeProvider);
 
     showModalBottomSheet(
       context: context,
@@ -120,14 +122,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         color: AppColors.outlineVariant,
                         borderRadius: BorderRadius.circular(2)))),
             const SizedBox(height: 16),
-            const Text('تعديل الملف الشخصي',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            Text(l10n.editProfile,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
             TextField(
               controller: nameController,
-              textDirection: TextDirection.rtl,
+              textDirection: locale.languageCode == 'ar'
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
               decoration: InputDecoration(
-                  labelText: 'الاسم الكامل',
+                  labelText: l10n.fullName,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8))),
             ),
@@ -137,8 +142,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 final newName = nameController.text.trim();
                 if (newName.length < 2) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
+                    SnackBar(
+                        content: Text(l10n.nameTooShort),
                         behavior: SnackBarBehavior.floating),
                   );
                   return;
@@ -170,17 +175,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   if (context.mounted) {
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('تم تحديث الاسم بنجاح'),
+                      SnackBar(
+                          content: Text(l10n.nameUpdated),
                           behavior: SnackBarBehavior.floating),
                     );
                   }
                 } catch (_) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text(
-                              'تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'),
+                      SnackBar(
+                          content: Text(l10n.saveFailed),
                           behavior: SnackBarBehavior.floating),
                     );
                   }
@@ -192,8 +196,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8))),
-              child: const Text('حفظ التغييرات',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              child: Text(l10n.saveChanges,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -208,13 +213,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final l10n = AppLocalizations.of(context);
     final locale = ref.watch(localeProvider);
 
-    final fullName = user?.fullName ?? 'المستخدم';
+    final fullName = user?.fullName ?? l10n.userRole;
     final email = user?.username ?? '';
     final roleLabel = user?.role.name == 'teacher'
-        ? 'معلم'
+        ? l10n.teacherRole
         : user?.role.name == 'admin'
-            ? 'مشرف'
-            : 'طالب';
+            ? l10n.adminRole
+            : l10n.studentRole;
 
     // Initials
     final parts = fullName.trim().split(' ');
@@ -231,7 +236,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          'الإعدادات',
+          l10n.settings,
           style: TextStyle(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.w700,
@@ -371,7 +376,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 24),
 
           // ── Account settings section ──────────────────────────────────────
-          const _SectionLabel(label: 'إعدادات الحساب'),
+          _SectionLabel(label: l10n.accountSettings),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -379,16 +384,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               _SettingsTile(
                 icon: Icons.lock_outline_rounded,
                 iconColor: AppColors.primary,
-                title: 'تغيير كلمة المرور',
-                subtitle: 'تحديث كلمة المرور الخاصة بك',
+                title: l10n.changePassword,
+                subtitle: l10n.changePasswordSubtitle,
                 onTap: () => context.push(AppRoutes.changePassword),
               ),
               _Divider(),
               _SettingsTile(
                 icon: Icons.person_outline_rounded,
                 iconColor: AppColors.primary,
-                title: 'تعديل الملف الشخصي',
-                subtitle: 'تحديث بياناتك الشخصية',
+                title: l10n.editProfile,
+                subtitle: l10n.profileSubtitle,
                 onTap: () {
                   _showEditProfileBottomSheet(context, ref, user);
                 },
@@ -408,7 +413,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 20),
 
           // ── Appearance section ──────────────────────────────────────────
-          const _SectionLabel(label: 'المظهر'),
+          _SectionLabel(label: l10n.appearance),
           const SizedBox(height: 8),
           _SettingsCard(
             children: [
@@ -418,8 +423,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   return _SettingsTile(
                     icon: Icons.dark_mode_rounded,
                     iconColor: const Color(0xFF8B5CF6),
-                    title: 'الوضع الليلي',
-                    subtitle: isDark ? 'مُفعّل حالياً' : 'مُعطّل حالياً',
+                    title: l10n.darkMode,
+                    subtitle: isDark
+                        ? l10n.darkModeCurrentlyEnabled
+                        : l10n.darkModeCurrentlyDisabled,
                     onTap: () {
                       ref.read(themeModeProvider.notifier).setDarkMode(
                             enabled: !isDark,
@@ -442,7 +449,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 20),
 
           // ── Notifications section ─────────────────────────────────────────
-          const _SectionLabel(label: 'الإشعارات'),
+          _SectionLabel(label: l10n.notifications),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -450,8 +457,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               _SettingsTile(
                 icon: Icons.notifications_outlined,
                 iconColor: const Color(0xFFD97706),
-                title: 'إشعارات الاختبارات',
-                subtitle: 'تنبيهات الاختبارات الجديدة',
+                title: l10n.assessmentNotifications,
+                subtitle: l10n.assessmentNotificationsSubtitle,
                 onTap: () => context.push(AppRoutes.notificationSettings),
                 trailing: _ToggleSwitch(value: true, onChanged: (_) {}),
               ),
@@ -459,12 +466,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               _SettingsTile(
                 icon: Icons.campaign_outlined,
                 iconColor: const Color(0xFFD97706),
-                title: 'إشعارات النتائج',
-                subtitle: 'تنبيهات عند صدور النتائج',
+                title: l10n.resultNotifications,
+                subtitle: l10n.resultNotificationsSubtitle,
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('إعدادات إشعارات النتائج'),
+                    SnackBar(
+                        content: Text(l10n.resultNotificationSettings),
                         behavior: SnackBarBehavior.floating),
                   );
                 },
@@ -476,7 +483,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 20),
 
           // ── About section ─────────────────────────────────────────────────
-          const _SectionLabel(label: 'عن التطبيق'),
+          _SectionLabel(label: l10n.aboutApp),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -484,16 +491,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               _SettingsTile(
                 icon: Icons.info_outline_rounded,
                 iconColor: AppColors.primary,
-                title: 'عن التطبيق وسجل الإصدارات',
-                subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
+                title: l10n.aboutAndChangelog,
+                subtitle: l10n.versionLabel(AppVersion.current),
                 onTap: () => context.push('/about'),
               ),
               _Divider(),
               _SettingsTile(
                 icon: Icons.help_outline_rounded,
                 iconColor: AppColors.onSurfaceVariant,
-                title: 'الدعم الفني',
-                subtitle: 'تواصل مع فريق الدعم',
+                title: l10n.support,
+                subtitle: l10n.supportSubtitle,
                 onTap: () => context.push(AppRoutes.support),
               ),
             ],
@@ -519,9 +526,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 child: const Icon(Icons.logout_rounded,
                     color: AppColors.error, size: 18),
               ),
-              title: const Text(
-                'تسجيل الخروج',
-                style: TextStyle(
+              title: Text(
+                l10n.logout,
+                style: const TextStyle(
                   color: AppColors.error,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -535,16 +542,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   builder: (ctx) => AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),
-                    title: const Text('تسجيل الخروج'),
-                    content: const Text('هل تريد تسجيل الخروج؟'),
+                    title: Text(l10n.logout),
+                    content: Text(l10n.logoutQuestion),
                     actions: [
                       TextButton(
                           onPressed: () => Navigator.pop(ctx, false),
-                          child: const Text('إلغاء')),
+                          child: Text(l10n.cancel)),
                       TextButton(
                           onPressed: () => Navigator.pop(ctx, true),
-                          child: const Text('خروج',
-                              style: TextStyle(color: AppColors.error))),
+                          child: Text(l10n.logoutConfirm,
+                              style: const TextStyle(color: AppColors.error))),
                     ],
                   ),
                 );

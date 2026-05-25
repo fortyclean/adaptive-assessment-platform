@@ -8,22 +8,36 @@ void main() {
     await tester.pumpWidget(
       _LocalizedLabelApp(
         locale: const Locale('ar', 'SA'),
-        labelBuilder: (context) => AppLocalizations.of(context).appLanguage,
+        labelBuilder: (context) =>
+            '${AppLocalizations.of(context).appLanguage} / ${AppLocalizations.of(context).logout}',
       ),
     );
 
-    expect(find.text('لغة التطبيق'), findsOneWidget);
+    expect(find.text('لغة التطبيق / تسجيل الخروج'), findsOneWidget);
   });
 
   testWidgets('loads English localization labels', (tester) async {
     await tester.pumpWidget(
       _LocalizedLabelApp(
         locale: const Locale('en', 'US'),
-        labelBuilder: (context) => AppLocalizations.of(context).appLanguage,
+        labelBuilder: (context) =>
+            '${AppLocalizations.of(context).appLanguage} / ${AppLocalizations.of(context).logout}',
       ),
     );
 
-    expect(find.text('App language'), findsOneWidget);
+    expect(find.text('App language / Log out'), findsOneWidget);
+  });
+
+  testWidgets('formats localized version labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) =>
+            AppLocalizations.of(context).versionLabel('1.0.70'),
+      ),
+    );
+
+    expect(find.text('Version 1.0.70 — EduAssess'), findsOneWidget);
   });
 }
 

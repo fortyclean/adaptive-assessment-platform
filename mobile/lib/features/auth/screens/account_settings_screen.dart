@@ -129,7 +129,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 const SizedBox(height: 24),
                 _buildProfileCard(user, colorScheme),
                 const SizedBox(height: 16),
-                _buildSectionLabel('الأمان والخصوصية', colorScheme),
+                _buildSectionLabel(l10n.securityAndPrivacy, colorScheme),
                 const SizedBox(height: 8),
                 _buildSecurityGroup(context),
                 const SizedBox(height: 16),
@@ -137,7 +137,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 const SizedBox(height: 8),
                 _buildAppearanceGroup(),
                 const SizedBox(height: 16),
-                _buildSectionLabel('أخرى', colorScheme),
+                _buildSectionLabel(l10n.other, colorScheme),
                 const SizedBox(height: 8),
                 _buildOtherGroup(context),
                 const SizedBox(height: 24),
@@ -187,7 +187,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             ),
             const Spacer(),
             IconButton(
-              tooltip: 'مركز الإشعارات',
+              tooltip: AppLocalizations.of(context).notificationCenter,
               icon: Icon(
                 Icons.notifications_outlined,
                 color: colorScheme.onSurfaceVariant,
@@ -204,14 +204,14 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'إعدادات الحساب',
+            AppLocalizations.of(context).accountSettings,
             style: AppTextStyles.displayMedium.copyWith(
               color: colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'تحكم في ملفك الشخصي وتفضيلات التطبيق من مكان واحد.',
+            AppLocalizations.of(context).profileSubtitle,
             style: AppTextStyles.bodyMedium.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -220,11 +220,12 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
       );
 
   Widget _buildProfileCard(AuthUser? user, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context);
     final roleLabel = switch (user?.role) {
-      UserRole.admin => 'مشرف',
-      UserRole.teacher => 'معلم',
-      UserRole.student => 'طالب',
-      null => 'مستخدم',
+      UserRole.admin => l10n.adminRole,
+      UserRole.teacher => l10n.teacherRole,
+      UserRole.student => l10n.studentRole,
+      null => l10n.userRole,
     };
 
     return Container(
@@ -255,7 +256,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 bottom: -4,
                 left: -4,
                 child: Tooltip(
-                  message: 'تعديل الاسم',
+                  message: l10n.editNameTooltip,
                   child: InkWell(
                     customBorder: const CircleBorder(),
                     onTap: _showEditProfileDialog,
@@ -292,7 +293,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  user?.fullName ?? 'المستخدم',
+                  user?.fullName ?? l10n.userRole,
                   style: AppTextStyles.titleMedium.copyWith(
                     color: colorScheme.onSurface,
                   ),
@@ -341,23 +342,27 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
         ),
       );
 
-  Widget _buildSecurityGroup(BuildContext context) => _SettingsCard(
-        children: [
-          _SettingsRowTile(
-            icon: Icons.lock_outline_rounded,
-            title: 'تغيير كلمة المرور',
-            subtitle: 'تحديث كلمة مرور الحساب الحالي',
-            onTap: () => context.push(AppRoutes.changePassword),
-          ),
-          const _Divider(),
-          _SettingsRowTile(
-            icon: Icons.notifications_active_outlined,
-            title: 'إعدادات الإشعارات',
-            subtitle: 'الاختبارات، النتائج، التقارير والتنبيهات الفورية',
-            onTap: () => context.push(AppRoutes.notificationSettings),
-          ),
-        ],
-      );
+  Widget _buildSecurityGroup(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return _SettingsCard(
+      children: [
+        _SettingsRowTile(
+          icon: Icons.lock_outline_rounded,
+          title: l10n.changePassword,
+          subtitle: l10n.changePasswordSubtitle,
+          onTap: () => context.push(AppRoutes.changePassword),
+        ),
+        const _Divider(),
+        _SettingsRowTile(
+          icon: Icons.notifications_active_outlined,
+          title: l10n.notificationSettings,
+          subtitle: l10n.notificationSettingsSubtitle,
+          onTap: () => context.push(AppRoutes.notificationSettings),
+        ),
+      ],
+    );
+  }
 
   Widget _buildAppearanceGroup() {
     final isDarkMode = ref.watch(themeModeProvider) == ThemeMode.dark;
@@ -401,47 +406,51 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     );
   }
 
-  Widget _buildOtherGroup(BuildContext context) => _SettingsCard(
-        children: [
-          _SettingsRowTile(
-            icon: Icons.info_outline_rounded,
-            title: 'عن التطبيق وسجل الإصدارات',
-            subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
-            onTap: () => context.push('/about'),
-          ),
-          const _Divider(),
-          _SettingsRowTile(
-            icon: Icons.help_outline_rounded,
-            title: 'مركز المساعدة',
-            subtitle: 'الدعم الفني ومعلومات التطبيق',
-            onTap: () => _showHelpCenter(context),
-          ),
-          const _Divider(),
-          InkWell(
-            onTap: () => _handleLogout(context),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.logout_rounded,
+  Widget _buildOtherGroup(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return _SettingsCard(
+      children: [
+        _SettingsRowTile(
+          icon: Icons.info_outline_rounded,
+          title: l10n.aboutAndChangelog,
+          subtitle: l10n.versionLabel(AppVersion.current),
+          onTap: () => context.push('/about'),
+        ),
+        const _Divider(),
+        _SettingsRowTile(
+          icon: Icons.help_outline_rounded,
+          title: l10n.helpCenter,
+          subtitle: l10n.helpCenterSubtitle,
+          onTap: () => _showHelpCenter(context),
+        ),
+        const _Divider(),
+        InkWell(
+          onTap: () => _handleLogout(context),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.logout_rounded,
+                  color: AppColors.error,
+                  size: 24,
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  l10n.logout,
+                  style: AppTextStyles.bodyLarge.copyWith(
                     color: AppColors.error,
-                    size: 24,
+                    fontWeight: FontWeight.w700,
                   ),
-                  const SizedBox(width: 16),
-                  Text(
-                    'تسجيل الخروج',
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.error,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 
   Widget _buildBottomNav() {
     final role = ref.watch(currentUserProvider)?.role;
@@ -458,23 +467,28 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     final authState = ref.read(authProvider);
     final user = authState.user;
     if (user == null) return;
+    final l10n = AppLocalizations.of(context);
+    final locale = ref.read(localeProvider);
 
     final nameController = TextEditingController(text: user.fullName);
 
     final result = await showDialog<String>(
       context: context,
       builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection:
+            locale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
         child: AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text('تعديل الاسم'),
+          title: Text(l10n.editName),
           content: TextField(
             controller: nameController,
-            textDirection: TextDirection.rtl,
+            textDirection: locale.languageCode == 'ar'
+                ? TextDirection.rtl
+                : TextDirection.ltr,
             autofocus: true,
             decoration: InputDecoration(
-              labelText: 'الاسم الكامل',
+              labelText: l10n.fullName,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             ),
@@ -482,11 +496,11 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('إلغاء'),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, nameController.text.trim()),
-              child: const Text('حفظ'),
+              child: Text(l10n.save),
             ),
           ],
         ),
@@ -498,8 +512,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     if (!mounted || result == null) return;
     if (result.length < 2) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
+        SnackBar(
+          content: Text(l10n.nameTooShort),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -534,8 +548,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تم تحديث الاسم بنجاح'),
+          SnackBar(
+            content: Text(l10n.nameUpdated),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -543,8 +557,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تعذر حفظ التغييرات، يرجى المحاولة مرة أخرى'),
+          SnackBar(
+            content: Text(l10n.saveFailed),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -553,32 +567,37 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
   }
 
   void _showHelpCenter(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     showAboutDialog(
       context: context,
       applicationName: 'EduAssess',
       applicationVersion: AppVersion.current,
-      applicationLegalese: '© 2026 EduAssess. جميع الحقوق محفوظة.',
+      applicationLegalese: l10n.legalese,
     );
   }
 
   Future<void> _handleLogout(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final locale = ref.read(localeProvider);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection:
+            locale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
         child: AlertDialog(
-          title: const Text('تسجيل الخروج'),
-          content: const Text('هل تريد تسجيل الخروج من حسابك؟'),
+          title: Text(l10n.logout),
+          content: Text(l10n.logoutAccountQuestion),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('إلغاء'),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text(
-                'خروج',
-                style: TextStyle(color: AppColors.error),
+              child: Text(
+                l10n.logoutConfirm,
+                style: const TextStyle(color: AppColors.error),
               ),
             ),
           ],

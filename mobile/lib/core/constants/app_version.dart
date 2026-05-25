@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.69';
-  static const int buildNumber = 69;
+  static const String current = '1.0.70';
+  static const int buildNumber = 70;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,20 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.70',
+      buildNumber: 70,
+      date: 'مايو 2026',
+      title: 'توسيع ترجمة شاشات الإعدادات',
+      changes: [
+        'نقل نصوص شاشة الإعدادات العامة إلى مفاتيح ARB بدل النصوص العربية الثابتة.',
+        'نقل نصوص شاشة إعدادات الحساب إلى AppLocalizations مع دعم اتجاه الحوار حسب اللغة.',
+        'إضافة مفاتيح إنجليزية مقابلة لإعدادات الحساب، الإشعارات، الدعم، والخروج.',
+        'توليد ملفات الترجمة الجديدة واستخدامها في رسائل الحفظ والأخطاء.',
+        'الحفاظ على المهمة 38.2 مفتوحة لباقي شاشات التطبيق خارج نطاق الإعدادات.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.69',
       buildNumber: 69,
