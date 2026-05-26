@@ -2587,6 +2587,108 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حفظ الاختبار كمسودة'**
   String get saveAssessmentAsDraft;
+
+  /// No description provided for @classScheduleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجداول الدراسية'**
+  String get classScheduleTitle;
+
+  /// No description provided for @scheduleOptions.
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات الجدول'**
+  String get scheduleOptions;
+
+  /// No description provided for @currentWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع الحالي'**
+  String get currentWeek;
+
+  /// No description provided for @weeklySchedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدول الأسبوع'**
+  String get weeklySchedule;
+
+  /// No description provided for @scheduleLocalOnlyMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد API للجدول الدراسي بعد. ستظهر الحصص الحقيقية هنا عند الربط، ويمكنك الآن إضافة حصص محلية لليوم المحدد بدون عرض بيانات وهمية.'**
+  String get scheduleLocalOnlyMessage;
+
+  /// No description provided for @addOrEditLesson.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة / تعديل حصة'**
+  String get addOrEditLesson;
+
+  /// No description provided for @addLessonForDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة حصة - {day}'**
+  String addLessonForDay(Object day);
+
+  /// No description provided for @subjectRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'المادة الدراسية *'**
+  String get subjectRequired;
+
+  /// No description provided for @teacherName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المعلم'**
+  String get teacherName;
+
+  /// No description provided for @roomOrLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'القاعة / الموقع'**
+  String get roomOrLocation;
+
+  /// No description provided for @lessonTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الحصة:'**
+  String get lessonTime;
+
+  /// No description provided for @enterSubjectName.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال اسم المادة'**
+  String get enterSubjectName;
+
+  /// No description provided for @lessonAdded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إضافة حصة {subject}'**
+  String lessonAdded(Object subject);
+
+  /// No description provided for @addLesson.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة الحصة'**
+  String get addLesson;
+
+  /// No description provided for @noLessonsForDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد حصص ليوم {day}'**
+  String noLessonsForDay(Object day);
+
+  /// No description provided for @emptyScheduleMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند ربط API الجدول الدراسي ستظهر الحصص هنا تلقائيًا. يمكنك إضافة حصة محلية الآن للمراجعة والتجربة.'**
+  String get emptyScheduleMessage;
+
+  /// No description provided for @addLessonForThisDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة حصة لهذا اليوم'**
+  String get addLessonForThisDay;
 }
 
 class _AppLocalizationsDelegate

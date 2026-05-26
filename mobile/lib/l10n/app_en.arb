@@ -578,5 +578,37 @@
   "publishImmediatelyTitle": "Publish assessment immediately after creation",
   "publishImmediatelySubtitle": "Requires selecting at least one class so students receive notifications.",
   "confirmCreateAndPublishAssessment": "Confirm, create, and publish assessment",
-  "saveAssessmentAsDraft": "Save assessment as draft"
+  "saveAssessmentAsDraft": "Save assessment as draft",
+  "classScheduleTitle": "Class schedule",
+  "scheduleOptions": "Schedule options",
+  "currentWeek": "Current week",
+  "weeklySchedule": "Weekly schedule",
+  "scheduleLocalOnlyMessage": "No timetable API is connected yet. Real lessons will appear here after integration. For now, you can add local lessons for the selected day without showing fake data.",
+  "addOrEditLesson": "Add / edit lesson",
+  "addLessonForDay": "Add lesson - {day}",
+  "@addLessonForDay": {
+    "placeholders": {
+      "day": {}
+    }
+  },
+  "subjectRequired": "Subject *",
+  "teacherName": "Teacher name",
+  "roomOrLocation": "Room / location",
+  "lessonTime": "Lesson time:",
+  "enterSubjectName": "Please enter the subject name",
+  "lessonAdded": "Lesson added: {subject}",
+  "@lessonAdded": {
+    "placeholders": {
+      "subject": {}
+    }
+  },
+  "addLesson": "Add lesson",
+  "noLessonsForDay": "No lessons for {day}",
+  "@noLessonsForDay": {
+    "placeholders": {
+      "day": {}
+    }
+  },
+  "emptyScheduleMessage": "Lessons will appear here automatically when the timetable API is connected. You can add a local lesson now for review and testing.",
+  "addLessonForThisDay": "Add lesson for this day"
 }

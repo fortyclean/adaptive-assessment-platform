@@ -1367,4 +1367,63 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveAssessmentAsDraft => 'Save assessment as draft';
+
+  @override
+  String get classScheduleTitle => 'Class schedule';
+
+  @override
+  String get scheduleOptions => 'Schedule options';
+
+  @override
+  String get currentWeek => 'Current week';
+
+  @override
+  String get weeklySchedule => 'Weekly schedule';
+
+  @override
+  String get scheduleLocalOnlyMessage =>
+      'No timetable API is connected yet. Real lessons will appear here after integration. For now, you can add local lessons for the selected day without showing fake data.';
+
+  @override
+  String get addOrEditLesson => 'Add / edit lesson';
+
+  @override
+  String addLessonForDay(Object day) {
+    return 'Add lesson - $day';
+  }
+
+  @override
+  String get subjectRequired => 'Subject *';
+
+  @override
+  String get teacherName => 'Teacher name';
+
+  @override
+  String get roomOrLocation => 'Room / location';
+
+  @override
+  String get lessonTime => 'Lesson time:';
+
+  @override
+  String get enterSubjectName => 'Please enter the subject name';
+
+  @override
+  String lessonAdded(Object subject) {
+    return 'Lesson added: $subject';
+  }
+
+  @override
+  String get addLesson => 'Add lesson';
+
+  @override
+  String noLessonsForDay(Object day) {
+    return 'No lessons for $day';
+  }
+
+  @override
+  String get emptyScheduleMessage =>
+      'Lessons will appear here automatically when the timetable API is connected. You can add a local lesson now for review and testing.';
+
+  @override
+  String get addLessonForThisDay => 'Add lesson for this day';
 }

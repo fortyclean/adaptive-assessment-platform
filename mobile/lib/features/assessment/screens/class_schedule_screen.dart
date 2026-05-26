@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// Class Schedule Screen — Design _70 (الجداول الدراسية)
@@ -28,6 +30,10 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
 
   List<_ScheduleItem> get _selectedDaySchedule =>
       _scheduleByDay[_selectedDayIndex] ?? const <_ScheduleItem>[];
+
+  AppLocalizations get _l10n =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+      AppLocalizationsAr();
 
   @override
   Widget build(BuildContext context) => Directionality(
@@ -105,9 +111,9 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  'الجداول الدراسية',
-                  style: TextStyle(
+                Text(
+                  _l10n.classScheduleTitle,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
@@ -122,8 +128,8 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
               color: AppColors.primary,
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('خيارات الجدول'),
+                  SnackBar(
+                      content: Text(_l10n.scheduleOptions),
                       behavior: SnackBarBehavior.floating),
                 );
               },
@@ -160,9 +166,9 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                     color: const Color(0xFFD0E1FB),
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  child: const Text(
-                    'الأسبوع الحالي',
-                    style: TextStyle(
+                  child: Text(
+                    _l10n.currentWeek,
+                    style: const TextStyle(
                       fontFamily: 'Almarai',
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -170,9 +176,9 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                     ),
                   ),
                 ),
-                const Text(
-                  'جدول الأسبوع',
-                  style: TextStyle(
+                Text(
+                  _l10n.weeklySchedule,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -275,15 +281,15 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.primary.withValues(alpha: 0.18)),
         ),
-        child: const Row(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.info_outline, color: AppColors.primary, size: 20),
-            SizedBox(width: 10),
+            const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'لا يوجد API للجدول الدراسي بعد. ستظهر الحصص الحقيقية هنا عند الربط، ويمكنك الآن إضافة حصص محلية لليوم المحدد بدون عرض بيانات وهمية.',
-                style: TextStyle(
+                _l10n.scheduleLocalOnlyMessage,
+                style: const TextStyle(
                   fontFamily: 'Almarai',
                   color: AppColors.onSurface,
                   fontSize: 13,
@@ -494,8 +500,8 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
         foregroundColor: Colors.white,
         elevation: 6,
         icon: const Icon(Icons.edit_calendar_outlined),
-        label: const Text('إضافة / تعديل حصة',
-            style: TextStyle(
+        label: Text(_l10n.addOrEditLesson,
+            style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 16,
                 fontWeight: FontWeight.w600)),
@@ -553,7 +559,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                         icon: const Icon(Icons.close),
                         onPressed: () => Navigator.pop(ctx)),
                     Text(
-                      'إضافة حصة - ${_days[_selectedDayIndex].name}',
+                      _l10n.addLessonForDay(_days[_selectedDayIndex].name),
                       style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
@@ -568,7 +574,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   controller: subjectCtrl,
                   textDirection: TextDirection.rtl,
                   decoration: InputDecoration(
-                    labelText: 'المادة الدراسية *',
+                    labelText: _l10n.subjectRequired,
                     prefixIcon: const Icon(Icons.book_outlined),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -580,7 +586,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   controller: teacherCtrl,
                   textDirection: TextDirection.rtl,
                   decoration: InputDecoration(
-                    labelText: 'اسم المعلم',
+                    labelText: _l10n.teacherName,
                     prefixIcon: const Icon(Icons.person_outline),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -592,7 +598,7 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                   controller: locationCtrl,
                   textDirection: TextDirection.rtl,
                   decoration: InputDecoration(
-                    labelText: 'القاعة / الموقع',
+                    labelText: _l10n.roomOrLocation,
                     prefixIcon: const Icon(Icons.location_on_outlined),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -600,8 +606,8 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                 ),
                 const SizedBox(height: 12),
                 // Time selector
-                const Text('وقت الحصة:',
-                    style: TextStyle(
+                Text(_l10n.lessonTime,
+                    style: const TextStyle(
                         fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
                 const SizedBox(height: 8),
                 Wrap(
@@ -638,8 +644,8 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                 ElevatedButton.icon(
                   onPressed: () {
                     if (subjectCtrl.text.trim().isEmpty) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
-                          content: Text('يرجى إدخال اسم المادة'),
+                      ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+                          content: Text(_l10n.enterSubjectName),
                           behavior: SnackBarBehavior.floating));
                       return;
                     }
@@ -653,10 +659,10 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                         time: selectedTime,
                         subject: subjectCtrl.text.trim(),
                         teacher: teacherCtrl.text.trim().isEmpty
-                            ? 'غير محدد'
+                            ? _l10n.unspecified
                             : teacherCtrl.text.trim(),
                         location: locationCtrl.text.trim().isEmpty
-                            ? 'غير محدد'
+                            ? _l10n.unspecified
                             : locationCtrl.text.trim(),
                         tag: subjectCtrl.text.trim(),
                         accentColor: AppColors.primary,
@@ -668,15 +674,16 @@ class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                          content: Text(
-                              '✅ تمت إضافة حصة ${subjectCtrl.text.trim()}'),
+                          content:
+                              Text(_l10n.lessonAdded(subjectCtrl.text.trim())),
                           behavior: SnackBarBehavior.floating,
                           backgroundColor: AppColors.success),
                     );
                   },
                   icon: const Icon(Icons.add_rounded),
-                  label: const Text('إضافة الحصة',
-                      style: TextStyle(fontSize: 16, fontFamily: 'Almarai')),
+                  label: Text(_l10n.addLesson,
+                      style:
+                          const TextStyle(fontSize: 16, fontFamily: 'Almarai')),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -712,52 +719,55 @@ class _EmptyScheduleState extends StatelessWidget {
   final VoidCallback onAddLesson;
 
   @override
-  Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-        ),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.event_busy_outlined,
+  Widget build(BuildContext context) {
+    final l10n = _classScheduleL10n(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          const Icon(
+            Icons.event_busy_outlined,
+            color: AppColors.onSurfaceVariant,
+            size: 44,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            l10n.noLessonsForDay(dayName),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Almarai',
+              color: AppColors.onSurface,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l10n.emptyScheduleMessage,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Almarai',
               color: AppColors.onSurfaceVariant,
-              size: 44,
+              fontSize: 13,
+              height: 1.45,
             ),
-            const SizedBox(height: 12),
-            Text(
-              'لا توجد حصص ليوم $dayName',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontFamily: 'Almarai',
-                color: AppColors.onSurface,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'عند ربط API الجدول الدراسي ستظهر الحصص هنا تلقائيًا. يمكنك إضافة حصة محلية الآن للمراجعة والتجربة.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Almarai',
-                color: AppColors.onSurfaceVariant,
-                fontSize: 13,
-                height: 1.45,
-              ),
-            ),
-            const SizedBox(height: 16),
-            OutlinedButton.icon(
-              onPressed: onAddLesson,
-              icon: const Icon(Icons.add),
-              label: const Text('إضافة حصة لهذا اليوم'),
-            ),
-          ],
-        ),
-      );
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: onAddLesson,
+            icon: const Icon(Icons.add),
+            label: Text(l10n.addLessonForThisDay),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _ScheduleItem {
@@ -783,3 +793,7 @@ class _ScheduleItem {
   final Color tagFg;
   final bool isBreak;
 }
+
+AppLocalizations _classScheduleL10n(BuildContext context) =>
+    Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+    AppLocalizationsAr();

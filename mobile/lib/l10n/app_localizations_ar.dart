@@ -1358,4 +1358,63 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get saveAssessmentAsDraft => 'حفظ الاختبار كمسودة';
+
+  @override
+  String get classScheduleTitle => 'الجداول الدراسية';
+
+  @override
+  String get scheduleOptions => 'خيارات الجدول';
+
+  @override
+  String get currentWeek => 'الأسبوع الحالي';
+
+  @override
+  String get weeklySchedule => 'جدول الأسبوع';
+
+  @override
+  String get scheduleLocalOnlyMessage =>
+      'لا يوجد API للجدول الدراسي بعد. ستظهر الحصص الحقيقية هنا عند الربط، ويمكنك الآن إضافة حصص محلية لليوم المحدد بدون عرض بيانات وهمية.';
+
+  @override
+  String get addOrEditLesson => 'إضافة / تعديل حصة';
+
+  @override
+  String addLessonForDay(Object day) {
+    return 'إضافة حصة - $day';
+  }
+
+  @override
+  String get subjectRequired => 'المادة الدراسية *';
+
+  @override
+  String get teacherName => 'اسم المعلم';
+
+  @override
+  String get roomOrLocation => 'القاعة / الموقع';
+
+  @override
+  String get lessonTime => 'وقت الحصة:';
+
+  @override
+  String get enterSubjectName => 'يرجى إدخال اسم المادة';
+
+  @override
+  String lessonAdded(Object subject) {
+    return 'تمت إضافة حصة $subject';
+  }
+
+  @override
+  String get addLesson => 'إضافة الحصة';
+
+  @override
+  String noLessonsForDay(Object day) {
+    return 'لا توجد حصص ليوم $day';
+  }
+
+  @override
+  String get emptyScheduleMessage =>
+      'عند ربط API الجدول الدراسي ستظهر الحصص هنا تلقائيًا. يمكنك إضافة حصة محلية الآن للمراجعة والتجربة.';
+
+  @override
+  String get addLessonForThisDay => 'إضافة حصة لهذا اليوم';
 }

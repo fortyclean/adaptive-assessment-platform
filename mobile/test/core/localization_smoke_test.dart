@@ -256,6 +256,32 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads class schedule localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.classScheduleTitle,
+            l10n.currentWeek,
+            l10n.addLessonForDay('Sunday'),
+            l10n.lessonAdded('Math'),
+            l10n.noLessonsForDay('Sunday'),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Class schedule / Current week / Add lesson - Sunday / '
+        'Lesson added: Math / No lessons for Sunday',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

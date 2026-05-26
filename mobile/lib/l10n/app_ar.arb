@@ -578,5 +578,37 @@
   "publishImmediatelyTitle": "نشر الاختبار مباشرة بعد الإنشاء",
   "publishImmediatelySubtitle": "يتطلب اختيار فصل واحد على الأقل حتى تصل الإشعارات للطلاب.",
   "confirmCreateAndPublishAssessment": "تأكيد وإنشاء ونشر الاختبار",
-  "saveAssessmentAsDraft": "حفظ الاختبار كمسودة"
+  "saveAssessmentAsDraft": "حفظ الاختبار كمسودة",
+  "classScheduleTitle": "الجداول الدراسية",
+  "scheduleOptions": "خيارات الجدول",
+  "currentWeek": "الأسبوع الحالي",
+  "weeklySchedule": "جدول الأسبوع",
+  "scheduleLocalOnlyMessage": "لا يوجد API للجدول الدراسي بعد. ستظهر الحصص الحقيقية هنا عند الربط، ويمكنك الآن إضافة حصص محلية لليوم المحدد بدون عرض بيانات وهمية.",
+  "addOrEditLesson": "إضافة / تعديل حصة",
+  "addLessonForDay": "إضافة حصة - {day}",
+  "@addLessonForDay": {
+    "placeholders": {
+      "day": {}
+    }
+  },
+  "subjectRequired": "المادة الدراسية *",
+  "teacherName": "اسم المعلم",
+  "roomOrLocation": "القاعة / الموقع",
+  "lessonTime": "وقت الحصة:",
+  "enterSubjectName": "يرجى إدخال اسم المادة",
+  "lessonAdded": "تمت إضافة حصة {subject}",
+  "@lessonAdded": {
+    "placeholders": {
+      "subject": {}
+    }
+  },
+  "addLesson": "إضافة الحصة",
+  "noLessonsForDay": "لا توجد حصص ليوم {day}",
+  "@noLessonsForDay": {
+    "placeholders": {
+      "day": {}
+    }
+  },
+  "emptyScheduleMessage": "عند ربط API الجدول الدراسي ستظهر الحصص هنا تلقائيًا. يمكنك إضافة حصة محلية الآن للمراجعة والتجربة.",
+  "addLessonForThisDay": "إضافة حصة لهذا اليوم"
 }
