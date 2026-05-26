@@ -480,5 +480,52 @@
   "marketItemXpBoosterTitle": "مضاعف XP لمدة ساعة",
   "marketItemXpBoosterDescription": "يزيد نقاط الخبرة المكتسبة في الجلسة القادمة.",
   "marketItemExtraTimeTitle": "مكافأة وقت إضافي",
-  "marketItemExtraTimeDescription": "مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة."
+  "marketItemExtraTimeDescription": "مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة.",
+  "myClassesTitle": "فصولي الدراسية",
+  "addNewClass": "إضافة فصل جديد",
+  "className": "اسم الفصل",
+  "classNameHint": "مثال: أولى متوسط (أ)",
+  "gradeLevel": "المرحلة الدراسية",
+  "gradeLevelHint": "مثال: الصف الأول المتوسط",
+  "create": "إنشاء",
+  "unspecified": "غير محدد",
+  "classCreated": "تم إنشاء الفصل: {name}",
+  "@classCreated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "createClassForbidden": "ليس لديك صلاحية إنشاء فصل",
+  "serverConnectionFailed": "تعذر الاتصال بالخادم",
+  "students": "الطلاب",
+  "activeAssessments": "اختبارات نشطة",
+  "averagePerformance": "متوسط الأداء",
+  "createAssessmentForClass": "إنشاء اختبار لهذا الفصل",
+  "viewClassReport": "عرض تقرير الفصل",
+  "classCertificates": "شهادات الفصل",
+  "addClassTooltip": "إضافة فصل",
+  "newClass": "فصل جديد",
+  "classes": "الفصول",
+  "studentCountCompact": "{count} طالب",
+  "@studentCountCompact": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "activeAssessmentCountCompact": "{count} نشط",
+  "@activeAssessmentCountCompact": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "averageScoreCompact": "{score}% متوسط",
+  "@averageScoreCompact": {
+    "placeholders": {
+      "score": {}
+    }
+  },
+  "report": "التقرير",
+  "assessment": "اختبار",
+  "noClassesYet": "لا توجد فصول دراسية بعد",
+  "noClassesMessage": "ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم."
 }

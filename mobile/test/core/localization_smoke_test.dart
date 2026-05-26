@@ -176,6 +176,32 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads teacher classes localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.myClassesTitle,
+            l10n.addNewClass,
+            l10n.classCreated('Grade 7 A'),
+            l10n.studentCountCompact(24),
+            l10n.averageScoreCompact('82'),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'My classes / Add new class / Class created: Grade 7 A / '
+        '24 students / 82% average',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

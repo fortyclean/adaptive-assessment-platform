@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/teacher_repository.dart';
@@ -18,6 +20,10 @@ class MyClassesScreen extends ConsumerStatefulWidget {
 class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
   bool _isLoading = true;
   List<Map<String, dynamic>> _classrooms = [];
+
+  AppLocalizations get _l10n =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+      AppLocalizationsAr();
 
   @override
   void initState() {
@@ -74,36 +80,36 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('إضافة فصل جديد',
+        title: Text(_l10n.addNewClass,
             textDirection: TextDirection.rtl,
-            style: TextStyle(fontFamily: 'Almarai')),
+            style: const TextStyle(fontFamily: 'Almarai')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameCtrl,
               textDirection: TextDirection.rtl,
-              decoration: const InputDecoration(
-                labelText: 'اسم الفصل',
-                hintText: 'مثال: أولى متوسط (أ)',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: _l10n.className,
+                hintText: _l10n.classNameHint,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: gradeCtrl,
               textDirection: TextDirection.rtl,
-              decoration: const InputDecoration(
-                labelText: 'المرحلة الدراسية',
-                hintText: 'مثال: الصف الأول المتوسط',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: _l10n.gradeLevel,
+                hintText: _l10n.gradeLevelHint,
+                border: const OutlineInputBorder(),
               ),
             ),
           ],
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+              onPressed: () => Navigator.pop(ctx), child: Text(_l10n.cancel)),
           ElevatedButton(
             onPressed: () async {
               if (nameCtrl.text.trim().isEmpty) return;
@@ -112,14 +118,14 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                 await ref.read(teacherRepositoryProvider).createClassroom({
                   'name': nameCtrl.text.trim(),
                   'gradeLevel': gradeCtrl.text.trim().isEmpty
-                      ? 'غير محدد'
+                      ? _l10n.unspecified
                       : gradeCtrl.text.trim(),
                   'academicYear': '2024-2025',
                 });
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text('تم إنشاء الفصل: ${nameCtrl.text}'),
+                      content: Text(_l10n.classCreated(nameCtrl.text)),
                       behavior: SnackBarBehavior.floating,
                       backgroundColor: AppColors.success),
                 );
@@ -130,7 +136,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                       content: Text(
-                          'خطأ: ${e.toString().contains('403') ? "ليس لديك صلاحية إنشاء فصل" : "تعذر الاتصال بالخادم"}'),
+                          '${_l10n.unexpectedError}: ${e.toString().contains('403') ? _l10n.createClassForbidden : _l10n.serverConnectionFailed}'),
                       behavior: SnackBarBehavior.floating,
                       backgroundColor: AppColors.error),
                 );
@@ -139,7 +145,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white),
-            child: const Text('إنشاء', style: TextStyle(fontFamily: 'Almarai')),
+            child: Text(_l10n.create,
+                style: const TextStyle(fontFamily: 'Almarai')),
           ),
         ],
       ),
@@ -201,16 +208,16 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
               Row(
                 children: [
                   Expanded(
-                      child: _detailStat(
-                          'الطلاب', '$studentCount', Icons.people_outline)),
+                      child: _detailStat(_l10n.students, '$studentCount',
+                          Icons.people_outline)),
                   const SizedBox(width: 10),
                   Expanded(
-                      child: _detailStat('اختبارات نشطة', '$activeAssessments',
-                          Icons.assignment_outlined)),
+                      child: _detailStat(_l10n.activeAssessments,
+                          '$activeAssessments', Icons.assignment_outlined)),
                   const SizedBox(width: 10),
                   Expanded(
                       child: _detailStat(
-                          'متوسط الأداء',
+                          _l10n.averagePerformance,
                           '${avgScore.toStringAsFixed(0)}%',
                           Icons.analytics_outlined)),
                 ],
@@ -222,8 +229,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                   context.push('/teacher/assessments/create');
                 },
                 icon: const Icon(Icons.add_rounded),
-                label: const Text('إنشاء اختبار لهذا الفصل',
-                    style: TextStyle(fontFamily: 'Almarai')),
+                label: Text(_l10n.createAssessmentForClass,
+                    style: const TextStyle(fontFamily: 'Almarai')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -239,8 +246,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                   context.push('/teacher/reports/${classroom['_id']}');
                 },
                 icon: const Icon(Icons.bar_chart_rounded),
-                label: const Text('عرض تقرير الفصل',
-                    style: TextStyle(fontFamily: 'Almarai')),
+                label: Text(_l10n.viewClassReport,
+                    style: const TextStyle(fontFamily: 'Almarai')),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -254,8 +261,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                   context.push('/teacher/certificates');
                 },
                 icon: const Icon(Icons.workspace_premium_outlined),
-                label: const Text('شهادات الفصل',
-                    style: TextStyle(fontFamily: 'Almarai')),
+                label: Text(_l10n.classCertificates,
+                    style: const TextStyle(fontFamily: 'Almarai')),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -314,8 +321,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('فصولي الدراسية',
-                style: TextStyle(
+            Text(_l10n.myClassesTitle,
+                style: const TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -332,7 +339,7 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
             icon: const Icon(Icons.add_circle_outline_rounded),
             color: AppColors.primary,
             onPressed: _showAddClassDialog,
-            tooltip: 'إضافة فصل',
+            tooltip: _l10n.addClassTooltip,
           ),
         ],
       ),
@@ -358,8 +365,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
         onPressed: _showAddClassDialog,
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.add_rounded, color: Colors.white),
-        label: const Text('فصل جديد',
-            style: TextStyle(color: Colors.white, fontFamily: 'Almarai')),
+        label: Text(_l10n.newClass,
+            style: const TextStyle(color: Colors.white, fontFamily: 'Almarai')),
       ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'teacher'),
     );
@@ -379,16 +386,16 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
     return Row(
       children: [
         Expanded(
-            child: _summaryCard('الفصول', '${_classrooms.length}',
+            child: _summaryCard(_l10n.classes, '${_classrooms.length}',
                 Icons.class_rounded, AppColors.primary)),
         const SizedBox(width: 10),
         Expanded(
-            child: _summaryCard('الطلاب', '$totalStudents',
+            child: _summaryCard(_l10n.students, '$totalStudents',
                 Icons.people_rounded, AppColors.success)),
         const SizedBox(width: 10),
         Expanded(
             child: _summaryCard(
-                'متوسط الأداء',
+                _l10n.averagePerformance,
                 '${avgScore.toStringAsFixed(0)}%',
                 Icons.analytics_rounded,
                 const Color(0xFFD97706))),
@@ -496,11 +503,12 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _miniStat(Icons.people_outline, '$studentCount طالب'),
-                  _miniStat(
-                      Icons.assignment_outlined, '$activeAssessments نشط'),
+                  _miniStat(Icons.people_outline,
+                      _l10n.studentCountCompact(studentCount)),
+                  _miniStat(Icons.assignment_outlined,
+                      _l10n.activeAssessmentCountCompact(activeAssessments)),
                   _miniStat(Icons.analytics_outlined,
-                      '${avgScore.toStringAsFixed(0)}% متوسط'),
+                      _l10n.averageScoreCompact(avgScore.toStringAsFixed(0))),
                 ],
               ),
               const SizedBox(height: 14),
@@ -512,9 +520,9 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                       onPressed: () =>
                           context.push('/teacher/reports/${classroom['_id']}'),
                       icon: const Icon(Icons.bar_chart_rounded, size: 16),
-                      label: const Text('التقرير',
-                          style:
-                              TextStyle(fontSize: 12, fontFamily: 'Almarai')),
+                      label: Text(_l10n.report,
+                          style: const TextStyle(
+                              fontSize: 12, fontFamily: 'Almarai')),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         shape: RoundedRectangleBorder(
@@ -528,9 +536,9 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                       onPressed: () =>
                           context.push('/teacher/assessments/create'),
                       icon: const Icon(Icons.add_rounded, size: 16),
-                      label: const Text('اختبار',
-                          style:
-                              TextStyle(fontSize: 12, fontFamily: 'Almarai')),
+                      label: Text(_l10n.assessment,
+                          style: const TextStyle(
+                              fontSize: 12, fontFamily: 'Almarai')),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
@@ -578,15 +586,15 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                     size: 48, color: AppColors.primary),
               ),
               const SizedBox(height: 24),
-              const Text('لا توجد فصول دراسية بعد',
-                  style: TextStyle(
+              Text(_l10n.noClassesYet,
+                  style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Almarai')),
               const SizedBox(height: 8),
-              const Text(
-                'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم',
-                style: TextStyle(
+              Text(
+                _l10n.noClassesMessage,
+                style: const TextStyle(
                     color: AppColors.onSurfaceVariant,
                     fontSize: 14,
                     fontFamily: 'Almarai',
@@ -600,8 +608,9 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
                 child: ElevatedButton.icon(
                   onPressed: _showAddClassDialog,
                   icon: const Icon(Icons.add_circle_outline),
-                  label: const Text('إضافة فصل جديد',
-                      style: TextStyle(fontSize: 16, fontFamily: 'Almarai')),
+                  label: Text(_l10n.addNewClass,
+                      style:
+                          const TextStyle(fontSize: 16, fontFamily: 'Almarai')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,

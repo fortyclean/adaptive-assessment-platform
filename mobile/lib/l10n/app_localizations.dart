@@ -2119,6 +2119,168 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة.'**
   String get marketItemExtraTimeDescription;
+
+  /// No description provided for @myClassesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصولي الدراسية'**
+  String get myClassesTitle;
+
+  /// No description provided for @addNewClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فصل جديد'**
+  String get addNewClass;
+
+  /// No description provided for @className.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الفصل'**
+  String get className;
+
+  /// No description provided for @classNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: أولى متوسط (أ)'**
+  String get classNameHint;
+
+  /// No description provided for @gradeLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة الدراسية'**
+  String get gradeLevel;
+
+  /// No description provided for @gradeLevelHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: الصف الأول المتوسط'**
+  String get gradeLevelHint;
+
+  /// No description provided for @create.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء'**
+  String get create;
+
+  /// No description provided for @unspecified.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير محدد'**
+  String get unspecified;
+
+  /// No description provided for @classCreated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء الفصل: {name}'**
+  String classCreated(Object name);
+
+  /// No description provided for @createClassForbidden.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس لديك صلاحية إنشاء فصل'**
+  String get createClassForbidden;
+
+  /// No description provided for @serverConnectionFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الاتصال بالخادم'**
+  String get serverConnectionFailed;
+
+  /// No description provided for @students.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلاب'**
+  String get students;
+
+  /// No description provided for @activeAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبارات نشطة'**
+  String get activeAssessments;
+
+  /// No description provided for @averagePerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط الأداء'**
+  String get averagePerformance;
+
+  /// No description provided for @createAssessmentForClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء اختبار لهذا الفصل'**
+  String get createAssessmentForClass;
+
+  /// No description provided for @viewClassReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض تقرير الفصل'**
+  String get viewClassReport;
+
+  /// No description provided for @classCertificates.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهادات الفصل'**
+  String get classCertificates;
+
+  /// No description provided for @addClassTooltip.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فصل'**
+  String get addClassTooltip;
+
+  /// No description provided for @newClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصل جديد'**
+  String get newClass;
+
+  /// No description provided for @classes.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصول'**
+  String get classes;
+
+  /// No description provided for @studentCountCompact.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} طالب'**
+  String studentCountCompact(Object count);
+
+  /// No description provided for @activeAssessmentCountCompact.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} نشط'**
+  String activeAssessmentCountCompact(Object count);
+
+  /// No description provided for @averageScoreCompact.
+  ///
+  /// In ar, this message translates to:
+  /// **'{score}% متوسط'**
+  String averageScoreCompact(Object score);
+
+  /// No description provided for @report.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقرير'**
+  String get report;
+
+  /// No description provided for @assessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار'**
+  String get assessment;
+
+  /// No description provided for @noClassesYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فصول دراسية بعد'**
+  String get noClassesYet;
+
+  /// No description provided for @noClassesMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم.'**
+  String get noClassesMessage;
 }
 
 class _AppLocalizationsDelegate

@@ -480,5 +480,52 @@
   "marketItemXpBoosterTitle": "1-hour XP booster",
   "marketItemXpBoosterDescription": "Increases experience points earned in your next session.",
   "marketItemExtraTimeTitle": "Extra time reward",
-  "marketItemExtraTimeDescription": "An active demo collectible that shows how owned items appear."
+  "marketItemExtraTimeDescription": "An active demo collectible that shows how owned items appear.",
+  "myClassesTitle": "My classes",
+  "addNewClass": "Add new class",
+  "className": "Class name",
+  "classNameHint": "Example: Grade 7 (A)",
+  "gradeLevel": "Grade level",
+  "gradeLevelHint": "Example: Grade 7",
+  "create": "Create",
+  "unspecified": "Unspecified",
+  "classCreated": "Class created: {name}",
+  "@classCreated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "createClassForbidden": "You do not have permission to create a class",
+  "serverConnectionFailed": "Could not connect to the server",
+  "students": "Students",
+  "activeAssessments": "Active assessments",
+  "averagePerformance": "Average performance",
+  "createAssessmentForClass": "Create assessment for this class",
+  "viewClassReport": "View class report",
+  "classCertificates": "Class certificates",
+  "addClassTooltip": "Add class",
+  "newClass": "New class",
+  "classes": "Classes",
+  "studentCountCompact": "{count} students",
+  "@studentCountCompact": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "activeAssessmentCountCompact": "{count} active",
+  "@activeAssessmentCountCompact": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "averageScoreCompact": "{score}% average",
+  "@averageScoreCompact": {
+    "placeholders": {
+      "score": {}
+    }
+  },
+  "report": "Report",
+  "assessment": "Assessment",
+  "noClassesYet": "No classes yet",
+  "noClassesMessage": "Start by creating a class to organize your students and manage their assessments."
 }

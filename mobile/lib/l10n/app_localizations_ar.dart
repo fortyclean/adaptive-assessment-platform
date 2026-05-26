@@ -1103,4 +1103,94 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get marketItemExtraTimeDescription =>
       'مقتنى تجريبي نشط يظهر كيف تبدو العناصر المملوكة.';
+
+  @override
+  String get myClassesTitle => 'فصولي الدراسية';
+
+  @override
+  String get addNewClass => 'إضافة فصل جديد';
+
+  @override
+  String get className => 'اسم الفصل';
+
+  @override
+  String get classNameHint => 'مثال: أولى متوسط (أ)';
+
+  @override
+  String get gradeLevel => 'المرحلة الدراسية';
+
+  @override
+  String get gradeLevelHint => 'مثال: الصف الأول المتوسط';
+
+  @override
+  String get create => 'إنشاء';
+
+  @override
+  String get unspecified => 'غير محدد';
+
+  @override
+  String classCreated(Object name) {
+    return 'تم إنشاء الفصل: $name';
+  }
+
+  @override
+  String get createClassForbidden => 'ليس لديك صلاحية إنشاء فصل';
+
+  @override
+  String get serverConnectionFailed => 'تعذر الاتصال بالخادم';
+
+  @override
+  String get students => 'الطلاب';
+
+  @override
+  String get activeAssessments => 'اختبارات نشطة';
+
+  @override
+  String get averagePerformance => 'متوسط الأداء';
+
+  @override
+  String get createAssessmentForClass => 'إنشاء اختبار لهذا الفصل';
+
+  @override
+  String get viewClassReport => 'عرض تقرير الفصل';
+
+  @override
+  String get classCertificates => 'شهادات الفصل';
+
+  @override
+  String get addClassTooltip => 'إضافة فصل';
+
+  @override
+  String get newClass => 'فصل جديد';
+
+  @override
+  String get classes => 'الفصول';
+
+  @override
+  String studentCountCompact(Object count) {
+    return '$count طالب';
+  }
+
+  @override
+  String activeAssessmentCountCompact(Object count) {
+    return '$count نشط';
+  }
+
+  @override
+  String averageScoreCompact(Object score) {
+    return '$score% متوسط';
+  }
+
+  @override
+  String get report => 'التقرير';
+
+  @override
+  String get assessment => 'اختبار';
+
+  @override
+  String get noClassesYet => 'لا توجد فصول دراسية بعد';
+
+  @override
+  String get noClassesMessage =>
+      'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم.';
 }

@@ -1106,4 +1106,95 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get marketItemExtraTimeDescription =>
       'An active demo collectible that shows how owned items appear.';
+
+  @override
+  String get myClassesTitle => 'My classes';
+
+  @override
+  String get addNewClass => 'Add new class';
+
+  @override
+  String get className => 'Class name';
+
+  @override
+  String get classNameHint => 'Example: Grade 7 (A)';
+
+  @override
+  String get gradeLevel => 'Grade level';
+
+  @override
+  String get gradeLevelHint => 'Example: Grade 7';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get unspecified => 'Unspecified';
+
+  @override
+  String classCreated(Object name) {
+    return 'Class created: $name';
+  }
+
+  @override
+  String get createClassForbidden =>
+      'You do not have permission to create a class';
+
+  @override
+  String get serverConnectionFailed => 'Could not connect to the server';
+
+  @override
+  String get students => 'Students';
+
+  @override
+  String get activeAssessments => 'Active assessments';
+
+  @override
+  String get averagePerformance => 'Average performance';
+
+  @override
+  String get createAssessmentForClass => 'Create assessment for this class';
+
+  @override
+  String get viewClassReport => 'View class report';
+
+  @override
+  String get classCertificates => 'Class certificates';
+
+  @override
+  String get addClassTooltip => 'Add class';
+
+  @override
+  String get newClass => 'New class';
+
+  @override
+  String get classes => 'Classes';
+
+  @override
+  String studentCountCompact(Object count) {
+    return '$count students';
+  }
+
+  @override
+  String activeAssessmentCountCompact(Object count) {
+    return '$count active';
+  }
+
+  @override
+  String averageScoreCompact(Object score) {
+    return '$score% average';
+  }
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get assessment => 'Assessment';
+
+  @override
+  String get noClassesYet => 'No classes yet';
+
+  @override
+  String get noClassesMessage =>
+      'Start by creating a class to organize your students and manage their assessments.';
 }
