@@ -1265,4 +1265,97 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get live => 'مباشر';
+
+  @override
+  String get assessmentCreatedAndPublishedSuccessfully =>
+      'تم إنشاء الاختبار ونشره بنجاح';
+
+  @override
+  String get assessmentSavedAsDraftSuccessfully =>
+      'تم حفظ الاختبار كمسودة بنجاح';
+
+  @override
+  String get insufficientQuestionsWarning =>
+      'تحذير: عدد الأسئلة المتاحة أقل من المطلوب';
+
+  @override
+  String get assessmentCreatedDemoMode =>
+      'تم إنشاء الاختبار بنجاح (وضع تجريبي)';
+
+  @override
+  String get assessmentCreateFailed =>
+      'تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.';
+
+  @override
+  String get assessmentTitleHint => 'مثال: اختبار الوحدة الأولى';
+
+  @override
+  String get requiredField => 'مطلوب';
+
+  @override
+  String get chooseSubject => 'اختر المادة...';
+
+  @override
+  String get unitOrChapter => 'الوحدة / الفصل';
+
+  @override
+  String get unitHint => 'مثال: الوحدة الأولى';
+
+  @override
+  String get assessmentType => 'نوع الاختبار';
+
+  @override
+  String get randomAssessment => 'اختبار عشوائي';
+
+  @override
+  String get randomAssessmentDescription =>
+      'يتم اختيار الأسئلة بشكل عشوائي من بنك الأسئلة.';
+
+  @override
+  String get adaptiveAssessment => 'اختبار تكيفي';
+
+  @override
+  String get adaptiveAssessmentDescription =>
+      'تتغير صعوبة الأسئلة بناءً على إجابات الطالب.';
+
+  @override
+  String get questionUnit => 'سؤال';
+
+  @override
+  String get timeInMinutes => 'الزمن (بالدقائق)';
+
+  @override
+  String get minuteUnit => 'دقيقة';
+
+  @override
+  String get chooseGradeLevel => 'اختر المرحلة...';
+
+  @override
+  String get classrooms => 'الفصول الدراسية';
+
+  @override
+  String get noLinkedClassroomsMessage =>
+      'لا توجد فصول مرتبطة بعد. يمكنك حفظ الاختبار كمسودة، لكن النشر يحتاج فصلًا واحدًا على الأقل.';
+
+  @override
+  String get availabilityWindow => 'نافذة التوفر';
+
+  @override
+  String get startDate => 'تاريخ البداية';
+
+  @override
+  String get endDate => 'تاريخ الانتهاء';
+
+  @override
+  String get publishImmediatelyTitle => 'نشر الاختبار مباشرة بعد الإنشاء';
+
+  @override
+  String get publishImmediatelySubtitle =>
+      'يتطلب اختيار فصل واحد على الأقل حتى تصل الإشعارات للطلاب.';
+
+  @override
+  String get confirmCreateAndPublishAssessment => 'تأكيد وإنشاء ونشر الاختبار';
+
+  @override
+  String get saveAssessmentAsDraft => 'حفظ الاختبار كمسودة';
 }

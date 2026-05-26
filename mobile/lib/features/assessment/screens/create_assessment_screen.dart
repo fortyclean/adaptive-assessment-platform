@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../models/create_assessment_draft.dart';
 import '../repositories/teacher_repository.dart';
 
@@ -37,6 +39,10 @@ class _CreateAssessmentScreenState
   bool _isLoadingClassrooms = true;
   List<Map<String, dynamic>> _classrooms = [];
   String? _warningMessage;
+
+  AppLocalizations get _l10n =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+      AppLocalizationsAr();
 
   final List<String> _gradeLevels = [
     'الصف السابع',
@@ -129,8 +135,8 @@ class _CreateAssessmentScreenState
           SnackBar(
             content: Text(
               _publishImmediately
-                  ? 'تم إنشاء الاختبار ونشره بنجاح'
-                  : 'تم حفظ الاختبار كمسودة بنجاح',
+                  ? _l10n.assessmentCreatedAndPublishedSuccessfully
+                  : _l10n.assessmentSavedAsDraftSuccessfully,
             ),
           ),
         );
@@ -139,22 +145,20 @@ class _CreateAssessmentScreenState
     } catch (e) {
       final msg = e.toString();
       if (msg.contains('Insufficient')) {
-        setState(() =>
-            _warningMessage = 'تحذير: عدد الأسئلة المتاحة أقل من المطلوب');
+        setState(() => _warningMessage = _l10n.insufficientQuestionsWarning);
       } else {
         if (mounted && AppConstants.useMockData) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم إنشاء الاختبار بنجاح (وضع تجريبي)'),
+            SnackBar(
+              content: Text(_l10n.assessmentCreatedDemoMode),
               behavior: SnackBarBehavior.floating,
-              backgroundColor: Color(0xFF2E7D32),
+              backgroundColor: const Color(0xFF2E7D32),
             ),
           );
           context.pop();
         } else if (mounted) {
           setState(() {
-            _warningMessage =
-                'تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.';
+            _warningMessage = _l10n.assessmentCreateFailed;
           });
         }
       }
@@ -190,350 +194,346 @@ class _CreateAssessmentScreenState
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    final l10n = _l10n;
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          elevation: 0,
-          shadowColor: Colors.black12,
-          surfaceTintColor: Colors.transparent,
-          title: const Text(
-            'إنشاء اختبار جديد',
-            style: TextStyle(
-              color: AppColors.primaryContainer,
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
-            ),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: AppColors.primaryContainer),
-            onPressed: () => context.pop(),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(
-              height: 1,
-              color: Theme.of(context).colorScheme.outlineVariant,
-            ),
+        elevation: 0,
+        shadowColor: Colors.black12,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+          l10n.createNewAssessment,
+          style: const TextStyle(
+            color: AppColors.primaryContainer,
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
           ),
         ),
-        body: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
-            children: [
-              // ── Title ──────────────────────────────────────────────────────
-              const _FormLabel(label: 'عنوان الاختبار'),
-              const SizedBox(height: 8),
-              _StyledTextFormField(
-                hintText: 'مثال: اختبار الوحدة الأولى',
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _title = v!.trim(),
-              ),
-              const SizedBox(height: 20),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.primaryContainer),
+          onPressed: () => context.pop(),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+        ),
+      ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
+          children: [
+            // ── Title ──────────────────────────────────────────────────────
+            _FormLabel(label: l10n.assessmentTitle),
+            const SizedBox(height: 8),
+            _StyledTextFormField(
+              hintText: l10n.assessmentTitleHint,
+              validator: (v) =>
+                  (v == null || v.trim().isEmpty) ? l10n.requiredField : null,
+              onSaved: (v) => _title = v!.trim(),
+            ),
+            const SizedBox(height: 20),
 
-              // ── Subject ────────────────────────────────────────────────────
-              const _FormLabel(label: 'المادة الدراسية'),
-              const SizedBox(height: 8),
-              _StyledDropdown<String>(
-                hint: 'اختر المادة...',
-                value: _subject,
-                items: _arabicSubjects
-                    .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                    .toList(),
-                onChanged: (v) => setState(() => _subject = v),
-                validator: (v) => v == null ? 'مطلوب' : null,
-              ),
-              const SizedBox(height: 20),
+            // ── Subject ────────────────────────────────────────────────────
+            _FormLabel(label: l10n.subject),
+            const SizedBox(height: 8),
+            _StyledDropdown<String>(
+              hint: l10n.chooseSubject,
+              value: _subject,
+              items: _arabicSubjects
+                  .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                  .toList(),
+              onChanged: (v) => setState(() => _subject = v),
+              validator: (v) => v == null ? l10n.requiredField : null,
+            ),
+            const SizedBox(height: 20),
 
-              // ── Unit ───────────────────────────────────────────────────────
-              const _FormLabel(label: 'الوحدة / الفصل'),
-              const SizedBox(height: 8),
-              _StyledTextFormField(
-                hintText: 'مثال: الوحدة الأولى',
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'مطلوب' : null,
-                onSaved: (v) => _unit = v!.trim(),
-              ),
-              const SizedBox(height: 20),
+            // ── Unit ───────────────────────────────────────────────────────
+            _FormLabel(label: l10n.unitOrChapter),
+            const SizedBox(height: 8),
+            _StyledTextFormField(
+              hintText: l10n.unitHint,
+              validator: (v) =>
+                  (v == null || v.trim().isEmpty) ? l10n.requiredField : null,
+              onSaved: (v) => _unit = v!.trim(),
+            ),
+            const SizedBox(height: 20),
 
-              // ── Assessment Type ────────────────────────────────────────────
-              const _FormLabel(label: 'نوع الاختبار'),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: _TypeCard(
-                      label: 'اختبار عشوائي',
-                      description:
-                          'يتم اختيار الأسئلة بشكل عشوائي من بنك الأسئلة.',
-                      icon: Icons.shuffle_rounded,
-                      selected: _assessmentType == 'random',
-                      onTap: () => setState(() => _assessmentType = 'random'),
-                    ),
+            // ── Assessment Type ────────────────────────────────────────────
+            _FormLabel(label: l10n.assessmentType),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: _TypeCard(
+                    label: l10n.randomAssessment,
+                    description: l10n.randomAssessmentDescription,
+                    icon: Icons.shuffle_rounded,
+                    selected: _assessmentType == 'random',
+                    onTap: () => setState(() => _assessmentType = 'random'),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _TypeCard(
-                      label: 'اختبار تكيفي',
-                      description:
-                          'تتغير صعوبة الأسئلة بناءً على إجابات الطالب.',
-                      icon: Icons.auto_awesome_rounded,
-                      selected: _assessmentType == 'adaptive',
-                      onTap: () => setState(() => _assessmentType = 'adaptive'),
-                    ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _TypeCard(
+                    label: l10n.adaptiveAssessment,
+                    description: l10n.adaptiveAssessmentDescription,
+                    icon: Icons.auto_awesome_rounded,
+                    selected: _assessmentType == 'adaptive',
+                    onTap: () => setState(() => _assessmentType = 'adaptive'),
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
 
-              // ── Question Count & Time ──────────────────────────────────────
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const _FormLabel(label: 'عدد الأسئلة'),
-                        const SizedBox(height: 8),
-                        _CounterField(
-                          value: _questionCount,
-                          min: AppConstants.minQuestions,
-                          max: AppConstants.maxQuestions,
-                          suffix: 'سؤال',
-                          onChanged: (v) => setState(() => _questionCount = v),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const _FormLabel(label: 'الزمن (بالدقائق)'),
-                        const SizedBox(height: 8),
-                        _CounterField(
-                          value: _timeLimitMinutes,
-                          min: AppConstants.minTimeLimitMinutes,
-                          max: AppConstants.maxTimeLimitMinutes,
-                          suffix: 'دقيقة',
-                          onChanged: (v) =>
-                              setState(() => _timeLimitMinutes = v),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // ── Grade Level ────────────────────────────────────────────────
-              const _FormLabel(label: 'المرحلة الدراسية'),
-              const SizedBox(height: 8),
-              _StyledDropdown<String>(
-                hint: 'اختر المرحلة...',
-                value: _gradeLevel,
-                items: _gradeLevels
-                    .map((g) => DropdownMenuItem(value: g, child: Text(g)))
-                    .toList(),
-                onChanged: (v) => setState(() => _gradeLevel = v),
-                validator: (v) => v == null ? 'مطلوب' : null,
-              ),
-              const SizedBox(height: 20),
-
-              // ── Classrooms ─────────────────────────────────────────────────
-              if (!_isLoadingClassrooms && _classrooms.isNotEmpty) ...[
-                const _FormLabel(label: 'الفصول الدراسية'),
-                const SizedBox(height: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.outlineVariant),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x0A000000),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
+            // ── Question Count & Time ──────────────────────────────────────
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
                   child: Column(
-                    children: _classrooms.asMap().entries.map((entry) {
-                      final i = entry.key;
-                      final c = entry.value;
-                      final isLast = i == _classrooms.length - 1;
-                      return Column(
-                        children: [
-                          CheckboxListTile(
-                            title: Text(
-                              c['name'] as String? ?? '',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppColors.onSurface,
-                              ),
-                            ),
-                            subtitle: Text(
-                              c['gradeLevel'] as String? ?? '',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: AppColors.onSurfaceVariant,
-                              ),
-                            ),
-                            value: _classroomIds.contains(c['_id'] as String),
-                            activeColor: AppColors.primaryContainer,
-                            onChanged: (checked) {
-                              setState(() {
-                                if (checked ?? false) {
-                                  _classroomIds.add(c['_id'] as String);
-                                } else {
-                                  _classroomIds.remove(c['_id'] as String);
-                                }
-                              });
-                            },
-                          ),
-                          if (!isLast)
-                            const Divider(
-                                height: 1, color: AppColors.outlineVariant),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 20),
-              ],
-              if (!_isLoadingClassrooms && _classrooms.isEmpty) ...[
-                const _InfoBanner(
-                  icon: Icons.info_outline_rounded,
-                  text:
-                      'لا توجد فصول مرتبطة بعد. يمكنك حفظ الاختبار كمسودة، لكن النشر يحتاج فصلًا واحدًا على الأقل.',
-                ),
-                const SizedBox(height: 20),
-              ],
-
-              // ── Availability Window ────────────────────────────────────────
-              const _FormLabel(label: 'نافذة التوفر'),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: _DateButton(
-                      label: _availableFrom != null
-                          ? '${_availableFrom!.day}/${_availableFrom!.month}/${_availableFrom!.year}'
-                          : 'تاريخ البداية',
-                      icon: Icons.calendar_today_rounded,
-                      onTap: () => _pickDateTime(true),
-                      hasValue: _availableFrom != null,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _DateButton(
-                      label: _availableUntil != null
-                          ? '${_availableUntil!.day}/${_availableUntil!.month}/${_availableUntil!.year}'
-                          : 'تاريخ الانتهاء',
-                      icon: Icons.calendar_today_rounded,
-                      onTap: () => _pickDateTime(false),
-                      hasValue: _availableUntil != null,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              SwitchListTile.adaptive(
-                value: _publishImmediately,
-                onChanged: (value) =>
-                    setState(() => _publishImmediately = value),
-                activeThumbColor: AppColors.primaryContainer,
-                contentPadding: EdgeInsets.zero,
-                secondary: const Icon(Icons.publish_rounded),
-                title: const Text(
-                  'نشر الاختبار مباشرة بعد الإنشاء',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-                subtitle: const Text(
-                  'يتطلب اختيار فصل واحد على الأقل حتى تصل الإشعارات للطلاب.',
-                ),
-              ),
-
-              // ── Warning ────────────────────────────────────────────────────
-              if (_warningMessage != null) ...[
-                const SizedBox(height: 14),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.warningContainer,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.warning),
-                  ),
-                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.warning_amber_rounded,
-                          color: AppColors.warning, size: 18),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          _warningMessage!,
-                          style: const TextStyle(
-                            color: AppColors.warning,
-                            fontSize: 13,
-                          ),
-                        ),
+                      _FormLabel(label: l10n.questionCount),
+                      const SizedBox(height: 8),
+                      _CounterField(
+                        value: _questionCount,
+                        min: AppConstants.minQuestions,
+                        max: AppConstants.maxQuestions,
+                        suffix: l10n.questionUnit,
+                        onChanged: (v) => setState(() => _questionCount = v),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _FormLabel(label: l10n.timeInMinutes),
+                      const SizedBox(height: 8),
+                      _CounterField(
+                        value: _timeLimitMinutes,
+                        min: AppConstants.minTimeLimitMinutes,
+                        max: AppConstants.maxTimeLimitMinutes,
+                        suffix: l10n.minuteUnit,
+                        onChanged: (v) => setState(() => _timeLimitMinutes = v),
                       ),
                     ],
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 20),
 
-              const SizedBox(height: 32),
+            // ── Grade Level ────────────────────────────────────────────────
+            _FormLabel(label: l10n.gradeLevel),
+            const SizedBox(height: 8),
+            _StyledDropdown<String>(
+              hint: l10n.chooseGradeLevel,
+              value: _gradeLevel,
+              items: _gradeLevels
+                  .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                  .toList(),
+              onChanged: (v) => setState(() => _gradeLevel = v),
+              validator: (v) => v == null ? l10n.requiredField : null,
+            ),
+            const SizedBox(height: 20),
 
-              // ── Submit Button ──────────────────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _handleSubmit,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryContainer,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor:
-                        AppColors.primaryContainer.withValues(alpha: 0.5),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+            // ── Classrooms ─────────────────────────────────────────────────
+            if (!_isLoadingClassrooms && _classrooms.isNotEmpty) ...[
+              _FormLabel(label: l10n.classrooms),
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.outlineVariant),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x0A000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
                     ),
-                    elevation: 2,
-                    shadowColor:
-                        AppColors.primaryContainer.withValues(alpha: 0.3),
-                  ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
+                  ],
+                ),
+                child: Column(
+                  children: _classrooms.asMap().entries.map((entry) {
+                    final i = entry.key;
+                    final c = entry.value;
+                    final isLast = i == _classrooms.length - 1;
+                    return Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(
+                            c['name'] as String? ?? '',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppColors.onSurface,
+                            ),
                           ),
-                        )
-                      : Text(
-                          _publishImmediately
-                              ? 'تأكيد وإنشاء ونشر الاختبار'
-                              : 'حفظ الاختبار كمسودة',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                          subtitle: Text(
+                            c['gradeLevel'] as String? ?? '',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColors.onSurfaceVariant,
+                            ),
                           ),
+                          value: _classroomIds.contains(c['_id'] as String),
+                          activeColor: AppColors.primaryContainer,
+                          onChanged: (checked) {
+                            setState(() {
+                              if (checked ?? false) {
+                                _classroomIds.add(c['_id'] as String);
+                              } else {
+                                _classroomIds.remove(c['_id'] as String);
+                              }
+                            });
+                          },
                         ),
+                        if (!isLast)
+                          const Divider(
+                              height: 1, color: AppColors.outlineVariant),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+            if (!_isLoadingClassrooms && _classrooms.isEmpty) ...[
+              _InfoBanner(
+                icon: Icons.info_outline_rounded,
+                text: l10n.noLinkedClassroomsMessage,
+              ),
+              const SizedBox(height: 20),
+            ],
+
+            // ── Availability Window ────────────────────────────────────────
+            _FormLabel(label: l10n.availabilityWindow),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: _DateButton(
+                    label: _availableFrom != null
+                        ? '${_availableFrom!.day}/${_availableFrom!.month}/${_availableFrom!.year}'
+                        : l10n.startDate,
+                    icon: Icons.calendar_today_rounded,
+                    onTap: () => _pickDateTime(true),
+                    hasValue: _availableFrom != null,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _DateButton(
+                    label: _availableUntil != null
+                        ? '${_availableUntil!.day}/${_availableUntil!.month}/${_availableUntil!.year}'
+                        : l10n.endDate,
+                    icon: Icons.calendar_today_rounded,
+                    onTap: () => _pickDateTime(false),
+                    hasValue: _availableUntil != null,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            SwitchListTile.adaptive(
+              value: _publishImmediately,
+              onChanged: (value) => setState(() => _publishImmediately = value),
+              activeThumbColor: AppColors.primaryContainer,
+              contentPadding: EdgeInsets.zero,
+              secondary: const Icon(Icons.publish_rounded),
+              title: Text(
+                l10n.publishImmediatelyTitle,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              subtitle: Text(l10n.publishImmediatelySubtitle),
+            ),
+
+            // ── Warning ────────────────────────────────────────────────────
+            if (_warningMessage != null) ...[
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.warningContainer,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.warning),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.warning_amber_rounded,
+                        color: AppColors.warning, size: 18),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _warningMessage!,
+                        style: const TextStyle(
+                          color: AppColors.warning,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
+
+            const SizedBox(height: 32),
+
+            // ── Submit Button ──────────────────────────────────────────────
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _handleSubmit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryContainer,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor:
+                      AppColors.primaryContainer.withValues(alpha: 0.5),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  elevation: 2,
+                  shadowColor:
+                      AppColors.primaryContainer.withValues(alpha: 0.3),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        _publishImmediately
+                            ? l10n.confirmCreateAndPublishAssessment
+                            : l10n.saveAssessmentAsDraft,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 // ─── Form Label ───────────────────────────────────────────────────────────────

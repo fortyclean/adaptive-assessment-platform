@@ -1272,4 +1272,99 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get live => 'Live';
+
+  @override
+  String get assessmentCreatedAndPublishedSuccessfully =>
+      'Assessment created and published successfully';
+
+  @override
+  String get assessmentSavedAsDraftSuccessfully =>
+      'Assessment saved as a draft successfully';
+
+  @override
+  String get insufficientQuestionsWarning =>
+      'Warning: available questions are fewer than requested';
+
+  @override
+  String get assessmentCreatedDemoMode =>
+      'Assessment created successfully (demo mode)';
+
+  @override
+  String get assessmentCreateFailed =>
+      'Could not create the assessment. Check your connection and data, then try again.';
+
+  @override
+  String get assessmentTitleHint => 'Example: Unit 1 assessment';
+
+  @override
+  String get requiredField => 'Required';
+
+  @override
+  String get chooseSubject => 'Choose a subject...';
+
+  @override
+  String get unitOrChapter => 'Unit / chapter';
+
+  @override
+  String get unitHint => 'Example: Unit 1';
+
+  @override
+  String get assessmentType => 'Assessment type';
+
+  @override
+  String get randomAssessment => 'Random assessment';
+
+  @override
+  String get randomAssessmentDescription =>
+      'Questions are selected randomly from the question bank.';
+
+  @override
+  String get adaptiveAssessment => 'Adaptive assessment';
+
+  @override
+  String get adaptiveAssessmentDescription =>
+      'Question difficulty changes based on the student\'s answers.';
+
+  @override
+  String get questionUnit => 'questions';
+
+  @override
+  String get timeInMinutes => 'Time (minutes)';
+
+  @override
+  String get minuteUnit => 'min';
+
+  @override
+  String get chooseGradeLevel => 'Choose a grade level...';
+
+  @override
+  String get classrooms => 'Classrooms';
+
+  @override
+  String get noLinkedClassroomsMessage =>
+      'No linked classes yet. You can save the assessment as a draft, but publishing requires at least one class.';
+
+  @override
+  String get availabilityWindow => 'Availability window';
+
+  @override
+  String get startDate => 'Start date';
+
+  @override
+  String get endDate => 'End date';
+
+  @override
+  String get publishImmediatelyTitle =>
+      'Publish assessment immediately after creation';
+
+  @override
+  String get publishImmediatelySubtitle =>
+      'Requires selecting at least one class so students receive notifications.';
+
+  @override
+  String get confirmCreateAndPublishAssessment =>
+      'Confirm, create, and publish assessment';
+
+  @override
+  String get saveAssessmentAsDraft => 'Save assessment as draft';
 }

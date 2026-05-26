@@ -2419,6 +2419,174 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مباشر'**
   String get live;
+
+  /// No description provided for @assessmentCreatedAndPublishedSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء الاختبار ونشره بنجاح'**
+  String get assessmentCreatedAndPublishedSuccessfully;
+
+  /// No description provided for @assessmentSavedAsDraftSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ الاختبار كمسودة بنجاح'**
+  String get assessmentSavedAsDraftSuccessfully;
+
+  /// No description provided for @insufficientQuestionsWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحذير: عدد الأسئلة المتاحة أقل من المطلوب'**
+  String get insufficientQuestionsWarning;
+
+  /// No description provided for @assessmentCreatedDemoMode.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء الاختبار بنجاح (وضع تجريبي)'**
+  String get assessmentCreatedDemoMode;
+
+  /// No description provided for @assessmentCreateFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.'**
+  String get assessmentCreateFailed;
+
+  /// No description provided for @assessmentTitleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: اختبار الوحدة الأولى'**
+  String get assessmentTitleHint;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In ar, this message translates to:
+  /// **'مطلوب'**
+  String get requiredField;
+
+  /// No description provided for @chooseSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المادة...'**
+  String get chooseSubject;
+
+  /// No description provided for @unitOrChapter.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة / الفصل'**
+  String get unitOrChapter;
+
+  /// No description provided for @unitHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: الوحدة الأولى'**
+  String get unitHint;
+
+  /// No description provided for @assessmentType.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الاختبار'**
+  String get assessmentType;
+
+  /// No description provided for @randomAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار عشوائي'**
+  String get randomAssessment;
+
+  /// No description provided for @randomAssessmentDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتم اختيار الأسئلة بشكل عشوائي من بنك الأسئلة.'**
+  String get randomAssessmentDescription;
+
+  /// No description provided for @adaptiveAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار تكيفي'**
+  String get adaptiveAssessment;
+
+  /// No description provided for @adaptiveAssessmentDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'تتغير صعوبة الأسئلة بناءً على إجابات الطالب.'**
+  String get adaptiveAssessmentDescription;
+
+  /// No description provided for @questionUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'سؤال'**
+  String get questionUnit;
+
+  /// No description provided for @timeInMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'الزمن (بالدقائق)'**
+  String get timeInMinutes;
+
+  /// No description provided for @minuteUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقيقة'**
+  String get minuteUnit;
+
+  /// No description provided for @chooseGradeLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المرحلة...'**
+  String get chooseGradeLevel;
+
+  /// No description provided for @classrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصول الدراسية'**
+  String get classrooms;
+
+  /// No description provided for @noLinkedClassroomsMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فصول مرتبطة بعد. يمكنك حفظ الاختبار كمسودة، لكن النشر يحتاج فصلًا واحدًا على الأقل.'**
+  String get noLinkedClassroomsMessage;
+
+  /// No description provided for @availabilityWindow.
+  ///
+  /// In ar, this message translates to:
+  /// **'نافذة التوفر'**
+  String get availabilityWindow;
+
+  /// No description provided for @startDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ البداية'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الانتهاء'**
+  String get endDate;
+
+  /// No description provided for @publishImmediatelyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر الاختبار مباشرة بعد الإنشاء'**
+  String get publishImmediatelyTitle;
+
+  /// No description provided for @publishImmediatelySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتطلب اختيار فصل واحد على الأقل حتى تصل الإشعارات للطلاب.'**
+  String get publishImmediatelySubtitle;
+
+  /// No description provided for @confirmCreateAndPublishAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد وإنشاء ونشر الاختبار'**
+  String get confirmCreateAndPublishAssessment;
+
+  /// No description provided for @saveAssessmentAsDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الاختبار كمسودة'**
+  String get saveAssessmentAsDraft;
 }
 
 class _AppLocalizationsDelegate

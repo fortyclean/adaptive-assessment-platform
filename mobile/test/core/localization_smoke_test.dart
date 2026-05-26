@@ -229,6 +229,33 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads create assessment localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.createNewAssessment,
+            l10n.assessmentTitleHint,
+            l10n.adaptiveAssessment,
+            l10n.publishImmediatelyTitle,
+            l10n.saveAssessmentAsDraft,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Create new assessment / Example: Unit 1 assessment / '
+        'Adaptive assessment / Publish assessment immediately after creation / '
+        'Save assessment as draft',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {
