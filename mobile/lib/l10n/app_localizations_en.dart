@@ -1197,4 +1197,79 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noClassesMessage =>
       'Start by creating a class to organize your students and manage their assessments.';
+
+  @override
+  String get manageAssessmentsLoadFailed =>
+      'Could not load assessments from the server. Check your connection and try again.';
+
+  @override
+  String get editAssessment => 'Edit assessment';
+
+  @override
+  String get assessmentTitle => 'Assessment title';
+
+  @override
+  String get subject => 'Subject';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get archived => 'Archived';
+
+  @override
+  String get editQuestionsFromBank => 'Edit questions from question bank';
+
+  @override
+  String get changesSavedSuccessfully => 'Changes saved successfully';
+
+  @override
+  String get savedLocally => 'Saved locally';
+
+  @override
+  String get assessmentPublishedSuccessfully =>
+      'Assessment published successfully';
+
+  @override
+  String get assessmentPublishFailed =>
+      'Could not publish the assessment. Check your connection and try again.';
+
+  @override
+  String get manageAssessmentsTitle => 'Assessments';
+
+  @override
+  String get manageAssessmentsSubtitle =>
+      'Manage and track all of your assessments.';
+
+  @override
+  String get noTeacherAssessmentsTitle => 'No assessments';
+
+  @override
+  String get noTeacherAssessmentsMessage =>
+      'Start by creating your first assessment.';
+
+  @override
+  String get questionsCountUnknown => '-- questions';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get deleteAssessmentTitle => 'Delete assessment';
+
+  @override
+  String get deleteAssessmentConfirmation =>
+      'Do you want to delete this assessment?';
+
+  @override
+  String get assessmentDeletedLocally => 'Assessment deleted';
+
+  @override
+  String get publish => 'Publish';
+
+  @override
+  String get reports => 'Reports';
+
+  @override
+  String get live => 'Live';
 }

@@ -2281,6 +2281,144 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم.'**
   String get noClassesMessage;
+
+  /// No description provided for @manageAssessmentsLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get manageAssessmentsLoadFailed;
+
+  /// No description provided for @editAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الاختبار'**
+  String get editAssessment;
+
+  /// No description provided for @assessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان الاختبار'**
+  String get assessmentTitle;
+
+  /// No description provided for @subject.
+  ///
+  /// In ar, this message translates to:
+  /// **'المادة الدراسية'**
+  String get subject;
+
+  /// No description provided for @status.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة'**
+  String get status;
+
+  /// No description provided for @archived.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤرشف'**
+  String get archived;
+
+  /// No description provided for @editQuestionsFromBank.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الأسئلة من بنك الأسئلة'**
+  String get editQuestionsFromBank;
+
+  /// No description provided for @changesSavedSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ التغييرات'**
+  String get changesSavedSuccessfully;
+
+  /// No description provided for @savedLocally.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحفظ محلياً'**
+  String get savedLocally;
+
+  /// No description provided for @assessmentPublishedSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نشر الاختبار بنجاح'**
+  String get assessmentPublishedSuccessfully;
+
+  /// No description provided for @assessmentPublishFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر نشر الاختبار. تحقق من الاتصال ثم حاول مرة أخرى.'**
+  String get assessmentPublishFailed;
+
+  /// No description provided for @manageAssessmentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبارات'**
+  String get manageAssessmentsTitle;
+
+  /// No description provided for @manageAssessmentsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة وتتبع جميع الاختبارات الخاصة بك.'**
+  String get manageAssessmentsSubtitle;
+
+  /// No description provided for @noTeacherAssessmentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد اختبارات'**
+  String get noTeacherAssessmentsTitle;
+
+  /// No description provided for @noTeacherAssessmentsMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ بإنشاء اختبارك الأول.'**
+  String get noTeacherAssessmentsMessage;
+
+  /// No description provided for @questionsCountUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'-- سؤال'**
+  String get questionsCountUnknown;
+
+  /// No description provided for @edit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get edit;
+
+  /// No description provided for @deleteAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الاختبار'**
+  String get deleteAssessmentTitle;
+
+  /// No description provided for @deleteAssessmentConfirmation.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذا الاختبار؟'**
+  String get deleteAssessmentConfirmation;
+
+  /// No description provided for @assessmentDeletedLocally.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف الاختبار'**
+  String get assessmentDeletedLocally;
+
+  /// No description provided for @publish.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر'**
+  String get publish;
+
+  /// No description provided for @reports.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقارير'**
+  String get reports;
+
+  /// No description provided for @live.
+  ///
+  /// In ar, this message translates to:
+  /// **'مباشر'**
+  String get live;
 }
 
 class _AppLocalizationsDelegate

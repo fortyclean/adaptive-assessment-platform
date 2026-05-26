@@ -202,6 +202,33 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads teacher assessment management localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.manageAssessmentsTitle,
+            l10n.editAssessment,
+            l10n.assessmentPublishedSuccessfully,
+            l10n.deleteAssessmentTitle,
+            l10n.questionsCount(12),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Assessments / Edit assessment / Assessment published successfully / '
+        'Delete assessment / 12 questions',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

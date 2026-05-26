@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../repositories/teacher_repository.dart';
 
@@ -23,6 +25,10 @@ class _ManageAssessmentsScreenState
   List<Map<String, dynamic>> _assessments = [];
   String _statusFilter = 'all';
   String? _errorMessage;
+
+  AppLocalizations get _l10n =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+      AppLocalizationsAr();
 
   static const List<Map<String, dynamic>> _mockAssessments = [
     {
@@ -149,9 +155,8 @@ class _ManageAssessmentsScreenState
     } catch (_) {
       setState(() {
         _assessments = _shouldUseDemoFallback ? _mockAssessments : [];
-        _errorMessage = _shouldUseDemoFallback
-            ? null
-            : 'تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.';
+        _errorMessage =
+            _shouldUseDemoFallback ? null : _l10n.manageAssessmentsLoadFailed;
         _isLoading = false;
       });
     }
@@ -168,6 +173,7 @@ class _ManageAssessmentsScreenState
   }
 
   void _showEditDialog(BuildContext context, Map<String, dynamic> assessment) {
+    final l10n = _l10n;
     final titleController =
         TextEditingController(text: assessment['title'] as String? ?? '');
     final subjectController =
@@ -206,8 +212,8 @@ class _ManageAssessmentsScreenState
                   IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Navigator.pop(ctx)),
-                  const Text('تعديل الاختبار',
-                      style: TextStyle(
+                  Text(l10n.editAssessment,
+                      style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                           fontFamily: 'Almarai')),
@@ -220,7 +226,7 @@ class _ManageAssessmentsScreenState
                 controller: titleController,
                 textDirection: TextDirection.rtl,
                 decoration: InputDecoration(
-                  labelText: 'عنوان الاختبار',
+                  labelText: l10n.assessmentTitle,
                   prefixIcon: const Icon(Icons.title_rounded),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -232,7 +238,7 @@ class _ManageAssessmentsScreenState
                 controller: subjectController,
                 textDirection: TextDirection.rtl,
                 decoration: InputDecoration(
-                  labelText: 'المادة الدراسية',
+                  labelText: l10n.subject,
                   prefixIcon: const Icon(Icons.book_outlined),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -240,8 +246,8 @@ class _ManageAssessmentsScreenState
               ),
               const SizedBox(height: 12),
               // Status selector
-              const Text('الحالة:',
-                  style: TextStyle(
+              Text(l10n.status,
+                  style: const TextStyle(
                       fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
               const SizedBox(height: 8),
               Row(
@@ -249,17 +255,17 @@ class _ManageAssessmentsScreenState
                   for (final s in [
                     {
                       'value': 'draft',
-                      'label': 'مسودة',
+                      'label': l10n.draft,
                       'color': AppColors.onSurfaceVariant
                     },
                     {
                       'value': 'active',
-                      'label': 'نشط',
+                      'label': l10n.active,
                       'color': AppColors.success
                     },
                     {
                       'value': 'completed',
-                      'label': 'مؤرشف',
+                      'label': l10n.archived,
                       'color': AppColors.primary
                     },
                   ]) ...[
@@ -273,7 +279,7 @@ class _ManageAssessmentsScreenState
                           decoration: BoxDecoration(
                             color: selectedStatus == s['value']
                                 ? (s['color'] as Color).withValues(alpha: 0.15)
-                                : Colors.white,
+                                : Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                                 color: selectedStatus == s['value']
@@ -302,8 +308,8 @@ class _ManageAssessmentsScreenState
                   context.push('/teacher/questions');
                 },
                 icon: const Icon(Icons.quiz_outlined),
-                label: const Text('تعديل الأسئلة من بنك الأسئلة',
-                    style: TextStyle(fontFamily: 'Almarai')),
+                label: Text(l10n.editQuestionsFromBank,
+                    style: const TextStyle(fontFamily: 'Almarai')),
                 style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
@@ -328,15 +334,15 @@ class _ManageAssessmentsScreenState
                   try {
                     // Backend update would go here
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('✅ تم حفظ التغييرات'),
+                      SnackBar(
+                          content: Text(l10n.changesSavedSuccessfully),
                           behavior: SnackBarBehavior.floating,
                           backgroundColor: AppColors.success),
                     );
                   } catch (_) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('تم الحفظ محلياً'),
+                      SnackBar(
+                          content: Text(l10n.savedLocally),
                           behavior: SnackBarBehavior.floating),
                     );
                   }
@@ -347,8 +353,8 @@ class _ManageAssessmentsScreenState
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                child: const Text('حفظ التغييرات',
-                    style: TextStyle(
+                child: Text(l10n.saveChanges,
+                    style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Almarai')),
@@ -366,7 +372,7 @@ class _ManageAssessmentsScreenState
       await ref.read(teacherRepositoryProvider).publishAssessment(id);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم نشر الاختبار بنجاح')),
+          SnackBar(content: Text(_l10n.assessmentPublishedSuccessfully)),
         );
         _loadAssessments();
       }
@@ -383,15 +389,14 @@ class _ManageAssessmentsScreenState
         }
         if (!_shouldUseDemoFallback) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content:
-                  Text('تعذر نشر الاختبار. تحقق من الاتصال ثم حاول مرة أخرى.'),
+            SnackBar(
+              content: Text(_l10n.assessmentPublishFailed),
             ),
           );
           return;
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم نشر الاختبار بنجاح')),
+          SnackBar(content: Text(_l10n.assessmentPublishedSuccessfully)),
         );
       }
     }
@@ -404,9 +409,9 @@ class _ManageAssessmentsScreenState
           backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
-          title: const Text(
-            'التقييم الذكي',
-            style: TextStyle(
+          title: Text(
+            _l10n.smartAssessment,
+            style: const TextStyle(
               color: Color(0xFF00288E),
               fontWeight: FontWeight.w900,
               fontSize: 20,
@@ -447,9 +452,9 @@ class _ManageAssessmentsScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'الاختبارات',
-                    style: TextStyle(
+                  Text(
+                    _l10n.manageAssessmentsTitle,
+                    style: const TextStyle(
                       color: AppColors.onSurface,
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -457,9 +462,9 @@ class _ManageAssessmentsScreenState
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'إدارة وتتبع جميع الاختبارات الخاصة بك.',
-                    style: TextStyle(
+                  Text(
+                    _l10n.manageAssessmentsSubtitle,
+                    style: const TextStyle(
                       color: AppColors.onSurfaceVariant,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -473,25 +478,25 @@ class _ManageAssessmentsScreenState
                     child: Row(
                       children: [
                         _FilterChip(
-                          label: 'الكل',
+                          label: _l10n.filterAll,
                           selected: _statusFilter == 'all',
                           onTap: () => setState(() => _statusFilter = 'all'),
                         ),
                         const SizedBox(width: 8),
                         _FilterChip(
-                          label: 'نشط',
+                          label: _l10n.active,
                           selected: _statusFilter == 'active',
                           onTap: () => setState(() => _statusFilter = 'active'),
                         ),
                         const SizedBox(width: 8),
                         _FilterChip(
-                          label: 'مسودة',
+                          label: _l10n.draft,
                           selected: _statusFilter == 'draft',
                           onTap: () => setState(() => _statusFilter = 'draft'),
                         ),
                         const SizedBox(width: 8),
                         _FilterChip(
-                          label: 'مؤرشف',
+                          label: _l10n.archived,
                           selected: _statusFilter == 'completed',
                           onTap: () =>
                               setState(() => _statusFilter = 'completed'),
@@ -563,7 +568,7 @@ class _ManageAssessmentsScreenState
               FilledButton.icon(
                 onPressed: _loadAssessments,
                 icon: const Icon(Icons.refresh_rounded),
-                label: const Text('إعادة المحاولة'),
+                label: Text(_l10n.retry),
               ),
             ],
           ),
@@ -585,18 +590,18 @@ class _ManageAssessmentsScreenState
                   size: 40, color: AppColors.outlineVariant),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'لا توجد اختبارات',
-              style: TextStyle(
+            Text(
+              _l10n.noTeacherAssessmentsTitle,
+              style: const TextStyle(
                 color: AppColors.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'ابدأ بإنشاء اختبارك الأول',
-              style: TextStyle(
+            Text(
+              _l10n.noTeacherAssessmentsMessage,
+              style: const TextStyle(
                 color: AppColors.onSurfaceVariant,
                 fontSize: 14,
               ),
@@ -655,12 +660,13 @@ class _AssessmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = _manageAssessmentsL10n(context);
     final status = assessment['status'] as String? ?? '';
     final isActive = status == 'active';
     final isDraft = status == 'draft';
     final isAdaptive = assessment['assessmentType'] == 'adaptive';
     final date = assessment['availableFrom'] as String?;
-    var dateLabel = 'غير محدد';
+    var dateLabel = l10n.unspecified;
     if (date != null) {
       try {
         final dt = DateTime.parse(date);
@@ -733,7 +739,11 @@ class _AssessmentCard extends StatelessWidget {
                         size: 16, color: AppColors.onSurfaceVariant),
                     const SizedBox(width: 4),
                     Text(
-                      '${assessment['questionCount'] ?? '--'} سؤال',
+                      assessment['questionCount'] == null
+                          ? l10n.questionsCountUnknown
+                          : l10n.questionsCount(
+                              assessment['questionCount'] as Object,
+                            ),
                       style: const TextStyle(
                         color: AppColors.onSurfaceVariant,
                         fontSize: 13,
@@ -759,7 +769,7 @@ class _AssessmentCard extends StatelessWidget {
                     Expanded(
                       child: _CardButton(
                         icon: Icons.edit_outlined,
-                        label: 'تعديل',
+                        label: l10n.edit,
                         onTap: onEdit ?? () {},
                         color: AppColors.primary,
                         outlined: true,
@@ -769,29 +779,31 @@ class _AssessmentCard extends StatelessWidget {
                     Expanded(
                       child: _CardButton(
                         icon: Icons.delete_outline_rounded,
-                        label: 'حذف',
+                        label: l10n.delete,
                         onTap: () {
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                              title: const Text('حذف الاختبار'),
-                              content: const Text('هل تريد حذف هذا الاختبار؟'),
+                              title: Text(l10n.deleteAssessmentTitle),
+                              content: Text(l10n.deleteAssessmentConfirmation),
                               actions: [
                                 TextButton(
                                     onPressed: () => Navigator.pop(ctx),
-                                    child: const Text('إلغاء')),
+                                    child: Text(l10n.cancel)),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(ctx);
                                     // Demo: remove locally
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('تم حذف الاختبار'),
+                                      SnackBar(
+                                          content: Text(
+                                              l10n.assessmentDeletedLocally),
                                           backgroundColor: AppColors.error),
                                     );
                                   },
-                                  child: const Text('حذف',
-                                      style: TextStyle(color: AppColors.error)),
+                                  child: Text(l10n.delete,
+                                      style: const TextStyle(
+                                          color: AppColors.error)),
                                 ),
                               ],
                             ),
@@ -806,7 +818,7 @@ class _AssessmentCard extends StatelessWidget {
                       Expanded(
                         child: _CardButton(
                           icon: Icons.publish_rounded,
-                          label: 'نشر',
+                          label: l10n.publish,
                           onTap: onPublish!,
                           color: AppColors.primary,
                           outlined: false,
@@ -816,7 +828,7 @@ class _AssessmentCard extends StatelessWidget {
                       Expanded(
                         child: _CardButton(
                           icon: Icons.bar_chart_rounded,
-                          label: 'التقارير',
+                          label: l10n.reports,
                           onTap: () => context
                               .push('/teacher/reports/${assessment['_id']}'),
                           color: AppColors.onSurfaceVariant,
@@ -854,7 +866,7 @@ class _CardButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: outlined ? Colors.white : color,
+            color: outlined ? Theme.of(context).colorScheme.surface : color,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: outlined ? AppColors.outlineVariant : color,
@@ -885,6 +897,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = _manageAssessmentsL10n(context);
     Color bg;
     Color fg;
     String label;
@@ -894,7 +907,7 @@ class _StatusBadge extends StatelessWidget {
       case 'active':
         bg = const Color(0xFFE8F5E9);
         fg = const Color(0xFF2E7D32);
-        label = 'مباشر';
+        label = l10n.live;
         dot = Container(
           width: 8,
           height: 8,
@@ -907,13 +920,13 @@ class _StatusBadge extends StatelessWidget {
       case 'draft':
         bg = AppColors.surfaceContainerHigh;
         fg = AppColors.onSurfaceVariant;
-        label = 'مسودة';
+        label = l10n.draft;
         dot = null;
         break;
       case 'completed':
         bg = const Color(0xFFD0E1FB);
         fg = const Color(0xFF54647A);
-        label = 'مؤرشف';
+        label = l10n.archived;
         dot = null;
         break;
       default:
@@ -952,24 +965,29 @@ class _TypeBadge extends StatelessWidget {
   final bool isAdaptive;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: isAdaptive ? const Color(0xFFD0E1FB) : const Color(0xFFFFDBCE),
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(
-            color:
-                isAdaptive ? const Color(0xFFD3E4FE) : const Color(0xFFFFB59A),
-          ),
+  Widget build(BuildContext context) {
+    final l10n = _manageAssessmentsL10n(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: isAdaptive ? const Color(0xFFD0E1FB) : const Color(0xFFFFDBCE),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+          color: isAdaptive ? const Color(0xFFD3E4FE) : const Color(0xFFFFB59A),
         ),
-        child: Text(
-          isAdaptive ? 'تكيفي' : 'عشوائي',
-          style: TextStyle(
-            color:
-                isAdaptive ? const Color(0xFF54647A) : const Color(0xFF611E00),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
+      ),
+      child: Text(
+        isAdaptive ? l10n.assessmentTypeAdaptive : l10n.assessmentTypeRandom,
+        style: TextStyle(
+          color: isAdaptive ? const Color(0xFF54647A) : const Color(0xFF611E00),
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
         ),
-      );
+      ),
+    );
+  }
 }
+
+AppLocalizations _manageAssessmentsL10n(BuildContext context) =>
+    Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+    AppLocalizationsAr();

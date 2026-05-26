@@ -1193,4 +1193,76 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get noClassesMessage =>
       'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم.';
+
+  @override
+  String get manageAssessmentsLoadFailed =>
+      'تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get editAssessment => 'تعديل الاختبار';
+
+  @override
+  String get assessmentTitle => 'عنوان الاختبار';
+
+  @override
+  String get subject => 'المادة الدراسية';
+
+  @override
+  String get status => 'الحالة';
+
+  @override
+  String get archived => 'مؤرشف';
+
+  @override
+  String get editQuestionsFromBank => 'تعديل الأسئلة من بنك الأسئلة';
+
+  @override
+  String get changesSavedSuccessfully => 'تم حفظ التغييرات';
+
+  @override
+  String get savedLocally => 'تم الحفظ محلياً';
+
+  @override
+  String get assessmentPublishedSuccessfully => 'تم نشر الاختبار بنجاح';
+
+  @override
+  String get assessmentPublishFailed =>
+      'تعذر نشر الاختبار. تحقق من الاتصال ثم حاول مرة أخرى.';
+
+  @override
+  String get manageAssessmentsTitle => 'الاختبارات';
+
+  @override
+  String get manageAssessmentsSubtitle =>
+      'إدارة وتتبع جميع الاختبارات الخاصة بك.';
+
+  @override
+  String get noTeacherAssessmentsTitle => 'لا توجد اختبارات';
+
+  @override
+  String get noTeacherAssessmentsMessage => 'ابدأ بإنشاء اختبارك الأول.';
+
+  @override
+  String get questionsCountUnknown => '-- سؤال';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get deleteAssessmentTitle => 'حذف الاختبار';
+
+  @override
+  String get deleteAssessmentConfirmation => 'هل تريد حذف هذا الاختبار؟';
+
+  @override
+  String get assessmentDeletedLocally => 'تم حذف الاختبار';
+
+  @override
+  String get publish => 'نشر';
+
+  @override
+  String get reports => 'التقارير';
+
+  @override
+  String get live => 'مباشر';
 }
