@@ -610,5 +610,46 @@
     }
   },
   "emptyScheduleMessage": "Lessons will appear here automatically when the timetable API is connected. You can add a local lesson now for review and testing.",
-  "addLessonForThisDay": "Add lesson for this day"
+  "addLessonForThisDay": "Add lesson for this day",
+  "activeTasks": "Active tasks",
+  "drafts": "Drafts",
+  "completedTasks": "Completed tasks",
+  "activeSummaryLabel": "Active",
+  "draftsSummaryLabel": "Drafts",
+  "completedSummaryLabel": "Completed",
+  "newTask": "New task",
+  "taskManagementTitle": "Task management",
+  "taskManagementSubtitle": "Track student assignments and completion rates, and create local tasks for review during testing.",
+  "taskManagementLocalOnlyMessage": "Task management currently uses clear local state. Permanent saving and student sync require connecting the task API in a later phase.",
+  "deleteTaskTitle": "Delete task?",
+  "deleteTaskConfirmation": "\"{title}\" will be removed from the local list only. Background sync is not available until the task API is connected.",
+  "@deleteTaskConfirmation": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "taskOptions": "Task options",
+  "editTask": "Edit task",
+  "publishDraft": "Publish draft",
+  "markAsCompleted": "Mark as completed",
+  "deleteTask": "Delete task",
+  "completionRate": "Completion rate",
+  "dueWithinWeek": "Due: within a week",
+  "createNewTask": "Create new task",
+  "taskEditorLocalOnlyMessage": "Choose the target class so the task is linked to the expected student count. Changes are saved only in this session until the task API is connected.",
+  "taskTitle": "Task title",
+  "enterClearTaskTitle": "Write a clear task title",
+  "classLabel": "Class",
+  "selectTargetClass": "Select the target class",
+  "chooseSuggestedClass": "Choose one of the suggested classes so students are assigned accurately",
+  "dueDate": "Due date",
+  "enterDueDate": "Enter the due date",
+  "createTask": "Create task",
+  "noTasksInTab": "No tasks in \"{tab}\"",
+  "@noTasksInTab": {
+    "placeholders": {
+      "tab": {}
+    }
+  },
+  "emptyTasksMessage": "Change the filter or create a new task for students."
 }

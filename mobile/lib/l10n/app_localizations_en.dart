@@ -1426,4 +1426,106 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addLessonForThisDay => 'Add lesson for this day';
+
+  @override
+  String get activeTasks => 'Active tasks';
+
+  @override
+  String get drafts => 'Drafts';
+
+  @override
+  String get completedTasks => 'Completed tasks';
+
+  @override
+  String get activeSummaryLabel => 'Active';
+
+  @override
+  String get draftsSummaryLabel => 'Drafts';
+
+  @override
+  String get completedSummaryLabel => 'Completed';
+
+  @override
+  String get newTask => 'New task';
+
+  @override
+  String get taskManagementTitle => 'Task management';
+
+  @override
+  String get taskManagementSubtitle =>
+      'Track student assignments and completion rates, and create local tasks for review during testing.';
+
+  @override
+  String get taskManagementLocalOnlyMessage =>
+      'Task management currently uses clear local state. Permanent saving and student sync require connecting the task API in a later phase.';
+
+  @override
+  String get deleteTaskTitle => 'Delete task?';
+
+  @override
+  String deleteTaskConfirmation(Object title) {
+    return '\"$title\" will be removed from the local list only. Background sync is not available until the task API is connected.';
+  }
+
+  @override
+  String get taskOptions => 'Task options';
+
+  @override
+  String get editTask => 'Edit task';
+
+  @override
+  String get publishDraft => 'Publish draft';
+
+  @override
+  String get markAsCompleted => 'Mark as completed';
+
+  @override
+  String get deleteTask => 'Delete task';
+
+  @override
+  String get completionRate => 'Completion rate';
+
+  @override
+  String get dueWithinWeek => 'Due: within a week';
+
+  @override
+  String get createNewTask => 'Create new task';
+
+  @override
+  String get taskEditorLocalOnlyMessage =>
+      'Choose the target class so the task is linked to the expected student count. Changes are saved only in this session until the task API is connected.';
+
+  @override
+  String get taskTitle => 'Task title';
+
+  @override
+  String get enterClearTaskTitle => 'Write a clear task title';
+
+  @override
+  String get classLabel => 'Class';
+
+  @override
+  String get selectTargetClass => 'Select the target class';
+
+  @override
+  String get chooseSuggestedClass =>
+      'Choose one of the suggested classes so students are assigned accurately';
+
+  @override
+  String get dueDate => 'Due date';
+
+  @override
+  String get enterDueDate => 'Enter the due date';
+
+  @override
+  String get createTask => 'Create task';
+
+  @override
+  String noTasksInTab(Object tab) {
+    return 'No tasks in \"$tab\"';
+  }
+
+  @override
+  String get emptyTasksMessage =>
+      'Change the filter or create a new task for students.';
 }

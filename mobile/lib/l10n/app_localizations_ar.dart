@@ -1417,4 +1417,105 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addLessonForThisDay => 'إضافة حصة لهذا اليوم';
+
+  @override
+  String get activeTasks => 'المهام النشطة';
+
+  @override
+  String get drafts => 'المسودات';
+
+  @override
+  String get completedTasks => 'المكتملة';
+
+  @override
+  String get activeSummaryLabel => 'نشطة';
+
+  @override
+  String get draftsSummaryLabel => 'مسودات';
+
+  @override
+  String get completedSummaryLabel => 'مكتملة';
+
+  @override
+  String get newTask => 'مهمة جديدة';
+
+  @override
+  String get taskManagementTitle => 'إدارة المهام';
+
+  @override
+  String get taskManagementSubtitle =>
+      'تابع واجبات طلابك ونسب الإنجاز، وأنشئ مهامًا محلية قابلة للمراجعة أثناء الاختبار.';
+
+  @override
+  String get taskManagementLocalOnlyMessage =>
+      'إدارة المهام تعمل الآن بحالة محلية واضحة. للحفظ الدائم والمزامنة مع الطلاب يجب ربط API المهام في المرحلة القادمة.';
+
+  @override
+  String get deleteTaskTitle => 'حذف المهمة؟';
+
+  @override
+  String deleteTaskConfirmation(Object title) {
+    return 'سيتم حذف \"$title\" من القائمة المحلية فقط. لا توجد مزامنة خلفية حتى يتوفر API المهام.';
+  }
+
+  @override
+  String get taskOptions => 'خيارات المهمة';
+
+  @override
+  String get editTask => 'تعديل المهمة';
+
+  @override
+  String get publishDraft => 'نشر المسودة';
+
+  @override
+  String get markAsCompleted => 'تعليم كمكتملة';
+
+  @override
+  String get deleteTask => 'حذف المهمة';
+
+  @override
+  String get completionRate => 'نسبة الإنجاز';
+
+  @override
+  String get dueWithinWeek => 'تسليم: خلال أسبوع';
+
+  @override
+  String get createNewTask => 'إنشاء مهمة جديدة';
+
+  @override
+  String get taskEditorLocalOnlyMessage =>
+      'اختر الفصل المستهدف حتى تكون المهمة مرتبطة بعدد الطلاب المتوقع، وسيتم حفظ التغيير داخل هذه الجلسة فقط حتى يتم ربط API المهام.';
+
+  @override
+  String get taskTitle => 'عنوان المهمة';
+
+  @override
+  String get enterClearTaskTitle => 'اكتب عنوانًا واضحًا للمهمة';
+
+  @override
+  String get classLabel => 'الفصل';
+
+  @override
+  String get selectTargetClass => 'حدد الفصل المستهدف';
+
+  @override
+  String get chooseSuggestedClass =>
+      'اختر فصلًا من الفصول المقترحة حتى يتم تعيين الطلاب بدقة';
+
+  @override
+  String get dueDate => 'موعد التسليم';
+
+  @override
+  String get enterDueDate => 'حدد موعد التسليم';
+
+  @override
+  String get createTask => 'إنشاء المهمة';
+
+  @override
+  String noTasksInTab(Object tab) {
+    return 'لا توجد مهام في \"$tab\"';
+  }
+
+  @override
+  String get emptyTasksMessage => 'غيّر الفلتر أو أنشئ مهمة جديدة للطلاب.';
 }

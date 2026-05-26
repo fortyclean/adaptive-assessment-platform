@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/app_localizations_ar.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
 /// Teacher task management screen.
@@ -21,6 +23,10 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
   int _activeTab = 0;
   int _selectedFilter = 0;
   int _createdCount = 0;
+
+  AppLocalizations get _l10n =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+      AppLocalizationsAr();
 
   static const List<_LocalClassroom> _localClassrooms = [
     _LocalClassroom(name: 'الصف السابع - ب', studentCount: 24),
@@ -82,18 +88,18 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
     ),
   ];
 
-  static const List<String> _tabs = [
-    'المهام النشطة',
-    'المسودات',
-    'المكتملة',
-  ];
+  List<String> get _tabs => [
+        _l10n.activeTasks,
+        _l10n.drafts,
+        _l10n.completedTasks,
+      ];
 
-  static const List<String> _filters = [
-    'الكل',
-    'رياضيات',
-    'فيزياء',
-    'لغة عربية',
-  ];
+  List<String> get _filters => [
+        _l10n.filterAll,
+        'رياضيات',
+        'فيزياء',
+        'لغة عربية',
+      ];
 
   List<_TeacherTask> get _visibleTasks {
     final status = switch (_activeTab) {
@@ -170,7 +176,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
             icon: const Icon(Icons.add),
-            label: const Text('مهمة جديدة'),
+            label: Text(_l10n.newTask),
           ),
           bottomNavigationBar:
               const AppBottomNav(currentIndex: 1, role: 'teacher'),
@@ -208,28 +214,29 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
         ),
         actions: [
           IconButton(
-            tooltip: 'الإشعارات',
+            tooltip: _l10n.notifications,
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () => context.push(AppRoutes.teacherNotifications),
           ),
         ],
       );
 
-  Widget _buildHeader() => const Column(
+  Widget _buildHeader() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'إدارة المهام',
-            style: TextStyle(
+            _l10n.taskManagementTitle,
+            style: const TextStyle(
               color: AppColors.primary,
               fontSize: 24,
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
-            'تابع واجبات طلابك ونسب الإنجاز، وأنشئ مهامًا محلية قابلة للمراجعة أثناء الاختبار.',
-            style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14),
+            _l10n.taskManagementSubtitle,
+            style: const TextStyle(
+                color: AppColors.onSurfaceVariant, fontSize: 14),
           ),
         ],
       );
@@ -239,7 +246,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
           Expanded(
             child: _SummaryTile(
               icon: Icons.playlist_add_check_outlined,
-              label: 'نشطة',
+              label: _l10n.activeSummaryLabel,
               value: _activeCount.toString(),
               color: AppColors.primary,
             ),
@@ -248,7 +255,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
           Expanded(
             child: _SummaryTile(
               icon: Icons.edit_note_outlined,
-              label: 'مسودات',
+              label: _l10n.draftsSummaryLabel,
               value: _draftCount.toString(),
               color: AppColors.warning,
             ),
@@ -257,7 +264,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
           Expanded(
             child: _SummaryTile(
               icon: Icons.verified_outlined,
-              label: 'مكتملة',
+              label: _l10n.completedSummaryLabel,
               value: _completedCount.toString(),
               color: AppColors.success,
             ),
@@ -272,15 +279,15 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.primary.withValues(alpha: 0.18)),
         ),
-        child: const Row(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.info_outline, color: AppColors.primary, size: 20),
-            SizedBox(width: 10),
+            const Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'إدارة المهام تعمل الآن بحالة محلية واضحة. للحفظ الدائم والمزامنة مع الطلاب يجب ربط API المهام في المرحلة القادمة.',
-                style: TextStyle(
+                _l10n.taskManagementLocalOnlyMessage,
+                style: const TextStyle(
                   color: AppColors.onSurface,
                   fontSize: 13,
                   height: 1.45,
@@ -402,19 +409,19 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('حذف المهمة؟'),
+        title: Text(_l10n.deleteTaskTitle),
         content: Text(
-          'سيتم حذف "${task.title}" من القائمة المحلية فقط. لا توجد مزامنة خلفية حتى يتوفر API المهام.',
+          _l10n.deleteTaskConfirmation(task.title),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('إلغاء'),
+            child: Text(_l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: AppColors.error),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('حذف'),
+            child: Text(_l10n.delete),
           ),
         ],
       ),
@@ -477,8 +484,9 @@ class _TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = _taskManagementL10n(context);
     final progressPercent = (task.completionRate * 100).round();
-    final status = task.status.label;
+    final status = task.status.localizedLabel(l10n);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -534,7 +542,7 @@ class _TaskCard extends StatelessWidget {
                 ),
               ),
               PopupMenuButton<_TaskMenuAction>(
-                tooltip: 'خيارات المهمة',
+                tooltip: l10n.taskOptions,
                 onSelected: (action) {
                   switch (action) {
                     case _TaskMenuAction.edit:
@@ -548,26 +556,26 @@ class _TaskCard extends StatelessWidget {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: _TaskMenuAction.edit,
-                    child: Text('تعديل المهمة'),
+                    child: Text(l10n.editTask),
                   ),
                   if (onPublish != null)
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: _TaskMenuAction.publish,
-                      child: Text('نشر المسودة'),
+                      child: Text(l10n.publishDraft),
                     ),
                   if (onComplete != null)
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: _TaskMenuAction.complete,
-                      child: Text('تعليم كمكتملة'),
+                      child: Text(l10n.markAsCompleted),
                     ),
                   const PopupMenuDivider(),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: _TaskMenuAction.delete,
                     child: Text(
-                      'حذف المهمة',
-                      style: TextStyle(color: AppColors.error),
+                      l10n.deleteTask,
+                      style: const TextStyle(color: AppColors.error),
                     ),
                   ),
                 ],
@@ -582,7 +590,7 @@ class _TaskCard extends StatelessWidget {
               _Meta(icon: Icons.groups_outlined, label: task.className),
               _Meta(
                 icon: Icons.person_outline,
-                label: '${task.assignedStudentCount} طالب',
+                label: l10n.studentCountCompact(task.assignedStudentCount),
               ),
               _Meta(
                 icon: Icons.event_outlined,
@@ -597,10 +605,10 @@ class _TaskCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'نسبة الإنجاز',
-                style:
-                    TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
+              Text(
+                l10n.completionRate,
+                style: const TextStyle(
+                    color: AppColors.onSurfaceVariant, fontSize: 12),
               ),
               Text(
                 '$progressPercent%',
@@ -652,8 +660,7 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
     final task = widget.task;
     _titleController = TextEditingController(text: task?.title ?? '');
     _classController = TextEditingController(text: task?.className ?? '');
-    _dueDateController =
-        TextEditingController(text: task?.dueDate ?? 'تسليم: خلال أسبوع');
+    _dueDateController = TextEditingController(text: task?.dueDate ?? '');
     _subject = task?.subject ?? 'رياضيات';
     _status = task?.status ?? _TaskStatus.active;
   }
@@ -668,6 +675,10 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = _taskManagementL10n(context);
+    if (_dueDateController.text.isEmpty) {
+      _dueDateController.text = l10n.dueWithinWeek;
+    }
     final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -681,29 +692,29 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  widget.task == null ? 'إنشاء مهمة جديدة' : 'تعديل المهمة',
+                  widget.task == null ? l10n.createNewTask : l10n.editTask,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'اختر الفصل المستهدف حتى تكون المهمة مرتبطة بعدد الطلاب المتوقع، وسيتم حفظ التغيير داخل هذه الجلسة فقط حتى يتم ربط API المهام.',
-                  style: TextStyle(color: AppColors.onSurfaceVariant),
+                Text(
+                  l10n.taskEditorLocalOnlyMessage,
+                  style: const TextStyle(color: AppColors.onSurfaceVariant),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(labelText: 'عنوان المهمة'),
+                  decoration: InputDecoration(labelText: l10n.taskTitle),
                   validator: (value) => value == null || value.trim().length < 3
-                      ? 'اكتب عنوانًا واضحًا للمهمة'
+                      ? l10n.enterClearTaskTitle
                       : null,
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   initialValue: _subject,
-                  decoration: const InputDecoration(labelText: 'المادة'),
+                  decoration: InputDecoration(labelText: l10n.subject),
                   items: const [
                     DropdownMenuItem(value: 'رياضيات', child: Text('رياضيات')),
                     DropdownMenuItem(value: 'فيزياء', child: Text('فيزياء')),
@@ -717,15 +728,13 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _classController,
-                  decoration: const InputDecoration(labelText: 'الفصل'),
+                  decoration: InputDecoration(labelText: l10n.classLabel),
                   validator: (value) {
                     final text = value?.trim() ?? '';
-                    if (text.isEmpty) return 'حدد الفصل المستهدف';
+                    if (text.isEmpty) return l10n.selectTargetClass;
                     final isKnown =
                         widget.classrooms.any((item) => item.name == text);
-                    return isKnown
-                        ? null
-                        : 'اختر فصلًا من الفصول المقترحة حتى يتم تعيين الطلاب بدقة';
+                    return isKnown ? null : l10n.chooseSuggestedClass;
                   },
                 ),
                 const SizedBox(height: 8),
@@ -737,7 +746,7 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
                         (classroom) => ActionChip(
                           avatar: const Icon(Icons.groups_outlined, size: 16),
                           label: Text(
-                            '${classroom.name} · ${classroom.studentCount} طالب',
+                            '${classroom.name} · ${l10n.studentCountCompact(classroom.studentCount)}',
                           ),
                           onPressed: () => setState(
                             () => _classController.text = classroom.name,
@@ -749,23 +758,23 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _dueDateController,
-                  decoration: const InputDecoration(labelText: 'موعد التسليم'),
+                  decoration: InputDecoration(labelText: l10n.dueDate),
                   validator: (value) => value == null || value.trim().isEmpty
-                      ? 'حدد موعد التسليم'
+                      ? l10n.enterDueDate
                       : null,
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<_TaskStatus>(
                   initialValue: _status,
-                  decoration: const InputDecoration(labelText: 'الحالة'),
-                  items: const [
+                  decoration: InputDecoration(labelText: l10n.status),
+                  items: [
                     DropdownMenuItem(
                       value: _TaskStatus.active,
-                      child: Text('نشطة'),
+                      child: Text(l10n.active),
                     ),
                     DropdownMenuItem(
                       value: _TaskStatus.draft,
-                      child: Text('مسودة'),
+                      child: Text(l10n.draft),
                     ),
                   ],
                   onChanged: (value) {
@@ -776,7 +785,8 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
                 FilledButton.icon(
                   onPressed: _submit,
                   icon: const Icon(Icons.check),
-                  label: Text(widget.task == null ? 'إنشاء المهمة' : 'حفظ'),
+                  label:
+                      Text(widget.task == null ? l10n.createTask : l10n.save),
                 ),
               ],
             ),
@@ -914,41 +924,44 @@ class _EmptyTasksState extends StatelessWidget {
   final VoidCallback onCreate;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-        ),
-        child: Column(
-          children: [
-            const Icon(Icons.assignment_late_outlined,
-                color: AppColors.onSurfaceVariant, size: 42),
-            const SizedBox(height: 12),
-            Text(
-              'لا توجد مهام في "$tabLabel"',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.onSurface,
-                fontWeight: FontWeight.w700,
-              ),
+  Widget build(BuildContext context) {
+    final l10n = _taskManagementL10n(context);
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.assignment_late_outlined,
+              color: AppColors.onSurfaceVariant, size: 42),
+          const SizedBox(height: 12),
+          Text(
+            l10n.noTasksInTab(tabLabel),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: AppColors.onSurface,
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(height: 6),
-            const Text(
-              'غيّر الفلتر أو أنشئ مهمة جديدة للطلاب.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.onSurfaceVariant),
-            ),
-            const SizedBox(height: 16),
-            OutlinedButton.icon(
-              onPressed: onCreate,
-              icon: const Icon(Icons.add),
-              label: const Text('إنشاء مهمة'),
-            ),
-          ],
-        ),
-      );
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l10n.emptyTasksMessage,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: AppColors.onSurfaceVariant),
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: onCreate,
+            icon: const Icon(Icons.add),
+            label: Text(l10n.createTask),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _TaskFormResult {
@@ -1046,10 +1059,10 @@ enum _TaskStatus {
   draft,
   completed;
 
-  String get label => switch (this) {
-        _TaskStatus.active => 'نشطة',
-        _TaskStatus.draft => 'مسودة',
-        _TaskStatus.completed => 'مكتملة',
+  String localizedLabel(AppLocalizations l10n) => switch (this) {
+        _TaskStatus.active => l10n.active,
+        _TaskStatus.draft => l10n.draft,
+        _TaskStatus.completed => l10n.completed,
       };
 
   Color get color => switch (this) {
@@ -1065,3 +1078,7 @@ enum _TaskMenuAction {
   complete,
   delete,
 }
+
+AppLocalizations _taskManagementL10n(BuildContext context) =>
+    Localizations.of<AppLocalizations>(context, AppLocalizations) ??
+    AppLocalizationsAr();

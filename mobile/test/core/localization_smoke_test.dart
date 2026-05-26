@@ -282,6 +282,33 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads task management localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.taskManagementTitle,
+            l10n.newTask,
+            l10n.deleteTaskConfirmation('Algebra homework'),
+            l10n.noTasksInTab(l10n.activeTasks),
+            l10n.createTask,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Task management / New task / "Algebra homework" will be removed '
+        'from the local list only. Background sync is not available until the '
+        'task API is connected. / No tasks in "Active tasks" / Create task',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

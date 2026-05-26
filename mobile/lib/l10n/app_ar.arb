@@ -610,5 +610,46 @@
     }
   },
   "emptyScheduleMessage": "عند ربط API الجدول الدراسي ستظهر الحصص هنا تلقائيًا. يمكنك إضافة حصة محلية الآن للمراجعة والتجربة.",
-  "addLessonForThisDay": "إضافة حصة لهذا اليوم"
+  "addLessonForThisDay": "إضافة حصة لهذا اليوم",
+  "activeTasks": "المهام النشطة",
+  "drafts": "المسودات",
+  "completedTasks": "المكتملة",
+  "activeSummaryLabel": "نشطة",
+  "draftsSummaryLabel": "مسودات",
+  "completedSummaryLabel": "مكتملة",
+  "newTask": "مهمة جديدة",
+  "taskManagementTitle": "إدارة المهام",
+  "taskManagementSubtitle": "تابع واجبات طلابك ونسب الإنجاز، وأنشئ مهامًا محلية قابلة للمراجعة أثناء الاختبار.",
+  "taskManagementLocalOnlyMessage": "إدارة المهام تعمل الآن بحالة محلية واضحة. للحفظ الدائم والمزامنة مع الطلاب يجب ربط API المهام في المرحلة القادمة.",
+  "deleteTaskTitle": "حذف المهمة؟",
+  "deleteTaskConfirmation": "سيتم حذف \"{title}\" من القائمة المحلية فقط. لا توجد مزامنة خلفية حتى يتوفر API المهام.",
+  "@deleteTaskConfirmation": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "taskOptions": "خيارات المهمة",
+  "editTask": "تعديل المهمة",
+  "publishDraft": "نشر المسودة",
+  "markAsCompleted": "تعليم كمكتملة",
+  "deleteTask": "حذف المهمة",
+  "completionRate": "نسبة الإنجاز",
+  "dueWithinWeek": "تسليم: خلال أسبوع",
+  "createNewTask": "إنشاء مهمة جديدة",
+  "taskEditorLocalOnlyMessage": "اختر الفصل المستهدف حتى تكون المهمة مرتبطة بعدد الطلاب المتوقع، وسيتم حفظ التغيير داخل هذه الجلسة فقط حتى يتم ربط API المهام.",
+  "taskTitle": "عنوان المهمة",
+  "enterClearTaskTitle": "اكتب عنوانًا واضحًا للمهمة",
+  "classLabel": "الفصل",
+  "selectTargetClass": "حدد الفصل المستهدف",
+  "chooseSuggestedClass": "اختر فصلًا من الفصول المقترحة حتى يتم تعيين الطلاب بدقة",
+  "dueDate": "موعد التسليم",
+  "enterDueDate": "حدد موعد التسليم",
+  "createTask": "إنشاء المهمة",
+  "noTasksInTab": "لا توجد مهام في \"{tab}\"",
+  "@noTasksInTab": {
+    "placeholders": {
+      "tab": {}
+    }
+  },
+  "emptyTasksMessage": "غيّر الفلتر أو أنشئ مهمة جديدة للطلاب."
 }

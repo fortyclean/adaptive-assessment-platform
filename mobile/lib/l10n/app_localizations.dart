@@ -2689,6 +2689,192 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إضافة حصة لهذا اليوم'**
   String get addLessonForThisDay;
+
+  /// No description provided for @activeTasks.
+  ///
+  /// In ar, this message translates to:
+  /// **'المهام النشطة'**
+  String get activeTasks;
+
+  /// No description provided for @drafts.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسودات'**
+  String get drafts;
+
+  /// No description provided for @completedTasks.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكتملة'**
+  String get completedTasks;
+
+  /// No description provided for @activeSummaryLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشطة'**
+  String get activeSummaryLabel;
+
+  /// No description provided for @draftsSummaryLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسودات'**
+  String get draftsSummaryLabel;
+
+  /// No description provided for @completedSummaryLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get completedSummaryLabel;
+
+  /// No description provided for @newTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'مهمة جديدة'**
+  String get newTask;
+
+  /// No description provided for @taskManagementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة المهام'**
+  String get taskManagementTitle;
+
+  /// No description provided for @taskManagementSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تابع واجبات طلابك ونسب الإنجاز، وأنشئ مهامًا محلية قابلة للمراجعة أثناء الاختبار.'**
+  String get taskManagementSubtitle;
+
+  /// No description provided for @taskManagementLocalOnlyMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة المهام تعمل الآن بحالة محلية واضحة. للحفظ الدائم والمزامنة مع الطلاب يجب ربط API المهام في المرحلة القادمة.'**
+  String get taskManagementLocalOnlyMessage;
+
+  /// No description provided for @deleteTaskTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف المهمة؟'**
+  String get deleteTaskTitle;
+
+  /// No description provided for @deleteTaskConfirmation.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم حذف \"{title}\" من القائمة المحلية فقط. لا توجد مزامنة خلفية حتى يتوفر API المهام.'**
+  String deleteTaskConfirmation(Object title);
+
+  /// No description provided for @taskOptions.
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات المهمة'**
+  String get taskOptions;
+
+  /// No description provided for @editTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل المهمة'**
+  String get editTask;
+
+  /// No description provided for @publishDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر المسودة'**
+  String get publishDraft;
+
+  /// No description provided for @markAsCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليم كمكتملة'**
+  String get markAsCompleted;
+
+  /// No description provided for @deleteTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف المهمة'**
+  String get deleteTask;
+
+  /// No description provided for @completionRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الإنجاز'**
+  String get completionRate;
+
+  /// No description provided for @dueWithinWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم: خلال أسبوع'**
+  String get dueWithinWeek;
+
+  /// No description provided for @createNewTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء مهمة جديدة'**
+  String get createNewTask;
+
+  /// No description provided for @taskEditorLocalOnlyMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الفصل المستهدف حتى تكون المهمة مرتبطة بعدد الطلاب المتوقع، وسيتم حفظ التغيير داخل هذه الجلسة فقط حتى يتم ربط API المهام.'**
+  String get taskEditorLocalOnlyMessage;
+
+  /// No description provided for @taskTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان المهمة'**
+  String get taskTitle;
+
+  /// No description provided for @enterClearTaskTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب عنوانًا واضحًا للمهمة'**
+  String get enterClearTaskTitle;
+
+  /// No description provided for @classLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصل'**
+  String get classLabel;
+
+  /// No description provided for @selectTargetClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد الفصل المستهدف'**
+  String get selectTargetClass;
+
+  /// No description provided for @chooseSuggestedClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر فصلًا من الفصول المقترحة حتى يتم تعيين الطلاب بدقة'**
+  String get chooseSuggestedClass;
+
+  /// No description provided for @dueDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد التسليم'**
+  String get dueDate;
+
+  /// No description provided for @enterDueDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد موعد التسليم'**
+  String get enterDueDate;
+
+  /// No description provided for @createTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء المهمة'**
+  String get createTask;
+
+  /// No description provided for @noTasksInTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مهام في \"{tab}\"'**
+  String noTasksInTab(Object tab);
+
+  /// No description provided for @emptyTasksMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر الفلتر أو أنشئ مهمة جديدة للطلاب.'**
+  String get emptyTasksMessage;
 }
 
 class _AppLocalizationsDelegate
