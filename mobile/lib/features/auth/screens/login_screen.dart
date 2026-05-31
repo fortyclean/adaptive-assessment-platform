@@ -182,10 +182,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: const Color(0xFFFBF8FF),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -194,14 +192,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               constraints: const BoxConstraints(maxWidth: 448),
               child: Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surface,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.outlineVariant),
+                  border: Border.all(color: const Color(0xFFE3E1EB)),
                   boxShadow: const [
                     BoxShadow(
-                      color: Color(0x0A000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
+                      color: Color(0x14000000),
+                      blurRadius: 16,
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
@@ -346,7 +344,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             width: 72,
             height: 72,
             decoration: const BoxDecoration(
-              color: Color(0xFFDDE1FF),
+              color: Color(0xFFEEEDF7),
               shape: BoxShape.circle,
             ),
             child: ClipOval(

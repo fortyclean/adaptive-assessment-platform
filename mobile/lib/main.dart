@@ -34,13 +34,9 @@ Future<void> main() async {
     await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
 
     // ── Restore session ───────────────────────────────────────────────────────
-    // Keeps the user logged in when switching apps or restarting the device.
     final container = ProviderContainer();
-    await _restoreSession(container);
 
     // ── Initialize notifications ──────────────────────────────────────────────
-    await NotificationService.instance.init();
-    await _syncRestoredPushUser(container);
 
     runApp(
       UncontrolledProviderScope(
@@ -48,12 +44,42 @@ Future<void> main() async {
         child: const AdaptiveAssessmentApp(),
       ),
     );
+
+    unawaited(_restoreSessionAfterFirstFrame(container));
+    unawaited(_initializeNotificationsAfterFirstFrame(container));
   }, (error, stack) async {
     await CrashReportingService.instance.captureException(
       error,
       stackTrace: stack,
     );
   });
+}
+
+Future<void> _restoreSessionAfterFirstFrame(ProviderContainer container) async {
+  await WidgetsBinding.instance.endOfFrame;
+  try {
+    await _restoreSession(container);
+  } catch (error, stack) {
+    await CrashReportingService.instance.captureException(
+      error,
+      stackTrace: stack,
+    );
+  }
+}
+
+Future<void> _initializeNotificationsAfterFirstFrame(
+  ProviderContainer container,
+) async {
+  await WidgetsBinding.instance.endOfFrame;
+  try {
+    await NotificationService.instance.init();
+    await _syncRestoredPushUser(container);
+  } catch (error, stack) {
+    await CrashReportingService.instance.captureException(
+      error,
+      stackTrace: stack,
+    );
+  }
 }
 
 Future<void> _syncRestoredPushUser(ProviderContainer container) async {

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.76';
-  static const int buildNumber = 76;
+  static const String current = '1.0.77';
+  static const int buildNumber = 77;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.77',
+      buildNumber: 77,
+      date: 'مايو 2026',
+      title: 'تحسين فتح التطبيق وشاشة الدخول',
+      changes: [
+        'عرض واجهة التطبيق فوراً قبل استعادة الجلسة وتهيئة الإشعارات لتقليل التوقف قبل شاشة تسجيل الدخول.',
+        'تغيير خلفية شاشة الإطلاق الأصلية من الأزرق إلى سطح فاتح متناسق مع شاشة الدخول.',
+        'تحسين بطاقة تسجيل الدخول بخلفية بيضاء وحد رمادي خفيف مطابق لمرجع التصميم.',
+        'إضافة اختبار حماية يمنع رجوع استعادة الجلسة أو الإشعارات كعمليات حابسة قبل runApp.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.76',
       buildNumber: 76,
