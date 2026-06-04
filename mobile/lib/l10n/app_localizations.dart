@@ -3333,6 +3333,180 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مستوى الصعوبة'**
   String get difficultyLevel;
+
+  /// No description provided for @importFromExcelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استيراد من Excel'**
+  String get importFromExcelTitle;
+
+  /// No description provided for @downloadTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل القالب'**
+  String get downloadTemplate;
+
+  /// No description provided for @importHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل الاستيراد'**
+  String get importHistory;
+
+  /// No description provided for @importInstructions.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليمات الاستيراد'**
+  String get importInstructions;
+
+  /// No description provided for @importInstructionDownloadTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'حمّل القالب من الزر أعلاه'**
+  String get importInstructionDownloadTemplate;
+
+  /// No description provided for @importInstructionFillColumns.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل الأسئلة في الأعمدة المحددة'**
+  String get importInstructionFillColumns;
+
+  /// No description provided for @importInstructionSaveFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'احفظ الملف بصيغة .xlsx أو .xls'**
+  String get importInstructionSaveFile;
+
+  /// No description provided for @importInstructionTapUpload.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على منطقة الرفع لاختيار الملف'**
+  String get importInstructionTapUpload;
+
+  /// No description provided for @importRequiredColumns.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأعمدة المطلوبة: نص السؤال، المادة، المستوى، الصعوبة، الخيارات (أ-د)، الإجابة الصحيحة'**
+  String get importRequiredColumns;
+
+  /// No description provided for @excelFileAccessFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الوصول إلى الملف'**
+  String get excelFileAccessFailed;
+
+  /// No description provided for @excelFileTooLarge.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم الملف يتجاوز 10MB'**
+  String get excelFileTooLarge;
+
+  /// No description provided for @excelUploadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل رفع الملف — تحقق من الاتصال'**
+  String get excelUploadFailed;
+
+  /// No description provided for @unexpectedImportError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ غير متوقع: {error}'**
+  String unexpectedImportError(Object error);
+
+  /// No description provided for @demoMissingSubjectError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حقل المادة مفقود في الصف 5'**
+  String get demoMissingSubjectError;
+
+  /// No description provided for @demoDuplicateQuestionError.
+  ///
+  /// In ar, this message translates to:
+  /// **'سؤال مكرر في الصف 12'**
+  String get demoDuplicateQuestionError;
+
+  /// No description provided for @uploadInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري الرفع... {percent}%'**
+  String uploadInProgress(int percent);
+
+  /// No description provided for @processingFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري معالجة الملف...'**
+  String get processingFile;
+
+  /// No description provided for @tapToChooseExcelFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط لاختيار ملف Excel'**
+  String get tapToChooseExcelFile;
+
+  /// No description provided for @excelAllowedTypes.
+  ///
+  /// In ar, this message translates to:
+  /// **'.xlsx أو .xls أو .csv (حتى 10MB)'**
+  String get excelAllowedTypes;
+
+  /// No description provided for @chooseFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ملفاً'**
+  String get chooseFile;
+
+  /// No description provided for @importResult.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة الاستيراد'**
+  String get importResult;
+
+  /// No description provided for @importedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستورد'**
+  String get importedLabel;
+
+  /// No description provided for @skippedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'متخطى'**
+  String get skippedLabel;
+
+  /// No description provided for @failedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاشل'**
+  String get failedLabel;
+
+  /// No description provided for @errorDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الأخطاء:'**
+  String get errorDetails;
+
+  /// No description provided for @rowNumberLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'صف {row}'**
+  String rowNumberLabel(Object row);
+
+  /// No description provided for @doneAddedQuestions.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم — تمت إضافة {count} سؤال'**
+  String doneAddedQuestions(int count);
+
+  /// No description provided for @excelFileFallbackName.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملف Excel'**
+  String get excelFileFallbackName;
+
+  /// No description provided for @importHistorySummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{imported} مستورد • {skipped} متخطى • {failed} فاشل'**
+  String importHistorySummary(Object imported, Object skipped, Object failed);
 }
 
 class _AppLocalizationsDelegate

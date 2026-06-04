@@ -1783,4 +1783,105 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get difficultyLevel => 'Difficulty level';
+
+  @override
+  String get importFromExcelTitle => 'Import from Excel';
+
+  @override
+  String get downloadTemplate => 'Download template';
+
+  @override
+  String get importHistory => 'Import history';
+
+  @override
+  String get importInstructions => 'Import instructions';
+
+  @override
+  String get importInstructionDownloadTemplate =>
+      'Download the template from the button above';
+
+  @override
+  String get importInstructionFillColumns =>
+      'Enter questions in the specified columns';
+
+  @override
+  String get importInstructionSaveFile => 'Save the file as .xlsx or .xls';
+
+  @override
+  String get importInstructionTapUpload =>
+      'Tap the upload area to choose the file';
+
+  @override
+  String get importRequiredColumns =>
+      'Required columns: question text, subject, level, difficulty, options (A-D), correct answer';
+
+  @override
+  String get excelFileAccessFailed => 'Could not access the file';
+
+  @override
+  String get excelFileTooLarge => 'File size exceeds 10MB';
+
+  @override
+  String get excelUploadFailed => 'File upload failed — check the connection';
+
+  @override
+  String unexpectedImportError(Object error) {
+    return 'Unexpected error: $error';
+  }
+
+  @override
+  String get demoMissingSubjectError => 'Subject field is missing in row 5';
+
+  @override
+  String get demoDuplicateQuestionError => 'Duplicate question in row 12';
+
+  @override
+  String uploadInProgress(int percent) {
+    return 'Uploading... $percent%';
+  }
+
+  @override
+  String get processingFile => 'Processing file...';
+
+  @override
+  String get tapToChooseExcelFile => 'Tap to choose an Excel file';
+
+  @override
+  String get excelAllowedTypes => '.xlsx, .xls, or .csv (up to 10MB)';
+
+  @override
+  String get chooseFile => 'Choose file';
+
+  @override
+  String get importResult => 'Import result';
+
+  @override
+  String get importedLabel => 'Imported';
+
+  @override
+  String get skippedLabel => 'Skipped';
+
+  @override
+  String get failedLabel => 'Failed';
+
+  @override
+  String get errorDetails => 'Error details:';
+
+  @override
+  String rowNumberLabel(Object row) {
+    return 'Row $row';
+  }
+
+  @override
+  String doneAddedQuestions(int count) {
+    return 'Done — added $count questions';
+  }
+
+  @override
+  String get excelFileFallbackName => 'Excel file';
+
+  @override
+  String importHistorySummary(Object imported, Object skipped, Object failed) {
+    return '$imported imported • $skipped skipped • $failed failed';
+  }
 }

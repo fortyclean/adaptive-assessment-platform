@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.78';
-  static const int buildNumber = 78;
+  static const String current = '1.0.79';
+  static const int buildNumber = 79;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.79',
+      buildNumber: 79,
+      date: 'يونيو 2026',
+      title: 'ترجمة استيراد Excel',
+      changes: [
+        'نقل رسائل شاشة استيراد Excel إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'ترجمة تعليمات الاستيراد وحالات الرفع والمعالجة وقيود حجم الملف.',
+        'ترجمة نتيجة الاستيراد وتفاصيل الأخطاء وسجل الاستيرادات.',
+        'إضافة اختبار حماية لمفاتيح شاشة استيراد Excel مع تحليل Flutter نظيف.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.78',
       buildNumber: 78,

@@ -432,6 +432,38 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads Excel import localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.importFromExcelTitle,
+            l10n.downloadTemplate,
+            l10n.importInstructions,
+            l10n.excelFileTooLarge,
+            l10n.uploadInProgress(42),
+            l10n.importResult,
+            l10n.rowNumberLabel('5'),
+            l10n.doneAddedQuestions(12),
+            l10n.importHistorySummary('12', '2', '1'),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Import from Excel / Download template / Import instructions / '
+        'File size exceeds 10MB / Uploading... 42% / Import result / '
+        'Row 5 / Done — added 12 questions / '
+        '12 imported • 2 skipped • 1 failed',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

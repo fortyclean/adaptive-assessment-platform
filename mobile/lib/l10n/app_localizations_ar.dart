@@ -1771,4 +1771,102 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get difficultyLevel => 'مستوى الصعوبة';
+
+  @override
+  String get importFromExcelTitle => 'استيراد من Excel';
+
+  @override
+  String get downloadTemplate => 'تحميل القالب';
+
+  @override
+  String get importHistory => 'سجل الاستيراد';
+
+  @override
+  String get importInstructions => 'تعليمات الاستيراد';
+
+  @override
+  String get importInstructionDownloadTemplate => 'حمّل القالب من الزر أعلاه';
+
+  @override
+  String get importInstructionFillColumns => 'أدخل الأسئلة في الأعمدة المحددة';
+
+  @override
+  String get importInstructionSaveFile => 'احفظ الملف بصيغة .xlsx أو .xls';
+
+  @override
+  String get importInstructionTapUpload => 'اضغط على منطقة الرفع لاختيار الملف';
+
+  @override
+  String get importRequiredColumns =>
+      'الأعمدة المطلوبة: نص السؤال، المادة، المستوى، الصعوبة، الخيارات (أ-د)، الإجابة الصحيحة';
+
+  @override
+  String get excelFileAccessFailed => 'تعذر الوصول إلى الملف';
+
+  @override
+  String get excelFileTooLarge => 'حجم الملف يتجاوز 10MB';
+
+  @override
+  String get excelUploadFailed => 'فشل رفع الملف — تحقق من الاتصال';
+
+  @override
+  String unexpectedImportError(Object error) {
+    return 'حدث خطأ غير متوقع: $error';
+  }
+
+  @override
+  String get demoMissingSubjectError => 'حقل المادة مفقود في الصف 5';
+
+  @override
+  String get demoDuplicateQuestionError => 'سؤال مكرر في الصف 12';
+
+  @override
+  String uploadInProgress(int percent) {
+    return 'جاري الرفع... $percent%';
+  }
+
+  @override
+  String get processingFile => 'جاري معالجة الملف...';
+
+  @override
+  String get tapToChooseExcelFile => 'اضغط لاختيار ملف Excel';
+
+  @override
+  String get excelAllowedTypes => '.xlsx أو .xls أو .csv (حتى 10MB)';
+
+  @override
+  String get chooseFile => 'اختر ملفاً';
+
+  @override
+  String get importResult => 'نتيجة الاستيراد';
+
+  @override
+  String get importedLabel => 'مستورد';
+
+  @override
+  String get skippedLabel => 'متخطى';
+
+  @override
+  String get failedLabel => 'فاشل';
+
+  @override
+  String get errorDetails => 'تفاصيل الأخطاء:';
+
+  @override
+  String rowNumberLabel(Object row) {
+    return 'صف $row';
+  }
+
+  @override
+  String doneAddedQuestions(int count) {
+    return 'تم — تمت إضافة $count سؤال';
+  }
+
+  @override
+  String get excelFileFallbackName => 'ملف Excel';
+
+  @override
+  String importHistorySummary(Object imported, Object skipped, Object failed) {
+    return '$imported مستورد • $skipped متخطى • $failed فاشل';
+  }
 }

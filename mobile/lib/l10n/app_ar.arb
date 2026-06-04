@@ -787,5 +787,65 @@
       "optionLabel": {}
     }
   },
-  "difficultyLevel": "مستوى الصعوبة"
+  "difficultyLevel": "مستوى الصعوبة",
+  "importFromExcelTitle": "استيراد من Excel",
+  "downloadTemplate": "تحميل القالب",
+  "importHistory": "سجل الاستيراد",
+  "importInstructions": "تعليمات الاستيراد",
+  "importInstructionDownloadTemplate": "حمّل القالب من الزر أعلاه",
+  "importInstructionFillColumns": "أدخل الأسئلة في الأعمدة المحددة",
+  "importInstructionSaveFile": "احفظ الملف بصيغة .xlsx أو .xls",
+  "importInstructionTapUpload": "اضغط على منطقة الرفع لاختيار الملف",
+  "importRequiredColumns": "الأعمدة المطلوبة: نص السؤال، المادة، المستوى، الصعوبة، الخيارات (أ-د)، الإجابة الصحيحة",
+  "excelFileAccessFailed": "تعذر الوصول إلى الملف",
+  "excelFileTooLarge": "حجم الملف يتجاوز 10MB",
+  "excelUploadFailed": "فشل رفع الملف — تحقق من الاتصال",
+  "unexpectedImportError": "حدث خطأ غير متوقع: {error}",
+  "demoMissingSubjectError": "حقل المادة مفقود في الصف 5",
+  "demoDuplicateQuestionError": "سؤال مكرر في الصف 12",
+  "uploadInProgress": "جاري الرفع... {percent}%",
+  "processingFile": "جاري معالجة الملف...",
+  "tapToChooseExcelFile": "اضغط لاختيار ملف Excel",
+  "excelAllowedTypes": ".xlsx أو .xls أو .csv (حتى 10MB)",
+  "chooseFile": "اختر ملفاً",
+  "importResult": "نتيجة الاستيراد",
+  "importedLabel": "مستورد",
+  "skippedLabel": "متخطى",
+  "failedLabel": "فاشل",
+  "errorDetails": "تفاصيل الأخطاء:",
+  "rowNumberLabel": "صف {row}",
+  "doneAddedQuestions": "تم — تمت إضافة {count} سؤال",
+  "excelFileFallbackName": "ملف Excel",
+  "importHistorySummary": "{imported} مستورد • {skipped} متخطى • {failed} فاشل",
+  "@unexpectedImportError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "@uploadInProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@rowNumberLabel": {
+    "placeholders": {
+      "row": {}
+    }
+  },
+  "@doneAddedQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@importHistorySummary": {
+    "placeholders": {
+      "imported": {},
+      "skipped": {},
+      "failed": {}
+    }
+  }
 }

@@ -787,5 +787,65 @@
       "optionLabel": {}
     }
   },
-  "difficultyLevel": "Difficulty level"
+  "difficultyLevel": "Difficulty level",
+  "importFromExcelTitle": "Import from Excel",
+  "downloadTemplate": "Download template",
+  "importHistory": "Import history",
+  "importInstructions": "Import instructions",
+  "importInstructionDownloadTemplate": "Download the template from the button above",
+  "importInstructionFillColumns": "Enter questions in the specified columns",
+  "importInstructionSaveFile": "Save the file as .xlsx or .xls",
+  "importInstructionTapUpload": "Tap the upload area to choose the file",
+  "importRequiredColumns": "Required columns: question text, subject, level, difficulty, options (A-D), correct answer",
+  "excelFileAccessFailed": "Could not access the file",
+  "excelFileTooLarge": "File size exceeds 10MB",
+  "excelUploadFailed": "File upload failed — check the connection",
+  "unexpectedImportError": "Unexpected error: {error}",
+  "demoMissingSubjectError": "Subject field is missing in row 5",
+  "demoDuplicateQuestionError": "Duplicate question in row 12",
+  "uploadInProgress": "Uploading... {percent}%",
+  "processingFile": "Processing file...",
+  "tapToChooseExcelFile": "Tap to choose an Excel file",
+  "excelAllowedTypes": ".xlsx, .xls, or .csv (up to 10MB)",
+  "chooseFile": "Choose file",
+  "importResult": "Import result",
+  "importedLabel": "Imported",
+  "skippedLabel": "Skipped",
+  "failedLabel": "Failed",
+  "errorDetails": "Error details:",
+  "rowNumberLabel": "Row {row}",
+  "doneAddedQuestions": "Done — added {count} questions",
+  "excelFileFallbackName": "Excel file",
+  "importHistorySummary": "{imported} imported • {skipped} skipped • {failed} failed",
+  "@unexpectedImportError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "@uploadInProgress": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@rowNumberLabel": {
+    "placeholders": {
+      "row": {}
+    }
+  },
+  "@doneAddedQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@importHistorySummary": {
+    "placeholders": {
+      "imported": {},
+      "skipped": {},
+      "failed": {}
+    }
+  }
 }
