@@ -401,7 +401,7 @@
   "chooseCorrectAnswer": "اختر الإجابة الصحيحة:",
   "trueLabel": "صحيح",
   "falseLabel": "خطأ",
-  "questionTypeMcq": "اختيار من متعدد",
+  "questionTypeMcq": "اختيار متعدد",
   "questionTypeTrueFalse": "صح أو خطأ",
   "questionTypeFillBlank": "ملء الفراغ",
   "questionTypeEssay": "مقالي",
@@ -557,7 +557,7 @@
   "assessmentCreateFailed": "تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.",
   "assessmentTitleHint": "مثال: اختبار الوحدة الأولى",
   "requiredField": "مطلوب",
-  "chooseSubject": "اختر المادة...",
+  "chooseSubject": "اختر المادة",
   "unitOrChapter": "الوحدة / الفصل",
   "unitHint": "مثال: الوحدة الأولى",
   "assessmentType": "نوع الاختبار",
@@ -727,5 +727,65 @@
       "completionRate": {},
       "topSkill": {}
     }
-  }
+  },
+  "questionBankQualityTitle": "جودة بنك الأسئلة",
+  "qualityDataLoadFailed": "تعذر تحميل البيانات",
+  "totalQuestionsLabel": "إجمالي الأسئلة",
+  "qualityStatusLabel": "الحالة",
+  "balancedStatus": "متوازن",
+  "insufficientStatus": "غير كافٍ",
+  "questionDifficultyDistribution": "توزيع الأسئلة حسب الصعوبة",
+  "easyDifficulty": "سهل",
+  "mediumDifficulty": "متوسط",
+  "hardDifficulty": "صعب",
+  "addQuestions": "إضافة أسئلة",
+  "questionCountCompact": "{count} سؤال",
+  "minimumQuestionsRequired": "الحد الأدنى: {count} أسئلة",
+  "@questionCountCompact": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@minimumQuestionsRequired": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addNewQuestionTitle": "إضافة سؤال جديد",
+  "questionClassification": "تصنيف السؤال",
+  "subjectLabel": "المادة الدراسية",
+  "gradeLevelLabel": "المرحلة الدراسية",
+  "chooseGrade": "اختر المرحلة",
+  "gradeSeven": "الصف السابع",
+  "gradeEight": "الصف الثامن",
+  "gradeNine": "الصف التاسع",
+  "gradeTen": "الصف العاشر",
+  "gradeEleven": "الصف الحادي عشر",
+  "gradeTwelve": "الصف الثاني عشر",
+  "unitLabel": "الوحدة الدراسية",
+  "mainSkillLabel": "المهارة الرئيسية",
+  "mainSkillHint": "مثال: الجمع والطرح",
+  "questionTypeSection": "نوع السؤال",
+  "questionTypeTrueFalseShort": "صح / خطأ",
+  "questionContent": "محتوى السؤال",
+  "questionTextLabel": "نص السؤال *",
+  "questionTextHint": "اكتب نص السؤال هنا...",
+  "answerOptions": "خيارات الإجابة",
+  "optionHint": "الخيار {optionLabel}",
+  "selectCorrectAnswerHint": "اضغط على الخيار لتحديد الإجابة الصحيحة",
+  "chooseDifficultyError": "يرجى اختيار مستوى الصعوبة",
+  "saveQuestion": "حفظ السؤال",
+  "questionSavedSuccessfully": "تم حفظ السؤال بنجاح",
+  "questionSavedInDemoBank": "تم حفظ السؤال بنجاح في البنك التجريبي",
+  "returningMessage": "جاري العودة...",
+  "@optionHint": {
+    "placeholders": {
+      "optionLabel": {}
+    }
+  },
+  "difficultyLevel": "مستوى الصعوبة"
 }

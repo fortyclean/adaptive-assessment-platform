@@ -1787,7 +1787,7 @@ abstract class AppLocalizations {
   /// No description provided for @questionTypeMcq.
   ///
   /// In ar, this message translates to:
-  /// **'اختيار من متعدد'**
+  /// **'اختيار متعدد'**
   String get questionTypeMcq;
 
   /// No description provided for @questionTypeTrueFalse.
@@ -2465,7 +2465,7 @@ abstract class AppLocalizations {
   /// No description provided for @chooseSubject.
   ///
   /// In ar, this message translates to:
-  /// **'اختر المادة...'**
+  /// **'اختر المادة'**
   String get chooseSubject;
 
   /// No description provided for @unitOrChapter.
@@ -3087,6 +3087,252 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.'**
   String get schoolReportExportFailure;
+
+  /// No description provided for @questionBankQualityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جودة بنك الأسئلة'**
+  String get questionBankQualityTitle;
+
+  /// No description provided for @qualityDataLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل البيانات'**
+  String get qualityDataLoadFailed;
+
+  /// No description provided for @totalQuestionsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الأسئلة'**
+  String get totalQuestionsLabel;
+
+  /// No description provided for @qualityStatusLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة'**
+  String get qualityStatusLabel;
+
+  /// No description provided for @balancedStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوازن'**
+  String get balancedStatus;
+
+  /// No description provided for @insufficientStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير كافٍ'**
+  String get insufficientStatus;
+
+  /// No description provided for @questionDifficultyDistribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'توزيع الأسئلة حسب الصعوبة'**
+  String get questionDifficultyDistribution;
+
+  /// No description provided for @easyDifficulty.
+  ///
+  /// In ar, this message translates to:
+  /// **'سهل'**
+  String get easyDifficulty;
+
+  /// No description provided for @mediumDifficulty.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط'**
+  String get mediumDifficulty;
+
+  /// No description provided for @hardDifficulty.
+  ///
+  /// In ar, this message translates to:
+  /// **'صعب'**
+  String get hardDifficulty;
+
+  /// No description provided for @addQuestions.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة أسئلة'**
+  String get addQuestions;
+
+  /// No description provided for @questionCountCompact.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} سؤال'**
+  String questionCountCompact(int count);
+
+  /// No description provided for @minimumQuestionsRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى: {count} أسئلة'**
+  String minimumQuestionsRequired(int count);
+
+  /// No description provided for @addNewQuestionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سؤال جديد'**
+  String get addNewQuestionTitle;
+
+  /// No description provided for @questionClassification.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصنيف السؤال'**
+  String get questionClassification;
+
+  /// No description provided for @subjectLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المادة الدراسية'**
+  String get subjectLabel;
+
+  /// No description provided for @gradeLevelLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة الدراسية'**
+  String get gradeLevelLabel;
+
+  /// No description provided for @chooseGrade.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المرحلة'**
+  String get chooseGrade;
+
+  /// No description provided for @gradeSeven.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف السابع'**
+  String get gradeSeven;
+
+  /// No description provided for @gradeEight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الثامن'**
+  String get gradeEight;
+
+  /// No description provided for @gradeNine.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف التاسع'**
+  String get gradeNine;
+
+  /// No description provided for @gradeTen.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف العاشر'**
+  String get gradeTen;
+
+  /// No description provided for @gradeEleven.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الحادي عشر'**
+  String get gradeEleven;
+
+  /// No description provided for @gradeTwelve.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الثاني عشر'**
+  String get gradeTwelve;
+
+  /// No description provided for @unitLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة الدراسية'**
+  String get unitLabel;
+
+  /// No description provided for @mainSkillLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المهارة الرئيسية'**
+  String get mainSkillLabel;
+
+  /// No description provided for @mainSkillHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: الجمع والطرح'**
+  String get mainSkillHint;
+
+  /// No description provided for @questionTypeSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع السؤال'**
+  String get questionTypeSection;
+
+  /// No description provided for @questionTypeTrueFalseShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'صح / خطأ'**
+  String get questionTypeTrueFalseShort;
+
+  /// No description provided for @questionContent.
+  ///
+  /// In ar, this message translates to:
+  /// **'محتوى السؤال'**
+  String get questionContent;
+
+  /// No description provided for @questionTextLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص السؤال *'**
+  String get questionTextLabel;
+
+  /// No description provided for @questionTextHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب نص السؤال هنا...'**
+  String get questionTextHint;
+
+  /// No description provided for @answerOptions.
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات الإجابة'**
+  String get answerOptions;
+
+  /// No description provided for @optionHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخيار {optionLabel}'**
+  String optionHint(Object optionLabel);
+
+  /// No description provided for @selectCorrectAnswerHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على الخيار لتحديد الإجابة الصحيحة'**
+  String get selectCorrectAnswerHint;
+
+  /// No description provided for @chooseDifficultyError.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى اختيار مستوى الصعوبة'**
+  String get chooseDifficultyError;
+
+  /// No description provided for @saveQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ السؤال'**
+  String get saveQuestion;
+
+  /// No description provided for @questionSavedSuccessfully.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ السؤال بنجاح'**
+  String get questionSavedSuccessfully;
+
+  /// No description provided for @questionSavedInDemoBank.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ السؤال بنجاح في البنك التجريبي'**
+  String get questionSavedInDemoBank;
+
+  /// No description provided for @returningMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري العودة...'**
+  String get returningMessage;
+
+  /// No description provided for @difficultyLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستوى الصعوبة'**
+  String get difficultyLevel;
 }
 
 class _AppLocalizationsDelegate

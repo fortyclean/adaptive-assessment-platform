@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.77';
-  static const int buildNumber = 77;
+  static const String current = '1.0.78';
+  static const int buildNumber = 78;
   static const String releaseDate = 'مايو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.78',
+      buildNumber: 78,
+      date: 'يونيو 2026',
+      title: 'توسيع الترجمة في بنك الأسئلة والتصدير',
+      changes: [
+        'نقل شاشة جودة بنك الأسئلة إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'نقل شاشة إضافة السؤال وحقولها ورسائل التحقق والحفظ إلى localization.',
+        'تثبيت ترجمة رسائل التحميل والمشاركة والشهادات وتصدير تقارير المدرسة.',
+        'إضافة اختبارات حماية لمفاتيح الترجمة الجديدة وتحليل Flutter نظيف.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.77',
       buildNumber: 77,

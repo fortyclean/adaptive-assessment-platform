@@ -370,6 +370,68 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads question bank quality localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.questionBankQualityTitle,
+            l10n.qualityDataLoadFailed,
+            l10n.totalQuestionsLabel,
+            l10n.balancedStatus,
+            l10n.insufficientStatus,
+            l10n.questionDifficultyDistribution,
+            l10n.questionCountCompact(7),
+            l10n.minimumQuestionsRequired(3),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Question bank quality / Could not load data / Total questions / '
+        'Balanced / Insufficient / Question distribution by difficulty / '
+        '7 questions / Minimum: 3 questions',
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('loads add question localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.addNewQuestionTitle,
+            l10n.questionClassification,
+            l10n.chooseSubject,
+            l10n.gradeSeven,
+            l10n.questionTypeMcq,
+            l10n.questionTypeEssay,
+            l10n.optionHint('A'),
+            l10n.chooseDifficultyError,
+            l10n.saveQuestion,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Add new question / Question classification / Choose subject / '
+        'Grade 7 / Multiple choice / Essay / Option A / '
+        'Please choose a difficulty level / Save question',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

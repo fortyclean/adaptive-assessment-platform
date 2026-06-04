@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
-/// Question Bank Quality Indicator Screen — Screen 29
-/// Requirements: 22.3, 22.4
+/// Question Bank Quality Indicator Screen.
 class QualityIndicatorScreen extends ConsumerStatefulWidget {
   const QualityIndicatorScreen({
     required this.subject,
@@ -14,6 +15,7 @@ class QualityIndicatorScreen extends ConsumerStatefulWidget {
     required this.unit,
     super.key,
   });
+
   final String subject;
   final String gradeLevel;
   final String unit;
@@ -51,22 +53,26 @@ class _QualityIndicatorScreenState
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('جودة بنك الأسئلة'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => context.pop(),
-          ),
-        ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _qualityData == null
-                ? const Center(child: Text('تعذر تحميل البيانات'))
-                : _buildContent(),
-      );
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
 
-  Widget _buildContent() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.questionBankQualityTitle),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => context.pop(),
+        ),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _qualityData == null
+              ? Center(child: Text(l10n.qualityDataLoadFailed))
+              : _buildContent(context, l10n),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, AppLocalizations l10n) {
     final data = _qualityData!;
     final counts = data['counts'] as Map<String, dynamic>? ??
         {'easy': 0, 'medium': 0, 'hard': 0};
@@ -78,12 +84,11 @@ class _QualityIndicatorScreenState
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        // Summary Bento Grid
         Row(
           children: [
             Expanded(
               child: _BentoCard(
-                label: 'إجمالي الأسئلة',
+                label: l10n.totalQuestionsLabel,
                 value: '$total',
                 icon: Icons.quiz_rounded,
                 color: AppColors.primary,
@@ -92,8 +97,9 @@ class _QualityIndicatorScreenState
             const SizedBox(width: 12),
             Expanded(
               child: _BentoCard(
-                label: 'الحالة',
-                value: isBalanced ? 'متوازن' : 'غير كافٍ',
+                label: l10n.qualityStatusLabel,
+                value:
+                    isBalanced ? l10n.balancedStatus : l10n.insufficientStatus,
                 icon: isBalanced
                     ? Icons.check_circle_rounded
                     : Icons.warning_rounded,
@@ -103,40 +109,36 @@ class _QualityIndicatorScreenState
           ],
         ),
         const SizedBox(height: 16),
-
-        // Per-difficulty cards
-        Text('توزيع الأسئلة حسب الصعوبة',
-            style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          l10n.questionDifficultyDistribution,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         const SizedBox(height: 12),
-
         _DifficultyCard(
-          label: 'سهل',
+          label: l10n.easyDifficulty,
           count: counts['easy'] as int? ?? 0,
           color: AppColors.success,
           minRequired: 3,
         ),
         const SizedBox(height: 8),
         _DifficultyCard(
-          label: 'متوسط',
+          label: l10n.mediumDifficulty,
           count: counts['medium'] as int? ?? 0,
           color: AppColors.warning,
           minRequired: 3,
         ),
         const SizedBox(height: 8),
         _DifficultyCard(
-          label: 'صعب',
+          label: l10n.hardDifficulty,
           count: counts['hard'] as int? ?? 0,
           color: AppColors.error,
           minRequired: 3,
         ),
-
         const SizedBox(height: 24),
-
-        // Add questions shortcut
         ElevatedButton.icon(
           onPressed: () => context.push(AppRoutes.teacherAddQuestion),
           icon: const Icon(Icons.add_rounded),
-          label: const Text('إضافة أسئلة'),
+          label: Text(l10n.addQuestions),
         ),
       ],
     );
@@ -150,6 +152,7 @@ class _BentoCard extends StatelessWidget {
     required this.icon,
     required this.color,
   });
+
   final String label;
   final String value;
   final IconData icon;
@@ -164,16 +167,20 @@ class _BentoCard extends StatelessWidget {
             children: [
               Icon(icon, color: color, size: 28),
               const SizedBox(height: 8),
-              Text(value,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: color,
-                        fontWeight: FontWeight.w700,
-                      )),
-              Text(label,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall
-                      ?.copyWith(color: AppColors.onSurfaceVariant)),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              Text(
+                label,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall
+                    ?.copyWith(color: AppColors.onSurfaceVariant),
+              ),
             ],
           ),
         ),
@@ -187,6 +194,7 @@ class _DifficultyCard extends StatelessWidget {
     required this.color,
     required this.minRequired,
   });
+
   final String label;
   final int count;
   final Color color;
@@ -196,6 +204,7 @@ class _DifficultyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final progress = (count / (minRequired * 2)).clamp(0.0, 1.0);
 
     return Card(
@@ -207,22 +216,28 @@ class _DifficultyCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(label,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: color)),
+                Text(
+                  label,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: color),
+                ),
                 Row(
                   children: [
-                    Text('$count سؤال',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge
-                            ?.copyWith(fontWeight: FontWeight.w700)),
+                    Text(
+                      l10n.questionCountCompact(count),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
                     const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: _isSufficient
                             ? AppColors.successContainer
@@ -230,7 +245,9 @@ class _DifficultyCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        _isSufficient ? 'كافٍ' : 'غير كافٍ',
+                        _isSufficient
+                            ? l10n.balancedStatus
+                            : l10n.insufficientStatus,
                         style: TextStyle(
                           color: _isSufficient
                               ? AppColors.success
@@ -252,7 +269,7 @@ class _DifficultyCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'الحد الأدنى: $minRequired أسئلة',
+              l10n.minimumQuestionsRequired(minRequired),
               style: Theme.of(context)
                   .textTheme
                   .labelSmall

@@ -557,7 +557,7 @@
   "assessmentCreateFailed": "Could not create the assessment. Check your connection and data, then try again.",
   "assessmentTitleHint": "Example: Unit 1 assessment",
   "requiredField": "Required",
-  "chooseSubject": "Choose a subject...",
+  "chooseSubject": "Choose subject",
   "unitOrChapter": "Unit / chapter",
   "unitHint": "Example: Unit 1",
   "assessmentType": "Assessment type",
@@ -727,5 +727,65 @@
       "completionRate": {},
       "topSkill": {}
     }
-  }
+  },
+  "questionBankQualityTitle": "Question bank quality",
+  "qualityDataLoadFailed": "Could not load data",
+  "totalQuestionsLabel": "Total questions",
+  "qualityStatusLabel": "Status",
+  "balancedStatus": "Balanced",
+  "insufficientStatus": "Insufficient",
+  "questionDifficultyDistribution": "Question distribution by difficulty",
+  "easyDifficulty": "Easy",
+  "mediumDifficulty": "Medium",
+  "hardDifficulty": "Hard",
+  "addQuestions": "Add questions",
+  "questionCountCompact": "{count} questions",
+  "minimumQuestionsRequired": "Minimum: {count} questions",
+  "@questionCountCompact": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@minimumQuestionsRequired": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addNewQuestionTitle": "Add new question",
+  "questionClassification": "Question classification",
+  "subjectLabel": "Subject",
+  "gradeLevelLabel": "Grade level",
+  "chooseGrade": "Choose grade",
+  "gradeSeven": "Grade 7",
+  "gradeEight": "Grade 8",
+  "gradeNine": "Grade 9",
+  "gradeTen": "Grade 10",
+  "gradeEleven": "Grade 11",
+  "gradeTwelve": "Grade 12",
+  "unitLabel": "Unit",
+  "mainSkillLabel": "Main skill",
+  "mainSkillHint": "Example: addition and subtraction",
+  "questionTypeSection": "Question type",
+  "questionTypeTrueFalseShort": "True / False",
+  "questionContent": "Question content",
+  "questionTextLabel": "Question text *",
+  "questionTextHint": "Write the question text here...",
+  "answerOptions": "Answer options",
+  "optionHint": "Option {optionLabel}",
+  "selectCorrectAnswerHint": "Tap an option to mark the correct answer",
+  "chooseDifficultyError": "Please choose a difficulty level",
+  "saveQuestion": "Save question",
+  "questionSavedSuccessfully": "Question saved successfully",
+  "questionSavedInDemoBank": "Question saved successfully in the demo bank",
+  "returningMessage": "Returning...",
+  "@optionHint": {
+    "placeholders": {
+      "optionLabel": {}
+    }
+  },
+  "difficultyLevel": "Difficulty level"
 }

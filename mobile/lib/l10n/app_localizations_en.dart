@@ -1300,7 +1300,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get requiredField => 'Required';
 
   @override
-  String get chooseSubject => 'Choose a subject...';
+  String get chooseSubject => 'Choose subject';
 
   @override
   String get unitOrChapter => 'Unit / chapter';
@@ -1651,4 +1651,136 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get schoolReportExportFailure =>
       'Could not export the school report. Check the connection and try again.';
+
+  @override
+  String get questionBankQualityTitle => 'Question bank quality';
+
+  @override
+  String get qualityDataLoadFailed => 'Could not load data';
+
+  @override
+  String get totalQuestionsLabel => 'Total questions';
+
+  @override
+  String get qualityStatusLabel => 'Status';
+
+  @override
+  String get balancedStatus => 'Balanced';
+
+  @override
+  String get insufficientStatus => 'Insufficient';
+
+  @override
+  String get questionDifficultyDistribution =>
+      'Question distribution by difficulty';
+
+  @override
+  String get easyDifficulty => 'Easy';
+
+  @override
+  String get mediumDifficulty => 'Medium';
+
+  @override
+  String get hardDifficulty => 'Hard';
+
+  @override
+  String get addQuestions => 'Add questions';
+
+  @override
+  String questionCountCompact(int count) {
+    return '$count questions';
+  }
+
+  @override
+  String minimumQuestionsRequired(int count) {
+    return 'Minimum: $count questions';
+  }
+
+  @override
+  String get addNewQuestionTitle => 'Add new question';
+
+  @override
+  String get questionClassification => 'Question classification';
+
+  @override
+  String get subjectLabel => 'Subject';
+
+  @override
+  String get gradeLevelLabel => 'Grade level';
+
+  @override
+  String get chooseGrade => 'Choose grade';
+
+  @override
+  String get gradeSeven => 'Grade 7';
+
+  @override
+  String get gradeEight => 'Grade 8';
+
+  @override
+  String get gradeNine => 'Grade 9';
+
+  @override
+  String get gradeTen => 'Grade 10';
+
+  @override
+  String get gradeEleven => 'Grade 11';
+
+  @override
+  String get gradeTwelve => 'Grade 12';
+
+  @override
+  String get unitLabel => 'Unit';
+
+  @override
+  String get mainSkillLabel => 'Main skill';
+
+  @override
+  String get mainSkillHint => 'Example: addition and subtraction';
+
+  @override
+  String get questionTypeSection => 'Question type';
+
+  @override
+  String get questionTypeTrueFalseShort => 'True / False';
+
+  @override
+  String get questionContent => 'Question content';
+
+  @override
+  String get questionTextLabel => 'Question text *';
+
+  @override
+  String get questionTextHint => 'Write the question text here...';
+
+  @override
+  String get answerOptions => 'Answer options';
+
+  @override
+  String optionHint(Object optionLabel) {
+    return 'Option $optionLabel';
+  }
+
+  @override
+  String get selectCorrectAnswerHint =>
+      'Tap an option to mark the correct answer';
+
+  @override
+  String get chooseDifficultyError => 'Please choose a difficulty level';
+
+  @override
+  String get saveQuestion => 'Save question';
+
+  @override
+  String get questionSavedSuccessfully => 'Question saved successfully';
+
+  @override
+  String get questionSavedInDemoBank =>
+      'Question saved successfully in the demo bank';
+
+  @override
+  String get returningMessage => 'Returning...';
+
+  @override
+  String get difficultyLevel => 'Difficulty level';
 }

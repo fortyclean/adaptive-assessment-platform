@@ -920,7 +920,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get falseLabel => 'خطأ';
 
   @override
-  String get questionTypeMcq => 'اختيار من متعدد';
+  String get questionTypeMcq => 'اختيار متعدد';
 
   @override
   String get questionTypeTrueFalse => 'صح أو خطأ';
@@ -1293,7 +1293,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get requiredField => 'مطلوب';
 
   @override
-  String get chooseSubject => 'اختر المادة...';
+  String get chooseSubject => 'اختر المادة';
 
   @override
   String get unitOrChapter => 'الوحدة / الفصل';
@@ -1641,4 +1641,134 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get schoolReportExportFailure =>
       'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.';
+
+  @override
+  String get questionBankQualityTitle => 'جودة بنك الأسئلة';
+
+  @override
+  String get qualityDataLoadFailed => 'تعذر تحميل البيانات';
+
+  @override
+  String get totalQuestionsLabel => 'إجمالي الأسئلة';
+
+  @override
+  String get qualityStatusLabel => 'الحالة';
+
+  @override
+  String get balancedStatus => 'متوازن';
+
+  @override
+  String get insufficientStatus => 'غير كافٍ';
+
+  @override
+  String get questionDifficultyDistribution => 'توزيع الأسئلة حسب الصعوبة';
+
+  @override
+  String get easyDifficulty => 'سهل';
+
+  @override
+  String get mediumDifficulty => 'متوسط';
+
+  @override
+  String get hardDifficulty => 'صعب';
+
+  @override
+  String get addQuestions => 'إضافة أسئلة';
+
+  @override
+  String questionCountCompact(int count) {
+    return '$count سؤال';
+  }
+
+  @override
+  String minimumQuestionsRequired(int count) {
+    return 'الحد الأدنى: $count أسئلة';
+  }
+
+  @override
+  String get addNewQuestionTitle => 'إضافة سؤال جديد';
+
+  @override
+  String get questionClassification => 'تصنيف السؤال';
+
+  @override
+  String get subjectLabel => 'المادة الدراسية';
+
+  @override
+  String get gradeLevelLabel => 'المرحلة الدراسية';
+
+  @override
+  String get chooseGrade => 'اختر المرحلة';
+
+  @override
+  String get gradeSeven => 'الصف السابع';
+
+  @override
+  String get gradeEight => 'الصف الثامن';
+
+  @override
+  String get gradeNine => 'الصف التاسع';
+
+  @override
+  String get gradeTen => 'الصف العاشر';
+
+  @override
+  String get gradeEleven => 'الصف الحادي عشر';
+
+  @override
+  String get gradeTwelve => 'الصف الثاني عشر';
+
+  @override
+  String get unitLabel => 'الوحدة الدراسية';
+
+  @override
+  String get mainSkillLabel => 'المهارة الرئيسية';
+
+  @override
+  String get mainSkillHint => 'مثال: الجمع والطرح';
+
+  @override
+  String get questionTypeSection => 'نوع السؤال';
+
+  @override
+  String get questionTypeTrueFalseShort => 'صح / خطأ';
+
+  @override
+  String get questionContent => 'محتوى السؤال';
+
+  @override
+  String get questionTextLabel => 'نص السؤال *';
+
+  @override
+  String get questionTextHint => 'اكتب نص السؤال هنا...';
+
+  @override
+  String get answerOptions => 'خيارات الإجابة';
+
+  @override
+  String optionHint(Object optionLabel) {
+    return 'الخيار $optionLabel';
+  }
+
+  @override
+  String get selectCorrectAnswerHint =>
+      'اضغط على الخيار لتحديد الإجابة الصحيحة';
+
+  @override
+  String get chooseDifficultyError => 'يرجى اختيار مستوى الصعوبة';
+
+  @override
+  String get saveQuestion => 'حفظ السؤال';
+
+  @override
+  String get questionSavedSuccessfully => 'تم حفظ السؤال بنجاح';
+
+  @override
+  String get questionSavedInDemoBank => 'تم حفظ السؤال بنجاح في البنك التجريبي';
+
+  @override
+  String get returningMessage => 'جاري العودة...';
+
+  @override
+  String get difficultyLevel => 'مستوى الصعوبة';
 }
