@@ -419,7 +419,6 @@
   "currentBalance": "Current balance",
   "marketplaceLevelLabel": "Level 14: Math genius",
   "myCollection": "My collection",
-  "viewAll": "View all",
   "ownedActive": "Active",
   "emptyCollectionMessage": "You have not added any collectibles yet. Buy your first reward and it will appear here.",
   "marketplaceEmptyTitle": "No items in this section",
@@ -651,5 +650,21 @@
       "tab": {}
     }
   },
-  "emptyTasksMessage": "Change the filter or create a new task for students."
+  "emptyTasksMessage": "Change the filter or create a new task for students.",
+  "navHome": "Home",
+  "navAssessments": "Assessments",
+  "navProgress": "Progress",
+  "navSettings": "Settings",
+  "navQuestionBank": "Question bank",
+  "navReports": "Reports",
+  "navUsers": "Users",
+  "navClassrooms": "Classes",
+  "mcqOptionSemanticLabel": "Option {optionKey}: {value}",
+  "questionImageAlt": "Question image",
+  "@mcqOptionSemanticLabel": {
+    "placeholders": {
+      "optionKey": {},
+      "value": {}
+    }
+  }
 }

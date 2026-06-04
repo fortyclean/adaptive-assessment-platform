@@ -309,6 +309,37 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads shared navigation and question widget localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.navHome,
+            l10n.navAssessments,
+            l10n.navQuestionBank,
+            l10n.navUsers,
+            l10n.navClassrooms,
+            l10n.mcqOptionSemanticLabel('A', 'Answer'),
+            l10n.questionImageAlt,
+            l10n.trueLabel,
+            l10n.falseLabel,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Home / Assessments / Question bank / Users / Classes / '
+        'Option A: Answer / Question image / True / False',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

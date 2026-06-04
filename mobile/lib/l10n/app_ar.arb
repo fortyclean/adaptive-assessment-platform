@@ -399,7 +399,7 @@
   "previous": "السابق",
   "noQuestions": "لا توجد أسئلة",
   "chooseCorrectAnswer": "اختر الإجابة الصحيحة:",
-  "trueLabel": "صح",
+  "trueLabel": "صحيح",
   "falseLabel": "خطأ",
   "questionTypeMcq": "اختيار من متعدد",
   "questionTypeTrueFalse": "صح أو خطأ",
@@ -419,7 +419,6 @@
   "currentBalance": "الرصيد الحالي",
   "marketplaceLevelLabel": "المستوى 14: عبقري رياضيات",
   "myCollection": "مجموعتي",
-  "viewAll": "عرض الكل",
   "ownedActive": "نشط",
   "emptyCollectionMessage": "لم تضف أي مقتنيات بعد. اشترِ أول مكافأة وستظهر هنا.",
   "marketplaceEmptyTitle": "لا توجد عناصر في هذا القسم",
@@ -651,5 +650,21 @@
       "tab": {}
     }
   },
-  "emptyTasksMessage": "غيّر الفلتر أو أنشئ مهمة جديدة للطلاب."
+  "emptyTasksMessage": "غيّر الفلتر أو أنشئ مهمة جديدة للطلاب.",
+  "navHome": "الرئيسية",
+  "navAssessments": "الاختبارات",
+  "navProgress": "التقدم",
+  "navSettings": "الإعدادات",
+  "navQuestionBank": "بنك الأسئلة",
+  "navReports": "التقارير",
+  "navUsers": "المستخدمون",
+  "navClassrooms": "الفصول",
+  "mcqOptionSemanticLabel": "الخيار {optionKey}: {value}",
+  "questionImageAlt": "صورة السؤال",
+  "@mcqOptionSemanticLabel": {
+    "placeholders": {
+      "optionKey": {},
+      "value": {}
+    }
+  }
 }

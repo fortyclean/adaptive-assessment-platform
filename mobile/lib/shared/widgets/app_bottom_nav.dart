@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Shared Bottom Navigation Bar matching the design system.
-/// Used across Teacher, Student, and Admin dashboards.
-///
-/// Active item: blue pill background (#EFF6FF), primary color icon.
-/// Inactive: gray icon, no background.
+import '../../l10n/app_localizations.dart';
+
+/// Shared bottom navigation bar for Teacher, Student, and Admin dashboards.
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({
     required this.currentIndex,
@@ -20,7 +18,8 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = _itemsForRole(role);
+    final l10n = AppLocalizations.of(context);
+    final items = _itemsForRole(role, l10n);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -60,7 +59,6 @@ class AppBottomNav extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                     decoration: BoxDecoration(
-                      // Active: #EFF6FF pill background
                       color: isActive
                           ? colorScheme.primaryContainer.withValues(alpha: 0.18)
                           : Colors.transparent,
@@ -71,7 +69,6 @@ class AppBottomNav extends StatelessWidget {
                       children: [
                         Icon(
                           isActive ? item.activeIcon : item.icon,
-                          // Active: primary container blue, Inactive: gray
                           color: isActive
                               ? colorScheme.primary
                               : colorScheme.onSurface.withValues(alpha: 0.72),
@@ -159,88 +156,87 @@ class AppBottomNav extends StatelessWidget {
     }
   }
 
-  List<_NavItem> _itemsForRole(String role) {
+  List<_NavItem> _itemsForRole(String role, AppLocalizations l10n) {
     if (role == 'student') {
-      return const [
+      return [
         _NavItem(
-          label: 'الرئيسية',
+          label: l10n.navHome,
           icon: Icons.home_outlined,
           activeIcon: Icons.home_rounded,
         ),
         _NavItem(
-          label: 'الاختبارات',
+          label: l10n.navAssessments,
           icon: Icons.quiz_outlined,
           activeIcon: Icons.quiz_rounded,
         ),
         _NavItem(
-          label: 'التقدم',
+          label: l10n.navProgress,
           icon: Icons.bar_chart_outlined,
           activeIcon: Icons.bar_chart_rounded,
         ),
         _NavItem(
-          label: 'الإعدادات',
+          label: l10n.navSettings,
           icon: Icons.settings_outlined,
           activeIcon: Icons.settings_rounded,
         ),
       ];
     } else if (role == 'teacher') {
-      return const [
+      return [
         _NavItem(
-          label: 'الرئيسية',
+          label: l10n.navHome,
           icon: Icons.home_outlined,
           activeIcon: Icons.home_rounded,
         ),
         _NavItem(
-          label: 'الاختبارات',
+          label: l10n.navAssessments,
           icon: Icons.quiz_outlined,
           activeIcon: Icons.quiz_rounded,
         ),
         _NavItem(
-          label: 'بنك الأسئلة',
+          label: l10n.navQuestionBank,
           icon: Icons.library_books_outlined,
           activeIcon: Icons.library_books_rounded,
         ),
         _NavItem(
-          label: 'التقارير',
+          label: l10n.navReports,
           icon: Icons.bar_chart_outlined,
           activeIcon: Icons.bar_chart_rounded,
         ),
         _NavItem(
-          label: 'الإعدادات',
-          icon: Icons.settings_outlined,
-          activeIcon: Icons.settings_rounded,
-        ),
-      ];
-    } else {
-      // admin
-      return const [
-        _NavItem(
-          label: 'الرئيسية',
-          icon: Icons.home_outlined,
-          activeIcon: Icons.home_rounded,
-        ),
-        _NavItem(
-          label: 'المستخدمون',
-          icon: Icons.group_outlined,
-          activeIcon: Icons.group_rounded,
-        ),
-        _NavItem(
-          label: 'الفصول',
-          icon: Icons.school_outlined,
-          activeIcon: Icons.school_rounded,
-        ),
-        _NavItem(
-          label: 'التقارير',
-          icon: Icons.bar_chart_outlined,
-          activeIcon: Icons.bar_chart_rounded,
-        ),
-        _NavItem(
-          label: 'الإعدادات',
+          label: l10n.navSettings,
           icon: Icons.settings_outlined,
           activeIcon: Icons.settings_rounded,
         ),
       ];
     }
+
+    return [
+      _NavItem(
+        label: l10n.navHome,
+        icon: Icons.home_outlined,
+        activeIcon: Icons.home_rounded,
+      ),
+      _NavItem(
+        label: l10n.navUsers,
+        icon: Icons.group_outlined,
+        activeIcon: Icons.group_rounded,
+      ),
+      _NavItem(
+        label: l10n.navClassrooms,
+        icon: Icons.school_outlined,
+        activeIcon: Icons.school_rounded,
+      ),
+      _NavItem(
+        label: l10n.navReports,
+        icon: Icons.bar_chart_outlined,
+        activeIcon: Icons.bar_chart_rounded,
+      ),
+      _NavItem(
+        label: l10n.navSettings,
+        icon: Icons.settings_outlined,
+        activeIcon: Icons.settings_rounded,
+      ),
+    ];
   }
 }
 

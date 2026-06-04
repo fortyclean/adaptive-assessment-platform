@@ -914,7 +914,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chooseCorrectAnswer => 'اختر الإجابة الصحيحة:';
 
   @override
-  String get trueLabel => 'صح';
+  String get trueLabel => 'صحيح';
 
   @override
   String get falseLabel => 'خطأ';
@@ -1518,4 +1518,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get emptyTasksMessage => 'غيّر الفلتر أو أنشئ مهمة جديدة للطلاب.';
+
+  @override
+  String get navHome => 'الرئيسية';
+
+  @override
+  String get navAssessments => 'الاختبارات';
+
+  @override
+  String get navProgress => 'التقدم';
+
+  @override
+  String get navSettings => 'الإعدادات';
+
+  @override
+  String get navQuestionBank => 'بنك الأسئلة';
+
+  @override
+  String get navReports => 'التقارير';
+
+  @override
+  String get navUsers => 'المستخدمون';
+
+  @override
+  String get navClassrooms => 'الفصول';
+
+  @override
+  String mcqOptionSemanticLabel(Object optionKey, Object value) {
+    return 'الخيار $optionKey: $value';
+  }
+
+  @override
+  String get questionImageAlt => 'صورة السؤال';
 }

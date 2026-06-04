@@ -167,29 +167,35 @@ class _TrueFalseWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: [
-          Expanded(
-              child: _TFButton(
-            label: 'صحيح',
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Row(
+      children: [
+        Expanded(
+          child: _TFButton(
+            label: l10n.trueLabel,
             icon: Icons.check_circle_outline_rounded,
             value: 'true',
             borderColor: _getColor('true'),
             bgColor: _getBgColor('true'),
             onTap: isDisabled ? null : () => onSelected('true'),
-          )),
-          const SizedBox(width: 16),
-          Expanded(
-              child: _TFButton(
-            label: 'خطأ',
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _TFButton(
+            label: l10n.falseLabel,
             icon: Icons.cancel_outlined,
             value: 'false',
             borderColor: _getColor('false'),
             bgColor: _getBgColor('false'),
             onTap: isDisabled ? null : () => onSelected('false'),
-          )),
-        ],
-      );
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _TFButton extends StatelessWidget {

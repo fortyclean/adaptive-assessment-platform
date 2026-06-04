@@ -1528,4 +1528,36 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get emptyTasksMessage =>
       'Change the filter or create a new task for students.';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navAssessments => 'Assessments';
+
+  @override
+  String get navProgress => 'Progress';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
+  String get navQuestionBank => 'Question bank';
+
+  @override
+  String get navReports => 'Reports';
+
+  @override
+  String get navUsers => 'Users';
+
+  @override
+  String get navClassrooms => 'Classes';
+
+  @override
+  String mcqOptionSemanticLabel(Object optionKey, Object value) {
+    return 'Option $optionKey: $value';
+  }
+
+  @override
+  String get questionImageAlt => 'Question image';
 }

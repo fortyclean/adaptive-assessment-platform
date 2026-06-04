@@ -1775,7 +1775,7 @@ abstract class AppLocalizations {
   /// No description provided for @trueLabel.
   ///
   /// In ar, this message translates to:
-  /// **'صح'**
+  /// **'صحيح'**
   String get trueLabel;
 
   /// No description provided for @falseLabel.
@@ -2875,6 +2875,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'غيّر الفلتر أو أنشئ مهمة جديدة للطلاب.'**
   String get emptyTasksMessage;
+
+  /// No description provided for @navHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
+  String get navHome;
+
+  /// No description provided for @navAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبارات'**
+  String get navAssessments;
+
+  /// No description provided for @navProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقدم'**
+  String get navProgress;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get navSettings;
+
+  /// No description provided for @navQuestionBank.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنك الأسئلة'**
+  String get navQuestionBank;
+
+  /// No description provided for @navReports.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقارير'**
+  String get navReports;
+
+  /// No description provided for @navUsers.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستخدمون'**
+  String get navUsers;
+
+  /// No description provided for @navClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصول'**
+  String get navClassrooms;
+
+  /// No description provided for @mcqOptionSemanticLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخيار {optionKey}: {value}'**
+  String mcqOptionSemanticLabel(Object optionKey, Object value);
+
+  /// No description provided for @questionImageAlt.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة السؤال'**
+  String get questionImageAlt;
 }
 
 class _AppLocalizationsDelegate
