@@ -1560,4 +1560,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get questionImageAlt => 'Question image';
+
+  @override
+  String get couldNotOpenLink => 'Could not open the link';
+
+  @override
+  String downloadingFile(Object fileName) {
+    return 'Downloading $fileName...';
+  }
+
+  @override
+  String downloadFailedWithReason(Object reason) {
+    return 'Download failed: $reason';
+  }
+
+  @override
+  String exportFailedWithReason(Object reason) {
+    return 'Export failed: $reason';
+  }
+
+  @override
+  String get shareFailed => 'Sharing failed';
+
+  @override
+  String get downloadingQuestionTemplate => 'Downloading question template...';
+
+  @override
+  String get questionTemplateImportSubject =>
+      'Question import template - EduAssess';
+
+  @override
+  String get questionTemplateSubject => 'Question import template';
+
+  @override
+  String completionCertificateSubject(Object studentName) {
+    return 'Completion certificate - $studentName';
+  }
+
+  @override
+  String completionCertificateContent(Object studentName, Object classroomName,
+      Object score, Object grade, Object issueDate) {
+    return 'Completion Certificate\n═══════════════════════════════\n\nThis certificate is awarded to:\n$studentName\n\nFor successfully completing: $classroomName\n\nScore: $score%\nGrade: $grade\n\nAcademic year: 2024-2025\nIssue date: $issueDate\n\n═══════════════════════════════\nEduAssess Adaptive Assessment Platform\n';
+  }
+
+  @override
+  String get connectionTimeout => 'Connection timed out';
+
+  @override
+  String get unauthorizedError => 'Unauthorized';
+
+  @override
+  String get fileNotFound => 'File not found';
+
+  @override
+  String get connectionError => 'Connection error';
+
+  @override
+  String get schoolReportExportSection => 'Section';
+
+  @override
+  String get schoolReportExportMetric => 'Metric';
+
+  @override
+  String get schoolReportExportValue => 'Value';
+
+  @override
+  String get schoolReportExportReport => 'Report';
+
+  @override
+  String get schoolReportExportGeneratedAt => 'Generated at';
+
+  @override
+  String get schoolReportExportFilterScope => 'Filter scope';
+
+  @override
+  String get schoolReportExportSummary => 'Summary';
+
+  @override
+  String get schoolReportExportClassroomComparison => 'Classroom comparison';
+
+  @override
+  String get schoolReportExportWeakSkills => 'Skills needing support';
+
+  @override
+  String schoolReportExportComparisonValue(
+      Object averageScore, Object completionRate, Object topSkill) {
+    return 'Average: $averageScore | Completion: $completionRate | Skill: $topSkill';
+  }
+
+  @override
+  String get schoolReportExportFailure =>
+      'Could not export the school report. Check the connection and try again.';
 }

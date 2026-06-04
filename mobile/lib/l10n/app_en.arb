@@ -666,5 +666,66 @@
       "optionKey": {},
       "value": {}
     }
+  },
+  "couldNotOpenLink": "Could not open the link",
+  "downloadingFile": "Downloading {fileName}...",
+  "downloadFailedWithReason": "Download failed: {reason}",
+  "exportFailedWithReason": "Export failed: {reason}",
+  "shareFailed": "Sharing failed",
+  "downloadingQuestionTemplate": "Downloading question template...",
+  "questionTemplateImportSubject": "Question import template - EduAssess",
+  "questionTemplateSubject": "Question import template",
+  "completionCertificateSubject": "Completion certificate - {studentName}",
+  "completionCertificateContent": "Completion Certificate\n═══════════════════════════════\n\nThis certificate is awarded to:\n{studentName}\n\nFor successfully completing: {classroomName}\n\nScore: {score}%\nGrade: {grade}\n\nAcademic year: 2024-2025\nIssue date: {issueDate}\n\n═══════════════════════════════\nEduAssess Adaptive Assessment Platform\n",
+  "connectionTimeout": "Connection timed out",
+  "unauthorizedError": "Unauthorized",
+  "fileNotFound": "File not found",
+  "connectionError": "Connection error",
+  "@downloadingFile": {
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "@downloadFailedWithReason": {
+    "placeholders": {
+      "reason": {}
+    }
+  },
+  "@exportFailedWithReason": {
+    "placeholders": {
+      "reason": {}
+    }
+  },
+  "@completionCertificateSubject": {
+    "placeholders": {
+      "studentName": {}
+    }
+  },
+  "@completionCertificateContent": {
+    "placeholders": {
+      "studentName": {},
+      "classroomName": {},
+      "score": {},
+      "grade": {},
+      "issueDate": {}
+    }
+  },
+  "schoolReportExportSection": "Section",
+  "schoolReportExportMetric": "Metric",
+  "schoolReportExportValue": "Value",
+  "schoolReportExportReport": "Report",
+  "schoolReportExportGeneratedAt": "Generated at",
+  "schoolReportExportFilterScope": "Filter scope",
+  "schoolReportExportSummary": "Summary",
+  "schoolReportExportClassroomComparison": "Classroom comparison",
+  "schoolReportExportWeakSkills": "Skills needing support",
+  "schoolReportExportComparisonValue": "Average: {averageScore} | Completion: {completionRate} | Skill: {topSkill}",
+  "schoolReportExportFailure": "Could not export the school report. Check the connection and try again.",
+  "@schoolReportExportComparisonValue": {
+    "placeholders": {
+      "averageScore": {},
+      "completionRate": {},
+      "topSkill": {}
+    }
   }
 }

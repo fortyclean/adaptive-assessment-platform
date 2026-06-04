@@ -1,35 +1,35 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../l10n/app_localizations.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_constants.dart';
 
-/// Central helper for all download, share, and export operations.
-/// Replaces all fake SnackBar "جاري تحميل..." with real functionality.
+/// Central helper for download, share, and export operations.
 class DownloadHelper {
   DownloadHelper._();
 
-  static final _dio = Dio(BaseOptions(
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 60),
-  ));
+  static final _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 60),
+    ),
+  );
 
-  // ── Open URL in browser ───────────────────────────────────────────────────
   static Future<void> openUrl(String url, BuildContext context) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (context.mounted) {
-        _showError(context, 'تعذر فتح الرابط');
-      }
+    } else if (context.mounted) {
+      _showError(context, AppLocalizations.of(context).couldNotOpenLink);
     }
   }
 
-  // ── Download file and share ───────────────────────────────────────────────
   static Future<void> downloadAndShare({
     required String url,
     required String fileName,
@@ -37,7 +37,9 @@ class DownloadHelper {
     String? token,
     String? subject,
   }) async {
-    _showProgress(context, 'جاري تحميل $fileName...');
+    final l10n = AppLocalizations.of(context);
+    _showProgress(context, l10n.downloadingFile(fileName));
+
     try {
       final dir = await getTemporaryDirectory();
       final filePath = '${dir.path}/$fileName';
@@ -48,9 +50,6 @@ class DownloadHelper {
         options: Options(
           headers: token != null ? {'Authorization': 'Bearer $token'} : null,
         ),
-        onReceiveProgress: (received, total) {
-          // Progress tracked internally
-        },
       );
 
       if (context.mounted) {
@@ -62,13 +61,18 @@ class DownloadHelper {
       }
     } on Object catch (e) {
       if (context.mounted) {
+        final mountedL10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        _showError(context, 'فشل التحميل: ${_friendlyError(e)}');
+        _showError(
+          context,
+          mountedL10n.downloadFailedWithReason(
+            _friendlyError(e, mountedL10n),
+          ),
+        );
       }
     }
   }
 
-  // ── Save text as file and share ───────────────────────────────────────────
   static Future<void> shareTextAsFile({
     required String content,
     required String fileName,
@@ -85,12 +89,13 @@ class DownloadHelper {
       );
     } on Object catch (e) {
       if (context.mounted) {
-        _showError(context, 'فشل التصدير: ${_friendlyError(e)}');
+        final l10n = AppLocalizations.of(context);
+        _showError(
+            context, l10n.exportFailedWithReason(_friendlyError(e, l10n)));
       }
     }
   }
 
-  // ── Share text directly ───────────────────────────────────────────────────
   static Future<void> shareText({
     required String text,
     required BuildContext context,
@@ -100,17 +105,19 @@ class DownloadHelper {
       await Share.share(text, subject: subject);
     } on Object {
       if (context.mounted) {
-        _showError(context, 'فشل المشاركة');
+        _showError(context, AppLocalizations.of(context).shareFailed);
       }
     }
   }
 
-  // ── Download Excel template ───────────────────────────────────────────────
   static Future<void> downloadExcelTemplate(
-      BuildContext context, String token) async {
-    // Backend returns JSON template — convert to CSV for download
+    BuildContext context,
+    String token,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+
     try {
-      _showProgress(context, 'جاري تحميل قالب الأسئلة...');
+      _showProgress(context, l10n.downloadingQuestionTemplate);
       final response = await _dio.get<Map<String, dynamic>>(
         '${AppConstants.apiBaseUrl}/questions/template/download',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
@@ -122,7 +129,6 @@ class DownloadHelper {
       final columns = (template?['columns'] as List?)?.cast<String>() ?? [];
       final example = template?['example'] as Map<String, dynamic>? ?? {};
 
-      // Build CSV content
       final csvLines = [
         columns.join(','),
         columns.map((c) => example[c]?.toString() ?? '').join(','),
@@ -133,26 +139,24 @@ class DownloadHelper {
           content: csvLines.join('\n'),
           fileName: 'questions_template.csv',
           context: context,
-          subject: 'قالب استيراد الأسئلة - EduAssess',
+          subject: AppLocalizations.of(context).questionTemplateImportSubject,
         );
       }
     } on Object {
       if (context.mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        // Fallback: provide a basic template
         const csvContent =
             'subject,gradeLevel,academicTerm,unit,mainSkill,subSkill,difficulty,questionType,questionText,optionA,optionB,optionC,optionD,correctAnswer\nMathematics,Grade 7,Term 1,Algebra,Equations,Linear Equations,medium,mcq,What is x in 2x+4=10?,2,3,4,5,B';
         await shareTextAsFile(
           content: csvContent,
           fileName: 'questions_template.csv',
           context: context,
-          subject: 'قالب استيراد الأسئلة',
+          subject: AppLocalizations.of(context).questionTemplateSubject,
         );
       }
     }
   }
 
-  // ── Download certificate as PDF ───────────────────────────────────────────
   static Future<void> downloadCertificate({
     required BuildContext context,
     required String studentName,
@@ -161,36 +165,25 @@ class DownloadHelper {
     required String classroomName,
     required String token,
   }) async {
-    // Build certificate content as text (PDF generation requires additional package)
-    // For now: share as formatted text that can be printed
-    final content = '''
-شهادة إتمام
-═══════════════════════════════
-
-تُمنح هذه الشهادة إلى:
-$studentName
-
-لإتمامه بنجاح مادة: $classroomName
-
-الدرجة: ${score.toStringAsFixed(1)}%
-التقدير: $grade
-
-العام الدراسي: 2024-2025
-تاريخ الإصدار: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}
-
-═══════════════════════════════
-منصة EduAssess للتقييم التكيفي
-''';
+    final l10n = AppLocalizations.of(context);
+    final now = DateTime.now();
+    final issueDate = '${now.day}/${now.month}/${now.year}';
+    final content = l10n.completionCertificateContent(
+      studentName,
+      classroomName,
+      score.toStringAsFixed(1),
+      grade,
+      issueDate,
+    );
 
     await shareTextAsFile(
       content: content,
       fileName: 'certificate_$studentName.txt',
       context: context,
-      subject: 'شهادة إتمام - $studentName',
+      subject: l10n.completionCertificateSubject(studentName),
     );
   }
 
-  // ── Export report as CSV ──────────────────────────────────────────────────
   static Future<void> exportReportCsv({
     required BuildContext context,
     required List<List<String>> rows,
@@ -214,7 +207,6 @@ $studentName
     );
   }
 
-  // ── Send notification via backend ─────────────────────────────────────────
   static Future<bool> sendNotification({
     required String message,
     required String recipientId,
@@ -227,7 +219,7 @@ $studentName
         data: {
           'recipientId': recipientId,
           'message': message,
-          'type': 'teacher_message'
+          'type': 'teacher_message',
         },
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
@@ -238,17 +230,19 @@ $studentName
     }
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
   static void _showProgress(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
           children: [
             const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                    strokeWidth: 2, color: Colors.white)),
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            ),
             const SizedBox(width: 12),
             Text(message, style: const TextStyle(fontFamily: 'Almarai')),
           ],
@@ -269,18 +263,18 @@ $studentName
     );
   }
 
-  static String _friendlyError(Object e) {
+  static String _friendlyError(Object e, AppLocalizations l10n) {
     if (e is DioException) {
       if (e.type == DioExceptionType.connectionTimeout) {
-        return 'انتهت مهلة الاتصال';
+        return l10n.connectionTimeout;
       }
       if (e.response?.statusCode == 401) {
-        return 'غير مصرح';
+        return l10n.unauthorizedError;
       }
       if (e.response?.statusCode == 404) {
-        return 'الملف غير موجود';
+        return l10n.fileNotFound;
       }
     }
-    return e.toString().length > 50 ? 'خطأ في الاتصال' : e.toString();
+    return e.toString().length > 50 ? l10n.connectionError : e.toString();
   }
 }

@@ -666,5 +666,66 @@
       "optionKey": {},
       "value": {}
     }
+  },
+  "couldNotOpenLink": "تعذر فتح الرابط",
+  "downloadingFile": "جاري تحميل {fileName}...",
+  "downloadFailedWithReason": "فشل التحميل: {reason}",
+  "exportFailedWithReason": "فشل التصدير: {reason}",
+  "shareFailed": "فشل المشاركة",
+  "downloadingQuestionTemplate": "جاري تحميل قالب الأسئلة...",
+  "questionTemplateImportSubject": "قالب استيراد الأسئلة - EduAssess",
+  "questionTemplateSubject": "قالب استيراد الأسئلة",
+  "completionCertificateSubject": "شهادة إتمام - {studentName}",
+  "completionCertificateContent": "شهادة إتمام\n═══════════════════════════════\n\nتُمنح هذه الشهادة إلى:\n{studentName}\n\nلإتمامه بنجاح مادة: {classroomName}\n\nالدرجة: {score}%\nالتقدير: {grade}\n\nالعام الدراسي: 2024-2025\nتاريخ الإصدار: {issueDate}\n\n═══════════════════════════════\nمنصة EduAssess للتقييم التكيفي\n",
+  "connectionTimeout": "انتهت مهلة الاتصال",
+  "unauthorizedError": "غير مصرح",
+  "fileNotFound": "الملف غير موجود",
+  "connectionError": "خطأ في الاتصال",
+  "@downloadingFile": {
+    "placeholders": {
+      "fileName": {}
+    }
+  },
+  "@downloadFailedWithReason": {
+    "placeholders": {
+      "reason": {}
+    }
+  },
+  "@exportFailedWithReason": {
+    "placeholders": {
+      "reason": {}
+    }
+  },
+  "@completionCertificateSubject": {
+    "placeholders": {
+      "studentName": {}
+    }
+  },
+  "@completionCertificateContent": {
+    "placeholders": {
+      "studentName": {},
+      "classroomName": {},
+      "score": {},
+      "grade": {},
+      "issueDate": {}
+    }
+  },
+  "schoolReportExportSection": "القسم",
+  "schoolReportExportMetric": "المؤشر",
+  "schoolReportExportValue": "القيمة",
+  "schoolReportExportReport": "التقرير",
+  "schoolReportExportGeneratedAt": "تاريخ الإنشاء",
+  "schoolReportExportFilterScope": "نطاق الفلاتر",
+  "schoolReportExportSummary": "الملخص",
+  "schoolReportExportClassroomComparison": "مقارنة الفصول",
+  "schoolReportExportWeakSkills": "مهارات تحتاج دعماً",
+  "schoolReportExportComparisonValue": "متوسط: {averageScore} | إكمال: {completionRate} | مهارة: {topSkill}",
+  "schoolReportExportFailure": "تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.",
+  "@schoolReportExportComparisonValue": {
+    "placeholders": {
+      "averageScore": {},
+      "completionRate": {},
+      "topSkill": {}
+    }
   }
 }

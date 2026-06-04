@@ -2,6 +2,56 @@ import 'dart:convert';
 
 enum SchoolReportExportFormat { json, csv }
 
+class SchoolReportExportLabels {
+  const SchoolReportExportLabels({
+    required this.section,
+    required this.metric,
+    required this.value,
+    required this.report,
+    required this.generatedAt,
+    required this.filterScope,
+    required this.summary,
+    required this.classroomComparison,
+    required this.weakSkills,
+    required this.comparisonValueBuilder,
+  });
+
+  final String section;
+  final String metric;
+  final String value;
+  final String report;
+  final String generatedAt;
+  final String filterScope;
+  final String summary;
+  final String classroomComparison;
+  final String weakSkills;
+  final String Function(
+    Object averageScore,
+    Object completionRate,
+    Object topSkill,
+  ) comparisonValueBuilder;
+
+  static const arabic = SchoolReportExportLabels(
+    section: 'القسم',
+    metric: 'المؤشر',
+    value: 'القيمة',
+    report: 'التقرير',
+    generatedAt: 'تاريخ الإنشاء',
+    filterScope: 'نطاق الفلاتر',
+    summary: 'الملخص',
+    classroomComparison: 'مقارنة الفصول',
+    weakSkills: 'مهارات تحتاج دعماً',
+    comparisonValueBuilder: _arabicComparisonValue,
+  );
+
+  static String _arabicComparisonValue(
+    Object averageScore,
+    Object completionRate,
+    Object topSkill,
+  ) =>
+      'متوسط: $averageScore | إكمال: $completionRate | مهارة: $topSkill';
+}
+
 class SchoolReportExportUtils {
   const SchoolReportExportUtils._();
 
@@ -18,11 +68,16 @@ class SchoolReportExportUtils {
     required Map<String, dynamic> report,
     required SchoolReportExportFormat format,
     required String filterSummary,
+    SchoolReportExportLabels labels = SchoolReportExportLabels.arabic,
   }) {
     if (format == SchoolReportExportFormat.json) {
       return const JsonEncoder.withIndent('  ').convert(report);
     }
-    return buildCsv(report: report, filterSummary: filterSummary);
+    return buildCsv(
+      report: report,
+      filterSummary: filterSummary,
+      labels: labels,
+    );
   }
 
   static String buildFileName({
@@ -37,34 +92,39 @@ class SchoolReportExportUtils {
   static String buildCsv({
     required Map<String, dynamic> report,
     required String filterSummary,
+    SchoolReportExportLabels labels = SchoolReportExportLabels.arabic,
   }) {
     final buffer = StringBuffer();
     void row(List<Object?> values) {
       buffer.writeln(values.map(csvCell).join(','));
     }
 
-    row(['القسم', 'المؤشر', 'القيمة']);
-    row(['التقرير', 'تاريخ الإنشاء', report['generatedAt'] ?? '']);
-    row(['التقرير', 'نطاق الفلاتر', filterSummary]);
+    row([labels.section, labels.metric, labels.value]);
+    row([labels.report, labels.generatedAt, report['generatedAt'] ?? '']);
+    row([labels.report, labels.filterScope, filterSummary]);
 
     final summary = report['summary'] as Map<String, dynamic>? ?? {};
     for (final entry in summary.entries) {
-      row(['الملخص', entry.key, entry.value]);
+      row([labels.summary, entry.key, entry.value]);
     }
 
     final comparisons = report['classroomComparison'] as List? ?? const [];
     for (final item in comparisons.whereType<Map<String, dynamic>>()) {
       row([
-        'مقارنة الفصول',
+        labels.classroomComparison,
         item['name'] ?? item['classroomName'] ?? '',
-        'متوسط: ${item['averageScore'] ?? ''} | إكمال: ${item['completionRate'] ?? ''} | مهارة: ${item['topSkill'] ?? ''}',
+        labels.comparisonValueBuilder(
+          (item['averageScore'] ?? '').toString(),
+          (item['completionRate'] ?? '').toString(),
+          (item['topSkill'] ?? '').toString(),
+        ),
       ]);
     }
 
     final weaknesses = report['weakestSkills'] as List? ?? const [];
     for (final item in weaknesses.whereType<Map<String, dynamic>>()) {
       row([
-        'مهارات تحتاج دعماً',
+        labels.weakSkills,
         item['mainSkill'] ?? '',
         item['averagePercentage'] ?? '',
       ]);

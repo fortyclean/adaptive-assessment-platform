@@ -2935,6 +2935,158 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'صورة السؤال'**
   String get questionImageAlt;
+
+  /// No description provided for @couldNotOpenLink.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح الرابط'**
+  String get couldNotOpenLink;
+
+  /// No description provided for @downloadingFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل {fileName}...'**
+  String downloadingFile(Object fileName);
+
+  /// No description provided for @downloadFailedWithReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل التحميل: {reason}'**
+  String downloadFailedWithReason(Object reason);
+
+  /// No description provided for @exportFailedWithReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل التصدير: {reason}'**
+  String exportFailedWithReason(Object reason);
+
+  /// No description provided for @shareFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل المشاركة'**
+  String get shareFailed;
+
+  /// No description provided for @downloadingQuestionTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل قالب الأسئلة...'**
+  String get downloadingQuestionTemplate;
+
+  /// No description provided for @questionTemplateImportSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'قالب استيراد الأسئلة - EduAssess'**
+  String get questionTemplateImportSubject;
+
+  /// No description provided for @questionTemplateSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'قالب استيراد الأسئلة'**
+  String get questionTemplateSubject;
+
+  /// No description provided for @completionCertificateSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهادة إتمام - {studentName}'**
+  String completionCertificateSubject(Object studentName);
+
+  /// No description provided for @completionCertificateContent.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهادة إتمام\n═══════════════════════════════\n\nتُمنح هذه الشهادة إلى:\n{studentName}\n\nلإتمامه بنجاح مادة: {classroomName}\n\nالدرجة: {score}%\nالتقدير: {grade}\n\nالعام الدراسي: 2024-2025\nتاريخ الإصدار: {issueDate}\n\n═══════════════════════════════\nمنصة EduAssess للتقييم التكيفي\n'**
+  String completionCertificateContent(Object studentName, Object classroomName,
+      Object score, Object grade, Object issueDate);
+
+  /// No description provided for @connectionTimeout.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت مهلة الاتصال'**
+  String get connectionTimeout;
+
+  /// No description provided for @unauthorizedError.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مصرح'**
+  String get unauthorizedError;
+
+  /// No description provided for @fileNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف غير موجود'**
+  String get fileNotFound;
+
+  /// No description provided for @connectionError.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطأ في الاتصال'**
+  String get connectionError;
+
+  /// No description provided for @schoolReportExportSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'القسم'**
+  String get schoolReportExportSection;
+
+  /// No description provided for @schoolReportExportMetric.
+  ///
+  /// In ar, this message translates to:
+  /// **'المؤشر'**
+  String get schoolReportExportMetric;
+
+  /// No description provided for @schoolReportExportValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'القيمة'**
+  String get schoolReportExportValue;
+
+  /// No description provided for @schoolReportExportReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقرير'**
+  String get schoolReportExportReport;
+
+  /// No description provided for @schoolReportExportGeneratedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الإنشاء'**
+  String get schoolReportExportGeneratedAt;
+
+  /// No description provided for @schoolReportExportFilterScope.
+  ///
+  /// In ar, this message translates to:
+  /// **'نطاق الفلاتر'**
+  String get schoolReportExportFilterScope;
+
+  /// No description provided for @schoolReportExportSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملخص'**
+  String get schoolReportExportSummary;
+
+  /// No description provided for @schoolReportExportClassroomComparison.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة الفصول'**
+  String get schoolReportExportClassroomComparison;
+
+  /// No description provided for @schoolReportExportWeakSkills.
+  ///
+  /// In ar, this message translates to:
+  /// **'مهارات تحتاج دعماً'**
+  String get schoolReportExportWeakSkills;
+
+  /// No description provided for @schoolReportExportComparisonValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط: {averageScore} | إكمال: {completionRate} | مهارة: {topSkill}'**
+  String schoolReportExportComparisonValue(
+      Object averageScore, Object completionRate, Object topSkill);
+
+  /// No description provided for @schoolReportExportFailure.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.'**
+  String get schoolReportExportFailure;
 }
 
 class _AppLocalizationsDelegate

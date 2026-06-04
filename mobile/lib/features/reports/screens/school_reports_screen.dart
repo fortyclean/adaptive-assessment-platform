@@ -7,6 +7,7 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/download_helper.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -313,6 +314,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
           report: report,
           format: format,
           filterSummary: _filterSummaryText(),
+          labels: _schoolReportExportLabels(context),
         ),
         fileName: SchoolReportExportUtils.buildFileName(
           timestamp: DateTime.now(),
@@ -323,10 +325,11 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
       );
     } catch (_) {
       if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.',
+            l10n.schoolReportExportFailure,
           ),
           behavior: SnackBarBehavior.floating,
           backgroundColor: AppColors.error,
@@ -335,6 +338,22 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
     } finally {
       if (mounted) setState(() => _exportingReport = false);
     }
+  }
+
+  SchoolReportExportLabels _schoolReportExportLabels(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SchoolReportExportLabels(
+      section: l10n.schoolReportExportSection,
+      metric: l10n.schoolReportExportMetric,
+      value: l10n.schoolReportExportValue,
+      report: l10n.schoolReportExportReport,
+      generatedAt: l10n.schoolReportExportGeneratedAt,
+      filterScope: l10n.schoolReportExportFilterScope,
+      summary: l10n.schoolReportExportSummary,
+      classroomComparison: l10n.schoolReportExportClassroomComparison,
+      weakSkills: l10n.schoolReportExportWeakSkills,
+      comparisonValueBuilder: l10n.schoolReportExportComparisonValue,
+    );
   }
 
   String _filterSummaryText() {

@@ -1550,4 +1550,95 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get questionImageAlt => 'صورة السؤال';
+
+  @override
+  String get couldNotOpenLink => 'تعذر فتح الرابط';
+
+  @override
+  String downloadingFile(Object fileName) {
+    return 'جاري تحميل $fileName...';
+  }
+
+  @override
+  String downloadFailedWithReason(Object reason) {
+    return 'فشل التحميل: $reason';
+  }
+
+  @override
+  String exportFailedWithReason(Object reason) {
+    return 'فشل التصدير: $reason';
+  }
+
+  @override
+  String get shareFailed => 'فشل المشاركة';
+
+  @override
+  String get downloadingQuestionTemplate => 'جاري تحميل قالب الأسئلة...';
+
+  @override
+  String get questionTemplateImportSubject =>
+      'قالب استيراد الأسئلة - EduAssess';
+
+  @override
+  String get questionTemplateSubject => 'قالب استيراد الأسئلة';
+
+  @override
+  String completionCertificateSubject(Object studentName) {
+    return 'شهادة إتمام - $studentName';
+  }
+
+  @override
+  String completionCertificateContent(Object studentName, Object classroomName,
+      Object score, Object grade, Object issueDate) {
+    return 'شهادة إتمام\n═══════════════════════════════\n\nتُمنح هذه الشهادة إلى:\n$studentName\n\nلإتمامه بنجاح مادة: $classroomName\n\nالدرجة: $score%\nالتقدير: $grade\n\nالعام الدراسي: 2024-2025\nتاريخ الإصدار: $issueDate\n\n═══════════════════════════════\nمنصة EduAssess للتقييم التكيفي\n';
+  }
+
+  @override
+  String get connectionTimeout => 'انتهت مهلة الاتصال';
+
+  @override
+  String get unauthorizedError => 'غير مصرح';
+
+  @override
+  String get fileNotFound => 'الملف غير موجود';
+
+  @override
+  String get connectionError => 'خطأ في الاتصال';
+
+  @override
+  String get schoolReportExportSection => 'القسم';
+
+  @override
+  String get schoolReportExportMetric => 'المؤشر';
+
+  @override
+  String get schoolReportExportValue => 'القيمة';
+
+  @override
+  String get schoolReportExportReport => 'التقرير';
+
+  @override
+  String get schoolReportExportGeneratedAt => 'تاريخ الإنشاء';
+
+  @override
+  String get schoolReportExportFilterScope => 'نطاق الفلاتر';
+
+  @override
+  String get schoolReportExportSummary => 'الملخص';
+
+  @override
+  String get schoolReportExportClassroomComparison => 'مقارنة الفصول';
+
+  @override
+  String get schoolReportExportWeakSkills => 'مهارات تحتاج دعماً';
+
+  @override
+  String schoolReportExportComparisonValue(
+      Object averageScore, Object completionRate, Object topSkill) {
+    return 'متوسط: $averageScore | إكمال: $completionRate | مهارة: $topSkill';
+  }
+
+  @override
+  String get schoolReportExportFailure =>
+      'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.';
 }

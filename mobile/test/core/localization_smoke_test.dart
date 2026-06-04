@@ -340,6 +340,36 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads download and share helper localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.couldNotOpenLink,
+            l10n.downloadingFile('report.csv'),
+            l10n.downloadFailedWithReason(l10n.connectionTimeout),
+            l10n.exportFailedWithReason(l10n.fileNotFound),
+            l10n.questionTemplateImportSubject,
+            l10n.completionCertificateSubject('Sara'),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Could not open the link / Downloading report.csv... / '
+        'Download failed: Connection timed out / '
+        'Export failed: File not found / '
+        'Question import template - EduAssess / Completion certificate - Sara',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {
