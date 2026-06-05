@@ -3068,4 +3068,59 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get classroom => 'فصل دراسي';
+
+  @override
+  String get classroomManagementLoadFailed =>
+      'تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get deleteClassroom => 'حذف الفصل';
+
+  @override
+  String deleteClassroomQuestion(Object name) {
+    return 'هل تريد حذف فصل \"$name\"؟';
+  }
+
+  @override
+  String get classroomDeleteFailed => 'تعذر حذف الفصل. يرجى المحاولة مرة أخرى';
+
+  @override
+  String classroomDeleted(Object name) {
+    return 'تم حذف فصل \"$name\"';
+  }
+
+  @override
+  String get classroomManagementAdminSubtitle =>
+      'إدارة الفصول وتعيين المعلمين والطلاب';
+
+  @override
+  String get totalClassrooms => 'إجمالي الفصول';
+
+  @override
+  String get classroomManagementSearchHint =>
+      'ابحث باسم الفصل أو المرحلة أو المعلم';
+
+  @override
+  String get clearSearch => 'مسح البحث';
+
+  @override
+  String get withoutTeacher => 'بدون معلم';
+
+  @override
+  String get withStudents => 'بها طلاب';
+
+  @override
+  String get withoutStudents => 'بدون طلاب';
+
+  @override
+  String get noMatchingClassrooms => 'لا توجد فصول مطابقة';
+
+  @override
+  String get clearSearchAndFilters => 'مسح البحث والفلاتر';
+
+  @override
+  String get noClassrooms => 'لا توجد فصول دراسية';
+
+  @override
+  String get addClassToStart => 'أضف فصلاً جديداً للبدء';
 }

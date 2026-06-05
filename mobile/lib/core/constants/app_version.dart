@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.95';
-  static const int buildNumber = 95;
+  static const String current = '1.0.96';
+  static const int buildNumber = 96;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.96',
+      buildNumber: 96,
+      date: 'يونيو 2026',
+      title: 'ترجمة إدارة الفصول',
+      changes: [
+        'نقل الواجهة الرئيسية لإدارة الفصول إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'ترجمة رسائل تحميل وحذف الفصول وزر إضافة فصل وإعادة المحاولة.',
+        'ترجمة عنوان الشاشة وبطاقات المؤشرات وشريط البحث وفلاتر الفصول.',
+        'ترجمة حالات عدم وجود الفصول وإضافة اختبار حماية لمفاتيح الشاشة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.95',
       buildNumber: 95,

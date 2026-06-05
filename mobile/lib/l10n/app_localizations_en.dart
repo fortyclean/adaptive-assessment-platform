@@ -3103,4 +3103,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get classroom => 'Classroom';
+
+  @override
+  String get classroomManagementLoadFailed =>
+      'Could not load classrooms. Check your connection and try again.';
+
+  @override
+  String get deleteClassroom => 'Delete classroom';
+
+  @override
+  String deleteClassroomQuestion(Object name) {
+    return 'Do you want to delete class \"$name\"?';
+  }
+
+  @override
+  String get classroomDeleteFailed =>
+      'Could not delete the classroom. Please try again.';
+
+  @override
+  String classroomDeleted(Object name) {
+    return 'Class \"$name\" deleted';
+  }
+
+  @override
+  String get classroomManagementAdminSubtitle =>
+      'Manage classrooms and assign teachers and students';
+
+  @override
+  String get totalClassrooms => 'Total classrooms';
+
+  @override
+  String get classroomManagementSearchHint =>
+      'Search by class name, grade, or teacher';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get withoutTeacher => 'Without teacher';
+
+  @override
+  String get withStudents => 'Has students';
+
+  @override
+  String get withoutStudents => 'Without students';
+
+  @override
+  String get noMatchingClassrooms => 'No matching classrooms';
+
+  @override
+  String get clearSearchAndFilters => 'Clear search and filters';
+
+  @override
+  String get noClassrooms => 'No classrooms';
+
+  @override
+  String get addClassToStart => 'Add a new class to start';
 }

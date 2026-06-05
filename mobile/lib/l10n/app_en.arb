@@ -1296,5 +1296,31 @@
       "name": {}
     }
   },
-  "classroom": "Classroom"
+  "classroom": "Classroom",
+  "classroomManagementLoadFailed": "Could not load classrooms. Check your connection and try again.",
+  "deleteClassroom": "Delete classroom",
+  "deleteClassroomQuestion": "Do you want to delete class \"{name}\"?",
+  "@deleteClassroomQuestion": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "classroomDeleteFailed": "Could not delete the classroom. Please try again.",
+  "classroomDeleted": "Class \"{name}\" deleted",
+  "@classroomDeleted": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "classroomManagementAdminSubtitle": "Manage classrooms and assign teachers and students",
+  "totalClassrooms": "Total classrooms",
+  "classroomManagementSearchHint": "Search by class name, grade, or teacher",
+  "clearSearch": "Clear search",
+  "withoutTeacher": "Without teacher",
+  "withStudents": "Has students",
+  "withoutStudents": "Without students",
+  "noMatchingClassrooms": "No matching classrooms",
+  "clearSearchAndFilters": "Clear search and filters",
+  "noClassrooms": "No classrooms",
+  "addClassToStart": "Add a new class to start"
 }

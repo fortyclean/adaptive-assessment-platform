@@ -901,6 +901,37 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads classroom management localization labels and messages',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.classroomManagementTitle,
+            l10n.classroomManagementAdminSubtitle,
+            l10n.classroomManagementSearchHint,
+            l10n.deleteClassroomQuestion('Grade 10-A'),
+            l10n.classroomDeleted('Grade 10-A'),
+            l10n.noMatchingClassrooms,
+            l10n.addClass,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Classroom management / Manage classrooms and assign teachers and students / '
+        'Search by class name, grade, or teacher / '
+        'Do you want to delete class "Grade 10-A"? / '
+        'Class "Grade 10-A" deleted / No matching classrooms / Add class',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

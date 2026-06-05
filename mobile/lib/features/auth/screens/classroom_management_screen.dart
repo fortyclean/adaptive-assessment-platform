@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -394,7 +395,7 @@ class _ClassroomManagementScreenState
           _classrooms = [];
           _isLoading = false;
           _errorMessage =
-              'تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.';
+              AppLocalizations.of(context).classroomManagementLoadFailed;
         });
         return;
       }
@@ -414,16 +415,17 @@ class _ClassroomManagementScreenState
         child: AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text('حذف الفصل'),
-          content: Text('هل تريد حذف فصل "$name"؟'),
+          title: Text(AppLocalizations.of(context).deleteClassroom),
+          content:
+              Text(AppLocalizations.of(context).deleteClassroomQuestion(name)),
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('إلغاء')),
+                child: Text(AppLocalizations.of(context).cancel)),
             TextButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('حذف',
-                    style: TextStyle(color: AppColors.error))),
+                child: Text(AppLocalizations.of(context).delete,
+                    style: const TextStyle(color: AppColors.error))),
           ],
         ),
       ),
@@ -437,8 +439,9 @@ class _ClassroomManagementScreenState
         if (!AppConstants.useMockData && !_isDemoSession) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('تعذر حذف الفصل. يرجى المحاولة مرة أخرى'),
+              SnackBar(
+                content:
+                    Text(AppLocalizations.of(context).classroomDeleteFailed),
                 behavior: SnackBarBehavior.floating,
                 backgroundColor: AppColors.error,
               ),
@@ -453,7 +456,8 @@ class _ClassroomManagementScreenState
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('تم حذف فصل "$name"'),
+              content:
+                  Text(AppLocalizations.of(context).classroomDeleted(name)),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppColors.error,
             ),
@@ -493,8 +497,8 @@ class _ClassroomManagementScreenState
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
             icon: const Icon(Icons.add_rounded),
-            label: const Text('إضافة فصل',
-                style: TextStyle(
+            label: Text(AppLocalizations.of(context).addClass,
+                style: const TextStyle(
                     fontFamily: 'Almarai', fontWeight: FontWeight.w600)),
           ),
           body: _isLoading
@@ -521,7 +525,7 @@ class _ClassroomManagementScreenState
                             ElevatedButton.icon(
                               onPressed: _loadClassrooms,
                               icon: const Icon(Icons.refresh),
-                              label: const Text('إعادة المحاولة'),
+                              label: Text(AppLocalizations.of(context).retry),
                             ),
                           ],
                         ),
@@ -590,11 +594,11 @@ class _ClassroomManagementScreenState
                 icon: Icon(Icons.arrow_forward_rounded,
                     color: Theme.of(context).colorScheme.onSurfaceVariant),
                 onPressed: () => context.pop(),
-                tooltip: 'رجوع',
+                tooltip: AppLocalizations.of(context).back,
               )
             : null,
         title: Text(
-          'التقييم الذكي',
+          AppLocalizations.of(context).smartAssessment,
           style: TextStyle(
             fontFamily: 'Almarai',
             fontSize: 20,
@@ -609,7 +613,7 @@ class _ClassroomManagementScreenState
             icon: Icon(Icons.notifications_outlined,
                 color: Theme.of(context).colorScheme.onSurfaceVariant),
             onPressed: () => context.push(AppRoutes.notificationCenter),
-            tooltip: 'الإشعارات',
+            tooltip: AppLocalizations.of(context).notifications,
           ),
           const SizedBox(width: 4),
           const Padding(
@@ -627,13 +631,13 @@ class _ClassroomManagementScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'إدارة الفصول الدراسية',
+            AppLocalizations.of(context).classroomManagementTitle,
             style:
                 AppTextStyles.displayMedium.copyWith(color: AppColors.primary),
           ),
           const SizedBox(height: 4),
           Text(
-            'إدارة الفصول وتعيين المعلمين والطلاب',
+            AppLocalizations.of(context).classroomManagementAdminSubtitle,
             style: AppTextStyles.bodyMedium
                 .copyWith(color: AppColors.onSurfaceVariant),
           ),
@@ -650,7 +654,7 @@ class _ClassroomManagementScreenState
       children: [
         Expanded(
           child: _KpiCard(
-            label: 'إجمالي الفصول',
+            label: AppLocalizations.of(context).totalClassrooms,
             value: '${_classrooms.length}',
             icon: Icons.class_rounded,
             color: AppColors.primary,
@@ -659,7 +663,7 @@ class _ClassroomManagementScreenState
         const SizedBox(width: 8),
         Expanded(
           child: _KpiCard(
-            label: 'إجمالي الطلاب',
+            label: AppLocalizations.of(context).totalStudents,
             value: '$totalStudents',
             icon: Icons.people_rounded,
             color: AppColors.success,
@@ -668,7 +672,7 @@ class _ClassroomManagementScreenState
         const SizedBox(width: 8),
         Expanded(
           child: _KpiCard(
-            label: 'اختبارات نشطة',
+            label: AppLocalizations.of(context).activeAssessments,
             value: '$totalActive',
             icon: Icons.assignment_rounded,
             color: AppColors.warning,
@@ -687,12 +691,13 @@ class _ClassroomManagementScreenState
               controller: _searchController,
               textDirection: TextDirection.rtl,
               decoration: InputDecoration(
-                hintText: 'ابحث باسم الفصل أو المرحلة أو المعلم',
+                hintText:
+                    AppLocalizations.of(context).classroomManagementSearchHint,
                 prefixIcon: const Icon(Icons.search_rounded),
                 suffixIcon: _searchQuery.isEmpty
                     ? null
                     : IconButton(
-                        tooltip: 'مسح البحث',
+                        tooltip: AppLocalizations.of(context).clearSearch,
                         icon: const Icon(Icons.clear_rounded),
                         onPressed: () {
                           _searchController.clear();
@@ -712,27 +717,27 @@ class _ClassroomManagementScreenState
               child: Row(
                 children: [
                   _FilterChipButton(
-                    label: 'كل الفصول',
+                    label: AppLocalizations.of(context).allClassrooms,
                     selected: _classroomFilter == 'all',
                     onTap: () => setState(() => _classroomFilter = 'all'),
                   ),
                   const SizedBox(width: 8),
                   _FilterChipButton(
-                    label: 'بدون معلم',
+                    label: AppLocalizations.of(context).withoutTeacher,
                     selected: _classroomFilter == 'without_teacher',
                     onTap: () =>
                         setState(() => _classroomFilter = 'without_teacher'),
                   ),
                   const SizedBox(width: 8),
                   _FilterChipButton(
-                    label: 'بها طلاب',
+                    label: AppLocalizations.of(context).withStudents,
                     selected: _classroomFilter == 'with_students',
                     onTap: () =>
                         setState(() => _classroomFilter = 'with_students'),
                   ),
                   const SizedBox(width: 8),
                   _FilterChipButton(
-                    label: 'بدون طلاب',
+                    label: AppLocalizations.of(context).withoutStudents,
                     selected: _classroomFilter == 'without_students',
                     onTap: () =>
                         setState(() => _classroomFilter = 'without_students'),
@@ -754,7 +759,7 @@ class _ClassroomManagementScreenState
                   color: AppColors.onSurfaceVariant, size: 34),
               const SizedBox(height: 8),
               Text(
-                'لا توجد فصول مطابقة',
+                AppLocalizations.of(context).noMatchingClassrooms,
                 style: AppTextStyles.titleMedium
                     .copyWith(color: AppColors.onSurfaceVariant),
               ),
@@ -768,7 +773,7 @@ class _ClassroomManagementScreenState
                   });
                 },
                 icon: const Icon(Icons.restart_alt_rounded),
-                label: const Text('مسح البحث والفلاتر'),
+                label: Text(AppLocalizations.of(context).clearSearchAndFilters),
               ),
             ],
           ),
@@ -790,18 +795,18 @@ class _ClassroomManagementScreenState
                   size: 40, color: AppColors.outlineVariant),
             ),
             const SizedBox(height: 16),
-            Text('لا توجد فصول دراسية',
+            Text(AppLocalizations.of(context).noClassrooms,
                 style: AppTextStyles.titleMedium
                     .copyWith(color: AppColors.onSurfaceVariant)),
             const SizedBox(height: 8),
-            Text('أضف فصلاً جديداً للبدء',
+            Text(AppLocalizations.of(context).addClassToStart,
                 style: AppTextStyles.bodyMedium
                     .copyWith(color: AppColors.outlineVariant)),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: _showCreateDialog,
               icon: const Icon(Icons.add_rounded),
-              label: const Text('إضافة فصل'),
+              label: Text(AppLocalizations.of(context).addClass),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,

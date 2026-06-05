@@ -5692,6 +5692,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'فصل دراسي'**
   String get classroom;
+
+  /// No description provided for @classroomManagementLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get classroomManagementLoadFailed;
+
+  /// No description provided for @deleteClassroom.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الفصل'**
+  String get deleteClassroom;
+
+  /// No description provided for @deleteClassroomQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف فصل \"{name}\"؟'**
+  String deleteClassroomQuestion(Object name);
+
+  /// No description provided for @classroomDeleteFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حذف الفصل. يرجى المحاولة مرة أخرى'**
+  String get classroomDeleteFailed;
+
+  /// No description provided for @classroomDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف فصل \"{name}\"'**
+  String classroomDeleted(Object name);
+
+  /// No description provided for @classroomManagementAdminSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الفصول وتعيين المعلمين والطلاب'**
+  String get classroomManagementAdminSubtitle;
+
+  /// No description provided for @totalClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الفصول'**
+  String get totalClassrooms;
+
+  /// No description provided for @classroomManagementSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم الفصل أو المرحلة أو المعلم'**
+  String get classroomManagementSearchHint;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح البحث'**
+  String get clearSearch;
+
+  /// No description provided for @withoutTeacher.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون معلم'**
+  String get withoutTeacher;
+
+  /// No description provided for @withStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'بها طلاب'**
+  String get withStudents;
+
+  /// No description provided for @withoutStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون طلاب'**
+  String get withoutStudents;
+
+  /// No description provided for @noMatchingClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فصول مطابقة'**
+  String get noMatchingClassrooms;
+
+  /// No description provided for @clearSearchAndFilters.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح البحث والفلاتر'**
+  String get clearSearchAndFilters;
+
+  /// No description provided for @noClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فصول دراسية'**
+  String get noClassrooms;
+
+  /// No description provided for @addClassToStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف فصلاً جديداً للبدء'**
+  String get addClassToStart;
 }
 
 class _AppLocalizationsDelegate

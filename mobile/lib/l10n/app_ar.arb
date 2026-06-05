@@ -1296,5 +1296,31 @@
       "name": {}
     }
   },
-  "classroom": "فصل دراسي"
+  "classroom": "فصل دراسي",
+  "classroomManagementLoadFailed": "تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.",
+  "deleteClassroom": "حذف الفصل",
+  "deleteClassroomQuestion": "هل تريد حذف فصل \"{name}\"؟",
+  "@deleteClassroomQuestion": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "classroomDeleteFailed": "تعذر حذف الفصل. يرجى المحاولة مرة أخرى",
+  "classroomDeleted": "تم حذف فصل \"{name}\"",
+  "@classroomDeleted": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "classroomManagementAdminSubtitle": "إدارة الفصول وتعيين المعلمين والطلاب",
+  "totalClassrooms": "إجمالي الفصول",
+  "classroomManagementSearchHint": "ابحث باسم الفصل أو المرحلة أو المعلم",
+  "clearSearch": "مسح البحث",
+  "withoutTeacher": "بدون معلم",
+  "withStudents": "بها طلاب",
+  "withoutStudents": "بدون طلاب",
+  "noMatchingClassrooms": "لا توجد فصول مطابقة",
+  "clearSearchAndFilters": "مسح البحث والفلاتر",
+  "noClassrooms": "لا توجد فصول دراسية",
+  "addClassToStart": "أضف فصلاً جديداً للبدء"
 }
