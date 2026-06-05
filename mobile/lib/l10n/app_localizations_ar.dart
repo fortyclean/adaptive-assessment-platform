@@ -3381,4 +3381,82 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get system => 'النظام';
+
+  @override
+  String get smartCoaching => 'التدريب الذكي';
+
+  @override
+  String get performanceAlertDemoStudentName => 'أحمد محمد العتيبي';
+
+  @override
+  String get performanceAlertDemoClassName => 'الصف العاشر - ب';
+
+  @override
+  String get performanceAlertDemoSubject => 'مادة الرياضيات';
+
+  @override
+  String get currentAverage => 'المعدل الحالي';
+
+  @override
+  String get attendanceRate => 'نسبة الحضور';
+
+  @override
+  String get sendMessageToStudent => 'إرسال رسالة للطالب';
+
+  @override
+  String get writeMessageHere => 'اكتب رسالتك هنا...';
+
+  @override
+  String get messageSentToStudent => 'تم إرسال الرسالة للطالب';
+
+  @override
+  String get send => 'إرسال';
+
+  @override
+  String get scheduleReview => 'جدولة مراجعة';
+
+  @override
+  String get reviewScheduledNextWeek =>
+      'سيتم جدولة مراجعة مع الطالب خلال الأسبوع القادم.';
+
+  @override
+  String get reviewScheduled => 'تم جدولة المراجعة بنجاح';
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String get openingFullReport => 'جاري فتح التقرير الكامل...';
+
+  @override
+  String get performanceDropAlertTitle => 'تنبيه: تراجع ملحوظ في الأداء';
+
+  @override
+  String get performanceDropAlertSubtitle =>
+      'تم الكشف عن انخفاض مفاجئ يتطلب تدخلاً تربوياً';
+
+  @override
+  String get mainReason => 'السبب الرئيسي';
+
+  @override
+  String performanceDropReason(Object drop) {
+    return 'انخفاض بنسبة $drop% في درجات اختبارات الوحدة الثانية (الجبر المتقدم) مقارنة بمتوسط درجات الطالب في الفصل الدراسي الأول.';
+  }
+
+  @override
+  String get academicAchievementPath => 'مسار التحصيل الأكاديمي';
+
+  @override
+  String get now => 'الآن';
+
+  @override
+  String weekNumber(Object number) {
+    return 'أسبوع $number';
+  }
+
+  @override
+  String get contactStudent => 'تواصل مع الطالب';
+
+  @override
+  String get fullReport => 'التقرير الكامل';
 }

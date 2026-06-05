@@ -6274,6 +6274,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'النظام'**
   String get system;
+
+  /// No description provided for @smartCoaching.
+  ///
+  /// In ar, this message translates to:
+  /// **'التدريب الذكي'**
+  String get smartCoaching;
+
+  /// No description provided for @performanceAlertDemoStudentName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحمد محمد العتيبي'**
+  String get performanceAlertDemoStudentName;
+
+  /// No description provided for @performanceAlertDemoClassName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف العاشر - ب'**
+  String get performanceAlertDemoClassName;
+
+  /// No description provided for @performanceAlertDemoSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'مادة الرياضيات'**
+  String get performanceAlertDemoSubject;
+
+  /// No description provided for @currentAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعدل الحالي'**
+  String get currentAverage;
+
+  /// No description provided for @attendanceRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الحضور'**
+  String get attendanceRate;
+
+  /// No description provided for @sendMessageToStudent.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال رسالة للطالب'**
+  String get sendMessageToStudent;
+
+  /// No description provided for @writeMessageHere.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب رسالتك هنا...'**
+  String get writeMessageHere;
+
+  /// No description provided for @messageSentToStudent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الرسالة للطالب'**
+  String get messageSentToStudent;
+
+  /// No description provided for @send.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال'**
+  String get send;
+
+  /// No description provided for @scheduleReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدولة مراجعة'**
+  String get scheduleReview;
+
+  /// No description provided for @reviewScheduledNextWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم جدولة مراجعة مع الطالب خلال الأسبوع القادم.'**
+  String get reviewScheduledNextWeek;
+
+  /// No description provided for @reviewScheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم جدولة المراجعة بنجاح'**
+  String get reviewScheduled;
+
+  /// No description provided for @confirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
+  String get confirm;
+
+  /// No description provided for @openingFullReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري فتح التقرير الكامل...'**
+  String get openingFullReport;
+
+  /// No description provided for @performanceDropAlertTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه: تراجع ملحوظ في الأداء'**
+  String get performanceDropAlertTitle;
+
+  /// No description provided for @performanceDropAlertSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الكشف عن انخفاض مفاجئ يتطلب تدخلاً تربوياً'**
+  String get performanceDropAlertSubtitle;
+
+  /// No description provided for @mainReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبب الرئيسي'**
+  String get mainReason;
+
+  /// No description provided for @performanceDropReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'انخفاض بنسبة {drop}% في درجات اختبارات الوحدة الثانية (الجبر المتقدم) مقارنة بمتوسط درجات الطالب في الفصل الدراسي الأول.'**
+  String performanceDropReason(Object drop);
+
+  /// No description provided for @academicAchievementPath.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسار التحصيل الأكاديمي'**
+  String get academicAchievementPath;
+
+  /// No description provided for @now.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآن'**
+  String get now;
+
+  /// No description provided for @weekNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوع {number}'**
+  String weekNumber(Object number);
+
+  /// No description provided for @contactStudent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواصل مع الطالب'**
+  String get contactStudent;
+
+  /// No description provided for @fullReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقرير الكامل'**
+  String get fullReport;
 }
 
 class _AppLocalizationsDelegate

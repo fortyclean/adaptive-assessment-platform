@@ -1412,5 +1412,39 @@
   "archiveRequestSubmitted": "Archive request submitted for review",
   "submitRequest": "Submit request",
   "unknownAction": "Unknown action",
-  "system": "System"
+  "system": "System",
+  "smartCoaching": "Smart coaching",
+  "performanceAlertDemoStudentName": "Ahmed Mohammed Al-Otaibi",
+  "performanceAlertDemoClassName": "Grade 10 - B",
+  "performanceAlertDemoSubject": "Mathematics",
+  "currentAverage": "Current average",
+  "attendanceRate": "Attendance rate",
+  "sendMessageToStudent": "Send message to student",
+  "writeMessageHere": "Write your message here...",
+  "messageSentToStudent": "Message sent to the student",
+  "send": "Send",
+  "scheduleReview": "Schedule review",
+  "reviewScheduledNextWeek": "A review with the student will be scheduled during the next week.",
+  "reviewScheduled": "Review scheduled successfully",
+  "confirm": "Confirm",
+  "openingFullReport": "Opening the full report...",
+  "performanceDropAlertTitle": "Alert: noticeable performance drop",
+  "performanceDropAlertSubtitle": "A sudden decline was detected and needs educational intervention",
+  "mainReason": "Main reason",
+  "performanceDropReason": "{drop}% drop in unit 2 test scores (advanced algebra) compared with the student's average in the first term.",
+  "@performanceDropReason": {
+    "placeholders": {
+      "drop": {}
+    }
+  },
+  "academicAchievementPath": "Academic achievement path",
+  "now": "Now",
+  "weekNumber": "Week {number}",
+  "@weekNumber": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "contactStudent": "Contact student",
+  "fullReport": "Full report"
 }

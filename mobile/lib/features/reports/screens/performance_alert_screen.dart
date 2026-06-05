@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Performance Alert Screen — Screen 36
 /// Displays a performance alert for a specific student with:
@@ -35,10 +36,11 @@ class PerformanceAlertScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     // Use provided data or fall back to design defaults
-    final name = studentName ?? 'أحمد محمد العتيبي';
-    final classLabel = className ?? 'الصف العاشر - ب';
-    final subjectLabel = subject ?? 'مادة الرياضيات';
+    final name = studentName ?? l10n.performanceAlertDemoStudentName;
+    final classLabel = className ?? l10n.performanceAlertDemoClassName;
+    final subjectLabel = subject ?? l10n.performanceAlertDemoSubject;
     final average = currentAverage ?? 72.0;
     final attendance = attendanceRate ?? 94.0;
     final drop = dropPercentage ?? 15;
@@ -73,14 +75,14 @@ class PerformanceAlertScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: _MetricCard(
-                    label: 'المعدل الحالي',
+                    label: l10n.currentAverage,
                     value: '${average.round()}%',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: _MetricCard(
-                    label: 'نسبة الحضور',
+                    label: l10n.attendanceRate,
                     value: '${attendance.round()}%',
                   ),
                 ),
@@ -115,11 +117,11 @@ class PerformanceAlertScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward, color: Color(0xFF64748B)),
           onPressed: () => context.pop(),
-          tooltip: 'رجوع',
+          tooltip: AppLocalizations.of(context).back,
         ),
-        title: const Text(
-          'التدريب الذكي',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context).smartCoaching,
+          style: const TextStyle(
             fontFamily: 'Almarai',
             fontSize: 20,
             fontWeight: FontWeight.w700,
@@ -132,7 +134,7 @@ class PerformanceAlertScreen extends StatelessWidget {
             icon: const Icon(Icons.notifications_outlined,
                 color: Color(0xFF64748B)),
             onPressed: () => context.push('/teacher/notifications'),
-            tooltip: 'الإشعارات',
+            tooltip: AppLocalizations.of(context).notifications,
           ),
           const SizedBox(width: 4),
           Padding(
@@ -184,15 +186,16 @@ class PerformanceAlertScreen extends StatelessWidget {
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(2)))),
             const SizedBox(height: 16),
-            const Text('إرسال رسالة للطالب',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            Text(AppLocalizations.of(context).sendMessageToStudent,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
             TextField(
               controller: msgController,
               maxLines: 3,
               textDirection: TextDirection.rtl,
               decoration: InputDecoration(
-                hintText: 'اكتب رسالتك هنا...',
+                hintText: AppLocalizations.of(context).writeMessageHere,
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
@@ -202,10 +205,11 @@ class PerformanceAlertScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('تم إرسال الرسالة للطالب'),
+                  SnackBar(
+                      content: Text(
+                          AppLocalizations.of(context).messageSentToStudent),
                       behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFF2E7D32)),
+                      backgroundColor: const Color(0xFF2E7D32)),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -214,8 +218,9 @@ class PerformanceAlertScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8))),
-              child: const Text('إرسال',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              child: Text(AppLocalizations.of(context).send,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -228,33 +233,35 @@ class PerformanceAlertScreen extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('جدولة مراجعة'),
-        content: const Column(
+        title: Text(AppLocalizations.of(context).scheduleReview),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.event_outlined, size: 48, color: Color(0xFF1E40AF)),
-            SizedBox(height: 12),
-            Text('سيتم جدولة مراجعة مع الطالب خلال الأسبوع القادم.',
+            const Icon(Icons.event_outlined,
+                size: 48, color: Color(0xFF1E40AF)),
+            const SizedBox(height: 12),
+            Text(AppLocalizations.of(context).reviewScheduledNextWeek,
                 textAlign: TextAlign.center),
           ],
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text('إلغاء')),
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(AppLocalizations.of(context).cancel)),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('تم جدولة المراجعة بنجاح'),
+                SnackBar(
+                    content: Text(AppLocalizations.of(context).reviewScheduled),
                     behavior: SnackBarBehavior.floating,
-                    backgroundColor: Color(0xFF2E7D32)),
+                    backgroundColor: const Color(0xFF2E7D32)),
               );
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1E40AF),
                 foregroundColor: Colors.white),
-            child: const Text('تأكيد'),
+            child: Text(AppLocalizations.of(context).confirm),
           ),
         ],
       ),
@@ -263,7 +270,7 @@ class PerformanceAlertScreen extends StatelessWidget {
 
   void _onFullReport(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('جاري فتح التقرير الكامل...')),
+      SnackBar(content: Text(AppLocalizations.of(context).openingFullReport)),
     );
   }
 }
@@ -323,14 +330,16 @@ class _AlertHeaderCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'تنبيه: تراجع ملحوظ في الأداء',
+                              AppLocalizations.of(context)
+                                  .performanceDropAlertTitle,
                               style: AppTextStyles.titleLarge.copyWith(
                                 color: AppColors.onSurface,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'تم الكشف عن انخفاض مفاجئ يتطلب تدخلًا تربويًا',
+                              AppLocalizations.of(context)
+                                  .performanceDropAlertSubtitle,
                               style: AppTextStyles.labelSmall.copyWith(
                                 color: AppColors.outline,
                               ),
@@ -483,7 +492,7 @@ class _ReasonDetailCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'السبب الرئيسي',
+                  AppLocalizations.of(context).mainReason,
                   style: AppTextStyles.labelLarge.copyWith(
                     color: AppColors.error,
                     fontWeight: FontWeight.w700,
@@ -510,7 +519,7 @@ class _ReasonDetailCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'انخفاض بنسبة $drop% في درجات اختبارات الوحدة الثانية (الجبر المتقدم) مقارنة بمتوسط درجات الطالب في الفصل الدراسي الأول.',
+              AppLocalizations.of(context).performanceDropReason(drop),
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.onSurface,
               ),
@@ -578,8 +587,8 @@ class _MasteryChartCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'مسار التحصيل الأكاديمي',
+            Text(
+              AppLocalizations.of(context).academicAchievementPath,
               style: AppTextStyles.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -618,13 +627,13 @@ class _WeeklyBarChart extends StatelessWidget {
               alignment: Alignment.topCenter,
               clipBehavior: Clip.none,
               children: [
-                // "الآن" label above the last bar
+                // Current label above the last bar.
                 if (isLast)
-                  const Positioned(
+                  Positioned(
                     top: -24,
                     child: Text(
-                      'الآن',
-                      style: TextStyle(
+                      AppLocalizations.of(context).now,
+                      style: const TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
@@ -665,7 +674,7 @@ class _WeeklyLabels extends StatelessWidget {
         children: List.generate(count, (i) {
           final isLast = i == count - 1;
           return Text(
-            'أسبوع ${i + 1}',
+            AppLocalizations.of(context).weekNumber(i + 1),
             style: AppTextStyles.labelSmall.copyWith(
               color: isLast ? AppColors.primary : AppColors.outline,
               fontWeight: isLast ? FontWeight.w700 : FontWeight.w500,
@@ -697,7 +706,7 @@ class _ActionButtons extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: onContact,
               icon: const Icon(Icons.chat_outlined, size: 20),
-              label: const Text('تواصل مع الطالب'),
+              label: Text(AppLocalizations.of(context).contactStudent),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -720,7 +729,7 @@ class _ActionButtons extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: onSchedule,
                   icon: const Icon(Icons.event_outlined, size: 20),
-                  label: const Text('جدولة مراجعة'),
+                  label: Text(AppLocalizations.of(context).scheduleReview),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     side: const BorderSide(
@@ -742,7 +751,7 @@ class _ActionButtons extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: onFullReport,
                   icon: const Icon(Icons.analytics_outlined, size: 20),
-                  label: const Text('التقرير الكامل'),
+                  label: Text(AppLocalizations.of(context).fullReport),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.surfaceContainerHigh,
                     foregroundColor: AppColors.onSurface,

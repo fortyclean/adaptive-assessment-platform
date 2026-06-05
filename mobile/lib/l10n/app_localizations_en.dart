@@ -3425,4 +3425,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get system => 'System';
+
+  @override
+  String get smartCoaching => 'Smart coaching';
+
+  @override
+  String get performanceAlertDemoStudentName => 'Ahmed Mohammed Al-Otaibi';
+
+  @override
+  String get performanceAlertDemoClassName => 'Grade 10 - B';
+
+  @override
+  String get performanceAlertDemoSubject => 'Mathematics';
+
+  @override
+  String get currentAverage => 'Current average';
+
+  @override
+  String get attendanceRate => 'Attendance rate';
+
+  @override
+  String get sendMessageToStudent => 'Send message to student';
+
+  @override
+  String get writeMessageHere => 'Write your message here...';
+
+  @override
+  String get messageSentToStudent => 'Message sent to the student';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get scheduleReview => 'Schedule review';
+
+  @override
+  String get reviewScheduledNextWeek =>
+      'A review with the student will be scheduled during the next week.';
+
+  @override
+  String get reviewScheduled => 'Review scheduled successfully';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get openingFullReport => 'Opening the full report...';
+
+  @override
+  String get performanceDropAlertTitle => 'Alert: noticeable performance drop';
+
+  @override
+  String get performanceDropAlertSubtitle =>
+      'A sudden decline was detected and needs educational intervention';
+
+  @override
+  String get mainReason => 'Main reason';
+
+  @override
+  String performanceDropReason(Object drop) {
+    return '$drop% drop in unit 2 test scores (advanced algebra) compared with the student\'s average in the first term.';
+  }
+
+  @override
+  String get academicAchievementPath => 'Academic achievement path';
+
+  @override
+  String get now => 'Now';
+
+  @override
+  String weekNumber(Object number) {
+    return 'Week $number';
+  }
+
+  @override
+  String get contactStudent => 'Contact student';
+
+  @override
+  String get fullReport => 'Full report';
 }

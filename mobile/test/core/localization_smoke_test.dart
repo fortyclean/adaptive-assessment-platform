@@ -964,6 +964,38 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads performance alert localization labels and messages',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.smartCoaching,
+            l10n.performanceDropAlertTitle,
+            l10n.performanceDropReason(15),
+            l10n.currentAverage,
+            l10n.attendanceRate,
+            l10n.sendMessageToStudent,
+            l10n.weekNumber(4),
+            l10n.fullReport,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Smart coaching / Alert: noticeable performance drop / '
+        '15% drop in unit 2 test scores (advanced algebra) compared with '
+        'the student\'s average in the first term. / Current average / '
+        'Attendance rate / Send message to student / Week 4 / Full report',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {
