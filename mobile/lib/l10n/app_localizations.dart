@@ -6617,6 +6617,426 @@ abstract class AppLocalizations {
   /// **'جاري فتح التقرير الكامل...'**
   String get openingFullReport;
 
+  /// No description provided for @studentProfileFallbackName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطالب'**
+  String get studentProfileFallbackName;
+
+  /// No description provided for @exportStudentReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير التقرير'**
+  String get exportStudentReport;
+
+  /// No description provided for @exportingStudentReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تصدير تقرير الطالب...'**
+  String get exportingStudentReport;
+
+  /// No description provided for @scoreLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدرجة'**
+  String get scoreLabel;
+
+  /// No description provided for @minutesUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقيقة'**
+  String get minutesUnit;
+
+  /// No description provided for @completedStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get completedStatus;
+
+  /// No description provided for @timedOutStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتهي الوقت'**
+  String get timedOutStatus;
+
+  /// No description provided for @studentInitialFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'ط'**
+  String get studentInitialFallback;
+
+  /// No description provided for @skillsTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'المهارات'**
+  String get skillsTab;
+
+  /// No description provided for @performanceTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأداء'**
+  String get performanceTab;
+
+  /// No description provided for @activityTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط'**
+  String get activityTab;
+
+  /// No description provided for @skillMapTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خريطة المهارات'**
+  String get skillMapTitle;
+
+  /// No description provided for @skillMapSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الإتقان لكل مهارة رئيسية'**
+  String get skillMapSubtitle;
+
+  /// No description provided for @skillBreakdownTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفصيل المهارات'**
+  String get skillBreakdownTitle;
+
+  /// No description provided for @dayNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم {number}'**
+  String dayNumber(Object number);
+
+  /// No description provided for @weeklyAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتوسط الأسبوعي'**
+  String get weeklyAverage;
+
+  /// No description provided for @bestPerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفضل أداء'**
+  String get bestPerformance;
+
+  /// No description provided for @weeklyPerformanceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأداء الأسبوعي'**
+  String get weeklyPerformanceTitle;
+
+  /// No description provided for @lastSevenDaysScores.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجات آخر 7 أيام'**
+  String get lastSevenDaysScores;
+
+  /// No description provided for @recentActivityLog.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل النشاط الأخير'**
+  String get recentActivityLog;
+
+  /// No description provided for @recentActivitySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر الأنشطة والمحاولات'**
+  String get recentActivitySubtitle;
+
+  /// No description provided for @strengthLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'قوة'**
+  String get strengthLabel;
+
+  /// No description provided for @weaknessLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضعف'**
+  String get weaknessLabel;
+
+  /// No description provided for @answerReviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة الإجابات'**
+  String get answerReviewTitle;
+
+  /// No description provided for @questionFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'سؤال'**
+  String get questionFallback;
+
+  /// No description provided for @correctStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'صحيح'**
+  String get correctStatus;
+
+  /// No description provided for @incorrectStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'خاطئ'**
+  String get incorrectStatus;
+
+  /// No description provided for @yourAnswerValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجابتك: {answer}'**
+  String yourAnswerValue(Object answer);
+
+  /// No description provided for @correctAnswerValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجابة الصحيحة: {answer}'**
+  String correctAnswerValue(Object answer);
+
+  /// No description provided for @skillUnderstanding.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفهم'**
+  String get skillUnderstanding;
+
+  /// No description provided for @skillAnalysisName.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحليل'**
+  String get skillAnalysisName;
+
+  /// No description provided for @skillApplication.
+  ///
+  /// In ar, this message translates to:
+  /// **'التطبيق'**
+  String get skillApplication;
+
+  /// No description provided for @skillEvaluation.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم'**
+  String get skillEvaluation;
+
+  /// No description provided for @skillSynthesis.
+  ///
+  /// In ar, this message translates to:
+  /// **'التركيب'**
+  String get skillSynthesis;
+
+  /// No description provided for @skillRecall.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكر'**
+  String get skillRecall;
+
+  /// No description provided for @weekdaySunday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحد'**
+  String get weekdaySunday;
+
+  /// No description provided for @weekdayMonday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اثنين'**
+  String get weekdayMonday;
+
+  /// No description provided for @weekdayTuesday.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثلاثاء'**
+  String get weekdayTuesday;
+
+  /// No description provided for @weekdayWednesday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أربعاء'**
+  String get weekdayWednesday;
+
+  /// No description provided for @weekdayThursday.
+  ///
+  /// In ar, this message translates to:
+  /// **'خميس'**
+  String get weekdayThursday;
+
+  /// No description provided for @weekdayFriday.
+  ///
+  /// In ar, this message translates to:
+  /// **'جمعة'**
+  String get weekdayFriday;
+
+  /// No description provided for @weekdaySaturday.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبت'**
+  String get weekdaySaturday;
+
+  /// No description provided for @activityCompletedMathAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل اختبار الرياضيات'**
+  String get activityCompletedMathAssessment;
+
+  /// No description provided for @activityMathScoreUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجة: 88% — وحدة 3'**
+  String get activityMathScoreUnit;
+
+  /// No description provided for @activityTwoHoursAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ ساعتين'**
+  String get activityTwoHoursAgo;
+
+  /// No description provided for @activityPlatformLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل دخول للمنصة'**
+  String get activityPlatformLogin;
+
+  /// No description provided for @activityActiveSession45.
+  ///
+  /// In ar, this message translates to:
+  /// **'جلسة نشطة لمدة 45 دقيقة'**
+  String get activityActiveSession45;
+
+  /// No description provided for @activityThreeHoursAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ 3 ساعات'**
+  String get activityThreeHoursAgo;
+
+  /// No description provided for @activityStartedScienceAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدأ اختبار العلوم'**
+  String get activityStartedScienceAssessment;
+
+  /// No description provided for @activityNotCompletedTimedOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يكتمل — انتهى الوقت'**
+  String get activityNotCompletedTimedOut;
+
+  /// No description provided for @activityYesterday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمس'**
+  String get activityYesterday;
+
+  /// No description provided for @activityEarnedExcellentBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصل على وسام \"متميز\"'**
+  String get activityEarnedExcellentBadge;
+
+  /// No description provided for @activityFirstStudent90.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول طالب يحقق 90%+ في الوحدة'**
+  String get activityFirstStudent90;
+
+  /// No description provided for @activityTwoDaysAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ يومين'**
+  String get activityTwoDaysAgo;
+
+  /// No description provided for @activityCompletedArabicAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل اختبار اللغة العربية'**
+  String get activityCompletedArabicAssessment;
+
+  /// No description provided for @activityArabicScoreUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجة: 76% — وحدة 2'**
+  String get activityArabicScoreUnit;
+
+  /// No description provided for @activityThreeDaysAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ 3 أيام'**
+  String get activityThreeDaysAgo;
+
+  /// No description provided for @studentFilesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة ملفات الطلاب'**
+  String get studentFilesTitle;
+
+  /// No description provided for @studentFilesClassSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الثالث الثانوي - علوم الحاسب'**
+  String get studentFilesClassSubtitle;
+
+  /// No description provided for @sortByName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get sortByName;
+
+  /// No description provided for @sortByPerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأداء'**
+  String get sortByPerformance;
+
+  /// No description provided for @selectedSuffix.
+  ///
+  /// In ar, this message translates to:
+  /// **'✓'**
+  String get selectedSuffix;
+
+  /// No description provided for @studentFileSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث عن اسم الطالب أو الرقم التعريفي...'**
+  String get studentFileSearchHint;
+
+  /// No description provided for @newlyAssigned.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكلفون حديثاً'**
+  String get newlyAssigned;
+
+  /// No description provided for @topStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلاب المتفوقين'**
+  String get topStudents;
+
+  /// No description provided for @fileNumberLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الملف: {fileNumber}'**
+  String fileNumberLabel(Object fileNumber);
+
+  /// No description provided for @unknownInitial.
+  ///
+  /// In ar, this message translates to:
+  /// **'؟'**
+  String get unknownInitial;
+
+  /// No description provided for @overallPerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأداء العام'**
+  String get overallPerformance;
+
+  /// No description provided for @viewStudentFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض ملف الطالب: {name}'**
+  String viewStudentFile(Object name);
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض التفاصيل'**
+  String get viewDetails;
+
   /// No description provided for @performanceDropAlertTitle.
   ///
   /// In ar, this message translates to:

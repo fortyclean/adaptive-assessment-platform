@@ -3585,6 +3585,227 @@ class AppLocalizationsAr extends AppLocalizations {
   String get openingFullReport => 'جاري فتح التقرير الكامل...';
 
   @override
+  String get studentProfileFallbackName => 'الطالب';
+
+  @override
+  String get exportStudentReport => 'تصدير التقرير';
+
+  @override
+  String get exportingStudentReport => 'جاري تصدير تقرير الطالب...';
+
+  @override
+  String get scoreLabel => 'الدرجة';
+
+  @override
+  String get minutesUnit => 'دقيقة';
+
+  @override
+  String get completedStatus => 'مكتمل';
+
+  @override
+  String get timedOutStatus => 'منتهي الوقت';
+
+  @override
+  String get studentInitialFallback => 'ط';
+
+  @override
+  String get skillsTab => 'المهارات';
+
+  @override
+  String get performanceTab => 'الأداء';
+
+  @override
+  String get activityTab => 'النشاط';
+
+  @override
+  String get skillMapTitle => 'خريطة المهارات';
+
+  @override
+  String get skillMapSubtitle => 'نسبة الإتقان لكل مهارة رئيسية';
+
+  @override
+  String get skillBreakdownTitle => 'تفصيل المهارات';
+
+  @override
+  String dayNumber(Object number) {
+    return 'يوم $number';
+  }
+
+  @override
+  String get weeklyAverage => 'المتوسط الأسبوعي';
+
+  @override
+  String get bestPerformance => 'أفضل أداء';
+
+  @override
+  String get weeklyPerformanceTitle => 'الأداء الأسبوعي';
+
+  @override
+  String get lastSevenDaysScores => 'درجات آخر 7 أيام';
+
+  @override
+  String get recentActivityLog => 'سجل النشاط الأخير';
+
+  @override
+  String get recentActivitySubtitle => 'آخر الأنشطة والمحاولات';
+
+  @override
+  String get strengthLabel => 'قوة';
+
+  @override
+  String get weaknessLabel => 'ضعف';
+
+  @override
+  String get answerReviewTitle => 'مراجعة الإجابات';
+
+  @override
+  String get questionFallback => 'سؤال';
+
+  @override
+  String get correctStatus => 'صحيح';
+
+  @override
+  String get incorrectStatus => 'خاطئ';
+
+  @override
+  String yourAnswerValue(Object answer) {
+    return 'إجابتك: $answer';
+  }
+
+  @override
+  String correctAnswerValue(Object answer) {
+    return 'الإجابة الصحيحة: $answer';
+  }
+
+  @override
+  String get skillUnderstanding => 'الفهم';
+
+  @override
+  String get skillAnalysisName => 'التحليل';
+
+  @override
+  String get skillApplication => 'التطبيق';
+
+  @override
+  String get skillEvaluation => 'التقييم';
+
+  @override
+  String get skillSynthesis => 'التركيب';
+
+  @override
+  String get skillRecall => 'التذكر';
+
+  @override
+  String get weekdaySunday => 'أحد';
+
+  @override
+  String get weekdayMonday => 'اثنين';
+
+  @override
+  String get weekdayTuesday => 'ثلاثاء';
+
+  @override
+  String get weekdayWednesday => 'أربعاء';
+
+  @override
+  String get weekdayThursday => 'خميس';
+
+  @override
+  String get weekdayFriday => 'جمعة';
+
+  @override
+  String get weekdaySaturday => 'سبت';
+
+  @override
+  String get activityCompletedMathAssessment => 'أكمل اختبار الرياضيات';
+
+  @override
+  String get activityMathScoreUnit => 'درجة: 88% — وحدة 3';
+
+  @override
+  String get activityTwoHoursAgo => 'منذ ساعتين';
+
+  @override
+  String get activityPlatformLogin => 'تسجيل دخول للمنصة';
+
+  @override
+  String get activityActiveSession45 => 'جلسة نشطة لمدة 45 دقيقة';
+
+  @override
+  String get activityThreeHoursAgo => 'منذ 3 ساعات';
+
+  @override
+  String get activityStartedScienceAssessment => 'بدأ اختبار العلوم';
+
+  @override
+  String get activityNotCompletedTimedOut => 'لم يكتمل — انتهى الوقت';
+
+  @override
+  String get activityYesterday => 'أمس';
+
+  @override
+  String get activityEarnedExcellentBadge => 'حصل على وسام \"متميز\"';
+
+  @override
+  String get activityFirstStudent90 => 'أول طالب يحقق 90%+ في الوحدة';
+
+  @override
+  String get activityTwoDaysAgo => 'منذ يومين';
+
+  @override
+  String get activityCompletedArabicAssessment => 'أكمل اختبار اللغة العربية';
+
+  @override
+  String get activityArabicScoreUnit => 'درجة: 76% — وحدة 2';
+
+  @override
+  String get activityThreeDaysAgo => 'منذ 3 أيام';
+
+  @override
+  String get studentFilesTitle => 'إدارة ملفات الطلاب';
+
+  @override
+  String get studentFilesClassSubtitle => 'الصف الثالث الثانوي - علوم الحاسب';
+
+  @override
+  String get sortByName => 'الاسم';
+
+  @override
+  String get sortByPerformance => 'الأداء';
+
+  @override
+  String get selectedSuffix => '✓';
+
+  @override
+  String get studentFileSearchHint =>
+      'البحث عن اسم الطالب أو الرقم التعريفي...';
+
+  @override
+  String get newlyAssigned => 'المكلفون حديثاً';
+
+  @override
+  String get topStudents => 'الطلاب المتفوقين';
+
+  @override
+  String fileNumberLabel(Object fileNumber) {
+    return 'رقم الملف: $fileNumber';
+  }
+
+  @override
+  String get unknownInitial => '؟';
+
+  @override
+  String get overallPerformance => 'الأداء العام';
+
+  @override
+  String viewStudentFile(Object name) {
+    return 'عرض ملف الطالب: $name';
+  }
+
+  @override
+  String get viewDetails => 'عرض التفاصيل';
+
+  @override
   String get performanceDropAlertTitle => 'تنبيه: تراجع ملحوظ في الأداء';
 
   @override

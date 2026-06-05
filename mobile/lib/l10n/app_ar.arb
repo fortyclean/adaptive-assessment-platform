@@ -1529,6 +1529,101 @@
   "reviewScheduled": "تم جدولة المراجعة بنجاح",
   "confirm": "تأكيد",
   "openingFullReport": "جاري فتح التقرير الكامل...",
+  "studentProfileFallbackName": "الطالب",
+  "exportStudentReport": "تصدير التقرير",
+  "exportingStudentReport": "جاري تصدير تقرير الطالب...",
+  "scoreLabel": "الدرجة",
+  "minutesUnit": "دقيقة",
+  "completedStatus": "مكتمل",
+  "timedOutStatus": "منتهي الوقت",
+  "studentInitialFallback": "ط",
+  "skillsTab": "المهارات",
+  "performanceTab": "الأداء",
+  "activityTab": "النشاط",
+  "skillMapTitle": "خريطة المهارات",
+  "skillMapSubtitle": "نسبة الإتقان لكل مهارة رئيسية",
+  "skillBreakdownTitle": "تفصيل المهارات",
+  "dayNumber": "يوم {number}",
+  "@dayNumber": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "weeklyAverage": "المتوسط الأسبوعي",
+  "bestPerformance": "أفضل أداء",
+  "weeklyPerformanceTitle": "الأداء الأسبوعي",
+  "lastSevenDaysScores": "درجات آخر 7 أيام",
+  "recentActivityLog": "سجل النشاط الأخير",
+  "recentActivitySubtitle": "آخر الأنشطة والمحاولات",
+  "strengthLabel": "قوة",
+  "weaknessLabel": "ضعف",
+  "answerReviewTitle": "مراجعة الإجابات",
+  "questionFallback": "سؤال",
+  "correctStatus": "صحيح",
+  "incorrectStatus": "خاطئ",
+  "yourAnswerValue": "إجابتك: {answer}",
+  "@yourAnswerValue": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "correctAnswerValue": "الإجابة الصحيحة: {answer}",
+  "@correctAnswerValue": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "skillUnderstanding": "الفهم",
+  "skillAnalysisName": "التحليل",
+  "skillApplication": "التطبيق",
+  "skillEvaluation": "التقييم",
+  "skillSynthesis": "التركيب",
+  "skillRecall": "التذكر",
+  "weekdaySunday": "أحد",
+  "weekdayMonday": "اثنين",
+  "weekdayTuesday": "ثلاثاء",
+  "weekdayWednesday": "أربعاء",
+  "weekdayThursday": "خميس",
+  "weekdayFriday": "جمعة",
+  "weekdaySaturday": "سبت",
+  "activityCompletedMathAssessment": "أكمل اختبار الرياضيات",
+  "activityMathScoreUnit": "درجة: 88% — وحدة 3",
+  "activityTwoHoursAgo": "منذ ساعتين",
+  "activityPlatformLogin": "تسجيل دخول للمنصة",
+  "activityActiveSession45": "جلسة نشطة لمدة 45 دقيقة",
+  "activityThreeHoursAgo": "منذ 3 ساعات",
+  "activityStartedScienceAssessment": "بدأ اختبار العلوم",
+  "activityNotCompletedTimedOut": "لم يكتمل — انتهى الوقت",
+  "activityYesterday": "أمس",
+  "activityEarnedExcellentBadge": "حصل على وسام \"متميز\"",
+  "activityFirstStudent90": "أول طالب يحقق 90%+ في الوحدة",
+  "activityTwoDaysAgo": "منذ يومين",
+  "activityCompletedArabicAssessment": "أكمل اختبار اللغة العربية",
+  "activityArabicScoreUnit": "درجة: 76% — وحدة 2",
+  "activityThreeDaysAgo": "منذ 3 أيام",
+  "studentFilesTitle": "إدارة ملفات الطلاب",
+  "studentFilesClassSubtitle": "الصف الثالث الثانوي - علوم الحاسب",
+  "sortByName": "الاسم",
+  "sortByPerformance": "الأداء",
+  "selectedSuffix": "✓",
+  "studentFileSearchHint": "البحث عن اسم الطالب أو الرقم التعريفي...",
+  "newlyAssigned": "المكلفون حديثاً",
+  "topStudents": "الطلاب المتفوقين",
+  "fileNumberLabel": "رقم الملف: {fileNumber}",
+  "@fileNumberLabel": {
+    "placeholders": {
+      "fileNumber": {}
+    }
+  },
+  "unknownInitial": "؟",
+  "overallPerformance": "الأداء العام",
+  "viewStudentFile": "عرض ملف الطالب: {name}",
+  "@viewStudentFile": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "viewDetails": "عرض التفاصيل",
   "performanceDropAlertTitle": "تنبيه: تراجع ملحوظ في الأداء",
   "performanceDropAlertSubtitle": "تم الكشف عن انخفاض مفاجئ يتطلب تدخلاً تربوياً",
   "mainReason": "السبب الرئيسي",

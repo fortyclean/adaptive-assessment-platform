@@ -186,8 +186,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       if (!mounted) return;
       setState(() {
         _isLoading = false;
-        _fatalError = _l10nOrNull(context)?.questionLoadFailed ??
-            'تعذر تحميل السؤال من الخادم. يرجى إعادة المحاولة أو الرجوع.';
+        _fatalError = AppLocalizations.of(context).questionLoadFailed;
       });
     }
   }
@@ -265,8 +264,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
       final l10n = _l10nOrNull(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n?.answerSubmitFailed ??
-              'تعذر إرسال الإجابة. تحقق من الاتصال ثم أعد المحاولة.'),
+          content: Text(
+            l10n?.answerSubmitFailed ??
+                AppLocalizations.of(context).answerSubmitFailed,
+          ),
           backgroundColor: AppColors.error,
         ),
       );
@@ -293,8 +294,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
         final l10n = _l10nOrNull(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n?.assessmentSubmitFailed ??
-                'تعذر تسليم الاختبار. يرجى المحاولة مرة أخرى.'),
+            content: Text(
+              l10n?.assessmentSubmitFailed ??
+                  AppLocalizations.of(context).assessmentSubmitFailed,
+            ),
             backgroundColor: AppColors.error,
           ),
         );
@@ -315,16 +318,15 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(_l10nOrNull(ctx)?.confirmExit ?? 'تأكيد الخروج'),
-        content: Text(_l10nOrNull(ctx)?.exitAssessmentPrompt ??
-            'هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
+        title: Text(AppLocalizations.of(ctx).confirmExit),
+        content: Text(AppLocalizations.of(ctx).exitAssessmentPrompt),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: Text(_l10nOrNull(ctx)?.cancel ?? 'إلغاء')),
+              child: Text(AppLocalizations.of(ctx).cancel)),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: Text(_l10nOrNull(ctx)?.exit ?? 'خروج',
+              child: Text(AppLocalizations.of(ctx).exit,
                   style: const TextStyle(color: AppColors.error))),
         ],
       ),
@@ -424,12 +426,12 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
               const SizedBox(height: 16),
               FilledButton(
                 onPressed: _loadNextQuestion,
-                child: Text(_l10nOrNull(context)?.retry ?? 'إعادة المحاولة'),
+                child: Text(AppLocalizations.of(context).retry),
               ),
               const SizedBox(height: 8),
               TextButton(
                 onPressed: () => context.pop(),
-                child: Text(_l10nOrNull(context)?.back ?? 'رجوع'),
+                child: Text(AppLocalizations.of(context).back),
               ),
             ],
           ),
@@ -495,9 +497,10 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                _l10nOrNull(context)?.questionProgress(
-                        _questionNumber, widget.questionCount) ??
-                    'السؤال $_questionNumber من ${widget.questionCount}',
+                AppLocalizations.of(context).questionProgress(
+                  _questionNumber,
+                  widget.questionCount,
+                ),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontWeight: FontWeight.w600,
@@ -579,9 +582,8 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 children: [
                   Text(
                     isLastQuestion
-                        ? _l10nOrNull(context)?.submitAssessment ??
-                            'تسليم الاختبار'
-                        : _l10nOrNull(context)?.next ?? 'التالي',
+                        ? AppLocalizations.of(context).submitAssessment
+                        : AppLocalizations.of(context).next,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: canGoNext
                               ? Colors.white
@@ -639,7 +641,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                     const Icon(Icons.arrow_forward_rounded, size: 18),
                     const SizedBox(width: 6),
                     Text(
-                      _l10nOrNull(context)?.previous ?? 'السابق',
+                      AppLocalizations.of(context).previous,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
@@ -658,8 +660,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
 
   Widget _buildQuestionBody() {
     if (_currentQuestion == null) {
-      return Center(
-          child: Text(_l10nOrNull(context)?.noQuestions ?? 'لا توجد أسئلة'));
+      return Center(child: Text(AppLocalizations.of(context).noQuestions));
     }
 
     final qType =
@@ -737,8 +738,7 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Text(
-              _l10nOrNull(context)?.chooseCorrectAnswer ??
-                  'اختر الإجابة الصحيحة:',
+              AppLocalizations.of(context).chooseCorrectAnswer,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: AppColors.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
@@ -774,13 +774,13 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
                 : [
                     _McqOption(
                       optionKey: 'true',
-                      value: _l10nOrNull(context)?.trueLabel ?? 'صح',
+                      value: AppLocalizations.of(context).trueLabel,
                       isSelected: _selectedAnswer == 'true',
                       onTap: () => _selectAnswer('true'),
                     ),
                     _McqOption(
                       optionKey: 'false',
-                      value: _l10nOrNull(context)?.falseLabel ?? 'خطأ',
+                      value: AppLocalizations.of(context).falseLabel,
                       isSelected: _selectedAnswer == 'false',
                       onTap: () => _selectAnswer('false'),
                     ),
@@ -807,18 +807,18 @@ class _ExamScreenState extends ConsumerState<ExamScreen>
   }
 
   String _questionTypeName(BuildContext context, _QuestionType type) {
-    final l10n = _l10nOrNull(context);
+    final l10n = AppLocalizations.of(context);
     switch (type) {
       case _QuestionType.mcq:
-        return l10n?.questionTypeMcq ?? 'اختيار من متعدد';
+        return l10n.questionTypeMcq;
       case _QuestionType.trueFalse:
-        return l10n?.questionTypeTrueFalse ?? 'صح أو خطأ';
+        return l10n.questionTypeTrueFalse;
       case _QuestionType.fillBlank:
-        return l10n?.questionTypeFillBlank ?? 'ملء الفراغ';
+        return l10n.questionTypeFillBlank;
       case _QuestionType.essay:
-        return l10n?.questionTypeEssay ?? 'مقالي';
+        return l10n.questionTypeEssay;
       case _QuestionType.unknown:
-        return l10n?.questionTypeGeneric ?? 'سؤال';
+        return l10n.questionTypeGeneric;
     }
   }
 }
@@ -987,8 +987,7 @@ class _FillBlankInputState extends State<_FillBlankInput> {
               if (_hasText) widget.onSubmit(widget.controller.text.trim());
             },
             decoration: InputDecoration(
-              hintText:
-                  _l10nOrNull(context)?.writeAnswerHere ?? 'اكتب إجابتك هنا...',
+              hintText: AppLocalizations.of(context).writeAnswerHere,
               hintTextDirection: TextDirection.rtl,
               filled: true,
               fillColor: AppColors.surfaceContainer,
@@ -1034,7 +1033,7 @@ class _FillBlankInputState extends State<_FillBlankInput> {
               ),
             ),
             child: Text(
-              _l10nOrNull(context)?.confirmAnswer ?? 'تأكيد الإجابة',
+              AppLocalizations.of(context).confirmAnswer,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: _hasText ? Colors.white : AppColors.onSurface,
                     fontWeight: FontWeight.w600,
@@ -1103,8 +1102,7 @@ class _EssayInputState extends State<_EssayInput> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    _l10nOrNull(context)?.essayReviewNotice ??
-                        'سيتم مراجعة إجابتك من قِبل المعلم وتحديد الدرجة لاحقاً',
+                    AppLocalizations.of(context).essayReviewNotice,
                     textDirection: TextDirection.rtl,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: AppColors.onSurfaceVariant,
@@ -1125,8 +1123,7 @@ class _EssayInputState extends State<_EssayInput> {
             keyboardType: TextInputType.multiline,
             textInputAction: TextInputAction.newline,
             decoration: InputDecoration(
-              hintText: _l10nOrNull(context)?.writeEssayAnswerHere ??
-                  'اكتب إجابتك المقالية هنا...',
+              hintText: AppLocalizations.of(context).writeEssayAnswerHere,
               hintTextDirection: TextDirection.rtl,
               filled: true,
               fillColor: AppColors.surfaceContainer,
@@ -1173,7 +1170,7 @@ class _EssayInputState extends State<_EssayInput> {
               ),
             ),
             child: Text(
-              _l10nOrNull(context)?.submitAnswer ?? 'تسليم الإجابة',
+              AppLocalizations.of(context).submitAnswer,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: _hasText ? Colors.white : AppColors.onSurface,
                     fontWeight: FontWeight.w600,

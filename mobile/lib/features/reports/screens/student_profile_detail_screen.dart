@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
 class _SkillData {
@@ -59,14 +60,17 @@ class _StudentProfileDetailScreenState
   late TabController _tabController;
 
   // ── Mock / fallback data ──────────────────────────────────────────────────
-  final List<_SkillData> _skills = const [
-    _SkillData(name: 'الفهم', value: 0.85),
-    _SkillData(name: 'التحليل', value: 0.72),
-    _SkillData(name: 'التطبيق', value: 0.90),
-    _SkillData(name: 'التقييم', value: 0.65),
-    _SkillData(name: 'التركيب', value: 0.78),
-    _SkillData(name: 'التذكر', value: 0.88),
-  ];
+  List<_SkillData> get _fallbackSkills {
+    final l10n = AppLocalizations.of(context);
+    return [
+      _SkillData(name: l10n.skillUnderstanding, value: 0.85),
+      _SkillData(name: l10n.skillAnalysisName, value: 0.72),
+      _SkillData(name: l10n.skillApplication, value: 0.90),
+      _SkillData(name: l10n.skillEvaluation, value: 0.65),
+      _SkillData(name: l10n.skillSynthesis, value: 0.78),
+      _SkillData(name: l10n.skillRecall, value: 0.88),
+    ];
+  }
 
   final List<double> _weeklyScores = const [
     0.62,
@@ -78,58 +82,64 @@ class _StudentProfileDetailScreenState
     0.84,
   ];
 
-  final List<String> _weekDays = const [
-    'أحد',
-    'اثنين',
-    'ثلاثاء',
-    'أربعاء',
-    'خميس',
-    'جمعة',
-    'سبت',
-  ];
+  List<String> get _fallbackWeekDays {
+    final l10n = AppLocalizations.of(context);
+    return [
+      l10n.weekdaySunday,
+      l10n.weekdayMonday,
+      l10n.weekdayTuesday,
+      l10n.weekdayWednesday,
+      l10n.weekdayThursday,
+      l10n.weekdayFriday,
+      l10n.weekdaySaturday,
+    ];
+  }
 
-  final List<_ActivityLog> _activityLog = const [
-    _ActivityLog(
-      icon: Icons.assignment_turned_in_outlined,
-      iconColor: AppColors.success,
-      bgColor: Color(0xFFECFDF5),
-      title: 'أكمل اختبار الرياضيات',
-      subtitle: 'درجة: 88% — وحدة 3',
-      time: 'منذ ساعتين',
-    ),
-    _ActivityLog(
-      icon: Icons.login_rounded,
-      iconColor: AppColors.primary,
-      bgColor: Color(0xFFEFF6FF),
-      title: 'تسجيل دخول للمنصة',
-      subtitle: 'جلسة نشطة لمدة 45 دقيقة',
-      time: 'منذ 3 ساعات',
-    ),
-    _ActivityLog(
-      icon: Icons.quiz_outlined,
-      iconColor: AppColors.warning,
-      bgColor: Color(0xFFFEF3C7),
-      title: 'بدأ اختبار العلوم',
-      subtitle: 'لم يكتمل — انتهى الوقت',
-      time: 'أمس',
-    ),
-    _ActivityLog(
-      icon: Icons.emoji_events_outlined,
-      iconColor: Color(0xFFD97706),
-      bgColor: Color(0xFFFEF3C7),
-      title: 'حصل على وسام "متميز"',
-      subtitle: 'أول طالب يحقق 90%+ في الوحدة',
-      time: 'منذ يومين',
-    ),
-    _ActivityLog(
-      icon: Icons.assignment_outlined,
-      iconColor: AppColors.primary,
-      bgColor: Color(0xFFEFF6FF),
-      title: 'أكمل اختبار اللغة العربية',
-      subtitle: 'درجة: 76% — وحدة 2',
-      time: 'منذ 3 أيام',
-    ),
-  ];
+  List<_ActivityLog> get _fallbackActivityLog {
+    final l10n = AppLocalizations.of(context);
+    return [
+      _ActivityLog(
+        icon: Icons.assignment_turned_in_outlined,
+        iconColor: AppColors.success,
+        bgColor: const Color(0xFFECFDF5),
+        title: l10n.activityCompletedMathAssessment,
+        subtitle: l10n.activityMathScoreUnit,
+        time: l10n.activityTwoHoursAgo,
+      ),
+      _ActivityLog(
+        icon: Icons.login_rounded,
+        iconColor: AppColors.primary,
+        bgColor: const Color(0xFFEFF6FF),
+        title: l10n.activityPlatformLogin,
+        subtitle: l10n.activityActiveSession45,
+        time: l10n.activityThreeHoursAgo,
+      ),
+      _ActivityLog(
+        icon: Icons.quiz_outlined,
+        iconColor: AppColors.warning,
+        bgColor: const Color(0xFFFEF3C7),
+        title: l10n.activityStartedScienceAssessment,
+        subtitle: l10n.activityNotCompletedTimedOut,
+        time: l10n.activityYesterday,
+      ),
+      _ActivityLog(
+        icon: Icons.emoji_events_outlined,
+        iconColor: const Color(0xFFD97706),
+        bgColor: const Color(0xFFFEF3C7),
+        title: l10n.activityEarnedExcellentBadge,
+        subtitle: l10n.activityFirstStudent90,
+        time: l10n.activityTwoDaysAgo,
+      ),
+      _ActivityLog(
+        icon: Icons.assignment_outlined,
+        iconColor: AppColors.primary,
+        bgColor: const Color(0xFFEFF6FF),
+        title: l10n.activityCompletedArabicAssessment,
+        subtitle: l10n.activityArabicScoreUnit,
+        time: l10n.activityThreeDaysAgo,
+      ),
+    ];
+  }
 
   @override
   void initState() {
@@ -168,8 +178,10 @@ class _StudentProfileDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final name =
-        _studentData?['fullName'] as String? ?? widget.studentName ?? 'الطالب';
+    final l10n = AppLocalizations.of(context);
+    final name = _studentData?['fullName'] as String? ??
+        widget.studentName ??
+        l10n.studentProfileFallbackName;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -200,43 +212,43 @@ class _StudentProfileDetailScreenState
   SliverAppBar _buildSliverAppBar(String name) {
     final cs = Theme.of(context).colorScheme;
     return SliverAppBar(
-        expandedHeight: 0,
-        floating: true,
-        snap: true,
-        backgroundColor: cs.surface,
-        elevation: 0,
-        scrolledUnderElevation: 1,
-        shadowColor: Colors.black12,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+      expandedHeight: 0,
+      floating: true,
+      snap: true,
+      backgroundColor: cs.surface,
+      elevation: 0,
+      scrolledUnderElevation: 1,
+      shadowColor: Colors.black12,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        color: AppColors.onSurface,
+        onPressed: () => context.pop(),
+      ),
+      title: Text(
+        name,
+        style: const TextStyle(
+          fontFamily: 'Almarai',
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
           color: AppColors.onSurface,
-          onPressed: () => context.pop(),
         ),
-        title: Text(
-          name,
-          style: const TextStyle(
-            fontFamily: 'Almarai',
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: AppColors.onSurface,
-          ),
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.download_rounded),
+          color: AppColors.onSurfaceVariant,
+          onPressed: _exportReport,
+          tooltip: AppLocalizations.of(context).exportStudentReport,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.download_rounded),
-            color: AppColors.onSurfaceVariant,
-            onPressed: _exportReport,
-            tooltip: 'تصدير التقرير',
-          ),
-        ],
-      );
-    }
+      ],
+    );
+  }
 
   void _exportReport() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('جاري تصدير تقرير الطالب...'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(AppLocalizations.of(context).exportingStudentReport),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -282,7 +294,7 @@ class _StudentProfileDetailScreenState
                         ),
                       ),
                       Text(
-                        'الدرجة',
+                        AppLocalizations.of(context).scoreLabel,
                         style: TextStyle(
                           fontFamily: 'Almarai',
                           fontSize: 11,
@@ -313,9 +325,9 @@ class _StudentProfileDetailScreenState
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         if (timeTaken != null) ...[
-                          const Text(
-                            ' دقيقة',
-                            style: TextStyle(
+                          Text(
+                            AppLocalizations.of(context).minutesUnit,
+                            style: const TextStyle(
                               fontFamily: 'Almarai',
                               fontSize: 13,
                               color: AppColors.onSurfaceVariant,
@@ -328,8 +340,8 @@ class _StudentProfileDetailScreenState
                         ],
                         Text(
                           _studentData?['status'] == 'completed'
-                              ? 'مكتمل'
-                              : 'منتهي الوقت',
+                              ? AppLocalizations.of(context).completedStatus
+                              : AppLocalizations.of(context).timedOutStatus,
                           style: TextStyle(
                             fontFamily: 'Almarai',
                             fontSize: 13,
@@ -350,7 +362,9 @@ class _StudentProfileDetailScreenState
                 radius: 28,
                 backgroundColor: AppColors.surfaceContainer,
                 child: Text(
-                  name.isNotEmpty ? name[0] : 'ط',
+                  name.isNotEmpty
+                      ? name[0]
+                      : AppLocalizations.of(context).studentInitialFallback,
                   style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 22,
@@ -387,10 +401,10 @@ class _StudentProfileDetailScreenState
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
-          tabs: const [
-            Tab(text: 'المهارات'),
-            Tab(text: 'الأداء'),
-            Tab(text: 'النشاط'),
+          tabs: [
+            Tab(text: AppLocalizations.of(context).skillsTab),
+            Tab(text: AppLocalizations.of(context).performanceTab),
+            Tab(text: AppLocalizations.of(context).activityTab),
           ],
         ),
       );
@@ -410,7 +424,7 @@ class _StudentProfileDetailScreenState
         );
       }).toList();
     } else {
-      skills = _skills;
+      skills = _fallbackSkills;
     }
 
     return SingleChildScrollView(
@@ -436,9 +450,9 @@ class _StudentProfileDetailScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'خريطة المهارات',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).skillMapTitle,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -446,9 +460,9 @@ class _StudentProfileDetailScreenState
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'نسبة الإتقان لكل مهارة رئيسية',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).skillMapSubtitle,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 13,
                     color: AppColors.onSurfaceVariant,
@@ -511,9 +525,9 @@ class _StudentProfileDetailScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'تفصيل المهارات',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).skillBreakdownTitle,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -541,10 +555,13 @@ class _StudentProfileDetailScreenState
       scores = weeklyData
           .map((v) => (v as num).toDouble().clamp(0.0, 100.0) / 100.0)
           .toList();
-      days = List.generate(scores.length, (i) => 'يوم ${i + 1}');
+      days = List.generate(
+        scores.length,
+        (i) => AppLocalizations.of(context).dayNumber(i + 1),
+      );
     } else {
       scores = _weeklyScores;
-      days = _weekDays;
+      days = _fallbackWeekDays;
     }
 
     final avg =
@@ -561,7 +578,7 @@ class _StudentProfileDetailScreenState
             children: [
               Expanded(
                 child: _KpiCard(
-                  label: 'المتوسط الأسبوعي',
+                  label: AppLocalizations.of(context).weeklyAverage,
                   value: '${(avg * 100).round()}%',
                   icon: Icons.bar_chart_rounded,
                   color: AppColors.primary,
@@ -570,7 +587,7 @@ class _StudentProfileDetailScreenState
               const SizedBox(width: 12),
               Expanded(
                 child: _KpiCard(
-                  label: 'أفضل أداء',
+                  label: AppLocalizations.of(context).bestPerformance,
                   value: '${(best * 100).round()}%',
                   icon: Icons.emoji_events_rounded,
                   color: AppColors.success,
@@ -598,9 +615,9 @@ class _StudentProfileDetailScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'الأداء الأسبوعي',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).weeklyPerformanceTitle,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -608,9 +625,9 @@ class _StudentProfileDetailScreenState
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'درجات آخر 7 أيام',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).lastSevenDaysScores,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 13,
                     color: AppColors.onSurfaceVariant,
@@ -694,9 +711,9 @@ class _StudentProfileDetailScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'سجل النشاط الأخير',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).recentActivityLog,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -704,9 +721,9 @@ class _StudentProfileDetailScreenState
               ),
             ),
             const SizedBox(height: 4),
-            const Text(
-              'آخر الأنشطة والمحاولات',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).recentActivitySubtitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 13,
                 color: AppColors.onSurfaceVariant,
@@ -727,9 +744,9 @@ class _StudentProfileDetailScreenState
                 ],
               ),
               child: Column(
-                children: List.generate(_activityLog.length, (i) {
-                  final log = _activityLog[i];
-                  final isLast = i == _activityLog.length - 1;
+                children: List.generate(_fallbackActivityLog.length, (i) {
+                  final log = _fallbackActivityLog[i];
+                  final isLast = i == _fallbackActivityLog.length - 1;
                   return Column(
                     children: [
                       Padding(
@@ -805,7 +822,6 @@ class _StudentProfileDetailScreenState
         ),
       );
 }
-
 
 // ─── Skill Radar Painter ──────────────────────────────────────────────────────
 
@@ -973,7 +989,9 @@ class _SkillProgressRow extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      isStrength ? 'قوة' : 'ضعف',
+                      isStrength
+                          ? AppLocalizations.of(context).strengthLabel
+                          : AppLocalizations.of(context).weaknessLabel,
                       style: TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 10,
@@ -1104,9 +1122,9 @@ class _AnswerHistoryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'مراجعة الإجابات',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).answerReviewTitle,
+            style: const TextStyle(
               fontFamily: 'Almarai',
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -1116,7 +1134,8 @@ class _AnswerHistoryCard extends StatelessWidget {
           const SizedBox(height: 12),
           ...answers.take(10).map((answer) {
             final isCorrect = (answer['isCorrect'] as bool?) ?? false;
-            final questionText = (answer['questionText'] as String?) ?? 'سؤال';
+            final questionText = (answer['questionText'] as String?) ??
+                AppLocalizations.of(context).questionFallback;
             final selectedAnswer = (answer['selectedAnswer'] as String?) ?? '';
             final correctAnswer = (answer['correctAnswer'] as String?) ?? '';
             final difficulty =
@@ -1153,7 +1172,9 @@ class _AnswerHistoryCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            isCorrect ? 'صحيح' : 'خاطئ',
+                            isCorrect
+                                ? AppLocalizations.of(context).correctStatus
+                                : AppLocalizations.of(context).incorrectStatus,
                             style: TextStyle(
                               fontFamily: 'Almarai',
                               fontSize: 10,
@@ -1173,10 +1194,12 @@ class _AnswerHistoryCard extends StatelessWidget {
                           ),
                           child: Text(
                             difficulty == 'easy'
-                                ? 'سهل'
+                                ? AppLocalizations.of(context).easyDifficulty
                                 : difficulty == 'hard'
-                                    ? 'صعب'
-                                    : 'متوسط',
+                                    ? AppLocalizations.of(context)
+                                        .hardDifficulty
+                                    : AppLocalizations.of(context)
+                                        .mediumDifficulty,
                             style: const TextStyle(
                               fontFamily: 'Almarai',
                               fontSize: 10,
@@ -1200,7 +1223,8 @@ class _AnswerHistoryCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'إجابتك: $selectedAnswer',
+                      AppLocalizations.of(context)
+                          .yourAnswerValue(selectedAnswer),
                       style: TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 12,
@@ -1210,7 +1234,8 @@ class _AnswerHistoryCard extends StatelessWidget {
                     if (!isCorrect) ...[
                       const SizedBox(height: 2),
                       Text(
-                        'الإجابة الصحيحة: $correctAnswer',
+                        AppLocalizations.of(context)
+                            .correctAnswerValue(correctAnswer),
                         style: const TextStyle(
                           fontFamily: 'Almarai',
                           fontSize: 12,

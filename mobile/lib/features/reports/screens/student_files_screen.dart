@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
 class _StudentData {
@@ -17,6 +18,7 @@ class _StudentData {
   final int performance;
   final bool isOnline;
 }
+
 class _StatItem {
   const _StatItem({required this.label, required this.value});
 
@@ -37,7 +39,7 @@ class StudentFilesScreen extends ConsumerStatefulWidget {
 class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  String _sortBy = 'الأداء';
+  String _sortBy = 'performance';
 
   // Sample data — replace with real API data
   final List<_StudentData> _students = const [
@@ -80,7 +82,7 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
           s.fileNumber.contains(_searchQuery);
     }).toList();
 
-    if (_sortBy == 'الأداء') {
+    if (_sortBy == 'performance') {
       list.sort((a, b) => b.performance.compareTo(a.performance));
     } else {
       list.sort((a, b) => a.name.compareTo(b.name));
@@ -119,82 +121,82 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
   Widget _buildAppBar(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Container(
-        height: 64 + MediaQuery.of(context).padding.top,
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top,
-          left: 16,
-          right: 16,
+      height: 64 + MediaQuery.of(context).padding.top,
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top,
+        left: 16,
+        right: 16,
+      ),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        border: const Border(
+          bottom: BorderSide(color: Color(0xFFE2E8F0)),
         ),
-        decoration: BoxDecoration(
-          color: cs.surface,
-          border: const Border(
-            bottom: BorderSide(color: Color(0xFFE2E8F0)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0A000000),
+            blurRadius: 4,
+            offset: Offset(0, 2),
           ),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Notifications (RTL: left)
-            IconButton(
-              icon: const Icon(Icons.notifications_outlined),
-              color: const Color(0xFF1E40AF),
-              onPressed: () => context.push('/teacher/notifications'),
-            ),
-            // Logo + avatar (RTL: right)
-            Row(
-              children: [
-                const Text(
-                  'EduAssess',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1E40AF),
-                  ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Notifications (RTL: left)
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            color: const Color(0xFF1E40AF),
+            onPressed: () => context.push('/teacher/notifications'),
+          ),
+          // Logo + avatar (RTL: right)
+          Row(
+            children: [
+              const Text(
+                'EduAssess',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1E40AF),
                 ),
-                const SizedBox(width: 12),
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.outlineVariant),
-                    color: AppColors.surfaceContainer,
-                  ),
-                  child: const Icon(Icons.person,
-                      size: 22, color: Color(0xFF444653)),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.outlineVariant),
+                  color: AppColors.surfaceContainer,
                 ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
+                child: const Icon(Icons.person,
+                    size: 22, color: Color(0xFF444653)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   // ─── Header ──────────────────────────────────────────────────────────────
 
-  Widget _buildHeader() => const Column(
+  Widget _buildHeader() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            'إدارة ملفات الطلاب',
-            style: TextStyle(
+            AppLocalizations.of(context).studentFilesTitle,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
               color: Color(0xFF1A1B22),
             ),
             textAlign: TextAlign.right,
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
-            'الصف الثالث الثانوي - علوم الحاسب',
-            style: TextStyle(
+            AppLocalizations.of(context).studentFilesClassSubtitle,
+            style: const TextStyle(
               fontSize: 14,
               color: Color(0xFF444653),
             ),
@@ -209,15 +211,19 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
         children: [
           // Sort buttons (RTL: left)
           _buildFilterButton(
-            label: _sortBy == 'الاسم' ? 'الاسم ✓' : 'الاسم',
+            label: _sortBy == 'name'
+                ? '${AppLocalizations.of(context).sortByName} ${AppLocalizations.of(context).selectedSuffix}'
+                : AppLocalizations.of(context).sortByName,
             icon: Icons.filter_list,
-            onTap: () => setState(() => _sortBy = 'الاسم'),
+            onTap: () => setState(() => _sortBy = 'name'),
           ),
           const SizedBox(width: 8),
           _buildFilterButton(
-            label: _sortBy == 'الأداء' ? 'الأداء ✓' : 'الأداء',
+            label: _sortBy == 'performance'
+                ? '${AppLocalizations.of(context).sortByPerformance} ${AppLocalizations.of(context).selectedSuffix}'
+                : AppLocalizations.of(context).sortByPerformance,
             icon: Icons.sort,
-            onTap: () => setState(() => _sortBy = 'الأداء'),
+            onTap: () => setState(() => _sortBy = 'performance'),
           ),
           const SizedBox(width: 12),
           // Search field (RTL: right)
@@ -235,13 +241,15 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
                 textAlign: TextAlign.right,
                 textDirection: TextDirection.rtl,
                 onChanged: (v) => setState(() => _searchQuery = v),
-                decoration: const InputDecoration(
-                  hintText: 'البحث عن اسم الطالب أو الرقم التعريفي...',
-                  hintStyle: TextStyle(fontSize: 14, color: Color(0xFF757684)),
-                  prefixIcon: Icon(Icons.search, color: Color(0xFF757684)),
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).studentFileSearchHint,
+                  hintStyle:
+                      const TextStyle(fontSize: 14, color: Color(0xFF757684)),
+                  prefixIcon:
+                      const Icon(Icons.search, color: Color(0xFF757684)),
                   border: InputBorder.none,
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
               ),
             ),
@@ -286,15 +294,17 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
 
   Widget _buildStatsOverview() {
     final stats = [
-      _StatItem(label: 'إجمالي الطلاب', value: '${_students.length}'),
       _StatItem(
-        label: 'متوسط الأداء',
+          label: AppLocalizations.of(context).totalStudents,
+          value: '${_students.length}'),
+      _StatItem(
+        label: AppLocalizations.of(context).averagePerformance,
         value:
             '${_students.map((s) => s.performance).reduce((a, b) => a + b) ~/ _students.length}%',
       ),
-      const _StatItem(label: 'المكلفون حديثاً', value: '5'),
+      _StatItem(label: AppLocalizations.of(context).newlyAssigned, value: '5'),
       _StatItem(
-        label: 'الطلاب المتفوقين',
+        label: AppLocalizations.of(context).topStudents,
         value: '${_students.where((s) => s.performance >= 85).length}',
       ),
     ];
@@ -427,7 +437,8 @@ class _StudentCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'رقم الملف: ${student.fileNumber}',
+                          AppLocalizations.of(context)
+                              .fileNumberLabel(student.fileNumber),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -454,7 +465,9 @@ class _StudentCard extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            student.name.isNotEmpty ? student.name[0] : '؟',
+                            student.name.isNotEmpty
+                                ? student.name[0]
+                                : AppLocalizations.of(context).unknownInitial,
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
@@ -499,9 +512,9 @@ class _StudentCard extends StatelessWidget {
                           color: _performanceColor,
                         ),
                       ),
-                      const Text(
-                        'الأداء العام',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).overallPerformance,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF505F76),
@@ -528,7 +541,8 @@ class _StudentCard extends StatelessWidget {
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('عرض ملف الطالب: ${student.name}'),
+                            content: Text(AppLocalizations.of(context)
+                                .viewStudentFile(student.name)),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -542,9 +556,9 @@ class _StudentCard extends StatelessWidget {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        'عرض التفاصيل',
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.of(context).viewDetails,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),

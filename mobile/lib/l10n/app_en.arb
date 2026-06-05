@@ -1529,6 +1529,101 @@
   "reviewScheduled": "Review scheduled successfully",
   "confirm": "Confirm",
   "openingFullReport": "Opening the full report...",
+  "studentProfileFallbackName": "Student",
+  "exportStudentReport": "Export report",
+  "exportingStudentReport": "Exporting student report...",
+  "scoreLabel": "Score",
+  "minutesUnit": "minutes",
+  "completedStatus": "Completed",
+  "timedOutStatus": "Timed out",
+  "studentInitialFallback": "S",
+  "skillsTab": "Skills",
+  "performanceTab": "Performance",
+  "activityTab": "Activity",
+  "skillMapTitle": "Skill map",
+  "skillMapSubtitle": "Mastery percentage for each main skill",
+  "skillBreakdownTitle": "Skill breakdown",
+  "dayNumber": "Day {number}",
+  "@dayNumber": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "weeklyAverage": "Weekly average",
+  "bestPerformance": "Best performance",
+  "weeklyPerformanceTitle": "Weekly performance",
+  "lastSevenDaysScores": "Scores from the last 7 days",
+  "recentActivityLog": "Recent activity log",
+  "recentActivitySubtitle": "Latest activities and attempts",
+  "strengthLabel": "Strength",
+  "weaknessLabel": "Weakness",
+  "answerReviewTitle": "Answer review",
+  "questionFallback": "Question",
+  "correctStatus": "Correct",
+  "incorrectStatus": "Incorrect",
+  "yourAnswerValue": "Your answer: {answer}",
+  "@yourAnswerValue": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "correctAnswerValue": "Correct answer: {answer}",
+  "@correctAnswerValue": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "skillUnderstanding": "Understanding",
+  "skillAnalysisName": "Analysis",
+  "skillApplication": "Application",
+  "skillEvaluation": "Evaluation",
+  "skillSynthesis": "Synthesis",
+  "skillRecall": "Recall",
+  "weekdaySunday": "Sun",
+  "weekdayMonday": "Mon",
+  "weekdayTuesday": "Tue",
+  "weekdayWednesday": "Wed",
+  "weekdayThursday": "Thu",
+  "weekdayFriday": "Fri",
+  "weekdaySaturday": "Sat",
+  "activityCompletedMathAssessment": "Completed mathematics assessment",
+  "activityMathScoreUnit": "Score: 88% - Unit 3",
+  "activityTwoHoursAgo": "2 hours ago",
+  "activityPlatformLogin": "Signed in to the platform",
+  "activityActiveSession45": "Active session for 45 minutes",
+  "activityThreeHoursAgo": "3 hours ago",
+  "activityStartedScienceAssessment": "Started science assessment",
+  "activityNotCompletedTimedOut": "Not completed - time expired",
+  "activityYesterday": "Yesterday",
+  "activityEarnedExcellentBadge": "Earned the \"Excellent\" badge",
+  "activityFirstStudent90": "First student to achieve 90%+ in the unit",
+  "activityTwoDaysAgo": "2 days ago",
+  "activityCompletedArabicAssessment": "Completed Arabic language assessment",
+  "activityArabicScoreUnit": "Score: 76% - Unit 2",
+  "activityThreeDaysAgo": "3 days ago",
+  "studentFilesTitle": "Student files",
+  "studentFilesClassSubtitle": "Grade 12 - Computer Science",
+  "sortByName": "Name",
+  "sortByPerformance": "Performance",
+  "selectedSuffix": "✓",
+  "studentFileSearchHint": "Search by student name or ID...",
+  "newlyAssigned": "Newly assigned",
+  "topStudents": "Top students",
+  "fileNumberLabel": "File number: {fileNumber}",
+  "@fileNumberLabel": {
+    "placeholders": {
+      "fileNumber": {}
+    }
+  },
+  "unknownInitial": "?",
+  "overallPerformance": "Overall performance",
+  "viewStudentFile": "Viewing student file: {name}",
+  "@viewStudentFile": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "viewDetails": "View details",
   "performanceDropAlertTitle": "Alert: noticeable performance drop",
   "performanceDropAlertSubtitle": "A sudden decline was detected and needs educational intervention",
   "mainReason": "Main reason",

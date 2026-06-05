@@ -3631,6 +3631,229 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openingFullReport => 'Opening the full report...';
 
   @override
+  String get studentProfileFallbackName => 'Student';
+
+  @override
+  String get exportStudentReport => 'Export report';
+
+  @override
+  String get exportingStudentReport => 'Exporting student report...';
+
+  @override
+  String get scoreLabel => 'Score';
+
+  @override
+  String get minutesUnit => 'minutes';
+
+  @override
+  String get completedStatus => 'Completed';
+
+  @override
+  String get timedOutStatus => 'Timed out';
+
+  @override
+  String get studentInitialFallback => 'S';
+
+  @override
+  String get skillsTab => 'Skills';
+
+  @override
+  String get performanceTab => 'Performance';
+
+  @override
+  String get activityTab => 'Activity';
+
+  @override
+  String get skillMapTitle => 'Skill map';
+
+  @override
+  String get skillMapSubtitle => 'Mastery percentage for each main skill';
+
+  @override
+  String get skillBreakdownTitle => 'Skill breakdown';
+
+  @override
+  String dayNumber(Object number) {
+    return 'Day $number';
+  }
+
+  @override
+  String get weeklyAverage => 'Weekly average';
+
+  @override
+  String get bestPerformance => 'Best performance';
+
+  @override
+  String get weeklyPerformanceTitle => 'Weekly performance';
+
+  @override
+  String get lastSevenDaysScores => 'Scores from the last 7 days';
+
+  @override
+  String get recentActivityLog => 'Recent activity log';
+
+  @override
+  String get recentActivitySubtitle => 'Latest activities and attempts';
+
+  @override
+  String get strengthLabel => 'Strength';
+
+  @override
+  String get weaknessLabel => 'Weakness';
+
+  @override
+  String get answerReviewTitle => 'Answer review';
+
+  @override
+  String get questionFallback => 'Question';
+
+  @override
+  String get correctStatus => 'Correct';
+
+  @override
+  String get incorrectStatus => 'Incorrect';
+
+  @override
+  String yourAnswerValue(Object answer) {
+    return 'Your answer: $answer';
+  }
+
+  @override
+  String correctAnswerValue(Object answer) {
+    return 'Correct answer: $answer';
+  }
+
+  @override
+  String get skillUnderstanding => 'Understanding';
+
+  @override
+  String get skillAnalysisName => 'Analysis';
+
+  @override
+  String get skillApplication => 'Application';
+
+  @override
+  String get skillEvaluation => 'Evaluation';
+
+  @override
+  String get skillSynthesis => 'Synthesis';
+
+  @override
+  String get skillRecall => 'Recall';
+
+  @override
+  String get weekdaySunday => 'Sun';
+
+  @override
+  String get weekdayMonday => 'Mon';
+
+  @override
+  String get weekdayTuesday => 'Tue';
+
+  @override
+  String get weekdayWednesday => 'Wed';
+
+  @override
+  String get weekdayThursday => 'Thu';
+
+  @override
+  String get weekdayFriday => 'Fri';
+
+  @override
+  String get weekdaySaturday => 'Sat';
+
+  @override
+  String get activityCompletedMathAssessment =>
+      'Completed mathematics assessment';
+
+  @override
+  String get activityMathScoreUnit => 'Score: 88% - Unit 3';
+
+  @override
+  String get activityTwoHoursAgo => '2 hours ago';
+
+  @override
+  String get activityPlatformLogin => 'Signed in to the platform';
+
+  @override
+  String get activityActiveSession45 => 'Active session for 45 minutes';
+
+  @override
+  String get activityThreeHoursAgo => '3 hours ago';
+
+  @override
+  String get activityStartedScienceAssessment => 'Started science assessment';
+
+  @override
+  String get activityNotCompletedTimedOut => 'Not completed - time expired';
+
+  @override
+  String get activityYesterday => 'Yesterday';
+
+  @override
+  String get activityEarnedExcellentBadge => 'Earned the \"Excellent\" badge';
+
+  @override
+  String get activityFirstStudent90 =>
+      'First student to achieve 90%+ in the unit';
+
+  @override
+  String get activityTwoDaysAgo => '2 days ago';
+
+  @override
+  String get activityCompletedArabicAssessment =>
+      'Completed Arabic language assessment';
+
+  @override
+  String get activityArabicScoreUnit => 'Score: 76% - Unit 2';
+
+  @override
+  String get activityThreeDaysAgo => '3 days ago';
+
+  @override
+  String get studentFilesTitle => 'Student files';
+
+  @override
+  String get studentFilesClassSubtitle => 'Grade 12 - Computer Science';
+
+  @override
+  String get sortByName => 'Name';
+
+  @override
+  String get sortByPerformance => 'Performance';
+
+  @override
+  String get selectedSuffix => '✓';
+
+  @override
+  String get studentFileSearchHint => 'Search by student name or ID...';
+
+  @override
+  String get newlyAssigned => 'Newly assigned';
+
+  @override
+  String get topStudents => 'Top students';
+
+  @override
+  String fileNumberLabel(Object fileNumber) {
+    return 'File number: $fileNumber';
+  }
+
+  @override
+  String get unknownInitial => '?';
+
+  @override
+  String get overallPerformance => 'Overall performance';
+
+  @override
+  String viewStudentFile(Object name) {
+    return 'Viewing student file: $name';
+  }
+
+  @override
+  String get viewDetails => 'View details';
+
+  @override
   String get performanceDropAlertTitle => 'Alert: noticeable performance drop';
 
   @override
