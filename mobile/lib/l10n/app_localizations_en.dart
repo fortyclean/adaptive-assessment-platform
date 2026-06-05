@@ -2214,4 +2214,187 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assessments => 'Assessments';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get navResources => 'Resources';
+
+  @override
+  String get supportCenterTitle => 'Technical support and help';
+
+  @override
+  String get supportCenterSubtitle =>
+      'We are here to answer your questions and support your learning journey.';
+
+  @override
+  String get supportSearchHint => 'How can we help you today?';
+
+  @override
+  String get supportMainSections => 'Main sections';
+
+  @override
+  String get supportGeneralCategory => 'General';
+
+  @override
+  String get supportGeneralCategorySubtitle =>
+      'Frequently asked questions about the platform';
+
+  @override
+  String get supportGeneralDialogTitle => 'General section';
+
+  @override
+  String get supportGeneralDialogHeading => 'Frequently asked questions:';
+
+  @override
+  String get supportGeneralFaqStart => 'How do I start using the platform?';
+
+  @override
+  String get supportGeneralFaqCreateAssessment =>
+      'How do I create a new assessment?';
+
+  @override
+  String get supportGeneralFaqAddStudents =>
+      'How do I add students to a class?';
+
+  @override
+  String get supportGeneralFaqReports => 'How do I view reports?';
+
+  @override
+  String get supportGeneralDialogFooter =>
+      'For more help, contact the support team.';
+
+  @override
+  String get supportTechnicalCategory => 'Technical';
+
+  @override
+  String get supportTechnicalCategorySubtitle =>
+      'Solutions for technical issues';
+
+  @override
+  String get supportTechnicalDialogTitle => 'Technical section';
+
+  @override
+  String get supportTechnicalDialogHeading => 'Common technical issues:';
+
+  @override
+  String get supportTechnicalIssueLogin => 'Problem signing in';
+
+  @override
+  String get supportTechnicalIssueSlowPages => 'Pages loading slowly';
+
+  @override
+  String get supportTechnicalIssueSaveError => 'Error saving data';
+
+  @override
+  String get supportTechnicalIssueUpload => 'Problem uploading files';
+
+  @override
+  String get supportTechnicalDialogFooter =>
+      'If the problem continues, contact technical support.';
+
+  @override
+  String get supportBillingCategory => 'Billing';
+
+  @override
+  String get supportBillingCategorySubtitle => 'Subscriptions and payments';
+
+  @override
+  String get supportBillingDialogTitle => 'Billing section';
+
+  @override
+  String get supportBillingDialogHeading => 'Subscription information:';
+
+  @override
+  String get supportBillingCurrentPlan => 'Current plan: Free';
+
+  @override
+  String get supportBillingExpiry => 'Expiry date: Not specified';
+
+  @override
+  String get supportBillingUsers => 'Users: Unlimited';
+
+  @override
+  String get supportBillingDialogFooter =>
+      'For upgrades or billing questions, contact sales.';
+
+  @override
+  String supportBulletItem(Object item) {
+    return '• $item';
+  }
+
+  @override
+  String get supportContactTitle => 'Contact support';
+
+  @override
+  String get supportContactSubtitle => 'Our team is available 24/7 to help you';
+
+  @override
+  String get supportStartLiveChat => 'Start live chat';
+
+  @override
+  String get supportLiveDialogTitle => 'Live technical support';
+
+  @override
+  String get supportTeamAvailable => 'The support team is available 24/7';
+
+  @override
+  String get supportDirectContact =>
+      'Direct contact: support@adaptive-mastery.com';
+
+  @override
+  String get supportOpenTicket => 'Open support ticket';
+
+  @override
+  String get supportTicketHint => 'Describe your issue in detail...';
+
+  @override
+  String get supportTicketSent =>
+      'Your support ticket has been sent. We will contact you within 24 hours.';
+
+  @override
+  String get supportSubmitTicket => 'Submit ticket';
+
+  @override
+  String get supportTutorialFirstAssessment =>
+      'How to start your first assessment';
+
+  @override
+  String get supportTutorialFirstDuration => '3 minutes • Video';
+
+  @override
+  String get supportTutorialReports => 'Understanding performance reports';
+
+  @override
+  String get supportTutorialReportsDuration => '5 minutes • Article';
+
+  @override
+  String get supportTutorialsTitle => 'Learning tutorials';
+
+  @override
+  String get supportAllTutorialsTitle => 'All learning tutorials';
+
+  @override
+  String get supportAvailableTutorials => 'Available tutorials:';
+
+  @override
+  String get supportTutorialClassrooms => 'Managing classrooms';
+
+  @override
+  String get supportTutorialQuestionBank => 'Creating a question bank';
+
+  @override
+  String get supportTutorialAdaptiveAssessment => 'Using adaptive assessment';
+
+  @override
+  String get supportMoreTutorialsSoon => 'More tutorials coming soon...';
+
+  @override
+  String get supportTutorialDialogMessage =>
+      'This tutorial will help you understand how to use the platform better.';
+
+  @override
+  String get supportTutorialDialogFooter =>
+      'To access the full content, please visit the help center.';
 }

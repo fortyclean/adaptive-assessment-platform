@@ -602,6 +602,38 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads support center localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.supportCenterTitle,
+            l10n.supportSearchHint,
+            l10n.supportGeneralCategory,
+            l10n.supportTechnicalCategory,
+            l10n.supportBillingCategory,
+            l10n.supportStartLiveChat,
+            l10n.supportOpenTicket,
+            l10n.supportTutorialFirstDuration,
+            l10n.supportBulletItem('Sample'),
+            l10n.navResources,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Technical support and help / How can we help you today? / General / '
+        'Technical / Billing / Start live chat / Open support ticket / '
+        '3 minutes • Video / • Sample / Resources',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

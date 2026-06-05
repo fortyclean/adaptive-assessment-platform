@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.84';
-  static const int buildNumber = 84;
+  static const String current = '1.0.85';
+  static const int buildNumber = 85;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI

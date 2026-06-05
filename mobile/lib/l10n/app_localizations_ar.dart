@@ -2193,4 +2193,182 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get assessments => 'الاختبارات';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
+  String get navResources => 'المصادر';
+
+  @override
+  String get supportCenterTitle => 'الدعم الفني والمساعدة';
+
+  @override
+  String get supportCenterSubtitle =>
+      'نحن هنا للإجابة على استفساراتك ومساعدتك في رحلتك التعليمية.';
+
+  @override
+  String get supportSearchHint => 'كيف يمكننا مساعدتك اليوم؟';
+
+  @override
+  String get supportMainSections => 'الأقسام الرئيسية';
+
+  @override
+  String get supportGeneralCategory => 'عام';
+
+  @override
+  String get supportGeneralCategorySubtitle => 'الأسئلة الشائعة حول المنصة';
+
+  @override
+  String get supportGeneralDialogTitle => 'قسم عام';
+
+  @override
+  String get supportGeneralDialogHeading => 'الأسئلة الشائعة:';
+
+  @override
+  String get supportGeneralFaqStart => 'كيف أبدأ استخدام المنصة؟';
+
+  @override
+  String get supportGeneralFaqCreateAssessment => 'كيف أنشئ اختبارًا جديدًا؟';
+
+  @override
+  String get supportGeneralFaqAddStudents => 'كيف أضيف طلابًا إلى الفصل؟';
+
+  @override
+  String get supportGeneralFaqReports => 'كيف أعرض التقارير؟';
+
+  @override
+  String get supportGeneralDialogFooter =>
+      'للمزيد من المساعدة، تواصل مع فريق الدعم.';
+
+  @override
+  String get supportTechnicalCategory => 'تقني';
+
+  @override
+  String get supportTechnicalCategorySubtitle => 'حلول المشاكل الفنية';
+
+  @override
+  String get supportTechnicalDialogTitle => 'قسم تقني';
+
+  @override
+  String get supportTechnicalDialogHeading => 'المشاكل الفنية الشائعة:';
+
+  @override
+  String get supportTechnicalIssueLogin => 'مشكلة في تسجيل الدخول';
+
+  @override
+  String get supportTechnicalIssueSlowPages => 'بطء في تحميل الصفحات';
+
+  @override
+  String get supportTechnicalIssueSaveError => 'خطأ في حفظ البيانات';
+
+  @override
+  String get supportTechnicalIssueUpload => 'مشكلة في رفع الملفات';
+
+  @override
+  String get supportTechnicalDialogFooter =>
+      'إذا استمرت المشكلة، تواصل مع الدعم الفني.';
+
+  @override
+  String get supportBillingCategory => 'الفواتير';
+
+  @override
+  String get supportBillingCategorySubtitle => 'الاشتراكات والمدفوعات';
+
+  @override
+  String get supportBillingDialogTitle => 'قسم الفواتير';
+
+  @override
+  String get supportBillingDialogHeading => 'معلومات الاشتراك:';
+
+  @override
+  String get supportBillingCurrentPlan => 'الخطة الحالية: مجانية';
+
+  @override
+  String get supportBillingExpiry => 'تاريخ الانتهاء: غير محدد';
+
+  @override
+  String get supportBillingUsers => 'عدد المستخدمين: غير محدود';
+
+  @override
+  String get supportBillingDialogFooter =>
+      'للترقية أو الاستفسار عن الفواتير، تواصل مع قسم المبيعات.';
+
+  @override
+  String supportBulletItem(Object item) {
+    return '• $item';
+  }
+
+  @override
+  String get supportContactTitle => 'تواصل مع الدعم';
+
+  @override
+  String get supportContactSubtitle => 'فريقنا متواجد 24/7 لمساعدتك';
+
+  @override
+  String get supportStartLiveChat => 'بدء محادثة فورية';
+
+  @override
+  String get supportLiveDialogTitle => 'الدعم الفني المباشر';
+
+  @override
+  String get supportTeamAvailable => 'فريق الدعم متواجد 24/7';
+
+  @override
+  String get supportDirectContact =>
+      'للتواصل المباشر: support@adaptive-mastery.com';
+
+  @override
+  String get supportOpenTicket => 'فتح تذكرة دعم';
+
+  @override
+  String get supportTicketHint => 'اشرح مشكلتك بالتفصيل...';
+
+  @override
+  String get supportTicketSent =>
+      'تم إرسال تذكرة الدعم. سنتواصل معك خلال 24 ساعة.';
+
+  @override
+  String get supportSubmitTicket => 'إرسال التذكرة';
+
+  @override
+  String get supportTutorialFirstAssessment => 'كيفية بدء اختبارك الأول';
+
+  @override
+  String get supportTutorialFirstDuration => '3 دقائق • فيديو';
+
+  @override
+  String get supportTutorialReports => 'فهم تقارير الأداء';
+
+  @override
+  String get supportTutorialReportsDuration => '5 دقائق • مقال';
+
+  @override
+  String get supportTutorialsTitle => 'شروحات تعليمية';
+
+  @override
+  String get supportAllTutorialsTitle => 'جميع الشروحات التعليمية';
+
+  @override
+  String get supportAvailableTutorials => 'الشروحات المتاحة:';
+
+  @override
+  String get supportTutorialClassrooms => 'إدارة الفصول الدراسية';
+
+  @override
+  String get supportTutorialQuestionBank => 'إنشاء بنك الأسئلة';
+
+  @override
+  String get supportTutorialAdaptiveAssessment => 'استخدام التقييم التكيفي';
+
+  @override
+  String get supportMoreTutorialsSoon => 'المزيد من الشروحات قريبًا...';
+
+  @override
+  String get supportTutorialDialogMessage =>
+      'هذا الشرح التعليمي سيساعدك على فهم كيفية استخدام المنصة بشكل أفضل.';
+
+  @override
+  String get supportTutorialDialogFooter =>
+      'للوصول إلى المحتوى الكامل، يرجى زيارة مركز المساعدة.';
 }

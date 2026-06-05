@@ -4113,6 +4113,342 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الاختبارات'**
   String get assessments;
+
+  /// No description provided for @close.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق'**
+  String get close;
+
+  /// No description provided for @navResources.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصادر'**
+  String get navResources;
+
+  /// No description provided for @supportCenterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم الفني والمساعدة'**
+  String get supportCenterTitle;
+
+  /// No description provided for @supportCenterSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نحن هنا للإجابة على استفساراتك ومساعدتك في رحلتك التعليمية.'**
+  String get supportCenterSubtitle;
+
+  /// No description provided for @supportSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف يمكننا مساعدتك اليوم؟'**
+  String get supportSearchHint;
+
+  /// No description provided for @supportMainSections.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقسام الرئيسية'**
+  String get supportMainSections;
+
+  /// No description provided for @supportGeneralCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'عام'**
+  String get supportGeneralCategory;
+
+  /// No description provided for @supportGeneralCategorySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسئلة الشائعة حول المنصة'**
+  String get supportGeneralCategorySubtitle;
+
+  /// No description provided for @supportGeneralDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قسم عام'**
+  String get supportGeneralDialogTitle;
+
+  /// No description provided for @supportGeneralDialogHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسئلة الشائعة:'**
+  String get supportGeneralDialogHeading;
+
+  /// No description provided for @supportGeneralFaqStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف أبدأ استخدام المنصة؟'**
+  String get supportGeneralFaqStart;
+
+  /// No description provided for @supportGeneralFaqCreateAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف أنشئ اختبارًا جديدًا؟'**
+  String get supportGeneralFaqCreateAssessment;
+
+  /// No description provided for @supportGeneralFaqAddStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف أضيف طلابًا إلى الفصل؟'**
+  String get supportGeneralFaqAddStudents;
+
+  /// No description provided for @supportGeneralFaqReports.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف أعرض التقارير؟'**
+  String get supportGeneralFaqReports;
+
+  /// No description provided for @supportGeneralDialogFooter.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمزيد من المساعدة، تواصل مع فريق الدعم.'**
+  String get supportGeneralDialogFooter;
+
+  /// No description provided for @supportTechnicalCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقني'**
+  String get supportTechnicalCategory;
+
+  /// No description provided for @supportTechnicalCategorySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حلول المشاكل الفنية'**
+  String get supportTechnicalCategorySubtitle;
+
+  /// No description provided for @supportTechnicalDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قسم تقني'**
+  String get supportTechnicalDialogTitle;
+
+  /// No description provided for @supportTechnicalDialogHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشاكل الفنية الشائعة:'**
+  String get supportTechnicalDialogHeading;
+
+  /// No description provided for @supportTechnicalIssueLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في تسجيل الدخول'**
+  String get supportTechnicalIssueLogin;
+
+  /// No description provided for @supportTechnicalIssueSlowPages.
+  ///
+  /// In ar, this message translates to:
+  /// **'بطء في تحميل الصفحات'**
+  String get supportTechnicalIssueSlowPages;
+
+  /// No description provided for @supportTechnicalIssueSaveError.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطأ في حفظ البيانات'**
+  String get supportTechnicalIssueSaveError;
+
+  /// No description provided for @supportTechnicalIssueUpload.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في رفع الملفات'**
+  String get supportTechnicalIssueUpload;
+
+  /// No description provided for @supportTechnicalDialogFooter.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا استمرت المشكلة، تواصل مع الدعم الفني.'**
+  String get supportTechnicalDialogFooter;
+
+  /// No description provided for @supportBillingCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفواتير'**
+  String get supportBillingCategory;
+
+  /// No description provided for @supportBillingCategorySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاشتراكات والمدفوعات'**
+  String get supportBillingCategorySubtitle;
+
+  /// No description provided for @supportBillingDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قسم الفواتير'**
+  String get supportBillingDialogTitle;
+
+  /// No description provided for @supportBillingDialogHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات الاشتراك:'**
+  String get supportBillingDialogHeading;
+
+  /// No description provided for @supportBillingCurrentPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخطة الحالية: مجانية'**
+  String get supportBillingCurrentPlan;
+
+  /// No description provided for @supportBillingExpiry.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الانتهاء: غير محدد'**
+  String get supportBillingExpiry;
+
+  /// No description provided for @supportBillingUsers.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد المستخدمين: غير محدود'**
+  String get supportBillingUsers;
+
+  /// No description provided for @supportBillingDialogFooter.
+  ///
+  /// In ar, this message translates to:
+  /// **'للترقية أو الاستفسار عن الفواتير، تواصل مع قسم المبيعات.'**
+  String get supportBillingDialogFooter;
+
+  /// No description provided for @supportBulletItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'• {item}'**
+  String supportBulletItem(Object item);
+
+  /// No description provided for @supportContactTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواصل مع الدعم'**
+  String get supportContactTitle;
+
+  /// No description provided for @supportContactSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فريقنا متواجد 24/7 لمساعدتك'**
+  String get supportContactSubtitle;
+
+  /// No description provided for @supportStartLiveChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء محادثة فورية'**
+  String get supportStartLiveChat;
+
+  /// No description provided for @supportLiveDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم الفني المباشر'**
+  String get supportLiveDialogTitle;
+
+  /// No description provided for @supportTeamAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'فريق الدعم متواجد 24/7'**
+  String get supportTeamAvailable;
+
+  /// No description provided for @supportDirectContact.
+  ///
+  /// In ar, this message translates to:
+  /// **'للتواصل المباشر: support@adaptive-mastery.com'**
+  String get supportDirectContact;
+
+  /// No description provided for @supportOpenTicket.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح تذكرة دعم'**
+  String get supportOpenTicket;
+
+  /// No description provided for @supportTicketHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشرح مشكلتك بالتفصيل...'**
+  String get supportTicketHint;
+
+  /// No description provided for @supportTicketSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال تذكرة الدعم. سنتواصل معك خلال 24 ساعة.'**
+  String get supportTicketSent;
+
+  /// No description provided for @supportSubmitTicket.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال التذكرة'**
+  String get supportSubmitTicket;
+
+  /// No description provided for @supportTutorialFirstAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيفية بدء اختبارك الأول'**
+  String get supportTutorialFirstAssessment;
+
+  /// No description provided for @supportTutorialFirstDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'3 دقائق • فيديو'**
+  String get supportTutorialFirstDuration;
+
+  /// No description provided for @supportTutorialReports.
+  ///
+  /// In ar, this message translates to:
+  /// **'فهم تقارير الأداء'**
+  String get supportTutorialReports;
+
+  /// No description provided for @supportTutorialReportsDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'5 دقائق • مقال'**
+  String get supportTutorialReportsDuration;
+
+  /// No description provided for @supportTutorialsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شروحات تعليمية'**
+  String get supportTutorialsTitle;
+
+  /// No description provided for @supportAllTutorialsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جميع الشروحات التعليمية'**
+  String get supportAllTutorialsTitle;
+
+  /// No description provided for @supportAvailableTutorials.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشروحات المتاحة:'**
+  String get supportAvailableTutorials;
+
+  /// No description provided for @supportTutorialClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الفصول الدراسية'**
+  String get supportTutorialClassrooms;
+
+  /// No description provided for @supportTutorialQuestionBank.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء بنك الأسئلة'**
+  String get supportTutorialQuestionBank;
+
+  /// No description provided for @supportTutorialAdaptiveAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدام التقييم التكيفي'**
+  String get supportTutorialAdaptiveAssessment;
+
+  /// No description provided for @supportMoreTutorialsSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'المزيد من الشروحات قريبًا...'**
+  String get supportMoreTutorialsSoon;
+
+  /// No description provided for @supportTutorialDialogMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الشرح التعليمي سيساعدك على فهم كيفية استخدام المنصة بشكل أفضل.'**
+  String get supportTutorialDialogMessage;
+
+  /// No description provided for @supportTutorialDialogFooter.
+  ///
+  /// In ar, this message translates to:
+  /// **'للوصول إلى المحتوى الكامل، يرجى زيارة مركز المساعدة.'**
+  String get supportTutorialDialogFooter;
 }
 
 class _AppLocalizationsDelegate
