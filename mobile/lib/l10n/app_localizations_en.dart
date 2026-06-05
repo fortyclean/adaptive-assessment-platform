@@ -3003,6 +3003,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not load users. Check your connection and try again.';
 
   @override
+  String notFoundPage(Object error) {
+    return 'Page not found: $error';
+  }
+
+  @override
+  String editEntity(Object name) {
+    return 'Edit: $name';
+  }
+
+  @override
+  String get usernameReadOnlyHelper =>
+      'Shown for identification and does not change login details';
+
+  @override
+  String get searchClassrooms => 'Search classrooms';
+
+  @override
+  String linkedClassrooms(Object count) {
+    return 'Linked classrooms ($count)';
+  }
+
+  @override
+  String get classroomsUnavailableRetry =>
+      'Could not load classrooms right now. Check your connection and try again.';
+
+  @override
+  String gradeValue(Object grade) {
+    return 'Grade: $grade';
+  }
+
+  @override
+  String get userUpdated => 'User details updated';
+
+  @override
+  String get userUpdateFailed =>
+      'Could not save user details. Please try again.';
+
+  @override
   String get disableAccount => 'Disable account';
 
   @override
@@ -3109,6 +3147,85 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not load classrooms. Check your connection and try again.';
 
   @override
+  String assignTeacherToClass(Object name) {
+    return 'Assign teacher to: $name';
+  }
+
+  @override
+  String get chooseTeacherForClass =>
+      'Choose a teacher to assign to this class';
+
+  @override
+  String get searchTeacher => 'Search teacher';
+
+  @override
+  String get teachersLoadFailed =>
+      'Could not load the teacher list. Check your connection and try again.';
+
+  @override
+  String get teacherAssignFailed =>
+      'Could not assign the teacher to the class. Please try again.';
+
+  @override
+  String teacherAssignedToClass(Object teacher, Object classroom) {
+    return '$teacher assigned to class $classroom';
+  }
+
+  @override
+  String get confirmAssignment => 'Confirm assignment';
+
+  @override
+  String demoStudentName(Object index) {
+    return 'Demo student $index';
+  }
+
+  @override
+  String get gradeLevelFallback => 'Grade level';
+
+  @override
+  String get studentsLoadFailed =>
+      'Could not load the student list. Check your connection and try again.';
+
+  @override
+  String assignStudentsToClass(Object name) {
+    return 'Assign students to: $name';
+  }
+
+  @override
+  String chooseStudentsForClass(Object count) {
+    return 'Choose students linked to this class ($count)';
+  }
+
+  @override
+  String get searchStudent => 'Search student';
+
+  @override
+  String get selectVisible => 'Select visible';
+
+  @override
+  String get clearVisible => 'Clear visible';
+
+  @override
+  String get activeStudent => 'Active student';
+
+  @override
+  String get studentsAssignFailed =>
+      'Could not assign students to the class. Please try again.';
+
+  @override
+  String get classStudentsUpdated => 'Class students updated';
+
+  @override
+  String get saveStudents => 'Save students';
+
+  @override
+  String get classroomUpdateFailed =>
+      'Could not update class details. Please try again.';
+
+  @override
+  String get classroomUpdated => 'Class updated';
+
+  @override
   String get deleteClassroom => 'Delete classroom';
 
   @override
@@ -3159,6 +3276,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addClassToStart => 'Add a new class to start';
+
+  @override
+  String get unassigned => 'Unassigned';
+
+  @override
+  String classroomActiveAssessmentsNow(Object count) {
+    return '$count active assessments now';
+  }
+
+  @override
+  String get noStudentNamesYet => 'Student names are not shown yet';
+
+  @override
+  String get assignTeacher => 'Assign teacher';
+
+  @override
+  String get assignStudents => 'Assign students';
+
+  @override
+  String get classroomCreateFailed =>
+      'Could not create the class. Please try again.';
+
+  @override
+  String classroomCreated(Object name) {
+    return 'Class \"$name\" created successfully';
+  }
+
+  @override
+  String get addNewClassroom => 'Add new class';
+
+  @override
+  String get classNameRequiredLabel => 'Class name *';
+
+  @override
+  String get gradeLevelRequiredLabel => 'Grade level *';
+
+  @override
+  String get academicYearRequiredLabel => 'Academic year *';
+
+  @override
+  String get academicYearHint => 'Example: 2024-2025';
 
   @override
   String get institutionDemoLocalSaveStatus =>

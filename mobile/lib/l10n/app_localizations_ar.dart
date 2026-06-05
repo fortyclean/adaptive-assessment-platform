@@ -1126,7 +1126,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get create => 'إنشاء';
 
   @override
-  String get unspecified => 'غير محدد';
+  String get unspecified => 'غير محددة';
 
   @override
   String classCreated(Object name) {
@@ -2968,6 +2968,43 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.';
 
   @override
+  String notFoundPage(Object error) {
+    return 'الصفحة غير موجودة: $error';
+  }
+
+  @override
+  String editEntity(Object name) {
+    return 'تعديل: $name';
+  }
+
+  @override
+  String get usernameReadOnlyHelper => 'يعرض للتمييز ولا يغير بيانات الدخول';
+
+  @override
+  String get searchClassrooms => 'بحث في الفصول';
+
+  @override
+  String linkedClassrooms(Object count) {
+    return 'الفصول المرتبطة ($count)';
+  }
+
+  @override
+  String get classroomsUnavailableRetry =>
+      'تعذر تحميل الفصول حالياً. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String gradeValue(Object grade) {
+    return 'المرحلة: $grade';
+  }
+
+  @override
+  String get userUpdated => 'تم تحديث بيانات المستخدم';
+
+  @override
+  String get userUpdateFailed =>
+      'تعذر حفظ بيانات المستخدم. يرجى المحاولة مرة أخرى';
+
+  @override
   String get disableAccount => 'تعطيل الحساب';
 
   @override
@@ -3074,6 +3111,84 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.';
 
   @override
+  String assignTeacherToClass(Object name) {
+    return 'ربط معلم بـ: $name';
+  }
+
+  @override
+  String get chooseTeacherForClass => 'اختر معلماً لتعيينه في هذا الفصل';
+
+  @override
+  String get searchTeacher => 'بحث عن معلم';
+
+  @override
+  String get teachersLoadFailed =>
+      'تعذر تحميل قائمة المعلمين. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get teacherAssignFailed =>
+      'تعذر ربط المعلم بالفصل. يرجى المحاولة مرة أخرى';
+
+  @override
+  String teacherAssignedToClass(Object teacher, Object classroom) {
+    return 'تم ربط $teacher بفصل $classroom';
+  }
+
+  @override
+  String get confirmAssignment => 'تأكيد الربط';
+
+  @override
+  String demoStudentName(Object index) {
+    return 'طالب تجريبي $index';
+  }
+
+  @override
+  String get gradeLevelFallback => 'الصف الدراسي';
+
+  @override
+  String get studentsLoadFailed =>
+      'تعذر تحميل قائمة الطلاب. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String assignStudentsToClass(Object name) {
+    return 'ربط طلاب بـ: $name';
+  }
+
+  @override
+  String chooseStudentsForClass(Object count) {
+    return 'اختر الطلاب المرتبطين بهذا الفصل ($count)';
+  }
+
+  @override
+  String get searchStudent => 'بحث عن طالب';
+
+  @override
+  String get selectVisible => 'تحديد الظاهر';
+
+  @override
+  String get clearVisible => 'إلغاء الظاهر';
+
+  @override
+  String get activeStudent => 'طالب نشط';
+
+  @override
+  String get studentsAssignFailed =>
+      'تعذر ربط الطلاب بالفصل. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get classStudentsUpdated => 'تم تحديث طلاب الفصل';
+
+  @override
+  String get saveStudents => 'حفظ الطلاب';
+
+  @override
+  String get classroomUpdateFailed =>
+      'تعذر تحديث بيانات الفصل. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get classroomUpdated => 'تم تحديث الفصل';
+
+  @override
   String get deleteClassroom => 'حذف الفصل';
 
   @override
@@ -3123,6 +3238,47 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addClassToStart => 'أضف فصلاً جديداً للبدء';
+
+  @override
+  String get unassigned => 'غير محدد';
+
+  @override
+  String classroomActiveAssessmentsNow(Object count) {
+    return '$count اختبار نشط حالياً';
+  }
+
+  @override
+  String get noStudentNamesYet => 'لم يتم عرض أسماء الطلاب بعد';
+
+  @override
+  String get assignTeacher => 'ربط معلم';
+
+  @override
+  String get assignStudents => 'ربط طلاب';
+
+  @override
+  String get classroomCreateFailed =>
+      'تعذر إنشاء الفصل. يرجى المحاولة مرة أخرى';
+
+  @override
+  String classroomCreated(Object name) {
+    return 'تم إنشاء فصل \"$name\" بنجاح';
+  }
+
+  @override
+  String get addNewClassroom => 'إضافة فصل جديد';
+
+  @override
+  String get classNameRequiredLabel => 'اسم الفصل *';
+
+  @override
+  String get gradeLevelRequiredLabel => 'المرحلة الدراسية *';
+
+  @override
+  String get academicYearRequiredLabel => 'العام الدراسي *';
+
+  @override
+  String get academicYearHint => 'مثال: 2024-2025';
 
   @override
   String get institutionDemoLocalSaveStatus =>

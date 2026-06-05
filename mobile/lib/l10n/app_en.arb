@@ -1247,6 +1247,36 @@
   "adminDashboardAddStudent": "Add student",
   "quickAccess": "Quick access",
   "userManagementLoadFailed": "Could not load users. Check your connection and try again.",
+  "notFoundPage": "Page not found: {error}",
+  "@notFoundPage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "editEntity": "Edit: {name}",
+  "@editEntity": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "usernameReadOnlyHelper": "Shown for identification and does not change login details",
+  "searchClassrooms": "Search classrooms",
+  "linkedClassrooms": "Linked classrooms ({count})",
+  "@linkedClassrooms": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "classroomsUnavailableRetry": "Could not load classrooms right now. Check your connection and try again.",
+  "gradeValue": "Grade: {grade}",
+  "@gradeValue": {
+    "placeholders": {
+      "grade": {}
+    }
+  },
+  "unspecified": "Unspecified",
+  "userUpdated": "User details updated",
+  "userUpdateFailed": "Could not save user details. Please try again.",
   "disableAccount": "Disable account",
   "disableAccountQuestion": "Do you want to disable {name}'s account?",
   "@disableAccountQuestion": {
@@ -1298,6 +1328,53 @@
   },
   "classroom": "Classroom",
   "classroomManagementLoadFailed": "Could not load classrooms. Check your connection and try again.",
+  "assignTeacherToClass": "Assign teacher to: {name}",
+  "@assignTeacherToClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chooseTeacherForClass": "Choose a teacher to assign to this class",
+  "searchTeacher": "Search teacher",
+  "teachersLoadFailed": "Could not load the teacher list. Check your connection and try again.",
+  "teacherAssignFailed": "Could not assign the teacher to the class. Please try again.",
+  "teacherAssignedToClass": "{teacher} assigned to class {classroom}",
+  "@teacherAssignedToClass": {
+    "placeholders": {
+      "teacher": {},
+      "classroom": {}
+    }
+  },
+  "confirmAssignment": "Confirm assignment",
+  "demoStudentName": "Demo student {index}",
+  "@demoStudentName": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "gradeLevelFallback": "Grade level",
+  "studentsLoadFailed": "Could not load the student list. Check your connection and try again.",
+  "assignStudentsToClass": "Assign students to: {name}",
+  "@assignStudentsToClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chooseStudentsForClass": "Choose students linked to this class ({count})",
+  "@chooseStudentsForClass": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "searchStudent": "Search student",
+  "selectVisible": "Select visible",
+  "clearVisible": "Clear visible",
+  "activeStudent": "Active student",
+  "studentsAssignFailed": "Could not assign students to the class. Please try again.",
+  "classStudentsUpdated": "Class students updated",
+  "saveStudents": "Save students",
+  "classroomUpdateFailed": "Could not update class details. Please try again.",
+  "classroomUpdated": "Class updated",
   "deleteClassroom": "Delete classroom",
   "deleteClassroomQuestion": "Do you want to delete class \"{name}\"?",
   "@deleteClassroomQuestion": {
@@ -1323,6 +1400,30 @@
   "clearSearchAndFilters": "Clear search and filters",
   "noClassrooms": "No classrooms",
   "addClassToStart": "Add a new class to start",
+  "unassigned": "Unassigned",
+  "classroomActiveAssessmentsNow": "{count} active assessments now",
+  "@classroomActiveAssessmentsNow": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "noStudentNamesYet": "Student names are not shown yet",
+  "assignTeacher": "Assign teacher",
+  "assignStudents": "Assign students",
+  "classroomCreateFailed": "Could not create the class. Please try again.",
+  "classroomCreated": "Class \"{name}\" created successfully",
+  "@classroomCreated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "addNewClassroom": "Add new class",
+  "classNameRequiredLabel": "Class name *",
+  "classNameHint": "Example: Grade 7 (A)",
+  "gradeLevelRequiredLabel": "Grade level *",
+  "gradeLevelHint": "Example: Grade 7",
+  "academicYearRequiredLabel": "Academic year *",
+  "academicYearHint": "Example: 2024-2025",
   "institutionDemoLocalSaveStatus": "Demo mode: settings are saved on this device",
   "syncedWithServer": "Synced with server",
   "serverConnectionFailed": "Could not connect to the server",

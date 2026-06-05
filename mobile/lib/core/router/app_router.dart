@@ -63,6 +63,7 @@ import '../../features/reports/screens/student_academic_profile_screen.dart';
 import '../../features/reports/screens/student_files_screen.dart';
 import '../../features/reports/screens/student_profile_detail_screen.dart';
 import '../../features/reports/screens/teacher_report_screen.dart';
+import '../../l10n/app_localizations.dart';
 import '../../shared/providers/auth_provider.dart';
 
 // ─── Route Names ──────────────────────────────────────────────────────────────
@@ -653,7 +654,11 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(
-        child: Text('الصفحة غير موجودة: ${state.error}'),
+        child: Text(
+          AppLocalizations.of(context).notFoundPage(
+            state.error?.toString() ?? '',
+          ),
+        ),
       ),
     ),
   );

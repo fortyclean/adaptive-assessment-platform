@@ -1247,6 +1247,36 @@
   "adminDashboardAddStudent": "إضافة طالب",
   "quickAccess": "وصول سريع",
   "userManagementLoadFailed": "تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.",
+  "notFoundPage": "الصفحة غير موجودة: {error}",
+  "@notFoundPage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "editEntity": "تعديل: {name}",
+  "@editEntity": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "usernameReadOnlyHelper": "يعرض للتمييز ولا يغير بيانات الدخول",
+  "searchClassrooms": "بحث في الفصول",
+  "linkedClassrooms": "الفصول المرتبطة ({count})",
+  "@linkedClassrooms": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "classroomsUnavailableRetry": "تعذر تحميل الفصول حالياً. تحقق من الاتصال ثم أعد المحاولة.",
+  "gradeValue": "المرحلة: {grade}",
+  "@gradeValue": {
+    "placeholders": {
+      "grade": {}
+    }
+  },
+  "unspecified": "غير محددة",
+  "userUpdated": "تم تحديث بيانات المستخدم",
+  "userUpdateFailed": "تعذر حفظ بيانات المستخدم. يرجى المحاولة مرة أخرى",
   "disableAccount": "تعطيل الحساب",
   "disableAccountQuestion": "هل تريد تعطيل حساب {name}؟",
   "@disableAccountQuestion": {
@@ -1298,6 +1328,53 @@
   },
   "classroom": "فصل دراسي",
   "classroomManagementLoadFailed": "تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.",
+  "assignTeacherToClass": "ربط معلم بـ: {name}",
+  "@assignTeacherToClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chooseTeacherForClass": "اختر معلماً لتعيينه في هذا الفصل",
+  "searchTeacher": "بحث عن معلم",
+  "teachersLoadFailed": "تعذر تحميل قائمة المعلمين. تحقق من الاتصال ثم أعد المحاولة.",
+  "teacherAssignFailed": "تعذر ربط المعلم بالفصل. يرجى المحاولة مرة أخرى",
+  "teacherAssignedToClass": "تم ربط {teacher} بفصل {classroom}",
+  "@teacherAssignedToClass": {
+    "placeholders": {
+      "teacher": {},
+      "classroom": {}
+    }
+  },
+  "confirmAssignment": "تأكيد الربط",
+  "demoStudentName": "طالب تجريبي {index}",
+  "@demoStudentName": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "gradeLevelFallback": "الصف الدراسي",
+  "studentsLoadFailed": "تعذر تحميل قائمة الطلاب. تحقق من الاتصال ثم أعد المحاولة.",
+  "assignStudentsToClass": "ربط طلاب بـ: {name}",
+  "@assignStudentsToClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chooseStudentsForClass": "اختر الطلاب المرتبطين بهذا الفصل ({count})",
+  "@chooseStudentsForClass": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "searchStudent": "بحث عن طالب",
+  "selectVisible": "تحديد الظاهر",
+  "clearVisible": "إلغاء الظاهر",
+  "activeStudent": "طالب نشط",
+  "studentsAssignFailed": "تعذر ربط الطلاب بالفصل. يرجى المحاولة مرة أخرى",
+  "classStudentsUpdated": "تم تحديث طلاب الفصل",
+  "saveStudents": "حفظ الطلاب",
+  "classroomUpdateFailed": "تعذر تحديث بيانات الفصل. يرجى المحاولة مرة أخرى",
+  "classroomUpdated": "تم تحديث الفصل",
   "deleteClassroom": "حذف الفصل",
   "deleteClassroomQuestion": "هل تريد حذف فصل \"{name}\"؟",
   "@deleteClassroomQuestion": {
@@ -1323,6 +1400,30 @@
   "clearSearchAndFilters": "مسح البحث والفلاتر",
   "noClassrooms": "لا توجد فصول دراسية",
   "addClassToStart": "أضف فصلاً جديداً للبدء",
+  "unassigned": "غير محدد",
+  "classroomActiveAssessmentsNow": "{count} اختبار نشط حالياً",
+  "@classroomActiveAssessmentsNow": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "noStudentNamesYet": "لم يتم عرض أسماء الطلاب بعد",
+  "assignTeacher": "ربط معلم",
+  "assignStudents": "ربط طلاب",
+  "classroomCreateFailed": "تعذر إنشاء الفصل. يرجى المحاولة مرة أخرى",
+  "classroomCreated": "تم إنشاء فصل \"{name}\" بنجاح",
+  "@classroomCreated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "addNewClassroom": "إضافة فصل جديد",
+  "classNameRequiredLabel": "اسم الفصل *",
+  "classNameHint": "مثال: أولى متوسط (أ)",
+  "gradeLevelRequiredLabel": "المرحلة الدراسية *",
+  "gradeLevelHint": "مثال: الصف الأول المتوسط",
+  "academicYearRequiredLabel": "العام الدراسي *",
+  "academicYearHint": "مثال: 2024-2025",
   "institutionDemoLocalSaveStatus": "وضع تجريبي: يتم الحفظ على هذا الجهاز",
   "syncedWithServer": "تمت المزامنة مع الخادم",
   "serverConnectionFailed": "تعذر الاتصال بالخادم",

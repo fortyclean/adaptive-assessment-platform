@@ -2165,7 +2165,7 @@ abstract class AppLocalizations {
   /// No description provided for @unspecified.
   ///
   /// In ar, this message translates to:
-  /// **'غير محدد'**
+  /// **'غير محددة'**
   String get unspecified;
 
   /// No description provided for @classCreated.
@@ -5513,6 +5513,60 @@ abstract class AppLocalizations {
   /// **'تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.'**
   String get userManagementLoadFailed;
 
+  /// No description provided for @notFoundPage.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصفحة غير موجودة: {error}'**
+  String notFoundPage(Object error);
+
+  /// No description provided for @editEntity.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل: {name}'**
+  String editEntity(Object name);
+
+  /// No description provided for @usernameReadOnlyHelper.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعرض للتمييز ولا يغير بيانات الدخول'**
+  String get usernameReadOnlyHelper;
+
+  /// No description provided for @searchClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث في الفصول'**
+  String get searchClassrooms;
+
+  /// No description provided for @linkedClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصول المرتبطة ({count})'**
+  String linkedClassrooms(Object count);
+
+  /// No description provided for @classroomsUnavailableRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الفصول حالياً. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get classroomsUnavailableRetry;
+
+  /// No description provided for @gradeValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة: {grade}'**
+  String gradeValue(Object grade);
+
+  /// No description provided for @userUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث بيانات المستخدم'**
+  String get userUpdated;
+
+  /// No description provided for @userUpdateFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حفظ بيانات المستخدم. يرجى المحاولة مرة أخرى'**
+  String get userUpdateFailed;
+
   /// No description provided for @disableAccount.
   ///
   /// In ar, this message translates to:
@@ -5699,6 +5753,132 @@ abstract class AppLocalizations {
   /// **'تعذر تحميل الفصول الدراسية. تحقق من الاتصال ثم أعد المحاولة.'**
   String get classroomManagementLoadFailed;
 
+  /// No description provided for @assignTeacherToClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط معلم بـ: {name}'**
+  String assignTeacherToClass(Object name);
+
+  /// No description provided for @chooseTeacherForClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر معلماً لتعيينه في هذا الفصل'**
+  String get chooseTeacherForClass;
+
+  /// No description provided for @searchTeacher.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث عن معلم'**
+  String get searchTeacher;
+
+  /// No description provided for @teachersLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل قائمة المعلمين. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get teachersLoadFailed;
+
+  /// No description provided for @teacherAssignFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر ربط المعلم بالفصل. يرجى المحاولة مرة أخرى'**
+  String get teacherAssignFailed;
+
+  /// No description provided for @teacherAssignedToClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم ربط {teacher} بفصل {classroom}'**
+  String teacherAssignedToClass(Object teacher, Object classroom);
+
+  /// No description provided for @confirmAssignment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الربط'**
+  String get confirmAssignment;
+
+  /// No description provided for @demoStudentName.
+  ///
+  /// In ar, this message translates to:
+  /// **'طالب تجريبي {index}'**
+  String demoStudentName(Object index);
+
+  /// No description provided for @gradeLevelFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الدراسي'**
+  String get gradeLevelFallback;
+
+  /// No description provided for @studentsLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل قائمة الطلاب. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get studentsLoadFailed;
+
+  /// No description provided for @assignStudentsToClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط طلاب بـ: {name}'**
+  String assignStudentsToClass(Object name);
+
+  /// No description provided for @chooseStudentsForClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الطلاب المرتبطين بهذا الفصل ({count})'**
+  String chooseStudentsForClass(Object count);
+
+  /// No description provided for @searchStudent.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث عن طالب'**
+  String get searchStudent;
+
+  /// No description provided for @selectVisible.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد الظاهر'**
+  String get selectVisible;
+
+  /// No description provided for @clearVisible.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الظاهر'**
+  String get clearVisible;
+
+  /// No description provided for @activeStudent.
+  ///
+  /// In ar, this message translates to:
+  /// **'طالب نشط'**
+  String get activeStudent;
+
+  /// No description provided for @studentsAssignFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر ربط الطلاب بالفصل. يرجى المحاولة مرة أخرى'**
+  String get studentsAssignFailed;
+
+  /// No description provided for @classStudentsUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث طلاب الفصل'**
+  String get classStudentsUpdated;
+
+  /// No description provided for @saveStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الطلاب'**
+  String get saveStudents;
+
+  /// No description provided for @classroomUpdateFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديث بيانات الفصل. يرجى المحاولة مرة أخرى'**
+  String get classroomUpdateFailed;
+
+  /// No description provided for @classroomUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث الفصل'**
+  String get classroomUpdated;
+
   /// No description provided for @deleteClassroom.
   ///
   /// In ar, this message translates to:
@@ -5788,6 +5968,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أضف فصلاً جديداً للبدء'**
   String get addClassToStart;
+
+  /// No description provided for @unassigned.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير محدد'**
+  String get unassigned;
+
+  /// No description provided for @classroomActiveAssessmentsNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} اختبار نشط حالياً'**
+  String classroomActiveAssessmentsNow(Object count);
+
+  /// No description provided for @noStudentNamesYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم عرض أسماء الطلاب بعد'**
+  String get noStudentNamesYet;
+
+  /// No description provided for @assignTeacher.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط معلم'**
+  String get assignTeacher;
+
+  /// No description provided for @assignStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط طلاب'**
+  String get assignStudents;
+
+  /// No description provided for @classroomCreateFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إنشاء الفصل. يرجى المحاولة مرة أخرى'**
+  String get classroomCreateFailed;
+
+  /// No description provided for @classroomCreated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء فصل \"{name}\" بنجاح'**
+  String classroomCreated(Object name);
+
+  /// No description provided for @addNewClassroom.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فصل جديد'**
+  String get addNewClassroom;
+
+  /// No description provided for @classNameRequiredLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الفصل *'**
+  String get classNameRequiredLabel;
+
+  /// No description provided for @gradeLevelRequiredLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة الدراسية *'**
+  String get gradeLevelRequiredLabel;
+
+  /// No description provided for @academicYearRequiredLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العام الدراسي *'**
+  String get academicYearRequiredLabel;
+
+  /// No description provided for @academicYearHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: 2024-2025'**
+  String get academicYearHint;
 
   /// No description provided for @institutionDemoLocalSaveStatus.
   ///

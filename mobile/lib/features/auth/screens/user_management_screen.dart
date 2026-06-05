@@ -429,6 +429,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
     };
     var classroomSearchQuery = '';
     if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
 
     showModalBottomSheet<void>(
       context: context,
@@ -467,7 +468,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                               color: AppColors.outlineVariant,
                               borderRadius: BorderRadius.circular(2)))),
                   const SizedBox(height: 16),
-                  Text('تعديل: ${user['fullName']}',
+                  Text(l10n.editEntity((user['fullName'] ?? '').toString()),
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 16),
@@ -475,7 +476,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                     controller: nameController,
                     textDirection: TextDirection.rtl,
                     decoration: InputDecoration(
-                        labelText: 'الاسم الكامل',
+                        labelText: l10n.fullName,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8))),
                   ),
@@ -485,8 +486,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                     readOnly: true,
                     textDirection: TextDirection.ltr,
                     decoration: InputDecoration(
-                      labelText: 'اسم المستخدم',
-                      helperText: 'يعرض للتمييز ولا يغير بيانات الدخول',
+                      labelText: l10n.username,
+                      helperText: l10n.usernameReadOnlyHelper,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8)),
                     ),
@@ -497,7 +498,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                     keyboardType: TextInputType.emailAddress,
                     textDirection: TextDirection.ltr,
                     decoration: InputDecoration(
-                        labelText: 'البريد الإلكتروني',
+                        labelText: l10n.email,
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8))),
                   ),
@@ -505,7 +506,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                   TextField(
                     textDirection: TextDirection.rtl,
                     decoration: InputDecoration(
-                      labelText: 'بحث في الفصول',
+                      labelText: l10n.searchClassrooms,
                       prefixIcon: const Icon(Icons.search_rounded),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8)),
@@ -515,17 +516,17 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'الفصول المرتبطة (${selectedClassroomIds.length})',
+                    l10n.linkedClassrooms(selectedClassroomIds.length),
                     style: const TextStyle(
                         fontWeight: FontWeight.w700, fontSize: 13),
                   ),
                   const SizedBox(height: 8),
                   if (classroomOptions.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Text(
-                        'تعذر تحميل الفصول حالياً. تحقق من الاتصال ثم أعد المحاولة.',
-                        style: TextStyle(color: AppColors.error),
+                        l10n.classroomsUnavailableRetry,
+                        style: const TextStyle(color: AppColors.error),
                       ),
                     )
                   else
@@ -559,7 +560,10 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                                   const TextStyle(fontWeight: FontWeight.w600),
                             ),
                             subtitle: Text(
-                              'المرحلة: ${classroom['gradeLevel'] ?? 'غير محددة'}',
+                              l10n.gradeValue(
+                                (classroom['gradeLevel'] ?? l10n.unspecified)
+                                    .toString(),
+                              ),
                               style: const TextStyle(
                                   color: AppColors.onSurfaceVariant,
                                   fontSize: 12),
@@ -576,10 +580,10 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       Chip(
                         label: Text(
                           (user['role'] as String? ?? 'user') == 'teacher'
-                              ? 'معلم'
+                              ? l10n.teacherRole
                               : (user['role'] as String? ?? 'user') == 'student'
-                                  ? 'طالب'
-                                  : 'مشرف',
+                                  ? l10n.studentRole
+                                  : l10n.adminRole,
                         ),
                         backgroundColor:
                             AppColors.primary.withValues(alpha: 0.08),
@@ -587,8 +591,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       ),
                       Chip(
                         label: Text((user['isActive'] as bool? ?? false)
-                            ? 'نشط'
-                            : 'بانتظار الاعتماد'),
+                            ? l10n.active
+                            : l10n.pendingApproval),
                         backgroundColor: (user['isActive'] as bool? ?? false)
                             ? AppColors.success.withValues(alpha: 0.08)
                             : AppColors.warningContainer,
@@ -608,9 +612,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       final classroomIds = selectedClassroomIds.toList();
                       if (newName.length < 2) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content:
-                                Text('الاسم يجب أن يحتوي على حرفين على الأقل'),
+                          SnackBar(
+                            content: Text(l10n.nameTooShort),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -618,8 +621,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                       }
                       if (newEmail.isNotEmpty && !newEmail.contains('@')) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('البريد الإلكتروني غير صحيح'),
+                          SnackBar(
+                            content: Text(l10n.emailInvalid),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -656,8 +659,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         if (mounted && ctx.mounted) {
                           Navigator.pop(ctx);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('تم تحديث بيانات المستخدم'),
+                            SnackBar(
+                              content: Text(l10n.userUpdated),
                               behavior: SnackBarBehavior.floating,
                             ),
                           );
@@ -666,10 +669,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         if (!AppConstants.useMockData && !isDemoSession) {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'تعذر حفظ بيانات المستخدم. يرجى المحاولة مرة أخرى',
-                                ),
+                              SnackBar(
+                                content: Text(l10n.userUpdateFailed),
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: AppColors.error,
                               ),
@@ -697,8 +698,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8))),
-                    child: const Text('حفظ التغييرات',
-                        style: TextStyle(
+                    child: Text(l10n.saveChanges,
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w600)),
                   ),
                 ],

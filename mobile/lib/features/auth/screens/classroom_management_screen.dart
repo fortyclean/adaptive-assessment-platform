@@ -355,11 +355,11 @@ class _ClassroomManagementScreenState
     switch (_classroomFilter) {
       case 'without_teacher':
         return items.where((classroom) {
-          final teacherName =
-              (classroom['teacherName'] as String?) ?? 'غير محدد';
+          final teacherName = (classroom['teacherName'] as String?) ??
+              AppLocalizations.of(context).unassigned;
           return classroom['teacherId'] == null ||
               '${classroom['teacherId']}'.isEmpty ||
-              teacherName == 'غير محدد';
+              teacherName == AppLocalizations.of(context).unassigned;
         }).toList();
       case 'with_students':
         return items
@@ -865,10 +865,10 @@ class _ClassroomManagementScreenState
 
     if (teachers.isEmpty) {
       if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'تعذر تحميل قائمة المعلمين. تحقق من الاتصال ثم أعد المحاولة.'),
+        SnackBar(
+          content: Text(l10n.teachersLoadFailed),
           behavior: SnackBarBehavior.floating,
           backgroundColor: AppColors.error,
         ),
@@ -879,6 +879,7 @@ class _ClassroomManagementScreenState
     var selectedTeacherId = classroom['teacherId'] as String?;
     var teacherSearchQuery = '';
     if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
 
     await showModalBottomSheet<void>(
       context: context,
@@ -917,18 +918,21 @@ class _ClassroomManagementScreenState
                               color: AppColors.outlineVariant,
                               borderRadius: BorderRadius.circular(2)))),
                   const SizedBox(height: 16),
-                  Text('ربط معلم بـ: ${classroom['name']}',
+                  Text(
+                      l10n.assignTeacherToClass(
+                        (classroom['name'] ?? '').toString(),
+                      ),
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 4),
-                  const Text('اختر معلماً لتعيينه في هذا الفصل',
-                      style: TextStyle(
+                  Text(l10n.chooseTeacherForClass,
+                      style: const TextStyle(
                           color: AppColors.onSurfaceVariant, fontSize: 13)),
                   const SizedBox(height: 12),
                   TextField(
                     textDirection: TextDirection.rtl,
                     decoration: InputDecoration(
-                      labelText: 'بحث عن معلم',
+                      labelText: l10n.searchTeacher,
                       prefixIcon: const Icon(Icons.search_rounded),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -981,9 +985,8 @@ class _ClassroomManagementScreenState
                                   !_isDemoSession) {
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'تعذر ربط المعلم بالفصل. يرجى المحاولة مرة أخرى'),
+                                    SnackBar(
+                                      content: Text(l10n.teacherAssignFailed),
                                       behavior: SnackBarBehavior.floating,
                                       backgroundColor: AppColors.error,
                                     ),
@@ -1005,8 +1008,10 @@ class _ClassroomManagementScreenState
                             Navigator.pop(ctx);
                             ScaffoldMessenger.of(ctx).showSnackBar(
                               SnackBar(
-                                content: Text(
-                                    'تم ربط ${teacher['fullName']} بفصل ${classroom['name']}'),
+                                content: Text(l10n.teacherAssignedToClass(
+                                  (teacher['fullName'] ?? '').toString(),
+                                  (classroom['name'] ?? '').toString(),
+                                )),
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: const Color(0xFF2E7D32),
                               ),
@@ -1019,8 +1024,8 @@ class _ClassroomManagementScreenState
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('تأكيد الربط',
-                        style: TextStyle(
+                    child: Text(l10n.confirmAssignment,
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w600)),
                   ),
                 ],
@@ -1033,12 +1038,13 @@ class _ClassroomManagementScreenState
   }
 
   Future<void> _showAssignStudentsDialog(Map<String, dynamic> classroom) async {
+    final l10n = AppLocalizations.of(context);
     final fallbackStudents = List<Map<String, dynamic>>.generate(
       36,
       (index) => {
         '_id': 's${index + 1}',
-        'fullName': 'طالب تجريبي ${index + 1}',
-        'grade': classroom['gradeLevel'] as String? ?? 'الصف الدراسي',
+        'fullName': l10n.demoStudentName(index + 1),
+        'grade': classroom['gradeLevel'] as String? ?? l10n.gradeLevelFallback,
       },
     );
     final students = await _loadStudentOptions(fallbackStudents);
@@ -1046,9 +1052,8 @@ class _ClassroomManagementScreenState
     if (students.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('تعذر تحميل قائمة الطلاب. تحقق من الاتصال ثم أعد المحاولة.'),
+        SnackBar(
+          content: Text(l10n.studentsLoadFailed),
           behavior: SnackBarBehavior.floating,
           backgroundColor: AppColors.error,
         ),
@@ -1104,12 +1109,15 @@ class _ClassroomManagementScreenState
                               color: AppColors.outlineVariant,
                               borderRadius: BorderRadius.circular(2)))),
                   const SizedBox(height: 16),
-                  Text('ربط طلاب بـ: ${classroom['name']}',
+                  Text(
+                      l10n.assignStudentsToClass(
+                        (classroom['name'] ?? '').toString(),
+                      ),
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 4),
                   Text(
-                    'اختر الطلاب المرتبطين بهذا الفصل (${selectedStudentIds.length})',
+                    l10n.chooseStudentsForClass(selectedStudentIds.length),
                     style: const TextStyle(
                         color: AppColors.onSurfaceVariant, fontSize: 13),
                   ),
@@ -1117,7 +1125,7 @@ class _ClassroomManagementScreenState
                   TextField(
                     textDirection: TextDirection.rtl,
                     decoration: InputDecoration(
-                      labelText: 'بحث عن طالب',
+                      labelText: l10n.searchStudent,
                       prefixIcon: const Icon(Icons.search_rounded),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -1142,7 +1150,7 @@ class _ClassroomManagementScreenState
                                 });
                               },
                         icon: const Icon(Icons.done_all_rounded, size: 18),
-                        label: const Text('تحديد الظاهر'),
+                        label: Text(l10n.selectVisible),
                       ),
                       const SizedBox(width: 8),
                       TextButton.icon(
@@ -1158,7 +1166,7 @@ class _ClassroomManagementScreenState
                                 });
                               },
                         icon: const Icon(Icons.remove_done_rounded, size: 18),
-                        label: const Text('إلغاء الظاهر'),
+                        label: Text(l10n.clearVisible),
                       ),
                     ],
                   ),
@@ -1189,13 +1197,13 @@ class _ClassroomManagementScreenState
                           title: Text(
                             student['fullName'] as String? ??
                                 student['username'] as String? ??
-                                'طالب',
+                                l10n.studentRole,
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           subtitle: Text(
                             student['grade'] as String? ??
                                 student['username'] as String? ??
-                                'طالب نشط',
+                                l10n.activeStudent,
                             style: const TextStyle(
                                 color: AppColors.onSurfaceVariant,
                                 fontSize: 12),
@@ -1217,9 +1225,8 @@ class _ClassroomManagementScreenState
                         if (!AppConstants.useMockData && !_isDemoSession) {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'تعذر ربط الطلاب بالفصل. يرجى المحاولة مرة أخرى'),
+                              SnackBar(
+                                content: Text(l10n.studentsAssignFailed),
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: AppColors.error,
                               ),
@@ -1239,10 +1246,10 @@ class _ClassroomManagementScreenState
                       if (!ctx.mounted) return;
                       Navigator.pop(ctx);
                       ScaffoldMessenger.of(ctx).showSnackBar(
-                        const SnackBar(
-                          content: Text('تم تحديث طلاب الفصل'),
+                        SnackBar(
+                          content: Text(l10n.classStudentsUpdated),
                           behavior: SnackBarBehavior.floating,
-                          backgroundColor: Color(0xFF2E7D32),
+                          backgroundColor: const Color(0xFF2E7D32),
                         ),
                       );
                     },
@@ -1253,8 +1260,8 @@ class _ClassroomManagementScreenState
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('حفظ الطلاب',
-                        style: TextStyle(
+                    child: Text(l10n.saveStudents,
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w600)),
                   ),
                 ],
@@ -1269,6 +1276,7 @@ class _ClassroomManagementScreenState
   void _showEditDialog(Map<String, dynamic> classroom) {
     final nameController =
         TextEditingController(text: classroom['name'] as String? ?? '');
+    final l10n = AppLocalizations.of(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -1293,7 +1301,7 @@ class _ClassroomManagementScreenState
                         color: AppColors.outlineVariant,
                         borderRadius: BorderRadius.circular(2)))),
             const SizedBox(height: 16),
-            Text('تعديل: ${classroom['name']}',
+            Text(l10n.editEntity((classroom['name'] ?? '').toString()),
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
@@ -1301,7 +1309,7 @@ class _ClassroomManagementScreenState
               controller: nameController,
               textDirection: TextDirection.rtl,
               decoration: InputDecoration(
-                  labelText: 'اسم الفصل',
+                  labelText: l10n.classroom,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8))),
             ),
@@ -1319,9 +1327,8 @@ class _ClassroomManagementScreenState
                   if (!AppConstants.useMockData && !_isDemoSession) {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                              'تعذر تحديث بيانات الفصل. يرجى المحاولة مرة أخرى'),
+                        SnackBar(
+                          content: Text(l10n.classroomUpdateFailed),
                           behavior: SnackBarBehavior.floating,
                           backgroundColor: AppColors.error,
                         ),
@@ -1341,8 +1348,8 @@ class _ClassroomManagementScreenState
                 if (!ctx.mounted) return;
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(ctx).showSnackBar(
-                  const SnackBar(
-                      content: Text('تم تحديث الفصل'),
+                  SnackBar(
+                      content: Text(l10n.classroomUpdated),
                       behavior: SnackBarBehavior.floating),
                 );
               },
@@ -1352,8 +1359,9 @@ class _ClassroomManagementScreenState
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8))),
-              child: const Text('حفظ التغييرات',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              child: Text(l10n.saveChanges,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -1469,10 +1477,11 @@ class _ClassroomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final studentCount = (classroom['studentIds'] as List?)?.length ??
         (classroom['studentCount'] as int?) ??
         0;
-    final teacherName = classroom['teacherName'] as String? ?? 'غير محدد';
+    final teacherName = classroom['teacherName'] as String? ?? l10n.unassigned;
     final studentNames = _studentNames(classroom);
     final activeAssessments = classroom['activeAssessments'] as int? ?? 0;
     final averageScore = classroom['averageScore'] as int?;
@@ -1529,14 +1538,14 @@ class _ClassroomCard extends StatelessWidget {
                   icon: const Icon(Icons.edit_outlined,
                       color: AppColors.primary, size: 20),
                   onPressed: onEdit,
-                  tooltip: 'تعديل',
+                  tooltip: l10n.edit,
                   visualDensity: VisualDensity.compact,
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete_outline_rounded,
                       color: AppColors.error, size: 20),
                   onPressed: onDelete,
-                  tooltip: 'حذف',
+                  tooltip: l10n.delete,
                   visualDensity: VisualDensity.compact,
                 ),
               ],
@@ -1552,14 +1561,14 @@ class _ClassroomCard extends StatelessWidget {
                   children: [
                     _StatItem(
                       icon: Icons.people_rounded,
-                      label: 'الطلاب',
+                      label: l10n.students,
                       value: '$studentCount',
                       color: AppColors.primary,
                     ),
                     const SizedBox(width: 16),
                     _StatItem(
                       icon: Icons.person_rounded,
-                      label: 'المعلم',
+                      label: l10n.teacher,
                       value: teacherName,
                       color: AppColors.success,
                       isText: true,
@@ -1571,7 +1580,7 @@ class _ClassroomCard extends StatelessWidget {
                   children: [
                     _StatItem(
                       icon: Icons.assignment_rounded,
-                      label: 'اختبارات نشطة',
+                      label: l10n.activeAssessments,
                       value: '$activeAssessments',
                       color: activeAssessments > 0
                           ? AppColors.warning
@@ -1581,7 +1590,7 @@ class _ClassroomCard extends StatelessWidget {
                       const SizedBox(width: 16),
                       _StatItem(
                         icon: Icons.bar_chart_rounded,
-                        label: 'متوسط الدرجات',
+                        label: l10n.average,
                         value: '$averageScore%',
                         color: averageScore >= 70
                             ? AppColors.success
@@ -1607,7 +1616,9 @@ class _ClassroomCard extends StatelessWidget {
                             size: 16, color: AppColors.warning),
                         const SizedBox(width: 8),
                         Text(
-                          '$activeAssessments اختبار نشط حالياً',
+                          l10n.classroomActiveAssessmentsNow(
+                            activeAssessments,
+                          ),
                           style: const TextStyle(
                             fontFamily: 'Almarai',
                             fontSize: 12,
@@ -1622,16 +1633,16 @@ class _ClassroomCard extends StatelessWidget {
                 const SizedBox(height: 12),
                 _ClassroomPreviewRow(
                   icon: Icons.person_outline_rounded,
-                  label: 'المعلم',
+                  label: l10n.teacher,
                   value: teacherName,
                 ),
                 const SizedBox(height: 8),
                 _ClassroomPreviewRow(
                   icon: Icons.group_outlined,
-                  label: 'الطلاب',
+                  label: l10n.students,
                   value: studentNames.isEmpty
-                      ? 'لم يتم عرض أسماء الطلاب بعد'
-                      : studentNames.take(3).join('، '),
+                      ? l10n.noStudentNamesYet
+                      : studentNames.take(3).join(l10n.listSeparator),
                   trailing: studentNames.length > 3
                       ? '+${studentNames.length - 3}'
                       : null,
@@ -1644,7 +1655,7 @@ class _ClassroomCard extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: onAssignTeacher,
                         icon: const Icon(Icons.person_add_outlined, size: 16),
-                        label: const Text('ربط معلم'),
+                        label: Text(l10n.assignTeacher),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.primary,
                           side: const BorderSide(color: AppColors.primary),
@@ -1661,7 +1672,7 @@ class _ClassroomCard extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: onAssignStudents,
                         icon: const Icon(Icons.group_add_outlined, size: 16),
-                        label: const Text('ربط طلاب'),
+                        label: Text(l10n.assignStudents),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.primary,
                           side: const BorderSide(color: AppColors.primary),
@@ -1833,6 +1844,7 @@ class _CreateClassroomDialogState
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
     setState(() => _isLoading = true);
+    final l10n = AppLocalizations.of(context);
 
     try {
       await ref.read(adminRepositoryProvider).createClassroom({
@@ -1847,8 +1859,8 @@ class _CreateClassroomDialogState
       if (!AppConstants.useMockData && !isDemoSession) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تعذر إنشاء الفصل. يرجى المحاولة مرة أخرى'),
+            SnackBar(
+              content: Text(l10n.classroomCreateFailed),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppColors.error,
             ),
@@ -1864,14 +1876,14 @@ class _CreateClassroomDialogState
         'gradeLevel': _gradeLevel,
         'academicYear': _academicYear,
         'studentIds': <String>[],
-        'teacherName': 'غير محدد',
+        'teacherName': l10n.unassigned,
         'activeAssessments': 0,
         'averageScore': null,
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('تم إنشاء فصل "$_name" بنجاح'),
+            content: Text(l10n.classroomCreated(_name)),
             behavior: SnackBarBehavior.floating,
             backgroundColor: const Color(0xFF2E7D32),
           ),
@@ -1883,75 +1895,80 @@ class _CreateClassroomDialogState
   }
 
   @override
-  Widget build(BuildContext context) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text('إضافة فصل جديد',
-              style: TextStyle(
-                  fontFamily: 'Almarai', fontWeight: FontWeight.w700)),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'اسم الفصل *',
-                    hintText: 'مثال: أولى متوسط (أ)',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                  onSaved: (v) => _name = v!,
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(l10n.addNewClassroom,
+            style: const TextStyle(
+                fontFamily: 'Almarai', fontWeight: FontWeight.w700)),
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: l10n.classNameRequiredLabel,
+                  hintText: l10n.classNameHint,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'المرحلة الدراسية *',
-                    hintText: 'مثال: الصف الأول المتوسط',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                  onSaved: (v) => _gradeLevel = v!,
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'العام الدراسي *',
-                    hintText: 'مثال: 2024-2025',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                  onSaved: (v) => _academicYear = v!,
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('إلغاء')),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _submit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l10n.requiredField : null,
+                onSaved: (v) => _name = v!,
               ),
-              child: _isLoading
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
-                  : const Text('إنشاء'),
-            ),
-          ],
+              const SizedBox(height: 12),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: l10n.gradeLevelRequiredLabel,
+                  hintText: l10n.gradeLevelHint,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l10n.requiredField : null,
+                onSaved: (v) => _gradeLevel = v!,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: l10n.academicYearRequiredLabel,
+                  hintText: l10n.academicYearHint,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l10n.requiredField : null,
+                onSaved: (v) => _academicYear = v!,
+              ),
+            ],
+          ),
         ),
-      );
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.cancel)),
+          ElevatedButton(
+            onPressed: _isLoading ? null : _submit,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+            child: _isLoading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2, color: Colors.white))
+                : Text(l10n.create),
+          ),
+        ],
+      ),
+    );
+  }
 }
