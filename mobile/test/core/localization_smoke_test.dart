@@ -476,10 +476,14 @@ void main() {
             l10n.markAllAsRead,
             l10n.noNotificationsTitle,
             l10n.notificationsToday,
+            l10n.notificationsYesterday,
             l10n.notificationsPrevious,
             l10n.notificationSettings,
             l10n.studentPerformanceNotificationsGroup,
             l10n.pushNotificationsTitle,
+            l10n.unreadNotificationsCount(3),
+            l10n.noUnreadNotifications,
+            l10n.noOlderNotificationsToShow,
             l10n.notificationSettingsSaved,
           ].join(' / ');
         },
@@ -489,8 +493,10 @@ void main() {
     expect(
       find.text(
         'Notifications / Mark all as read / No notifications / Today / '
-        'Previous / Notification settings / Student performance / '
-        'Instant alerts (Push) / Notification settings saved successfully',
+        'Yesterday / Previous / Notification settings / Student performance / '
+        'Instant alerts (Push) / You have 3 new unread notifications / '
+        'No unread notifications / No older notifications to show / '
+        'Notification settings saved successfully',
       ),
       findsOneWidget,
     );

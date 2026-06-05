@@ -877,5 +877,17 @@
   "questionBankSmsSubtitle": "For urgent alerts related to final assessments.",
   "periodicReportsNotificationsGroup": "Periodic reports",
   "periodicReportsEmailSubtitle": "Send comprehensive monthly reports to supervisors.",
-  "notificationSettingsPageSubtitle": "Choose how you want to stay informed about the latest updates."
+  "notificationSettingsPageSubtitle": "Choose how you want to stay informed about the latest updates.",
+  "notificationsYesterday": "Yesterday",
+  "unreadNotificationsCount": "You have {count} new unread notifications",
+  "@unreadNotificationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noUnreadNotifications": "No unread notifications",
+  "noOlderNotificationsToShow": "No older notifications to show",
+  "yesterdayDatePrefix": "Yesterday,"
 }

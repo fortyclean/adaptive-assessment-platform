@@ -1969,4 +1969,21 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get notificationSettingsPageSubtitle =>
       'خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.';
+
+  @override
+  String get notificationsYesterday => 'أمس';
+
+  @override
+  String unreadNotificationsCount(int count) {
+    return 'لديك $count تنبيهات جديدة غير مقروءة';
+  }
+
+  @override
+  String get noUnreadNotifications => 'لا توجد تنبيهات غير مقروءة';
+
+  @override
+  String get noOlderNotificationsToShow => 'لا توجد تنبيهات أقدم لعرضها';
+
+  @override
+  String get yesterdayDatePrefix => 'أمس،';
 }

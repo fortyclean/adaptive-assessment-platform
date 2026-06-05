@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 import '../../../core/constants/app_colors.dart';
 import '../../../core/network/api_service.dart';
+import '../../../l10n/app_localizations.dart';
 
-/// Advanced Notification Center — Screen 34
-/// Matches _34/code.html design exactly.
-/// Features:
-///   - Today / Yesterday section grouping with dividers
-///   - Unread indicator dot (blue circle) on unread items
-///   - Notification icons per type (quiz, trending_up, settings, bar_chart)
-///   - Empty state illustration at bottom
-///   - Swipe-to-dismiss gesture support
-///   - "تحديد الكل كمقروء" button
+/// Advanced Notification Center - Screen 34
 /// Requirements: 21.4, 21.5, 21.6, 21.7
 class AdvancedNotificationCenterScreen extends ConsumerStatefulWidget {
   const AdvancedNotificationCenterScreen({super.key});
@@ -39,15 +33,16 @@ class _AdvancedNotificationCenterScreenState
     try {
       final response =
           await ref.read(apiServiceProvider).dio.get('/notifications');
+      if (!mounted) return;
       setState(() {
         _notifications = List<Map<String, dynamic>>.from(
-            response.data['notifications'] as List);
+          response.data['notifications'] as List,
+        );
         _unreadCount = response.data['unreadCount'] as int? ?? 0;
         _isLoading = false;
       });
     } catch (_) {
-      // Keep the center honest in production: show an empty state instead of
-      // fabricated notifications when the API is unavailable.
+      if (!mounted) return;
       setState(() {
         _notifications = [];
         _unreadCount = 0;
@@ -60,6 +55,7 @@ class _AdvancedNotificationCenterScreenState
     try {
       await ref.read(apiServiceProvider).dio.patch('/notifications/read-all');
     } catch (_) {}
+    if (!mounted) return;
     setState(() {
       for (final n in _notifications) {
         n['isRead'] = true;
@@ -72,6 +68,7 @@ class _AdvancedNotificationCenterScreenState
     try {
       await ref.read(apiServiceProvider).dio.patch('/notifications/$id/read');
     } catch (_) {}
+    if (!mounted) return;
     setState(() {
       final idx = _notifications.indexWhere((n) => n['_id'] == id);
       if (idx != -1) {
@@ -89,9 +86,7 @@ class _AdvancedNotificationCenterScreenState
     });
   }
 
-  // ── Grouping ──────────────────────────────────────────────────────────────
-  /// Returns groups: 'اليوم', 'أمس', 'السابقة'
-  Map<String, List<Map<String, dynamic>>> get _grouped {
+  Map<String, List<Map<String, dynamic>>> _grouped(AppLocalizations l10n) {
     final today = <Map<String, dynamic>>[];
     final yesterday = <Map<String, dynamic>>[];
     final previous = <Map<String, dynamic>>[];
@@ -115,25 +110,29 @@ class _AdvancedNotificationCenterScreenState
     }
 
     return {
-      'اليوم': today,
-      'أمس': yesterday,
-      'السابقة': previous,
+      l10n.notificationsToday: today,
+      l10n.notificationsYesterday: yesterday,
+      l10n.notificationsPrevious: previous,
     };
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: _buildAppBar(),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : RefreshIndicator(
-                onRefresh: _loadNotifications,
-                child: _buildBody(),
-              ),
-      );
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
 
-  PreferredSizeWidget _buildAppBar() {
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: _buildAppBar(l10n),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: _loadNotifications,
+              child: _buildBody(l10n),
+            ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     return AppBar(
       backgroundColor: colorScheme.surface,
@@ -142,14 +141,11 @@ class _AdvancedNotificationCenterScreenState
       surfaceTintColor: Colors.transparent,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Container(
-          height: 1,
-          color: colorScheme.outlineVariant,
-        ),
+        child: Container(height: 1, color: colorScheme.outlineVariant),
       ),
-      title: const Text(
-        'التقييم الذكي',
-        style: TextStyle(
+      title: Text(
+        l10n.smartAssessmentTitle,
+        style: const TextStyle(
           color: Color(0xFF1E40AF),
           fontSize: 20,
           fontWeight: FontWeight.w700,
@@ -175,24 +171,21 @@ class _AdvancedNotificationCenterScreenState
             Icons.notifications_outlined,
             color: Color(0xFF1E40AF),
           ),
-          onPressed: () {}, // keep as is - already on notifications screen
+          onPressed: () {},
         ),
       ],
     );
   }
 
-  Widget _buildBody() {
-    final grouped = _grouped;
+  Widget _buildBody(AppLocalizations l10n) {
+    final grouped = _grouped(l10n);
     final hasAnyNotifications = grouped.values.any((list) => list.isNotEmpty);
 
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       children: [
-        // ── Page Header ──────────────────────────────────────────────────
-        _buildPageHeader(),
+        _buildPageHeader(l10n),
         const SizedBox(height: 24),
-
-        // ── Grouped Sections ─────────────────────────────────────────────
         for (final entry in grouped.entries)
           if (entry.value.isNotEmpty) ...[
             _SectionHeader(title: entry.key),
@@ -210,48 +203,47 @@ class _AdvancedNotificationCenterScreenState
             ),
             const SizedBox(height: 8),
           ],
-
-        // ── Empty State ───────────────────────────────────────────────────
-        _buildEmptyState(hasAnyNotifications),
+        _buildEmptyState(l10n, hasAnyNotifications),
       ],
     );
   }
 
-  Widget _buildPageHeader() {
+  Widget _buildPageHeader(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title + subtitle
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'مركز التنبيهات',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onSurface,
-                fontFamily: 'Almarai',
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.notificationCenter,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: colorScheme.onSurface,
+                  fontFamily: 'Almarai',
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              _unreadCount > 0
-                  ? 'لديك $_unreadCount تنبيهات جديدة غير مقروءة'
-                  : 'لا توجد تنبيهات غير مقروءة',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: colorScheme.onSurfaceVariant,
-                fontFamily: 'Almarai',
+              const SizedBox(height: 4),
+              Text(
+                _unreadCount > 0
+                    ? l10n.unreadNotificationsCount(_unreadCount)
+                    : l10n.noUnreadNotifications,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: colorScheme.onSurfaceVariant,
+                  fontFamily: 'Almarai',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        // Mark all read button
-        if (_unreadCount > 0)
+        if (_unreadCount > 0) ...[
+          const SizedBox(width: 12),
           TextButton(
             onPressed: _markAllRead,
             style: TextButton.styleFrom(
@@ -261,20 +253,24 @@ class _AdvancedNotificationCenterScreenState
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text(
-              'تحديد الكل كمقروء',
-              style: TextStyle(
+            child: Text(
+              l10n.markAllAsRead,
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 fontFamily: 'Almarai',
               ),
             ),
           ),
+        ],
       ],
     );
   }
 
-  Widget _buildEmptyState(bool hasNotifications) {
+  Widget _buildEmptyState(
+    AppLocalizations l10n,
+    bool hasNotifications,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(top: 48, bottom: 24),
@@ -296,8 +292,9 @@ class _AdvancedNotificationCenterScreenState
           const SizedBox(height: 16),
           Text(
             hasNotifications
-                ? 'لا توجد تنبيهات أقدم لعرضها'
-                : 'لا توجد تنبيهات',
+                ? l10n.noOlderNotificationsToShow
+                : l10n.noNotificationsTitle,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -309,59 +306,7 @@ class _AdvancedNotificationCenterScreenState
       ),
     );
   }
-
-  // ── Sample data for offline/preview ──────────────────────────────────────
-  // ignore: unused_element
-  List<Map<String, dynamic>> _sampleNotifications() {
-    final now = DateTime.now();
-    final yesterday = now.subtract(const Duration(days: 1));
-    return [
-      {
-        '_id': '1',
-        'title': 'نتائج اختبار الرياضيات',
-        'body':
-            'تم إصدار نتائج اختبار "الجبر المتقدم". لقد حققت نسبة 92%، رائع!',
-        'type': 'quiz',
-        'isRead': false,
-        'createdAt':
-            DateTime(now.year, now.month, now.day, 10, 30).toIso8601String(),
-      },
-      {
-        '_id': '2',
-        'title': 'تقدم في المسار التعليمي',
-        'body': 'تهانينا! لقد أكملت 80% من مسار العلوم لهذا الأسبوع.',
-        'type': 'trending_up',
-        'isRead': false,
-        'createdAt':
-            DateTime(now.year, now.month, now.day, 9, 15).toIso8601String(),
-      },
-      {
-        '_id': '3',
-        'title': 'تحديث النظام',
-        'body':
-            'تم تحديث تطبيق التقييم الذكي إلى الإصدار 2.4.5 مع تحسينات في الأداء.',
-        'type': 'settings',
-        'isRead': true,
-        'createdAt':
-            DateTime(yesterday.year, yesterday.month, yesterday.day, 16)
-                .toIso8601String(),
-      },
-      {
-        '_id': '4',
-        'title': 'تقرير شهري جديد',
-        'body':
-            'التقرير الشهري لشهر أكتوبر متاح الآن للعرض والتحميل بصيغة PDF.',
-        'type': 'bar_chart',
-        'isRead': true,
-        'createdAt':
-            DateTime(yesterday.year, yesterday.month, yesterday.day, 14, 30)
-                .toIso8601String(),
-      },
-    ];
-  }
 }
-
-// ─── Section Header ──────────────────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({required this.title});
@@ -392,8 +337,6 @@ class _SectionHeader extends StatelessWidget {
     );
   }
 }
-
-// ─── Swipeable Notification Card ─────────────────────────────────────────────
 
 class _SwipeableNotificationCard extends StatelessWidget {
   const _SwipeableNotificationCard({
@@ -437,8 +380,6 @@ class _SwipeableNotificationCard extends StatelessWidget {
       );
 }
 
-// ─── Notification Card ────────────────────────────────────────────────────────
-
 class _NotificationCard extends StatelessWidget {
   const _NotificationCard({
     required this.notification,
@@ -457,8 +398,8 @@ class _NotificationCard extends StatelessWidget {
     final createdAt = notification['createdAt'] != null
         ? DateTime.parse(notification['createdAt'] as String)
         : DateTime.now();
-
-    final timeStr = _formatTime(createdAt);
+    final l10n = AppLocalizations.of(context);
+    final timeStr = _formatTime(context, l10n, createdAt);
     final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
@@ -468,9 +409,7 @@ class _NotificationCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: colorScheme.outlineVariant,
-          ),
+          border: Border.all(color: colorScheme.outlineVariant),
           boxShadow: const [
             BoxShadow(
               color: Color(0x0A000000),
@@ -484,11 +423,8 @@ class _NotificationCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── Icon Container ──────────────────────────────────────────
               _NotificationIcon(type: type, isRead: isRead),
               const SizedBox(width: 16),
-
-              // ── Content ─────────────────────────────────────────────────
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,8 +471,6 @@ class _NotificationCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-
-              // ── Unread Dot ───────────────────────────────────────────────
               if (!isRead)
                 Container(
                   width: 8,
@@ -556,41 +490,27 @@ class _NotificationCard extends StatelessWidget {
     );
   }
 
-  String _formatTime(DateTime dt) {
+  String _formatTime(
+    BuildContext context,
+    AppLocalizations l10n,
+    DateTime dt,
+  ) {
     final now = DateTime.now();
     final todayDate = DateTime(now.year, now.month, now.day);
     final itemDate = DateTime(dt.year, dt.month, dt.day);
+    final locale = Localizations.localeOf(context).languageCode;
+    final formattedTime = DateFormat('hh:mm a', locale).format(dt);
 
     if (itemDate == todayDate) {
-      // Today: show time only e.g. "10:30 ص"
-      final hour = dt.hour;
-      final minute = dt.minute.toString().padLeft(2, '0');
-      final period = hour < 12 ? 'ص' : 'م';
-      final displayHour = hour == 0
-          ? 12
-          : hour > 12
-              ? hour - 12
-              : hour;
-      return '$displayHour:$minute $period';
-    } else {
-      // Yesterday or older: show "أمس، HH:MM ص/م"
-      final hour = dt.hour;
-      final minute = dt.minute.toString().padLeft(2, '0');
-      final period = hour < 12 ? 'ص' : 'م';
-      final displayHour = hour == 0
-          ? 12
-          : hour > 12
-              ? hour - 12
-              : hour;
-      final prefix = itemDate == todayDate.subtract(const Duration(days: 1))
-          ? 'أمس،'
-          : DateFormat('d MMM', 'ar').format(dt);
-      return '$prefix $displayHour:$minute $period';
+      return formattedTime;
     }
+
+    final prefix = itemDate == todayDate.subtract(const Duration(days: 1))
+        ? l10n.yesterdayDatePrefix
+        : DateFormat('d MMM', locale).format(dt);
+    return '$prefix $formattedTime';
   }
 }
-
-// ─── Notification Icon ────────────────────────────────────────────────────────
 
 class _NotificationIcon extends StatelessWidget {
   const _NotificationIcon({required this.type, required this.isRead});
@@ -600,7 +520,7 @@ class _NotificationIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = _iconConfig(type, isRead);
+    final config = _iconConfig(type);
 
     return Container(
       width: 48,
@@ -617,7 +537,7 @@ class _NotificationIcon extends StatelessWidget {
     );
   }
 
-  _IconConfig _iconConfig(String type, bool isRead) {
+  _IconConfig _iconConfig(String type) {
     switch (type) {
       case 'quiz':
         return const _IconConfig(

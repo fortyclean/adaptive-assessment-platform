@@ -3687,6 +3687,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.'**
   String get notificationSettingsPageSubtitle;
+
+  /// No description provided for @notificationsYesterday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمس'**
+  String get notificationsYesterday;
+
+  /// No description provided for @unreadNotificationsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'لديك {count} تنبيهات جديدة غير مقروءة'**
+  String unreadNotificationsCount(int count);
+
+  /// No description provided for @noUnreadNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تنبيهات غير مقروءة'**
+  String get noUnreadNotifications;
+
+  /// No description provided for @noOlderNotificationsToShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تنبيهات أقدم لعرضها'**
+  String get noOlderNotificationsToShow;
+
+  /// No description provided for @yesterdayDatePrefix.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمس،'**
+  String get yesterdayDatePrefix;
 }
 
 class _AppLocalizationsDelegate

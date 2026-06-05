@@ -1987,4 +1987,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationSettingsPageSubtitle =>
       'Choose how you want to stay informed about the latest updates.';
+
+  @override
+  String get notificationsYesterday => 'Yesterday';
+
+  @override
+  String unreadNotificationsCount(int count) {
+    return 'You have $count new unread notifications';
+  }
+
+  @override
+  String get noUnreadNotifications => 'No unread notifications';
+
+  @override
+  String get noOlderNotificationsToShow => 'No older notifications to show';
+
+  @override
+  String get yesterdayDatePrefix => 'Yesterday,';
 }

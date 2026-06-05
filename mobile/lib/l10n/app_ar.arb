@@ -877,5 +877,17 @@
   "questionBankSmsSubtitle": "للتنبيهات العاجلة المتعلقة بالاختبارات النهائية.",
   "periodicReportsNotificationsGroup": "تقارير دورية",
   "periodicReportsEmailSubtitle": "إرسال التقارير الشهرية الشاملة للمشرفين.",
-  "notificationSettingsPageSubtitle": "خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات."
+  "notificationSettingsPageSubtitle": "خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.",
+  "notificationsYesterday": "أمس",
+  "unreadNotificationsCount": "لديك {count} تنبيهات جديدة غير مقروءة",
+  "@unreadNotificationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noUnreadNotifications": "لا توجد تنبيهات غير مقروءة",
+  "noOlderNotificationsToShow": "لا توجد تنبيهات أقدم لعرضها",
+  "yesterdayDatePrefix": "أمس،"
 }

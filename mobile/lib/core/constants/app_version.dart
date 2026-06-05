@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.80';
-  static const int buildNumber = 80;
+  static const String current = '1.0.81';
+  static const int buildNumber = 81;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.81',
+      buildNumber: 81,
+      date: 'يونيو 2026',
+      title: 'إكمال ترجمة مركز الإشعارات المتقدم',
+      changes: [
+        'نقل شاشة مركز الإشعارات المتقدم إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'ترجمة مجموعات اليوم وأمس والسابقة ورسائل التنبيهات غير المقروءة والحالة الفارغة.',
+        'ضبط عرض وقت التنبيهات وتاريخ أمس حسب لغة التطبيق الحالية.',
+        'إزالة بيانات المعاينة غير المستخدمة ذات النصوص الثابتة وإضافة اختبار حماية للمفاتيح الجديدة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.80',
       buildNumber: 80,
