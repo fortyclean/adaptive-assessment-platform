@@ -932,6 +932,38 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads institution settings localization labels and messages',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.institutionSettings,
+            l10n.academicStructure,
+            l10n.academicYearsSubtitle,
+            l10n.institutionSettingsLoadFailed,
+            l10n.lastSavedAt('2026/6/5 - 17:20'),
+            l10n.archiveDataWarning,
+            l10n.requestIntegrationSupport,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Institution settings / Academic structure / '
+        'Manage classrooms and academic dates / '
+        'Could not load institution settings from the server. Showing the last saved copy. / '
+        'Last saved: 2026/6/5 - 17:20 / '
+        'Warning: data archiving / Request integration support',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

@@ -3123,4 +3123,262 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addClassToStart => 'أضف فصلاً جديداً للبدء';
+
+  @override
+  String get institutionDemoLocalSaveStatus =>
+      'وضع تجريبي: يتم الحفظ على هذا الجهاز';
+
+  @override
+  String get syncedWithServer => 'تمت المزامنة مع الخادم';
+
+  @override
+  String get institutionSettingsLoadFailed =>
+      'تعذر تحميل إعدادات المؤسسة من الخادم. تم عرض آخر نسخة محفوظة.';
+
+  @override
+  String get savingSettings => 'جار حفظ الإعدادات...';
+
+  @override
+  String get savedLocallyOnly => 'تم الحفظ محلياً فقط';
+
+  @override
+  String get institutionSettingsServerSaveFailed =>
+      'تم الحفظ محلياً، لكن تعذر تحديث إعدادات المؤسسة على الخادم.';
+
+  @override
+  String get institutionEmailInvalid => 'البريد الإلكتروني للمؤسسة غير صحيح';
+
+  @override
+  String get institutionPhoneInvalid =>
+      'رقم التواصل يجب أن يحتوي على 7 أرقام على الأقل';
+
+  @override
+  String get noSavedSyncRecorded => 'لا يوجد حفظ مسجل';
+
+  @override
+  String get unknownTime => 'وقت غير محدد';
+
+  @override
+  String get academicStructure => 'الهيكل الأكاديمي';
+
+  @override
+  String get academicYears => 'الأعوام الدراسية';
+
+  @override
+  String get academicYearsSubtitle => 'إدارة الفصول والتواريخ الدراسية';
+
+  @override
+  String get gradeScales => 'مقاييس التقييم';
+
+  @override
+  String get gradeScalesSubtitle => 'تحديد سلم الدرجات والتقديرات';
+
+  @override
+  String get rolesAndPermissions => 'الأدوار والصلاحيات';
+
+  @override
+  String get rolesAndPermissionsSubtitle => 'تخصيص وصول المعلمين والإداريين';
+
+  @override
+  String get activityLogs => 'سجلات الأنشطة';
+
+  @override
+  String get activityLogsSubtitle => 'تتبع الدخول وتغييرات النظام';
+
+  @override
+  String get systemPreferences => 'تفضيلات النظام';
+
+  @override
+  String get alertSettings => 'إعدادات التنبيهات';
+
+  @override
+  String get alertSettingsSubtitle => 'البريد الإلكتروني والإشعارات الفورية';
+
+  @override
+  String get languageAndRegion => 'اللغة والمنطقة';
+
+  @override
+  String get languageAndRegionSubtitle => 'اللغة العربية، التوقيت المحلي';
+
+  @override
+  String get systemIntegrations => 'تكامل الأنظمة';
+
+  @override
+  String get systemIntegrationsSubtitle => 'ربط API والمزودين الخارجيين';
+
+  @override
+  String get accountAndSupport => 'الحساب والدعم';
+
+  @override
+  String get accountSettingsInstitutionSubtitle =>
+      'الملف الشخصي وكلمة المرور وتفضيلات الحساب';
+
+  @override
+  String get supportAndHelpSubtitle => 'التواصل مع فريق الدعم والمساعدة';
+
+  @override
+  String get logoutAdminSessionSubtitle => 'إنهاء جلسة المشرف الحالية';
+
+  @override
+  String lastSavedAt(Object time) {
+    return 'آخر حفظ: $time';
+  }
+
+  @override
+  String get syncSettings => 'مزامنة الإعدادات';
+
+  @override
+  String get institutionSettingsSynced => 'تمت مزامنة إعدادات المؤسسة';
+
+  @override
+  String get institutionSettingsSubtitle =>
+      'إدارة الهوية الأكاديمية وصلاحيات النظام';
+
+  @override
+  String get schoolProfile => 'ملف المدرسة';
+
+  @override
+  String get logoUploadStorageNotice =>
+      'يمكن تغيير الشعار من لوحة ربط التخزين عند تفعيل رفع الملفات.';
+
+  @override
+  String get logo => 'الشعار';
+
+  @override
+  String get institutionName => 'اسم المؤسسة';
+
+  @override
+  String get contactInformation => 'معلومات التواصل';
+
+  @override
+  String get archiveInstitutionData => 'أرشفة بيانات المؤسسة';
+
+  @override
+  String get logoutAdminQuestion => 'هل تريد تسجيل الخروج من حساب المشرف؟';
+
+  @override
+  String get editSchoolProfile => 'تعديل ملف المدرسة';
+
+  @override
+  String get contactPhone => 'رقم التواصل';
+
+  @override
+  String get emailAlerts => 'تنبيهات البريد الإلكتروني';
+
+  @override
+  String get emailAlertsSubtitle => 'إرسال ملخصات وتنبيهات مهمة عبر البريد';
+
+  @override
+  String get institutionProfileSaved => 'تم حفظ بيانات المؤسسة';
+
+  @override
+  String get currentAcademicYear => 'العام الدراسي الحالي';
+
+  @override
+  String get classroomManagementSettingsSubtitle =>
+      'افتح شاشة الفصول لتعديل الصفوف وربط المعلمين والطلاب.';
+
+  @override
+  String get openClassroomManagement => 'فتح إدارة الفصول';
+
+  @override
+  String get gradeScale => 'سلم التقديرات';
+
+  @override
+  String get saveGradeScale => 'حفظ مقياس التقييم';
+
+  @override
+  String get gradeScaleSaved => 'تم حفظ مقياس التقييم';
+
+  @override
+  String get auditLog => 'سجل التدقيق';
+
+  @override
+  String get auditLogLoadFailed => 'تعذر تحميل سجل التدقيق';
+
+  @override
+  String get auditLogLoadFailedMessage =>
+      'تحقق من الاتصال أو صلاحيات المشرف ثم أعد المحاولة. لا يتم عرض بيانات وهمية خارج وضع الديمو.';
+
+  @override
+  String get noAuditEvents => 'لا توجد أحداث تدقيق بعد';
+
+  @override
+  String get noAuditEventsMessage =>
+      'ستظهر هنا إجراءات مثل تعطيل الحسابات، تغيير الصلاحيات، ربط الفصول، وطلبات الأرشفة.';
+
+  @override
+  String get sensitiveActions => 'إجراءات حساسة';
+
+  @override
+  String get sensitiveActionsSubtitle =>
+      'يعرض آخر تغييرات المشرف التي تؤثر على الحسابات والفصول والإعدادات.';
+
+  @override
+  String get openAdvancedSupervisorDashboard => 'فتح لوحة المشرف المتقدمة';
+
+  @override
+  String get pushNotifications => 'الإشعارات الفورية';
+
+  @override
+  String get pushNotificationsInstitutionSubtitle =>
+      'تنبيهات داخل التطبيق للمشرف والمعلمين';
+
+  @override
+  String get weeklyDigest => 'ملخص أسبوعي';
+
+  @override
+  String get weeklyDigestSubtitle => 'ملخص أداء المؤسسة كل أسبوع';
+
+  @override
+  String get advancedSettings => 'الإعدادات المتقدمة';
+
+  @override
+  String get interfaceLanguage => 'لغة الواجهة';
+
+  @override
+  String get timezone => 'المنطقة الزمنية';
+
+  @override
+  String get saveLanguageAndRegion => 'حفظ اللغة والمنطقة';
+
+  @override
+  String get languageAndRegionSaved => 'تم حفظ اللغة والمنطقة';
+
+  @override
+  String get currentApiEndpoint => 'واجهة API الحالية';
+
+  @override
+  String get sisIntegration => 'نظام معلومات الطلاب SIS';
+
+  @override
+  String get sisIntegrationSubtitle => 'تجهيز الربط مع أنظمة سجلات الطلاب';
+
+  @override
+  String get lmsIntegration => 'نظام إدارة التعلم LMS';
+
+  @override
+  String get lmsIntegrationSubtitle => 'تجهيز الربط مع منصات التعلم الخارجية';
+
+  @override
+  String get requestIntegrationSupport => 'طلب دعم الربط';
+
+  @override
+  String get archiveDataWarning => 'تحذير: أرشفة البيانات';
+
+  @override
+  String get archiveDataWarningMessage =>
+      'سيتم إرسال طلب أرشفة بيانات المؤسسة للمراجعة الإدارية قبل التنفيذ، ولن تُحذف البيانات فورًا من هذا الزر.';
+
+  @override
+  String get archiveRequestSubmitted => 'تم تسجيل طلب الأرشفة للمراجعة';
+
+  @override
+  String get submitRequest => 'إرسال الطلب';
+
+  @override
+  String get unknownAction => 'إجراء غير محدد';
+
+  @override
+  String get system => 'النظام';
 }

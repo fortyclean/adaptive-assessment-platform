@@ -5788,6 +5788,492 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أضف فصلاً جديداً للبدء'**
   String get addClassToStart;
+
+  /// No description provided for @institutionDemoLocalSaveStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'وضع تجريبي: يتم الحفظ على هذا الجهاز'**
+  String get institutionDemoLocalSaveStatus;
+
+  /// No description provided for @syncedWithServer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت المزامنة مع الخادم'**
+  String get syncedWithServer;
+
+  /// No description provided for @institutionSettingsLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل إعدادات المؤسسة من الخادم. تم عرض آخر نسخة محفوظة.'**
+  String get institutionSettingsLoadFailed;
+
+  /// No description provided for @savingSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'جار حفظ الإعدادات...'**
+  String get savingSettings;
+
+  /// No description provided for @savedLocallyOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحفظ محلياً فقط'**
+  String get savedLocallyOnly;
+
+  /// No description provided for @institutionSettingsServerSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحفظ محلياً، لكن تعذر تحديث إعدادات المؤسسة على الخادم.'**
+  String get institutionSettingsServerSaveFailed;
+
+  /// No description provided for @institutionEmailInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني للمؤسسة غير صحيح'**
+  String get institutionEmailInvalid;
+
+  /// No description provided for @institutionPhoneInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم التواصل يجب أن يحتوي على 7 أرقام على الأقل'**
+  String get institutionPhoneInvalid;
+
+  /// No description provided for @noSavedSyncRecorded.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد حفظ مسجل'**
+  String get noSavedSyncRecorded;
+
+  /// No description provided for @unknownTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت غير محدد'**
+  String get unknownTime;
+
+  /// No description provided for @academicStructure.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهيكل الأكاديمي'**
+  String get academicStructure;
+
+  /// No description provided for @academicYears.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأعوام الدراسية'**
+  String get academicYears;
+
+  /// No description provided for @academicYearsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الفصول والتواريخ الدراسية'**
+  String get academicYearsSubtitle;
+
+  /// No description provided for @gradeScales.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقاييس التقييم'**
+  String get gradeScales;
+
+  /// No description provided for @gradeScalesSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد سلم الدرجات والتقديرات'**
+  String get gradeScalesSubtitle;
+
+  /// No description provided for @rolesAndPermissions.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأدوار والصلاحيات'**
+  String get rolesAndPermissions;
+
+  /// No description provided for @rolesAndPermissionsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخصيص وصول المعلمين والإداريين'**
+  String get rolesAndPermissionsSubtitle;
+
+  /// No description provided for @activityLogs.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجلات الأنشطة'**
+  String get activityLogs;
+
+  /// No description provided for @activityLogsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تتبع الدخول وتغييرات النظام'**
+  String get activityLogsSubtitle;
+
+  /// No description provided for @systemPreferences.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفضيلات النظام'**
+  String get systemPreferences;
+
+  /// No description provided for @alertSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات التنبيهات'**
+  String get alertSettings;
+
+  /// No description provided for @alertSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني والإشعارات الفورية'**
+  String get alertSettingsSubtitle;
+
+  /// No description provided for @languageAndRegion.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة والمنطقة'**
+  String get languageAndRegion;
+
+  /// No description provided for @languageAndRegionSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة العربية، التوقيت المحلي'**
+  String get languageAndRegionSubtitle;
+
+  /// No description provided for @systemIntegrations.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكامل الأنظمة'**
+  String get systemIntegrations;
+
+  /// No description provided for @systemIntegrationsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط API والمزودين الخارجيين'**
+  String get systemIntegrationsSubtitle;
+
+  /// No description provided for @accountAndSupport.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب والدعم'**
+  String get accountAndSupport;
+
+  /// No description provided for @accountSettingsInstitutionSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف الشخصي وكلمة المرور وتفضيلات الحساب'**
+  String get accountSettingsInstitutionSubtitle;
+
+  /// No description provided for @supportAndHelpSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التواصل مع فريق الدعم والمساعدة'**
+  String get supportAndHelpSubtitle;
+
+  /// No description provided for @logoutAdminSessionSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنهاء جلسة المشرف الحالية'**
+  String get logoutAdminSessionSubtitle;
+
+  /// No description provided for @lastSavedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر حفظ: {time}'**
+  String lastSavedAt(Object time);
+
+  /// No description provided for @syncSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'مزامنة الإعدادات'**
+  String get syncSettings;
+
+  /// No description provided for @institutionSettingsSynced.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت مزامنة إعدادات المؤسسة'**
+  String get institutionSettingsSynced;
+
+  /// No description provided for @institutionSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الهوية الأكاديمية وصلاحيات النظام'**
+  String get institutionSettingsSubtitle;
+
+  /// No description provided for @schoolProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملف المدرسة'**
+  String get schoolProfile;
+
+  /// No description provided for @logoUploadStorageNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن تغيير الشعار من لوحة ربط التخزين عند تفعيل رفع الملفات.'**
+  String get logoUploadStorageNotice;
+
+  /// No description provided for @logo.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشعار'**
+  String get logo;
+
+  /// No description provided for @institutionName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المؤسسة'**
+  String get institutionName;
+
+  /// No description provided for @contactInformation.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات التواصل'**
+  String get contactInformation;
+
+  /// No description provided for @archiveInstitutionData.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرشفة بيانات المؤسسة'**
+  String get archiveInstitutionData;
+
+  /// No description provided for @logoutAdminQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد تسجيل الخروج من حساب المشرف؟'**
+  String get logoutAdminQuestion;
+
+  /// No description provided for @editSchoolProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل ملف المدرسة'**
+  String get editSchoolProfile;
+
+  /// No description provided for @contactPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم التواصل'**
+  String get contactPhone;
+
+  /// No description provided for @emailAlerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات البريد الإلكتروني'**
+  String get emailAlerts;
+
+  /// No description provided for @emailAlertsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال ملخصات وتنبيهات مهمة عبر البريد'**
+  String get emailAlertsSubtitle;
+
+  /// No description provided for @institutionProfileSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ بيانات المؤسسة'**
+  String get institutionProfileSaved;
+
+  /// No description provided for @currentAcademicYear.
+  ///
+  /// In ar, this message translates to:
+  /// **'العام الدراسي الحالي'**
+  String get currentAcademicYear;
+
+  /// No description provided for @classroomManagementSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح شاشة الفصول لتعديل الصفوف وربط المعلمين والطلاب.'**
+  String get classroomManagementSettingsSubtitle;
+
+  /// No description provided for @openClassroomManagement.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح إدارة الفصول'**
+  String get openClassroomManagement;
+
+  /// No description provided for @gradeScale.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلم التقديرات'**
+  String get gradeScale;
+
+  /// No description provided for @saveGradeScale.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ مقياس التقييم'**
+  String get saveGradeScale;
+
+  /// No description provided for @gradeScaleSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ مقياس التقييم'**
+  String get gradeScaleSaved;
+
+  /// No description provided for @auditLog.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل التدقيق'**
+  String get auditLog;
+
+  /// No description provided for @auditLogLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل سجل التدقيق'**
+  String get auditLogLoadFailed;
+
+  /// No description provided for @auditLogLoadFailedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من الاتصال أو صلاحيات المشرف ثم أعد المحاولة. لا يتم عرض بيانات وهمية خارج وضع الديمو.'**
+  String get auditLogLoadFailedMessage;
+
+  /// No description provided for @noAuditEvents.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أحداث تدقيق بعد'**
+  String get noAuditEvents;
+
+  /// No description provided for @noAuditEventsMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر هنا إجراءات مثل تعطيل الحسابات، تغيير الصلاحيات، ربط الفصول، وطلبات الأرشفة.'**
+  String get noAuditEventsMessage;
+
+  /// No description provided for @sensitiveActions.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجراءات حساسة'**
+  String get sensitiveActions;
+
+  /// No description provided for @sensitiveActionsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعرض آخر تغييرات المشرف التي تؤثر على الحسابات والفصول والإعدادات.'**
+  String get sensitiveActionsSubtitle;
+
+  /// No description provided for @openAdvancedSupervisorDashboard.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح لوحة المشرف المتقدمة'**
+  String get openAdvancedSupervisorDashboard;
+
+  /// No description provided for @pushNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات الفورية'**
+  String get pushNotifications;
+
+  /// No description provided for @pushNotificationsInstitutionSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات داخل التطبيق للمشرف والمعلمين'**
+  String get pushNotificationsInstitutionSubtitle;
+
+  /// No description provided for @weeklyDigest.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص أسبوعي'**
+  String get weeklyDigest;
+
+  /// No description provided for @weeklyDigestSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص أداء المؤسسة كل أسبوع'**
+  String get weeklyDigestSubtitle;
+
+  /// No description provided for @advancedSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات المتقدمة'**
+  String get advancedSettings;
+
+  /// No description provided for @interfaceLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'لغة الواجهة'**
+  String get interfaceLanguage;
+
+  /// No description provided for @timezone.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة الزمنية'**
+  String get timezone;
+
+  /// No description provided for @saveLanguageAndRegion.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ اللغة والمنطقة'**
+  String get saveLanguageAndRegion;
+
+  /// No description provided for @languageAndRegionSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ اللغة والمنطقة'**
+  String get languageAndRegionSaved;
+
+  /// No description provided for @currentApiEndpoint.
+  ///
+  /// In ar, this message translates to:
+  /// **'واجهة API الحالية'**
+  String get currentApiEndpoint;
+
+  /// No description provided for @sisIntegration.
+  ///
+  /// In ar, this message translates to:
+  /// **'نظام معلومات الطلاب SIS'**
+  String get sisIntegration;
+
+  /// No description provided for @sisIntegrationSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجهيز الربط مع أنظمة سجلات الطلاب'**
+  String get sisIntegrationSubtitle;
+
+  /// No description provided for @lmsIntegration.
+  ///
+  /// In ar, this message translates to:
+  /// **'نظام إدارة التعلم LMS'**
+  String get lmsIntegration;
+
+  /// No description provided for @lmsIntegrationSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجهيز الربط مع منصات التعلم الخارجية'**
+  String get lmsIntegrationSubtitle;
+
+  /// No description provided for @requestIntegrationSupport.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب دعم الربط'**
+  String get requestIntegrationSupport;
+
+  /// No description provided for @archiveDataWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحذير: أرشفة البيانات'**
+  String get archiveDataWarning;
+
+  /// No description provided for @archiveDataWarningMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم إرسال طلب أرشفة بيانات المؤسسة للمراجعة الإدارية قبل التنفيذ، ولن تُحذف البيانات فورًا من هذا الزر.'**
+  String get archiveDataWarningMessage;
+
+  /// No description provided for @archiveRequestSubmitted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل طلب الأرشفة للمراجعة'**
+  String get archiveRequestSubmitted;
+
+  /// No description provided for @submitRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الطلب'**
+  String get submitRequest;
+
+  /// No description provided for @unknownAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجراء غير محدد'**
+  String get unknownAction;
+
+  /// No description provided for @system.
+  ///
+  /// In ar, this message translates to:
+  /// **'النظام'**
+  String get system;
 }
 
 class _AppLocalizationsDelegate

@@ -3159,4 +3159,270 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addClassToStart => 'Add a new class to start';
+
+  @override
+  String get institutionDemoLocalSaveStatus =>
+      'Demo mode: settings are saved on this device';
+
+  @override
+  String get syncedWithServer => 'Synced with server';
+
+  @override
+  String get institutionSettingsLoadFailed =>
+      'Could not load institution settings from the server. Showing the last saved copy.';
+
+  @override
+  String get savingSettings => 'Saving settings...';
+
+  @override
+  String get savedLocallyOnly => 'Saved locally only';
+
+  @override
+  String get institutionSettingsServerSaveFailed =>
+      'Settings were saved locally, but the institution settings could not be updated on the server.';
+
+  @override
+  String get institutionEmailInvalid => 'Institution email is invalid';
+
+  @override
+  String get institutionPhoneInvalid =>
+      'Contact phone must contain at least 7 digits';
+
+  @override
+  String get noSavedSyncRecorded => 'No saved sync recorded';
+
+  @override
+  String get unknownTime => 'Unknown time';
+
+  @override
+  String get academicStructure => 'Academic structure';
+
+  @override
+  String get academicYears => 'Academic years';
+
+  @override
+  String get academicYearsSubtitle => 'Manage classrooms and academic dates';
+
+  @override
+  String get gradeScales => 'Grade scales';
+
+  @override
+  String get gradeScalesSubtitle => 'Set grade scales and marks';
+
+  @override
+  String get rolesAndPermissions => 'Roles and permissions';
+
+  @override
+  String get rolesAndPermissionsSubtitle =>
+      'Customize teacher and administrator access';
+
+  @override
+  String get activityLogs => 'Activity logs';
+
+  @override
+  String get activityLogsSubtitle => 'Track logins and system changes';
+
+  @override
+  String get systemPreferences => 'System preferences';
+
+  @override
+  String get alertSettings => 'Alert settings';
+
+  @override
+  String get alertSettingsSubtitle => 'Email and instant notifications';
+
+  @override
+  String get languageAndRegion => 'Language and region';
+
+  @override
+  String get languageAndRegionSubtitle => 'Arabic language and local time';
+
+  @override
+  String get systemIntegrations => 'System integrations';
+
+  @override
+  String get systemIntegrationsSubtitle =>
+      'Connect APIs and external providers';
+
+  @override
+  String get accountAndSupport => 'Account and support';
+
+  @override
+  String get accountSettingsInstitutionSubtitle =>
+      'Profile, password, and account preferences';
+
+  @override
+  String get supportAndHelpSubtitle => 'Contact support and help';
+
+  @override
+  String get logoutAdminSessionSubtitle => 'End the current admin session';
+
+  @override
+  String lastSavedAt(Object time) {
+    return 'Last saved: $time';
+  }
+
+  @override
+  String get syncSettings => 'Sync settings';
+
+  @override
+  String get institutionSettingsSynced => 'Institution settings synced';
+
+  @override
+  String get institutionSettingsSubtitle =>
+      'Manage academic identity and system permissions';
+
+  @override
+  String get schoolProfile => 'School profile';
+
+  @override
+  String get logoUploadStorageNotice =>
+      'The logo can be changed from storage integration once file uploads are enabled.';
+
+  @override
+  String get logo => 'Logo';
+
+  @override
+  String get institutionName => 'Institution name';
+
+  @override
+  String get contactInformation => 'Contact information';
+
+  @override
+  String get archiveInstitutionData => 'Archive institution data';
+
+  @override
+  String get logoutAdminQuestion =>
+      'Do you want to log out of the admin account?';
+
+  @override
+  String get editSchoolProfile => 'Edit school profile';
+
+  @override
+  String get contactPhone => 'Contact phone';
+
+  @override
+  String get emailAlerts => 'Email alerts';
+
+  @override
+  String get emailAlertsSubtitle =>
+      'Send important summaries and alerts by email';
+
+  @override
+  String get institutionProfileSaved => 'Institution profile saved';
+
+  @override
+  String get currentAcademicYear => 'Current academic year';
+
+  @override
+  String get classroomManagementSettingsSubtitle =>
+      'Open classrooms to edit grades and assign teachers and students.';
+
+  @override
+  String get openClassroomManagement => 'Open classroom management';
+
+  @override
+  String get gradeScale => 'Grade scale';
+
+  @override
+  String get saveGradeScale => 'Save grade scale';
+
+  @override
+  String get gradeScaleSaved => 'Grade scale saved';
+
+  @override
+  String get auditLog => 'Audit log';
+
+  @override
+  String get auditLogLoadFailed => 'Could not load audit log';
+
+  @override
+  String get auditLogLoadFailedMessage =>
+      'Check the connection or admin permissions, then try again. Demo data is not shown outside demo mode.';
+
+  @override
+  String get noAuditEvents => 'No audit events yet';
+
+  @override
+  String get noAuditEventsMessage =>
+      'Actions such as disabling accounts, changing permissions, assigning classrooms, and archive requests will appear here.';
+
+  @override
+  String get sensitiveActions => 'Sensitive actions';
+
+  @override
+  String get sensitiveActionsSubtitle =>
+      'Shows recent admin changes that affect accounts, classrooms, and settings.';
+
+  @override
+  String get openAdvancedSupervisorDashboard =>
+      'Open advanced supervisor dashboard';
+
+  @override
+  String get pushNotifications => 'Push notifications';
+
+  @override
+  String get pushNotificationsInstitutionSubtitle =>
+      'In-app alerts for admins and teachers';
+
+  @override
+  String get weeklyDigest => 'Weekly digest';
+
+  @override
+  String get weeklyDigestSubtitle =>
+      'Institution performance summary every week';
+
+  @override
+  String get advancedSettings => 'Advanced settings';
+
+  @override
+  String get interfaceLanguage => 'Interface language';
+
+  @override
+  String get timezone => 'Time zone';
+
+  @override
+  String get saveLanguageAndRegion => 'Save language and region';
+
+  @override
+  String get languageAndRegionSaved => 'Language and region saved';
+
+  @override
+  String get currentApiEndpoint => 'Current API endpoint';
+
+  @override
+  String get sisIntegration => 'Student information system SIS';
+
+  @override
+  String get sisIntegrationSubtitle =>
+      'Prepare connection with student record systems';
+
+  @override
+  String get lmsIntegration => 'Learning management system LMS';
+
+  @override
+  String get lmsIntegrationSubtitle =>
+      'Prepare connection with external learning platforms';
+
+  @override
+  String get requestIntegrationSupport => 'Request integration support';
+
+  @override
+  String get archiveDataWarning => 'Warning: data archiving';
+
+  @override
+  String get archiveDataWarningMessage =>
+      'An institution data archive request will be sent for administrative review before execution. Data will not be deleted immediately from this button.';
+
+  @override
+  String get archiveRequestSubmitted => 'Archive request submitted for review';
+
+  @override
+  String get submitRequest => 'Submit request';
+
+  @override
+  String get unknownAction => 'Unknown action';
+
+  @override
+  String get system => 'System';
 }

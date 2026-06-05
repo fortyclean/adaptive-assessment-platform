@@ -8,6 +8,7 @@ import '../../../core/constants/app_version.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
+import '../../../l10n/app_localizations.dart';
 import '../repositories/admin_repository.dart';
 import '../repositories/auth_repository.dart';
 
@@ -40,6 +41,8 @@ class _InstitutionSettingsScreenState
   bool _isSavingSettings = false;
   DateTime? _lastSyncedAt;
   String _syncStatusMessage = 'لم تتم مزامنة الإعدادات بعد';
+
+  AppLocalizations get _l10n => AppLocalizations.of(context);
 
   @override
   void initState() {
@@ -90,7 +93,7 @@ class _InstitutionSettingsScreenState
     if (_allowLocalOnlySettings) {
       if (!mounted) return;
       setState(() {
-        _syncStatusMessage = 'وضع تجريبي: يتم الحفظ على هذا الجهاز';
+        _syncStatusMessage = _l10n.institutionDemoLocalSaveStatus;
       });
       return;
     }
@@ -102,16 +105,16 @@ class _InstitutionSettingsScreenState
       setState(() {
         _applyInstitutionSettings(settings);
         _lastSyncedAt = DateTime.now();
-        _syncStatusMessage = 'تمت المزامنة مع الخادم';
+        _syncStatusMessage = _l10n.syncedWithServer;
       });
       await _saveSettingsLocally();
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _syncStatusMessage = 'تعذر الاتصال بالخادم';
+        _syncStatusMessage = _l10n.serverConnectionFailed;
       });
       _showMessage(
-        'تعذر تحميل إعدادات المؤسسة من الخادم. تم عرض آخر نسخة محفوظة.',
+        _l10n.institutionSettingsLoadFailed,
         isError: true,
       );
     }
@@ -162,7 +165,7 @@ class _InstitutionSettingsScreenState
     if (mounted) {
       setState(() {
         _isSavingSettings = true;
-        _syncStatusMessage = 'جار حفظ الإعدادات...';
+        _syncStatusMessage = _l10n.savingSettings;
       });
     }
 
@@ -177,17 +180,17 @@ class _InstitutionSettingsScreenState
           setState(() {
             _applyInstitutionSettings(settings);
             _lastSyncedAt = DateTime.now();
-            _syncStatusMessage = 'تمت المزامنة مع الخادم';
+            _syncStatusMessage = _l10n.syncedWithServer;
           });
         }
       } catch (_) {
         if (!mounted) return;
         setState(() {
-          _syncStatusMessage = 'تم الحفظ محلياً فقط';
+          _syncStatusMessage = _l10n.savedLocallyOnly;
           _isSavingSettings = false;
         });
         _showMessage(
-          'تم الحفظ محلياً، لكن تعذر تحديث إعدادات المؤسسة على الخادم.',
+          _l10n.institutionSettingsServerSaveFailed,
           isError: true,
         );
         return;
@@ -195,7 +198,7 @@ class _InstitutionSettingsScreenState
     } else if (mounted) {
       setState(() {
         _lastSyncedAt = DateTime.now();
-        _syncStatusMessage = 'تم الحفظ محلياً';
+        _syncStatusMessage = _l10n.savedLocally;
       });
     }
 
@@ -275,10 +278,10 @@ class _InstitutionSettingsScreenState
 
   String? _validateContactFields() {
     if (_schoolEmail.trim().isEmpty || !_isValidEmail(_schoolEmail)) {
-      return 'البريد الإلكتروني للمؤسسة غير صحيح';
+      return _l10n.institutionEmailInvalid;
     }
     if (_schoolPhone.trim().isEmpty || !_isValidPhone(_schoolPhone)) {
-      return 'رقم التواصل يجب أن يحتوي على 7 أرقام على الأقل';
+      return _l10n.institutionPhoneInvalid;
     }
     return null;
   }
@@ -292,7 +295,7 @@ class _InstitutionSettingsScreenState
   }
 
   String _formatSyncTime(DateTime? value) {
-    if (value == null) return 'لا يوجد حفظ مسجل';
+    if (value == null) return _l10n.noSavedSyncRecorded;
     final hour = value.hour.toString().padLeft(2, '0');
     final minute = value.minute.toString().padLeft(2, '0');
     return '${value.year}/${value.month}/${value.day} - $hour:$minute';
@@ -305,7 +308,7 @@ class _InstitutionSettingsScreenState
     } else if (value is String) {
       date = DateTime.tryParse(value);
     }
-    if (date == null) return 'وقت غير محدد';
+    if (date == null) return _l10n.unknownTime;
     return _formatSyncTime(date);
   }
 
@@ -327,90 +330,90 @@ class _InstitutionSettingsScreenState
                 _buildSyncStatusCard(),
                 const SizedBox(height: 16),
                 _buildSettingsGroup(
-                  title: 'الهيكل الأكاديمي',
-                  items: const [
+                  title: _l10n.academicStructure,
+                  items: [
                     _SettingsItem(
                       icon: Icons.calendar_today_outlined,
-                      title: 'الأعوام الدراسية',
-                      subtitle: 'إدارة الفصول والتواريخ الدراسية',
+                      title: _l10n.academicYears,
+                      subtitle: _l10n.academicYearsSubtitle,
                       action: _SettingsAction.academicYears,
                     ),
                     _SettingsItem(
                       icon: Icons.grade_outlined,
-                      title: 'مقاييس التقييم',
-                      subtitle: 'تحديد سلم الدرجات والتقديرات',
+                      title: _l10n.gradeScales,
+                      subtitle: _l10n.gradeScalesSubtitle,
                       action: _SettingsAction.gradeScale,
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 _buildSettingsGroup(
-                  title: 'إدارة المستخدمين',
-                  items: const [
+                  title: _l10n.userManagement,
+                  items: [
                     _SettingsItem(
                       icon: Icons.admin_panel_settings_outlined,
-                      title: 'الأدوار والصلاحيات',
-                      subtitle: 'تخصيص وصول المعلمين والإداريين',
+                      title: _l10n.rolesAndPermissions,
+                      subtitle: _l10n.rolesAndPermissionsSubtitle,
                       action: _SettingsAction.roles,
                     ),
                     _SettingsItem(
                       icon: Icons.history_edu_outlined,
-                      title: 'سجلات الأنشطة',
-                      subtitle: 'تتبع الدخول وتغييرات النظام',
+                      title: _l10n.activityLogs,
+                      subtitle: _l10n.activityLogsSubtitle,
                       action: _SettingsAction.activityLog,
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 _buildSettingsGroup(
-                  title: 'تفضيلات النظام',
-                  items: const [
+                  title: _l10n.systemPreferences,
+                  items: [
                     _SettingsItem(
                       icon: Icons.notifications_active_outlined,
-                      title: 'إعدادات التنبيهات',
-                      subtitle: 'البريد الإلكتروني والإشعارات الفورية',
+                      title: _l10n.alertSettings,
+                      subtitle: _l10n.alertSettingsSubtitle,
                       action: _SettingsAction.notifications,
                     ),
                     _SettingsItem(
                       icon: Icons.translate_outlined,
-                      title: 'اللغة والمنطقة',
-                      subtitle: 'اللغة العربية، التوقيت المحلي',
+                      title: _l10n.languageAndRegion,
+                      subtitle: _l10n.languageAndRegionSubtitle,
                       action: _SettingsAction.locale,
                     ),
                     _SettingsItem(
                       icon: Icons.hub_outlined,
-                      title: 'تكامل الأنظمة',
-                      subtitle: 'ربط API والمزودين الخارجيين',
+                      title: _l10n.systemIntegrations,
+                      subtitle: _l10n.systemIntegrationsSubtitle,
                       action: _SettingsAction.integrations,
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 _buildSettingsGroup(
-                  title: 'الحساب والدعم',
-                  items: const [
+                  title: _l10n.accountAndSupport,
+                  items: [
                     _SettingsItem(
                       icon: Icons.account_circle_outlined,
-                      title: 'إعدادات الحساب',
-                      subtitle: 'الملف الشخصي وكلمة المرور وتفضيلات الحساب',
+                      title: _l10n.accountSettings,
+                      subtitle: _l10n.accountSettingsInstitutionSubtitle,
                       action: _SettingsAction.accountSettings,
                     ),
                     _SettingsItem(
                       icon: Icons.info_outline_rounded,
-                      title: 'عن التطبيق وسجل الإصدارات',
-                      subtitle: 'الإصدار ${AppVersion.current} — EduAssess',
+                      title: _l10n.aboutAndChangelog,
+                      subtitle: _l10n.versionLabel(AppVersion.current),
                       action: _SettingsAction.about,
                     ),
                     _SettingsItem(
                       icon: Icons.support_agent_outlined,
-                      title: 'الدعم الفني',
-                      subtitle: 'التواصل مع فريق الدعم والمساعدة',
+                      title: _l10n.support,
+                      subtitle: _l10n.supportAndHelpSubtitle,
                       action: _SettingsAction.support,
                     ),
                     _SettingsItem(
                       icon: Icons.logout_rounded,
-                      title: 'تسجيل الخروج',
-                      subtitle: 'إنهاء جلسة المشرف الحالية',
+                      title: _l10n.logout,
+                      subtitle: _l10n.logoutAdminSessionSubtitle,
                       action: _SettingsAction.logout,
                       color: AppColors.error,
                     ),
@@ -464,7 +467,7 @@ class _InstitutionSettingsScreenState
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'آخر حفظ: ${_formatSyncTime(_lastSyncedAt)}',
+                    _l10n.lastSavedAt(_formatSyncTime(_lastSyncedAt)),
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -474,11 +477,11 @@ class _InstitutionSettingsScreenState
               ),
             ),
             IconButton(
-              tooltip: 'مزامنة الإعدادات',
+              tooltip: _l10n.syncSettings,
               onPressed: _isSavingSettings
                   ? null
                   : () => _saveInstitutionSettings(
-                        successMessage: 'تمت مزامنة إعدادات المؤسسة',
+                        successMessage: _l10n.institutionSettingsSynced,
                       ),
               icon: const Icon(Icons.sync_rounded),
               color: AppColors.primary,
@@ -514,7 +517,7 @@ class _InstitutionSettingsScreenState
       ),
       actions: [
         IconButton(
-          tooltip: 'الإشعارات',
+          tooltip: _l10n.notifications,
           icon: Icon(
             Icons.notifications_outlined,
             color: colorScheme.onSurfaceVariant,
@@ -528,9 +531,9 @@ class _InstitutionSettingsScreenState
   Widget _buildHeader() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'إعدادات المؤسسة',
-            style: TextStyle(
+          Text(
+            _l10n.institutionSettings,
+            style: const TextStyle(
               color: AppColors.primary,
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -538,7 +541,7 @@ class _InstitutionSettingsScreenState
           ),
           const SizedBox(height: 4),
           Text(
-            'إدارة الهوية الأكاديمية وصلاحيات النظام',
+            _l10n.institutionSettingsSubtitle,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
               fontSize: 14,
@@ -556,23 +559,24 @@ class _InstitutionSettingsScreenState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.school_outlined,
+                    const Icon(Icons.school_outlined,
                         color: AppColors.primary, size: 20),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
-                      'ملف المدرسة',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      _l10n.schoolProfile,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
                 TextButton(
                   onPressed: _showSchoolProfileDialog,
-                  child: const Text(
-                    'تعديل',
-                    style: TextStyle(color: AppColors.primary, fontSize: 14),
+                  child: Text(
+                    _l10n.edit,
+                    style:
+                        const TextStyle(color: AppColors.primary, fontSize: 14),
                   ),
                 ),
               ],
@@ -582,8 +586,7 @@ class _InstitutionSettingsScreenState
               children: [
                 InkWell(
                   borderRadius: BorderRadius.circular(12),
-                  onTap: () => _showMessage(
-                      'يمكن تغيير الشعار من لوحة ربط التخزين عند تفعيل رفع الملفات.'),
+                  onTap: () => _showMessage(_l10n.logoUploadStorageNotice),
                   child: Container(
                     width: 80,
                     height: 80,
@@ -602,7 +605,7 @@ class _InstitutionSettingsScreenState
                             color: AppColors.primary, size: 32),
                         const SizedBox(height: 4),
                         Text(
-                          'الشعار',
+                          _l10n.logo,
                           style: TextStyle(
                             fontSize: 10,
                             color:
@@ -618,7 +621,7 @@ class _InstitutionSettingsScreenState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('اسم المؤسسة',
+                      Text(_l10n.institutionName,
                           style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
@@ -632,7 +635,7 @@ class _InstitutionSettingsScreenState
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text('معلومات التواصل',
+                      Text(_l10n.contactInformation,
                           style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
@@ -749,9 +752,10 @@ class _InstitutionSettingsScreenState
   Widget _buildDangerZone() => OutlinedButton.icon(
         onPressed: _showArchiveDialog,
         icon: const Icon(Icons.archive_outlined, color: AppColors.error),
-        label: const Text(
-          'أرشفة بيانات المؤسسة',
-          style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
+        label: Text(
+          _l10n.archiveInstitutionData,
+          style: const TextStyle(
+              color: AppColors.error, fontWeight: FontWeight.w600),
         ),
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColors.error),
@@ -805,18 +809,18 @@ class _InstitutionSettingsScreenState
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('تسجيل الخروج'),
-        content: const Text('هل تريد تسجيل الخروج من حساب المشرف؟'),
+        title: Text(_l10n.logout),
+        content: Text(_l10n.logoutAdminQuestion),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('إلغاء'),
+            child: Text(_l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
-              'خروج',
-              style: TextStyle(color: AppColors.error),
+            child: Text(
+              _l10n.logoutConfirm,
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
         ],
@@ -839,26 +843,25 @@ class _InstitutionSettingsScreenState
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('تعديل ملف المدرسة'),
+        title: Text(_l10n.editSchoolProfile),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'اسم المؤسسة'),
+                decoration: InputDecoration(labelText: _l10n.institutionName),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: phoneController,
-                decoration: const InputDecoration(labelText: 'رقم التواصل'),
+                decoration: InputDecoration(labelText: _l10n.contactPhone),
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: emailController,
-                decoration:
-                    const InputDecoration(labelText: 'البريد الإلكتروني'),
+                decoration: InputDecoration(labelText: _l10n.email),
                 keyboardType: TextInputType.emailAddress,
               ),
             ],
@@ -867,19 +870,18 @@ class _InstitutionSettingsScreenState
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء'),
+            child: Text(_l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () async {
               final newEmail = emailController.text.trim();
               final newPhone = phoneController.text.trim();
               if (newEmail.isEmpty || !_isValidEmail(newEmail)) {
-                _showMessage('البريد الإلكتروني غير صحيح', isError: true);
+                _showMessage(_l10n.emailInvalid, isError: true);
                 return;
               }
               if (newPhone.isEmpty || !_isValidPhone(newPhone)) {
-                _showMessage('رقم التواصل يجب أن يحتوي على 7 أرقام على الأقل',
-                    isError: true);
+                _showMessage(_l10n.institutionPhoneInvalid, isError: true);
                 return;
               }
               setState(() {
@@ -891,14 +893,14 @@ class _InstitutionSettingsScreenState
               });
               Navigator.pop(ctx);
               await _saveInstitutionSettings(
-                successMessage: 'تم حفظ بيانات المؤسسة',
+                successMessage: _l10n.institutionProfileSaved,
               );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
             ),
-            child: const Text('حفظ'),
+            child: Text(_l10n.save),
           ),
         ],
       ),
@@ -907,14 +909,14 @@ class _InstitutionSettingsScreenState
 
   void _showAcademicYearsSheet() {
     _showSettingsSheet(
-      title: 'الأعوام الدراسية',
+      title: _l10n.academicYears,
       icon: Icons.calendar_today_outlined,
       child: StatefulBuilder(
         builder: (context, setSheetState) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _dropdownField(
-              label: 'العام الدراسي الحالي',
+              label: _l10n.currentAcademicYear,
               value: _academicYear,
               values: const ['2024 / 2025', '2025 / 2026', '2026 / 2027'],
               onChanged: (value) {
@@ -926,7 +928,7 @@ class _InstitutionSettingsScreenState
             ),
             const SizedBox(height: 12),
             _dropdownField(
-              label: 'الفصل الدراسي الحالي',
+              label: _l10n.currentTerm,
               value: _term,
               values: const [
                 'الفصل الدراسي الأول',
@@ -941,11 +943,11 @@ class _InstitutionSettingsScreenState
               },
             ),
             const SizedBox(height: 16),
-            _infoTile('إدارة الفصول',
-                'افتح شاشة الفصول لتعديل الصفوف وربط المعلمين والطلاب.'),
+            _infoTile(_l10n.classroomManagement,
+                _l10n.classroomManagementSettingsSubtitle),
             const SizedBox(height: 12),
             _primaryButton(
-              label: 'فتح إدارة الفصول',
+              label: _l10n.openClassroomManagement,
               icon: Icons.class_outlined,
               onPressed: () {
                 Navigator.pop(context);
@@ -960,14 +962,14 @@ class _InstitutionSettingsScreenState
 
   void _showGradeScaleSheet() {
     _showSettingsSheet(
-      title: 'مقاييس التقييم',
+      title: _l10n.gradeScales,
       icon: Icons.grade_outlined,
       child: StatefulBuilder(
         builder: (context, setSheetState) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _dropdownField(
-              label: 'سلم التقديرات',
+              label: _l10n.gradeScale,
               value: _gradeScale,
               values: const [
                 'A-F',
@@ -988,12 +990,12 @@ class _InstitutionSettingsScreenState
             _scaleRow('يحتاج دعم', 'أقل من 70%'),
             const SizedBox(height: 16),
             _primaryButton(
-              label: 'حفظ مقياس التقييم',
+              label: _l10n.saveGradeScale,
               icon: Icons.save_outlined,
               onPressed: () async {
                 Navigator.pop(context);
                 await _saveInstitutionSettings(
-                  successMessage: 'تم حفظ مقياس التقييم',
+                  successMessage: _l10n.gradeScaleSaved,
                 );
               },
             ),
@@ -1005,7 +1007,7 @@ class _InstitutionSettingsScreenState
 
   void _showActivityLogSheet() {
     _showSettingsSheet(
-      title: 'سجل التدقيق',
+      title: _l10n.auditLog,
       icon: Icons.history_edu_outlined,
       child: FutureBuilder<List<Map<String, dynamic>>>(
         future: Future<List<Map<String, dynamic>>>.delayed(
@@ -1023,9 +1025,8 @@ class _InstitutionSettingsScreenState
           if (snapshot.hasError) {
             return _auditState(
               icon: Icons.warning_amber_rounded,
-              title: 'تعذر تحميل سجل التدقيق',
-              message:
-                  'تحقق من الاتصال أو صلاحيات المشرف ثم أعد المحاولة. لا يتم عرض بيانات وهمية خارج وضع الديمو.',
+              title: _l10n.auditLogLoadFailed,
+              message: _l10n.auditLogLoadFailedMessage,
               isError: true,
             );
           }
@@ -1034,9 +1035,8 @@ class _InstitutionSettingsScreenState
           if (logs.isNotEmpty && logs.first['__loadError'] == true) {
             return _auditState(
               icon: Icons.warning_amber_rounded,
-              title: 'تعذر تحميل سجل التدقيق',
-              message:
-                  'تحقق من الاتصال أو صلاحيات المشرف ثم أعد المحاولة. لا يتم عرض بيانات وهمية خارج وضع الديمو.',
+              title: _l10n.auditLogLoadFailed,
+              message: _l10n.auditLogLoadFailedMessage,
               isError: true,
             );
           }
@@ -1044,9 +1044,8 @@ class _InstitutionSettingsScreenState
           if (logs.isEmpty) {
             return _auditState(
               icon: Icons.manage_search_outlined,
-              title: 'لا توجد أحداث تدقيق بعد',
-              message:
-                  'ستظهر هنا إجراءات مثل تعطيل الحسابات، تغيير الصلاحيات، ربط الفصول، وطلبات الأرشفة.',
+              title: _l10n.noAuditEvents,
+              message: _l10n.noAuditEventsMessage,
             );
           }
 
@@ -1054,14 +1053,14 @@ class _InstitutionSettingsScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _infoTile(
-                'إجراءات حساسة',
-                'يعرض آخر تغييرات المشرف التي تؤثر على الحسابات والفصول والإعدادات.',
+                _l10n.sensitiveActions,
+                _l10n.sensitiveActionsSubtitle,
               ),
               const SizedBox(height: 12),
               ...logs.map(_auditLogRow),
               const SizedBox(height: 16),
               _primaryButton(
-                label: 'فتح لوحة المشرف المتقدمة',
+                label: _l10n.openAdvancedSupervisorDashboard,
                 icon: Icons.dashboard_customize_outlined,
                 onPressed: () {
                   Navigator.pop(context);
@@ -1077,7 +1076,7 @@ class _InstitutionSettingsScreenState
 
   void _showNotificationSheet() {
     _showSettingsSheet(
-      title: 'إعدادات التنبيهات',
+      title: _l10n.alertSettings,
       icon: Icons.notifications_active_outlined,
       child: StatefulBuilder(
         builder: (context, setSheetState) => Column(
@@ -1089,8 +1088,8 @@ class _InstitutionSettingsScreenState
                 setState(() => _pushNotifications = value);
                 _persistInstitutionSettingsSilently();
               },
-              title: const Text('الإشعارات الفورية'),
-              subtitle: const Text('تنبيهات داخل التطبيق للمشرف والمعلمين'),
+              title: Text(_l10n.pushNotifications),
+              subtitle: Text(_l10n.pushNotificationsInstitutionSubtitle),
             ),
             SwitchListTile(
               value: _emailNotifications,
@@ -1099,8 +1098,8 @@ class _InstitutionSettingsScreenState
                 setState(() => _emailNotifications = value);
                 _persistInstitutionSettingsSilently();
               },
-              title: const Text('تنبيهات البريد الإلكتروني'),
-              subtitle: const Text('إرسال ملخصات وتنبيهات مهمة عبر البريد'),
+              title: Text(_l10n.emailAlerts),
+              subtitle: Text(_l10n.emailAlertsSubtitle),
             ),
             SwitchListTile(
               value: _weeklyDigest,
@@ -1109,12 +1108,12 @@ class _InstitutionSettingsScreenState
                 setState(() => _weeklyDigest = value);
                 _persistInstitutionSettingsSilently();
               },
-              title: const Text('ملخص أسبوعي'),
-              subtitle: const Text('ملخص أداء المؤسسة كل أسبوع'),
+              title: Text(_l10n.weeklyDigest),
+              subtitle: Text(_l10n.weeklyDigestSubtitle),
             ),
             const SizedBox(height: 12),
             _primaryButton(
-              label: 'الإعدادات المتقدمة',
+              label: _l10n.advancedSettings,
               icon: Icons.tune_outlined,
               onPressed: () {
                 Navigator.pop(context);
@@ -1129,13 +1128,13 @@ class _InstitutionSettingsScreenState
 
   void _showLocaleSheet() {
     _showSettingsSheet(
-      title: 'اللغة والمنطقة',
+      title: _l10n.languageAndRegion,
       icon: Icons.translate_outlined,
       child: StatefulBuilder(
         builder: (context, setSheetState) => Column(
           children: [
             _dropdownField(
-              label: 'لغة الواجهة',
+              label: _l10n.interfaceLanguage,
               value: _language,
               values: const ['العربية'],
               onChanged: (value) {
@@ -1147,7 +1146,7 @@ class _InstitutionSettingsScreenState
             ),
             const SizedBox(height: 12),
             _dropdownField(
-              label: 'المنطقة الزمنية',
+              label: _l10n.timezone,
               value: _timezone,
               values: const ['Asia/Kuwait', 'Asia/Riyadh', 'Asia/Dubai'],
               onChanged: (value) {
@@ -1159,12 +1158,12 @@ class _InstitutionSettingsScreenState
             ),
             const SizedBox(height: 16),
             _primaryButton(
-              label: 'حفظ اللغة والمنطقة',
+              label: _l10n.saveLanguageAndRegion,
               icon: Icons.save_outlined,
               onPressed: () async {
                 Navigator.pop(context);
                 await _saveInstitutionSettings(
-                  successMessage: 'تم حفظ اللغة والمنطقة',
+                  successMessage: _l10n.languageAndRegionSaved,
                 );
               },
             ),
@@ -1176,13 +1175,13 @@ class _InstitutionSettingsScreenState
 
   void _showIntegrationsSheet() {
     _showSettingsSheet(
-      title: 'تكامل الأنظمة',
+      title: _l10n.systemIntegrations,
       icon: Icons.hub_outlined,
       child: StatefulBuilder(
         builder: (context, setSheetState) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _infoTile('واجهة API الحالية', AppConstants.apiBaseUrl),
+            _infoTile(_l10n.currentApiEndpoint, AppConstants.apiBaseUrl),
             const SizedBox(height: 12),
             SwitchListTile(
               value: _sisIntegration,
@@ -1191,8 +1190,8 @@ class _InstitutionSettingsScreenState
                 setState(() => _sisIntegration = value);
                 _persistInstitutionSettingsSilently();
               },
-              title: const Text('نظام معلومات الطلاب SIS'),
-              subtitle: const Text('تجهيز الربط مع أنظمة سجلات الطلاب'),
+              title: Text(_l10n.sisIntegration),
+              subtitle: Text(_l10n.sisIntegrationSubtitle),
             ),
             SwitchListTile(
               value: _lmsIntegration,
@@ -1201,12 +1200,12 @@ class _InstitutionSettingsScreenState
                 setState(() => _lmsIntegration = value);
                 _persistInstitutionSettingsSilently();
               },
-              title: const Text('نظام إدارة التعلم LMS'),
-              subtitle: const Text('تجهيز الربط مع منصات التعلم الخارجية'),
+              title: Text(_l10n.lmsIntegration),
+              subtitle: Text(_l10n.lmsIntegrationSubtitle),
             ),
             const SizedBox(height: 12),
             _primaryButton(
-              label: 'طلب دعم الربط',
+              label: _l10n.requestIntegrationSupport,
               icon: Icons.support_agent_outlined,
               onPressed: () {
                 Navigator.pop(context);
@@ -1224,25 +1223,23 @@ class _InstitutionSettingsScreenState
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('تحذير: أرشفة البيانات'),
-        content: const Text(
-          'سيتم إرسال طلب أرشفة بيانات المؤسسة للمراجعة الإدارية قبل التنفيذ، ولن تُحذف البيانات فورًا من هذا الزر.',
-        ),
+        title: Text(_l10n.archiveDataWarning),
+        content: Text(_l10n.archiveDataWarningMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('إلغاء'),
+            child: Text(_l10n.cancel),
           ),
           TextButton(
             onPressed: () async {
               Navigator.pop(ctx);
               await _saveInstitutionSettings(
-                successMessage: 'تم تسجيل طلب الأرشفة للمراجعة',
+                successMessage: _l10n.archiveRequestSubmitted,
               );
             },
-            child: const Text(
-              'إرسال الطلب',
-              style: TextStyle(color: AppColors.error),
+            child: Text(
+              _l10n.submitRequest,
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
         ],
@@ -1435,9 +1432,9 @@ class _InstitutionSettingsScreenState
       'low' => AppColors.success,
       _ => AppColors.primary,
     };
-    final action = (log['action'] ?? 'إجراء غير محدد').toString();
-    final actor = (log['actorName'] ?? 'مشرف').toString();
-    final target = (log['targetName'] ?? 'النظام').toString();
+    final action = (log['action'] ?? _l10n.unknownAction).toString();
+    final actor = (log['actorName'] ?? _l10n.adminRole).toString();
+    final target = (log['targetName'] ?? _l10n.system).toString();
     final time = _formatAuditTime(log['createdAt']);
 
     return Container(
