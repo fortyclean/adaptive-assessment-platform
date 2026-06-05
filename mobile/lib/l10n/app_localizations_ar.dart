@@ -2046,4 +2046,80 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get applyFilters => 'تطبيق الفلاتر';
+
+  @override
+  String get advancedQuestionTitle => 'إنشاء سؤال متقدم';
+
+  @override
+  String get advancedQuestionSubtitle =>
+      'صمّم أسئلة تقييم متقدمة مع وسائط غنية وعناصر تفاعلية.';
+
+  @override
+  String get advancedUnitQuantum => 'الوحدة 4: ميكانيكا الكم المتقدمة';
+
+  @override
+  String get advancedUnitThermodynamics =>
+      'الوحدة 5: الديناميكا الحرارية والإنتروبيا';
+
+  @override
+  String get advancedUnitParticles => 'الوحدة 6: أساسيات فيزياء الجسيمات';
+
+  @override
+  String get assignUnit => 'تعيين الوحدة';
+
+  @override
+  String get essayQuestionEditor => 'محرر السؤال المقالي';
+
+  @override
+  String get wordLimitLabel => 'حد الكلمات:';
+
+  @override
+  String get autoGradingEnabled => 'التصحيح التلقائي مفعّل';
+
+  @override
+  String get matchingQuestionInterface => 'واجهة أسئلة المطابقة';
+
+  @override
+  String get addAnotherPair => 'إضافة زوج آخر';
+
+  @override
+  String get matchingItemA => 'العنصر أ';
+
+  @override
+  String get matchingMatchB => 'المطابق ب';
+
+  @override
+  String get questionSavedAsDraft => 'تم حفظ السؤال كمسودة';
+
+  @override
+  String get saveAsDraft => 'حفظ كمسودة';
+
+  @override
+  String get writeQuestionFirst => 'يرجى كتابة نص السؤال أولاً';
+
+  @override
+  String get publishQuestionTitle => 'نشر السؤال';
+
+  @override
+  String get publishQuestionConfirmation =>
+      'هل تريد نشر هذا السؤال في بنك الأسئلة؟';
+
+  @override
+  String get questionPublishedToBank => 'تم نشر السؤال في بنك الأسئلة';
+
+  @override
+  String get publishQuestion => 'نشر السؤال';
+
+  @override
+  String get plannedStatus => 'قيد التخطيط';
+
+  @override
+  String get aiQuestionAssistant => 'مساعد توليد الأسئلة';
+
+  @override
+  String get aiQuestionAssistantDisabledMessage =>
+      'هذه الميزة غير مفعلة في هذا الإصدار حتى يتم ربط خدمة توليد آمنة، مراجعة جودة السؤال، وتسجيل مصدر السؤال قبل نشره.';
+
+  @override
+  String get autoGenerationPlanned => 'التوليد التلقائي قيد التخطيط';
 }

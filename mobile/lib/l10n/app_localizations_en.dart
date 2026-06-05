@@ -2066,4 +2066,80 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get applyFilters => 'Apply filters';
+
+  @override
+  String get advancedQuestionTitle => 'Create advanced question';
+
+  @override
+  String get advancedQuestionSubtitle =>
+      'Design advanced assessment questions with rich media and interactive elements.';
+
+  @override
+  String get advancedUnitQuantum => 'Unit 4: Advanced quantum mechanics';
+
+  @override
+  String get advancedUnitThermodynamics => 'Unit 5: Thermodynamics and entropy';
+
+  @override
+  String get advancedUnitParticles => 'Unit 6: Particle physics fundamentals';
+
+  @override
+  String get assignUnit => 'Assign unit';
+
+  @override
+  String get essayQuestionEditor => 'Essay question editor';
+
+  @override
+  String get wordLimitLabel => 'Word limit:';
+
+  @override
+  String get autoGradingEnabled => 'Auto-grading enabled';
+
+  @override
+  String get matchingQuestionInterface => 'Matching question interface';
+
+  @override
+  String get addAnotherPair => 'Add another pair';
+
+  @override
+  String get matchingItemA => 'Item A';
+
+  @override
+  String get matchingMatchB => 'Match B';
+
+  @override
+  String get questionSavedAsDraft => 'Question saved as draft';
+
+  @override
+  String get saveAsDraft => 'Save as draft';
+
+  @override
+  String get writeQuestionFirst => 'Please write the question text first';
+
+  @override
+  String get publishQuestionTitle => 'Publish question';
+
+  @override
+  String get publishQuestionConfirmation =>
+      'Do you want to publish this question to the question bank?';
+
+  @override
+  String get questionPublishedToBank =>
+      'Question published to the question bank';
+
+  @override
+  String get publishQuestion => 'Publish question';
+
+  @override
+  String get plannedStatus => 'Planned';
+
+  @override
+  String get aiQuestionAssistant => 'Question generation assistant';
+
+  @override
+  String get aiQuestionAssistantDisabledMessage =>
+      'This feature is not enabled in this release until a safe generation service, question quality review, and source logging are connected before publishing.';
+
+  @override
+  String get autoGenerationPlanned => 'Auto-generation is planned';
 }

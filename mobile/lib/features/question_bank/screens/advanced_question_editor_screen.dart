@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
-/// Advanced Question Editor Screen — Design _75
-/// Rich text editor, matching pairs, difficulty selector, unit assignment.
+/// Advanced Question Editor Screen - Design _75.
 class AdvancedQuestionEditorScreen extends StatefulWidget {
   const AdvancedQuestionEditorScreen({super.key});
 
@@ -15,26 +16,20 @@ class AdvancedQuestionEditorScreen extends StatefulWidget {
 
 class _AdvancedQuestionEditorScreenState
     extends State<AdvancedQuestionEditorScreen> {
-  int _selectedDifficulty = 0; // 0=Easy, 1=Mid, 2=Hard
+  int _selectedDifficulty = 0;
   int _selectedUnit = 0;
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _wordLimitController =
       TextEditingController(text: '500');
 
-  final List<String> _units = const [
-    'الوحدة 4: ميكانيكا الكم المتقدمة',
-    'الوحدة 5: الديناميكا الحرارية والإنتروبيا',
-    'الوحدة 6: أساسيات فيزياء الجسيمات',
-  ];
-
   final List<_MatchingPair> _pairs = [
     _MatchingPair(
-      itemA: TextEditingController(text: "Schrödinger's Cat"),
+      itemA: TextEditingController(text: "Schrodinger's Cat"),
       matchB: TextEditingController(text: 'Superposition State'),
     ),
     _MatchingPair(
       itemA: TextEditingController(text: 'Planck Constant'),
-      matchB: TextEditingController(text: '6.626 x 10^-34 J·s'),
+      matchB: TextEditingController(text: '6.626 x 10^-34 J*s'),
     ),
   ];
 
@@ -49,73 +44,70 @@ class _AdvancedQuestionEditorScreenState
     super.dispose();
   }
 
+  List<String> _units(AppLocalizations l10n) => [
+        l10n.advancedUnitQuantum,
+        l10n.advancedUnitThermodynamics,
+        l10n.advancedUnitParticles,
+      ];
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        body: Column(
-          children: [
-            _buildHeader(context),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Page title
-                    const Text(
-                      'إنشاء سؤال متقدم',
-                      style: TextStyle(
-                        fontFamily: 'Lexend',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF1A1B22),
-                      ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Column(
+        children: [
+          _buildHeader(context),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 120),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.advancedQuestionTitle,
+                    style: const TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1A1B22),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'صمّم أسئلة تقييم متقدمة مع وسائط غنية وعناصر تفاعلية.',
-                      style: TextStyle(
-                        fontFamily: 'Lexend',
-                        fontSize: 14,
-                        color: Color(0xFF505F76),
-                        height: 1.6,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.advancedQuestionSubtitle,
+                    style: const TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 14,
+                      color: Color(0xFF505F76),
+                      height: 1.6,
                     ),
-                    const SizedBox(height: 24),
-
-                    // Global settings bento grid
-                    _buildSettingsGrid(),
-                    const SizedBox(height: 32),
-
-                    // Essay question editor
-                    _buildEssaySection(),
-                    const SizedBox(height: 32),
-
-                    // Matching question interface
-                    _buildMatchingSection(),
-                    const SizedBox(height: 40),
-
-                    // Save actions
-                    _buildSaveActions(),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildSettingsGrid(l10n),
+                  const SizedBox(height: 32),
+                  _buildEssaySection(l10n),
+                  const SizedBox(height: 32),
+                  _buildMatchingSection(l10n),
+                  const SizedBox(height: 40),
+                  _buildSaveActions(l10n),
+                ],
               ),
             ),
-          ],
-        ),
-        floatingActionButton: _buildAIFAB(),
-        bottomNavigationBar: const AppBottomNav(
-          currentIndex: 1,
-          role: 'teacher',
-        ),
-      );
-
-  // ─── Header ──────────────────────────────────────────────────────────────
+          ),
+        ],
+      ),
+      floatingActionButton: _buildAIFAB(l10n),
+      bottomNavigationBar: const AppBottomNav(
+        currentIndex: 1,
+        role: 'teacher',
+      ),
+    );
+  }
 
   Widget _buildHeader(BuildContext context) => Container(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top,
-        ),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           border: Border(
@@ -136,7 +128,6 @@ class _AdvancedQuestionEditorScreenState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Logo + avatar
                 Row(
                   children: [
                     Container(
@@ -168,7 +159,6 @@ class _AdvancedQuestionEditorScreenState
                     ),
                   ],
                 ),
-                // Notifications
                 IconButton(
                   icon: const Icon(Icons.notifications_outlined),
                   color: const Color(0xFF475569),
@@ -180,9 +170,7 @@ class _AdvancedQuestionEditorScreenState
         ),
       );
 
-  // ─── Settings Grid ───────────────────────────────────────────────────────
-
-  Widget _buildSettingsGrid() => LayoutBuilder(
+  Widget _buildSettingsGrid(AppLocalizations l10n) => LayoutBuilder(
         builder: (context, constraints) {
           final isWide = constraints.maxWidth > 600;
           if (isWide) {
@@ -191,56 +179,39 @@ class _AdvancedQuestionEditorScreenState
               children: [
                 SizedBox(
                   width: constraints.maxWidth / 3 - 8,
-                  child: _buildDifficultyCard(),
+                  child: _buildDifficultyCard(l10n),
                 ),
                 const SizedBox(width: 16),
-                Expanded(child: _buildUnitCard()),
+                Expanded(child: _buildUnitCard(l10n)),
               ],
             );
           }
           return Column(
             children: [
-              _buildDifficultyCard(),
+              _buildDifficultyCard(l10n),
               const SizedBox(height: 12),
-              _buildUnitCard(),
+              _buildUnitCard(l10n),
             ],
           );
         },
       );
 
-  Widget _buildDifficultyCard() {
-    final labels = ['سهل', 'متوسط', 'صعب'];
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+  Widget _buildDifficultyCard(AppLocalizations l10n) {
+    final labels = [
+      l10n.easyDifficulty,
+      l10n.mediumDifficulty,
+      l10n.hardDifficulty,
+    ];
+
+    return _SettingsCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'مستوى الصعوبة',
-            style: TextStyle(
-              fontFamily: 'Lexend',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF505F76),
-            ),
-          ),
+          _FieldLabel(l10n.difficultyLevel),
           const SizedBox(height: 8),
           Row(
             children: labels.asMap().entries.map((entry) {
               final i = entry.key;
-              final label = entry.value;
               final isSelected = i == _selectedDifficulty;
               return Expanded(
                 child: GestureDetector(
@@ -262,7 +233,7 @@ class _AdvancedQuestionEditorScreenState
                       ),
                     ),
                     child: Text(
-                      label,
+                      entry.value,
                       style: TextStyle(
                         fontFamily: 'Lexend',
                         fontSize: 12,
@@ -283,136 +254,84 @@ class _AdvancedQuestionEditorScreenState
     );
   }
 
-  Widget _buildUnitCard() => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'تعيين الوحدة',
-              style: TextStyle(
-                fontFamily: 'Lexend',
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF505F76),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.outlineVariant),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<int>(
-                  value: _selectedUnit,
-                  isExpanded: true,
-                  icon: const Icon(
-                    Icons.expand_more,
-                    color: AppColors.outline,
-                  ),
-                  style: const TextStyle(
-                    fontFamily: 'Lexend',
-                    fontSize: 14,
-                    color: Color(0xFF1A1B22),
-                  ),
-                  items: _units
-                      .asMap()
-                      .entries
-                      .map((entry) => DropdownMenuItem<int>(
-                            value: entry.key,
-                            child: Text(
-                              entry.value,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  onChanged: (v) {
-                    if (v != null) setState(() => _selectedUnit = v);
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+  Widget _buildUnitCard(AppLocalizations l10n) {
+    final units = _units(l10n);
 
-  // ─── Essay Section ───────────────────────────────────────────────────────
-
-  Widget _buildEssaySection() => Column(
+    return _SettingsCard(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
-            children: [
-              Icon(Icons.article_outlined, color: AppColors.primary, size: 22),
-              SizedBox(width: 8),
-              Text(
-                'محرر السؤال المقالي',
-                style: TextStyle(
-                  fontFamily: 'Lexend',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+          _FieldLabel(l10n.assignUnit),
+          const SizedBox(height: 8),
           Container(
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
               border: Border.all(color: AppColors.outlineVariant),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
             ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int>(
+                value: _selectedUnit,
+                isExpanded: true,
+                icon: const Icon(Icons.expand_more, color: AppColors.outline),
+                style: const TextStyle(
+                  fontFamily: 'Lexend',
+                  fontSize: 14,
+                  color: Color(0xFF1A1B22),
+                ),
+                items: units
+                    .asMap()
+                    .entries
+                    .map(
+                      (entry) => DropdownMenuItem<int>(
+                        value: entry.key,
+                        child: Text(
+                          entry.value,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) {
+                  if (v != null) setState(() => _selectedUnit = v);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEssaySection(AppLocalizations l10n) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionTitle(
+            icon: Icons.article_outlined,
+            title: l10n.essayQuestionEditor,
+          ),
+          const SizedBox(height: 16),
+          _SettingsCard(
+            padding: EdgeInsets.zero,
             child: Column(
               children: [
-                // Toolbar
                 _buildEditorToolbar(),
-                // Text area
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Text(
-                        'نص السؤال',
-                        style: TextStyle(
-                          fontFamily: 'Lexend',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF505F76),
-                        ),
-                      ),
+                      _FieldLabel(l10n.questionTextLabel),
                       const SizedBox(height: 8),
                       TextField(
                         controller: _questionController,
                         maxLines: 6,
                         textAlign: TextAlign.left,
-                        decoration: const InputDecoration(
-                          hintText: 'اكتب نص السؤال هنا...',
-                          hintStyle: TextStyle(
+                        decoration: InputDecoration(
+                          hintText: l10n.questionTextHint,
+                          hintStyle: const TextStyle(
                             fontFamily: 'Lexend',
                             fontSize: 16,
                             color: Color(0xFFC4C5D5),
@@ -428,22 +347,12 @@ class _AdvancedQuestionEditorScreenState
                         ),
                       ),
                       const Divider(color: Color(0xFFF1F5F9), height: 24),
-                      // Footer row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Word limit (LTR: right)
                           Row(
                             children: [
-                              const Text(
-                                'حد الكلمات:',
-                                style: TextStyle(
-                                  fontFamily: 'Lexend',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF505F76),
-                                ),
-                              ),
+                              _FieldLabel(l10n.wordLimitLabel),
                               const SizedBox(width: 8),
                               SizedBox(
                                 width: 72,
@@ -479,18 +388,17 @@ class _AdvancedQuestionEditorScreenState
                               ),
                             ],
                           ),
-                          // Auto-grading (LTR: left)
-                          const Row(
+                          Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.spellcheck,
                                 size: 18,
                                 color: AppColors.outline,
                               ),
-                              SizedBox(width: 6),
+                              const SizedBox(width: 6),
                               Text(
-                                'التصحيح التلقائي مفعّل',
-                                style: TextStyle(
+                                l10n.autoGradingEnabled,
+                                style: const TextStyle(
                                   fontFamily: 'Lexend',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
@@ -527,15 +435,11 @@ class _AdvancedQuestionEditorScreenState
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFC4C5D5)),
-        ),
+        border: Border(bottom: BorderSide(color: Color(0xFFC4C5D5))),
       ),
       child: Row(
         children: [
-          ...tools.map(
-            _buildToolbarButton,
-          ),
+          ...tools.map(_buildToolbarButton),
           const Spacer(),
           _buildToolbarButton(Icons.functions),
         ],
@@ -555,31 +459,17 @@ class _AdvancedQuestionEditorScreenState
         ),
       );
 
-  // ─── Matching Section ────────────────────────────────────────────────────
-
-  Widget _buildMatchingSection() => Column(
+  Widget _buildMatchingSection(AppLocalizations l10n) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
-            children: [
-              Icon(Icons.sync_alt, color: AppColors.primary, size: 22),
-              SizedBox(width: 8),
-              Text(
-                'واجهة أسئلة المطابقة',
-                style: TextStyle(
-                  fontFamily: 'Lexend',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1A1B22),
-                ),
-              ),
-            ],
+          _SectionTitle(
+            icon: Icons.sync_alt,
+            title: l10n.matchingQuestionInterface,
           ),
           const SizedBox(height: 16),
           ..._pairs.asMap().entries.map(
-                (entry) => _buildMatchingPair(entry.key, entry.value),
+                (entry) => _buildMatchingPair(l10n, entry.key, entry.value),
               ),
-          // Add pair button
           GestureDetector(
             onTap: () {
               setState(() {
@@ -601,18 +491,18 @@ class _AdvancedQuestionEditorScreenState
                   width: 2,
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.add_circle_outline,
                     color: AppColors.outline,
                     size: 20,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    'إضافة زوج آخر',
-                    style: TextStyle(
+                    l10n.addAnotherPair,
+                    style: const TextStyle(
                       fontFamily: 'Lexend',
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -626,72 +516,22 @@ class _AdvancedQuestionEditorScreenState
         ],
       );
 
-  Widget _buildMatchingPair(int index, _MatchingPair pair) => Container(
+  Widget _buildMatchingPair(
+    AppLocalizations l10n,
+    int index,
+    _MatchingPair pair,
+  ) =>
+      _SettingsCard(
         margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.outlineVariant),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
         child: Row(
           children: [
-            // Item A
             Expanded(
               flex: 5,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'العنصر أ',
-                    style: TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF505F76),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  TextField(
-                    controller: pair.itemA,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide:
-                            const BorderSide(color: AppColors.outlineVariant),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide:
-                            const BorderSide(color: AppColors.outlineVariant),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: AppColors.primary),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    style: const TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+              child: _MatchingTextField(
+                label: l10n.matchingItemA,
+                controller: pair.itemA,
               ),
             ),
-            // Link icon
             const Expanded(
               flex: 2,
               child: Center(
@@ -702,68 +542,25 @@ class _AdvancedQuestionEditorScreenState
                 ),
               ),
             ),
-            // Match B
             Expanded(
               flex: 5,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'المطابق ب',
-                    style: TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF505F76),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  TextField(
-                    controller: pair.matchB,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide:
-                            const BorderSide(color: AppColors.outlineVariant),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide:
-                            const BorderSide(color: AppColors.outlineVariant),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: AppColors.primary),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    style: const TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+              child: _MatchingTextField(
+                label: l10n.matchingMatchB,
+                controller: pair.matchB,
               ),
             ),
           ],
         ),
       );
 
-  // ─── Save Actions ────────────────────────────────────────────────────────
-
-  Widget _buildSaveActions() => Row(
+  Widget _buildSaveActions(AppLocalizations l10n) => Row(
         children: [
           Expanded(
             child: OutlinedButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('تم حفظ السؤال كمسودة'),
+                  SnackBar(
+                    content: Text(l10n.questionSavedAsDraft),
                     behavior: SnackBarBehavior.floating,
                     backgroundColor: AppColors.primary,
                   ),
@@ -777,9 +574,9 @@ class _AdvancedQuestionEditorScreenState
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                'حفظ كمسودة',
-                style: TextStyle(
+              child: Text(
+                l10n.saveAsDraft,
+                style: const TextStyle(
                   fontFamily: 'Lexend',
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -791,49 +588,7 @@ class _AdvancedQuestionEditorScreenState
           Expanded(
             flex: 2,
             child: ElevatedButton(
-              onPressed: () {
-                if (_questionController.text.trim().isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('يرجى كتابة نص السؤال أولاً'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: AppColors.error,
-                    ),
-                  );
-                  return;
-                }
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    title: const Text('نشر السؤال'),
-                    content:
-                        const Text('هل تريد نشر هذا السؤال في بنك الأسئلة؟'),
-                    actions: [
-                      TextButton(
-                          onPressed: () => Navigator.pop(ctx),
-                          child: const Text('إلغاء')),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(ctx);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('تم نشر السؤال في بنك الأسئلة'),
-                              behavior: SnackBarBehavior.floating,
-                              backgroundColor: Color(0xFF2E7D32),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white),
-                        child: const Text('نشر'),
-                      ),
-                    ],
-                  ),
-                );
-              },
+              onPressed: () => _handlePublish(l10n),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -844,9 +599,9 @@ class _AdvancedQuestionEditorScreenState
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                'نشر السؤال',
-                style: TextStyle(
+              child: Text(
+                l10n.publishQuestion,
+                style: const TextStyle(
                   fontFamily: 'Lexend',
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -857,19 +612,62 @@ class _AdvancedQuestionEditorScreenState
         ],
       );
 
-  // ─── AI FAB ──────────────────────────────────────────────────────────────
+  void _handlePublish(AppLocalizations l10n) {
+    if (_questionController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.writeQuestionFirst),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
 
-  Widget _buildAIFAB() => FloatingActionButton.extended(
-        onPressed: _showAiAssistantPlannedSheet,
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(l10n.publishQuestionTitle),
+        content: Text(l10n.publishQuestionConfirmation),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(l10n.questionPublishedToBank),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: const Color(0xFF2E7D32),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(l10n.publish),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAIFAB(AppLocalizations l10n) => FloatingActionButton.extended(
+        onPressed: () => _showAiAssistantPlannedSheet(l10n),
         tooltip: 'AI question assistant planned',
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
         elevation: 2,
         icon: const Icon(Icons.auto_awesome_rounded, size: 22),
-        label: const Text('قيد التخطيط'),
+        label: Text(l10n.plannedStatus),
       );
 
-  void _showAiAssistantPlannedSheet() {
+  void _showAiAssistantPlannedSheet(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
 
     showModalBottomSheet(
@@ -892,7 +690,7 @@ class _AdvancedQuestionEditorScreenState
               ),
               const SizedBox(height: 12),
               Text(
-                'مساعد توليد الأسئلة',
+                l10n.aiQuestionAssistant,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
@@ -900,7 +698,7 @@ class _AdvancedQuestionEditorScreenState
               ),
               const SizedBox(height: 8),
               Text(
-                'هذه الميزة غير مفعلة في هذا الإصدار حتى يتم ربط خدمة توليد آمنة، مراجعة جودة السؤال، وتسجيل مصدر السؤال قبل نشره.',
+                l10n.aiQuestionAssistantDisabledMessage,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
@@ -911,12 +709,12 @@ class _AdvancedQuestionEditorScreenState
               OutlinedButton.icon(
                 onPressed: null,
                 icon: const Icon(Icons.lock_clock_rounded),
-                label: const Text('التوليد التلقائي قيد التخطيط'),
+                label: Text(l10n.autoGenerationPlanned),
               ),
               const SizedBox(height: 8),
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('حسنًا'),
+                child: Text(l10n.ok),
               ),
             ],
           ),
@@ -926,10 +724,127 @@ class _AdvancedQuestionEditorScreenState
   }
 }
 
-// ─── Data Model ──────────────────────────────────────────────────────────────
+class _SettingsCard extends StatelessWidget {
+  const _SettingsCard({
+    required this.child,
+    this.padding = const EdgeInsets.all(16),
+    this.margin,
+  });
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? margin;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        margin: margin,
+        padding: padding,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.outlineVariant),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: child,
+      );
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({required this.icon, required this.title});
+
+  final IconData icon;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: [
+          Icon(icon, color: AppColors.primary, size: 22),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: const TextStyle(
+              fontFamily: 'Lexend',
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1A1B22),
+            ),
+          ),
+        ],
+      );
+}
+
+class _FieldLabel extends StatelessWidget {
+  const _FieldLabel(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        style: const TextStyle(
+          fontFamily: 'Lexend',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: Color(0xFF505F76),
+        ),
+      );
+}
+
+class _MatchingTextField extends StatelessWidget {
+  const _MatchingTextField({
+    required this.label,
+    required this.controller,
+  });
+
+  final String label;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _FieldLabel(label),
+          const SizedBox(height: 4),
+          TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AppColors.primary),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            style: const TextStyle(
+              fontFamily: 'Lexend',
+              fontSize: 14,
+            ),
+          ),
+        ],
+      );
+}
 
 class _MatchingPair {
   _MatchingPair({required this.itemA, required this.matchB});
+
   final TextEditingController itemA;
   final TextEditingController matchB;
 }

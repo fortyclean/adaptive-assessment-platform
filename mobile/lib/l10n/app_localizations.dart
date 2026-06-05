@@ -3837,6 +3837,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تطبيق الفلاتر'**
   String get applyFilters;
+
+  /// No description provided for @advancedQuestionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء سؤال متقدم'**
+  String get advancedQuestionTitle;
+
+  /// No description provided for @advancedQuestionSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صمّم أسئلة تقييم متقدمة مع وسائط غنية وعناصر تفاعلية.'**
+  String get advancedQuestionSubtitle;
+
+  /// No description provided for @advancedUnitQuantum.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة 4: ميكانيكا الكم المتقدمة'**
+  String get advancedUnitQuantum;
+
+  /// No description provided for @advancedUnitThermodynamics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة 5: الديناميكا الحرارية والإنتروبيا'**
+  String get advancedUnitThermodynamics;
+
+  /// No description provided for @advancedUnitParticles.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة 6: أساسيات فيزياء الجسيمات'**
+  String get advancedUnitParticles;
+
+  /// No description provided for @assignUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعيين الوحدة'**
+  String get assignUnit;
+
+  /// No description provided for @essayQuestionEditor.
+  ///
+  /// In ar, this message translates to:
+  /// **'محرر السؤال المقالي'**
+  String get essayQuestionEditor;
+
+  /// No description provided for @wordLimitLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'حد الكلمات:'**
+  String get wordLimitLabel;
+
+  /// No description provided for @autoGradingEnabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصحيح التلقائي مفعّل'**
+  String get autoGradingEnabled;
+
+  /// No description provided for @matchingQuestionInterface.
+  ///
+  /// In ar, this message translates to:
+  /// **'واجهة أسئلة المطابقة'**
+  String get matchingQuestionInterface;
+
+  /// No description provided for @addAnotherPair.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة زوج آخر'**
+  String get addAnotherPair;
+
+  /// No description provided for @matchingItemA.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنصر أ'**
+  String get matchingItemA;
+
+  /// No description provided for @matchingMatchB.
+  ///
+  /// In ar, this message translates to:
+  /// **'المطابق ب'**
+  String get matchingMatchB;
+
+  /// No description provided for @questionSavedAsDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ السؤال كمسودة'**
+  String get questionSavedAsDraft;
+
+  /// No description provided for @saveAsDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ كمسودة'**
+  String get saveAsDraft;
+
+  /// No description provided for @writeQuestionFirst.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى كتابة نص السؤال أولاً'**
+  String get writeQuestionFirst;
+
+  /// No description provided for @publishQuestionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر السؤال'**
+  String get publishQuestionTitle;
+
+  /// No description provided for @publishQuestionConfirmation.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد نشر هذا السؤال في بنك الأسئلة؟'**
+  String get publishQuestionConfirmation;
+
+  /// No description provided for @questionPublishedToBank.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نشر السؤال في بنك الأسئلة'**
+  String get questionPublishedToBank;
+
+  /// No description provided for @publishQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر السؤال'**
+  String get publishQuestion;
+
+  /// No description provided for @plannedStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التخطيط'**
+  String get plannedStatus;
+
+  /// No description provided for @aiQuestionAssistant.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعد توليد الأسئلة'**
+  String get aiQuestionAssistant;
+
+  /// No description provided for @aiQuestionAssistantDisabledMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الميزة غير مفعلة في هذا الإصدار حتى يتم ربط خدمة توليد آمنة، مراجعة جودة السؤال، وتسجيل مصدر السؤال قبل نشره.'**
+  String get aiQuestionAssistantDisabledMessage;
+
+  /// No description provided for @autoGenerationPlanned.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوليد التلقائي قيد التخطيط'**
+  String get autoGenerationPlanned;
 }
 
 class _AppLocalizationsDelegate

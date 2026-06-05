@@ -535,6 +535,41 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads advanced question editor localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.advancedQuestionTitle,
+            l10n.assignUnit,
+            l10n.essayQuestionEditor,
+            l10n.wordLimitLabel,
+            l10n.autoGradingEnabled,
+            l10n.matchingQuestionInterface,
+            l10n.addAnotherPair,
+            l10n.questionSavedAsDraft,
+            l10n.publishQuestionConfirmation,
+            l10n.aiQuestionAssistant,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Create advanced question / Assign unit / Essay question editor / '
+        'Word limit: / Auto-grading enabled / Matching question interface / '
+        'Add another pair / Question saved as draft / '
+        'Do you want to publish this question to the question bank? / '
+        'Question generation assistant',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {
