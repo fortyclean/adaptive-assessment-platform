@@ -1446,5 +1446,36 @@
     }
   },
   "contactStudent": "تواصل مع الطالب",
-  "fullReport": "التقرير الكامل"
+  "fullReport": "التقرير الكامل",
+  "studentDashboardFallbackStudent": "طالب",
+  "studentDashboardGreeting": "أهلاً بك، {name}!",
+  "@studentDashboardGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "studentDashboardMotivationQuote": "\"النجاح ليس عدم فعل الأخطاء، بل هو عدم تكرار نفس الخطأ مرتين.\"",
+  "studentDashboardMotivationAuthor": "جورج برنارد شو",
+  "studentDashboardGpa": "المعدل التراكمي (GPA)",
+  "studentDashboardCompletedTasks": "المهام المكتملة",
+  "studentDashboardEarnedBadges": "الأوسمة المستحقة",
+  "badgeCount": "{count} وساماً",
+  "@badgeCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "viewAll": "عرض الكل",
+  "studentDashboardMyCourses": "مساقاتي الدراسية",
+  "studentDashboardMathCourse": "الرياضيات",
+  "studentDashboardPhysicsCourse": "الفيزياء",
+  "studentDashboardArabicCourse": "اللغة العربية",
+  "monthOctoberShort": "أكتوبر",
+  "studentDashboardChemistryMidterm": "اختبار منتصف الفصل - كيمياء",
+  "studentDashboardMorningExamTime": "الساعة 09:00 صباحاً",
+  "studentDashboardGraduationProject": "مشروع التخرج - المرحلة الأولى",
+  "studentDashboardEveningDeadlineTime": "الساعة 11:59 مساءً",
+  "studentDashboardUpcomingExams": "الاختبارات القادمة",
+  "studentDashboardMyResources": "مصادري",
+  "studentDashboardStartTraining": "ابدأ التدريب"
 }

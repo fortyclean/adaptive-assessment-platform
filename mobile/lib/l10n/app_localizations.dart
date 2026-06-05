@@ -6418,6 +6418,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'التقرير الكامل'**
   String get fullReport;
+
+  /// No description provided for @studentDashboardFallbackStudent.
+  ///
+  /// In ar, this message translates to:
+  /// **'طالب'**
+  String get studentDashboardFallbackStudent;
+
+  /// No description provided for @studentDashboardGreeting.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلاً بك، {name}!'**
+  String studentDashboardGreeting(Object name);
+
+  /// No description provided for @studentDashboardMotivationQuote.
+  ///
+  /// In ar, this message translates to:
+  /// **'\"النجاح ليس عدم فعل الأخطاء، بل هو عدم تكرار نفس الخطأ مرتين.\"'**
+  String get studentDashboardMotivationQuote;
+
+  /// No description provided for @studentDashboardMotivationAuthor.
+  ///
+  /// In ar, this message translates to:
+  /// **'جورج برنارد شو'**
+  String get studentDashboardMotivationAuthor;
+
+  /// No description provided for @studentDashboardGpa.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعدل التراكمي (GPA)'**
+  String get studentDashboardGpa;
+
+  /// No description provided for @studentDashboardCompletedTasks.
+  ///
+  /// In ar, this message translates to:
+  /// **'المهام المكتملة'**
+  String get studentDashboardCompletedTasks;
+
+  /// No description provided for @studentDashboardEarnedBadges.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأوسمة المستحقة'**
+  String get studentDashboardEarnedBadges;
+
+  /// No description provided for @badgeCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} وساماً'**
+  String badgeCount(Object count);
+
+  /// No description provided for @studentDashboardMyCourses.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساقاتي الدراسية'**
+  String get studentDashboardMyCourses;
+
+  /// No description provided for @studentDashboardMathCourse.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات'**
+  String get studentDashboardMathCourse;
+
+  /// No description provided for @studentDashboardPhysicsCourse.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفيزياء'**
+  String get studentDashboardPhysicsCourse;
+
+  /// No description provided for @studentDashboardArabicCourse.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة العربية'**
+  String get studentDashboardArabicCourse;
+
+  /// No description provided for @monthOctoberShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكتوبر'**
+  String get monthOctoberShort;
+
+  /// No description provided for @studentDashboardChemistryMidterm.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار منتصف الفصل - كيمياء'**
+  String get studentDashboardChemistryMidterm;
+
+  /// No description provided for @studentDashboardMorningExamTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الساعة 09:00 صباحاً'**
+  String get studentDashboardMorningExamTime;
+
+  /// No description provided for @studentDashboardGraduationProject.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشروع التخرج - المرحلة الأولى'**
+  String get studentDashboardGraduationProject;
+
+  /// No description provided for @studentDashboardEveningDeadlineTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الساعة 11:59 مساءً'**
+  String get studentDashboardEveningDeadlineTime;
+
+  /// No description provided for @studentDashboardUpcomingExams.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبارات القادمة'**
+  String get studentDashboardUpcomingExams;
+
+  /// No description provided for @studentDashboardMyResources.
+  ///
+  /// In ar, this message translates to:
+  /// **'مصادري'**
+  String get studentDashboardMyResources;
+
+  /// No description provided for @studentDashboardStartTraining.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ التدريب'**
+  String get studentDashboardStartTraining;
 }
 
 class _AppLocalizationsDelegate

@@ -3503,4 +3503,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fullReport => 'Full report';
+
+  @override
+  String get studentDashboardFallbackStudent => 'Student';
+
+  @override
+  String studentDashboardGreeting(Object name) {
+    return 'Welcome, $name!';
+  }
+
+  @override
+  String get studentDashboardMotivationQuote =>
+      '\"Success does not mean never making mistakes, but never making the same mistake twice.\"';
+
+  @override
+  String get studentDashboardMotivationAuthor => 'George Bernard Shaw';
+
+  @override
+  String get studentDashboardGpa => 'Cumulative GPA';
+
+  @override
+  String get studentDashboardCompletedTasks => 'Completed tasks';
+
+  @override
+  String get studentDashboardEarnedBadges => 'Earned badges';
+
+  @override
+  String badgeCount(Object count) {
+    return '$count badges';
+  }
+
+  @override
+  String get studentDashboardMyCourses => 'My courses';
+
+  @override
+  String get studentDashboardMathCourse => 'Mathematics';
+
+  @override
+  String get studentDashboardPhysicsCourse => 'Physics';
+
+  @override
+  String get studentDashboardArabicCourse => 'Arabic language';
+
+  @override
+  String get monthOctoberShort => 'Oct';
+
+  @override
+  String get studentDashboardChemistryMidterm => 'Midterm exam - Chemistry';
+
+  @override
+  String get studentDashboardMorningExamTime => '09:00 AM';
+
+  @override
+  String get studentDashboardGraduationProject =>
+      'Graduation project - Phase 1';
+
+  @override
+  String get studentDashboardEveningDeadlineTime => '11:59 PM';
+
+  @override
+  String get studentDashboardUpcomingExams => 'Upcoming exams';
+
+  @override
+  String get studentDashboardMyResources => 'My resources';
+
+  @override
+  String get studentDashboardStartTraining => 'Start training';
 }

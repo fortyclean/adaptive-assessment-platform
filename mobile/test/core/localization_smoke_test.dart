@@ -996,6 +996,39 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads student dashboard localization labels and demo data',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.studentDashboardGreeting('Sara'),
+            l10n.studentDashboardFallbackStudent,
+            l10n.studentDashboardGpa,
+            l10n.studentDashboardCompletedTasks,
+            l10n.badgeCount(12),
+            l10n.studentDashboardMyCourses,
+            l10n.studentDashboardMathCourse,
+            l10n.studentDashboardChemistryMidterm,
+            l10n.studentDashboardUpcomingExams,
+            l10n.studentDashboardStartTraining,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Welcome, Sara! / Student / Cumulative GPA / Completed tasks / '
+        '12 badges / My courses / Mathematics / Midterm exam - Chemistry / '
+        'Upcoming exams / Start training',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

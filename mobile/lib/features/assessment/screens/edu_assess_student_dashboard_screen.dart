@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/user_avatar.dart';
@@ -25,29 +26,6 @@ class _EduAssessStudentDashboardScreenState
   final int _completedTasks = 24;
   final int _totalTasks = 30;
   final int _badgesCount = 12;
-
-  final List<_CourseProgress> _courses = const [
-    _CourseProgress(name: 'الرياضيات', progress: 0.75),
-    _CourseProgress(name: 'الفيزياء', progress: 0.90),
-    _CourseProgress(name: 'اللغة العربية', progress: 0.40),
-  ];
-
-  final List<_UpcomingExam> _upcomingExams = const [
-    _UpcomingExam(
-      day: '12',
-      month: 'أكتوبر',
-      title: 'اختبار منتصف الفصل - كيمياء',
-      time: 'الساعة 09:00 صباحاً',
-      colorIndex: 0,
-    ),
-    _UpcomingExam(
-      day: '15',
-      month: 'أكتوبر',
-      title: 'مشروع التخرج - المرحلة الأولى',
-      time: 'الساعة 11:59 مساءً',
-      colorIndex: 1,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -160,15 +138,17 @@ class _EduAssessStudentDashboardScreenState
   // ─── Greeting & Motivation ────────────────────────────────────────────────
 
   Widget _buildGreetingSection() {
+    final l10n = AppLocalizations.of(context);
     final user = ref.watch(authProvider).user;
-    final firstName = user?.fullName.split(' ').first ?? 'طالب';
+    final firstName =
+        user?.fullName.split(' ').first ?? l10n.studentDashboardFallbackStudent;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'أهلاً بك، $firstName!',
+          l10n.studentDashboardGreeting(firstName),
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
@@ -188,7 +168,7 @@ class _EduAssessStudentDashboardScreenState
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                '"النجاح ليس عدم فعل الأخطاء، بل هو عدم تكرار نفس الخطأ مرتين."',
+                l10n.studentDashboardMotivationQuote,
                 style: TextStyle(
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
@@ -199,7 +179,7 @@ class _EduAssessStudentDashboardScreenState
               ),
               const SizedBox(height: 8),
               Text(
-                'جورج برنارد شو',
+                l10n.studentDashboardMotivationAuthor,
                 style: TextStyle(
                   fontSize: 12,
                   color: colorScheme.onSurfaceVariant,
@@ -217,6 +197,7 @@ class _EduAssessStudentDashboardScreenState
   // ─── Summary Metrics Bento ────────────────────────────────────────────────
 
   Widget _buildMetricsBento() {
+    final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
@@ -257,9 +238,9 @@ class _EduAssessStudentDashboardScreenState
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text(
-                    'المعدل التراكمي (GPA)',
-                    style: TextStyle(
+                  Text(
+                    l10n.studentDashboardGpa,
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: AppColors.onSurfaceVariant,
@@ -286,7 +267,7 @@ class _EduAssessStudentDashboardScreenState
             Expanded(
               child: _buildMetricCard(
                 icon: Icons.task_alt_rounded,
-                label: 'المهام المكتملة',
+                label: l10n.studentDashboardCompletedTasks,
                 value: '$_completedTasks/$_totalTasks',
               ),
             ),
@@ -294,8 +275,8 @@ class _EduAssessStudentDashboardScreenState
             Expanded(
               child: _buildMetricCard(
                 icon: Icons.military_tech_rounded,
-                label: 'الأوسمة المستحقة',
-                value: '$_badgesCount وساماً',
+                label: l10n.studentDashboardEarnedBadges,
+                value: l10n.badgeCount(_badgesCount),
                 iconColor: const Color(0xFFD97706),
               ),
             ),
@@ -363,7 +344,13 @@ class _EduAssessStudentDashboardScreenState
   // ─── My Courses ───────────────────────────────────────────────────────────
 
   Widget _buildCoursesSection() {
+    final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final courses = [
+      _CourseProgress(name: l10n.studentDashboardMathCourse, progress: 0.75),
+      _CourseProgress(name: l10n.studentDashboardPhysicsCourse, progress: 0.90),
+      _CourseProgress(name: l10n.studentDashboardArabicCourse, progress: 0.40),
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -378,9 +365,9 @@ class _EduAssessStudentDashboardScreenState
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: const Text(
-                'عرض الكل',
-                style: TextStyle(
+              child: Text(
+                l10n.viewAll,
+                style: const TextStyle(
                   color: AppColors.primary,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -388,7 +375,7 @@ class _EduAssessStudentDashboardScreenState
               ),
             ),
             Text(
-              'مساقاتي الدراسية',
+              l10n.studentDashboardMyCourses,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -403,9 +390,9 @@ class _EduAssessStudentDashboardScreenState
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             reverse: true, // RTL scroll
-            itemCount: _courses.length,
+            itemCount: courses.length,
             separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, index) => _buildCourseCard(_courses[index]),
+            itemBuilder: (context, index) => _buildCourseCard(courses[index]),
           ),
         ),
       ],
@@ -478,13 +465,30 @@ class _EduAssessStudentDashboardScreenState
   // ─── Upcoming Exams ───────────────────────────────────────────────────────
 
   Widget _buildUpcomingExams() {
+    final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final upcomingExams = [
+      _UpcomingExam(
+        day: '12',
+        month: l10n.monthOctoberShort,
+        title: l10n.studentDashboardChemistryMidterm,
+        time: l10n.studentDashboardMorningExamTime,
+        colorIndex: 0,
+      ),
+      _UpcomingExam(
+        day: '15',
+        month: l10n.monthOctoberShort,
+        title: l10n.studentDashboardGraduationProject,
+        time: l10n.studentDashboardEveningDeadlineTime,
+        colorIndex: 1,
+      ),
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'الاختبارات القادمة',
+          l10n.studentDashboardUpcomingExams,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -493,7 +497,7 @@ class _EduAssessStudentDashboardScreenState
           textAlign: TextAlign.right,
         ),
         const SizedBox(height: 12),
-        ..._upcomingExams.map(_buildExamCard),
+        ...upcomingExams.map(_buildExamCard),
       ],
     );
   }
@@ -597,52 +601,55 @@ class _EduAssessStudentDashboardScreenState
 
   // ─── Quick Access ─────────────────────────────────────────────────────────
 
-  Widget _buildQuickAccess(BuildContext context) => Row(
-        children: [
-          // Resources button (RTL: left)
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.auto_stories_rounded, size: 24),
-              label: const Text('مصادري'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary, width: 2),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+  Widget _buildQuickAccess(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Row(
+      children: [
+        // Resources button (RTL: left)
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: () {},
+            icon: const Icon(Icons.auto_stories_rounded, size: 24),
+            label: Text(l10n.studentDashboardMyResources),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.primary,
+              side: const BorderSide(color: AppColors.primary, width: 2),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              textStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          // Start training button (RTL: right)
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () => context.push('/student/micro-learning'),
-              icon: const Icon(Icons.play_circle_rounded, size: 24),
-              label: const Text('ابدأ التدريب'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 2,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+        ),
+        const SizedBox(width: 12),
+        // Start training button (RTL: right)
+        Expanded(
+          child: ElevatedButton.icon(
+            onPressed: () => context.push('/student/micro-learning'),
+            icon: const Icon(Icons.play_circle_rounded, size: 24),
+            label: Text(l10n.studentDashboardStartTraining),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 2,
+              textStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 }
 
 // ─── Data Models ─────────────────────────────────────────────────────────────

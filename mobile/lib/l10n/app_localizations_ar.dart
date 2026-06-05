@@ -3459,4 +3459,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fullReport => 'التقرير الكامل';
+
+  @override
+  String get studentDashboardFallbackStudent => 'طالب';
+
+  @override
+  String studentDashboardGreeting(Object name) {
+    return 'أهلاً بك، $name!';
+  }
+
+  @override
+  String get studentDashboardMotivationQuote =>
+      '\"النجاح ليس عدم فعل الأخطاء، بل هو عدم تكرار نفس الخطأ مرتين.\"';
+
+  @override
+  String get studentDashboardMotivationAuthor => 'جورج برنارد شو';
+
+  @override
+  String get studentDashboardGpa => 'المعدل التراكمي (GPA)';
+
+  @override
+  String get studentDashboardCompletedTasks => 'المهام المكتملة';
+
+  @override
+  String get studentDashboardEarnedBadges => 'الأوسمة المستحقة';
+
+  @override
+  String badgeCount(Object count) {
+    return '$count وساماً';
+  }
+
+  @override
+  String get studentDashboardMyCourses => 'مساقاتي الدراسية';
+
+  @override
+  String get studentDashboardMathCourse => 'الرياضيات';
+
+  @override
+  String get studentDashboardPhysicsCourse => 'الفيزياء';
+
+  @override
+  String get studentDashboardArabicCourse => 'اللغة العربية';
+
+  @override
+  String get monthOctoberShort => 'أكتوبر';
+
+  @override
+  String get studentDashboardChemistryMidterm => 'اختبار منتصف الفصل - كيمياء';
+
+  @override
+  String get studentDashboardMorningExamTime => 'الساعة 09:00 صباحاً';
+
+  @override
+  String get studentDashboardGraduationProject =>
+      'مشروع التخرج - المرحلة الأولى';
+
+  @override
+  String get studentDashboardEveningDeadlineTime => 'الساعة 11:59 مساءً';
+
+  @override
+  String get studentDashboardUpcomingExams => 'الاختبارات القادمة';
+
+  @override
+  String get studentDashboardMyResources => 'مصادري';
+
+  @override
+  String get studentDashboardStartTraining => 'ابدأ التدريب';
 }

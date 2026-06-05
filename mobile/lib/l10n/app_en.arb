@@ -1446,5 +1446,36 @@
     }
   },
   "contactStudent": "Contact student",
-  "fullReport": "Full report"
+  "fullReport": "Full report",
+  "studentDashboardFallbackStudent": "Student",
+  "studentDashboardGreeting": "Welcome, {name}!",
+  "@studentDashboardGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "studentDashboardMotivationQuote": "\"Success does not mean never making mistakes, but never making the same mistake twice.\"",
+  "studentDashboardMotivationAuthor": "George Bernard Shaw",
+  "studentDashboardGpa": "Cumulative GPA",
+  "studentDashboardCompletedTasks": "Completed tasks",
+  "studentDashboardEarnedBadges": "Earned badges",
+  "badgeCount": "{count} badges",
+  "@badgeCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "viewAll": "View all",
+  "studentDashboardMyCourses": "My courses",
+  "studentDashboardMathCourse": "Mathematics",
+  "studentDashboardPhysicsCourse": "Physics",
+  "studentDashboardArabicCourse": "Arabic language",
+  "monthOctoberShort": "Oct",
+  "studentDashboardChemistryMidterm": "Midterm exam - Chemistry",
+  "studentDashboardMorningExamTime": "09:00 AM",
+  "studentDashboardGraduationProject": "Graduation project - Phase 1",
+  "studentDashboardEveningDeadlineTime": "11:59 PM",
+  "studentDashboardUpcomingExams": "Upcoming exams",
+  "studentDashboardMyResources": "My resources",
+  "studentDashboardStartTraining": "Start training"
 }
