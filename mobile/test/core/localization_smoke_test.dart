@@ -781,6 +781,35 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads about screen localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.aboutApp,
+            l10n.aboutAppSubtitle,
+            l10n.currentVersion,
+            l10n.versionHistory,
+            l10n.versionTypeRelease,
+            l10n.versionTypeFeature,
+            l10n.versionTypeFix,
+            l10n.versionTypeHotfix,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'About app / Smart adaptive assessment platform / Current version / '
+        'Version history / Release / Feature / Fix / Hotfix',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

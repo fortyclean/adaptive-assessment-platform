@@ -2711,4 +2711,25 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get signupTermsDialogBody =>
       'باستخدام منصة التقييم التكيفي، أنت توافق على:\n\n1. استخدام المنصة للأغراض التعليمية فقط.\n2. الحفاظ على سرية بيانات الدخول.\n3. عدم مشاركة محتوى الاختبارات مع الآخرين.\n4. الالتزام بقواعد النزاهة الأكاديمية.\n5. قبول سياسة الخصوصية الخاصة بالمنصة.\n\nللاستفسار: support@adaptive-mastery.com';
+
+  @override
+  String get aboutAppSubtitle => 'منصة التقييم التكيفي الذكي';
+
+  @override
+  String get versionHistory => 'سجل الإصدارات';
+
+  @override
+  String get currentVersion => 'الإصدار الحالي';
+
+  @override
+  String get versionTypeRelease => 'إصدار';
+
+  @override
+  String get versionTypeFeature => 'ميزة';
+
+  @override
+  String get versionTypeFix => 'إصلاح';
+
+  @override
+  String get versionTypeHotfix => 'طارئ';
 }

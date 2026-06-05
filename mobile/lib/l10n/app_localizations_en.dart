@@ -2744,4 +2744,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get signupTermsDialogBody =>
       'By using the adaptive assessment platform, you agree to:\n\n1. Use the platform for educational purposes only.\n2. Keep sign-in credentials confidential.\n3. Not share assessment content with others.\n4. Follow academic integrity rules.\n5. Accept the platform privacy policy.\n\nFor inquiries: support@adaptive-mastery.com';
+
+  @override
+  String get aboutAppSubtitle => 'Smart adaptive assessment platform';
+
+  @override
+  String get versionHistory => 'Version history';
+
+  @override
+  String get currentVersion => 'Current version';
+
+  @override
+  String get versionTypeRelease => 'Release';
+
+  @override
+  String get versionTypeFeature => 'Feature';
+
+  @override
+  String get versionTypeFix => 'Fix';
+
+  @override
+  String get versionTypeHotfix => 'Hotfix';
 }

@@ -3,14 +3,16 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_version.dart';
+import '../../../l10n/app_localizations.dart';
 
-/// About Screen — عن التطبيق
+/// About Screen
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -21,9 +23,9 @@ class AboutScreen extends StatelessWidget {
           color: AppColors.primary,
           onPressed: () => context.pop(),
         ),
-        title: const Text(
-          'عن التطبيق',
-          style: TextStyle(
+        title: Text(
+          l10n.aboutApp,
+          style: const TextStyle(
             color: AppColors.primary,
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -34,12 +36,12 @@ class AboutScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildAppHeader(),
+          _buildAppHeader(context),
           const SizedBox(height: 24),
           _buildCurrentVersion(context),
           const SizedBox(height: 24),
           Text(
-            'سجل الإصدارات',
+            l10n.versionHistory,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -56,7 +58,7 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAppHeader() => Container(
+  Widget _buildAppHeader(BuildContext context) => Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -98,9 +100,9 @@ class AboutScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            const Text(
-              'منصة التقييم التكيفي الذكي',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).aboutAppSubtitle,
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 14,
                 fontFamily: 'Almarai',
@@ -156,9 +158,9 @@ class AboutScreen extends StatelessWidget {
                   color: AppColors.success,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text(
-                  'الإصدار الحالي',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context).currentVersion,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 11,
                     fontFamily: 'Almarai',
@@ -229,7 +231,7 @@ class AboutScreen extends StatelessWidget {
     final isLatest = entry.version == AppVersion.current;
     final color = _typeColor(entry.type);
     final icon = _typeIcon(entry.type);
-    final label = _typeLabel(entry.type);
+    final label = _typeLabel(context, entry.type);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -370,16 +372,17 @@ class AboutScreen extends StatelessWidget {
     }
   }
 
-  String _typeLabel(VersionType type) {
+  String _typeLabel(BuildContext context, VersionType type) {
+    final l10n = AppLocalizations.of(context);
     switch (type) {
       case VersionType.release:
-        return 'إصدار';
+        return l10n.versionTypeRelease;
       case VersionType.feature:
-        return 'ميزة';
+        return l10n.versionTypeFeature;
       case VersionType.fix:
-        return 'إصلاح';
+        return l10n.versionTypeFix;
       case VersionType.hotfix:
-        return 'طارئ';
+        return l10n.versionTypeHotfix;
     }
   }
 }

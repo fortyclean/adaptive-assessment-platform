@@ -5055,6 +5055,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'باستخدام منصة التقييم التكيفي، أنت توافق على:\n\n1. استخدام المنصة للأغراض التعليمية فقط.\n2. الحفاظ على سرية بيانات الدخول.\n3. عدم مشاركة محتوى الاختبارات مع الآخرين.\n4. الالتزام بقواعد النزاهة الأكاديمية.\n5. قبول سياسة الخصوصية الخاصة بالمنصة.\n\nللاستفسار: support@adaptive-mastery.com'**
   String get signupTermsDialogBody;
+
+  /// No description provided for @aboutAppSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'منصة التقييم التكيفي الذكي'**
+  String get aboutAppSubtitle;
+
+  /// No description provided for @versionHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل الإصدارات'**
+  String get versionHistory;
+
+  /// No description provided for @currentVersion.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإصدار الحالي'**
+  String get currentVersion;
+
+  /// No description provided for @versionTypeRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'إصدار'**
+  String get versionTypeRelease;
+
+  /// No description provided for @versionTypeFeature.
+  ///
+  /// In ar, this message translates to:
+  /// **'ميزة'**
+  String get versionTypeFeature;
+
+  /// No description provided for @versionTypeFix.
+  ///
+  /// In ar, this message translates to:
+  /// **'إصلاح'**
+  String get versionTypeFix;
+
+  /// No description provided for @versionTypeHotfix.
+  ///
+  /// In ar, this message translates to:
+  /// **'طارئ'**
+  String get versionTypeHotfix;
 }
 
 class _AppLocalizationsDelegate

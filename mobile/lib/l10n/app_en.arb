@@ -1149,5 +1149,12 @@
   "signupTeacherAccountsManagedByAdmin": "Teacher accounts are added by the admin from user management.",
   "signupAgreePrefix": "I agree to ",
   "signupPrivacySuffix": " and the platform privacy policy.",
-  "signupTermsDialogBody": "By using the adaptive assessment platform, you agree to:\n\n1. Use the platform for educational purposes only.\n2. Keep sign-in credentials confidential.\n3. Not share assessment content with others.\n4. Follow academic integrity rules.\n5. Accept the platform privacy policy.\n\nFor inquiries: support@adaptive-mastery.com"
+  "signupTermsDialogBody": "By using the adaptive assessment platform, you agree to:\n\n1. Use the platform for educational purposes only.\n2. Keep sign-in credentials confidential.\n3. Not share assessment content with others.\n4. Follow academic integrity rules.\n5. Accept the platform privacy policy.\n\nFor inquiries: support@adaptive-mastery.com",
+  "aboutAppSubtitle": "Smart adaptive assessment platform",
+  "versionHistory": "Version history",
+  "currentVersion": "Current version",
+  "versionTypeRelease": "Release",
+  "versionTypeFeature": "Feature",
+  "versionTypeFix": "Fix",
+  "versionTypeHotfix": "Hotfix"
 }
