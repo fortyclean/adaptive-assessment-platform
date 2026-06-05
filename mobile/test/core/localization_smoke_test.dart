@@ -663,6 +663,39 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads login localization labels and messages', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.login,
+            l10n.username,
+            l10n.password,
+            l10n.signInWithGoogle,
+            l10n.loginServerStarting(7),
+            l10n.loginInvalidCredentials,
+            l10n.googlePendingApprovalMessage,
+            l10n.tryDemoMode,
+            l10n.demoStudentFullName,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Sign in / Username / Password / Sign in with Google / '
+        'Starting the server... (7s) / Username or password is incorrect / '
+        'Your Google join request has been sent. An admin must approve it '
+        'before you can sign in. / Or try demo mode / '
+        'Ahmed Mohammed Student',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

@@ -29,13 +29,13 @@ class GoogleAuthService {
     // Trigger Google sign-in flow
     final googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
-      throw Exception('تم إلغاء تسجيل الدخول بـ Google');
+      throw Exception('Google sign-in cancelled');
     }
 
     final googleAuth = await googleUser.authentication;
     final idToken = googleAuth.idToken;
     if (idToken == null) {
-      throw Exception('فشل الحصول على رمز Google');
+      throw Exception('Google ID token unavailable');
     }
 
     // Exchange Google ID token with backend

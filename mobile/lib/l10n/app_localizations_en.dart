@@ -2440,4 +2440,122 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get uiFeedbackAccessLogged => 'Access logged';
+
+  @override
+  String get login => 'Sign in';
+
+  @override
+  String get username => 'Username';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get loginLoading => 'Signing in...';
+
+  @override
+  String loginServerStarting(int seconds) {
+    return 'Starting the server... (${seconds}s)';
+  }
+
+  @override
+  String get loginServerWaking => 'Please wait, the server is waking up...';
+
+  @override
+  String get loginServerWakeRetry =>
+      'The server is waking up. Please wait 30 seconds and try again.';
+
+  @override
+  String get loginPendingApproval =>
+      'Your account is waiting for admin approval. Contact your institution administration.';
+
+  @override
+  String get loginInvalidCredentials => 'Username or password is incorrect';
+
+  @override
+  String get loginForbiddenOrDisabled =>
+      'Your account is waiting for admin approval or has been disabled. Contact the admin.';
+
+  @override
+  String get loginNoInternet => 'No internet connection';
+
+  @override
+  String get loginGenericError => 'Something went wrong. Please try again.';
+
+  @override
+  String get loginUnexpectedError =>
+      'An unexpected error occurred. Please try again.';
+
+  @override
+  String get forgotPasswordQuestion => 'Forgot password?';
+
+  @override
+  String get rememberMe => 'Remember me';
+
+  @override
+  String get createNewAccount => 'Create new account';
+
+  @override
+  String get noAccountQuestion => 'Do not have an account?';
+
+  @override
+  String get adaptiveAssessmentPlatformShort => 'Adaptive Assessment Platform';
+
+  @override
+  String get signInToYourAccount => 'Sign in to your account';
+
+  @override
+  String get enterUsernameHint => 'Enter username';
+
+  @override
+  String get enterUsernameRequired => 'Please enter your username';
+
+  @override
+  String get enterPasswordHint => 'Enter password';
+
+  @override
+  String get enterPasswordRequired => 'Please enter your password';
+
+  @override
+  String get or => 'Or';
+
+  @override
+  String get signInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get googleLoginLoading => 'Signing in with Google...';
+
+  @override
+  String get googlePendingApprovalMessage =>
+      'Your Google join request has been sent. An admin must approve it before you can sign in.';
+
+  @override
+  String get googleLoginDisabledOnServer =>
+      'Google sign-in is not enabled on the server right now';
+
+  @override
+  String get googleLoginFailedRetry =>
+      'Google sign-in failed. Please try again.';
+
+  @override
+  String get loginCancelled => 'Sign-in cancelled';
+
+  @override
+  String get googleLoginFailed => 'Google sign-in failed';
+
+  @override
+  String get tryDemoMode => 'Or try demo mode';
+
+  @override
+  String get demoDataOfflineNotice =>
+      'Demo data - no internet connection required';
+
+  @override
+  String get demoStudentFullName => 'Ahmed Mohammed Student';
+
+  @override
+  String get demoTeacherFullName => 'Sarah Ahmed Teacher';
+
+  @override
+  String get demoAdminFullName => 'Mohammed Ali Admin';
 }

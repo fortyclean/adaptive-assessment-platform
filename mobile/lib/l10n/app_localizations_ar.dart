@@ -2414,4 +2414,121 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get uiFeedbackAccessLogged => 'تم تسجيل الوصول';
+
+  @override
+  String get login => 'تسجيل الدخول';
+
+  @override
+  String get username => 'اسم المستخدم';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get loginLoading => 'جاري تسجيل الدخول...';
+
+  @override
+  String loginServerStarting(int seconds) {
+    return 'جاري تشغيل الخادم... ($seconds ث)';
+  }
+
+  @override
+  String get loginServerWaking => 'يرجى الانتظار، الخادم يستيقظ...';
+
+  @override
+  String get loginServerWakeRetry =>
+      'الخادم يستيقظ، يرجى الانتظار 30 ثانية والمحاولة مجددًا';
+
+  @override
+  String get loginPendingApproval =>
+      'الحساب بانتظار اعتماد المشرف. تواصل مع إدارة المؤسسة.';
+
+  @override
+  String get loginInvalidCredentials => 'اسم المستخدم أو كلمة المرور غير صحيحة';
+
+  @override
+  String get loginForbiddenOrDisabled =>
+      'الحساب بانتظار اعتماد المشرف أو تم تعطيله. تواصل مع المشرف.';
+
+  @override
+  String get loginNoInternet => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get loginGenericError => 'حدث خطأ، يرجى المحاولة مجددًا';
+
+  @override
+  String get loginUnexpectedError => 'حدث خطأ غير متوقع، يرجى المحاولة مجددًا';
+
+  @override
+  String get forgotPasswordQuestion => 'نسيت كلمة المرور؟';
+
+  @override
+  String get rememberMe => 'تذكرني';
+
+  @override
+  String get createNewAccount => 'إنشاء حساب جديد';
+
+  @override
+  String get noAccountQuestion => 'ليس لديك حساب؟';
+
+  @override
+  String get adaptiveAssessmentPlatformShort => 'منصة التقييم التكيفي';
+
+  @override
+  String get signInToYourAccount => 'تسجيل الدخول إلى حسابك';
+
+  @override
+  String get enterUsernameHint => 'أدخل اسم المستخدم';
+
+  @override
+  String get enterUsernameRequired => 'يرجى إدخال اسم المستخدم';
+
+  @override
+  String get enterPasswordHint => 'أدخل كلمة المرور';
+
+  @override
+  String get enterPasswordRequired => 'يرجى إدخال كلمة المرور';
+
+  @override
+  String get or => 'أو';
+
+  @override
+  String get signInWithGoogle => 'تسجيل الدخول بـ Google';
+
+  @override
+  String get googleLoginLoading => 'جاري تسجيل الدخول بـ Google...';
+
+  @override
+  String get googlePendingApprovalMessage =>
+      'تم إرسال طلب الانضمام بحساب Google. سيحتاج المشرف إلى الموافقة قبل الدخول.';
+
+  @override
+  String get googleLoginDisabledOnServer =>
+      'تسجيل الدخول بـ Google غير مفعّل على الخادم حاليًا';
+
+  @override
+  String get googleLoginFailedRetry =>
+      'فشل تسجيل الدخول بـ Google، يرجى المحاولة مجددًا';
+
+  @override
+  String get loginCancelled => 'تم إلغاء تسجيل الدخول';
+
+  @override
+  String get googleLoginFailed => 'فشل تسجيل الدخول بـ Google';
+
+  @override
+  String get tryDemoMode => 'أو جرّب وضع العرض';
+
+  @override
+  String get demoDataOfflineNotice =>
+      'بيانات تجريبية - لا يتطلب اتصالًا بالإنترنت';
+
+  @override
+  String get demoStudentFullName => 'أحمد محمد الطالب';
+
+  @override
+  String get demoTeacherFullName => 'سارة أحمد المعلمة';
+
+  @override
+  String get demoAdminFullName => 'محمد علي المشرف';
 }

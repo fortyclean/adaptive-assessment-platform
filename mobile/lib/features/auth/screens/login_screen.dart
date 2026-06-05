@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/user_avatar.dart';
 import '../repositories/auth_repository.dart';
@@ -30,8 +31,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _isLoading = false;
   bool _rememberMe = false;
   String? _errorMessage;
-  String _loadingMessage = 'جاري تسجيل الدخول...';
+  String _loadingMessage = '';
   int _loadingSeconds = 0;
+
+  AppLocalizations get l10n => AppLocalizations.of(context);
 
   @override
   void dispose() {
@@ -45,25 +48,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _demoLogin(UserRole role) async {
     const storage = FlutterSecureStorage();
     final demoUsers = {
-      UserRole.student: const AuthUser(
+      UserRole.student: AuthUser(
         id: 'demo-student-001',
         username: 'student_demo',
-        fullName: 'أحمد محمد الطالب',
+        fullName: l10n.demoStudentFullName,
         email: 'student@demo.edu',
         role: UserRole.student,
         classroomIds: ['cls-001'],
       ),
-      UserRole.teacher: const AuthUser(
+      UserRole.teacher: AuthUser(
         id: 'demo-teacher-001',
         username: 'teacher_demo',
-        fullName: 'سارة أحمد المعلمة',
+        fullName: l10n.demoTeacherFullName,
         email: 'teacher@demo.edu',
         role: UserRole.teacher,
       ),
-      UserRole.admin: const AuthUser(
+      UserRole.admin: AuthUser(
         id: 'demo-admin-001',
         username: 'admin_demo',
-        fullName: 'محمد علي المشرف',
+        fullName: l10n.demoAdminFullName,
         email: 'admin@demo.edu',
         role: UserRole.admin,
       ),
@@ -98,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
-      _loadingMessage = 'جاري تسجيل الدخول...';
+      _loadingMessage = l10n.loginLoading;
       _loadingSeconds = 0;
     });
 
@@ -112,9 +115,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       setState(() {
         _loadingSeconds++;
         if (_loadingSeconds >= 5 && _loadingSeconds < 30) {
-          _loadingMessage = 'جاري تشغيل الخادم... ($_loadingSeconds ث)';
+          _loadingMessage = l10n.loginServerStarting(_loadingSeconds);
         } else if (_loadingSeconds >= 30) {
-          _loadingMessage = 'يرجى الانتظار، الخادم يستيقظ...';
+          _loadingMessage = l10n.loginServerWaking;
         }
       });
     });
@@ -156,22 +159,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.sendTimeout) {
-        message = 'الخادم يستيقظ، يرجى الانتظار 30 ثانية والمحاولة مجدداً';
+        message = l10n.loginServerWakeRetry;
       } else if (responseStatus == 'pending_approval') {
-        message = 'الحساب بانتظار اعتماد المشرف. تواصل مع إدارة المؤسسة.';
+        message = l10n.loginPendingApproval;
       } else if (e.response?.statusCode == 401) {
-        message = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+        message = l10n.loginInvalidCredentials;
       } else if (e.response?.statusCode == 403) {
-        message = 'الحساب بانتظار اعتماد المشرف أو تم تعطيله. تواصل مع المشرف.';
+        message = l10n.loginForbiddenOrDisabled;
       } else if (e.type == DioExceptionType.connectionError) {
-        message = 'لا يوجد اتصال بالإنترنت';
+        message = l10n.loginNoInternet;
       } else {
-        message = 'حدث خطأ، يرجى المحاولة مجدداً';
+        message = l10n.loginGenericError;
       }
       setState(() => _errorMessage = message);
     } catch (_) {
       if (!mounted) return;
-      setState(() => _errorMessage = 'حدث خطأ غير متوقع، يرجى المحاولة مجدداً');
+      setState(() => _errorMessage = l10n.loginUnexpectedError);
     } finally {
       loadingTimer.cancel();
       if (mounted) setState(() => _isLoading = false);
@@ -215,11 +218,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _buildLabel('اسم المستخدم'),
+                          _buildLabel(l10n.username),
                           const SizedBox(height: 6),
                           _buildUsernameField(),
                           const SizedBox(height: 16),
-                          _buildLabel('كلمة المرور'),
+                          _buildLabel(l10n.password),
                           const SizedBox(height: 6),
                           _buildPasswordField(),
                           if (_errorMessage != null) ...[
@@ -241,9 +244,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   tapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),
-                                child: const Text(
-                                  'نسيت كلمة المرور؟',
-                                  style: TextStyle(
+                                child: Text(
+                                  l10n.forgotPasswordQuestion,
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: AppColors.primary,
@@ -254,9 +257,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               // Remember me (RTL: right)
                               Row(
                                 children: [
-                                  const Text(
-                                    'تذكرني',
-                                    style: TextStyle(
+                                  Text(
+                                    l10n.rememberMe,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: AppColors.onSurfaceVariant,
                                       fontFamily: 'Almarai',
@@ -296,9 +299,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () => context.push(AppRoutes.signup),
-                                child: const Text(
-                                  'إنشاء حساب جديد',
-                                  style: TextStyle(
+                                child: Text(
+                                  l10n.createNewAccount,
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.primary,
@@ -308,9 +311,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              const Text(
-                                'ليس لديك حساب؟',
-                                style: TextStyle(
+                              Text(
+                                l10n.noAccountQuestion,
+                                style: const TextStyle(
                                   fontSize: 14,
                                   color: AppColors.onSurfaceVariant,
                                   fontFamily: 'Almarai',
@@ -360,9 +363,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'منصة التقييم التكيفي',
-            style: TextStyle(
+          Text(
+            l10n.adaptiveAssessmentPlatformShort,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
               color: AppColors.onSurface,
@@ -371,9 +374,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          const Text(
-            'تسجيل الدخول إلى حسابك',
-            style: TextStyle(
+          Text(
+            l10n.signInToYourAccount,
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: AppColors.onSurfaceVariant,
@@ -403,7 +406,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       keyboardType: TextInputType.text,
       autocorrect: false,
       decoration: InputDecoration(
-        hintText: 'أدخل اسم المستخدم',
+        hintText: l10n.enterUsernameHint,
         hintStyle: const TextStyle(
           color: AppColors.onSurfaceVariant,
           fontSize: 14,
@@ -441,7 +444,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
-          return 'يرجى إدخال اسم المستخدم';
+          return l10n.enterUsernameRequired;
         }
         return null;
       },
@@ -455,7 +458,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       obscureText: _obscurePassword,
       textDirection: TextDirection.ltr,
       decoration: InputDecoration(
-        hintText: 'أدخل كلمة المرور',
+        hintText: l10n.enterPasswordHint,
         hintStyle: const TextStyle(
           color: AppColors.onSurfaceVariant,
           fontSize: 14,
@@ -503,7 +506,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'يرجى إدخال كلمة المرور';
+          return l10n.enterPasswordRequired;
         }
         return null;
       },
@@ -577,20 +580,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                   ],
                 )
-              : const Row(
+              : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   textDirection: TextDirection.rtl,
                   children: [
                     Text(
-                      'تسجيل الدخول',
-                      style: TextStyle(
+                      l10n.login,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Almarai',
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_back_rounded, size: 20),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.arrow_back_rounded, size: 20),
                   ],
                 ),
         ),
@@ -598,21 +601,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget _buildGoogleSignIn() => Column(
         children: [
-          const Row(
+          Row(
             children: [
-              Expanded(child: Divider()),
+              const Expanded(child: Divider()),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
-                  'أو',
-                  style: TextStyle(
+                  l10n.or,
+                  style: const TextStyle(
                     fontSize: 13,
                     color: AppColors.onSurfaceVariant,
                     fontFamily: 'Almarai',
                   ),
                 ),
               ),
-              Expanded(child: Divider()),
+              const Expanded(child: Divider()),
             ],
           ),
           const SizedBox(height: 12),
@@ -628,17 +631,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const FittedBox(
+              child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    GoogleMark(size: 20),
-                    SizedBox(width: 10),
+                    const GoogleMark(size: 20),
+                    const SizedBox(width: 10),
                     Text(
-                      'تسجيل الدخول بـ Google',
-                      style: TextStyle(
+                      l10n.signInWithGoogle,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         fontFamily: 'Almarai',
@@ -656,7 +659,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
-      _loadingMessage = 'جاري تسجيل الدخول بـ Google...';
+      _loadingMessage = l10n.googleLoginLoading;
       _loadingSeconds = 0;
     });
 
@@ -678,24 +681,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (!mounted) return;
       if (e.response?.data is Map &&
           (e.response?.data as Map)['status'] == 'pending_approval') {
-        setState(() => _errorMessage =
-            'تم إرسال طلب الانضمام بحساب Google. سيحتاج المشرف إلى الموافقة قبل الدخول.');
+        setState(() => _errorMessage = l10n.googlePendingApprovalMessage);
         return;
       }
       final msg = e.response?.statusCode == 503
-          ? 'تسجيل الدخول بـ Google غير مفعّل على الخادم حالياً'
-          : 'فشل تسجيل الدخول بـ Google، يرجى المحاولة مجدداً';
+          ? l10n.googleLoginDisabledOnServer
+          : l10n.googleLoginFailedRetry;
       setState(() => _errorMessage = msg);
     } catch (e) {
       if (!mounted) return;
       if (e.toString().contains('pending_approval')) {
-        setState(() => _errorMessage =
-            'تم إرسال طلب الانضمام بحساب Google. سيحتاج المشرف إلى الموافقة قبل الدخول.');
+        setState(() => _errorMessage = l10n.googlePendingApprovalMessage);
         return;
       }
-      final msg = e.toString().contains('إلغاء')
-          ? 'تم إلغاء تسجيل الدخول'
-          : 'فشل تسجيل الدخول بـ Google';
+      final msg = e.toString().contains('Google sign-in cancelled')
+          ? l10n.loginCancelled
+          : l10n.googleLoginFailed;
       setState(() => _errorMessage = msg);
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -705,21 +706,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _buildDemoSection() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Row(
+          Row(
             children: [
-              Expanded(child: Divider()),
+              const Expanded(child: Divider()),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
-                  'أو جرّب وضع العرض',
-                  style: TextStyle(
+                  l10n.tryDemoMode,
+                  style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.onSurfaceVariant,
                     fontFamily: 'Almarai',
                   ),
                 ),
               ),
-              Expanded(child: Divider()),
+              const Expanded(child: Divider()),
             ],
           ),
           const SizedBox(height: 12),
@@ -727,7 +728,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             children: [
               Expanded(
                 child: _DemoButton(
-                  label: 'طالب',
+                  label: l10n.studentRole,
                   icon: Icons.school_rounded,
                   color: const Color(0xFF047857),
                   bgColor: const Color(0xFFD1FAE5),
@@ -737,7 +738,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: _DemoButton(
-                  label: 'معلم',
+                  label: l10n.teacherRole,
                   icon: Icons.person_rounded,
                   color: const Color(0xFF1E40AF),
                   bgColor: const Color(0xFFDDE1FF),
@@ -747,7 +748,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: _DemoButton(
-                  label: 'مشرف',
+                  label: l10n.adminRole,
                   icon: Icons.admin_panel_settings_rounded,
                   color: const Color(0xFF7C3AED),
                   bgColor: const Color(0xFFEDE9FE),
@@ -757,10 +758,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          const Center(
+          Center(
             child: Text(
-              'بيانات تجريبية — لا يتطلب اتصالاً بالإنترنت',
-              style: TextStyle(
+              l10n.demoDataOfflineNotice,
+              style: const TextStyle(
                 fontSize: 11,
                 color: AppColors.outline,
                 fontFamily: 'Almarai',

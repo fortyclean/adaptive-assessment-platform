@@ -4527,6 +4527,222 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم تسجيل الوصول'**
   String get uiFeedbackAccessLogged;
+
+  /// No description provided for @login.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول'**
+  String get login;
+
+  /// No description provided for @username.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم'**
+  String get username;
+
+  /// No description provided for @password.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور'**
+  String get password;
+
+  /// No description provided for @loginLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تسجيل الدخول...'**
+  String get loginLoading;
+
+  /// No description provided for @loginServerStarting.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تشغيل الخادم... ({seconds} ث)'**
+  String loginServerStarting(int seconds);
+
+  /// No description provided for @loginServerWaking.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى الانتظار، الخادم يستيقظ...'**
+  String get loginServerWaking;
+
+  /// No description provided for @loginServerWakeRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخادم يستيقظ، يرجى الانتظار 30 ثانية والمحاولة مجددًا'**
+  String get loginServerWakeRetry;
+
+  /// No description provided for @loginPendingApproval.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب بانتظار اعتماد المشرف. تواصل مع إدارة المؤسسة.'**
+  String get loginPendingApproval;
+
+  /// No description provided for @loginInvalidCredentials.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم أو كلمة المرور غير صحيحة'**
+  String get loginInvalidCredentials;
+
+  /// No description provided for @loginForbiddenOrDisabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب بانتظار اعتماد المشرف أو تم تعطيله. تواصل مع المشرف.'**
+  String get loginForbiddenOrDisabled;
+
+  /// No description provided for @loginNoInternet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد اتصال بالإنترنت'**
+  String get loginNoInternet;
+
+  /// No description provided for @loginGenericError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ، يرجى المحاولة مجددًا'**
+  String get loginGenericError;
+
+  /// No description provided for @loginUnexpectedError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ غير متوقع، يرجى المحاولة مجددًا'**
+  String get loginUnexpectedError;
+
+  /// No description provided for @forgotPasswordQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسيت كلمة المرور؟'**
+  String get forgotPasswordQuestion;
+
+  /// No description provided for @rememberMe.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكرني'**
+  String get rememberMe;
+
+  /// No description provided for @createNewAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء حساب جديد'**
+  String get createNewAccount;
+
+  /// No description provided for @noAccountQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس لديك حساب؟'**
+  String get noAccountQuestion;
+
+  /// No description provided for @adaptiveAssessmentPlatformShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'منصة التقييم التكيفي'**
+  String get adaptiveAssessmentPlatformShort;
+
+  /// No description provided for @signInToYourAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول إلى حسابك'**
+  String get signInToYourAccount;
+
+  /// No description provided for @enterUsernameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسم المستخدم'**
+  String get enterUsernameHint;
+
+  /// No description provided for @enterUsernameRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال اسم المستخدم'**
+  String get enterUsernameRequired;
+
+  /// No description provided for @enterPasswordHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل كلمة المرور'**
+  String get enterPasswordHint;
+
+  /// No description provided for @enterPasswordRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال كلمة المرور'**
+  String get enterPasswordRequired;
+
+  /// No description provided for @or.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو'**
+  String get or;
+
+  /// No description provided for @signInWithGoogle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول بـ Google'**
+  String get signInWithGoogle;
+
+  /// No description provided for @googleLoginLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تسجيل الدخول بـ Google...'**
+  String get googleLoginLoading;
+
+  /// No description provided for @googlePendingApprovalMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال طلب الانضمام بحساب Google. سيحتاج المشرف إلى الموافقة قبل الدخول.'**
+  String get googlePendingApprovalMessage;
+
+  /// No description provided for @googleLoginDisabledOnServer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول بـ Google غير مفعّل على الخادم حاليًا'**
+  String get googleLoginDisabledOnServer;
+
+  /// No description provided for @googleLoginFailedRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل تسجيل الدخول بـ Google، يرجى المحاولة مجددًا'**
+  String get googleLoginFailedRetry;
+
+  /// No description provided for @loginCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء تسجيل الدخول'**
+  String get loginCancelled;
+
+  /// No description provided for @googleLoginFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل تسجيل الدخول بـ Google'**
+  String get googleLoginFailed;
+
+  /// No description provided for @tryDemoMode.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو جرّب وضع العرض'**
+  String get tryDemoMode;
+
+  /// No description provided for @demoDataOfflineNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات تجريبية - لا يتطلب اتصالًا بالإنترنت'**
+  String get demoDataOfflineNotice;
+
+  /// No description provided for @demoStudentFullName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحمد محمد الطالب'**
+  String get demoStudentFullName;
+
+  /// No description provided for @demoTeacherFullName.
+  ///
+  /// In ar, this message translates to:
+  /// **'سارة أحمد المعلمة'**
+  String get demoTeacherFullName;
+
+  /// No description provided for @demoAdminFullName.
+  ///
+  /// In ar, this message translates to:
+  /// **'محمد علي المشرف'**
+  String get demoAdminFullName;
 }
 
 class _AppLocalizationsDelegate

@@ -1039,5 +1039,48 @@
   "uiFeedbackSyncStatus": "Current sync status",
   "uiFeedbackPendingAlerts": "Pending alerts",
   "uiFeedbackSafeStatus": "Secure",
-  "uiFeedbackAccessLogged": "Access logged"
+  "uiFeedbackAccessLogged": "Access logged",
+  "login": "Sign in",
+  "username": "Username",
+  "password": "Password",
+  "loginLoading": "Signing in...",
+  "loginServerStarting": "Starting the server... ({seconds}s)",
+  "@loginServerStarting": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "loginServerWaking": "Please wait, the server is waking up...",
+  "loginServerWakeRetry": "The server is waking up. Please wait 30 seconds and try again.",
+  "loginPendingApproval": "Your account is waiting for admin approval. Contact your institution administration.",
+  "loginInvalidCredentials": "Username or password is incorrect",
+  "loginForbiddenOrDisabled": "Your account is waiting for admin approval or has been disabled. Contact the admin.",
+  "loginNoInternet": "No internet connection",
+  "loginGenericError": "Something went wrong. Please try again.",
+  "loginUnexpectedError": "An unexpected error occurred. Please try again.",
+  "forgotPasswordQuestion": "Forgot password?",
+  "rememberMe": "Remember me",
+  "createNewAccount": "Create new account",
+  "noAccountQuestion": "Do not have an account?",
+  "adaptiveAssessmentPlatformShort": "Adaptive Assessment Platform",
+  "signInToYourAccount": "Sign in to your account",
+  "enterUsernameHint": "Enter username",
+  "enterUsernameRequired": "Please enter your username",
+  "enterPasswordHint": "Enter password",
+  "enterPasswordRequired": "Please enter your password",
+  "or": "Or",
+  "signInWithGoogle": "Sign in with Google",
+  "googleLoginLoading": "Signing in with Google...",
+  "googlePendingApprovalMessage": "Your Google join request has been sent. An admin must approve it before you can sign in.",
+  "googleLoginDisabledOnServer": "Google sign-in is not enabled on the server right now",
+  "googleLoginFailedRetry": "Google sign-in failed. Please try again.",
+  "loginCancelled": "Sign-in cancelled",
+  "googleLoginFailed": "Google sign-in failed",
+  "tryDemoMode": "Or try demo mode",
+  "demoDataOfflineNotice": "Demo data - no internet connection required",
+  "demoStudentFullName": "Ahmed Mohammed Student",
+  "demoTeacherFullName": "Sarah Ahmed Teacher",
+  "demoAdminFullName": "Mohammed Ali Admin"
 }

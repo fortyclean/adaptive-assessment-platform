@@ -1039,5 +1039,48 @@
   "uiFeedbackSyncStatus": "حالة المزامنة الحالية",
   "uiFeedbackPendingAlerts": "تنبيهات معلّقة",
   "uiFeedbackSafeStatus": "آمن",
-  "uiFeedbackAccessLogged": "تم تسجيل الوصول"
+  "uiFeedbackAccessLogged": "تم تسجيل الوصول",
+  "login": "تسجيل الدخول",
+  "username": "اسم المستخدم",
+  "password": "كلمة المرور",
+  "loginLoading": "جاري تسجيل الدخول...",
+  "loginServerStarting": "جاري تشغيل الخادم... ({seconds} ث)",
+  "@loginServerStarting": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "loginServerWaking": "يرجى الانتظار، الخادم يستيقظ...",
+  "loginServerWakeRetry": "الخادم يستيقظ، يرجى الانتظار 30 ثانية والمحاولة مجددًا",
+  "loginPendingApproval": "الحساب بانتظار اعتماد المشرف. تواصل مع إدارة المؤسسة.",
+  "loginInvalidCredentials": "اسم المستخدم أو كلمة المرور غير صحيحة",
+  "loginForbiddenOrDisabled": "الحساب بانتظار اعتماد المشرف أو تم تعطيله. تواصل مع المشرف.",
+  "loginNoInternet": "لا يوجد اتصال بالإنترنت",
+  "loginGenericError": "حدث خطأ، يرجى المحاولة مجددًا",
+  "loginUnexpectedError": "حدث خطأ غير متوقع، يرجى المحاولة مجددًا",
+  "forgotPasswordQuestion": "نسيت كلمة المرور؟",
+  "rememberMe": "تذكرني",
+  "createNewAccount": "إنشاء حساب جديد",
+  "noAccountQuestion": "ليس لديك حساب؟",
+  "adaptiveAssessmentPlatformShort": "منصة التقييم التكيفي",
+  "signInToYourAccount": "تسجيل الدخول إلى حسابك",
+  "enterUsernameHint": "أدخل اسم المستخدم",
+  "enterUsernameRequired": "يرجى إدخال اسم المستخدم",
+  "enterPasswordHint": "أدخل كلمة المرور",
+  "enterPasswordRequired": "يرجى إدخال كلمة المرور",
+  "or": "أو",
+  "signInWithGoogle": "تسجيل الدخول بـ Google",
+  "googleLoginLoading": "جاري تسجيل الدخول بـ Google...",
+  "googlePendingApprovalMessage": "تم إرسال طلب الانضمام بحساب Google. سيحتاج المشرف إلى الموافقة قبل الدخول.",
+  "googleLoginDisabledOnServer": "تسجيل الدخول بـ Google غير مفعّل على الخادم حاليًا",
+  "googleLoginFailedRetry": "فشل تسجيل الدخول بـ Google، يرجى المحاولة مجددًا",
+  "loginCancelled": "تم إلغاء تسجيل الدخول",
+  "googleLoginFailed": "فشل تسجيل الدخول بـ Google",
+  "tryDemoMode": "أو جرّب وضع العرض",
+  "demoDataOfflineNotice": "بيانات تجريبية - لا يتطلب اتصالًا بالإنترنت",
+  "demoStudentFullName": "أحمد محمد الطالب",
+  "demoTeacherFullName": "سارة أحمد المعلمة",
+  "demoAdminFullName": "محمد علي المشرف"
 }
