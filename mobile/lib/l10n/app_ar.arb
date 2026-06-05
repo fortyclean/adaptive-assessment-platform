@@ -1082,5 +1082,16 @@
   "demoDataOfflineNotice": "بيانات تجريبية - لا يتطلب اتصالًا بالإنترنت",
   "demoStudentFullName": "أحمد محمد الطالب",
   "demoTeacherFullName": "سارة أحمد المعلمة",
-  "demoAdminFullName": "محمد علي المشرف"
+  "demoAdminFullName": "محمد علي المشرف",
+  "skip": "تخطي",
+  "getStarted": "ابدأ الآن",
+  "onboardingAdaptiveTitle": "التقييم التكيفي",
+  "onboardingAdaptiveSubtitle": "اختبارات تتكيف مع مستواك",
+  "onboardingAdaptiveDescription": "يتكيف نظام التقييم الذكي مع مستوى أدائك الفعلي، فيختار أسئلة تناسب قدراتك بدقة لتحصل على تقييم يعكس فهمك الحقيقي.",
+  "onboardingAnalyticsTitle": "تحليلات متقدمة",
+  "onboardingAnalyticsSubtitle": "افهم نقاط قوتك وضعفك",
+  "onboardingAnalyticsDescription": "احصل على تقارير بيانية تفصيلية تظهر أداءك في كل مهارة وتصنف نقاط قوتك وضعفك بوضوح حتى تعرف ما الذي تحتاج إلى مراجعته.",
+  "onboardingRewardsTitle": "نقاط وإنجازات",
+  "onboardingRewardsSubtitle": "تعلّم وتحفّز في آنٍ واحد",
+  "onboardingRewardsDescription": "اكسب نقاطًا مقابل كل اختبار تكمله وحقق شارات الإنجاز عند تميزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان."
 }

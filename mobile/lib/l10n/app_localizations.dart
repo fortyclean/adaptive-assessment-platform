@@ -4743,6 +4743,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'محمد علي المشرف'**
   String get demoAdminFullName;
+
+  /// No description provided for @skip.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخطي'**
+  String get skip;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ الآن'**
+  String get getStarted;
+
+  /// No description provided for @onboardingAdaptiveTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم التكيفي'**
+  String get onboardingAdaptiveTitle;
+
+  /// No description provided for @onboardingAdaptiveSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبارات تتكيف مع مستواك'**
+  String get onboardingAdaptiveSubtitle;
+
+  /// No description provided for @onboardingAdaptiveDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتكيف نظام التقييم الذكي مع مستوى أدائك الفعلي، فيختار أسئلة تناسب قدراتك بدقة لتحصل على تقييم يعكس فهمك الحقيقي.'**
+  String get onboardingAdaptiveDescription;
+
+  /// No description provided for @onboardingAnalyticsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحليلات متقدمة'**
+  String get onboardingAnalyticsTitle;
+
+  /// No description provided for @onboardingAnalyticsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'افهم نقاط قوتك وضعفك'**
+  String get onboardingAnalyticsSubtitle;
+
+  /// No description provided for @onboardingAnalyticsDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'احصل على تقارير بيانية تفصيلية تظهر أداءك في كل مهارة وتصنف نقاط قوتك وضعفك بوضوح حتى تعرف ما الذي تحتاج إلى مراجعته.'**
+  String get onboardingAnalyticsDescription;
+
+  /// No description provided for @onboardingRewardsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقاط وإنجازات'**
+  String get onboardingRewardsTitle;
+
+  /// No description provided for @onboardingRewardsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعلّم وتحفّز في آنٍ واحد'**
+  String get onboardingRewardsSubtitle;
+
+  /// No description provided for @onboardingRewardsDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكسب نقاطًا مقابل كل اختبار تكمله وحقق شارات الإنجاز عند تميزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان.'**
+  String get onboardingRewardsDescription;
 }
 
 class _AppLocalizationsDelegate

@@ -696,6 +696,33 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads onboarding localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.skip,
+            l10n.next,
+            l10n.getStarted,
+            l10n.onboardingAdaptiveTitle,
+            l10n.onboardingAnalyticsTitle,
+            l10n.onboardingRewardsTitle,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Skip / Next / Get started / Adaptive assessment / '
+        'Advanced analytics / Points and achievements',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

@@ -2558,4 +2558,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoAdminFullName => 'Mohammed Ali Admin';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get getStarted => 'Get started';
+
+  @override
+  String get onboardingAdaptiveTitle => 'Adaptive assessment';
+
+  @override
+  String get onboardingAdaptiveSubtitle =>
+      'Assessments that adapt to your level';
+
+  @override
+  String get onboardingAdaptiveDescription =>
+      'The smart assessment system adapts to your actual performance level, choosing questions that fit your abilities precisely so the result reflects your true understanding.';
+
+  @override
+  String get onboardingAnalyticsTitle => 'Advanced analytics';
+
+  @override
+  String get onboardingAnalyticsSubtitle =>
+      'Understand your strengths and weaknesses';
+
+  @override
+  String get onboardingAnalyticsDescription =>
+      'Get detailed visual reports that show your performance in each skill and clearly classify strengths and weaknesses so you know exactly what to review.';
+
+  @override
+  String get onboardingRewardsTitle => 'Points and achievements';
+
+  @override
+  String get onboardingRewardsSubtitle =>
+      'Learn and stay motivated at the same time';
+
+  @override
+  String get onboardingRewardsDescription =>
+      'Earn points for every completed assessment and unlock achievement badges when you excel. Track your progress and challenge yourself toward higher mastery.';
 }

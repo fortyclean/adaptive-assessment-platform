@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// OnboardingScreen — Screens 44–48
 /// Displays 3 slides introducing the platform's key features.
@@ -22,44 +23,41 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
 
-  static const List<_OnboardingSlide> _slides = [
-    _OnboardingSlide(
-      icon: Icons.psychology_rounded,
-      iconColor: AppColors.primary,
-      iconBackgroundColor: Color(0xFFDDE1FF),
-      gradientStart: Color(0xFF00288E),
-      gradientEnd: Color(0xFF1E40AF),
-      accentColor: Color(0xFFDDE1FF),
-      title: 'التقييم التكيفي',
-      subtitle: 'اختبارات تتكيف مع مستواك',
-      description:
-          'يتكيف نظام التقييم الذكي مع مستوى أدائك الفعلي، فيختار أسئلة تناسب قدراتك تماماً — لا سهلة جداً ولا صعبة جداً — لتحصل على تقييم دقيق يعكس فهمك الحقيقي.',
-    ),
-    _OnboardingSlide(
-      icon: Icons.analytics_rounded,
-      iconColor: Color(0xFF047857),
-      iconBackgroundColor: Color(0xFFD1FAE5),
-      gradientStart: Color(0xFF047857),
-      gradientEnd: Color(0xFF065F46),
-      accentColor: Color(0xFFD1FAE5),
-      title: 'تحليلات متقدمة',
-      subtitle: 'افهم نقاط قوتك وضعفك',
-      description:
-          'احصل على تقارير بيانية تفصيلية تُظهر أداءك في كل مهارة، وتُصنّف نقاط قوتك وضعفك بوضوح، حتى تعرف بالضبط على ماذا تركز في مراجعتك.',
-    ),
-    _OnboardingSlide(
-      icon: Icons.emoji_events_rounded,
-      iconColor: Color(0xFFD97706),
-      iconBackgroundColor: Color(0xFFFEF3C7),
-      gradientStart: Color(0xFFD97706),
-      gradientEnd: Color(0xFFB45309),
-      accentColor: Color(0xFFFEF3C7),
-      title: 'نقاط وإنجازات',
-      subtitle: 'تعلّم وتحفّز في آنٍ واحد',
-      description:
-          'اكسب نقاطاً مقابل كل اختبار تُكمله، وحقق شارات الإنجاز عند تميّزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان.',
-    ),
-  ];
+  List<_OnboardingSlide> _slides(AppLocalizations l10n) => [
+        _OnboardingSlide(
+          icon: Icons.psychology_rounded,
+          iconColor: AppColors.primary,
+          iconBackgroundColor: const Color(0xFFDDE1FF),
+          gradientStart: const Color(0xFF00288E),
+          gradientEnd: const Color(0xFF1E40AF),
+          accentColor: const Color(0xFFDDE1FF),
+          title: l10n.onboardingAdaptiveTitle,
+          subtitle: l10n.onboardingAdaptiveSubtitle,
+          description: l10n.onboardingAdaptiveDescription,
+        ),
+        _OnboardingSlide(
+          icon: Icons.analytics_rounded,
+          iconColor: const Color(0xFF047857),
+          iconBackgroundColor: const Color(0xFFD1FAE5),
+          gradientStart: const Color(0xFF047857),
+          gradientEnd: const Color(0xFF065F46),
+          accentColor: const Color(0xFFD1FAE5),
+          title: l10n.onboardingAnalyticsTitle,
+          subtitle: l10n.onboardingAnalyticsSubtitle,
+          description: l10n.onboardingAnalyticsDescription,
+        ),
+        _OnboardingSlide(
+          icon: Icons.emoji_events_rounded,
+          iconColor: const Color(0xFFD97706),
+          iconBackgroundColor: const Color(0xFFFEF3C7),
+          gradientStart: const Color(0xFFD97706),
+          gradientEnd: const Color(0xFFB45309),
+          accentColor: const Color(0xFFFEF3C7),
+          title: l10n.onboardingRewardsTitle,
+          subtitle: l10n.onboardingRewardsSubtitle,
+          description: l10n.onboardingRewardsDescription,
+        ),
+      ];
 
   @override
   void initState() {
@@ -83,7 +81,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   void _nextPage() {
-    if (_currentPage < _slides.length - 1) {
+    final slides = _slides(AppLocalizations.of(context));
+    if (_currentPage < slides.length - 1) {
       _fadeController.reverse().then((_) {
         _pageController.nextPage(
           duration: const Duration(milliseconds: 400),
@@ -109,8 +108,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
-    final isLastPage = _currentPage == _slides.length - 1;
-    final slide = _slides[_currentPage];
+    final l10n = AppLocalizations.of(context);
+    final slides = _slides(l10n);
+    final isLastPage = _currentPage == slides.length - 1;
+    final slide = slides[_currentPage];
 
     return Scaffold(
       backgroundColor: AppColors.surface,
@@ -178,9 +179,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
                           ),
-                          child: const Text(
-                            'تخطي',
-                            style: TextStyle(
+                          child: Text(
+                            l10n.skip,
+                            style: const TextStyle(
                               fontFamily: 'Almarai',
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -195,14 +196,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 Expanded(
                   child: PageView.builder(
                     controller: _pageController,
-                    itemCount: _slides.length,
+                    itemCount: slides.length,
                     onPageChanged: (index) {
                       setState(() => _currentPage = index);
                       _fadeController.forward(from: 0);
                     },
                     itemBuilder: (context, index) => FadeTransition(
                       opacity: _fadeAnimation,
-                      child: _OnboardingSlideWidget(slide: _slides[index]),
+                      child: _OnboardingSlideWidget(slide: slides[index]),
                     ),
                   ),
                 ),
@@ -213,7 +214,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      _slides.length,
+                      slides.length,
                       (index) => AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -272,7 +273,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  isLastPage ? 'ابدأ الآن' : 'التالي',
+                                  isLastPage ? l10n.getStarted : l10n.next,
                                   style: const TextStyle(
                                     fontFamily: 'Almarai',
                                     fontSize: 17,

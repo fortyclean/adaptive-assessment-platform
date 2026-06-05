@@ -2531,4 +2531,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get demoAdminFullName => 'محمد علي المشرف';
+
+  @override
+  String get skip => 'تخطي';
+
+  @override
+  String get getStarted => 'ابدأ الآن';
+
+  @override
+  String get onboardingAdaptiveTitle => 'التقييم التكيفي';
+
+  @override
+  String get onboardingAdaptiveSubtitle => 'اختبارات تتكيف مع مستواك';
+
+  @override
+  String get onboardingAdaptiveDescription =>
+      'يتكيف نظام التقييم الذكي مع مستوى أدائك الفعلي، فيختار أسئلة تناسب قدراتك بدقة لتحصل على تقييم يعكس فهمك الحقيقي.';
+
+  @override
+  String get onboardingAnalyticsTitle => 'تحليلات متقدمة';
+
+  @override
+  String get onboardingAnalyticsSubtitle => 'افهم نقاط قوتك وضعفك';
+
+  @override
+  String get onboardingAnalyticsDescription =>
+      'احصل على تقارير بيانية تفصيلية تظهر أداءك في كل مهارة وتصنف نقاط قوتك وضعفك بوضوح حتى تعرف ما الذي تحتاج إلى مراجعته.';
+
+  @override
+  String get onboardingRewardsTitle => 'نقاط وإنجازات';
+
+  @override
+  String get onboardingRewardsSubtitle => 'تعلّم وتحفّز في آنٍ واحد';
+
+  @override
+  String get onboardingRewardsDescription =>
+      'اكسب نقاطًا مقابل كل اختبار تكمله وحقق شارات الإنجاز عند تميزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان.';
 }

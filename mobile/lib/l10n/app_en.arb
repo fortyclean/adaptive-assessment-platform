@@ -1082,5 +1082,16 @@
   "demoDataOfflineNotice": "Demo data - no internet connection required",
   "demoStudentFullName": "Ahmed Mohammed Student",
   "demoTeacherFullName": "Sarah Ahmed Teacher",
-  "demoAdminFullName": "Mohammed Ali Admin"
+  "demoAdminFullName": "Mohammed Ali Admin",
+  "skip": "Skip",
+  "getStarted": "Get started",
+  "onboardingAdaptiveTitle": "Adaptive assessment",
+  "onboardingAdaptiveSubtitle": "Assessments that adapt to your level",
+  "onboardingAdaptiveDescription": "The smart assessment system adapts to your actual performance level, choosing questions that fit your abilities precisely so the result reflects your true understanding.",
+  "onboardingAnalyticsTitle": "Advanced analytics",
+  "onboardingAnalyticsSubtitle": "Understand your strengths and weaknesses",
+  "onboardingAnalyticsDescription": "Get detailed visual reports that show your performance in each skill and clearly classify strengths and weaknesses so you know exactly what to review.",
+  "onboardingRewardsTitle": "Points and achievements",
+  "onboardingRewardsSubtitle": "Learn and stay motivated at the same time",
+  "onboardingRewardsDescription": "Earn points for every completed assessment and unlock achievement badges when you excel. Track your progress and challenge yourself toward higher mastery."
 }
