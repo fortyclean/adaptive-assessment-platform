@@ -1737,7 +1737,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get questionContent => 'محتوى السؤال';
 
   @override
-  String get questionTextLabel => 'نص السؤال *';
+  String get questionTextLabel => 'نص السؤال';
 
   @override
   String get questionTextHint => 'اكتب نص السؤال هنا...';
@@ -1986,4 +1986,64 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get yesterdayDatePrefix => 'أمس،';
+
+  @override
+  String get questionBankTitle => 'بنك الأسئلة';
+
+  @override
+  String get subjectMathematics => 'رياضيات';
+
+  @override
+  String get subjectScience => 'علوم';
+
+  @override
+  String get subjectArabic => 'لغة عربية';
+
+  @override
+  String get subjectEnglish => 'إنجليزي';
+
+  @override
+  String get generalSkillFallback => 'مهارة عامة';
+
+  @override
+  String get editQuestionTitle => 'تعديل السؤال';
+
+  @override
+  String get questionUpdated => 'تم تحديث السؤال';
+
+  @override
+  String get saveEdits => 'حفظ التعديل';
+
+  @override
+  String get deleteQuestionTitle => 'حذف السؤال';
+
+  @override
+  String get deleteQuestionConfirmation => 'هل تريد حذف هذا السؤال نهائياً؟';
+
+  @override
+  String get questionDeleted => 'تم حذف السؤال';
+
+  @override
+  String get activeFilters => 'فلاتر نشطة';
+
+  @override
+  String get addQuestion => 'إضافة سؤال';
+
+  @override
+  String get importExcel => 'استيراد Excel';
+
+  @override
+  String get noQuestionsTitle => 'لا توجد أسئلة';
+
+  @override
+  String get noQuestionsSubtitle => 'ابدأ بإضافة أسئلة إلى بنك الأسئلة';
+
+  @override
+  String get filterQuestionsTitle => 'تصفية الأسئلة';
+
+  @override
+  String get unitNameHint => 'اكتب اسم الوحدة...';
+
+  @override
+  String get applyFilters => 'تطبيق الفلاتر';
 }

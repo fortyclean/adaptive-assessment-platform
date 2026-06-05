@@ -501,6 +501,40 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads question bank screen localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.questionBankTitle,
+            l10n.subjectMathematics,
+            l10n.subjectScience,
+            l10n.generalSkillFallback,
+            l10n.editQuestionTitle,
+            l10n.deleteQuestionConfirmation,
+            l10n.activeFilters,
+            l10n.unitOrChapter,
+            l10n.noQuestionsTitle,
+            l10n.filterQuestionsTitle,
+            l10n.applyFilters,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Question bank / Mathematics / Science / General skill / '
+        'Edit question / Do you want to permanently delete this question? / '
+        'Active filters / Unit / chapter / No questions / Filter questions / '
+        'Apply filters',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

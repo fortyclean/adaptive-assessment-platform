@@ -3271,7 +3271,7 @@ abstract class AppLocalizations {
   /// No description provided for @questionTextLabel.
   ///
   /// In ar, this message translates to:
-  /// **'نص السؤال *'**
+  /// **'نص السؤال'**
   String get questionTextLabel;
 
   /// No description provided for @questionTextHint.
@@ -3717,6 +3717,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أمس،'**
   String get yesterdayDatePrefix;
+
+  /// No description provided for @questionBankTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنك الأسئلة'**
+  String get questionBankTitle;
+
+  /// No description provided for @subjectMathematics.
+  ///
+  /// In ar, this message translates to:
+  /// **'رياضيات'**
+  String get subjectMathematics;
+
+  /// No description provided for @subjectScience.
+  ///
+  /// In ar, this message translates to:
+  /// **'علوم'**
+  String get subjectScience;
+
+  /// No description provided for @subjectArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'لغة عربية'**
+  String get subjectArabic;
+
+  /// No description provided for @subjectEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنجليزي'**
+  String get subjectEnglish;
+
+  /// No description provided for @generalSkillFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'مهارة عامة'**
+  String get generalSkillFallback;
+
+  /// No description provided for @editQuestionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل السؤال'**
+  String get editQuestionTitle;
+
+  /// No description provided for @questionUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث السؤال'**
+  String get questionUpdated;
+
+  /// No description provided for @saveEdits.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ التعديل'**
+  String get saveEdits;
+
+  /// No description provided for @deleteQuestionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف السؤال'**
+  String get deleteQuestionTitle;
+
+  /// No description provided for @deleteQuestionConfirmation.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذا السؤال نهائياً؟'**
+  String get deleteQuestionConfirmation;
+
+  /// No description provided for @questionDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف السؤال'**
+  String get questionDeleted;
+
+  /// No description provided for @activeFilters.
+  ///
+  /// In ar, this message translates to:
+  /// **'فلاتر نشطة'**
+  String get activeFilters;
+
+  /// No description provided for @addQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سؤال'**
+  String get addQuestion;
+
+  /// No description provided for @importExcel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استيراد Excel'**
+  String get importExcel;
+
+  /// No description provided for @noQuestionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أسئلة'**
+  String get noQuestionsTitle;
+
+  /// No description provided for @noQuestionsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ بإضافة أسئلة إلى بنك الأسئلة'**
+  String get noQuestionsSubtitle;
+
+  /// No description provided for @filterQuestionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفية الأسئلة'**
+  String get filterQuestionsTitle;
+
+  /// No description provided for @unitNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم الوحدة...'**
+  String get unitNameHint;
+
+  /// No description provided for @applyFilters.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق الفلاتر'**
+  String get applyFilters;
 }
 
 class _AppLocalizationsDelegate

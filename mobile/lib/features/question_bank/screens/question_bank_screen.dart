@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/demo_questions.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
-/// Question Bank Screen — Screen 6
+/// Question Bank Screen - Screen 6
 /// Requirements: 3.3, 3.4
 class QuestionBankScreen extends ConsumerStatefulWidget {
   const QuestionBankScreen({super.key});
@@ -16,24 +18,16 @@ class QuestionBankScreen extends ConsumerStatefulWidget {
 }
 
 class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
+  static const _allSubjectValue = '__all__';
+
   bool _isLoading = false;
   List<Map<String, dynamic>> _questions = [];
   int _currentPage = 1;
   bool _hasMore = true;
 
-  // Filters
   String? _filterSubject;
   String? _filterDifficulty;
   String? _filterUnit;
-
-  // Subject chips
-  final List<String> _subjectChips = [
-    'الكل',
-    'رياضيات',
-    'علوم',
-    'لغة عربية',
-    'إنجليزي'
-  ];
 
   @override
   void initState() {
@@ -68,6 +62,7 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
           List<Map<String, dynamic>>.from(data['questions'] as List? ?? []);
       final total = data['total'] as int? ?? 0;
 
+      if (!mounted) return;
       setState(() {
         if (reset) {
           _questions = newQuestions;
@@ -78,29 +73,41 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
         _isLoading = false;
       });
     } catch (_) {
-      // Demo mode: show questions from DemoQuestions
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
       setState(() {
         _questions = DemoQuestions.all
             .take(20)
-            .map((q) => {
-                  '_id': q['_id'],
-                  'questionText': q['questionText'],
-                  'subject': q['subject'],
-                  'difficulty': q['difficulty'] == 1
-                      ? 'easy'
-                      : q['difficulty'] == 3
-                          ? 'hard'
-                          : 'medium',
-                  'mainSkill': 'مهارة عامة',
-                  'questionType': 'mcq',
-                })
+            .map(
+              (q) => {
+                '_id': q['_id'],
+                'questionText': q['questionText'],
+                'subject': q['subject'],
+                'difficulty': q['difficulty'] == 1
+                    ? 'easy'
+                    : q['difficulty'] == 3
+                        ? 'hard'
+                        : 'medium',
+                'mainSkill': l10n.generalSkillFallback,
+                'questionType': 'mcq',
+              },
+            )
             .toList();
         _isLoading = false;
       });
     }
   }
 
+  List<_SubjectFilter> _subjectFilters(AppLocalizations l10n) => [
+        _SubjectFilter(_allSubjectValue, l10n.filterAll),
+        _SubjectFilter('Mathematics', l10n.subjectMathematics),
+        _SubjectFilter('Science', l10n.subjectScience),
+        _SubjectFilter('Arabic', l10n.subjectArabic),
+        _SubjectFilter('English', l10n.subjectEnglish),
+      ];
+
   void _editQuestion(Map<String, dynamic> question) {
+    final l10n = AppLocalizations.of(context);
     final textController =
         TextEditingController(text: question['questionText'] as String? ?? '');
     showModalBottomSheet(
@@ -108,36 +115,43 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (ctx) => Padding(
         padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-            left: 16,
-            right: 16,
-            top: 20),
+          bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+          left: 16,
+          right: 16,
+          top: 20,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Center(
-                child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                        color: AppColors.outlineVariant,
-                        borderRadius: BorderRadius.circular(2)))),
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.outlineVariant,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
-            const Text('تعديل السؤال',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            Text(
+              l10n.editQuestionTitle,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: textController,
               maxLines: 4,
-              textDirection: TextDirection.rtl,
               decoration: InputDecoration(
-                labelText: 'نص السؤال',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                labelText: l10n.questionTextLabel,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -153,19 +167,25 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
                 }
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('تم تحديث السؤال'),
-                      behavior: SnackBarBehavior.floating),
+                  SnackBar(
+                    content: Text(l10n.questionUpdated),
+                    behavior: SnackBarBehavior.floating,
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryContainer,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8))),
-              child: const Text('حفظ التعديل',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                backgroundColor: AppColors.primaryContainer,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                l10n.saveEdits,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
             ),
           ],
         ),
@@ -174,19 +194,24 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
   }
 
   Future<void> _deleteQuestion(Map<String, dynamic> question) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('حذف السؤال'),
-        content: const Text('هل تريد حذف هذا السؤال نهائياً؟'),
+        title: Text(l10n.deleteQuestionTitle),
+        content: Text(l10n.deleteQuestionConfirmation),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('إلغاء')),
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l10n.cancel),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('حذف', style: TextStyle(color: AppColors.error)),
+            child: Text(
+              l10n.delete,
+              style: const TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),
@@ -197,10 +222,11 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('تم حذف السؤال'),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: AppColors.error),
+          SnackBar(
+            content: Text(l10n.questionDeleted),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     }
@@ -230,216 +256,227 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          elevation: 0,
-          shadowColor: Colors.black12,
-          surfaceTintColor: Colors.transparent,
-          title: const Text(
-            'بنك الأسئلة',
-            style: TextStyle(
-              color: AppColors.primaryContainer,
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
-            ),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: AppColors.primaryContainer),
-            onPressed: () => context.pop(),
-          ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(
-              height: 1,
-              color: Theme.of(context).colorScheme.outlineVariant,
-            ),
+        elevation: 0,
+        shadowColor: Colors.black12,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+          l10n.questionBankTitle,
+          style: const TextStyle(
+            color: AppColors.primaryContainer,
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
           ),
         ),
-        body: Column(
-          children: [
-            // Filter chips row + unit filter button
-            _FilterBar(
-              selectedSubject: _filterSubject,
-              subjectChips: _subjectChips,
-              onSubjectSelected: (subject) {
-                setState(() {
-                  _filterSubject = subject == 'الكل' ? null : subject;
-                });
-                _loadQuestions(reset: true);
-              },
-              onUnitFilterTap: _showUnitFilterSheet,
-              hasActiveFilters:
-                  _filterUnit != null || _filterDifficulty != null,
-            ),
-
-            // Action buttons row
-            _ActionBar(
-              onAddQuestion: () => context.push(AppRoutes.teacherAddQuestion),
-              onImportExcel: () => context.push(AppRoutes.teacherImportExcel),
-            ),
-
-            // Questions list
-            Expanded(
-              child: _isLoading && _questions.isEmpty
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryContainer,
-                      ),
-                    )
-                  : _questions.isEmpty
-                      ? _EmptyState()
-                      : NotificationListener<ScrollNotification>(
-                          onNotification: (n) {
-                            if (n is ScrollEndNotification &&
-                                n.metrics.pixels >=
-                                    n.metrics.maxScrollExtent - 200 &&
-                                _hasMore &&
-                                !_isLoading) {
-                              _currentPage++;
-                              _loadQuestions();
-                            }
-                            return false;
-                          },
-                          child: ListView.builder(
-                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                            itemCount: _questions.length + (_hasMore ? 1 : 0),
-                            itemBuilder: (ctx, i) {
-                              if (i == _questions.length) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(16),
-                                    child: CircularProgressIndicator(
-                                      color: AppColors.primaryContainer,
-                                    ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.primaryContainer,
+          ),
+          onPressed: () => context.pop(),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          _FilterBar(
+            selectedSubject: _filterSubject,
+            subjectFilters: _subjectFilters(l10n),
+            onSubjectSelected: (subject) {
+              setState(() {
+                _filterSubject =
+                    subject.value == _allSubjectValue ? null : subject.value;
+              });
+              _loadQuestions(reset: true);
+            },
+            onUnitFilterTap: _showUnitFilterSheet,
+            hasActiveFilters: _filterUnit != null || _filterDifficulty != null,
+          ),
+          _ActionBar(
+            onAddQuestion: () => context.push(AppRoutes.teacherAddQuestion),
+            onImportExcel: () => context.push(AppRoutes.teacherImportExcel),
+          ),
+          Expanded(
+            child: _isLoading && _questions.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryContainer,
+                    ),
+                  )
+                : _questions.isEmpty
+                    ? const _EmptyState()
+                    : NotificationListener<ScrollNotification>(
+                        onNotification: (n) {
+                          if (n is ScrollEndNotification &&
+                              n.metrics.pixels >=
+                                  n.metrics.maxScrollExtent - 200 &&
+                              _hasMore &&
+                              !_isLoading) {
+                            _currentPage++;
+                            _loadQuestions();
+                          }
+                          return false;
+                        },
+                        child: ListView.builder(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                          itemCount: _questions.length + (_hasMore ? 1 : 0),
+                          itemBuilder: (ctx, i) {
+                            if (i == _questions.length) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.primaryContainer,
                                   ),
-                                );
-                              }
-                              return _QuestionCard(
-                                question: _questions[i],
-                                onEdit: () => _editQuestion(_questions[i]),
-                                onDelete: () => _deleteQuestion(_questions[i]),
+                                ),
                               );
-                            },
-                          ),
+                            }
+                            return _QuestionCard(
+                              question: _questions[i],
+                              onEdit: () => _editQuestion(_questions[i]),
+                              onDelete: () => _deleteQuestion(_questions[i]),
+                            );
+                          },
                         ),
-            ),
-          ],
-        ),
-      );
+                      ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-// ─── Filter Bar ───────────────────────────────────────────────────────────────
+class _SubjectFilter {
+  const _SubjectFilter(this.value, this.label);
+
+  final String value;
+  final String label;
+}
 
 class _FilterBar extends StatelessWidget {
   const _FilterBar({
     required this.selectedSubject,
-    required this.subjectChips,
+    required this.subjectFilters,
     required this.onSubjectSelected,
     required this.onUnitFilterTap,
     required this.hasActiveFilters,
   });
 
   final String? selectedSubject;
-  final List<String> subjectChips;
-  final ValueChanged<String> onSubjectSelected;
+  final List<_SubjectFilter> subjectFilters;
+  final ValueChanged<_SubjectFilter> onSubjectSelected;
   final VoidCallback onUnitFilterTap;
   final bool hasActiveFilters;
 
   @override
-  Widget build(BuildContext context) => Container(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          children: [
-            // Subject filter chips
-            SizedBox(
-              height: 36,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: subjectChips.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
-                itemBuilder: (ctx, i) {
-                  final chip = subjectChips[i];
-                  final isSelected = chip == 'الكل'
-                      ? selectedSubject == null
-                      : selectedSubject == chip;
-                  return _SubjectChip(
-                    label: chip,
-                    isSelected: isSelected,
-                    onTap: () => onSubjectSelected(chip),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Unit/chapter dropdown filter
-            Padding(
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 36,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: GestureDetector(
-                onTap: onUnitFilterTap,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
+              itemCount: subjectFilters.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (ctx, i) {
+                final chip = subjectFilters[i];
+                final isSelected =
+                    chip.value == _QuestionBankScreenState._allSubjectValue
+                        ? selectedSubject == null
+                        : selectedSubject == chip.value;
+                return _SubjectChip(
+                  label: chip.label,
+                  isSelected: isSelected,
+                  onTap: () => onSubjectSelected(chip),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: GestureDetector(
+              onTap: onUnitFilterTap,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: hasActiveFilters
+                        ? AppColors.primaryContainer
+                        : AppColors.outlineVariant,
+                    width: hasActiveFilters ? 1.5 : 1,
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x0A000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.filter_list_rounded,
+                      size: 18,
                       color: hasActiveFilters
                           ? AppColors.primaryContainer
-                          : AppColors.outlineVariant,
-                      width: hasActiveFilters ? 1.5 : 1,
+                          : AppColors.onSurfaceVariant,
                     ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x0A000000),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.filter_list_rounded,
-                        size: 18,
-                        color: hasActiveFilters
-                            ? AppColors.primaryContainer
-                            : AppColors.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          hasActiveFilters ? 'فلاتر نشطة' : 'الوحدة / الفصل',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: hasActiveFilters
-                                ? AppColors.primaryContainer
-                                : AppColors.onSurfaceVariant,
-                            fontWeight: hasActiveFilters
-                                ? FontWeight.w600
-                                : FontWeight.normal,
-                          ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        hasActiveFilters
+                            ? l10n.activeFilters
+                            : l10n.unitOrChapter,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: hasActiveFilters
+                              ? AppColors.primaryContainer
+                              : AppColors.onSurfaceVariant,
+                          fontWeight: hasActiveFilters
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                         ),
                       ),
-                      Icon(
-                        Icons.expand_more_rounded,
-                        size: 20,
-                        color: hasActiveFilters
-                            ? AppColors.primaryContainer
-                            : AppColors.outline,
-                      ),
-                    ],
-                  ),
+                    ),
+                    Icon(
+                      Icons.expand_more_rounded,
+                      size: 20,
+                      color: hasActiveFilters
+                          ? AppColors.primaryContainer
+                          : AppColors.outline,
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _SubjectChip extends StatelessWidget {
@@ -480,8 +517,6 @@ class _SubjectChip extends StatelessWidget {
       );
 }
 
-// ─── Action Bar ───────────────────────────────────────────────────────────────
-
 class _ActionBar extends StatelessWidget {
   const _ActionBar({
     required this.onAddQuestion,
@@ -492,31 +527,35 @@ class _ActionBar extends StatelessWidget {
   final VoidCallback onImportExcel;
 
   @override
-  Widget build(BuildContext context) => Container(
-        color: const Color(0xFFF8FAFC),
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-        child: Row(
-          children: [
-            Expanded(
-              child: _ActionButton(
-                icon: Icons.add_rounded,
-                label: 'إضافة سؤال',
-                isPrimary: true,
-                onTap: onAddQuestion,
-              ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Container(
+      color: const Color(0xFFF8FAFC),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: _ActionButton(
+              icon: Icons.add_rounded,
+              label: l10n.addQuestion,
+              isPrimary: true,
+              onTap: onAddQuestion,
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _ActionButton(
-                icon: Icons.upload_file_rounded,
-                label: 'استيراد Excel',
-                isPrimary: false,
-                onTap: onImportExcel,
-              ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _ActionButton(
+              icon: Icons.upload_file_rounded,
+              label: l10n.importExcel,
+              isPrimary: false,
+              onTap: onImportExcel,
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _ActionButton extends StatelessWidget {
@@ -576,10 +615,9 @@ class _ActionButton extends StatelessWidget {
       );
 }
 
-// ─── Question Card ────────────────────────────────────────────────────────────
-
 class _QuestionCard extends StatelessWidget {
   const _QuestionCard({required this.question, this.onEdit, this.onDelete});
+
   final Map<String, dynamic> question;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
@@ -606,19 +644,20 @@ class _QuestionCard extends StatelessWidget {
     }
   }
 
-  String get _difficultyLabel {
+  String _difficultyLabel(AppLocalizations l10n) {
     switch (question['difficulty']) {
       case 'easy':
-        return 'سهل';
+        return l10n.easyDifficulty;
       case 'hard':
-        return 'صعب';
+        return l10n.hardDifficulty;
       default:
-        return 'متوسط';
+        return l10n.mediumDifficulty;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final subject = question['subject'] as String? ?? '';
     final mainSkill = question['mainSkill'] as String? ?? '';
     final questionText = question['questionText'] as String? ?? '';
@@ -642,10 +681,8 @@ class _QuestionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Badges row + menu
             Row(
               children: [
-                // Subject badge
                 if (subject.isNotEmpty)
                   Container(
                     padding:
@@ -664,7 +701,6 @@ class _QuestionCard extends StatelessWidget {
                     ),
                   ),
                 if (subject.isNotEmpty) const SizedBox(width: 6),
-                // Difficulty badge
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -673,7 +709,7 @@ class _QuestionCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    _difficultyLabel,
+                    _difficultyLabel(l10n),
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -682,7 +718,6 @@ class _QuestionCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                // More menu button
                 SizedBox(
                   width: 32,
                   height: 32,
@@ -701,25 +736,30 @@ class _QuestionCard extends StatelessWidget {
                       if (value == 'delete' && onDelete != null) onDelete!();
                     },
                     itemBuilder: (_) => [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'edit',
                         child: Row(
                           children: [
-                            Icon(Icons.edit_rounded, size: 16),
-                            SizedBox(width: 8),
-                            Text('تعديل'),
+                            const Icon(Icons.edit_rounded, size: 16),
+                            const SizedBox(width: 8),
+                            Text(l10n.edit),
                           ],
                         ),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'delete',
                         child: Row(
                           children: [
-                            Icon(Icons.delete_outline_rounded,
-                                size: 16, color: AppColors.error),
-                            SizedBox(width: 8),
-                            Text('حذف',
-                                style: TextStyle(color: AppColors.error)),
+                            const Icon(
+                              Icons.delete_outline_rounded,
+                              size: 16,
+                              color: AppColors.error,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              l10n.delete,
+                              style: const TextStyle(color: AppColors.error),
+                            ),
                           ],
                         ),
                       ),
@@ -729,7 +769,6 @@ class _QuestionCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            // Question text
             Text(
               questionText,
               maxLines: 2,
@@ -740,7 +779,6 @@ class _QuestionCard extends StatelessWidget {
                 height: 1.5,
               ),
             ),
-            // Skill label
             if (mainSkill.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(
@@ -758,50 +796,52 @@ class _QuestionCard extends StatelessWidget {
   }
 }
 
-// ─── Empty State ──────────────────────────────────────────────────────────────
-
 class _EmptyState extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: const Color(0xFFEFF6FF),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: const Icon(
-                Icons.quiz_outlined,
-                size: 36,
-                color: AppColors.primaryContainer,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'لا توجد أسئلة',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.onSurface,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'ابدأ بإضافة أسئلة إلى بنك الأسئلة',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      );
-}
+  const _EmptyState();
 
-// ─── Unit Filter Sheet ────────────────────────────────────────────────────────
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFF6FF),
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: const Icon(
+              Icons.quiz_outlined,
+              size: 36,
+              color: AppColors.primaryContainer,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            l10n.noQuestionsTitle,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.onSurface,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.noQuestionsSubtitle,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class _UnitFilterSheet extends StatefulWidget {
   const _UnitFilterSheet({
@@ -809,6 +849,7 @@ class _UnitFilterSheet extends StatefulWidget {
     this.unit,
     this.difficulty,
   });
+
   final String? unit;
   final String? difficulty;
   final void Function(String?, String?) onApply;
@@ -835,138 +876,141 @@ class _UnitFilterSheetState extends State<_UnitFilterSheet> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-          left: 16,
-          right: 16,
-          top: 20,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Handle
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.outlineVariant,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        left: 16,
+        right: 16,
+        top: 20,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.outlineVariant,
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 16),
-            const Text(
-              'تصفية الأسئلة',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppColors.onSurface,
-              ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            l10n.filterQuestionsTitle,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.onSurface,
             ),
-            const SizedBox(height: 20),
-            // Difficulty
-            const Text(
-              'مستوى الصعوبة',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppColors.onSurfaceVariant,
-              ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            l10n.difficultyLevel,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.onSurfaceVariant,
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                _DifficultyChip(
-                  label: 'الكل',
-                  isSelected: _difficulty == null,
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _DifficultyChip(
+                label: l10n.filterAll,
+                isSelected: _difficulty == null,
+                color: AppColors.primaryContainer,
+                onTap: () => setState(() => _difficulty = null),
+              ),
+              const SizedBox(width: 8),
+              _DifficultyChip(
+                label: l10n.easyDifficulty,
+                isSelected: _difficulty == 'easy',
+                color: AppColors.success,
+                onTap: () => setState(() => _difficulty = 'easy'),
+              ),
+              const SizedBox(width: 8),
+              _DifficultyChip(
+                label: l10n.mediumDifficulty,
+                isSelected: _difficulty == 'medium',
+                color: AppColors.warning,
+                onTap: () => setState(() => _difficulty = 'medium'),
+              ),
+              const SizedBox(width: 8),
+              _DifficultyChip(
+                label: l10n.hardDifficulty,
+                isSelected: _difficulty == 'hard',
+                color: AppColors.error,
+                onTap: () => setState(() => _difficulty = 'hard'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            l10n.unitOrChapter,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _unitController,
+            decoration: InputDecoration(
+              hintText: l10n.unitNameHint,
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AppColors.outlineVariant),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
                   color: AppColors.primaryContainer,
-                  onTap: () => setState(() => _difficulty = null),
-                ),
-                const SizedBox(width: 8),
-                _DifficultyChip(
-                  label: 'سهل',
-                  isSelected: _difficulty == 'easy',
-                  color: AppColors.success,
-                  onTap: () => setState(() => _difficulty = 'easy'),
-                ),
-                const SizedBox(width: 8),
-                _DifficultyChip(
-                  label: 'متوسط',
-                  isSelected: _difficulty == 'medium',
-                  color: AppColors.warning,
-                  onTap: () => setState(() => _difficulty = 'medium'),
-                ),
-                const SizedBox(width: 8),
-                _DifficultyChip(
-                  label: 'صعب',
-                  isSelected: _difficulty == 'hard',
-                  color: AppColors.error,
-                  onTap: () => setState(() => _difficulty = 'hard'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            // Unit
-            const Text(
-              'الوحدة / الفصل',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppColors.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _unitController,
-              decoration: InputDecoration(
-                hintText: 'اكتب اسم الوحدة...',
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.outlineVariant),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.outlineVariant),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                      color: AppColors.primaryContainer, width: 1.5),
+                  width: 1.5,
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => widget.onApply(
-                _unitController.text.trim().isEmpty
-                    ? null
-                    : _unitController.text.trim(),
-                _difficulty,
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryContainer,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 0,
-              ),
-              child: const Text(
-                'تطبيق الفلاتر',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-              ),
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () => widget.onApply(
+              _unitController.text.trim().isEmpty
+                  ? null
+                  : _unitController.text.trim(),
+              _difficulty,
             ),
-          ],
-        ),
-      );
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryContainer,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+            ),
+            child: Text(
+              l10n.applyFilters,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _DifficultyChip extends StatelessWidget {

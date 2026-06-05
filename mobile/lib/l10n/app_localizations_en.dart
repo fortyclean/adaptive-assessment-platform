@@ -1748,7 +1748,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get questionContent => 'Question content';
 
   @override
-  String get questionTextLabel => 'Question text *';
+  String get questionTextLabel => 'Question text';
 
   @override
   String get questionTextHint => 'Write the question text here...';
@@ -2004,4 +2004,66 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yesterdayDatePrefix => 'Yesterday,';
+
+  @override
+  String get questionBankTitle => 'Question bank';
+
+  @override
+  String get subjectMathematics => 'Mathematics';
+
+  @override
+  String get subjectScience => 'Science';
+
+  @override
+  String get subjectArabic => 'Arabic';
+
+  @override
+  String get subjectEnglish => 'English';
+
+  @override
+  String get generalSkillFallback => 'General skill';
+
+  @override
+  String get editQuestionTitle => 'Edit question';
+
+  @override
+  String get questionUpdated => 'Question updated';
+
+  @override
+  String get saveEdits => 'Save edits';
+
+  @override
+  String get deleteQuestionTitle => 'Delete question';
+
+  @override
+  String get deleteQuestionConfirmation =>
+      'Do you want to permanently delete this question?';
+
+  @override
+  String get questionDeleted => 'Question deleted';
+
+  @override
+  String get activeFilters => 'Active filters';
+
+  @override
+  String get addQuestion => 'Add question';
+
+  @override
+  String get importExcel => 'Import Excel';
+
+  @override
+  String get noQuestionsTitle => 'No questions';
+
+  @override
+  String get noQuestionsSubtitle =>
+      'Start by adding questions to the question bank';
+
+  @override
+  String get filterQuestionsTitle => 'Filter questions';
+
+  @override
+  String get unitNameHint => 'Type the unit name...';
+
+  @override
+  String get applyFilters => 'Apply filters';
 }

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.81';
-  static const int buildNumber = 81;
+  static const String current = '1.0.82';
+  static const int buildNumber = 82;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.82',
+      buildNumber: 82,
+      date: 'يونيو 2026',
+      title: 'ترجمة شاشة بنك الأسئلة الأساسية',
+      changes: [
+        'نقل شاشة بنك الأسئلة الأساسية إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'ترجمة شرائح المواد والفلاتر وأزرار الإضافة والاستيراد وحالات الفراغ.',
+        'ترجمة حوارات تعديل وحذف السؤال ورسائل نجاح التعديل والحذف.',
+        'فصل قيم الفلترة الداخلية عن نصوص العرض لضمان دعم اللغة بدون تغيير سلوك البيانات.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.81',
       buildNumber: 81,
