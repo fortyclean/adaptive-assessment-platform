@@ -464,6 +464,37 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads notification localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.notifications,
+            l10n.markAllAsRead,
+            l10n.noNotificationsTitle,
+            l10n.notificationsToday,
+            l10n.notificationsPrevious,
+            l10n.notificationSettings,
+            l10n.studentPerformanceNotificationsGroup,
+            l10n.pushNotificationsTitle,
+            l10n.notificationSettingsSaved,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Notifications / Mark all as read / No notifications / Today / '
+        'Previous / Notification settings / Student performance / '
+        'Instant alerts (Push) / Notification settings saved successfully',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

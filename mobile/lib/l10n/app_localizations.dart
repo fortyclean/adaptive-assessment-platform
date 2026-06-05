@@ -3507,6 +3507,186 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{imported} مستورد • {skipped} متخطى • {failed} فاشل'**
   String importHistorySummary(Object imported, Object skipped, Object failed);
+
+  /// No description provided for @markAllAsRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد الكل كمقروء'**
+  String get markAllAsRead;
+
+  /// No description provided for @noNotificationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إشعارات'**
+  String get noNotificationsTitle;
+
+  /// No description provided for @noNotificationsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر هنا إشعاراتك الجديدة'**
+  String get noNotificationsSubtitle;
+
+  /// No description provided for @notificationsToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get notificationsToday;
+
+  /// No description provided for @notificationsPrevious.
+  ///
+  /// In ar, this message translates to:
+  /// **'السابقة'**
+  String get notificationsPrevious;
+
+  /// No description provided for @demoNotificationAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار جديد متاح'**
+  String get demoNotificationAssessmentTitle;
+
+  /// No description provided for @demoNotificationAssessmentBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نشر اختبار الرياضيات الدوري. يمكنك البدء الآن.'**
+  String get demoNotificationAssessmentBody;
+
+  /// No description provided for @demoNotificationGradeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتيجة اختبارك'**
+  String get demoNotificationGradeTitle;
+
+  /// No description provided for @demoNotificationGradeBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصلت على 78% في اختبار اللغة العربية. أحسنت!'**
+  String get demoNotificationGradeBody;
+
+  /// No description provided for @demoNotificationAlertTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه أداء'**
+  String get demoNotificationAlertTitle;
+
+  /// No description provided for @demoNotificationAlertBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'انخفض متوسط أداء الطالب أحمد في مادة الفيزياء.'**
+  String get demoNotificationAlertBody;
+
+  /// No description provided for @demoNotificationMessageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسالة من المعلم'**
+  String get demoNotificationMessageTitle;
+
+  /// No description provided for @demoNotificationMessageBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى مراجعة الوحدة الثالثة قبل الاختبار القادم.'**
+  String get demoNotificationMessageBody;
+
+  /// No description provided for @smartAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم الذكي'**
+  String get smartAssessmentTitle;
+
+  /// No description provided for @enableOneChannelPerNotificationGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّل قناة واحدة على الأقل لكل مجموعة إشعارات'**
+  String get enableOneChannelPerNotificationGroup;
+
+  /// No description provided for @notificationSettingsSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ إعدادات التنبيهات بنجاح'**
+  String get notificationSettingsSaved;
+
+  /// No description provided for @notificationSettingsSavedLocally.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ الإعدادات محلياً'**
+  String get notificationSettingsSavedLocally;
+
+  /// No description provided for @studentPerformanceNotificationsGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء الطلاب'**
+  String get studentPerformanceNotificationsGroup;
+
+  /// No description provided for @pushNotificationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات لحظية (Push)'**
+  String get pushNotificationsTitle;
+
+  /// No description provided for @studentPerformancePushSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلم إشعارات فورية عند تغير مستوى أداء الطلاب.'**
+  String get studentPerformancePushSubtitle;
+
+  /// No description provided for @emailNotificationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
+  String get emailNotificationTitle;
+
+  /// No description provided for @studentPerformanceEmailSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص أسبوعي للأداء الأكاديمي.'**
+  String get studentPerformanceEmailSubtitle;
+
+  /// No description provided for @questionBankNotificationsGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنك الأسئلة'**
+  String get questionBankNotificationsGroup;
+
+  /// No description provided for @contentUpdatesNotificationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديثات المحتوى'**
+  String get contentUpdatesNotificationTitle;
+
+  /// No description provided for @questionBankContentUpdatesSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات عند إضافة أسئلة جديدة أو تحديث معايير التقييم.'**
+  String get questionBankContentUpdatesSubtitle;
+
+  /// No description provided for @smsNotificationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسائل قصيرة (SMS)'**
+  String get smsNotificationTitle;
+
+  /// No description provided for @questionBankSmsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'للتنبيهات العاجلة المتعلقة بالاختبارات النهائية.'**
+  String get questionBankSmsSubtitle;
+
+  /// No description provided for @periodicReportsNotificationsGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير دورية'**
+  String get periodicReportsNotificationsGroup;
+
+  /// No description provided for @periodicReportsEmailSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال التقارير الشهرية الشاملة للمشرفين.'**
+  String get periodicReportsEmailSubtitle;
+
+  /// No description provided for @notificationSettingsPageSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.'**
+  String get notificationSettingsPageSubtitle;
 }
 
 class _AppLocalizationsDelegate

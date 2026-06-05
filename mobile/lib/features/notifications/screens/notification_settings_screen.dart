@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 
 const _notificationSettingsPrefix = 'notification_settings.';
 
-/// Notification Settings Screen — Screen 35
-/// Matches _35/code.html design exactly.
-/// Features:
-///   - Three notification groups: أداء الطلاب، بنك الأسئلة، تقارير دورية
-///   - Per-group toggles: Push notifications, Email, SMS
-///   - Save button
+/// Notification Settings Screen - Screen 35
 /// Requirements: 21.x
 class NotificationSettingsScreen extends ConsumerStatefulWidget {
   const NotificationSettingsScreen({super.key});
@@ -23,17 +20,11 @@ class NotificationSettingsScreen extends ConsumerStatefulWidget {
 
 class _NotificationSettingsScreenState
     extends ConsumerState<NotificationSettingsScreen> {
-  // ── State: Student Performance group ─────────────────────────────────────
   bool _studentPerfPush = true;
   bool _studentPerfEmail = false;
-
-  // ── State: Question Bank group ────────────────────────────────────────────
   bool _questionBankPush = true;
   bool _questionBankSms = false;
-
-  // ── State: Periodic Reports group ─────────────────────────────────────────
   bool _periodicReportsEmail = true;
-
   bool _isSaving = false;
 
   @override
@@ -79,12 +70,14 @@ class _NotificationSettingsScreenState
       _periodicReportsEmail;
 
   Future<void> _saveSettings() async {
+    final l10n = AppLocalizations.of(context);
+
     if (!_settingsAreValid) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'فعّل قناة واحدة على الأقل لكل مجموعة إشعارات',
-            style: TextStyle(fontFamily: 'Almarai'),
+            l10n.enableOneChannelPerNotificationGroup,
+            style: const TextStyle(fontFamily: 'Almarai'),
             textDirection: TextDirection.rtl,
           ),
           backgroundColor: AppColors.error,
@@ -120,10 +113,10 @@ class _NotificationSettingsScreenState
       await Future.delayed(const Duration(milliseconds: 600));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-              'تم حفظ إعدادات التنبيهات بنجاح',
-              style: TextStyle(fontFamily: 'Almarai'),
+              l10n.notificationSettingsSaved,
+              style: const TextStyle(fontFamily: 'Almarai'),
               textDirection: TextDirection.rtl,
             ),
             backgroundColor: AppColors.success,
@@ -132,13 +125,12 @@ class _NotificationSettingsScreenState
         );
       }
     } catch (_) {
-      // Fallback: save locally and show success (settings are stored in state)
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-              'تم حفظ الإعدادات محلياً',
-              style: TextStyle(fontFamily: 'Almarai'),
+              l10n.notificationSettingsSavedLocally,
+              style: const TextStyle(fontFamily: 'Almarai'),
               textDirection: TextDirection.rtl,
             ),
             backgroundColor: AppColors.success,
@@ -152,18 +144,23 @@ class _NotificationSettingsScreenState
   }
 
   @override
-  Widget build(BuildContext context) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: _buildAppBar(context),
-          body: _buildBody(),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
 
-  // ── AppBar ────────────────────────────────────────────────────────────────
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: _buildAppBar(context, l10n),
+        body: _buildBody(l10n),
+      ),
+    );
+  }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
     return AppBar(
       backgroundColor: colorScheme.surface,
@@ -174,9 +171,9 @@ class _NotificationSettingsScreenState
         preferredSize: const Size.fromHeight(1),
         child: Container(height: 1, color: colorScheme.outlineVariant),
       ),
-      title: const Text(
-        'التقييم الذكي',
-        style: TextStyle(
+      title: Text(
+        l10n.smartAssessmentTitle,
+        style: const TextStyle(
           color: Color(0xFF1E40AF),
           fontSize: 20,
           fontWeight: FontWeight.w700,
@@ -203,94 +200,80 @@ class _NotificationSettingsScreenState
             Icons.notifications_outlined,
             color: Color(0xFF64748B),
           ),
-          onPressed: () => context.pop(), // go back
+          onPressed: () => context.pop(),
         ),
       ],
     );
   }
 
-  // ── Body ──────────────────────────────────────────────────────────────────
-
-  Widget _buildBody() => ListView(
+  Widget _buildBody(AppLocalizations l10n) => ListView(
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
         children: [
-          // ── Page Header ────────────────────────────────────────────────────
-          _buildPageHeader(),
+          _buildPageHeader(l10n),
           const SizedBox(height: 24),
-
-          // ── Group 1: Student Performance ───────────────────────────────────
           _NotificationGroup(
             icon: Icons.analytics_rounded,
-            title: 'أداء الطلاب',
+            title: l10n.studentPerformanceNotificationsGroup,
             rows: [
               _NotificationToggleRow(
-                title: 'تنبيهات لحظية (Push)',
-                subtitle: 'استلم إشعارات فورية عند تغير مستوى أداء الطلاب.',
+                title: l10n.pushNotificationsTitle,
+                subtitle: l10n.studentPerformancePushSubtitle,
                 value: _studentPerfPush,
                 onChanged: (v) => setState(() => _studentPerfPush = v),
               ),
               _NotificationToggleRow(
-                title: 'البريد الإلكتروني',
-                subtitle: 'ملخص أسبوعي للأداء الأكاديمي.',
+                title: l10n.emailNotificationTitle,
+                subtitle: l10n.studentPerformanceEmailSubtitle,
                 value: _studentPerfEmail,
                 onChanged: (v) => setState(() => _studentPerfEmail = v),
               ),
             ],
           ),
           const SizedBox(height: 24),
-
-          // ── Group 2: Question Bank ─────────────────────────────────────────
           _NotificationGroup(
             icon: Icons.quiz_rounded,
-            title: 'بنك الأسئلة',
+            title: l10n.questionBankNotificationsGroup,
             rows: [
               _NotificationToggleRow(
-                title: 'تحديثات المحتوى',
-                subtitle:
-                    'إشعارات عند إضافة أسئلة جديدة أو تحديث معايير التقييم.',
+                title: l10n.contentUpdatesNotificationTitle,
+                subtitle: l10n.questionBankContentUpdatesSubtitle,
                 value: _questionBankPush,
                 onChanged: (v) => setState(() => _questionBankPush = v),
               ),
               _NotificationToggleRow(
-                title: 'رسائل قصيرة (SMS)',
-                subtitle: 'للتنبيهات العاجلة المتعلقة بالاختبارات النهائية.',
+                title: l10n.smsNotificationTitle,
+                subtitle: l10n.questionBankSmsSubtitle,
                 value: _questionBankSms,
                 onChanged: (v) => setState(() => _questionBankSms = v),
               ),
             ],
           ),
           const SizedBox(height: 24),
-
-          // ── Group 3: Periodic Reports ──────────────────────────────────────
           _NotificationGroup(
             icon: Icons.description_rounded,
-            title: 'تقارير دورية',
+            title: l10n.periodicReportsNotificationsGroup,
             rows: [
               _NotificationToggleRow(
-                title: 'البريد الإلكتروني',
-                subtitle: 'إرسال التقارير الشهرية الشاملة للمشرفين.',
+                title: l10n.emailNotificationTitle,
+                subtitle: l10n.periodicReportsEmailSubtitle,
                 value: _periodicReportsEmail,
                 onChanged: (v) => setState(() => _periodicReportsEmail = v),
               ),
             ],
           ),
           const SizedBox(height: 32),
-
-          // ── Save Button ────────────────────────────────────────────────────
-          _buildSaveButton(),
+          _buildSaveButton(l10n),
         ],
       );
 
-  // ── Page Header ───────────────────────────────────────────────────────────
-
-  Widget _buildPageHeader() {
+  Widget _buildPageHeader(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'إعدادات التنبيهات',
-          style: TextStyle(
+        Text(
+          l10n.notificationSettings,
+          style: const TextStyle(
             fontFamily: 'Almarai',
             fontSize: 24,
             fontWeight: FontWeight.w700,
@@ -300,7 +283,7 @@ class _NotificationSettingsScreenState
         ),
         const SizedBox(height: 4),
         Text(
-          'خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.',
+          l10n.notificationSettingsPageSubtitle,
           style: TextStyle(
             fontFamily: 'Almarai',
             fontSize: 14,
@@ -313,9 +296,7 @@ class _NotificationSettingsScreenState
     );
   }
 
-  // ── Save Button ───────────────────────────────────────────────────────────
-
-  Widget _buildSaveButton() => SizedBox(
+  Widget _buildSaveButton(AppLocalizations l10n) => SizedBox(
         width: double.infinity,
         child: ElevatedButton(
           onPressed: _isSaving ? null : _saveSettings,
@@ -339,9 +320,9 @@ class _NotificationSettingsScreenState
                     color: Colors.white,
                   ),
                 )
-              : const Text(
-                  'حفظ التغييرات',
-                  style: TextStyle(
+              : Text(
+                  l10n.saveChanges,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -351,8 +332,6 @@ class _NotificationSettingsScreenState
         ),
       );
 }
-
-// ─── Notification Group Card ──────────────────────────────────────────────────
 
 class _NotificationGroup extends StatelessWidget {
   const _NotificationGroup({
@@ -385,7 +364,6 @@ class _NotificationGroup extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Group Header ─────────────────────────────────────────────────
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
@@ -410,7 +388,6 @@ class _NotificationGroup extends StatelessWidget {
               ],
             ),
           ),
-          // ── Toggle Rows ──────────────────────────────────────────────────
           for (int i = 0; i < rows.length; i++) ...[
             if (i > 0)
               Divider(
@@ -427,8 +404,6 @@ class _NotificationGroup extends StatelessWidget {
     );
   }
 }
-
-// ─── Notification Toggle Row ──────────────────────────────────────────────────
 
 class _NotificationToggleRow extends StatelessWidget {
   const _NotificationToggleRow({
@@ -452,7 +427,6 @@ class _NotificationToggleRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
           children: [
-            // ── Text Content ───────────────────────────────────────────────
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -482,7 +456,6 @@ class _NotificationToggleRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // ── Toggle Switch ──────────────────────────────────────────────
             _AppToggle(value: value, onChanged: onChanged),
           ],
         ),
@@ -490,8 +463,6 @@ class _NotificationToggleRow extends StatelessWidget {
     );
   }
 }
-
-// ─── Custom Toggle Switch ─────────────────────────────────────────────────────
 
 class _AppToggle extends StatelessWidget {
   const _AppToggle({required this.value, required this.onChanged});
@@ -515,7 +486,6 @@ class _AppToggle extends StatelessWidget {
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeInOut,
-                // RTL: checked thumb is on the right (start), unchecked on left (end)
                 right: value ? 2 : null,
                 left: value ? null : 2,
                 top: 2,

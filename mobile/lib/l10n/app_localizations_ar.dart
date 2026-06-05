@@ -1869,4 +1869,104 @@ class AppLocalizationsAr extends AppLocalizations {
   String importHistorySummary(Object imported, Object skipped, Object failed) {
     return '$imported مستورد • $skipped متخطى • $failed فاشل';
   }
+
+  @override
+  String get markAllAsRead => 'تحديد الكل كمقروء';
+
+  @override
+  String get noNotificationsTitle => 'لا توجد إشعارات';
+
+  @override
+  String get noNotificationsSubtitle => 'ستظهر هنا إشعاراتك الجديدة';
+
+  @override
+  String get notificationsToday => 'اليوم';
+
+  @override
+  String get notificationsPrevious => 'السابقة';
+
+  @override
+  String get demoNotificationAssessmentTitle => 'اختبار جديد متاح';
+
+  @override
+  String get demoNotificationAssessmentBody =>
+      'تم نشر اختبار الرياضيات الدوري. يمكنك البدء الآن.';
+
+  @override
+  String get demoNotificationGradeTitle => 'نتيجة اختبارك';
+
+  @override
+  String get demoNotificationGradeBody =>
+      'حصلت على 78% في اختبار اللغة العربية. أحسنت!';
+
+  @override
+  String get demoNotificationAlertTitle => 'تنبيه أداء';
+
+  @override
+  String get demoNotificationAlertBody =>
+      'انخفض متوسط أداء الطالب أحمد في مادة الفيزياء.';
+
+  @override
+  String get demoNotificationMessageTitle => 'رسالة من المعلم';
+
+  @override
+  String get demoNotificationMessageBody =>
+      'يرجى مراجعة الوحدة الثالثة قبل الاختبار القادم.';
+
+  @override
+  String get smartAssessmentTitle => 'التقييم الذكي';
+
+  @override
+  String get enableOneChannelPerNotificationGroup =>
+      'فعّل قناة واحدة على الأقل لكل مجموعة إشعارات';
+
+  @override
+  String get notificationSettingsSaved => 'تم حفظ إعدادات التنبيهات بنجاح';
+
+  @override
+  String get notificationSettingsSavedLocally => 'تم حفظ الإعدادات محلياً';
+
+  @override
+  String get studentPerformanceNotificationsGroup => 'أداء الطلاب';
+
+  @override
+  String get pushNotificationsTitle => 'تنبيهات لحظية (Push)';
+
+  @override
+  String get studentPerformancePushSubtitle =>
+      'استلم إشعارات فورية عند تغير مستوى أداء الطلاب.';
+
+  @override
+  String get emailNotificationTitle => 'البريد الإلكتروني';
+
+  @override
+  String get studentPerformanceEmailSubtitle => 'ملخص أسبوعي للأداء الأكاديمي.';
+
+  @override
+  String get questionBankNotificationsGroup => 'بنك الأسئلة';
+
+  @override
+  String get contentUpdatesNotificationTitle => 'تحديثات المحتوى';
+
+  @override
+  String get questionBankContentUpdatesSubtitle =>
+      'إشعارات عند إضافة أسئلة جديدة أو تحديث معايير التقييم.';
+
+  @override
+  String get smsNotificationTitle => 'رسائل قصيرة (SMS)';
+
+  @override
+  String get questionBankSmsSubtitle =>
+      'للتنبيهات العاجلة المتعلقة بالاختبارات النهائية.';
+
+  @override
+  String get periodicReportsNotificationsGroup => 'تقارير دورية';
+
+  @override
+  String get periodicReportsEmailSubtitle =>
+      'إرسال التقارير الشهرية الشاملة للمشرفين.';
+
+  @override
+  String get notificationSettingsPageSubtitle =>
+      'خصص الطريقة التي تود بها البقاء على اطلاع بأحدث التطورات.';
 }

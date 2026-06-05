@@ -1884,4 +1884,107 @@ class AppLocalizationsEn extends AppLocalizations {
   String importHistorySummary(Object imported, Object skipped, Object failed) {
     return '$imported imported • $skipped skipped • $failed failed';
   }
+
+  @override
+  String get markAllAsRead => 'Mark all as read';
+
+  @override
+  String get noNotificationsTitle => 'No notifications';
+
+  @override
+  String get noNotificationsSubtitle =>
+      'Your new notifications will appear here';
+
+  @override
+  String get notificationsToday => 'Today';
+
+  @override
+  String get notificationsPrevious => 'Previous';
+
+  @override
+  String get demoNotificationAssessmentTitle => 'New assessment available';
+
+  @override
+  String get demoNotificationAssessmentBody =>
+      'The periodic mathematics assessment has been published. You can start now.';
+
+  @override
+  String get demoNotificationGradeTitle => 'Your assessment result';
+
+  @override
+  String get demoNotificationGradeBody =>
+      'You scored 78% in the Arabic language assessment. Well done!';
+
+  @override
+  String get demoNotificationAlertTitle => 'Performance alert';
+
+  @override
+  String get demoNotificationAlertBody =>
+      'Ahmed\'s average performance dropped in physics.';
+
+  @override
+  String get demoNotificationMessageTitle => 'Message from teacher';
+
+  @override
+  String get demoNotificationMessageBody =>
+      'Please review unit three before the upcoming assessment.';
+
+  @override
+  String get smartAssessmentTitle => 'Smart assessment';
+
+  @override
+  String get enableOneChannelPerNotificationGroup =>
+      'Enable at least one channel for each notification group';
+
+  @override
+  String get notificationSettingsSaved =>
+      'Notification settings saved successfully';
+
+  @override
+  String get notificationSettingsSavedLocally => 'Settings saved locally';
+
+  @override
+  String get studentPerformanceNotificationsGroup => 'Student performance';
+
+  @override
+  String get pushNotificationsTitle => 'Instant alerts (Push)';
+
+  @override
+  String get studentPerformancePushSubtitle =>
+      'Receive instant notifications when student performance levels change.';
+
+  @override
+  String get emailNotificationTitle => 'Email';
+
+  @override
+  String get studentPerformanceEmailSubtitle =>
+      'Weekly summary of academic performance.';
+
+  @override
+  String get questionBankNotificationsGroup => 'Question bank';
+
+  @override
+  String get contentUpdatesNotificationTitle => 'Content updates';
+
+  @override
+  String get questionBankContentUpdatesSubtitle =>
+      'Notifications when new questions are added or assessment criteria are updated.';
+
+  @override
+  String get smsNotificationTitle => 'Text messages (SMS)';
+
+  @override
+  String get questionBankSmsSubtitle =>
+      'For urgent alerts related to final assessments.';
+
+  @override
+  String get periodicReportsNotificationsGroup => 'Periodic reports';
+
+  @override
+  String get periodicReportsEmailSubtitle =>
+      'Send comprehensive monthly reports to supervisors.';
+
+  @override
+  String get notificationSettingsPageSubtitle =>
+      'Choose how you want to stay informed about the latest updates.';
 }

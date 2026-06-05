@@ -3,15 +3,28 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.79';
-  static const int buildNumber = 79;
-  static const String releaseDate = 'مايو 2026';
+  static const String current = '1.0.80';
+  static const int buildNumber = 80;
+  static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
   static String get display => 'الإصدار $current ($buildNumber)';
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.80',
+      buildNumber: 80,
+      date: 'يونيو 2026',
+      title: 'ترجمة مركز الإشعارات وإعداداتها',
+      changes: [
+        'نقل شاشة مركز الإشعارات إلى مفاتيح ترجمة عربية وإنجليزية تشمل العناوين والحالة الفارغة والتجربة المحلية.',
+        'نقل شاشة إعدادات التنبيهات ورسائل الحفظ والتحقق ومجموعات التنبيهات إلى localization.',
+        'ضبط تنسيق وقت الإشعارات ليعتمد على لغة التطبيق الحالية بدلاً من العربية الثابتة.',
+        'إضافة اختبار حماية لمفاتيح الإشعارات مع تحليل Flutter نظيف.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.79',
       buildNumber: 79,
