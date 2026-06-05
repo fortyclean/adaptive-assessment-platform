@@ -2907,4 +2907,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get math => 'Mathematics';
+
+  @override
+  String get adminDashboardV2Subtitle =>
+      'Welcome back. Here is today\'s school performance summary.';
+
+  @override
+  String get adminDashboardTotalStudents => 'Total students';
+
+  @override
+  String get adminDashboardActiveTeachers => 'Active teachers';
+
+  @override
+  String get adminDashboardOverallAverage => 'Overall average performance';
+
+  @override
+  String get adminDashboardRunningAssessments => 'Running assessments';
+
+  @override
+  String get currentTerm => 'Current term';
+
+  @override
+  String get adminDashboardSubjectPerformance => 'Subject performance';
+
+  @override
+  String get science => 'Science';
+
+  @override
+  String get arabicSubject => 'Arabic';
+
+  @override
+  String get englishSubject => 'English';
+
+  @override
+  String get historySubject => 'History';
+
+  @override
+  String get adminDashboardTopTeacherOneName => 'Mr. Mohammed Ahmed';
+
+  @override
+  String get adminDashboardTopTeacherOneRole =>
+      'Science teacher - high engagement (98%)';
+
+  @override
+  String get adminDashboardTopTeacherOneInitials => 'M.A';
+
+  @override
+  String get adminDashboardTopTeacherTwoName => 'Ms. Sarah Khaled';
+
+  @override
+  String get adminDashboardTopTeacherTwoRole =>
+      'Mathematics teacher - student progress (92%)';
+
+  @override
+  String get adminDashboardTopTeacherTwoInitials => 'S.K';
+
+  @override
+  String get adminDashboardTopTeachersThisMonth => 'Top teachers this month';
+
+  @override
+  String get adminDashboardReviewRequiredTitle => 'Review required';
+
+  @override
+  String get adminDashboardReviewRequiredBody =>
+      'Class 10-A needs science assessment grades reviewed.';
+
+  @override
+  String get adminDashboardReportsReadyTitle => 'Reports ready';
+
+  @override
+  String get adminDashboardReportsReadyBody =>
+      'Monthly student performance reports are now available for download.';
+
+  @override
+  String get adminDashboardScheduleUpdateTitle => 'Schedule update';
+
+  @override
+  String get adminDashboardScheduleUpdateBody =>
+      'The high school class schedule was updated for Tuesday.';
+
+  @override
+  String get adminDashboardManagementAlerts => 'Management alerts';
+
+  @override
+  String get adminDashboardSchedules => 'Schedules';
+
+  @override
+  String get adminDashboardAddStudent => 'Add student';
+
+  @override
+  String get quickAccess => 'Quick access';
 }

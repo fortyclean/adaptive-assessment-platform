@@ -4,13 +4,14 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/app_section_card.dart';
 import '../repositories/admin_repository.dart';
 
-/// Screen 68 — Admin Dashboard v2 (لوحة تحكم المشرف — نسخة محسّنة)
+/// Screen 68 — Admin Dashboard v2
 /// Features subject performance chart, top teachers list, admin alerts, quick access.
 /// RTL Arabic layout matching _68/code.html design.
 class AdminDashboardV2Screen extends ConsumerStatefulWidget {
@@ -186,29 +187,32 @@ class _AdminDashboardV2ScreenState
 
   // ─── Header ──────────────────────────────────────────────────────────────
 
-  Widget _buildHeader() => const Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            'لوحة تحكم المشرف',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary,
-            ),
-            textAlign: TextAlign.right,
+  Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          l10n.adminDashboardTitle,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: AppColors.primary,
           ),
-          SizedBox(height: 4),
-          Text(
-            'مرحباً بك مجدداً، إليك ملخص أداء المدرسة اليوم.',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.onSurfaceVariant,
-            ),
-            textAlign: TextAlign.right,
+          textAlign: TextAlign.right,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          l10n.adminDashboardV2Subtitle,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppColors.onSurfaceVariant,
           ),
-        ],
-      );
+          textAlign: TextAlign.right,
+        ),
+      ],
+    );
+  }
 
   // ─── Stats Bento Grid ────────────────────────────────────────────────────
 
@@ -219,6 +223,7 @@ class _AdminDashboardV2ScreenState
     final assessments = (_summary['totalAssessments'] as num?)?.round() ?? 0;
     final average = (_summary['schoolAverage'] as num?)?.round() ?? 0;
     final averageProgress = average.clamp(0, 100) / 100;
+    final l10n = AppLocalizations.of(context);
 
     return GridView.count(
       crossAxisCount: 2,
@@ -232,9 +237,9 @@ class _AdminDashboardV2ScreenState
           icon: Icons.groups,
           iconBg: const Color(0xFFDDE1FF),
           iconColor: AppColors.primary,
-          label: 'إجمالي الطلاب',
+          label: l10n.adminDashboardTotalStudents,
           value: _isLoadingSummary ? '...' : '$students',
-          badge: 'نشط',
+          badge: l10n.active,
           badgeColor: Colors.green,
           onTap: () => context.push(
             AppRoutes.adminUsers,
@@ -245,7 +250,7 @@ class _AdminDashboardV2ScreenState
           icon: Icons.person_outline,
           iconBg: const Color(0xFFFFDBCE),
           iconColor: const Color(0xFF611E00),
-          label: 'المعلمون النشطون',
+          label: l10n.adminDashboardActiveTeachers,
           value: _isLoadingSummary ? '...' : '$teachers',
           onTap: () => context.push(
             AppRoutes.adminUsers,
@@ -256,7 +261,7 @@ class _AdminDashboardV2ScreenState
           icon: Icons.trending_up,
           iconBg: const Color(0xFFD3E4FE),
           iconColor: const Color(0xFF505F76),
-          label: 'متوسط الأداء العام',
+          label: l10n.adminDashboardOverallAverage,
           value: _isLoadingSummary ? '...' : '$average%',
           showCircularProgress: true,
           progressValue: averageProgress.toDouble(),
@@ -266,7 +271,9 @@ class _AdminDashboardV2ScreenState
           icon: Icons.timer,
           iconBg: const Color(0xFFFEE2E2),
           iconColor: AppColors.error,
-          label: classrooms > 0 ? 'الفصول الدراسية' : 'اختبارات جارية',
+          label: classrooms > 0
+              ? l10n.classrooms
+              : l10n.adminDashboardRunningAssessments,
           value: _isLoadingSummary
               ? '...'
               : (classrooms > 0 ? '$classrooms' : '$assessments'),
@@ -374,12 +381,13 @@ class _AdminDashboardV2ScreenState
   // ─── Subject Performance Chart ───────────────────────────────────────────
 
   Widget _buildSubjectPerformanceChart() {
+    final l10n = AppLocalizations.of(context);
     final subjects = [
-      {'label': 'الرياضيات', 'value': 0.65},
-      {'label': 'العلوم', 'value': 0.88},
-      {'label': 'العربية', 'value': 0.72},
-      {'label': 'الإنجليزية', 'value': 0.55},
-      {'label': 'التاريخ', 'value': 0.80},
+      {'label': l10n.math, 'value': 0.65},
+      {'label': l10n.science, 'value': 0.88},
+      {'label': l10n.arabicSubject, 'value': 0.72},
+      {'label': l10n.englishSubject, 'value': 0.55},
+      {'label': l10n.historySubject, 'value': 0.80},
     ];
 
     final colorScheme = Theme.of(context).colorScheme;
@@ -400,16 +408,16 @@ class _AdminDashboardV2ScreenState
                   color: AppColors.surfaceContainer,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'الفصل الدراسي الحالي',
-                  style: TextStyle(
+                child: Text(
+                  l10n.currentTerm,
+                  style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.onSurfaceVariant,
                   ),
                 ),
               ),
               Text(
-                'أداء المواد الدراسية',
+                l10n.adminDashboardSubjectPerformance,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -487,18 +495,19 @@ class _AdminDashboardV2ScreenState
   // ─── Top Teachers ────────────────────────────────────────────────────────
 
   Widget _buildTopTeachers() {
+    final l10n = AppLocalizations.of(context);
     final teachers = [
       {
-        'name': 'أ. محمد أحمد',
-        'role': 'معلم علوم - تفاعل عالي (98%)',
+        'name': l10n.adminDashboardTopTeacherOneName,
+        'role': l10n.adminDashboardTopTeacherOneRole,
         'rating': '4.9',
-        'initials': 'م.أ',
+        'initials': l10n.adminDashboardTopTeacherOneInitials,
       },
       {
-        'name': 'أ. سارة خالد',
-        'role': 'معلمة رياضيات - تقدم طلابي (92%)',
+        'name': l10n.adminDashboardTopTeacherTwoName,
+        'role': l10n.adminDashboardTopTeacherTwoRole,
         'rating': '4.8',
-        'initials': 'س.خ',
+        'initials': l10n.adminDashboardTopTeacherTwoInitials,
       },
     ];
 
@@ -513,11 +522,12 @@ class _AdminDashboardV2ScreenState
             children: [
               TextButton(
                 onPressed: () => context.push(AppRoutes.adminUsers),
-                child: const Text('عرض الكل',
-                    style: TextStyle(color: AppColors.primary, fontSize: 13)),
+                child: Text(l10n.viewAll,
+                    style: const TextStyle(
+                        color: AppColors.primary, fontSize: 13)),
               ),
               Text(
-                'المعلمون المتميزون (هذا الشهر)',
+                l10n.adminDashboardTopTeachersThisMonth,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -610,21 +620,25 @@ class _AdminDashboardV2ScreenState
   // ─── Admin Alerts ────────────────────────────────────────────────────────
 
   Widget _buildAdminAlerts() {
+    final l10n = AppLocalizations.of(context);
     final alerts = [
       {
         'type': 'error',
-        'title': 'مراجعة مطلوبة',
-        'body': 'فصل 10-أ يحتاج لمراجعة درجات اختبار العلوم.',
+        'route': AppRoutes.adminClassrooms,
+        'title': l10n.adminDashboardReviewRequiredTitle,
+        'body': l10n.adminDashboardReviewRequiredBody,
       },
       {
         'type': 'info',
-        'title': 'تقارير جاهزة',
-        'body': 'تقارير الأداء الشهري للطلاب متاحة الآن للتحميل.',
+        'route': AppRoutes.adminReports,
+        'title': l10n.adminDashboardReportsReadyTitle,
+        'body': l10n.adminDashboardReportsReadyBody,
       },
       {
         'type': 'secondary',
-        'title': 'تحديث الجداول',
-        'body': 'تم تعديل جدول حصص المرحلة الثانوية ليوم الثلاثاء.',
+        'route': AppRoutes.adminClassrooms,
+        'title': l10n.adminDashboardScheduleUpdateTitle,
+        'body': l10n.adminDashboardScheduleUpdateBody,
       },
     ];
 
@@ -638,7 +652,7 @@ class _AdminDashboardV2ScreenState
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'تنبيهات الإدارة',
+                l10n.adminDashboardManagementAlerts,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -678,15 +692,9 @@ class _AdminDashboardV2ScreenState
         titleColor = const Color(0xFF54647A);
     }
 
-    VoidCallback onTap;
-    final title = alert['title'] as String;
-    if (title == 'مراجعة مطلوبة') {
-      onTap = () => context.push(AppRoutes.adminClassrooms);
-    } else if (title == 'تقارير جاهزة') {
-      onTap = () => context.push(AppRoutes.adminReports);
-    } else {
-      onTap = () => context.push(AppRoutes.adminClassrooms);
-    }
+    final route = alert['route'] as String;
+
+    void onTap() => context.push(route);
 
     return InkWell(
       onTap: onTap,
@@ -731,11 +739,28 @@ class _AdminDashboardV2ScreenState
   // ─── Quick Access ────────────────────────────────────────────────────────
 
   Widget _buildQuickAccess() {
+    final l10n = AppLocalizations.of(context);
     final items = [
-      {'icon': Icons.settings, 'label': 'الإعدادات'},
-      {'icon': Icons.calendar_month, 'label': 'الجداول'},
-      {'icon': Icons.person_add, 'label': 'إضافة طالب'},
-      {'icon': Icons.cloud_download, 'label': 'التقارير'},
+      {
+        'icon': Icons.settings,
+        'label': l10n.settings,
+        'route': AppRoutes.institutionSettings,
+      },
+      {
+        'icon': Icons.calendar_month,
+        'label': l10n.adminDashboardSchedules,
+        'route': AppRoutes.adminClassrooms,
+      },
+      {
+        'icon': Icons.person_add,
+        'label': l10n.adminDashboardAddStudent,
+        'route': AppRoutes.adminUsers,
+      },
+      {
+        'icon': Icons.cloud_download,
+        'label': l10n.reports,
+        'route': AppRoutes.adminReports,
+      },
     ];
 
     final colorScheme = Theme.of(context).colorScheme;
@@ -745,7 +770,7 @@ class _AdminDashboardV2ScreenState
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            'وصول سريع',
+            l10n.quickAccess,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -763,20 +788,9 @@ class _AdminDashboardV2ScreenState
             childAspectRatio: 2,
             children: items.map((item) {
               final label = item['label'] as String;
-              VoidCallback onTap;
-              if (label == 'الإعدادات') {
-                onTap = () => context.push(AppRoutes.institutionSettings);
-              } else if (label == 'الجداول') {
-                onTap = () => context.push(AppRoutes.adminClassrooms);
-              } else if (label == 'إضافة طالب') {
-                onTap = () => context.push(AppRoutes.adminUsers);
-              } else if (label == 'التقارير') {
-                onTap = () => context.push(AppRoutes.adminReports);
-              } else {
-                onTap = () => context.push(AppRoutes.adminDashboard);
-              }
+              final route = item['route'] as String;
               return InkWell(
-                onTap: onTap,
+                onTap: () => context.push(route),
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
                   padding: const EdgeInsets.all(16),

@@ -2872,4 +2872,94 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get math => 'الرياضيات';
+
+  @override
+  String get adminDashboardV2Subtitle =>
+      'مرحباً بك مجدداً، إليك ملخص أداء المدرسة اليوم.';
+
+  @override
+  String get adminDashboardTotalStudents => 'إجمالي الطلاب';
+
+  @override
+  String get adminDashboardActiveTeachers => 'المعلمون النشطون';
+
+  @override
+  String get adminDashboardOverallAverage => 'متوسط الأداء العام';
+
+  @override
+  String get adminDashboardRunningAssessments => 'اختبارات جارية';
+
+  @override
+  String get currentTerm => 'الفصل الدراسي الحالي';
+
+  @override
+  String get adminDashboardSubjectPerformance => 'أداء المواد الدراسية';
+
+  @override
+  String get science => 'العلوم';
+
+  @override
+  String get arabicSubject => 'العربية';
+
+  @override
+  String get englishSubject => 'الإنجليزية';
+
+  @override
+  String get historySubject => 'التاريخ';
+
+  @override
+  String get adminDashboardTopTeacherOneName => 'أ. محمد أحمد';
+
+  @override
+  String get adminDashboardTopTeacherOneRole => 'معلم علوم - تفاعل عالي (98%)';
+
+  @override
+  String get adminDashboardTopTeacherOneInitials => 'م.أ';
+
+  @override
+  String get adminDashboardTopTeacherTwoName => 'أ. سارة خالد';
+
+  @override
+  String get adminDashboardTopTeacherTwoRole =>
+      'معلمة رياضيات - تقدم طلابي (92%)';
+
+  @override
+  String get adminDashboardTopTeacherTwoInitials => 'س.خ';
+
+  @override
+  String get adminDashboardTopTeachersThisMonth =>
+      'المعلمون المتميزون (هذا الشهر)';
+
+  @override
+  String get adminDashboardReviewRequiredTitle => 'مراجعة مطلوبة';
+
+  @override
+  String get adminDashboardReviewRequiredBody =>
+      'فصل 10-أ يحتاج لمراجعة درجات اختبار العلوم.';
+
+  @override
+  String get adminDashboardReportsReadyTitle => 'تقارير جاهزة';
+
+  @override
+  String get adminDashboardReportsReadyBody =>
+      'تقارير الأداء الشهري للطلاب متاحة الآن للتحميل.';
+
+  @override
+  String get adminDashboardScheduleUpdateTitle => 'تحديث الجداول';
+
+  @override
+  String get adminDashboardScheduleUpdateBody =>
+      'تم تعديل جدول حصص المرحلة الثانوية ليوم الثلاثاء.';
+
+  @override
+  String get adminDashboardManagementAlerts => 'تنبيهات الإدارة';
+
+  @override
+  String get adminDashboardSchedules => 'الجداول';
+
+  @override
+  String get adminDashboardAddStudent => 'إضافة طالب';
+
+  @override
+  String get quickAccess => 'وصول سريع';
 }

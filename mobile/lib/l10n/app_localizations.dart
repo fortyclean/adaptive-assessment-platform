@@ -5338,6 +5338,174 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الرياضيات'**
   String get math;
+
+  /// No description provided for @adminDashboardV2Subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحباً بك مجدداً، إليك ملخص أداء المدرسة اليوم.'**
+  String get adminDashboardV2Subtitle;
+
+  /// No description provided for @adminDashboardTotalStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الطلاب'**
+  String get adminDashboardTotalStudents;
+
+  /// No description provided for @adminDashboardActiveTeachers.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلمون النشطون'**
+  String get adminDashboardActiveTeachers;
+
+  /// No description provided for @adminDashboardOverallAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط الأداء العام'**
+  String get adminDashboardOverallAverage;
+
+  /// No description provided for @adminDashboardRunningAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبارات جارية'**
+  String get adminDashboardRunningAssessments;
+
+  /// No description provided for @currentTerm.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصل الدراسي الحالي'**
+  String get currentTerm;
+
+  /// No description provided for @adminDashboardSubjectPerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء المواد الدراسية'**
+  String get adminDashboardSubjectPerformance;
+
+  /// No description provided for @science.
+  ///
+  /// In ar, this message translates to:
+  /// **'العلوم'**
+  String get science;
+
+  /// No description provided for @arabicSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get arabicSubject;
+
+  /// No description provided for @englishSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإنجليزية'**
+  String get englishSubject;
+
+  /// No description provided for @historySubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get historySubject;
+
+  /// No description provided for @adminDashboardTopTeacherOneName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أ. محمد أحمد'**
+  String get adminDashboardTopTeacherOneName;
+
+  /// No description provided for @adminDashboardTopTeacherOneRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلم علوم - تفاعل عالي (98%)'**
+  String get adminDashboardTopTeacherOneRole;
+
+  /// No description provided for @adminDashboardTopTeacherOneInitials.
+  ///
+  /// In ar, this message translates to:
+  /// **'م.أ'**
+  String get adminDashboardTopTeacherOneInitials;
+
+  /// No description provided for @adminDashboardTopTeacherTwoName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أ. سارة خالد'**
+  String get adminDashboardTopTeacherTwoName;
+
+  /// No description provided for @adminDashboardTopTeacherTwoRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلمة رياضيات - تقدم طلابي (92%)'**
+  String get adminDashboardTopTeacherTwoRole;
+
+  /// No description provided for @adminDashboardTopTeacherTwoInitials.
+  ///
+  /// In ar, this message translates to:
+  /// **'س.خ'**
+  String get adminDashboardTopTeacherTwoInitials;
+
+  /// No description provided for @adminDashboardTopTeachersThisMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلمون المتميزون (هذا الشهر)'**
+  String get adminDashboardTopTeachersThisMonth;
+
+  /// No description provided for @adminDashboardReviewRequiredTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة مطلوبة'**
+  String get adminDashboardReviewRequiredTitle;
+
+  /// No description provided for @adminDashboardReviewRequiredBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصل 10-أ يحتاج لمراجعة درجات اختبار العلوم.'**
+  String get adminDashboardReviewRequiredBody;
+
+  /// No description provided for @adminDashboardReportsReadyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير جاهزة'**
+  String get adminDashboardReportsReadyTitle;
+
+  /// No description provided for @adminDashboardReportsReadyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير الأداء الشهري للطلاب متاحة الآن للتحميل.'**
+  String get adminDashboardReportsReadyBody;
+
+  /// No description provided for @adminDashboardScheduleUpdateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث الجداول'**
+  String get adminDashboardScheduleUpdateTitle;
+
+  /// No description provided for @adminDashboardScheduleUpdateBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تعديل جدول حصص المرحلة الثانوية ليوم الثلاثاء.'**
+  String get adminDashboardScheduleUpdateBody;
+
+  /// No description provided for @adminDashboardManagementAlerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات الإدارة'**
+  String get adminDashboardManagementAlerts;
+
+  /// No description provided for @adminDashboardSchedules.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجداول'**
+  String get adminDashboardSchedules;
+
+  /// No description provided for @adminDashboardAddStudent.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة طالب'**
+  String get adminDashboardAddStudent;
+
+  /// No description provided for @quickAccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصول سريع'**
+  String get quickAccess;
 }
 
 class _AppLocalizationsDelegate

@@ -842,6 +842,35 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads advanced admin dashboard localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.adminDashboardV2Subtitle,
+            l10n.adminDashboardTotalStudents,
+            l10n.adminDashboardSubjectPerformance,
+            l10n.adminDashboardTopTeachersThisMonth,
+            l10n.adminDashboardReportsReadyTitle,
+            l10n.quickAccess,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Welcome back. Here is today\'s school performance summary. / '
+        'Total students / Subject performance / Top teachers this month / '
+        'Reports ready / Quick access',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {
