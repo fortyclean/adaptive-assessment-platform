@@ -5,10 +5,10 @@ import 'package:adaptive_assessment/core/constants/app_version.dart';
 void main() {
   group('AppVersion', () {
     test('current version matches pubspec contract', () {
-      expect(AppVersion.current, '1.0.76');
-      expect(AppVersion.buildNumber, 76);
-      expect(AppVersion.display, contains('1.0.76'));
-      expect(AppVersion.display, contains('(76)'));
+      expect(AppVersion.current, '1.0.89');
+      expect(AppVersion.buildNumber, 89);
+      expect(AppVersion.display, contains('1.0.89'));
+      expect(AppVersion.display, contains('(89)'));
     });
 
     test('changelog head matches current release', () {
@@ -21,7 +21,7 @@ void main() {
       final latestEntries = AppVersion.changelog.take(3);
 
       for (final entry in latestEntries) {
-        expect(entry.date, contains('مايو'));
+        expect(entry.date, contains('يونيو'));
         expect(entry.title, isNot(contains('localization')));
         expect(entry.title, isNot(contains('dashboard')));
         expect(entry.title, isNot(contains('crash reporting')));
