@@ -9,7 +9,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../providers/auth_provider.dart';
 
-/// يدير الإشعارات المحلية ويجهز التطبيق للتوسع لاحقا عبر API.
+/// Manages local notifications and prepares push-notification expansion.
 class NotificationService {
   NotificationService._internal();
   static final NotificationService instance = NotificationService._internal();
@@ -20,8 +20,8 @@ class NotificationService {
   static const AndroidNotificationDetails _instantAndroidDetails =
       AndroidNotificationDetails(
     'default_channel',
-    'التنبيهات',
-    channelDescription: 'تنبيهات لحظية للأداء والتقارير',
+    'Notifications',
+    channelDescription: 'Instant performance and report notifications',
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
@@ -30,8 +30,8 @@ class NotificationService {
   static const AndroidNotificationDetails _scheduledAndroidDetails =
       AndroidNotificationDetails(
     'scheduled_channel',
-    'تنبيهات مجدولة',
-    channelDescription: 'تنبيهات مجدولة للتقارير أو الأحداث',
+    'Scheduled notifications',
+    channelDescription: 'Scheduled report and event notifications',
     importance: Importance.high,
     priority: Priority.high,
   );

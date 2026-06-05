@@ -3088,6 +3088,301 @@ abstract class AppLocalizations {
   /// **'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.'**
   String get schoolReportExportFailure;
 
+  /// No description provided for @schoolReportDemoClassOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'أولى متوسط (أ)'**
+  String get schoolReportDemoClassOne;
+
+  /// No description provided for @schoolReportDemoClassTwo.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثالثة متوسط (ج)'**
+  String get schoolReportDemoClassTwo;
+
+  /// No description provided for @schoolReportDemoClassThree.
+  ///
+  /// In ar, this message translates to:
+  /// **'أولى متوسط (ب)'**
+  String get schoolReportDemoClassThree;
+
+  /// No description provided for @schoolReportDemoClassFour.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثانية متوسط (أ)'**
+  String get schoolReportDemoClassFour;
+
+  /// No description provided for @skillAlgebra.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجبر'**
+  String get skillAlgebra;
+
+  /// No description provided for @skillGeometry.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهندسة'**
+  String get skillGeometry;
+
+  /// No description provided for @skillNumbers.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأعداد'**
+  String get skillNumbers;
+
+  /// No description provided for @skillStatistics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإحصاء'**
+  String get skillStatistics;
+
+  /// No description provided for @schoolReportWeaknessEnglishListening.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة الإنجليزية - الاستماع'**
+  String get schoolReportWeaknessEnglishListening;
+
+  /// No description provided for @schoolReportWeaknessPhysicsDynamics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفيزياء - الديناميكا'**
+  String get schoolReportWeaknessPhysicsDynamics;
+
+  /// No description provided for @schoolReportWeaknessMathEquations.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات - المعادلات التفاضلية'**
+  String get schoolReportWeaknessMathEquations;
+
+  /// No description provided for @schoolReportWeaknessChemistryReactions.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكيمياء - التفاعلات العضوية'**
+  String get schoolReportWeaknessChemistryReactions;
+
+  /// No description provided for @schoolReportWeaknessArabicSpelling.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة العربية - الإملاء'**
+  String get schoolReportWeaknessArabicSpelling;
+
+  /// No description provided for @schoolReportSummaryLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل ملخص تقارير المدرسة.'**
+  String get schoolReportSummaryLoadFailed;
+
+  /// No description provided for @schoolReportComparisonLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل مقارنة الفصول.'**
+  String get schoolReportComparisonLoadFailed;
+
+  /// No description provided for @schoolReportWeaknessLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل مهارات الضعف.'**
+  String get schoolReportWeaknessLoadFailed;
+
+  /// No description provided for @schoolReportsUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث تقارير المدرسة'**
+  String get schoolReportsUpdated;
+
+  /// No description provided for @exportReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير التقرير'**
+  String get exportReport;
+
+  /// No description provided for @schoolReportJsonExportSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملف منظم يحافظ على كل تفاصيل التقرير'**
+  String get schoolReportJsonExportSubtitle;
+
+  /// No description provided for @schoolReportCsvExportSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدول مناسب للمراجعة في Excel'**
+  String get schoolReportCsvExportSubtitle;
+
+  /// No description provided for @allSubjects.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المواد'**
+  String get allSubjects;
+
+  /// No description provided for @allGradeLevels.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المراحل'**
+  String get allGradeLevels;
+
+  /// No description provided for @gradeLevelValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة {gradeLevel}'**
+  String gradeLevelValue(Object gradeLevel);
+
+  /// No description provided for @currentScope.
+  ///
+  /// In ar, this message translates to:
+  /// **'النطاق الحالي: {subject} • {grade}'**
+  String currentScope(Object subject, Object grade);
+
+  /// No description provided for @schoolReportNotUpdatedYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم تحديث التقرير بعد'**
+  String get schoolReportNotUpdatedYet;
+
+  /// No description provided for @schoolReportLastUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر تحديث: {year}/{month}/{day} - {hour}:{minute}'**
+  String schoolReportLastUpdated(
+      Object year, Object month, Object day, Object hour, Object minute);
+
+  /// No description provided for @schoolReportsOverviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير المدرسة الكلية'**
+  String get schoolReportsOverviewTitle;
+
+  /// No description provided for @refreshReports.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث التقارير'**
+  String get refreshReports;
+
+  /// No description provided for @schoolReportsOverviewSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة شاملة لأداء الفصول ومعدلات المشاركة عبر الأقسام'**
+  String get schoolReportsOverviewSubtitle;
+
+  /// No description provided for @overallAverageScore.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط الدرجات العام'**
+  String get overallAverageScore;
+
+  /// No description provided for @participationRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة المشاركة'**
+  String get participationRate;
+
+  /// No description provided for @stableStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستقر'**
+  String get stableStatus;
+
+  /// No description provided for @topClassroom.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصل المتصدر'**
+  String get topClassroom;
+
+  /// No description provided for @topClassroomSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'بمتوسط درجات 92% ومشاركة كاملة'**
+  String get topClassroomSummary;
+
+  /// No description provided for @filterComparison.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفية المقارنة'**
+  String get filterComparison;
+
+  /// No description provided for @apply.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق'**
+  String get apply;
+
+  /// No description provided for @filter.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفية'**
+  String get filter;
+
+  /// No description provided for @averageScoreComparison.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة متوسط الدرجات'**
+  String get averageScoreComparison;
+
+  /// No description provided for @classroomFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصل'**
+  String get classroomFallback;
+
+  /// No description provided for @viewAllClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض جميع الفصول'**
+  String get viewAllClassrooms;
+
+  /// No description provided for @strengthPoints.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقاط القوة'**
+  String get strengthPoints;
+
+  /// No description provided for @schoolReportStrengthMathAlgebra.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات - الجبر'**
+  String get schoolReportStrengthMathAlgebra;
+
+  /// No description provided for @schoolReportStrengthScienceBiology.
+  ///
+  /// In ar, this message translates to:
+  /// **'العلوم - الأحياء'**
+  String get schoolReportStrengthScienceBiology;
+
+  /// No description provided for @schoolReportStrengthArabicGrammar.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة العربية - النحو'**
+  String get schoolReportStrengthArabicGrammar;
+
+  /// No description provided for @schoolReportStrengthSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء استثنائي في فصول المرحلة الأولى.'**
+  String get schoolReportStrengthSummary;
+
+  /// No description provided for @needsIntervention.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج تدخل'**
+  String get needsIntervention;
+
+  /// No description provided for @schoolReportWeaknessSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'انخفاض ملحوظ يتطلب مراجعة المنهج.'**
+  String get schoolReportWeaknessSummary;
+
+  /// No description provided for @filterData.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفية البيانات'**
+  String get filterData;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح الفلاتر'**
+  String get clearFilters;
+
   /// No description provided for @questionBankQualityTitle.
   ///
   /// In ar, this message translates to:

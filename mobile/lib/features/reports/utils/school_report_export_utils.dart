@@ -31,25 +31,25 @@ class SchoolReportExportLabels {
     Object topSkill,
   ) comparisonValueBuilder;
 
-  static const arabic = SchoolReportExportLabels(
-    section: 'القسم',
-    metric: 'المؤشر',
-    value: 'القيمة',
-    report: 'التقرير',
-    generatedAt: 'تاريخ الإنشاء',
-    filterScope: 'نطاق الفلاتر',
-    summary: 'الملخص',
-    classroomComparison: 'مقارنة الفصول',
-    weakSkills: 'مهارات تحتاج دعماً',
-    comparisonValueBuilder: _arabicComparisonValue,
+  static const english = SchoolReportExportLabels(
+    section: 'Section',
+    metric: 'Metric',
+    value: 'Value',
+    report: 'Report',
+    generatedAt: 'Generated at',
+    filterScope: 'Filter scope',
+    summary: 'Summary',
+    classroomComparison: 'Classroom comparison',
+    weakSkills: 'Skills needing support',
+    comparisonValueBuilder: _englishComparisonValue,
   );
 
-  static String _arabicComparisonValue(
+  static String _englishComparisonValue(
     Object averageScore,
     Object completionRate,
     Object topSkill,
   ) =>
-      'متوسط: $averageScore | إكمال: $completionRate | مهارة: $topSkill';
+      'Average: $averageScore | Completion: $completionRate | Skill: $topSkill';
 }
 
 class SchoolReportExportUtils {
@@ -68,7 +68,7 @@ class SchoolReportExportUtils {
     required Map<String, dynamic> report,
     required SchoolReportExportFormat format,
     required String filterSummary,
-    SchoolReportExportLabels labels = SchoolReportExportLabels.arabic,
+    SchoolReportExportLabels labels = SchoolReportExportLabels.english,
   }) {
     if (format == SchoolReportExportFormat.json) {
       return const JsonEncoder.withIndent('  ').convert(report);
@@ -92,7 +92,7 @@ class SchoolReportExportUtils {
   static String buildCsv({
     required Map<String, dynamic> report,
     required String filterSummary,
-    SchoolReportExportLabels labels = SchoolReportExportLabels.arabic,
+    SchoolReportExportLabels labels = SchoolReportExportLabels.english,
   }) {
     final buffer = StringBuffer();
     void row(List<Object?> values) {

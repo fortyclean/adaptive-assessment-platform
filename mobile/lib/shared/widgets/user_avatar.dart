@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
 
 class UserAvatar extends StatelessWidget {
@@ -56,7 +57,7 @@ class _Initials extends StatelessWidget {
 
     return Center(
       child: Text(
-        _initials(user?.fullName),
+        _initials(user?.fullName, AppLocalizations.of(context).unknownInitial),
         style: TextStyle(
           color: colorScheme.primary,
           fontSize: size * 0.34,
@@ -67,9 +68,9 @@ class _Initials extends StatelessWidget {
     );
   }
 
-  String _initials(String? name) {
+  String _initials(String? name, String fallback) {
     final normalized = name?.trim();
-    if (normalized == null || normalized.isEmpty) return '؟';
+    if (normalized == null || normalized.isEmpty) return fallback;
     final parts = normalized.split(RegExp(r'\s+'));
     if (parts.length >= 2) return '${parts[0][0]}${parts[1][0]}';
     return parts.first[0];

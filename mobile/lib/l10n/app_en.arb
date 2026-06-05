@@ -721,6 +721,75 @@
   "schoolReportExportWeakSkills": "Skills needing support",
   "schoolReportExportComparisonValue": "Average: {averageScore} | Completion: {completionRate} | Skill: {topSkill}",
   "schoolReportExportFailure": "Could not export the school report. Check the connection and try again.",
+  "schoolReportDemoClassOne": "Grade 7 (A)",
+  "schoolReportDemoClassTwo": "Grade 9 (C)",
+  "schoolReportDemoClassThree": "Grade 7 (B)",
+  "schoolReportDemoClassFour": "Grade 8 (A)",
+  "skillAlgebra": "Algebra",
+  "skillGeometry": "Geometry",
+  "skillNumbers": "Numbers",
+  "skillStatistics": "Statistics",
+  "schoolReportWeaknessEnglishListening": "English - listening",
+  "schoolReportWeaknessPhysicsDynamics": "Physics - dynamics",
+  "schoolReportWeaknessMathEquations": "Mathematics - differential equations",
+  "schoolReportWeaknessChemistryReactions": "Chemistry - organic reactions",
+  "schoolReportWeaknessArabicSpelling": "Arabic - spelling",
+  "schoolReportSummaryLoadFailed": "Could not load the school report summary.",
+  "schoolReportComparisonLoadFailed": "Could not load classroom comparison.",
+  "schoolReportWeaknessLoadFailed": "Could not load weak skills.",
+  "schoolReportsUpdated": "School reports updated",
+  "exportReport": "Export report",
+  "schoolReportJsonExportSubtitle": "Structured file that preserves all report details",
+  "schoolReportCsvExportSubtitle": "Table suitable for review in Excel",
+  "allSubjects": "All subjects",
+  "allGradeLevels": "All grade levels",
+  "gradeLevelValue": "Grade {gradeLevel}",
+  "@gradeLevelValue": {
+    "placeholders": {
+      "gradeLevel": {}
+    }
+  },
+  "currentScope": "Current scope: {subject} • {grade}",
+  "@currentScope": {
+    "placeholders": {
+      "subject": {},
+      "grade": {}
+    }
+  },
+  "schoolReportNotUpdatedYet": "Report has not been updated yet",
+  "schoolReportLastUpdated": "Last updated: {year}/{month}/{day} - {hour}:{minute}",
+  "@schoolReportLastUpdated": {
+    "placeholders": {
+      "year": {},
+      "month": {},
+      "day": {},
+      "hour": {},
+      "minute": {}
+    }
+  },
+  "schoolReportsOverviewTitle": "School-wide reports",
+  "refreshReports": "Refresh reports",
+  "schoolReportsOverviewSubtitle": "Comprehensive comparison of classroom performance and participation rates across departments",
+  "overallAverageScore": "Overall average score",
+  "participationRate": "Participation rate",
+  "stableStatus": "Stable",
+  "topClassroom": "Top classroom",
+  "topClassroomSummary": "Average score 92% with full participation",
+  "filterComparison": "Filter comparison",
+  "apply": "Apply",
+  "filter": "Filter",
+  "averageScoreComparison": "Average score comparison",
+  "classroomFallback": "Classroom",
+  "viewAllClassrooms": "View all classrooms",
+  "strengthPoints": "Strengths",
+  "schoolReportStrengthMathAlgebra": "Mathematics - algebra",
+  "schoolReportStrengthScienceBiology": "Science - biology",
+  "schoolReportStrengthArabicGrammar": "Arabic - grammar",
+  "schoolReportStrengthSummary": "Exceptional performance in lower-grade classrooms.",
+  "needsIntervention": "Needs intervention",
+  "schoolReportWeaknessSummary": "A noticeable drop requires curriculum review.",
+  "filterData": "Filter data",
+  "clearFilters": "Clear filters",
   "@schoolReportExportComparisonValue": {
     "placeholders": {
       "averageScore": {},

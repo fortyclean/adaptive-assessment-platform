@@ -721,6 +721,75 @@
   "schoolReportExportWeakSkills": "مهارات تحتاج دعماً",
   "schoolReportExportComparisonValue": "متوسط: {averageScore} | إكمال: {completionRate} | مهارة: {topSkill}",
   "schoolReportExportFailure": "تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.",
+  "schoolReportDemoClassOne": "أولى متوسط (أ)",
+  "schoolReportDemoClassTwo": "ثالثة متوسط (ج)",
+  "schoolReportDemoClassThree": "أولى متوسط (ب)",
+  "schoolReportDemoClassFour": "ثانية متوسط (أ)",
+  "skillAlgebra": "الجبر",
+  "skillGeometry": "الهندسة",
+  "skillNumbers": "الأعداد",
+  "skillStatistics": "الإحصاء",
+  "schoolReportWeaknessEnglishListening": "اللغة الإنجليزية - الاستماع",
+  "schoolReportWeaknessPhysicsDynamics": "الفيزياء - الديناميكا",
+  "schoolReportWeaknessMathEquations": "الرياضيات - المعادلات التفاضلية",
+  "schoolReportWeaknessChemistryReactions": "الكيمياء - التفاعلات العضوية",
+  "schoolReportWeaknessArabicSpelling": "اللغة العربية - الإملاء",
+  "schoolReportSummaryLoadFailed": "تعذر تحميل ملخص تقارير المدرسة.",
+  "schoolReportComparisonLoadFailed": "تعذر تحميل مقارنة الفصول.",
+  "schoolReportWeaknessLoadFailed": "تعذر تحميل مهارات الضعف.",
+  "schoolReportsUpdated": "تم تحديث تقارير المدرسة",
+  "exportReport": "تصدير التقرير",
+  "schoolReportJsonExportSubtitle": "ملف منظم يحافظ على كل تفاصيل التقرير",
+  "schoolReportCsvExportSubtitle": "جدول مناسب للمراجعة في Excel",
+  "allSubjects": "كل المواد",
+  "allGradeLevels": "كل المراحل",
+  "gradeLevelValue": "المرحلة {gradeLevel}",
+  "@gradeLevelValue": {
+    "placeholders": {
+      "gradeLevel": {}
+    }
+  },
+  "currentScope": "النطاق الحالي: {subject} • {grade}",
+  "@currentScope": {
+    "placeholders": {
+      "subject": {},
+      "grade": {}
+    }
+  },
+  "schoolReportNotUpdatedYet": "لم يتم تحديث التقرير بعد",
+  "schoolReportLastUpdated": "آخر تحديث: {year}/{month}/{day} - {hour}:{minute}",
+  "@schoolReportLastUpdated": {
+    "placeholders": {
+      "year": {},
+      "month": {},
+      "day": {},
+      "hour": {},
+      "minute": {}
+    }
+  },
+  "schoolReportsOverviewTitle": "تقارير المدرسة الكلية",
+  "refreshReports": "تحديث التقارير",
+  "schoolReportsOverviewSubtitle": "مقارنة شاملة لأداء الفصول ومعدلات المشاركة عبر الأقسام",
+  "overallAverageScore": "متوسط الدرجات العام",
+  "participationRate": "نسبة المشاركة",
+  "stableStatus": "مستقر",
+  "topClassroom": "الفصل المتصدر",
+  "topClassroomSummary": "بمتوسط درجات 92% ومشاركة كاملة",
+  "filterComparison": "تصفية المقارنة",
+  "apply": "تطبيق",
+  "filter": "تصفية",
+  "averageScoreComparison": "مقارنة متوسط الدرجات",
+  "classroomFallback": "فصل",
+  "viewAllClassrooms": "عرض جميع الفصول",
+  "strengthPoints": "نقاط القوة",
+  "schoolReportStrengthMathAlgebra": "الرياضيات - الجبر",
+  "schoolReportStrengthScienceBiology": "العلوم - الأحياء",
+  "schoolReportStrengthArabicGrammar": "اللغة العربية - النحو",
+  "schoolReportStrengthSummary": "أداء استثنائي في فصول المرحلة الأولى.",
+  "needsIntervention": "تحتاج تدخل",
+  "schoolReportWeaknessSummary": "انخفاض ملحوظ يتطلب مراجعة المنهج.",
+  "filterData": "تصفية البيانات",
+  "clearFilters": "مسح الفلاتر",
   "@schoolReportExportComparisonValue": {
     "placeholders": {
       "averageScore": {},

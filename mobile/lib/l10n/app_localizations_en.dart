@@ -1653,6 +1653,169 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not export the school report. Check the connection and try again.';
 
   @override
+  String get schoolReportDemoClassOne => 'Grade 7 (A)';
+
+  @override
+  String get schoolReportDemoClassTwo => 'Grade 9 (C)';
+
+  @override
+  String get schoolReportDemoClassThree => 'Grade 7 (B)';
+
+  @override
+  String get schoolReportDemoClassFour => 'Grade 8 (A)';
+
+  @override
+  String get skillAlgebra => 'Algebra';
+
+  @override
+  String get skillGeometry => 'Geometry';
+
+  @override
+  String get skillNumbers => 'Numbers';
+
+  @override
+  String get skillStatistics => 'Statistics';
+
+  @override
+  String get schoolReportWeaknessEnglishListening => 'English - listening';
+
+  @override
+  String get schoolReportWeaknessPhysicsDynamics => 'Physics - dynamics';
+
+  @override
+  String get schoolReportWeaknessMathEquations =>
+      'Mathematics - differential equations';
+
+  @override
+  String get schoolReportWeaknessChemistryReactions =>
+      'Chemistry - organic reactions';
+
+  @override
+  String get schoolReportWeaknessArabicSpelling => 'Arabic - spelling';
+
+  @override
+  String get schoolReportSummaryLoadFailed =>
+      'Could not load the school report summary.';
+
+  @override
+  String get schoolReportComparisonLoadFailed =>
+      'Could not load classroom comparison.';
+
+  @override
+  String get schoolReportWeaknessLoadFailed => 'Could not load weak skills.';
+
+  @override
+  String get schoolReportsUpdated => 'School reports updated';
+
+  @override
+  String get exportReport => 'Export report';
+
+  @override
+  String get schoolReportJsonExportSubtitle =>
+      'Structured file that preserves all report details';
+
+  @override
+  String get schoolReportCsvExportSubtitle =>
+      'Table suitable for review in Excel';
+
+  @override
+  String get allSubjects => 'All subjects';
+
+  @override
+  String get allGradeLevels => 'All grade levels';
+
+  @override
+  String gradeLevelValue(Object gradeLevel) {
+    return 'Grade $gradeLevel';
+  }
+
+  @override
+  String currentScope(Object subject, Object grade) {
+    return 'Current scope: $subject • $grade';
+  }
+
+  @override
+  String get schoolReportNotUpdatedYet => 'Report has not been updated yet';
+
+  @override
+  String schoolReportLastUpdated(
+      Object year, Object month, Object day, Object hour, Object minute) {
+    return 'Last updated: $year/$month/$day - $hour:$minute';
+  }
+
+  @override
+  String get schoolReportsOverviewTitle => 'School-wide reports';
+
+  @override
+  String get refreshReports => 'Refresh reports';
+
+  @override
+  String get schoolReportsOverviewSubtitle =>
+      'Comprehensive comparison of classroom performance and participation rates across departments';
+
+  @override
+  String get overallAverageScore => 'Overall average score';
+
+  @override
+  String get participationRate => 'Participation rate';
+
+  @override
+  String get stableStatus => 'Stable';
+
+  @override
+  String get topClassroom => 'Top classroom';
+
+  @override
+  String get topClassroomSummary => 'Average score 92% with full participation';
+
+  @override
+  String get filterComparison => 'Filter comparison';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get averageScoreComparison => 'Average score comparison';
+
+  @override
+  String get classroomFallback => 'Classroom';
+
+  @override
+  String get viewAllClassrooms => 'View all classrooms';
+
+  @override
+  String get strengthPoints => 'Strengths';
+
+  @override
+  String get schoolReportStrengthMathAlgebra => 'Mathematics - algebra';
+
+  @override
+  String get schoolReportStrengthScienceBiology => 'Science - biology';
+
+  @override
+  String get schoolReportStrengthArabicGrammar => 'Arabic - grammar';
+
+  @override
+  String get schoolReportStrengthSummary =>
+      'Exceptional performance in lower-grade classrooms.';
+
+  @override
+  String get needsIntervention => 'Needs intervention';
+
+  @override
+  String get schoolReportWeaknessSummary =>
+      'A noticeable drop requires curriculum review.';
+
+  @override
+  String get filterData => 'Filter data';
+
+  @override
+  String get clearFilters => 'Clear filters';
+
+  @override
   String get questionBankQualityTitle => 'Question bank quality';
 
   @override

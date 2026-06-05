@@ -1643,6 +1643,166 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذر تصدير تقرير المدرسة. تحقق من الاتصال ثم حاول مرة أخرى.';
 
   @override
+  String get schoolReportDemoClassOne => 'أولى متوسط (أ)';
+
+  @override
+  String get schoolReportDemoClassTwo => 'ثالثة متوسط (ج)';
+
+  @override
+  String get schoolReportDemoClassThree => 'أولى متوسط (ب)';
+
+  @override
+  String get schoolReportDemoClassFour => 'ثانية متوسط (أ)';
+
+  @override
+  String get skillAlgebra => 'الجبر';
+
+  @override
+  String get skillGeometry => 'الهندسة';
+
+  @override
+  String get skillNumbers => 'الأعداد';
+
+  @override
+  String get skillStatistics => 'الإحصاء';
+
+  @override
+  String get schoolReportWeaknessEnglishListening =>
+      'اللغة الإنجليزية - الاستماع';
+
+  @override
+  String get schoolReportWeaknessPhysicsDynamics => 'الفيزياء - الديناميكا';
+
+  @override
+  String get schoolReportWeaknessMathEquations =>
+      'الرياضيات - المعادلات التفاضلية';
+
+  @override
+  String get schoolReportWeaknessChemistryReactions =>
+      'الكيمياء - التفاعلات العضوية';
+
+  @override
+  String get schoolReportWeaknessArabicSpelling => 'اللغة العربية - الإملاء';
+
+  @override
+  String get schoolReportSummaryLoadFailed => 'تعذر تحميل ملخص تقارير المدرسة.';
+
+  @override
+  String get schoolReportComparisonLoadFailed => 'تعذر تحميل مقارنة الفصول.';
+
+  @override
+  String get schoolReportWeaknessLoadFailed => 'تعذر تحميل مهارات الضعف.';
+
+  @override
+  String get schoolReportsUpdated => 'تم تحديث تقارير المدرسة';
+
+  @override
+  String get exportReport => 'تصدير التقرير';
+
+  @override
+  String get schoolReportJsonExportSubtitle =>
+      'ملف منظم يحافظ على كل تفاصيل التقرير';
+
+  @override
+  String get schoolReportCsvExportSubtitle => 'جدول مناسب للمراجعة في Excel';
+
+  @override
+  String get allSubjects => 'كل المواد';
+
+  @override
+  String get allGradeLevels => 'كل المراحل';
+
+  @override
+  String gradeLevelValue(Object gradeLevel) {
+    return 'المرحلة $gradeLevel';
+  }
+
+  @override
+  String currentScope(Object subject, Object grade) {
+    return 'النطاق الحالي: $subject • $grade';
+  }
+
+  @override
+  String get schoolReportNotUpdatedYet => 'لم يتم تحديث التقرير بعد';
+
+  @override
+  String schoolReportLastUpdated(
+      Object year, Object month, Object day, Object hour, Object minute) {
+    return 'آخر تحديث: $year/$month/$day - $hour:$minute';
+  }
+
+  @override
+  String get schoolReportsOverviewTitle => 'تقارير المدرسة الكلية';
+
+  @override
+  String get refreshReports => 'تحديث التقارير';
+
+  @override
+  String get schoolReportsOverviewSubtitle =>
+      'مقارنة شاملة لأداء الفصول ومعدلات المشاركة عبر الأقسام';
+
+  @override
+  String get overallAverageScore => 'متوسط الدرجات العام';
+
+  @override
+  String get participationRate => 'نسبة المشاركة';
+
+  @override
+  String get stableStatus => 'مستقر';
+
+  @override
+  String get topClassroom => 'الفصل المتصدر';
+
+  @override
+  String get topClassroomSummary => 'بمتوسط درجات 92% ومشاركة كاملة';
+
+  @override
+  String get filterComparison => 'تصفية المقارنة';
+
+  @override
+  String get apply => 'تطبيق';
+
+  @override
+  String get filter => 'تصفية';
+
+  @override
+  String get averageScoreComparison => 'مقارنة متوسط الدرجات';
+
+  @override
+  String get classroomFallback => 'فصل';
+
+  @override
+  String get viewAllClassrooms => 'عرض جميع الفصول';
+
+  @override
+  String get strengthPoints => 'نقاط القوة';
+
+  @override
+  String get schoolReportStrengthMathAlgebra => 'الرياضيات - الجبر';
+
+  @override
+  String get schoolReportStrengthScienceBiology => 'العلوم - الأحياء';
+
+  @override
+  String get schoolReportStrengthArabicGrammar => 'اللغة العربية - النحو';
+
+  @override
+  String get schoolReportStrengthSummary =>
+      'أداء استثنائي في فصول المرحلة الأولى.';
+
+  @override
+  String get needsIntervention => 'تحتاج تدخل';
+
+  @override
+  String get schoolReportWeaknessSummary => 'انخفاض ملحوظ يتطلب مراجعة المنهج.';
+
+  @override
+  String get filterData => 'تصفية البيانات';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
+
+  @override
   String get questionBankQualityTitle => 'جودة بنك الأسئلة';
 
   @override
