@@ -751,6 +751,36 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads signup localization labels and messages', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.signupCreateTitle,
+            l10n.signupFullNameRequired,
+            l10n.signupUsernameAllowedChars,
+            l10n.signupRequestSubmitted,
+            l10n.termsAndConditions,
+            l10n.signupCreateAccountError('timeout'),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Create a new account / Full name is required / '
+        'Only English letters, numbers, and _ are allowed / '
+        'Join request submitted. It will appear for the admin to approve '
+        'before sign-in. / Terms and conditions / '
+        'An error occurred while creating the account: timeout',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

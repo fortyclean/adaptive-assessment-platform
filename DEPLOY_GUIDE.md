@@ -1,6 +1,6 @@
 # دليل النشر والتشغيل — EduAssess
 
-> الإصدار المرجعي: `1.0.90`
+> الإصدار المرجعي: `1.0.91`
 > آخر تحديث: مايو 2026
 
 ---
@@ -80,8 +80,8 @@ GET /api/v1/health
 
 ```bash
 cd adaptive-assessment-platform
-gh release create v1.0.90 --title "EduAssess v1.0.90 - Extended onboarding localization" --generate-notes
-gh release upload v1.0.90 adaptive-mastery-v1.0.90.apk --clobber
+gh release create v1.0.91 --title "EduAssess v1.0.91 - Signup localization" --generate-notes
+gh release upload v1.0.91 adaptive-mastery-v1.0.91.apk --clobber
 ```
 
 إن لم يكن `gh` متاحاً، أنشئ الإصدار يدوياً من صفحة المستودع على GitHub وارفع نفس ملف الـ APK.
@@ -113,7 +113,7 @@ flutter build apk --release --dart-define=ONESIGNAL_APP_ID=your_onesignal_app_id
 لتفعيل تتبع الأعطال الإنتاجي، أضف Sentry DSN بدون حفظه داخل المستودع:
 
 ```bash
-flutter build apk --release --dart-define=SENTRY_DSN=https://public@sentry.example/project --dart-define=APP_RELEASE=adaptive-mastery@1.0.90+90 --dart-define=APP_ENV=production
+flutter build apk --release --dart-define=SENTRY_DSN=https://public@sentry.example/project --dart-define=APP_RELEASE=adaptive-mastery@1.0.91+91 --dart-define=APP_ENV=production
 ```
 
 ---
@@ -150,4 +150,4 @@ flutter build apk --release --dart-define=SENTRY_DSN=https://public@sentry.examp
 
 الهدف أن تكون تجربة الاختبار الخارجية قريبة جدًا من الإنتاج.
 
-آخر تحديث: يونيو 2026 | EduAssess v1.0.90
+آخر تحديث: يونيو 2026 | EduAssess v1.0.91

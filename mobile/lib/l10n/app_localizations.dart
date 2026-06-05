@@ -4905,6 +4905,156 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'خوض الاختبارات ومتابعة التقدم'**
   String get extendedOnboardingStudentRoleSubtitle;
+
+  /// No description provided for @signupCreateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء حساب جديد'**
+  String get signupCreateTitle;
+
+  /// No description provided for @signupCreateSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضم إلى مجتمع التعلم الذكي وباشر رحلتك التعليمية'**
+  String get signupCreateSubtitle;
+
+  /// No description provided for @signupFullNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسمك الثلاثي'**
+  String get signupFullNameHint;
+
+  /// No description provided for @signupFullNameRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم الكامل مطلوب'**
+  String get signupFullNameRequired;
+
+  /// No description provided for @email.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
+  String get email;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني مطلوب'**
+  String get emailRequired;
+
+  /// No description provided for @emailInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني غير صحيح'**
+  String get emailInvalid;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور مطلوبة'**
+  String get passwordRequired;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد كلمة المرور'**
+  String get confirmPassword;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء الحساب'**
+  String get createAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'لديك حساب بالفعل؟'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشروط والأحكام'**
+  String get termsAndConditions;
+
+  /// No description provided for @signupTermsRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى الموافقة على الشروط والأحكام'**
+  String get signupTermsRequired;
+
+  /// No description provided for @signupRequestSubmitted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال طلب الانضمام. سيظهر للمشرف للموافقة قبل تسجيل الدخول.'**
+  String get signupRequestSubmitted;
+
+  /// No description provided for @signupUsernameTaken.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم مستخدم بالفعل. اختر اسمًا آخر.'**
+  String get signupUsernameTaken;
+
+  /// No description provided for @signupEmailAlreadyRegistered.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو تواصل مع المشرف.'**
+  String get signupEmailAlreadyRegistered;
+
+  /// No description provided for @signupRequestFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إنشاء طلب الانضمام، تحقق من البيانات وحاول مرة أخرى.'**
+  String get signupRequestFailed;
+
+  /// No description provided for @signupCreateAccountError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ أثناء إنشاء الحساب: {error}'**
+  String signupCreateAccountError(Object error);
+
+  /// No description provided for @signupUsernameRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم مطلوب'**
+  String get signupUsernameRequired;
+
+  /// No description provided for @signupUsernameMinLength.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم يجب أن يكون 3 أحرف على الأقل'**
+  String get signupUsernameMinLength;
+
+  /// No description provided for @signupUsernameAllowedChars.
+  ///
+  /// In ar, this message translates to:
+  /// **'يسمح بالحروف الإنجليزية والأرقام و_ فقط'**
+  String get signupUsernameAllowedChars;
+
+  /// No description provided for @signupTeacherAccountsManagedByAdmin.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابات المعلمين يضيفها المشرف من إدارة المستخدمين.'**
+  String get signupTeacherAccountsManagedByAdmin;
+
+  /// No description provided for @signupAgreePrefix.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق على '**
+  String get signupAgreePrefix;
+
+  /// No description provided for @signupPrivacySuffix.
+  ///
+  /// In ar, this message translates to:
+  /// **' وسياسة الخصوصية الخاصة بالمنصة.'**
+  String get signupPrivacySuffix;
+
+  /// No description provided for @signupTermsDialogBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'باستخدام منصة التقييم التكيفي، أنت توافق على:\n\n1. استخدام المنصة للأغراض التعليمية فقط.\n2. الحفاظ على سرية بيانات الدخول.\n3. عدم مشاركة محتوى الاختبارات مع الآخرين.\n4. الالتزام بقواعد النزاهة الأكاديمية.\n5. قبول سياسة الخصوصية الخاصة بالمنصة.\n\nللاستفسار: support@adaptive-mastery.com'**
+  String get signupTermsDialogBody;
 }
 
 class _AppLocalizationsDelegate

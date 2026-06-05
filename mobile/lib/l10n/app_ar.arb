@@ -1119,5 +1119,35 @@
   "extendedOnboardingTeacherRoleTitle": "أنا معلم",
   "extendedOnboardingTeacherRoleSubtitle": "إنشاء الاختبارات وإدارة الفصول",
   "extendedOnboardingStudentRoleTitle": "أنا طالب",
-  "extendedOnboardingStudentRoleSubtitle": "خوض الاختبارات ومتابعة التقدم"
+  "extendedOnboardingStudentRoleSubtitle": "خوض الاختبارات ومتابعة التقدم",
+  "signupCreateTitle": "إنشاء حساب جديد",
+  "signupCreateSubtitle": "انضم إلى مجتمع التعلم الذكي وباشر رحلتك التعليمية",
+  "signupFullNameHint": "أدخل اسمك الثلاثي",
+  "signupFullNameRequired": "الاسم الكامل مطلوب",
+  "email": "البريد الإلكتروني",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "emailInvalid": "البريد الإلكتروني غير صحيح",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "createAccount": "إنشاء الحساب",
+  "alreadyHaveAccount": "لديك حساب بالفعل؟",
+  "termsAndConditions": "الشروط والأحكام",
+  "signupTermsRequired": "يرجى الموافقة على الشروط والأحكام",
+  "signupRequestSubmitted": "تم إرسال طلب الانضمام. سيظهر للمشرف للموافقة قبل تسجيل الدخول.",
+  "signupUsernameTaken": "اسم المستخدم مستخدم بالفعل. اختر اسمًا آخر.",
+  "signupEmailAlreadyRegistered": "هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو تواصل مع المشرف.",
+  "signupRequestFailed": "تعذر إنشاء طلب الانضمام، تحقق من البيانات وحاول مرة أخرى.",
+  "signupCreateAccountError": "حدث خطأ أثناء إنشاء الحساب: {error}",
+  "@signupCreateAccountError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "signupUsernameRequired": "اسم المستخدم مطلوب",
+  "signupUsernameMinLength": "اسم المستخدم يجب أن يكون 3 أحرف على الأقل",
+  "signupUsernameAllowedChars": "يسمح بالحروف الإنجليزية والأرقام و_ فقط",
+  "signupTeacherAccountsManagedByAdmin": "حسابات المعلمين يضيفها المشرف من إدارة المستخدمين.",
+  "signupAgreePrefix": "أوافق على ",
+  "signupPrivacySuffix": " وسياسة الخصوصية الخاصة بالمنصة.",
+  "signupTermsDialogBody": "باستخدام منصة التقييم التكيفي، أنت توافق على:\n\n1. استخدام المنصة للأغراض التعليمية فقط.\n2. الحفاظ على سرية بيانات الدخول.\n3. عدم مشاركة محتوى الاختبارات مع الآخرين.\n4. الالتزام بقواعد النزاهة الأكاديمية.\n5. قبول سياسة الخصوصية الخاصة بالمنصة.\n\nللاستفسار: support@adaptive-mastery.com"
 }

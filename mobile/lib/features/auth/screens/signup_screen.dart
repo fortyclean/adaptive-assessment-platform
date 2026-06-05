@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../repositories/auth_repository.dart';
 
 /// SignupScreen — Screen 55
@@ -31,6 +32,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   bool _termsAccepted = false;
   bool _isLoading = false;
 
+  AppLocalizations get l10n => AppLocalizations.of(context);
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -45,10 +48,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (!_termsAccepted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'يرجى الموافقة على الشروط والأحكام',
-            style: TextStyle(fontFamily: 'Almarai'),
+            l10n.signupTermsRequired,
+            style: const TextStyle(fontFamily: 'Almarai'),
           ),
           backgroundColor: AppColors.error,
         ),
@@ -67,10 +70,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'تم إرسال طلب الانضمام. سيظهر للمشرف للموافقة قبل تسجيل الدخول.',
-            style: TextStyle(fontFamily: 'Almarai'),
+            l10n.signupRequestSubmitted,
+            style: const TextStyle(fontFamily: 'Almarai'),
           ),
           backgroundColor: AppColors.success,
         ),
@@ -83,9 +86,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           : null;
       final message = e.response?.statusCode == 409
           ? (backendError == 'This username is already taken'
-              ? 'اسم المستخدم مستخدم بالفعل. اختر اسمًا آخر.'
-              : 'هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو تواصل مع المشرف.')
-          : 'تعذر إنشاء طلب الانضمام، تحقق من البيانات وحاول مرة أخرى.';
+              ? l10n.signupUsernameTaken
+              : l10n.signupEmailAlreadyRegistered)
+          : l10n.signupRequestFailed;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message, style: const TextStyle(fontFamily: 'Almarai')),
@@ -97,7 +100,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'حدث خطأ أثناء إنشاء الحساب: $e',
+            l10n.signupCreateAccountError(e.toString()),
             style: const TextStyle(fontFamily: 'Almarai'),
           ),
           backgroundColor: AppColors.error,
@@ -223,9 +226,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'إنشاء حساب جديد',
-              style: TextStyle(
+            Text(
+              l10n.signupCreateTitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
@@ -233,9 +236,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'انضم إلى مجتمع التعلم الذكي وباشر رحلتك التعليمية',
-              style: TextStyle(
+            Text(
+              l10n.signupCreateSubtitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 14,
                 color: AppColors.onSurfaceVariant,
@@ -258,13 +261,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             // Full name
             _buildTextField(
               controller: _nameController,
-              label: 'الاسم الكامل',
-              hint: 'أدخل اسمك الثلاثي',
+              label: l10n.fullName,
+              hint: l10n.signupFullNameHint,
               icon: Icons.badge_outlined,
               keyboardType: TextInputType.name,
               validator: (v) {
                 if (v == null || v.trim().isEmpty) {
-                  return 'الاسم الكامل مطلوب';
+                  return l10n.signupFullNameRequired;
                 }
                 return null;
               },
@@ -274,19 +277,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             // Username
             _buildTextField(
               controller: _usernameController,
-              label: 'اسم المستخدم',
+              label: l10n.username,
               hint: 'teacher_ali',
               icon: Icons.alternate_email_rounded,
               textDirection: TextDirection.ltr,
               validator: (v) {
                 if (v == null || v.trim().isEmpty) {
-                  return 'اسم المستخدم مطلوب';
+                  return l10n.signupUsernameRequired;
                 }
                 if (v.trim().length < 3) {
-                  return 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+                  return l10n.signupUsernameMinLength;
                 }
                 if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(v.trim())) {
-                  return 'يسمح بالحروف الإنجليزية والأرقام و_ فقط';
+                  return l10n.signupUsernameAllowedChars;
                 }
                 return null;
               },
@@ -296,17 +299,17 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             // Email
             _buildTextField(
               controller: _emailController,
-              label: 'البريد الإلكتروني',
+              label: l10n.email,
               hint: 'example@domain.com',
               icon: Icons.mail_outlined,
               keyboardType: TextInputType.emailAddress,
               textDirection: TextDirection.ltr,
               validator: (v) {
                 if (v == null || v.trim().isEmpty) {
-                  return 'البريد الإلكتروني مطلوب';
+                  return l10n.emailRequired;
                 }
                 if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v)) {
-                  return 'البريد الإلكتروني غير صحيح';
+                  return l10n.emailInvalid;
                 }
                 return null;
               },
@@ -316,18 +319,18 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             // Password
             _buildPasswordField(
               controller: _passwordController,
-              label: 'كلمة المرور',
+              label: l10n.password,
               isVisible: _passwordVisible,
               onToggleVisibility: () =>
                   setState(() => _passwordVisible = !_passwordVisible),
               validator: (v) {
-                if (v == null || v.isEmpty) return 'كلمة المرور مطلوبة';
-                if (v.length < 8) return 'يجب أن تكون 8 أحرف على الأقل';
+                if (v == null || v.isEmpty) return l10n.passwordRequired;
+                if (v.length < 8) return l10n.passwordMinLength;
                 if (!RegExp('[A-Z]').hasMatch(v)) {
-                  return 'يجب أن تحتوي على حرف كبير';
+                  return l10n.passwordNeedsUppercase;
                 }
                 if (!RegExp('[0-9]').hasMatch(v)) {
-                  return 'يجب أن تحتوي على رقم';
+                  return l10n.passwordNeedsDigit;
                 }
                 return null;
               },
@@ -337,16 +340,16 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             // Confirm password
             _buildPasswordField(
               controller: _confirmPasswordController,
-              label: 'تأكيد كلمة المرور',
+              label: l10n.confirmPassword,
               icon: Icons.enhanced_encryption_outlined,
               isVisible: _confirmPasswordVisible,
               onToggleVisibility: () => setState(
                   () => _confirmPasswordVisible = !_confirmPasswordVisible),
               showToggle: false,
               validator: (v) {
-                if (v == null || v.isEmpty) return 'تأكيد كلمة المرور مطلوب';
+                if (v == null || v.isEmpty) return l10n.confirmPasswordRequired;
                 if (v != _passwordController.text) {
-                  return 'كلمتا المرور غير متطابقتين';
+                  return l10n.passwordsDoNotMatch;
                 }
                 return null;
               },
@@ -378,14 +381,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               child: _buildRoleButton(
                 role: 'student',
                 icon: Icons.person_rounded,
-                label: 'طالب',
+                label: l10n.studentRole,
               ),
             ),
             Expanded(
               child: _buildRoleButton(
                 role: 'teacher',
                 icon: Icons.workspace_premium_rounded,
-                label: 'معلم',
+                label: l10n.teacherRole,
               ),
             ),
           ],
@@ -404,10 +407,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         setState(() => _selectedRole = role);
         if (role == 'teacher_disabled') {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
-                'حسابات المعلمين يضيفها المشرف من إدارة المستخدمين.',
-                style: TextStyle(fontFamily: 'Almarai'),
+                l10n.signupTeacherAccountsManagedByAdmin,
+                style: const TextStyle(fontFamily: 'Almarai'),
               ),
               backgroundColor: AppColors.primary,
             ),
@@ -634,7 +637,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     height: 1.6,
                   ),
                   children: [
-                    const TextSpan(text: 'أوافق على '),
+                    TextSpan(text: l10n.signupAgreePrefix),
                     WidgetSpan(
                       child: GestureDetector(
                         onTap: () {
@@ -643,18 +646,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             builder: (ctx) => AlertDialog(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16)),
-                              title: const Text('الشروط والأحكام'),
-                              content: const SingleChildScrollView(
+                              title: Text(l10n.termsAndConditions),
+                              content: SingleChildScrollView(
                                 child: Text(
-                                  'باستخدام منصة التقييم التكيفي، أنت توافق على:\n\n'
-                                  '1. استخدام المنصة للأغراض التعليمية فقط.\n'
-                                  '2. الحفاظ على سرية بيانات الدخول.\n'
-                                  '3. عدم مشاركة محتوى الاختبارات مع الآخرين.\n'
-                                  '4. الالتزام بقواعد النزاهة الأكاديمية.\n'
-                                  '5. قبول سياسة الخصوصية الخاصة بالمنصة.\n\n'
-                                  'للاستفسار: support@adaptive-mastery.com',
+                                  l10n.signupTermsDialogBody,
                                   textDirection: TextDirection.rtl,
-                                  style: TextStyle(height: 1.6),
+                                  style: const TextStyle(height: 1.6),
                                 ),
                               ),
                               actions: [
@@ -663,15 +660,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.primary,
                                       foregroundColor: Colors.white),
-                                  child: const Text('موافق'),
+                                  child: Text(l10n.ok),
                                 ),
                               ],
                             ),
                           );
                         },
-                        child: const Text(
-                          'الشروط والأحكام',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.termsAndConditions,
+                          style: const TextStyle(
                             fontFamily: 'Almarai',
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -682,9 +679,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
                     ),
-                    const TextSpan(
-                      text: ' وسياسة الخصوصية الخاصة بالمنصة.',
-                    ),
+                    TextSpan(text: l10n.signupPrivacySuffix),
                   ],
                 ),
               ),
@@ -728,14 +723,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 )
-              : const Row(
+              : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.app_registration_rounded, size: 20),
-                    SizedBox(width: 8),
+                    const Icon(Icons.app_registration_rounded, size: 20),
+                    const SizedBox(width: 8),
                     Text(
-                      'إنشاء الحساب',
-                      style: TextStyle(
+                      l10n.createAccount,
+                      style: const TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -753,9 +748,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         children: [
           GestureDetector(
             onTap: () => context.go(AppRoutes.login),
-            child: const Text(
-              'تسجيل الدخول',
-              style: TextStyle(
+            child: Text(
+              l10n.login,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
@@ -764,9 +759,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
           ),
           const SizedBox(width: 4),
-          const Text(
-            'لديك حساب بالفعل؟',
-            style: TextStyle(
+          Text(
+            l10n.alreadyHaveAccount,
+            style: const TextStyle(
               fontFamily: 'Almarai',
               fontSize: 14,
               color: AppColors.onSurfaceVariant,

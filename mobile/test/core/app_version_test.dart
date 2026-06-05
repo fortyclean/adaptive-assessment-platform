@@ -5,10 +5,10 @@ import 'package:adaptive_assessment/core/constants/app_version.dart';
 void main() {
   group('AppVersion', () {
     test('current version matches pubspec contract', () {
-      expect(AppVersion.current, '1.0.90');
-      expect(AppVersion.buildNumber, 90);
-      expect(AppVersion.display, contains('1.0.90'));
-      expect(AppVersion.display, contains('(90)'));
+      expect(AppVersion.current, '1.0.91');
+      expect(AppVersion.buildNumber, 91);
+      expect(AppVersion.display, contains('1.0.91'));
+      expect(AppVersion.display, contains('(91)'));
     });
 
     test('changelog head matches current release', () {

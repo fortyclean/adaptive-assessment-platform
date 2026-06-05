@@ -2658,4 +2658,90 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get extendedOnboardingStudentRoleSubtitle =>
       'Take assessments and track progress';
+
+  @override
+  String get signupCreateTitle => 'Create a new account';
+
+  @override
+  String get signupCreateSubtitle =>
+      'Join the smart learning community and start your learning journey';
+
+  @override
+  String get signupFullNameHint => 'Enter your full name';
+
+  @override
+  String get signupFullNameRequired => 'Full name is required';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get emailInvalid => 'Email is not valid';
+
+  @override
+  String get passwordRequired => 'Password is required';
+
+  @override
+  String get confirmPassword => 'Confirm password';
+
+  @override
+  String get createAccount => 'Create account';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get termsAndConditions => 'Terms and conditions';
+
+  @override
+  String get signupTermsRequired => 'Please agree to the terms and conditions';
+
+  @override
+  String get signupRequestSubmitted =>
+      'Join request submitted. It will appear for the admin to approve before sign-in.';
+
+  @override
+  String get signupUsernameTaken =>
+      'Username is already taken. Choose another one.';
+
+  @override
+  String get signupEmailAlreadyRegistered =>
+      'This email is already registered. Sign in or contact the admin.';
+
+  @override
+  String get signupRequestFailed =>
+      'Could not create the join request. Check the information and try again.';
+
+  @override
+  String signupCreateAccountError(Object error) {
+    return 'An error occurred while creating the account: $error';
+  }
+
+  @override
+  String get signupUsernameRequired => 'Username is required';
+
+  @override
+  String get signupUsernameMinLength =>
+      'Username must be at least 3 characters';
+
+  @override
+  String get signupUsernameAllowedChars =>
+      'Only English letters, numbers, and _ are allowed';
+
+  @override
+  String get signupTeacherAccountsManagedByAdmin =>
+      'Teacher accounts are added by the admin from user management.';
+
+  @override
+  String get signupAgreePrefix => 'I agree to ';
+
+  @override
+  String get signupPrivacySuffix => ' and the platform privacy policy.';
+
+  @override
+  String get signupTermsDialogBody =>
+      'By using the adaptive assessment platform, you agree to:\n\n1. Use the platform for educational purposes only.\n2. Keep sign-in credentials confidential.\n3. Not share assessment content with others.\n4. Follow academic integrity rules.\n5. Accept the platform privacy policy.\n\nFor inquiries: support@adaptive-mastery.com';
 }

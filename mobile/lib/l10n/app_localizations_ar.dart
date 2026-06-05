@@ -2625,4 +2625,90 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get extendedOnboardingStudentRoleSubtitle =>
       'خوض الاختبارات ومتابعة التقدم';
+
+  @override
+  String get signupCreateTitle => 'إنشاء حساب جديد';
+
+  @override
+  String get signupCreateSubtitle =>
+      'انضم إلى مجتمع التعلم الذكي وباشر رحلتك التعليمية';
+
+  @override
+  String get signupFullNameHint => 'أدخل اسمك الثلاثي';
+
+  @override
+  String get signupFullNameRequired => 'الاسم الكامل مطلوب';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get emailRequired => 'البريد الإلكتروني مطلوب';
+
+  @override
+  String get emailInvalid => 'البريد الإلكتروني غير صحيح';
+
+  @override
+  String get passwordRequired => 'كلمة المرور مطلوبة';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get createAccount => 'إنشاء الحساب';
+
+  @override
+  String get alreadyHaveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get termsAndConditions => 'الشروط والأحكام';
+
+  @override
+  String get signupTermsRequired => 'يرجى الموافقة على الشروط والأحكام';
+
+  @override
+  String get signupRequestSubmitted =>
+      'تم إرسال طلب الانضمام. سيظهر للمشرف للموافقة قبل تسجيل الدخول.';
+
+  @override
+  String get signupUsernameTaken =>
+      'اسم المستخدم مستخدم بالفعل. اختر اسمًا آخر.';
+
+  @override
+  String get signupEmailAlreadyRegistered =>
+      'هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو تواصل مع المشرف.';
+
+  @override
+  String get signupRequestFailed =>
+      'تعذر إنشاء طلب الانضمام، تحقق من البيانات وحاول مرة أخرى.';
+
+  @override
+  String signupCreateAccountError(Object error) {
+    return 'حدث خطأ أثناء إنشاء الحساب: $error';
+  }
+
+  @override
+  String get signupUsernameRequired => 'اسم المستخدم مطلوب';
+
+  @override
+  String get signupUsernameMinLength =>
+      'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+
+  @override
+  String get signupUsernameAllowedChars =>
+      'يسمح بالحروف الإنجليزية والأرقام و_ فقط';
+
+  @override
+  String get signupTeacherAccountsManagedByAdmin =>
+      'حسابات المعلمين يضيفها المشرف من إدارة المستخدمين.';
+
+  @override
+  String get signupAgreePrefix => 'أوافق على ';
+
+  @override
+  String get signupPrivacySuffix => ' وسياسة الخصوصية الخاصة بالمنصة.';
+
+  @override
+  String get signupTermsDialogBody =>
+      'باستخدام منصة التقييم التكيفي، أنت توافق على:\n\n1. استخدام المنصة للأغراض التعليمية فقط.\n2. الحفاظ على سرية بيانات الدخول.\n3. عدم مشاركة محتوى الاختبارات مع الآخرين.\n4. الالتزام بقواعد النزاهة الأكاديمية.\n5. قبول سياسة الخصوصية الخاصة بالمنصة.\n\nللاستفسار: support@adaptive-mastery.com';
 }

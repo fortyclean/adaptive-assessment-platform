@@ -1119,5 +1119,35 @@
   "extendedOnboardingTeacherRoleTitle": "I am a teacher",
   "extendedOnboardingTeacherRoleSubtitle": "Create assessments and manage classes",
   "extendedOnboardingStudentRoleTitle": "I am a student",
-  "extendedOnboardingStudentRoleSubtitle": "Take assessments and track progress"
+  "extendedOnboardingStudentRoleSubtitle": "Take assessments and track progress",
+  "signupCreateTitle": "Create a new account",
+  "signupCreateSubtitle": "Join the smart learning community and start your learning journey",
+  "signupFullNameHint": "Enter your full name",
+  "signupFullNameRequired": "Full name is required",
+  "email": "Email",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Email is not valid",
+  "passwordRequired": "Password is required",
+  "confirmPassword": "Confirm password",
+  "createAccount": "Create account",
+  "alreadyHaveAccount": "Already have an account?",
+  "termsAndConditions": "Terms and conditions",
+  "signupTermsRequired": "Please agree to the terms and conditions",
+  "signupRequestSubmitted": "Join request submitted. It will appear for the admin to approve before sign-in.",
+  "signupUsernameTaken": "Username is already taken. Choose another one.",
+  "signupEmailAlreadyRegistered": "This email is already registered. Sign in or contact the admin.",
+  "signupRequestFailed": "Could not create the join request. Check the information and try again.",
+  "signupCreateAccountError": "An error occurred while creating the account: {error}",
+  "@signupCreateAccountError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "signupUsernameRequired": "Username is required",
+  "signupUsernameMinLength": "Username must be at least 3 characters",
+  "signupUsernameAllowedChars": "Only English letters, numbers, and _ are allowed",
+  "signupTeacherAccountsManagedByAdmin": "Teacher accounts are added by the admin from user management.",
+  "signupAgreePrefix": "I agree to ",
+  "signupPrivacySuffix": " and the platform privacy policy.",
+  "signupTermsDialogBody": "By using the adaptive assessment platform, you agree to:\n\n1. Use the platform for educational purposes only.\n2. Keep sign-in credentials confidential.\n3. Not share assessment content with others.\n4. Follow academic integrity rules.\n5. Accept the platform privacy policy.\n\nFor inquiries: support@adaptive-mastery.com"
 }
