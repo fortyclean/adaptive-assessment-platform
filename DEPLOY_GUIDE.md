@@ -99,6 +99,7 @@ gh release upload v1.0.97 adaptive-mastery-v1.0.97.apk --clobber
 ثم نفذ:
 
 ```bash
+# إلزامي قبل أي APK رسمي حتى لا يدخل build cache قديم في حزمة الإصدار
 flutter clean
 flutter pub get
 flutter build apk --release
@@ -125,6 +126,8 @@ flutter build apk --release --dart-define=SENTRY_DSN=https://public@sentry.examp
 3. لا يتم تغيير الهوية البصرية أو نمط التصميم المعتمد بدون طلب صريح.
 4. عند وجود ميزة غير مكتملة (مثل ثيم جزئي)، تُخفى مؤقتًا بدل إظهار سلوك مضلل.
 5. وضع Demo يجب أن يحاكي إعدادات Online قدر الإمكان لاختبارات الصلاحيات والتنقل.
+6. لا يعتمد أي APK رسمي حتى يثبت أن ملف APK النهائي نفسه يحتوي الإصدار الحالي داخل Android manifest وداخل شاشة "عن التطبيق".
+7. إذا ظهر `versionName` صحيح لكن شاشة "عن التطبيق" تعرض رقمًا أقدم، أعد البناء من الصفر باستخدام `flutter clean` واستبدل APK النهائي.
 
 ---
 
@@ -136,7 +139,10 @@ flutter build apk --release --dart-define=SENTRY_DSN=https://public@sentry.examp
 - [ ] النصوص العربية لا تحتوي على ألفاظ إنجليزية غير مقصودة
 - [ ] لا يوجد Overflow بصري في الشاشات أو سجل الإصدارات
 - [ ] زر تسجيل الخروج + عن التطبيق + الإعدادات متاحة في أماكنها
-- [ ] البناء النهائي يعمل: `flutter build apk --release`
+- [ ] البناء النهائي تم بعد `flutter clean` و`flutter pub get`
+- [ ] `aapt dump badging adaptive-mastery-v{VERSION}.apk` يعرض `versionName` و`versionCode` الصحيحين
+- [ ] APK النهائي لا يحتوي رقم إصدار قديم في شاشة "عن التطبيق"
+- [ ] تم حساب SHA256 للـ APK النهائي بعد نسخه إلى جذر المشروع
 
 ---
 

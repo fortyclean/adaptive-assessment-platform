@@ -68,9 +68,22 @@ adaptive-mastery-v{VERSION}.apk
 
 ## 2. قواعد بناء APK
 
+### قاعدة إلزامية: البناء الرسمي يجب أن يكون نظيفًا
+- قبل أي APK رسمي أو APK مخصص للتسليم يجب تنفيذ `flutter clean` ثم `flutter pub get` ثم البناء من جديد. لا يُعتمد APK رسمي مبني فوق cache قديم.
+- يجب عدم الاكتفاء بأن Android manifest يعرض `versionName` و`versionCode` الصحيحين؛ يجب أن يكون كود Flutter/Dart داخل APK محدثًا أيضًا.
+- بعد نسخ APK إلى جذر المشروع، يجب التحقق من الملف النهائي نفسه:
+  - `aapt dump badging adaptive-mastery-v{VERSION}.apk` يجب أن يعرض `versionCode` و`versionName` الصحيحين.
+  - يجب البحث داخل APK عن نص الإصدار الحالي مثل `EduAssess vX.X.X` أو `الإصدار X.X.X` والتأكد أنه لا يعرض إصدارًا أقدم في شاشة "عن التطبيق".
+- إذا ظهر اختلاف بين `versionName` في Android ورقم الإصدار داخل شاشة "عن التطبيق"، فالسبب المحتمل cache بناء قديم، ويجب إعادة تنفيذ `flutter clean` وبناء APK جديد واستبدال الملف السابق.
+- فحص الهاتف عبر ADB أو الفحص اليدوي يُنفذ عند الحاجة أو عند طلب المستخدم، لكن صحة ملف APK نفسه شرط إلزامي قبل التسليم.
+
 ### أمر البناء القياسي
 ```bash
 cd "E:\Farid baghoza\Education study\adaptive-assessment-platform\mobile"
+
+# إلزامي قبل أي APK رسمي
+flutter clean
+flutter pub get
 
 # APK مع Backend الحقيقي (Render)
 flutter build apk --release ^
@@ -97,6 +110,12 @@ app-release.apk → adaptive-mastery-v{VERSION}.apk
 ```
 adaptive-assessment-platform\adaptive-mastery-v{VERSION}.apk
 ```
+
+### تحقق إلزامي بعد البناء
+لا يعتبر البناء صحيحًا حتى يتم التحقق من:
+1. `versionName` و`versionCode` داخل APK عبر `aapt dump badging`.
+2. ظهور الإصدار الحالي داخل محتوى APK/شاشة "عن التطبيق"، وليس إصدارًا قديمًا من build cache.
+3. بصمة SHA256 للملف النهائي بعد نسخه إلى جذر المشروع.
 
 ---
 
@@ -235,13 +254,15 @@ lib/
 1. تحديث رقم الإصدار في `pubspec.yaml` و`package.json`
 2. بناء Backend وتشغيل الاختبارات
 3. نشر Backend على Railway/Render
-4. بناء APK مع الـ API URL الصحيح
+4. تنفيذ `flutter clean` و`flutter pub get` ثم بناء APK مع الـ API URL الصحيح
 5. تسمية APK بالإصدار الصحيح
-6. تحديث `دليل_استخدام_التطبيق.md` بسجل التحديثات
-7. تحديث `DEPLOY_GUIDE.md`
-8. رفع APK على GitHub Releases
-9. **إلزامي من 2026-05-22:** بعد نجاح الاختبارات والبناء، يجب عمل `git commit` ثم `git push` إلى GitHub لنفس الفرع قبل اعتبار أي إصدار أو تحسين مكتملًا.
-10. إذا تعذر تنفيذ `push` بسبب مشكلة مصادقة أو تعارض مع الريموت، يجب ذكر السبب بوضوح في التقرير النهائي وعدم اعتبار المهمة منشورة.
+6. التحقق من `versionName`/`versionCode` ومن رقم الإصدار داخل محتوى APK وشاشة "عن التطبيق"
+7. حساب SHA256 للـ APK النهائي
+8. تحديث `دليل_استخدام_التطبيق.md` بسجل التحديثات
+9. تحديث `DEPLOY_GUIDE.md`
+10. رفع APK على GitHub Releases
+11. **إلزامي من 2026-05-22:** بعد نجاح الاختبارات والبناء، يجب عمل `git commit` ثم `git push` إلى GitHub لنفس الفرع قبل اعتبار أي إصدار أو تحسين مكتملًا.
+12. إذا تعذر تنفيذ `push` بسبب مشكلة مصادقة أو تعارض مع الريموت، يجب ذكر السبب بوضوح في التقرير النهائي وعدم اعتبار المهمة منشورة.
 
 ### GitHub Releases
 - Tag: `v{VERSION}` (مثل `v1.0.7`)
