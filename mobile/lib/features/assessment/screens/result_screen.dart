@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Results Screen — Screen 4 & 16
@@ -68,10 +69,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen>
   /// التحقق مما إذا كان attemptId يشير إلى وضع demo/mock
   bool get _isDemoAttempt {
     final id = widget.attemptId;
-    return AppConstants.useMockData &&
-        (id.startsWith('demo-') ||
-            id.startsWith('mock') ||
-            id.startsWith('local-'));
+    final token = ref.read(authProvider).accessToken ?? '';
+    return id.startsWith('demo-') ||
+        id.startsWith('mock') ||
+        id.startsWith('local-') ||
+        token.startsWith('demo-token-') ||
+        AppConstants.useMockData;
   }
 
   Future<void> _loadResult() async {

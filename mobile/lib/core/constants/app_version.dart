@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.97';
-  static const int buildNumber = 97;
+  static const String current = '1.0.98';
+  static const int buildNumber = 98;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.98',
+      buildNumber: 98,
+      date: 'يونيو 2026',
+      title: 'إصلاح نتائج الطالب والتحقق على الهاتف',
+      changes: [
+        'تحسين بطاقات النتائج السابقة لتظهر بوضوح على الهاتف وتدعم فتح النتيجة من كامل البطاقة.',
+        'إصلاح زر مراجعة النتيجة في وضع الطالب التجريبي للوصول إلى شاشة النتيجة بثبات.',
+        'إعادة التحقق من شاشة الإطلاق على جهاز Android فعلي والتأكد من ظهور الشعار على خلفية فاتحة.',
+        'توثيق أن اختبار OneSignal الحقيقي يحتاج بناء النسخة مع ONESIGNAL_APP_ID قبل إرسال إشعار من لوحة التحكم.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.97',
       buildNumber: 97,

@@ -755,6 +755,9 @@ class _StudentAssessmentsScreenState
     final assessment = attempt['assessmentId'] as Map<String, dynamic>?;
     final title = assessment?['title'] as String? ??
         AppLocalizations.of(context).assessmentFallback;
+    final attemptId = attempt['_id'] as String? ?? 'demo-attempt';
+    final resultAttemptId =
+        _shouldUseDemoFallback ? 'demo-$attemptId' : attemptId;
     final score = (attempt['scorePercentage'] as num?)?.toDouble() ?? 0.0;
     final submittedAt = attempt['submittedAt'] != null
         ? DateTime.tryParse(attempt['submittedAt'] as String)
@@ -767,86 +770,114 @@ class _StudentAssessmentsScreenState
         : '';
     final scoreColor = score >= 70 ? AppColors.success : AppColors.error;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+    void openResult() => context.push('/student/results/$resultAttemptId');
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          OutlinedButton(
-            onPressed: () => context.push('/student/results/${attempt['_id']}'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              side: const BorderSide(color: AppColors.primary),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          onTap: openResult,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: double.infinity,
+            constraints: const BoxConstraints(minHeight: 96),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
-            ),
-            child: Text(
-              AppLocalizations.of(context).review,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  textAlign: TextAlign.right,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-                if (dateStr.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    dateStr,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: AppColors.onSurfaceVariant,
+              ],
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 108,
+                  child: OutlinedButton(
+                    onPressed: openResult,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    textAlign: TextAlign.right,
+                    child: Text(
+                      AppLocalizations.of(context).review,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ],
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.right,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (dateStr.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          dateStr,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: scoreColor, width: 4),
+                    color: scoreColor.withValues(alpha: 0.08),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${score.round()}%',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: scoreColor,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: scoreColor, width: 4),
-            ),
-            child: Center(
-              child: Text(
-                '${score.round()}%',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: scoreColor,
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
