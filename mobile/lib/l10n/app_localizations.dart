@@ -5097,6 +5097,247 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'طارئ'**
   String get versionTypeHotfix;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسيت كلمة المرور'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordResetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تعيين كلمة المرور'**
+  String get forgotPasswordResetTitle;
+
+  /// No description provided for @forgotPasswordResetSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل بريدك الإلكتروني وسنرسل لك رمز إعادة التعيين'**
+  String get forgotPasswordResetSubtitle;
+
+  /// No description provided for @forgotPasswordGenericError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ. يرجى المحاولة مرة أخرى'**
+  String get forgotPasswordGenericError;
+
+  /// No description provided for @forgotPasswordSendCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال رمز التحقق'**
+  String get forgotPasswordSendCode;
+
+  /// No description provided for @forgotPasswordSentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الإرسال بنجاح'**
+  String get forgotPasswordSentTitle;
+
+  /// No description provided for @forgotPasswordSentSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من بريدك الإلكتروني للحصول على رمز إعادة التعيين'**
+  String get forgotPasswordSentSubtitle;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة لتسجيل الدخول'**
+  String get backToLogin;
+
+  /// No description provided for @adminDashboardLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات لوحة المشرف. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get adminDashboardLoadFailed;
+
+  /// No description provided for @adminDashboardGreeting.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحباً، {name}'**
+  String adminDashboardGreeting(Object name);
+
+  /// No description provided for @adminDashboardTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة تحكم المشرف'**
+  String get adminDashboardTitle;
+
+  /// No description provided for @adminDashboardSchoolStats.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحصائيات المدرسة'**
+  String get adminDashboardSchoolStats;
+
+  /// No description provided for @adminDashboardTeachers.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلمون'**
+  String get adminDashboardTeachers;
+
+  /// No description provided for @adminDashboardAdminAlerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنبيهات الإدارية'**
+  String get adminDashboardAdminAlerts;
+
+  /// No description provided for @adminDashboardPendingStudentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلاب لم يؤدوا الاختبار'**
+  String get adminDashboardPendingStudentsTitle;
+
+  /// No description provided for @adminDashboardPendingStudentsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوجد {count} طلاب لم يسلموا الاختبار الأخير'**
+  String adminDashboardPendingStudentsSubtitle(Object count);
+
+  /// No description provided for @adminDashboardPendingRequestsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات انضمام جديدة'**
+  String get adminDashboardPendingRequestsTitle;
+
+  /// No description provided for @adminDashboardPendingRequestsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوجد {count} طلبات انضمام تنتظر الموافقة'**
+  String adminDashboardPendingRequestsSubtitle(Object count);
+
+  /// No description provided for @adminDashboardPerformanceDropTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'انخفاض في الأداء'**
+  String get adminDashboardPerformanceDropTitle;
+
+  /// No description provided for @adminDashboardMathClassLevelTen.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصل الرياضيات - المستوى العاشر'**
+  String get adminDashboardMathClassLevelTen;
+
+  /// No description provided for @quickLinks.
+  ///
+  /// In ar, this message translates to:
+  /// **'روابط سريعة'**
+  String get quickLinks;
+
+  /// No description provided for @userManagement.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة المستخدمين'**
+  String get userManagement;
+
+  /// No description provided for @adminDashboardUserManagementSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة وتعديل حسابات المعلمين والطلاب'**
+  String get adminDashboardUserManagementSubtitle;
+
+  /// No description provided for @classroomManagement.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الفصول'**
+  String get classroomManagement;
+
+  /// No description provided for @adminDashboardClassroomManagementSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض وتنظيم الفصول الدراسية'**
+  String get adminDashboardClassroomManagementSubtitle;
+
+  /// No description provided for @schoolReports.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير المدرسة'**
+  String get schoolReports;
+
+  /// No description provided for @adminDashboardSchoolReportsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحليلات شاملة لأداء المدرسة'**
+  String get adminDashboardSchoolReportsSubtitle;
+
+  /// No description provided for @adminDashboardAdvancedDashboard.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة التحكم المتقدمة'**
+  String get adminDashboardAdvancedDashboard;
+
+  /// No description provided for @adminDashboardAdvancedDashboardSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحصائيات وتحليلات تفصيلية للمشرف'**
+  String get adminDashboardAdvancedDashboardSubtitle;
+
+  /// No description provided for @adminDashboardSupervisorDashboard.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة المشرف المتقدمة'**
+  String get adminDashboardSupervisorDashboard;
+
+  /// No description provided for @adminDashboardSupervisorDashboardSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحصائيات وتحليلات تفصيلية'**
+  String get adminDashboardSupervisorDashboardSubtitle;
+
+  /// No description provided for @institutionSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات المؤسسة'**
+  String get institutionSettings;
+
+  /// No description provided for @adminDashboardInstitutionSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضبط إعدادات المؤسسة التعليمية'**
+  String get adminDashboardInstitutionSettingsSubtitle;
+
+  /// No description provided for @performanceOverview.
+  ///
+  /// In ar, this message translates to:
+  /// **'نظرة عامة على الأداء'**
+  String get performanceOverview;
+
+  /// No description provided for @adminDashboardPerformanceOverviewSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط أداء المدرسة هذا الشهر'**
+  String get adminDashboardPerformanceOverviewSubtitle;
+
+  /// No description provided for @adminDashboardMonthlyPerformanceChange.
+  ///
+  /// In ar, this message translates to:
+  /// **'{direction} بنسبة {percentage}% هذا الشهر'**
+  String adminDashboardMonthlyPerformanceChange(
+      Object direction, Object percentage);
+
+  /// No description provided for @adminDashboardSchoolAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط أداء المدرسة'**
+  String get adminDashboardSchoolAverage;
+
+  /// No description provided for @improvement.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحسن'**
+  String get improvement;
+
+  /// No description provided for @decline.
+  ///
+  /// In ar, this message translates to:
+  /// **'انخفاض'**
+  String get decline;
+
+  /// No description provided for @math.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات'**
+  String get math;
 }
 
 class _AppLocalizationsDelegate

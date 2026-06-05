@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -48,10 +49,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
       final isDemoSession =
           (authState.accessToken ?? '').startsWith('demo-token-');
       if (!AppConstants.useMockData && !isDemoSession) {
+        final l10n = AppLocalizations.of(context);
         setState(() {
           _isLoading = false;
-          _errorMessage =
-              'تعذر تحميل بيانات لوحة المشرف. تحقق من الاتصال ثم أعد المحاولة.';
+          _errorMessage = l10n.adminDashboardLoadFailed;
         });
         return;
       }
@@ -81,7 +82,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
     final summary = _schoolReport?['summary'] as Map<String, dynamic>? ?? {};
     final alerts = _schoolReport?['alerts'] as Map<String, dynamic>? ?? {};
     final schoolAverage = summary['schoolAverage'] as num?;
+    final pendingStudents = alerts['pendingStudents'] as num? ?? 0;
+    final pendingRequests = alerts['pendingRequests'] as num? ?? 0;
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -94,7 +98,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'مرحباً، ${user?.fullName ?? ''}',
+              l10n.adminDashboardGreeting(user?.fullName ?? ''),
               style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 18,
@@ -102,9 +106,9 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                 color: AppColors.primary,
               ),
             ),
-            const Text(
-              'لوحة تحكم المشرف',
-              style: TextStyle(
+            Text(
+              l10n.adminDashboardTitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -151,7 +155,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         ElevatedButton.icon(
                           onPressed: _loadData,
                           icon: const Icon(Icons.refresh),
-                          label: const Text('إعادة المحاولة'),
+                          label: Text(l10n.retry),
                         ),
                       ],
                     ),
@@ -175,12 +179,12 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       ],
 
                       // ─── Bento Grid Stats ───────────────────────────────────
-                      const _SectionHeader(title: 'إحصائيات المدرسة'),
+                      _SectionHeader(title: l10n.adminDashboardSchoolStats),
                       const SizedBox(height: 12),
                       _BentoGrid(
                         children: [
                           _BentoCard(
-                            label: 'المعلمون',
+                            label: l10n.adminDashboardTeachers,
                             value: '${summary['totalTeachers'] ?? 0}',
                             icon: Icons.person_rounded,
                             color: AppColors.primary,
@@ -191,7 +195,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                             ),
                           ),
                           _BentoCard(
-                            label: 'الطلاب',
+                            label: l10n.students,
                             value: '${summary['totalStudents'] ?? 0}',
                             icon: Icons.school_rounded,
                             color: AppColors.success,
@@ -202,7 +206,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                             ),
                           ),
                           _BentoCard(
-                            label: 'الفصول',
+                            label: l10n.classrooms,
                             value: '${summary['totalClassrooms'] ?? 0}',
                             icon: Icons.class_rounded,
                             color: AppColors.warning,
@@ -211,7 +215,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                                 context.push(AppRoutes.adminClassrooms),
                           ),
                           _BentoCard(
-                            label: 'الاختبارات',
+                            label: l10n.assessments,
                             value: '${summary['totalAssessments'] ?? 0}',
                             icon: Icons.quiz_rounded,
                             color: AppColors.primaryContainer,
@@ -224,15 +228,16 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       const SizedBox(height: 24),
 
                       // ─── Administrative Alerts ──────────────────────────────
-                      const _SectionHeader(title: 'التنبيهات الإدارية'),
+                      _SectionHeader(title: l10n.adminDashboardAdminAlerts),
                       const SizedBox(height: 12),
                       _AlertCard(
                         icon: Icons.warning_rounded,
                         iconColor: AppColors.error,
                         iconBgColor: AppColors.errorContainer,
-                        title: 'طلاب لم يؤدوا الاختبار',
-                        subtitle:
-                            'يوجد ${alerts['pendingStudents'] ?? 0} طلاب لم يسلموا الاختبار الأخير',
+                        title: l10n.adminDashboardPendingStudentsTitle,
+                        subtitle: l10n.adminDashboardPendingStudentsSubtitle(
+                          pendingStudents,
+                        ),
                         onTap: () => context.push(
                           AppRoutes.adminUsers,
                           extra: {'initialFilter': 'student'},
@@ -243,9 +248,10 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         icon: Icons.notification_important_rounded,
                         iconColor: AppColors.primary,
                         iconBgColor: const Color(0xFFDDE1FF),
-                        title: 'طلبات انضمام جديدة',
-                        subtitle:
-                            'يوجد ${alerts['pendingRequests'] ?? 0} طلبات انضمام تنتظر الموافقة',
+                        title: l10n.adminDashboardPendingRequestsTitle,
+                        subtitle: l10n.adminDashboardPendingRequestsSubtitle(
+                          pendingRequests,
+                        ),
                         onTap: () => context.push(
                           AppRoutes.adminUsers,
                           extra: {'initialFilter': 'pending'},
@@ -256,13 +262,13 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                         icon: Icons.trending_down_rounded,
                         iconColor: AppColors.warning,
                         iconBgColor: const Color(0xFFFEF3C7),
-                        title: 'انخفاض في الأداء',
-                        subtitle: 'فصل الرياضيات - المستوى العاشر',
+                        title: l10n.adminDashboardPerformanceDropTitle,
+                        subtitle: l10n.adminDashboardMathClassLevelTen,
                         onTap: () => context.push(
                           AppRoutes.adminReports,
                           extra: {
                             'gradeLevel': '10',
-                            'subject': 'الرياضيات',
+                            'subject': l10n.math,
                           },
                         ),
                       ),
@@ -270,12 +276,12 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       const SizedBox(height: 24),
 
                       // ─── Quick Access Links ─────────────────────────────────
-                      const _SectionHeader(title: 'روابط سريعة'),
+                      _SectionHeader(title: l10n.quickLinks),
                       const SizedBox(height: 12),
                       _QuickLink(
                         icon: Icons.people_rounded,
-                        title: 'إدارة المستخدمين',
-                        subtitle: 'إضافة وتعديل حسابات المعلمين والطلاب',
+                        title: l10n.userManagement,
+                        subtitle: l10n.adminDashboardUserManagementSubtitle,
                         color: AppColors.primary,
                         bgColor: const Color(0xFFDDE1FF),
                         onTap: () => context.push(AppRoutes.adminUsers),
@@ -283,8 +289,9 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       const SizedBox(height: 8),
                       _QuickLink(
                         icon: Icons.class_rounded,
-                        title: 'إدارة الفصول',
-                        subtitle: 'عرض وتنظيم الفصول الدراسية',
+                        title: l10n.classroomManagement,
+                        subtitle:
+                            l10n.adminDashboardClassroomManagementSubtitle,
                         color: AppColors.warning,
                         bgColor: const Color(0xFFFEF3C7),
                         onTap: () => context.push(AppRoutes.adminClassrooms),
@@ -292,8 +299,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       const SizedBox(height: 8),
                       _QuickLink(
                         icon: Icons.bar_chart_rounded,
-                        title: 'تقارير المدرسة',
-                        subtitle: 'تحليلات شاملة لأداء المدرسة',
+                        title: l10n.schoolReports,
+                        subtitle: l10n.adminDashboardSchoolReportsSubtitle,
                         color: AppColors.success,
                         bgColor: const Color(0xFFD1FAE5),
                         onTap: () => context.push(AppRoutes.adminReports),
@@ -301,8 +308,8 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       const SizedBox(height: 8),
                       _QuickLink(
                         icon: Icons.dashboard_customize_rounded,
-                        title: 'لوحة التحكم المتقدمة',
-                        subtitle: 'إحصائيات وتحليلات تفصيلية للمشرف',
+                        title: l10n.adminDashboardAdvancedDashboard,
+                        subtitle: l10n.adminDashboardAdvancedDashboardSubtitle,
                         color: AppColors.primaryContainer,
                         bgColor: const Color(0xFFD0E1FB),
                         onTap: () => context.push(AppRoutes.adminDashboardV2),
@@ -310,8 +317,9 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       const SizedBox(height: 8),
                       _QuickLink(
                         icon: Icons.supervisor_account_rounded,
-                        title: 'لوحة المشرف المتقدمة',
-                        subtitle: 'إحصائيات وتحليلات تفصيلية',
+                        title: l10n.adminDashboardSupervisorDashboard,
+                        subtitle:
+                            l10n.adminDashboardSupervisorDashboardSubtitle,
                         color: AppColors.primaryContainer,
                         bgColor: const Color(0xFFD0E1FB),
                         onTap: () =>
@@ -320,8 +328,9 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
                       const SizedBox(height: 8),
                       _QuickLink(
                         icon: Icons.settings_outlined,
-                        title: 'إعدادات المؤسسة',
-                        subtitle: 'ضبط إعدادات المؤسسة التعليمية',
+                        title: l10n.institutionSettings,
+                        subtitle:
+                            l10n.adminDashboardInstitutionSettingsSubtitle,
                         color: AppColors.onSurfaceVariant,
                         bgColor: AppColors.surfaceContainer,
                         onTap: () =>
@@ -345,154 +354,162 @@ class _PerformanceBanner extends StatelessWidget {
   final int? improvementPercentage;
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [AppColors.primary, AppColors.primaryContainer],
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.25),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [AppColors.primary, AppColors.primaryContainer],
         ),
-        child: Stack(
-          children: [
-            // Decorative circles
-            Positioned(
-              bottom: -30,
-              left: -30,
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.07),
-                ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.25),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Decorative circles
+          Positioned(
+            bottom: -30,
+            left: -30,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.07),
               ),
             ),
-            Positioned(
-              top: -20,
-              right: -20,
-              child: Container(
+          ),
+          Positioned(
+            top: -20,
+            right: -20,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.07),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.performanceOverview,
+                      style: const TextStyle(
+                        fontFamily: 'Almarai',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      l10n.adminDashboardPerformanceOverviewSubtitle,
+                      style: TextStyle(
+                        fontFamily: 'Almarai',
+                        fontSize: 13,
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            improvementPercentage != null &&
+                                    improvementPercentage! < 0
+                                ? Icons.trending_down_rounded
+                                : Icons.trending_up_rounded,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            improvementPercentage != null
+                                ? l10n.adminDashboardMonthlyPerformanceChange(
+                                    improvementPercentage! >= 0
+                                        ? l10n.improvement
+                                        : l10n.decline,
+                                    improvementPercentage!.abs(),
+                                  )
+                                : l10n.adminDashboardSchoolAverage,
+                            style: const TextStyle(
+                              fontFamily: 'Almarai',
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.07),
+                  color: Colors.white.withValues(alpha: 0.15),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.3),
+                    width: 2,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$average%',
+                      style: const TextStyle(
+                        fontFamily: 'Almarai',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      l10n.average,
+                      style: TextStyle(
+                        fontFamily: 'Almarai',
+                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'نظرة عامة على الأداء',
-                        style: TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'متوسط أداء المدرسة هذا الشهر',
-                        style: TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 13,
-                          color: Colors.white.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.3),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              improvementPercentage != null &&
-                                      improvementPercentage! < 0
-                                  ? Icons.trending_down_rounded
-                                  : Icons.trending_up_rounded,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              improvementPercentage != null
-                                  ? '${improvementPercentage! >= 0 ? 'تحسن' : 'انخفاض'} بنسبة ${improvementPercentage!.abs()}% هذا الشهر'
-                                  : 'متوسط أداء المدرسة',
-                              style: const TextStyle(
-                                fontFamily: 'Almarai',
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.15),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.3),
-                      width: 2,
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '$average%',
-                        style: const TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'المعدل',
-                        style: TextStyle(
-                          fontFamily: 'Almarai',
-                          fontSize: 11,
-                          color: Colors.white.withValues(alpha: 0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 // ─── Section Header ───────────────────────────────────────────────────────────

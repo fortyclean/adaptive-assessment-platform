@@ -810,6 +810,38 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads forgot password and admin dashboard localization labels',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.forgotPasswordTitle,
+            l10n.forgotPasswordResetTitle,
+            l10n.forgotPasswordSendCode,
+            l10n.forgotPasswordSentTitle,
+            l10n.adminDashboardTitle,
+            l10n.adminDashboardSchoolStats,
+            l10n.adminDashboardPendingStudentsSubtitle(4),
+            l10n.adminDashboardMonthlyPerformanceChange('Improved', 12),
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Forgot password / Reset password / Send verification code / '
+        'Sent successfully / Admin dashboard / School statistics / '
+        '4 students have not submitted the latest assessment / '
+        'Improved by 12% this month',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

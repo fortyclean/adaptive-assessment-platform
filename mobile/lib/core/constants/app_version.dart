@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.92';
-  static const int buildNumber = 92;
+  static const String current = '1.0.93';
+  static const int buildNumber = 93;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.93',
+      buildNumber: 93,
+      date: 'يونيو 2026',
+      title: 'ترجمة لوحة المشرف واستعادة كلمة المرور',
+      changes: [
+        'نقل شاشة نسيان كلمة المرور إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'نقل لوحة المشرف الرئيسية إلى مفاتيح ترجمة تشمل الترحيب والإحصائيات والتنبيهات والروابط السريعة.',
+        'ترجمة بطاقة الأداء الشهرية ورسائل تغير الأداء والعدادات الديناميكية.',
+        'إضافة اختبار حماية للحزمة الجديدة مع استمرار التحقق من تطابق إصدار عن التطبيق مع الإصدار الحالي.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.92',
       buildNumber: 92,

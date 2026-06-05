@@ -1156,5 +1156,66 @@
   "versionTypeRelease": "Release",
   "versionTypeFeature": "Feature",
   "versionTypeFix": "Fix",
-  "versionTypeHotfix": "Hotfix"
+  "versionTypeHotfix": "Hotfix",
+  "forgotPasswordTitle": "Forgot password",
+  "forgotPasswordResetTitle": "Reset password",
+  "forgotPasswordResetSubtitle": "Enter your email and we will send you a reset code",
+  "forgotPasswordGenericError": "Something went wrong. Please try again",
+  "forgotPasswordSendCode": "Send verification code",
+  "forgotPasswordSentTitle": "Sent successfully",
+  "forgotPasswordSentSubtitle": "Check your email for the reset code",
+  "backToLogin": "Back to sign in",
+  "adminDashboardLoadFailed": "Could not load admin dashboard data. Check your connection and try again.",
+  "adminDashboardGreeting": "Welcome, {name}",
+  "adminDashboardTitle": "Admin dashboard",
+  "adminDashboardSchoolStats": "School statistics",
+  "adminDashboardTeachers": "Teachers",
+  "adminDashboardAdminAlerts": "Administrative alerts",
+  "adminDashboardPendingStudentsTitle": "Students missed the assessment",
+  "adminDashboardPendingStudentsSubtitle": "{count} students have not submitted the latest assessment",
+  "adminDashboardPendingRequestsTitle": "New join requests",
+  "adminDashboardPendingRequestsSubtitle": "{count} join requests are waiting for approval",
+  "adminDashboardPerformanceDropTitle": "Performance drop",
+  "adminDashboardMathClassLevelTen": "Mathematics class - level ten",
+  "quickLinks": "Quick links",
+  "userManagement": "User management",
+  "adminDashboardUserManagementSubtitle": "Add and edit teacher and student accounts",
+  "classroomManagement": "Classroom management",
+  "adminDashboardClassroomManagementSubtitle": "View and organize classrooms",
+  "schoolReports": "School reports",
+  "adminDashboardSchoolReportsSubtitle": "Comprehensive analytics for school performance",
+  "adminDashboardAdvancedDashboard": "Advanced dashboard",
+  "adminDashboardAdvancedDashboardSubtitle": "Detailed statistics and analytics for admins",
+  "adminDashboardSupervisorDashboard": "Advanced supervisor dashboard",
+  "adminDashboardSupervisorDashboardSubtitle": "Detailed statistics and analytics",
+  "institutionSettings": "Institution settings",
+  "adminDashboardInstitutionSettingsSubtitle": "Configure educational institution settings",
+  "performanceOverview": "Performance overview",
+  "adminDashboardPerformanceOverviewSubtitle": "School average performance this month",
+  "adminDashboardMonthlyPerformanceChange": "{direction} by {percentage}% this month",
+  "adminDashboardSchoolAverage": "School average performance",
+  "improvement": "Improved",
+  "decline": "Declined",
+  "math": "Mathematics",
+  "@adminDashboardGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "@adminDashboardPendingStudentsSubtitle": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@adminDashboardPendingRequestsSubtitle": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@adminDashboardMonthlyPerformanceChange": {
+    "placeholders": {
+      "direction": {},
+      "percentage": {}
+    }
+  }
 }

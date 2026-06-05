@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../repositories/auth_repository.dart';
 
 /// Forgot Password Screen — Screen 26
@@ -21,6 +22,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   bool _isLoading = false;
   bool _submitted = false;
   String? _errorMessage;
+
+  AppLocalizations get l10n => AppLocalizations.of(context);
 
   @override
   void dispose() {
@@ -44,7 +47,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     } on DioException catch (e) {
       setState(() {
         _errorMessage = e.response?.data?['error'] as String? ??
-            'حدث خطأ. يرجى المحاولة مرة أخرى';
+            l10n.forgotPasswordGenericError;
       });
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -54,7 +57,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('نسيت كلمة المرور'),
+          title: Text(l10n.forgotPasswordTitle),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () => context.pop(),
@@ -78,13 +81,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 size: 64, color: AppColors.primary),
             const SizedBox(height: 24),
             Text(
-              'إعادة تعيين كلمة المرور',
+              l10n.forgotPasswordResetTitle,
               style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              'أدخل بريدك الإلكتروني وسنرسل لك رمز إعادة التعيين',
+              l10n.forgotPasswordResetSubtitle,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
@@ -96,17 +99,17 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               textDirection: TextDirection.ltr,
-              decoration: const InputDecoration(
-                labelText: 'البريد الإلكتروني',
-                prefixIcon: Icon(Icons.email_outlined),
+              decoration: InputDecoration(
+                labelText: l10n.email,
+                prefixIcon: const Icon(Icons.email_outlined),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'يرجى إدخال البريد الإلكتروني';
+                  return l10n.emailRequired;
                 }
                 if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$')
                     .hasMatch(value.trim())) {
-                  return 'يرجى إدخال بريد إلكتروني صحيح';
+                  return l10n.emailInvalid;
                 }
                 return null;
               },
@@ -132,7 +135,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       child: CircularProgressIndicator(
                           strokeWidth: 2, color: Colors.white),
                     )
-                  : const Text('إرسال رمز التحقق'),
+                  : Text(l10n.forgotPasswordSendCode),
             ),
           ],
         ),
@@ -146,13 +149,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               size: 80, color: AppColors.success),
           const SizedBox(height: 24),
           Text(
-            'تم الإرسال بنجاح',
+            l10n.forgotPasswordSentTitle,
             style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
-            'تحقق من بريدك الإلكتروني للحصول على رمز إعادة التعيين',
+            l10n.forgotPasswordSentSubtitle,
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium
@@ -162,7 +165,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           const SizedBox(height: 32),
           OutlinedButton(
             onPressed: () => context.pop(),
-            child: const Text('العودة لتسجيل الدخول'),
+            child: Text(l10n.backToLogin),
           ),
         ],
       );

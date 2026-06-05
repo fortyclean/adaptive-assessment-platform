@@ -1156,5 +1156,66 @@
   "versionTypeRelease": "إصدار",
   "versionTypeFeature": "ميزة",
   "versionTypeFix": "إصلاح",
-  "versionTypeHotfix": "طارئ"
+  "versionTypeHotfix": "طارئ",
+  "forgotPasswordTitle": "نسيت كلمة المرور",
+  "forgotPasswordResetTitle": "إعادة تعيين كلمة المرور",
+  "forgotPasswordResetSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رمز إعادة التعيين",
+  "forgotPasswordGenericError": "حدث خطأ. يرجى المحاولة مرة أخرى",
+  "forgotPasswordSendCode": "إرسال رمز التحقق",
+  "forgotPasswordSentTitle": "تم الإرسال بنجاح",
+  "forgotPasswordSentSubtitle": "تحقق من بريدك الإلكتروني للحصول على رمز إعادة التعيين",
+  "backToLogin": "العودة لتسجيل الدخول",
+  "adminDashboardLoadFailed": "تعذر تحميل بيانات لوحة المشرف. تحقق من الاتصال ثم أعد المحاولة.",
+  "adminDashboardGreeting": "مرحباً، {name}",
+  "adminDashboardTitle": "لوحة تحكم المشرف",
+  "adminDashboardSchoolStats": "إحصائيات المدرسة",
+  "adminDashboardTeachers": "المعلمون",
+  "adminDashboardAdminAlerts": "التنبيهات الإدارية",
+  "adminDashboardPendingStudentsTitle": "طلاب لم يؤدوا الاختبار",
+  "adminDashboardPendingStudentsSubtitle": "يوجد {count} طلاب لم يسلموا الاختبار الأخير",
+  "adminDashboardPendingRequestsTitle": "طلبات انضمام جديدة",
+  "adminDashboardPendingRequestsSubtitle": "يوجد {count} طلبات انضمام تنتظر الموافقة",
+  "adminDashboardPerformanceDropTitle": "انخفاض في الأداء",
+  "adminDashboardMathClassLevelTen": "فصل الرياضيات - المستوى العاشر",
+  "quickLinks": "روابط سريعة",
+  "userManagement": "إدارة المستخدمين",
+  "adminDashboardUserManagementSubtitle": "إضافة وتعديل حسابات المعلمين والطلاب",
+  "classroomManagement": "إدارة الفصول",
+  "adminDashboardClassroomManagementSubtitle": "عرض وتنظيم الفصول الدراسية",
+  "schoolReports": "تقارير المدرسة",
+  "adminDashboardSchoolReportsSubtitle": "تحليلات شاملة لأداء المدرسة",
+  "adminDashboardAdvancedDashboard": "لوحة التحكم المتقدمة",
+  "adminDashboardAdvancedDashboardSubtitle": "إحصائيات وتحليلات تفصيلية للمشرف",
+  "adminDashboardSupervisorDashboard": "لوحة المشرف المتقدمة",
+  "adminDashboardSupervisorDashboardSubtitle": "إحصائيات وتحليلات تفصيلية",
+  "institutionSettings": "إعدادات المؤسسة",
+  "adminDashboardInstitutionSettingsSubtitle": "ضبط إعدادات المؤسسة التعليمية",
+  "performanceOverview": "نظرة عامة على الأداء",
+  "adminDashboardPerformanceOverviewSubtitle": "متوسط أداء المدرسة هذا الشهر",
+  "adminDashboardMonthlyPerformanceChange": "{direction} بنسبة {percentage}% هذا الشهر",
+  "adminDashboardSchoolAverage": "متوسط أداء المدرسة",
+  "improvement": "تحسن",
+  "decline": "انخفاض",
+  "math": "الرياضيات",
+  "@adminDashboardGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "@adminDashboardPendingStudentsSubtitle": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@adminDashboardPendingRequestsSubtitle": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "@adminDashboardMonthlyPerformanceChange": {
+    "placeholders": {
+      "direction": {},
+      "percentage": {}
+    }
+  }
 }

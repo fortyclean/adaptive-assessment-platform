@@ -1,6 +1,6 @@
 {
   "name": "adaptive-assessment-platform-backend",
-  "version": "1.0.92",
+  "version": "1.0.93",
   "description": "Backend API for the Adaptive Assessment Platform",
   "main": "dist/app.js",
   "scripts": {

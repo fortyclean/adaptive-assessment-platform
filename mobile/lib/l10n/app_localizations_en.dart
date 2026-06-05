@@ -2765,4 +2765,146 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get versionTypeHotfix => 'Hotfix';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot password';
+
+  @override
+  String get forgotPasswordResetTitle => 'Reset password';
+
+  @override
+  String get forgotPasswordResetSubtitle =>
+      'Enter your email and we will send you a reset code';
+
+  @override
+  String get forgotPasswordGenericError =>
+      'Something went wrong. Please try again';
+
+  @override
+  String get forgotPasswordSendCode => 'Send verification code';
+
+  @override
+  String get forgotPasswordSentTitle => 'Sent successfully';
+
+  @override
+  String get forgotPasswordSentSubtitle =>
+      'Check your email for the reset code';
+
+  @override
+  String get backToLogin => 'Back to sign in';
+
+  @override
+  String get adminDashboardLoadFailed =>
+      'Could not load admin dashboard data. Check your connection and try again.';
+
+  @override
+  String adminDashboardGreeting(Object name) {
+    return 'Welcome, $name';
+  }
+
+  @override
+  String get adminDashboardTitle => 'Admin dashboard';
+
+  @override
+  String get adminDashboardSchoolStats => 'School statistics';
+
+  @override
+  String get adminDashboardTeachers => 'Teachers';
+
+  @override
+  String get adminDashboardAdminAlerts => 'Administrative alerts';
+
+  @override
+  String get adminDashboardPendingStudentsTitle =>
+      'Students missed the assessment';
+
+  @override
+  String adminDashboardPendingStudentsSubtitle(Object count) {
+    return '$count students have not submitted the latest assessment';
+  }
+
+  @override
+  String get adminDashboardPendingRequestsTitle => 'New join requests';
+
+  @override
+  String adminDashboardPendingRequestsSubtitle(Object count) {
+    return '$count join requests are waiting for approval';
+  }
+
+  @override
+  String get adminDashboardPerformanceDropTitle => 'Performance drop';
+
+  @override
+  String get adminDashboardMathClassLevelTen => 'Mathematics class - level ten';
+
+  @override
+  String get quickLinks => 'Quick links';
+
+  @override
+  String get userManagement => 'User management';
+
+  @override
+  String get adminDashboardUserManagementSubtitle =>
+      'Add and edit teacher and student accounts';
+
+  @override
+  String get classroomManagement => 'Classroom management';
+
+  @override
+  String get adminDashboardClassroomManagementSubtitle =>
+      'View and organize classrooms';
+
+  @override
+  String get schoolReports => 'School reports';
+
+  @override
+  String get adminDashboardSchoolReportsSubtitle =>
+      'Comprehensive analytics for school performance';
+
+  @override
+  String get adminDashboardAdvancedDashboard => 'Advanced dashboard';
+
+  @override
+  String get adminDashboardAdvancedDashboardSubtitle =>
+      'Detailed statistics and analytics for admins';
+
+  @override
+  String get adminDashboardSupervisorDashboard =>
+      'Advanced supervisor dashboard';
+
+  @override
+  String get adminDashboardSupervisorDashboardSubtitle =>
+      'Detailed statistics and analytics';
+
+  @override
+  String get institutionSettings => 'Institution settings';
+
+  @override
+  String get adminDashboardInstitutionSettingsSubtitle =>
+      'Configure educational institution settings';
+
+  @override
+  String get performanceOverview => 'Performance overview';
+
+  @override
+  String get adminDashboardPerformanceOverviewSubtitle =>
+      'School average performance this month';
+
+  @override
+  String adminDashboardMonthlyPerformanceChange(
+      Object direction, Object percentage) {
+    return '$direction by $percentage% this month';
+  }
+
+  @override
+  String get adminDashboardSchoolAverage => 'School average performance';
+
+  @override
+  String get improvement => 'Improved';
+
+  @override
+  String get decline => 'Declined';
+
+  @override
+  String get math => 'Mathematics';
 }

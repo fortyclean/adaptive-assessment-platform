@@ -2732,4 +2732,144 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get versionTypeHotfix => 'طارئ';
+
+  @override
+  String get forgotPasswordTitle => 'نسيت كلمة المرور';
+
+  @override
+  String get forgotPasswordResetTitle => 'إعادة تعيين كلمة المرور';
+
+  @override
+  String get forgotPasswordResetSubtitle =>
+      'أدخل بريدك الإلكتروني وسنرسل لك رمز إعادة التعيين';
+
+  @override
+  String get forgotPasswordGenericError => 'حدث خطأ. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get forgotPasswordSendCode => 'إرسال رمز التحقق';
+
+  @override
+  String get forgotPasswordSentTitle => 'تم الإرسال بنجاح';
+
+  @override
+  String get forgotPasswordSentSubtitle =>
+      'تحقق من بريدك الإلكتروني للحصول على رمز إعادة التعيين';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get adminDashboardLoadFailed =>
+      'تعذر تحميل بيانات لوحة المشرف. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String adminDashboardGreeting(Object name) {
+    return 'مرحباً، $name';
+  }
+
+  @override
+  String get adminDashboardTitle => 'لوحة تحكم المشرف';
+
+  @override
+  String get adminDashboardSchoolStats => 'إحصائيات المدرسة';
+
+  @override
+  String get adminDashboardTeachers => 'المعلمون';
+
+  @override
+  String get adminDashboardAdminAlerts => 'التنبيهات الإدارية';
+
+  @override
+  String get adminDashboardPendingStudentsTitle => 'طلاب لم يؤدوا الاختبار';
+
+  @override
+  String adminDashboardPendingStudentsSubtitle(Object count) {
+    return 'يوجد $count طلاب لم يسلموا الاختبار الأخير';
+  }
+
+  @override
+  String get adminDashboardPendingRequestsTitle => 'طلبات انضمام جديدة';
+
+  @override
+  String adminDashboardPendingRequestsSubtitle(Object count) {
+    return 'يوجد $count طلبات انضمام تنتظر الموافقة';
+  }
+
+  @override
+  String get adminDashboardPerformanceDropTitle => 'انخفاض في الأداء';
+
+  @override
+  String get adminDashboardMathClassLevelTen =>
+      'فصل الرياضيات - المستوى العاشر';
+
+  @override
+  String get quickLinks => 'روابط سريعة';
+
+  @override
+  String get userManagement => 'إدارة المستخدمين';
+
+  @override
+  String get adminDashboardUserManagementSubtitle =>
+      'إضافة وتعديل حسابات المعلمين والطلاب';
+
+  @override
+  String get classroomManagement => 'إدارة الفصول';
+
+  @override
+  String get adminDashboardClassroomManagementSubtitle =>
+      'عرض وتنظيم الفصول الدراسية';
+
+  @override
+  String get schoolReports => 'تقارير المدرسة';
+
+  @override
+  String get adminDashboardSchoolReportsSubtitle =>
+      'تحليلات شاملة لأداء المدرسة';
+
+  @override
+  String get adminDashboardAdvancedDashboard => 'لوحة التحكم المتقدمة';
+
+  @override
+  String get adminDashboardAdvancedDashboardSubtitle =>
+      'إحصائيات وتحليلات تفصيلية للمشرف';
+
+  @override
+  String get adminDashboardSupervisorDashboard => 'لوحة المشرف المتقدمة';
+
+  @override
+  String get adminDashboardSupervisorDashboardSubtitle =>
+      'إحصائيات وتحليلات تفصيلية';
+
+  @override
+  String get institutionSettings => 'إعدادات المؤسسة';
+
+  @override
+  String get adminDashboardInstitutionSettingsSubtitle =>
+      'ضبط إعدادات المؤسسة التعليمية';
+
+  @override
+  String get performanceOverview => 'نظرة عامة على الأداء';
+
+  @override
+  String get adminDashboardPerformanceOverviewSubtitle =>
+      'متوسط أداء المدرسة هذا الشهر';
+
+  @override
+  String adminDashboardMonthlyPerformanceChange(
+      Object direction, Object percentage) {
+    return '$direction بنسبة $percentage% هذا الشهر';
+  }
+
+  @override
+  String get adminDashboardSchoolAverage => 'متوسط أداء المدرسة';
+
+  @override
+  String get improvement => 'تحسن';
+
+  @override
+  String get decline => 'انخفاض';
+
+  @override
+  String get math => 'الرياضيات';
 }
