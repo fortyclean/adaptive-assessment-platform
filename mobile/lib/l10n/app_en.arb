@@ -933,5 +933,37 @@
   "plannedStatus": "Planned",
   "aiQuestionAssistant": "Question generation assistant",
   "aiQuestionAssistantDisabledMessage": "This feature is not enabled in this release until a safe generation service, question quality review, and source logging are connected before publishing.",
-  "autoGenerationPlanned": "Auto-generation is planned"
+  "autoGenerationPlanned": "Auto-generation is planned",
+  "classroomManagementTitle": "Classroom management",
+  "classroomSearchHint": "Search for a classroom...",
+  "demoClassroomGradeTenA": "Grade 10 (A)",
+  "demoClassroomGradeTwelveC": "Grade 12 (C)",
+  "demoClassroomIntermediateB": "Intermediate level (B)",
+  "demoSubjectMathAdvanced": "Mathematics - advanced level",
+  "demoSubjectPhysicsScienceTrack": "Physics - science track",
+  "demoSubjectEnglishLanguage": "English language",
+  "viewStudentsForClass": "View students: {name}",
+  "@viewStudentsForClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reportsForClass": "Reports: {name}",
+  "@reportsForClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "urgentAlerts": "Urgent alerts",
+  "missingAssessmentSubmissionsAlert": "5 students have not submitted the assessment",
+  "mathGradeTenASubtitle": "Mathematics - Grade 10 (A)",
+  "newJoinRequestAlert": "New join request",
+  "englishClassSubtitle": "English class",
+  "viewAllAlerts": "View all alerts",
+  "academicPerformanceOverview": "Academic performance overview",
+  "academicPerformanceOverviewSubtitle": "The data shows a 12% improvement in students' average scores during the current month.",
+  "loadingFullReport": "Loading the full report...",
+  "downloadFullReport": "Download full report",
+  "viewStudents": "View students",
+  "assessments": "Assessments"
 }

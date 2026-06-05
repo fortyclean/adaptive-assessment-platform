@@ -2142,4 +2142,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoGenerationPlanned => 'Auto-generation is planned';
+
+  @override
+  String get classroomManagementTitle => 'Classroom management';
+
+  @override
+  String get classroomSearchHint => 'Search for a classroom...';
+
+  @override
+  String get demoClassroomGradeTenA => 'Grade 10 (A)';
+
+  @override
+  String get demoClassroomGradeTwelveC => 'Grade 12 (C)';
+
+  @override
+  String get demoClassroomIntermediateB => 'Intermediate level (B)';
+
+  @override
+  String get demoSubjectMathAdvanced => 'Mathematics - advanced level';
+
+  @override
+  String get demoSubjectPhysicsScienceTrack => 'Physics - science track';
+
+  @override
+  String get demoSubjectEnglishLanguage => 'English language';
+
+  @override
+  String viewStudentsForClass(Object name) {
+    return 'View students: $name';
+  }
+
+  @override
+  String reportsForClass(Object name) {
+    return 'Reports: $name';
+  }
+
+  @override
+  String get urgentAlerts => 'Urgent alerts';
+
+  @override
+  String get missingAssessmentSubmissionsAlert =>
+      '5 students have not submitted the assessment';
+
+  @override
+  String get mathGradeTenASubtitle => 'Mathematics - Grade 10 (A)';
+
+  @override
+  String get newJoinRequestAlert => 'New join request';
+
+  @override
+  String get englishClassSubtitle => 'English class';
+
+  @override
+  String get viewAllAlerts => 'View all alerts';
+
+  @override
+  String get academicPerformanceOverview => 'Academic performance overview';
+
+  @override
+  String get academicPerformanceOverviewSubtitle =>
+      'The data shows a 12% improvement in students\' average scores during the current month.';
+
+  @override
+  String get loadingFullReport => 'Loading the full report...';
+
+  @override
+  String get downloadFullReport => 'Download full report';
+
+  @override
+  String get viewStudents => 'View students';
+
+  @override
+  String get assessments => 'Assessments';
 }

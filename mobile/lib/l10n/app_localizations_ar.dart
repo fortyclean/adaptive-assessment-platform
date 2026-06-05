@@ -1217,7 +1217,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get editQuestionsFromBank => 'تعديل الأسئلة من بنك الأسئلة';
 
   @override
-  String get changesSavedSuccessfully => 'تم حفظ التغييرات';
+  String get changesSavedSuccessfully => 'تم حفظ التغييرات بنجاح';
 
   @override
   String get savedLocally => 'تم الحفظ محلياً';
@@ -1474,7 +1474,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deleteTask => 'حذف المهمة';
 
   @override
-  String get completionRate => 'نسبة الإنجاز';
+  String get completionRate => 'معدل الإنجاز';
 
   @override
   String get dueWithinWeek => 'تسليم: خلال أسبوع';
@@ -2122,4 +2122,75 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get autoGenerationPlanned => 'التوليد التلقائي قيد التخطيط';
+
+  @override
+  String get classroomManagementTitle => 'إدارة الفصول الدراسية';
+
+  @override
+  String get classroomSearchHint => 'البحث عن فصل دراسي...';
+
+  @override
+  String get demoClassroomGradeTenA => 'الفصل العاشر (أ)';
+
+  @override
+  String get demoClassroomGradeTwelveC => 'الفصل الثاني عشر (ج)';
+
+  @override
+  String get demoClassroomIntermediateB => 'المستوى المتوسط (ب)';
+
+  @override
+  String get demoSubjectMathAdvanced => 'الرياضيات - المستوى المتقدم';
+
+  @override
+  String get demoSubjectPhysicsScienceTrack => 'الفيزياء - مسار علمي';
+
+  @override
+  String get demoSubjectEnglishLanguage => 'اللغة الإنجليزية';
+
+  @override
+  String viewStudentsForClass(Object name) {
+    return 'عرض طلاب $name';
+  }
+
+  @override
+  String reportsForClass(Object name) {
+    return 'تقارير $name';
+  }
+
+  @override
+  String get urgentAlerts => 'التنبيهات العاجلة';
+
+  @override
+  String get missingAssessmentSubmissionsAlert => '5 طلاب لم يسلموا الاختبار';
+
+  @override
+  String get mathGradeTenASubtitle => 'الرياضيات - الفصل العاشر (أ)';
+
+  @override
+  String get newJoinRequestAlert => 'طلب انضمام جديد';
+
+  @override
+  String get englishClassSubtitle => 'فصل اللغة الإنجليزية';
+
+  @override
+  String get viewAllAlerts => 'عرض جميع التنبيهات';
+
+  @override
+  String get academicPerformanceOverview => 'نظرة عامة على الأداء الأكاديمي';
+
+  @override
+  String get academicPerformanceOverviewSubtitle =>
+      'تظهر البيانات تحسناً بنسبة 12% في متوسط درجات الطلاب خلال الشهر الحالي.';
+
+  @override
+  String get loadingFullReport => 'جاري تحميل التقرير الكامل...';
+
+  @override
+  String get downloadFullReport => 'تحميل التقرير الكامل';
+
+  @override
+  String get viewStudents => 'عرض الطلاب';
+
+  @override
+  String get assessments => 'الاختبارات';
 }

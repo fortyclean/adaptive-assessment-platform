@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.83';
-  static const int buildNumber = 83;
+  static const String current = '1.0.84';
+  static const int buildNumber = 84;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.84',
+      buildNumber: 84,
+      date: 'يونيو 2026',
+      title: 'ترجمة شاشة إدارة الفصول',
+      changes: [
+        'نقل شاشة إدارة الفصول إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'ترجمة بيانات الفصول التجريبية والبحث والإضافة والحفظ وإجراءات البطاقات.',
+        'ترجمة التنبيهات العاجلة ونظرة الأداء الأكاديمي ورسائل التحميل.',
+        'إضافة اختبار حماية لمفاتيح شاشة إدارة الفصول مع تحليل Flutter نظيف.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.83',
       buildNumber: 83,

@@ -2327,7 +2327,7 @@ abstract class AppLocalizations {
   /// No description provided for @changesSavedSuccessfully.
   ///
   /// In ar, this message translates to:
-  /// **'تم حفظ التغييرات'**
+  /// **'تم حفظ التغييرات بنجاح'**
   String get changesSavedSuccessfully;
 
   /// No description provided for @savedLocally.
@@ -2795,7 +2795,7 @@ abstract class AppLocalizations {
   /// No description provided for @completionRate.
   ///
   /// In ar, this message translates to:
-  /// **'نسبة الإنجاز'**
+  /// **'معدل الإنجاز'**
   String get completionRate;
 
   /// No description provided for @dueWithinWeek.
@@ -3981,6 +3981,138 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'التوليد التلقائي قيد التخطيط'**
   String get autoGenerationPlanned;
+
+  /// No description provided for @classroomManagementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الفصول الدراسية'**
+  String get classroomManagementTitle;
+
+  /// No description provided for @classroomSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث عن فصل دراسي...'**
+  String get classroomSearchHint;
+
+  /// No description provided for @demoClassroomGradeTenA.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصل العاشر (أ)'**
+  String get demoClassroomGradeTenA;
+
+  /// No description provided for @demoClassroomGradeTwelveC.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصل الثاني عشر (ج)'**
+  String get demoClassroomGradeTwelveC;
+
+  /// No description provided for @demoClassroomIntermediateB.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستوى المتوسط (ب)'**
+  String get demoClassroomIntermediateB;
+
+  /// No description provided for @demoSubjectMathAdvanced.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات - المستوى المتقدم'**
+  String get demoSubjectMathAdvanced;
+
+  /// No description provided for @demoSubjectPhysicsScienceTrack.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفيزياء - مسار علمي'**
+  String get demoSubjectPhysicsScienceTrack;
+
+  /// No description provided for @demoSubjectEnglishLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة الإنجليزية'**
+  String get demoSubjectEnglishLanguage;
+
+  /// No description provided for @viewStudentsForClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض طلاب {name}'**
+  String viewStudentsForClass(Object name);
+
+  /// No description provided for @reportsForClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير {name}'**
+  String reportsForClass(Object name);
+
+  /// No description provided for @urgentAlerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنبيهات العاجلة'**
+  String get urgentAlerts;
+
+  /// No description provided for @missingAssessmentSubmissionsAlert.
+  ///
+  /// In ar, this message translates to:
+  /// **'5 طلاب لم يسلموا الاختبار'**
+  String get missingAssessmentSubmissionsAlert;
+
+  /// No description provided for @mathGradeTenASubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات - الفصل العاشر (أ)'**
+  String get mathGradeTenASubtitle;
+
+  /// No description provided for @newJoinRequestAlert.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب انضمام جديد'**
+  String get newJoinRequestAlert;
+
+  /// No description provided for @englishClassSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصل اللغة الإنجليزية'**
+  String get englishClassSubtitle;
+
+  /// No description provided for @viewAllAlerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض جميع التنبيهات'**
+  String get viewAllAlerts;
+
+  /// No description provided for @academicPerformanceOverview.
+  ///
+  /// In ar, this message translates to:
+  /// **'نظرة عامة على الأداء الأكاديمي'**
+  String get academicPerformanceOverview;
+
+  /// No description provided for @academicPerformanceOverviewSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تظهر البيانات تحسناً بنسبة 12% في متوسط درجات الطلاب خلال الشهر الحالي.'**
+  String get academicPerformanceOverviewSubtitle;
+
+  /// No description provided for @loadingFullReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل التقرير الكامل...'**
+  String get loadingFullReport;
+
+  /// No description provided for @downloadFullReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل التقرير الكامل'**
+  String get downloadFullReport;
+
+  /// No description provided for @viewStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الطلاب'**
+  String get viewStudents;
+
+  /// No description provided for @assessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبارات'**
+  String get assessments;
 }
 
 class _AppLocalizationsDelegate

@@ -534,7 +534,7 @@
   "status": "الحالة",
   "archived": "مؤرشف",
   "editQuestionsFromBank": "تعديل الأسئلة من بنك الأسئلة",
-  "changesSavedSuccessfully": "تم حفظ التغييرات",
+  "changesSavedSuccessfully": "تم حفظ التغييرات بنجاح",
   "savedLocally": "تم الحفظ محلياً",
   "assessmentPublishedSuccessfully": "تم نشر الاختبار بنجاح",
   "assessmentPublishFailed": "تعذر نشر الاختبار. تحقق من الاتصال ثم حاول مرة أخرى.",
@@ -632,7 +632,7 @@
   "publishDraft": "نشر المسودة",
   "markAsCompleted": "تعليم كمكتملة",
   "deleteTask": "حذف المهمة",
-  "completionRate": "نسبة الإنجاز",
+  "completionRate": "معدل الإنجاز",
   "dueWithinWeek": "تسليم: خلال أسبوع",
   "createNewTask": "إنشاء مهمة جديدة",
   "taskEditorLocalOnlyMessage": "اختر الفصل المستهدف حتى تكون المهمة مرتبطة بعدد الطلاب المتوقع، وسيتم حفظ التغيير داخل هذه الجلسة فقط حتى يتم ربط API المهام.",
@@ -933,5 +933,37 @@
   "plannedStatus": "قيد التخطيط",
   "aiQuestionAssistant": "مساعد توليد الأسئلة",
   "aiQuestionAssistantDisabledMessage": "هذه الميزة غير مفعلة في هذا الإصدار حتى يتم ربط خدمة توليد آمنة، مراجعة جودة السؤال، وتسجيل مصدر السؤال قبل نشره.",
-  "autoGenerationPlanned": "التوليد التلقائي قيد التخطيط"
+  "autoGenerationPlanned": "التوليد التلقائي قيد التخطيط",
+  "classroomManagementTitle": "إدارة الفصول الدراسية",
+  "classroomSearchHint": "البحث عن فصل دراسي...",
+  "demoClassroomGradeTenA": "الفصل العاشر (أ)",
+  "demoClassroomGradeTwelveC": "الفصل الثاني عشر (ج)",
+  "demoClassroomIntermediateB": "المستوى المتوسط (ب)",
+  "demoSubjectMathAdvanced": "الرياضيات - المستوى المتقدم",
+  "demoSubjectPhysicsScienceTrack": "الفيزياء - مسار علمي",
+  "demoSubjectEnglishLanguage": "اللغة الإنجليزية",
+  "viewStudentsForClass": "عرض طلاب {name}",
+  "@viewStudentsForClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reportsForClass": "تقارير {name}",
+  "@reportsForClass": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "urgentAlerts": "التنبيهات العاجلة",
+  "missingAssessmentSubmissionsAlert": "5 طلاب لم يسلموا الاختبار",
+  "mathGradeTenASubtitle": "الرياضيات - الفصل العاشر (أ)",
+  "newJoinRequestAlert": "طلب انضمام جديد",
+  "englishClassSubtitle": "فصل اللغة الإنجليزية",
+  "viewAllAlerts": "عرض جميع التنبيهات",
+  "academicPerformanceOverview": "نظرة عامة على الأداء الأكاديمي",
+  "academicPerformanceOverviewSubtitle": "تظهر البيانات تحسناً بنسبة 12% في متوسط درجات الطلاب خلال الشهر الحالي.",
+  "loadingFullReport": "جاري تحميل التقرير الكامل...",
+  "downloadFullReport": "تحميل التقرير الكامل",
+  "viewStudents": "عرض الطلاب",
+  "assessments": "الاختبارات"
 }

@@ -570,6 +570,38 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads classroom list localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.classroomManagementTitle,
+            l10n.classroomSearchHint,
+            l10n.demoClassroomGradeTenA,
+            l10n.demoSubjectMathAdvanced,
+            l10n.viewStudentsForClass('Grade 10 (A)'),
+            l10n.urgentAlerts,
+            l10n.academicPerformanceOverview,
+            l10n.completionRate,
+            l10n.downloadFullReport,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Classroom management / Search for a classroom... / Grade 10 (A) / '
+        'Mathematics - advanced level / View students: Grade 10 (A) / '
+        'Urgent alerts / Academic performance overview / Completion rate / '
+        'Download full report',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {
