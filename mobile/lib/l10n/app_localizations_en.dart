@@ -2997,4 +2997,110 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quickAccess => 'Quick access';
+
+  @override
+  String get userManagementLoadFailed =>
+      'Could not load users. Check your connection and try again.';
+
+  @override
+  String get disableAccount => 'Disable account';
+
+  @override
+  String disableAccountQuestion(Object name) {
+    return 'Do you want to disable $name\'s account?';
+  }
+
+  @override
+  String get disable => 'Disable';
+
+  @override
+  String get accountDisabled => 'Account disabled';
+
+  @override
+  String get accountDisableFailed =>
+      'Could not disable the account. Please try again.';
+
+  @override
+  String accountActivated(Object name) {
+    return '$name\'s account activated';
+  }
+
+  @override
+  String get accountActivateFailed =>
+      'Could not activate the account. Please try again.';
+
+  @override
+  String get selectedClassroom => 'Selected classroom';
+
+  @override
+  String get addUser => 'Add user';
+
+  @override
+  String get userManagementSubtitle =>
+      'Control teacher and student accounts and permissions';
+
+  @override
+  String get userManagementSearchHint =>
+      'Search by name, email, or identifier...';
+
+  @override
+  String get allRoles => 'All roles';
+
+  @override
+  String get pendingApproval => 'Pending approval';
+
+  @override
+  String get filterByClassroom => 'Filter by classroom';
+
+  @override
+  String get clearClassroomFilter => 'Clear classroom filter';
+
+  @override
+  String get allClassrooms => 'All classrooms';
+
+  @override
+  String get noResults => 'No results';
+
+  @override
+  String get tryChangingSearchCriteria => 'Try changing the search criteria';
+
+  @override
+  String classroomsCount(Object count) {
+    return '$count classrooms';
+  }
+
+  @override
+  String get listSeparator => ', ';
+
+  @override
+  String get grade => 'Grade';
+
+  @override
+  String get lastActivity => 'Last activity';
+
+  @override
+  String get stop => 'Stop';
+
+  @override
+  String get approve => 'Approve';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get addNewUser => 'Add new user';
+
+  @override
+  String get role => 'Role';
+
+  @override
+  String get userCreateFailed => 'Could not create the user. Please try again.';
+
+  @override
+  String userCreated(Object name) {
+    return 'Account \"$name\" created successfully';
+  }
+
+  @override
+  String get classroom => 'Classroom';
 }

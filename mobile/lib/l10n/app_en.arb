@@ -1245,5 +1245,56 @@
   "adminDashboardManagementAlerts": "Management alerts",
   "adminDashboardSchedules": "Schedules",
   "adminDashboardAddStudent": "Add student",
-  "quickAccess": "Quick access"
+  "quickAccess": "Quick access",
+  "userManagementLoadFailed": "Could not load users. Check your connection and try again.",
+  "disableAccount": "Disable account",
+  "disableAccountQuestion": "Do you want to disable {name}'s account?",
+  "@disableAccountQuestion": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "disable": "Disable",
+  "accountDisabled": "Account disabled",
+  "accountDisableFailed": "Could not disable the account. Please try again.",
+  "accountActivated": "{name}'s account activated",
+  "@accountActivated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "accountActivateFailed": "Could not activate the account. Please try again.",
+  "selectedClassroom": "Selected classroom",
+  "addUser": "Add user",
+  "userManagementSubtitle": "Control teacher and student accounts and permissions",
+  "userManagementSearchHint": "Search by name, email, or identifier...",
+  "allRoles": "All roles",
+  "pendingApproval": "Pending approval",
+  "filterByClassroom": "Filter by classroom",
+  "clearClassroomFilter": "Clear classroom filter",
+  "allClassrooms": "All classrooms",
+  "noResults": "No results",
+  "tryChangingSearchCriteria": "Try changing the search criteria",
+  "classroomsCount": "{count} classrooms",
+  "@classroomsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "listSeparator": ", ",
+  "grade": "Grade",
+  "lastActivity": "Last activity",
+  "stop": "Stop",
+  "approve": "Approve",
+  "disabled": "Disabled",
+  "addNewUser": "Add new user",
+  "role": "Role",
+  "userCreateFailed": "Could not create the user. Please try again.",
+  "userCreated": "Account \"{name}\" created successfully",
+  "@userCreated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "classroom": "Classroom"
 }

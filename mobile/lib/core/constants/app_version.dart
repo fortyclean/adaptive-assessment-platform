@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.94';
-  static const int buildNumber = 94;
+  static const String current = '1.0.95';
+  static const int buildNumber = 95;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.95',
+      buildNumber: 95,
+      date: 'يونيو 2026',
+      title: 'ترجمة إدارة المستخدمين',
+      changes: [
+        'نقل واجهة إدارة المستخدمين الأساسية إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'ترجمة شريط البحث وفلاتر الأدوار والفصول والحالة الفارغة.',
+        'ترجمة رسائل تعطيل وتفعيل الحسابات وأزرار بطاقة المستخدم.',
+        'ترجمة حوار إضافة مستخدم جديد وإضافة اختبار حماية لمفاتيح الشاشة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.94',
       buildNumber: 94,

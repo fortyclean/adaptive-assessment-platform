@@ -530,7 +530,7 @@
   "manageAssessmentsLoadFailed": "تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.",
   "editAssessment": "تعديل الاختبار",
   "assessmentTitle": "عنوان الاختبار",
-  "subject": "المادة الدراسية",
+  "subject": "المادة",
   "status": "الحالة",
   "archived": "مؤرشف",
   "editQuestionsFromBank": "تعديل الأسئلة من بنك الأسئلة",
@@ -1245,5 +1245,56 @@
   "adminDashboardManagementAlerts": "تنبيهات الإدارة",
   "adminDashboardSchedules": "الجداول",
   "adminDashboardAddStudent": "إضافة طالب",
-  "quickAccess": "وصول سريع"
+  "quickAccess": "وصول سريع",
+  "userManagementLoadFailed": "تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.",
+  "disableAccount": "تعطيل الحساب",
+  "disableAccountQuestion": "هل تريد تعطيل حساب {name}؟",
+  "@disableAccountQuestion": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "disable": "تعطيل",
+  "accountDisabled": "تم تعطيل الحساب",
+  "accountDisableFailed": "تعذر تعطيل الحساب. يرجى المحاولة مرة أخرى",
+  "accountActivated": "تم تفعيل حساب {name}",
+  "@accountActivated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "accountActivateFailed": "تعذر تفعيل الحساب. يرجى المحاولة مرة أخرى",
+  "selectedClassroom": "فصل محدد",
+  "addUser": "إضافة مستخدم",
+  "userManagementSubtitle": "التحكم في حسابات المعلمين والطلاب والصلاحيات",
+  "userManagementSearchHint": "البحث بالاسم، البريد الإلكتروني، أو الرقم التعريفي...",
+  "allRoles": "كل الأدوار",
+  "pendingApproval": "بانتظار الاعتماد",
+  "filterByClassroom": "تصفية حسب الفصل",
+  "clearClassroomFilter": "مسح فلتر الفصل",
+  "allClassrooms": "كل الفصول",
+  "noResults": "لا توجد نتائج",
+  "tryChangingSearchCriteria": "جرب تغيير معايير البحث",
+  "classroomsCount": "{count} فصول",
+  "@classroomsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "listSeparator": "، ",
+  "grade": "الصف",
+  "lastActivity": "النشاط الأخير",
+  "stop": "إيقاف",
+  "approve": "اعتماد",
+  "disabled": "موقوف",
+  "addNewUser": "إضافة مستخدم جديد",
+  "role": "الدور",
+  "userCreateFailed": "تعذر إنشاء المستخدم. يرجى المحاولة مرة أخرى",
+  "userCreated": "تم إنشاء حساب \"{name}\" بنجاح",
+  "@userCreated": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "classroom": "فصل دراسي"
 }

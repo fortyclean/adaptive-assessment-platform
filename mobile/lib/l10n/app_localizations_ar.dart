@@ -1205,7 +1205,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get assessmentTitle => 'عنوان الاختبار';
 
   @override
-  String get subject => 'المادة الدراسية';
+  String get subject => 'المادة';
 
   @override
   String get status => 'الحالة';
@@ -2962,4 +2962,110 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get quickAccess => 'وصول سريع';
+
+  @override
+  String get userManagementLoadFailed =>
+      'تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get disableAccount => 'تعطيل الحساب';
+
+  @override
+  String disableAccountQuestion(Object name) {
+    return 'هل تريد تعطيل حساب $name؟';
+  }
+
+  @override
+  String get disable => 'تعطيل';
+
+  @override
+  String get accountDisabled => 'تم تعطيل الحساب';
+
+  @override
+  String get accountDisableFailed =>
+      'تعذر تعطيل الحساب. يرجى المحاولة مرة أخرى';
+
+  @override
+  String accountActivated(Object name) {
+    return 'تم تفعيل حساب $name';
+  }
+
+  @override
+  String get accountActivateFailed =>
+      'تعذر تفعيل الحساب. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get selectedClassroom => 'فصل محدد';
+
+  @override
+  String get addUser => 'إضافة مستخدم';
+
+  @override
+  String get userManagementSubtitle =>
+      'التحكم في حسابات المعلمين والطلاب والصلاحيات';
+
+  @override
+  String get userManagementSearchHint =>
+      'البحث بالاسم، البريد الإلكتروني، أو الرقم التعريفي...';
+
+  @override
+  String get allRoles => 'كل الأدوار';
+
+  @override
+  String get pendingApproval => 'بانتظار الاعتماد';
+
+  @override
+  String get filterByClassroom => 'تصفية حسب الفصل';
+
+  @override
+  String get clearClassroomFilter => 'مسح فلتر الفصل';
+
+  @override
+  String get allClassrooms => 'كل الفصول';
+
+  @override
+  String get noResults => 'لا توجد نتائج';
+
+  @override
+  String get tryChangingSearchCriteria => 'جرب تغيير معايير البحث';
+
+  @override
+  String classroomsCount(Object count) {
+    return '$count فصول';
+  }
+
+  @override
+  String get listSeparator => '، ';
+
+  @override
+  String get grade => 'الصف';
+
+  @override
+  String get lastActivity => 'النشاط الأخير';
+
+  @override
+  String get stop => 'إيقاف';
+
+  @override
+  String get approve => 'اعتماد';
+
+  @override
+  String get disabled => 'موقوف';
+
+  @override
+  String get addNewUser => 'إضافة مستخدم جديد';
+
+  @override
+  String get role => 'الدور';
+
+  @override
+  String get userCreateFailed => 'تعذر إنشاء المستخدم. يرجى المحاولة مرة أخرى';
+
+  @override
+  String userCreated(Object name) {
+    return 'تم إنشاء حساب \"$name\" بنجاح';
+  }
+
+  @override
+  String get classroom => 'فصل دراسي';
 }

@@ -2303,7 +2303,7 @@ abstract class AppLocalizations {
   /// No description provided for @subject.
   ///
   /// In ar, this message translates to:
-  /// **'المادة الدراسية'**
+  /// **'المادة'**
   String get subject;
 
   /// No description provided for @status.
@@ -5506,6 +5506,192 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'وصول سريع'**
   String get quickAccess;
+
+  /// No description provided for @userManagementLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get userManagementLoadFailed;
+
+  /// No description provided for @disableAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعطيل الحساب'**
+  String get disableAccount;
+
+  /// No description provided for @disableAccountQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد تعطيل حساب {name}؟'**
+  String disableAccountQuestion(Object name);
+
+  /// No description provided for @disable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعطيل'**
+  String get disable;
+
+  /// No description provided for @accountDisabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تعطيل الحساب'**
+  String get accountDisabled;
+
+  /// No description provided for @accountDisableFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تعطيل الحساب. يرجى المحاولة مرة أخرى'**
+  String get accountDisableFailed;
+
+  /// No description provided for @accountActivated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تفعيل حساب {name}'**
+  String accountActivated(Object name);
+
+  /// No description provided for @accountActivateFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تفعيل الحساب. يرجى المحاولة مرة أخرى'**
+  String get accountActivateFailed;
+
+  /// No description provided for @selectedClassroom.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصل محدد'**
+  String get selectedClassroom;
+
+  /// No description provided for @addUser.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مستخدم'**
+  String get addUser;
+
+  /// No description provided for @userManagementSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحكم في حسابات المعلمين والطلاب والصلاحيات'**
+  String get userManagementSubtitle;
+
+  /// No description provided for @userManagementSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث بالاسم، البريد الإلكتروني، أو الرقم التعريفي...'**
+  String get userManagementSearchHint;
+
+  /// No description provided for @allRoles.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الأدوار'**
+  String get allRoles;
+
+  /// No description provided for @pendingApproval.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار الاعتماد'**
+  String get pendingApproval;
+
+  /// No description provided for @filterByClassroom.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفية حسب الفصل'**
+  String get filterByClassroom;
+
+  /// No description provided for @clearClassroomFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح فلتر الفصل'**
+  String get clearClassroomFilter;
+
+  /// No description provided for @allClassrooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الفصول'**
+  String get allClassrooms;
+
+  /// No description provided for @noResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج'**
+  String get noResults;
+
+  /// No description provided for @tryChangingSearchCriteria.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرب تغيير معايير البحث'**
+  String get tryChangingSearchCriteria;
+
+  /// No description provided for @classroomsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} فصول'**
+  String classroomsCount(Object count);
+
+  /// No description provided for @listSeparator.
+  ///
+  /// In ar, this message translates to:
+  /// **'، '**
+  String get listSeparator;
+
+  /// No description provided for @grade.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف'**
+  String get grade;
+
+  /// No description provided for @lastActivity.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط الأخير'**
+  String get lastActivity;
+
+  /// No description provided for @stop.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف'**
+  String get stop;
+
+  /// No description provided for @approve.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد'**
+  String get approve;
+
+  /// No description provided for @disabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقوف'**
+  String get disabled;
+
+  /// No description provided for @addNewUser.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مستخدم جديد'**
+  String get addNewUser;
+
+  /// No description provided for @role.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدور'**
+  String get role;
+
+  /// No description provided for @userCreateFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إنشاء المستخدم. يرجى المحاولة مرة أخرى'**
+  String get userCreateFailed;
+
+  /// No description provided for @userCreated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء حساب \"{name}\" بنجاح'**
+  String userCreated(Object name);
+
+  /// No description provided for @classroom.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصل دراسي'**
+  String get classroom;
 }
 
 class _AppLocalizationsDelegate

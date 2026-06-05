@@ -871,6 +871,36 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads user management localization labels and messages',
+      (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.userManagement,
+            l10n.addUser,
+            l10n.userManagementSearchHint,
+            l10n.disableAccountQuestion('Mona'),
+            l10n.accountActivated('Mona'),
+            l10n.classroomsCount(3),
+            l10n.addNewUser,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'User management / Add user / Search by name, email, or identifier... / '
+        'Do you want to disable Mona\'s account? / Mona\'s account activated / '
+        '3 classrooms / Add new user',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

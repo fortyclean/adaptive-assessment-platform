@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/admin_top_actions.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -197,8 +198,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
         setState(() {
           _users = [];
           _isLoading = false;
-          _errorMessage =
-              'تعذر تحميل المستخدمين. تحقق من الاتصال ثم أعد المحاولة.';
+          _errorMessage = AppLocalizations.of(context).userManagementLoadFailed;
         });
         return;
       }
@@ -240,16 +240,17 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('تعطيل الحساب'),
-        content: Text('هل تريد تعطيل حساب $name؟'),
+        title: Text(AppLocalizations.of(context).disableAccount),
+        content:
+            Text(AppLocalizations.of(context).disableAccountQuestion(name)),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('إلغاء')),
+              child: Text(AppLocalizations.of(context).cancel)),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('تعطيل',
-                  style: TextStyle(color: AppColors.error))),
+              child: Text(AppLocalizations.of(context).disable,
+                  style: const TextStyle(color: AppColors.error))),
         ],
       ),
     );
@@ -260,15 +261,17 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
         await _loadUsers();
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم تعطيل الحساب')),
+            SnackBar(
+                content: Text(AppLocalizations.of(context).accountDisabled)),
           );
         }
       } on Object {
         if (!AppConstants.useMockData && !isDemoSession) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('تعذر تعطيل الحساب. يرجى المحاولة مرة أخرى'),
+              SnackBar(
+                content:
+                    Text(AppLocalizations.of(context).accountDisableFailed),
                 behavior: SnackBarBehavior.floating,
                 backgroundColor: AppColors.error,
               ),
@@ -285,7 +288,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
         });
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم تعطيل الحساب')),
+            SnackBar(
+                content: Text(AppLocalizations.of(context).accountDisabled)),
           );
         }
       }
@@ -301,15 +305,17 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       await _loadUsers();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم تفعيل حساب $name')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context).accountActivated(name))),
         );
       }
     } on Object {
       if (!AppConstants.useMockData && !isDemoSession) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تعذر تفعيل الحساب. يرجى المحاولة مرة أخرى'),
+            SnackBar(
+              content: Text(AppLocalizations.of(context).accountActivateFailed),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppColors.error,
             ),
@@ -361,7 +367,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
       classroom['name'] as String? ??
       classroom['classroomName'] as String? ??
       classroom['title'] as String? ??
-      'فصل دراسي';
+      AppLocalizations.of(context).classroom;
 
   Set<String> _userClassroomIds(Map<String, dynamic> user) => {
         for (final item in (user['classroomIds'] as List?) ?? const [])
@@ -387,7 +393,9 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
         break;
       }
     }
-    if (classroom == null) return 'فصل محدد';
+    if (classroom == null) {
+      return AppLocalizations.of(context).selectedClassroom;
+    }
     return _classroomName(classroom);
   }
 
@@ -719,12 +727,12 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
         initialValue: _classroomFilterId,
         isExpanded: true,
         decoration: InputDecoration(
-          labelText: 'تصفية حسب الفصل',
+          labelText: AppLocalizations.of(context).filterByClassroom,
           prefixIcon: const Icon(Icons.class_outlined),
           suffixIcon: _classroomFilterId == null
               ? null
               : IconButton(
-                  tooltip: 'مسح فلتر الفصل',
+                  tooltip: AppLocalizations.of(context).clearClassroomFilter,
                   icon: const Icon(Icons.clear_rounded),
                   onPressed: () => setState(() => _classroomFilterId = null),
                 ),
@@ -733,8 +741,8 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
               const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         ),
         items: [
-          const DropdownMenuItem<String>(
-            child: Text('كل الفصول'),
+          DropdownMenuItem<String>(
+            child: Text(AppLocalizations.of(context).allClassrooms),
           ),
           ..._classroomOptions.map((classroom) {
             final id = (classroom['_id'] ?? classroom['id']).toString();
@@ -745,7 +753,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
           }),
         ],
         selectedItemBuilder: (context) => [
-          const Text('كل الفصول'),
+          Text(AppLocalizations.of(context).allClassrooms),
           ..._classroomOptions.map((classroom) {
             final id = (classroom['_id'] ?? classroom['id']).toString();
             return Text(_classroomFilterLabel(id));
@@ -769,18 +777,18 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                   size: 40, color: AppColors.outlineVariant),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'لا توجد نتائج',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).noResults,
+              style: const TextStyle(
                 color: AppColors.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'جرب تغيير معايير البحث',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).tryChangingSearchCriteria,
+              style: const TextStyle(
                 color: AppColors.onSurfaceVariant,
                 fontSize: 14,
               ),
@@ -792,230 +800,228 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
+      backgroundColor: colorScheme.surface,
+      appBar: AppBar(
         backgroundColor: colorScheme.surface,
-        appBar: AppBar(
-          backgroundColor: colorScheme.surface,
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          title: Text(
-            'إدارة المستخدمين',
-            style: TextStyle(
-              color: colorScheme.onSurface,
-              fontWeight: FontWeight.w700,
-              fontSize: 18,
-            ),
-          ),
-          centerTitle: false,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                color: AppColors.onSurfaceVariant),
-            onPressed: () => context.pop(),
-          ),
-          actions: [
-            const AdminTopActions(),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: TextButton.icon(
-                onPressed: _showCreateUserDialog,
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text('إضافة مستخدم'),
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.onPrimary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  textStyle: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(height: 1, color: AppColors.outlineVariant),
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        title: Text(
+          l10n.userManagement,
+          style: TextStyle(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
           ),
         ),
-        body: Column(
-          children: [
-            // ── Search & filter bar ───────────────────────────────────────────
-            Container(
-              color: colorScheme.surface,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Subtitle
-                  const Text(
-                    'التحكم في حسابات المعلمين والطلاب والصلاحيات',
-                    style: TextStyle(
-                      color: AppColors.onSurfaceVariant,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Search field
-                  Container(
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.outlineVariant),
-                    ),
-                    child: TextField(
-                      controller: _searchController,
-                      textDirection: TextDirection.rtl,
-                      decoration: InputDecoration(
-                        hintText:
-                            'البحث بالاسم، البريد الإلكتروني، أو الرقم التعريفي...',
-                        hintStyle: const TextStyle(
-                          color: AppColors.onSurfaceVariant,
-                          fontSize: 13,
-                        ),
-                        prefixIcon: const Icon(Icons.search_rounded,
-                            color: AppColors.onSurfaceVariant, size: 20),
-                        suffixIcon: _searchQuery.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.clear_rounded, size: 18),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  setState(() => _searchQuery = '');
-                                  _loadUsers();
-                                },
-                              )
-                            : null,
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 12),
-                      ),
-                      onChanged: (v) {
-                        setState(() => _searchQuery = v);
-                        if (v.length >= 2 || v.isEmpty) _loadUsers();
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Role filter chips
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _RoleChip(
-                          label: 'كل الأدوار',
-                          selected: _roleFilter == null,
-                          onTap: () {
-                            setState(() => _roleFilter = null);
-                            _loadUsers();
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        _RoleChip(
-                          label: 'معلم',
-                          selected: _roleFilter == 'teacher',
-                          onTap: () {
-                            setState(() => _roleFilter = 'teacher');
-                            _loadUsers();
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        _RoleChip(
-                          label: 'طالب',
-                          selected: _roleFilter == 'student',
-                          onTap: () {
-                            setState(() => _roleFilter = 'student');
-                            _loadUsers();
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        _RoleChip(
-                          label: 'بانتظار الاعتماد',
-                          selected: _roleFilter == 'pending',
-                          onTap: () {
-                            setState(() => _roleFilter = 'pending');
-                            _loadUsers();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  _buildClassroomFilter(),
-                ],
+        centerTitle: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: AppColors.onSurfaceVariant),
+          onPressed: () => context.pop(),
+        ),
+        actions: [
+          const AdminTopActions(),
+          Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: TextButton.icon(
+              onPressed: _showCreateUserDialog,
+              icon: const Icon(Icons.add, size: 18),
+              label: Text(l10n.addUser),
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.onPrimary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                textStyle:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
               ),
             ),
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: AppColors.outlineVariant),
+        ),
+      ),
+      body: Column(
+        children: [
+          // ── Search & filter bar ───────────────────────────────────────────
+          Container(
+            color: colorScheme.surface,
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Subtitle
+                Text(
+                  l10n.userManagementSubtitle,
+                  style: const TextStyle(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Search field
+                Container(
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.outlineVariant),
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    textDirection: TextDirection.rtl,
+                    decoration: InputDecoration(
+                      hintText: l10n.userManagementSearchHint,
+                      hintStyle: const TextStyle(
+                        color: AppColors.onSurfaceVariant,
+                        fontSize: 13,
+                      ),
+                      prefixIcon: const Icon(Icons.search_rounded,
+                          color: AppColors.onSurfaceVariant, size: 20),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear_rounded, size: 18),
+                              onPressed: () {
+                                _searchController.clear();
+                                setState(() => _searchQuery = '');
+                                _loadUsers();
+                              },
+                            )
+                          : null,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                    ),
+                    onChanged: (v) {
+                      setState(() => _searchQuery = v);
+                      if (v.length >= 2 || v.isEmpty) _loadUsers();
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Role filter chips
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _RoleChip(
+                        label: l10n.allRoles,
+                        selected: _roleFilter == null,
+                        onTap: () {
+                          setState(() => _roleFilter = null);
+                          _loadUsers();
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      _RoleChip(
+                        label: l10n.teacherRole,
+                        selected: _roleFilter == 'teacher',
+                        onTap: () {
+                          setState(() => _roleFilter = 'teacher');
+                          _loadUsers();
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      _RoleChip(
+                        label: l10n.studentRole,
+                        selected: _roleFilter == 'student',
+                        onTap: () {
+                          setState(() => _roleFilter = 'student');
+                          _loadUsers();
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      _RoleChip(
+                        label: l10n.pendingApproval,
+                        selected: _roleFilter == 'pending',
+                        onTap: () {
+                          setState(() => _roleFilter = 'pending');
+                          _loadUsers();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildClassroomFilter(),
+              ],
+            ),
+          ),
 
-            // ── User list ─────────────────────────────────────────────────────
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child:
-                          CircularProgressIndicator(color: AppColors.primary))
-                  : _errorMessage != null
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.error_outline,
-                                    color: AppColors.error, size: 40),
-                                const SizedBox(height: 12),
-                                Text(
-                                  _errorMessage!,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: AppColors.onSurfaceVariant,
-                                  ),
+          // ── User list ─────────────────────────────────────────────────────
+          Expanded(
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(color: AppColors.primary))
+                : _errorMessage != null
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.error_outline,
+                                  color: AppColors.error, size: 40),
+                              const SizedBox(height: 12),
+                              Text(
+                                _errorMessage!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.onSurfaceVariant,
                                 ),
-                                const SizedBox(height: 16),
-                                ElevatedButton.icon(
-                                  onPressed: _loadUsers,
-                                  icon: const Icon(Icons.refresh),
-                                  label: const Text('إعادة المحاولة'),
-                                ),
-                              ],
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                onPressed: _loadUsers,
+                                icon: const Icon(Icons.refresh),
+                                label: Text(l10n.retry),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : _visibleUsers().isEmpty
+                        ? _buildEmpty()
+                        : RefreshIndicator(
+                            onRefresh: _loadUsers,
+                            color: AppColors.primary,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(16),
+                              itemCount: _visibleUsers().length,
+                              itemBuilder: (ctx, i) {
+                                final users = _visibleUsers();
+                                final user = users[i];
+                                return _UserCard(
+                                  user: user,
+                                  classroomNames: _classroomNamesForUser(user),
+                                  onDeactivate: user['isActive'] == true
+                                      ? () => _deactivateUser(
+                                          user['_id'] as String,
+                                          user['fullName'] as String)
+                                      : null,
+                                  onEdit: () => _editUser(user),
+                                  onReactivate: user['isActive'] == false
+                                      ? () => _reactivateUser(
+                                            user['_id'] as String,
+                                            user['fullName'] as String,
+                                          )
+                                      : null,
+                                );
+                              },
                             ),
                           ),
-                        )
-                      : _visibleUsers().isEmpty
-                          ? _buildEmpty()
-                          : RefreshIndicator(
-                              onRefresh: _loadUsers,
-                              color: AppColors.primary,
-                              child: ListView.builder(
-                                padding: const EdgeInsets.all(16),
-                                itemCount: _visibleUsers().length,
-                                itemBuilder: (ctx, i) {
-                                  final users = _visibleUsers();
-                                  final user = users[i];
-                                  return _UserCard(
-                                    user: user,
-                                    classroomNames:
-                                        _classroomNamesForUser(user),
-                                    onDeactivate: user['isActive'] == true
-                                        ? () => _deactivateUser(
-                                            user['_id'] as String,
-                                            user['fullName'] as String)
-                                        : null,
-                                    onEdit: () => _editUser(user),
-                                    onReactivate: user['isActive'] == false
-                                        ? () => _reactivateUser(
-                                              user['_id'] as String,
-                                              user['fullName'] as String,
-                                            )
-                                        : null,
-                                  );
-                                },
-                              ),
-                            ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'admin'),
-      );
+          ),
+        ],
+      ),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'admin'),
+    );
   }
 }
 
@@ -1075,6 +1081,7 @@ class _UserCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     final isActive = user['isActive'] as bool? ?? true;
     final role = user['role'] as String? ?? '';
     final isTeacher = role == 'teacher';
@@ -1084,9 +1091,9 @@ class _UserCard extends StatelessWidget {
     final subtitle = email ?? (username ?? '');
     final classroomSummary = classroomNames.isEmpty
         ? (user['classroomCount'] != null
-            ? '${user['classroomCount']} فصول'
+            ? l10n.classroomsCount(user['classroomCount'] as Object)
             : '—')
-        : classroomNames.take(2).join('، ');
+        : classroomNames.take(2).join(l10n.listSeparator);
 
     // Initials
     final parts = fullName.trim().split(' ');
@@ -1191,7 +1198,7 @@ class _UserCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _InfoCell(
-                      label: isTeacher ? 'المادة' : 'الصف',
+                      label: isTeacher ? l10n.subject : l10n.grade,
                       value: isTeacher
                           ? (user['subject'] as String? ?? '—')
                           : (user['grade'] as String? ?? '—'),
@@ -1199,7 +1206,7 @@ class _UserCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: _InfoCell(
-                      label: isTeacher ? 'الفصول' : 'النشاط الأخير',
+                      label: isTeacher ? l10n.classrooms : l10n.lastActivity,
                       value: isTeacher
                           ? classroomSummary
                           : (user['lastActive'] as String? ?? '—'),
@@ -1247,7 +1254,7 @@ class _UserCard extends StatelessWidget {
                 Expanded(
                   child: _ActionButton(
                     icon: Icons.edit_outlined,
-                    label: 'تعديل',
+                    label: l10n.edit,
                     onTap: onEdit ?? () {},
                     color: AppColors.primary,
                     isDestructive: false,
@@ -1258,14 +1265,14 @@ class _UserCard extends StatelessWidget {
                   child: isActive
                       ? _ActionButton(
                           icon: Icons.block_rounded,
-                          label: 'إيقاف',
+                          label: l10n.stop,
                           onTap: onDeactivate ?? () {},
                           color: AppColors.error,
                           isDestructive: true,
                         )
                       : _ActionButton(
                           icon: Icons.settings_backup_restore_rounded,
-                          label: 'اعتماد',
+                          label: l10n.approve,
                           onTap: onReactivate ?? () {},
                           color: AppColors.onSurfaceVariant,
                           isDestructive: false,
@@ -1287,6 +1294,7 @@ class _RoleBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (!isActive) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -1295,9 +1303,9 @@ class _RoleBadge extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
           border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
         ),
-        child: const Text(
-          'موقوف',
-          style: TextStyle(
+        child: Text(
+          l10n.disabled,
+          style: const TextStyle(
             color: AppColors.error,
             fontSize: 11,
             fontWeight: FontWeight.w500,
@@ -1319,7 +1327,7 @@ class _RoleBadge extends StatelessWidget {
         ),
       ),
       child: Text(
-        isTeacher ? 'معلم' : 'طالب',
+        isTeacher ? l10n.teacherRole : l10n.studentRole,
         style: TextStyle(
           color: isTeacher ? const Color(0xFF611E00) : const Color(0xFF54647A),
           fontSize: 11,
@@ -1442,8 +1450,8 @@ class _CreateUserDialogState extends ConsumerState<_CreateUserDialog> {
       if (!AppConstants.useMockData && !isDemoSession) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تعذر إنشاء المستخدم. يرجى المحاولة مرة أخرى'),
+            SnackBar(
+              content: Text(AppLocalizations.of(context).userCreateFailed),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppColors.error,
             ),
@@ -1456,7 +1464,7 @@ class _CreateUserDialogState extends ConsumerState<_CreateUserDialog> {
         widget.onCreated();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('تم إنشاء حساب "$_fullName" بنجاح'),
+            content: Text(AppLocalizations.of(context).userCreated(_fullName)),
             behavior: SnackBarBehavior.floating,
             backgroundColor: const Color(0xFF2E7D32),
           ),
@@ -1468,73 +1476,80 @@ class _CreateUserDialogState extends ConsumerState<_CreateUserDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('إضافة مستخدم جديد'),
-        content: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  textDirection: TextDirection.rtl,
-                  decoration: const InputDecoration(labelText: 'الاسم الكامل'),
-                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                  onSaved: (v) => _fullName = v!,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'اسم المستخدم'),
-                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                  onSaved: (v) => _username = v!,
-                ),
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'البريد الإلكتروني'),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (v) => (v == null || v.isEmpty) ? 'مطلوب' : null,
-                  onSaved: (v) => _email = v!,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'كلمة المرور'),
-                  obscureText: true,
-                  validator: (v) =>
-                      (v == null || v.length < 8) ? '8 أحرف على الأقل' : null,
-                  onSaved: (v) => _password = v!,
-                ),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'الدور'),
-                  initialValue: _role,
-                  items: const [
-                    DropdownMenuItem(value: 'teacher', child: Text('معلم')),
-                    DropdownMenuItem(value: 'student', child: Text('طالب')),
-                  ],
-                  onChanged: (v) => setState(() => _role = v!),
-                ),
-              ],
-            ),
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text(l10n.addNewUser),
+      content: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                textDirection: TextDirection.rtl,
+                decoration: InputDecoration(labelText: l10n.fullName),
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l10n.requiredField : null,
+                onSaved: (v) => _fullName = v!,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: l10n.username),
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l10n.requiredField : null,
+                onSaved: (v) => _username = v!,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: l10n.email),
+                keyboardType: TextInputType.emailAddress,
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l10n.requiredField : null,
+                onSaved: (v) => _email = v!,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: l10n.password),
+                obscureText: true,
+                validator: (v) => (v == null || v.length < 8)
+                    ? l10n.passwordRequirementMin8
+                    : null,
+                onSaved: (v) => _password = v!,
+              ),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(labelText: l10n.role),
+                initialValue: _role,
+                items: [
+                  DropdownMenuItem(
+                      value: 'teacher', child: Text(l10n.teacherRole)),
+                  DropdownMenuItem(
+                      value: 'student', child: Text(l10n.studentRole)),
+                ],
+                onChanged: (v) => setState(() => _role = v!),
+              ),
+            ],
           ),
         ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('إلغاء')),
-          ElevatedButton(
-            onPressed: _isLoading ? null : _submit,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
-            child: _isLoading
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white))
-                : const Text('إنشاء'),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+        ElevatedButton(
+          onPressed: _isLoading ? null : _submit,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
-        ],
-      );
+          child: _isLoading
+              ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: Colors.white))
+              : Text(l10n.create),
+        ),
+      ],
+    );
+  }
 }
