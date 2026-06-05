@@ -3817,6 +3817,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studentFilesClassSubtitle => 'Grade 12 - Computer Science';
 
   @override
+  String get studentFileDemoStudentOne => 'Ahmed Mahmoud Ali';
+
+  @override
+  String get studentFileDemoStudentTwo => 'Sarah Ibrahim Hassan';
+
+  @override
+  String get studentFileDemoStudentThree => 'Khaled Youssef Kamal';
+
+  @override
+  String get studentFileDemoStudentFour => 'Layla Abdulaziz';
+
+  @override
   String get sortByName => 'Name';
 
   @override
@@ -3884,6 +3896,177 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fullReport => 'Full report';
+
+  @override
+  String get certificateTemplateClassic => 'Classic';
+
+  @override
+  String get certificateTemplateClassicDescription =>
+      'Formal design with blue colors';
+
+  @override
+  String get certificateTemplateGold => 'Gold';
+
+  @override
+  String get certificateTemplateGoldDescription =>
+      'Premium design with gold colors';
+
+  @override
+  String get certificateTemplateGreen => 'Green';
+
+  @override
+  String get certificateTemplateGreenDescription =>
+      'Modern design with green colors';
+
+  @override
+  String get certificateDemoClassName => 'Grade 7 (A)';
+
+  @override
+  String get certificateDemoGradeLevel => 'Grade 7';
+
+  @override
+  String get certificateDemoStudentOne => 'Ahmed Ali Mansour';
+
+  @override
+  String get certificateDemoStudentTwo => 'Sarah Kamal Al-Saadi';
+
+  @override
+  String get certificateDemoStudentThree => 'Mohammed Khaled Al-Harbi';
+
+  @override
+  String get certificateDemoStudentFour => 'Layla Salem Al-Otaibi';
+
+  @override
+  String get certificateDemoStudentFive => 'Omar Faisal Al-Zahrani';
+
+  @override
+  String get gradeExcellent => 'Excellent';
+
+  @override
+  String get gradeDistinction => 'Distinction';
+
+  @override
+  String get gradeVeryGood => 'Very good';
+
+  @override
+  String get gradeGood => 'Good';
+
+  @override
+  String get gradeAcceptable => 'Acceptable';
+
+  @override
+  String get completionCertificateTitle => 'Completion certificate';
+
+  @override
+  String get certificateAwardedTo => 'This certificate is awarded to';
+
+  @override
+  String certificateCompletedClass(Object classroomName) {
+    return 'For successfully completing $classroomName';
+  }
+
+  @override
+  String get certificateAcademicYear => 'Academic year 2024-2025';
+
+  @override
+  String get customizeAndIssueCertificate => 'Customize and issue certificate';
+
+  @override
+  String get certificateStudentNameLabel => 'Student name on certificate';
+
+  @override
+  String get certificateTitleLabel => 'Certificate title';
+
+  @override
+  String certificateNotificationMessage(Object score) {
+    return 'Congratulations! You received a completion certificate with a score of $score%';
+  }
+
+  @override
+  String certificateSentTo(Object name) {
+    return 'Certificate sent to $name';
+  }
+
+  @override
+  String get sentDemoMode => 'Sent (demo mode)';
+
+  @override
+  String get downloadPdf => 'Download PDF';
+
+  @override
+  String get exportCertificates => 'Export certificates';
+
+  @override
+  String get nameColumn => 'Name';
+
+  @override
+  String get statusColumn => 'Status';
+
+  @override
+  String get passedLabel => 'Passed';
+
+  @override
+  String get exportPdfCsvAll => 'Export PDF/CSV for all';
+
+  @override
+  String get exportExcelCsv => 'Export Excel/CSV';
+
+  @override
+  String certificatesSentToPassed(Object count) {
+    return '$count certificates sent to passed students';
+  }
+
+  @override
+  String get sendToAll => 'Send to all';
+
+  @override
+  String get certificatesAndResults => 'Certificates and results';
+
+  @override
+  String get export => 'Export';
+
+  @override
+  String get templatePreview => 'Template preview';
+
+  @override
+  String get studentNameFallback => 'Student name';
+
+  @override
+  String get issuingCertificatesForPassed =>
+      'Issuing certificates for all passed students...';
+
+  @override
+  String get issueAll => 'Issue all';
+
+  @override
+  String get chooseCertificateTemplate => 'Choose certificate template';
+
+  @override
+  String get passedStudents => 'Passed';
+
+  @override
+  String get failedStudents => 'Failed';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String studentListCount(Object count) {
+    return 'Student list ($count)';
+  }
+
+  @override
+  String get sortScore => 'Sort: score';
+
+  @override
+  String get sortName => 'Sort: name';
+
+  @override
+  String get noResultsForClass => 'No results for this class';
+
+  @override
+  String get noResultsForClassMessage =>
+      'Students must complete an assessment first before their results appear here';
 
   @override
   String get studentDashboardFallbackStudent => 'Student';

@@ -41,42 +41,35 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
   String _searchQuery = '';
   String _sortBy = 'performance';
 
-  // Sample data — replace with real API data
-  final List<_StudentData> _students = const [
-    _StudentData(
-      name: 'أحمد محمود علي',
-      fileNumber: '#1042',
-      performance: 94,
-      isOnline: true,
-    ),
-    _StudentData(
-      name: 'سارة إبراهيم حسن',
-      fileNumber: '#1055',
-      performance: 88,
-      isOnline: true,
-    ),
-    _StudentData(
-      name: 'خالد يوسف كمال',
-      fileNumber: '#1021',
-      performance: 67,
-      isOnline: false,
-    ),
-    _StudentData(
-      name: 'ليلى عبد العزيز',
-      fileNumber: '#1068',
-      performance: 91,
-      isOnline: true,
-    ),
-  ];
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
+  List<_StudentData> _students(AppLocalizations l10n) => [
+        _StudentData(
+          name: l10n.studentFileDemoStudentOne,
+          fileNumber: '#1042',
+          performance: 94,
+          isOnline: true,
+        ),
+        _StudentData(
+          name: l10n.studentFileDemoStudentTwo,
+          fileNumber: '#1055',
+          performance: 88,
+          isOnline: true,
+        ),
+        _StudentData(
+          name: l10n.studentFileDemoStudentThree,
+          fileNumber: '#1021',
+          performance: 67,
+          isOnline: false,
+        ),
+        _StudentData(
+          name: l10n.studentFileDemoStudentFour,
+          fileNumber: '#1068',
+          performance: 91,
+          isOnline: true,
+        ),
+      ];
 
   List<_StudentData> get _filtered {
-    final list = _students.where((s) {
+    final list = _students(AppLocalizations.of(context)).where((s) {
       if (_searchQuery.isEmpty) return true;
       return s.name.contains(_searchQuery) ||
           s.fileNumber.contains(_searchQuery);
@@ -88,6 +81,12 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
       list.sort((a, b) => a.name.compareTo(b.name));
     }
     return list;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -293,19 +292,19 @@ class _StudentFilesScreenState extends ConsumerState<StudentFilesScreen> {
   // ─── Stats Overview ───────────────────────────────────────────────────────
 
   Widget _buildStatsOverview() {
+    final l10n = AppLocalizations.of(context);
+    final students = _students(l10n);
     final stats = [
+      _StatItem(label: l10n.totalStudents, value: '${students.length}'),
       _StatItem(
-          label: AppLocalizations.of(context).totalStudents,
-          value: '${_students.length}'),
-      _StatItem(
-        label: AppLocalizations.of(context).averagePerformance,
+        label: l10n.averagePerformance,
         value:
-            '${_students.map((s) => s.performance).reduce((a, b) => a + b) ~/ _students.length}%',
+            '${students.map((s) => s.performance).reduce((a, b) => a + b) ~/ students.length}%',
       ),
-      _StatItem(label: AppLocalizations.of(context).newlyAssigned, value: '5'),
+      _StatItem(label: l10n.newlyAssigned, value: '5'),
       _StatItem(
-        label: AppLocalizations.of(context).topStudents,
-        value: '${_students.where((s) => s.performance >= 85).length}',
+        label: l10n.topStudents,
+        value: '${students.where((s) => s.performance >= 85).length}',
       ),
     ];
 

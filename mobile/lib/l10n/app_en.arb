@@ -1603,6 +1603,10 @@
   "activityThreeDaysAgo": "3 days ago",
   "studentFilesTitle": "Student files",
   "studentFilesClassSubtitle": "Grade 12 - Computer Science",
+  "studentFileDemoStudentOne": "Ahmed Mahmoud Ali",
+  "studentFileDemoStudentTwo": "Sarah Ibrahim Hassan",
+  "studentFileDemoStudentThree": "Khaled Youssef Kamal",
+  "studentFileDemoStudentFour": "Layla Abdulaziz",
   "sortByName": "Name",
   "sortByPerformance": "Performance",
   "selectedSuffix": "✓",
@@ -1643,6 +1647,83 @@
   },
   "contactStudent": "Contact student",
   "fullReport": "Full report",
+  "certificateTemplateClassic": "Classic",
+  "certificateTemplateClassicDescription": "Formal design with blue colors",
+  "certificateTemplateGold": "Gold",
+  "certificateTemplateGoldDescription": "Premium design with gold colors",
+  "certificateTemplateGreen": "Green",
+  "certificateTemplateGreenDescription": "Modern design with green colors",
+  "certificateDemoClassName": "Grade 7 (A)",
+  "certificateDemoGradeLevel": "Grade 7",
+  "certificateDemoStudentOne": "Ahmed Ali Mansour",
+  "certificateDemoStudentTwo": "Sarah Kamal Al-Saadi",
+  "certificateDemoStudentThree": "Mohammed Khaled Al-Harbi",
+  "certificateDemoStudentFour": "Layla Salem Al-Otaibi",
+  "certificateDemoStudentFive": "Omar Faisal Al-Zahrani",
+  "gradeExcellent": "Excellent",
+  "gradeDistinction": "Distinction",
+  "gradeVeryGood": "Very good",
+  "gradeGood": "Good",
+  "gradeAcceptable": "Acceptable",
+  "completionCertificateTitle": "Completion certificate",
+  "certificateAwardedTo": "This certificate is awarded to",
+  "certificateCompletedClass": "For successfully completing {classroomName}",
+  "@certificateCompletedClass": {
+    "placeholders": {
+      "classroomName": {}
+    }
+  },
+  "certificateAcademicYear": "Academic year 2024-2025",
+  "customizeAndIssueCertificate": "Customize and issue certificate",
+  "certificateStudentNameLabel": "Student name on certificate",
+  "certificateTitleLabel": "Certificate title",
+  "certificateNotificationMessage": "Congratulations! You received a completion certificate with a score of {score}%",
+  "@certificateNotificationMessage": {
+    "placeholders": {
+      "score": {}
+    }
+  },
+  "certificateSentTo": "Certificate sent to {name}",
+  "@certificateSentTo": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "sentDemoMode": "Sent (demo mode)",
+  "downloadPdf": "Download PDF",
+  "exportCertificates": "Export certificates",
+  "nameColumn": "Name",
+  "statusColumn": "Status",
+  "passedLabel": "Passed",
+  "exportPdfCsvAll": "Export PDF/CSV for all",
+  "exportExcelCsv": "Export Excel/CSV",
+  "certificatesSentToPassed": "{count} certificates sent to passed students",
+  "@certificatesSentToPassed": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sendToAll": "Send to all",
+  "certificatesAndResults": "Certificates and results",
+  "export": "Export",
+  "templatePreview": "Template preview",
+  "studentNameFallback": "Student name",
+  "issuingCertificatesForPassed": "Issuing certificates for all passed students...",
+  "issueAll": "Issue all",
+  "chooseCertificateTemplate": "Choose certificate template",
+  "passedStudents": "Passed",
+  "failedStudents": "Failed",
+  "total": "Total",
+  "studentListCount": "Student list ({count})",
+  "@studentListCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sortScore": "Sort: score",
+  "sortName": "Sort: name",
+  "noResultsForClass": "No results for this class",
+  "noResultsForClassMessage": "Students must complete an assessment first before their results appear here",
   "studentDashboardFallbackStudent": "Student",
   "studentDashboardGreeting": "Welcome, {name}!",
   "@studentDashboardGreeting": {

@@ -3768,6 +3768,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studentFilesClassSubtitle => 'الصف الثالث الثانوي - علوم الحاسب';
 
   @override
+  String get studentFileDemoStudentOne => 'أحمد محمود علي';
+
+  @override
+  String get studentFileDemoStudentTwo => 'سارة إبراهيم حسن';
+
+  @override
+  String get studentFileDemoStudentThree => 'خالد يوسف كمال';
+
+  @override
+  String get studentFileDemoStudentFour => 'ليلى عبد العزيز';
+
+  @override
   String get sortByName => 'الاسم';
 
   @override
@@ -3836,6 +3848,174 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fullReport => 'التقرير الكامل';
+
+  @override
+  String get certificateTemplateClassic => 'الكلاسيكي';
+
+  @override
+  String get certificateTemplateClassicDescription => 'تصميم رسمي بألوان زرقاء';
+
+  @override
+  String get certificateTemplateGold => 'الذهبي';
+
+  @override
+  String get certificateTemplateGoldDescription => 'تصميم فاخر بألوان ذهبية';
+
+  @override
+  String get certificateTemplateGreen => 'الأخضر';
+
+  @override
+  String get certificateTemplateGreenDescription => 'تصميم حديث بألوان خضراء';
+
+  @override
+  String get certificateDemoClassName => 'أولى متوسط (أ)';
+
+  @override
+  String get certificateDemoGradeLevel => 'الصف الأول المتوسط';
+
+  @override
+  String get certificateDemoStudentOne => 'أحمد علي منصور';
+
+  @override
+  String get certificateDemoStudentTwo => 'سارة كمال السعدي';
+
+  @override
+  String get certificateDemoStudentThree => 'محمد خالد الحربي';
+
+  @override
+  String get certificateDemoStudentFour => 'ليلى سالم العتيبي';
+
+  @override
+  String get certificateDemoStudentFive => 'عمر فيصل الزهراني';
+
+  @override
+  String get gradeExcellent => 'ممتاز';
+
+  @override
+  String get gradeDistinction => 'امتياز';
+
+  @override
+  String get gradeVeryGood => 'جيد جداً';
+
+  @override
+  String get gradeGood => 'جيد';
+
+  @override
+  String get gradeAcceptable => 'مقبول';
+
+  @override
+  String get completionCertificateTitle => 'شهادة إتمام';
+
+  @override
+  String get certificateAwardedTo => 'تُمنح هذه الشهادة إلى';
+
+  @override
+  String certificateCompletedClass(Object classroomName) {
+    return 'لإتمامه بنجاح مادة $classroomName';
+  }
+
+  @override
+  String get certificateAcademicYear => 'العام الدراسي 2024-2025';
+
+  @override
+  String get customizeAndIssueCertificate => 'تخصيص وإصدار الشهادة';
+
+  @override
+  String get certificateStudentNameLabel => 'اسم الطالب على الشهادة';
+
+  @override
+  String get certificateTitleLabel => 'عنوان الشهادة';
+
+  @override
+  String certificateNotificationMessage(Object score) {
+    return 'تهانينا! لقد حصلت على شهادة إتمام بدرجة $score%';
+  }
+
+  @override
+  String certificateSentTo(Object name) {
+    return 'تم إرسال الشهادة إلى $name';
+  }
+
+  @override
+  String get sentDemoMode => 'تم الإرسال (وضع تجريبي)';
+
+  @override
+  String get downloadPdf => 'تحميل PDF';
+
+  @override
+  String get exportCertificates => 'تصدير الشهادات';
+
+  @override
+  String get nameColumn => 'الاسم';
+
+  @override
+  String get statusColumn => 'الحالة';
+
+  @override
+  String get passedLabel => 'ناجح';
+
+  @override
+  String get exportPdfCsvAll => 'تصدير PDF/CSV للكل';
+
+  @override
+  String get exportExcelCsv => 'تصدير Excel/CSV';
+
+  @override
+  String certificatesSentToPassed(Object count) {
+    return 'تم إرسال $count شهادة للطلاب الناجحين';
+  }
+
+  @override
+  String get sendToAll => 'إرسال للجميع';
+
+  @override
+  String get certificatesAndResults => 'الشهادات والنتائج';
+
+  @override
+  String get export => 'تصدير';
+
+  @override
+  String get templatePreview => 'معاينة النموذج';
+
+  @override
+  String get studentNameFallback => 'اسم الطالب';
+
+  @override
+  String get issuingCertificatesForPassed =>
+      'جاري إصدار شهادات لجميع الناجحين...';
+
+  @override
+  String get issueAll => 'إصدار الكل';
+
+  @override
+  String get chooseCertificateTemplate => 'اختر نموذج الشهادة';
+
+  @override
+  String get passedStudents => 'الناجحون';
+
+  @override
+  String get failedStudents => 'الراسبون';
+
+  @override
+  String get total => 'الإجمالي';
+
+  @override
+  String studentListCount(Object count) {
+    return 'قائمة الطلاب ($count)';
+  }
+
+  @override
+  String get sortScore => 'ترتيب: الدرجة';
+
+  @override
+  String get sortName => 'ترتيب: الاسم';
+
+  @override
+  String get noResultsForClass => 'لا توجد نتائج لهذا الفصل';
+
+  @override
+  String get noResultsForClassMessage =>
+      'يجب أن يكمل الطلاب اختباراً أولاً لتظهر نتائجهم هنا';
 
   @override
   String get studentDashboardFallbackStudent => 'طالب';

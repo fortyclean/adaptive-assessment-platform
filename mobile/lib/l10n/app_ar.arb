@@ -1603,6 +1603,10 @@
   "activityThreeDaysAgo": "منذ 3 أيام",
   "studentFilesTitle": "إدارة ملفات الطلاب",
   "studentFilesClassSubtitle": "الصف الثالث الثانوي - علوم الحاسب",
+  "studentFileDemoStudentOne": "أحمد محمود علي",
+  "studentFileDemoStudentTwo": "سارة إبراهيم حسن",
+  "studentFileDemoStudentThree": "خالد يوسف كمال",
+  "studentFileDemoStudentFour": "ليلى عبد العزيز",
   "sortByName": "الاسم",
   "sortByPerformance": "الأداء",
   "selectedSuffix": "✓",
@@ -1643,6 +1647,83 @@
   },
   "contactStudent": "تواصل مع الطالب",
   "fullReport": "التقرير الكامل",
+  "certificateTemplateClassic": "الكلاسيكي",
+  "certificateTemplateClassicDescription": "تصميم رسمي بألوان زرقاء",
+  "certificateTemplateGold": "الذهبي",
+  "certificateTemplateGoldDescription": "تصميم فاخر بألوان ذهبية",
+  "certificateTemplateGreen": "الأخضر",
+  "certificateTemplateGreenDescription": "تصميم حديث بألوان خضراء",
+  "certificateDemoClassName": "أولى متوسط (أ)",
+  "certificateDemoGradeLevel": "الصف الأول المتوسط",
+  "certificateDemoStudentOne": "أحمد علي منصور",
+  "certificateDemoStudentTwo": "سارة كمال السعدي",
+  "certificateDemoStudentThree": "محمد خالد الحربي",
+  "certificateDemoStudentFour": "ليلى سالم العتيبي",
+  "certificateDemoStudentFive": "عمر فيصل الزهراني",
+  "gradeExcellent": "ممتاز",
+  "gradeDistinction": "امتياز",
+  "gradeVeryGood": "جيد جداً",
+  "gradeGood": "جيد",
+  "gradeAcceptable": "مقبول",
+  "completionCertificateTitle": "شهادة إتمام",
+  "certificateAwardedTo": "تُمنح هذه الشهادة إلى",
+  "certificateCompletedClass": "لإتمامه بنجاح مادة {classroomName}",
+  "@certificateCompletedClass": {
+    "placeholders": {
+      "classroomName": {}
+    }
+  },
+  "certificateAcademicYear": "العام الدراسي 2024-2025",
+  "customizeAndIssueCertificate": "تخصيص وإصدار الشهادة",
+  "certificateStudentNameLabel": "اسم الطالب على الشهادة",
+  "certificateTitleLabel": "عنوان الشهادة",
+  "certificateNotificationMessage": "تهانينا! لقد حصلت على شهادة إتمام بدرجة {score}%",
+  "@certificateNotificationMessage": {
+    "placeholders": {
+      "score": {}
+    }
+  },
+  "certificateSentTo": "تم إرسال الشهادة إلى {name}",
+  "@certificateSentTo": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "sentDemoMode": "تم الإرسال (وضع تجريبي)",
+  "downloadPdf": "تحميل PDF",
+  "exportCertificates": "تصدير الشهادات",
+  "nameColumn": "الاسم",
+  "statusColumn": "الحالة",
+  "passedLabel": "ناجح",
+  "exportPdfCsvAll": "تصدير PDF/CSV للكل",
+  "exportExcelCsv": "تصدير Excel/CSV",
+  "certificatesSentToPassed": "تم إرسال {count} شهادة للطلاب الناجحين",
+  "@certificatesSentToPassed": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sendToAll": "إرسال للجميع",
+  "certificatesAndResults": "الشهادات والنتائج",
+  "export": "تصدير",
+  "templatePreview": "معاينة النموذج",
+  "studentNameFallback": "اسم الطالب",
+  "issuingCertificatesForPassed": "جاري إصدار شهادات لجميع الناجحين...",
+  "issueAll": "إصدار الكل",
+  "chooseCertificateTemplate": "اختر نموذج الشهادة",
+  "passedStudents": "الناجحون",
+  "failedStudents": "الراسبون",
+  "total": "الإجمالي",
+  "studentListCount": "قائمة الطلاب ({count})",
+  "@studentListCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sortScore": "ترتيب: الدرجة",
+  "sortName": "ترتيب: الاسم",
+  "noResultsForClass": "لا توجد نتائج لهذا الفصل",
+  "noResultsForClassMessage": "يجب أن يكمل الطلاب اختباراً أولاً لتظهر نتائجهم هنا",
   "studentDashboardFallbackStudent": "طالب",
   "studentDashboardGreeting": "أهلاً بك، {name}!",
   "@studentDashboardGreeting": {

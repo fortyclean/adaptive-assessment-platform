@@ -6971,6 +6971,30 @@ abstract class AppLocalizations {
   /// **'الصف الثالث الثانوي - علوم الحاسب'**
   String get studentFilesClassSubtitle;
 
+  /// No description provided for @studentFileDemoStudentOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحمد محمود علي'**
+  String get studentFileDemoStudentOne;
+
+  /// No description provided for @studentFileDemoStudentTwo.
+  ///
+  /// In ar, this message translates to:
+  /// **'سارة إبراهيم حسن'**
+  String get studentFileDemoStudentTwo;
+
+  /// No description provided for @studentFileDemoStudentThree.
+  ///
+  /// In ar, this message translates to:
+  /// **'خالد يوسف كمال'**
+  String get studentFileDemoStudentThree;
+
+  /// No description provided for @studentFileDemoStudentFour.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليلى عبد العزيز'**
+  String get studentFileDemoStudentFour;
+
   /// No description provided for @sortByName.
   ///
   /// In ar, this message translates to:
@@ -7090,6 +7114,318 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'التقرير الكامل'**
   String get fullReport;
+
+  /// No description provided for @certificateTemplateClassic.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكلاسيكي'**
+  String get certificateTemplateClassic;
+
+  /// No description provided for @certificateTemplateClassicDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصميم رسمي بألوان زرقاء'**
+  String get certificateTemplateClassicDescription;
+
+  /// No description provided for @certificateTemplateGold.
+  ///
+  /// In ar, this message translates to:
+  /// **'الذهبي'**
+  String get certificateTemplateGold;
+
+  /// No description provided for @certificateTemplateGoldDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصميم فاخر بألوان ذهبية'**
+  String get certificateTemplateGoldDescription;
+
+  /// No description provided for @certificateTemplateGreen.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأخضر'**
+  String get certificateTemplateGreen;
+
+  /// No description provided for @certificateTemplateGreenDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصميم حديث بألوان خضراء'**
+  String get certificateTemplateGreenDescription;
+
+  /// No description provided for @certificateDemoClassName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أولى متوسط (أ)'**
+  String get certificateDemoClassName;
+
+  /// No description provided for @certificateDemoGradeLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الأول المتوسط'**
+  String get certificateDemoGradeLevel;
+
+  /// No description provided for @certificateDemoStudentOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحمد علي منصور'**
+  String get certificateDemoStudentOne;
+
+  /// No description provided for @certificateDemoStudentTwo.
+  ///
+  /// In ar, this message translates to:
+  /// **'سارة كمال السعدي'**
+  String get certificateDemoStudentTwo;
+
+  /// No description provided for @certificateDemoStudentThree.
+  ///
+  /// In ar, this message translates to:
+  /// **'محمد خالد الحربي'**
+  String get certificateDemoStudentThree;
+
+  /// No description provided for @certificateDemoStudentFour.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليلى سالم العتيبي'**
+  String get certificateDemoStudentFour;
+
+  /// No description provided for @certificateDemoStudentFive.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمر فيصل الزهراني'**
+  String get certificateDemoStudentFive;
+
+  /// No description provided for @gradeExcellent.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممتاز'**
+  String get gradeExcellent;
+
+  /// No description provided for @gradeDistinction.
+  ///
+  /// In ar, this message translates to:
+  /// **'امتياز'**
+  String get gradeDistinction;
+
+  /// No description provided for @gradeVeryGood.
+  ///
+  /// In ar, this message translates to:
+  /// **'جيد جداً'**
+  String get gradeVeryGood;
+
+  /// No description provided for @gradeGood.
+  ///
+  /// In ar, this message translates to:
+  /// **'جيد'**
+  String get gradeGood;
+
+  /// No description provided for @gradeAcceptable.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبول'**
+  String get gradeAcceptable;
+
+  /// No description provided for @completionCertificateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهادة إتمام'**
+  String get completionCertificateTitle;
+
+  /// No description provided for @certificateAwardedTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُمنح هذه الشهادة إلى'**
+  String get certificateAwardedTo;
+
+  /// No description provided for @certificateCompletedClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'لإتمامه بنجاح مادة {classroomName}'**
+  String certificateCompletedClass(Object classroomName);
+
+  /// No description provided for @certificateAcademicYear.
+  ///
+  /// In ar, this message translates to:
+  /// **'العام الدراسي 2024-2025'**
+  String get certificateAcademicYear;
+
+  /// No description provided for @customizeAndIssueCertificate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخصيص وإصدار الشهادة'**
+  String get customizeAndIssueCertificate;
+
+  /// No description provided for @certificateStudentNameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الطالب على الشهادة'**
+  String get certificateStudentNameLabel;
+
+  /// No description provided for @certificateTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان الشهادة'**
+  String get certificateTitleLabel;
+
+  /// No description provided for @certificateNotificationMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تهانينا! لقد حصلت على شهادة إتمام بدرجة {score}%'**
+  String certificateNotificationMessage(Object score);
+
+  /// No description provided for @certificateSentTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الشهادة إلى {name}'**
+  String certificateSentTo(Object name);
+
+  /// No description provided for @sentDemoMode.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الإرسال (وضع تجريبي)'**
+  String get sentDemoMode;
+
+  /// No description provided for @downloadPdf.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل PDF'**
+  String get downloadPdf;
+
+  /// No description provided for @exportCertificates.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير الشهادات'**
+  String get exportCertificates;
+
+  /// No description provided for @nameColumn.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get nameColumn;
+
+  /// No description provided for @statusColumn.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة'**
+  String get statusColumn;
+
+  /// No description provided for @passedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ناجح'**
+  String get passedLabel;
+
+  /// No description provided for @exportPdfCsvAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير PDF/CSV للكل'**
+  String get exportPdfCsvAll;
+
+  /// No description provided for @exportExcelCsv.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير Excel/CSV'**
+  String get exportExcelCsv;
+
+  /// No description provided for @certificatesSentToPassed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال {count} شهادة للطلاب الناجحين'**
+  String certificatesSentToPassed(Object count);
+
+  /// No description provided for @sendToAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال للجميع'**
+  String get sendToAll;
+
+  /// No description provided for @certificatesAndResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهادات والنتائج'**
+  String get certificatesAndResults;
+
+  /// No description provided for @export.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير'**
+  String get export;
+
+  /// No description provided for @templatePreview.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة النموذج'**
+  String get templatePreview;
+
+  /// No description provided for @studentNameFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الطالب'**
+  String get studentNameFallback;
+
+  /// No description provided for @issuingCertificatesForPassed.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري إصدار شهادات لجميع الناجحين...'**
+  String get issuingCertificatesForPassed;
+
+  /// No description provided for @issueAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'إصدار الكل'**
+  String get issueAll;
+
+  /// No description provided for @chooseCertificateTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نموذج الشهادة'**
+  String get chooseCertificateTemplate;
+
+  /// No description provided for @passedStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'الناجحون'**
+  String get passedStudents;
+
+  /// No description provided for @failedStudents.
+  ///
+  /// In ar, this message translates to:
+  /// **'الراسبون'**
+  String get failedStudents;
+
+  /// No description provided for @total.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get total;
+
+  /// No description provided for @studentListCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة الطلاب ({count})'**
+  String studentListCount(Object count);
+
+  /// No description provided for @sortScore.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترتيب: الدرجة'**
+  String get sortScore;
+
+  /// No description provided for @sortName.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترتيب: الاسم'**
+  String get sortName;
+
+  /// No description provided for @noResultsForClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج لهذا الفصل'**
+  String get noResultsForClass;
+
+  /// No description provided for @noResultsForClassMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن يكمل الطلاب اختباراً أولاً لتظهر نتائجهم هنا'**
+  String get noResultsForClassMessage;
 
   /// No description provided for @studentDashboardFallbackStudent.
   ///
