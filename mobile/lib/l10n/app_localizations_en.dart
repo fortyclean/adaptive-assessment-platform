@@ -2397,4 +2397,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get supportTutorialDialogFooter =>
       'To access the full content, please visit the help center.';
+
+  @override
+  String get uiFeedbackTitle => 'System message components';
+
+  @override
+  String get uiFeedbackSubtitle =>
+      'Review alert and modal designs across the platform interface.';
+
+  @override
+  String get uiFeedbackSuccessTitle => 'Data imported successfully';
+
+  @override
+  String get uiFeedbackSuccessMessage =>
+      '32 new adaptive questions were added to the advanced biology question bank.';
+
+  @override
+  String get uiFeedbackErrorTitle => 'Could not save question';
+
+  @override
+  String get uiFeedbackErrorMessage =>
+      'The network connection was interrupted. Your progress on item 402 was not synchronized.';
+
+  @override
+  String get uiFeedbackDeleteTitle => 'Delete assessment';
+
+  @override
+  String get uiFeedbackDeleteMessage =>
+      'This action cannot be undone. Student progress data and analytics linked to the midterm physics assessment will be permanently deleted.';
+
+  @override
+  String get uiFeedbackDeleteConfirm => 'Delete permanently';
+
+  @override
+  String get uiFeedbackSyncStatus => 'Current sync status';
+
+  @override
+  String get uiFeedbackPendingAlerts => 'Pending alerts';
+
+  @override
+  String get uiFeedbackSafeStatus => 'Secure';
+
+  @override
+  String get uiFeedbackAccessLogged => 'Access logged';
 }

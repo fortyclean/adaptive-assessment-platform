@@ -634,6 +634,35 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads UI feedback localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.uiFeedbackTitle,
+            l10n.uiFeedbackSuccessTitle,
+            l10n.uiFeedbackErrorTitle,
+            l10n.uiFeedbackDeleteConfirm,
+            l10n.uiFeedbackSyncStatus,
+            l10n.uiFeedbackPendingAlerts,
+            l10n.uiFeedbackSafeStatus,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'System message components / Data imported successfully / '
+        'Could not save question / Delete permanently / Current sync status / '
+        'Pending alerts / Secure',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

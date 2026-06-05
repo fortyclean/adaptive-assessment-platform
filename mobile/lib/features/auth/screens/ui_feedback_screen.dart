@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_section_card.dart';
 
 /// Screen 73 — UI Feedback Components (Alerts, Modals, Status)
@@ -16,6 +17,8 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
   bool _showSuccessAlert = true;
   bool _showErrorAlert = true;
   bool _showDeleteModal = true;
+
+  AppLocalizations get l10n => AppLocalizations.of(context);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -86,7 +89,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'مكوّنات رسائل النظام',
+          l10n.uiFeedbackTitle,
           style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
@@ -94,7 +97,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
         ),
         const SizedBox(height: 4),
         Text(
-          'راجع تصميم التنبيهات والنوافذ المنبثقة داخل واجهة المنصة.',
+          l10n.uiFeedbackSubtitle,
           style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 14),
         ),
       ],
@@ -119,21 +122,22 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                 child: const Icon(Icons.check, color: Colors.white, size: 14),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'تم استيراد البيانات بنجاح',
-                      style: TextStyle(
+                      l10n.uiFeedbackSuccessTitle,
+                      style: const TextStyle(
                           color: Color(0xFF166534),
                           fontSize: 15,
                           fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
-                      'تمت إضافة 32 سؤالًا تكيفيًا جديدًا إلى بنك الأحياء المتقدم.',
-                      style: TextStyle(color: Color(0xFF166534), fontSize: 13),
+                      l10n.uiFeedbackSuccessMessage,
+                      style: const TextStyle(
+                          color: Color(0xFF166534), fontSize: 13),
                     ),
                   ],
                 ),
@@ -167,21 +171,22 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                     color: Colors.white, size: 14),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'فشل حفظ السؤال',
-                      style: TextStyle(
+                      l10n.uiFeedbackErrorTitle,
+                      style: const TextStyle(
                           color: AppColors.error,
                           fontSize: 15,
                           fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
-                      'انقطع اتصال الشبكة. لم تتم مزامنة تقدمك في العنصر رقم 402.',
-                      style: TextStyle(color: Color(0xFF991B1B), fontSize: 13),
+                      l10n.uiFeedbackErrorMessage,
+                      style: const TextStyle(
+                          color: Color(0xFF991B1B), fontSize: 13),
                     ),
                   ],
                 ),
@@ -220,15 +225,16 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                     color: AppColors.error, size: 24),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'حذف اختبار',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              Text(
+                l10n.uiFeedbackDeleteTitle,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
-              const Text(
-                'لا يمكن التراجع عن هذا الإجراء. سيتم حذف بيانات تقدم الطلاب والتحليلات المرتبطة باختبار فيزياء منتصف الفصل نهائيًا.',
-                style: TextStyle(fontSize: 13),
+              Text(
+                l10n.uiFeedbackDeleteMessage,
+                style: const TextStyle(fontSize: 13),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
@@ -244,8 +250,8 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 0,
                   ),
-                  child: const Text('حذف نهائي',
-                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  child: Text(l10n.uiFeedbackDeleteConfirm,
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
                 ),
               ),
               const SizedBox(height: 10),
@@ -260,7 +266,7 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
                         borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: const Text('إلغاء'),
+                  child: Text(l10n.cancel),
                 ),
               ),
             ],
@@ -283,9 +289,9 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'حالة المزامنة الحالية',
-                  style: TextStyle(
+                Text(
+                  l10n.uiFeedbackSyncStatus,
+                  style: const TextStyle(
                       color: Colors.white70, fontSize: 11, letterSpacing: 1),
                 ),
                 const SizedBox(height: 8),
@@ -315,42 +321,42 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: AppSectionCard(
-                  padding: EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.history_outlined,
+                      const Icon(Icons.history_outlined,
                           color: AppColors.primary, size: 24),
-                      SizedBox(height: 8),
-                      Text('3',
+                      const SizedBox(height: 8),
+                      const Text('3',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w700)),
-                      Text('تنبيهات معلّقة',
-                          style: TextStyle(
+                      Text(l10n.uiFeedbackPendingAlerts,
+                          style: const TextStyle(
                               color: AppColors.onSurfaceVariant, fontSize: 11)),
                     ],
                   ),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: AppSectionCard(
-                  padding: EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.security_outlined,
+                      const Icon(Icons.security_outlined,
                           color: Color(0xFF872D00), size: 24),
-                      SizedBox(height: 8),
-                      Text('آمن',
-                          style: TextStyle(
+                      const SizedBox(height: 8),
+                      Text(l10n.uiFeedbackSafeStatus,
+                          style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w700)),
-                      Text('تم تسجيل الوصول',
-                          style: TextStyle(
+                      Text(l10n.uiFeedbackAccessLogged,
+                          style: const TextStyle(
                               color: AppColors.onSurfaceVariant, fontSize: 11)),
                     ],
                   ),
@@ -378,10 +384,10 @@ class _UiFeedbackScreenState extends State<UiFeedbackScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(Icons.home_outlined, 'الرئيسية', false),
-          _navItem(Icons.quiz_outlined, 'الاختبارات', false),
-          _navItem(Icons.bar_chart_outlined, 'التقارير', false),
-          _navItem(Icons.settings, 'الإعدادات', true),
+          _navItem(Icons.home_outlined, l10n.navHome, false),
+          _navItem(Icons.quiz_outlined, l10n.navAssessments, false),
+          _navItem(Icons.bar_chart_outlined, l10n.navReports, false),
+          _navItem(Icons.settings, l10n.navSettings, true),
         ],
       ),
     );

@@ -1026,5 +1026,18 @@
   "supportTutorialAdaptiveAssessment": "Using adaptive assessment",
   "supportMoreTutorialsSoon": "More tutorials coming soon...",
   "supportTutorialDialogMessage": "This tutorial will help you understand how to use the platform better.",
-  "supportTutorialDialogFooter": "To access the full content, please visit the help center."
+  "supportTutorialDialogFooter": "To access the full content, please visit the help center.",
+  "uiFeedbackTitle": "System message components",
+  "uiFeedbackSubtitle": "Review alert and modal designs across the platform interface.",
+  "uiFeedbackSuccessTitle": "Data imported successfully",
+  "uiFeedbackSuccessMessage": "32 new adaptive questions were added to the advanced biology question bank.",
+  "uiFeedbackErrorTitle": "Could not save question",
+  "uiFeedbackErrorMessage": "The network connection was interrupted. Your progress on item 402 was not synchronized.",
+  "uiFeedbackDeleteTitle": "Delete assessment",
+  "uiFeedbackDeleteMessage": "This action cannot be undone. Student progress data and analytics linked to the midterm physics assessment will be permanently deleted.",
+  "uiFeedbackDeleteConfirm": "Delete permanently",
+  "uiFeedbackSyncStatus": "Current sync status",
+  "uiFeedbackPendingAlerts": "Pending alerts",
+  "uiFeedbackSafeStatus": "Secure",
+  "uiFeedbackAccessLogged": "Access logged"
 }

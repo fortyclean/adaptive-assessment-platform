@@ -4449,6 +4449,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'للوصول إلى المحتوى الكامل، يرجى زيارة مركز المساعدة.'**
   String get supportTutorialDialogFooter;
+
+  /// No description provided for @uiFeedbackTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكوّنات رسائل النظام'**
+  String get uiFeedbackTitle;
+
+  /// No description provided for @uiFeedbackSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع تصميم التنبيهات والنوافذ المنبثقة داخل واجهة المنصة.'**
+  String get uiFeedbackSubtitle;
+
+  /// No description provided for @uiFeedbackSuccessTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم استيراد البيانات بنجاح'**
+  String get uiFeedbackSuccessTitle;
+
+  /// No description provided for @uiFeedbackSuccessMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إضافة 32 سؤالًا تكيفيًا جديدًا إلى بنك الأحياء المتقدم.'**
+  String get uiFeedbackSuccessMessage;
+
+  /// No description provided for @uiFeedbackErrorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشل حفظ السؤال'**
+  String get uiFeedbackErrorTitle;
+
+  /// No description provided for @uiFeedbackErrorMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'انقطع اتصال الشبكة. لم تتم مزامنة تقدمك في العنصر رقم 402.'**
+  String get uiFeedbackErrorMessage;
+
+  /// No description provided for @uiFeedbackDeleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف اختبار'**
+  String get uiFeedbackDeleteTitle;
+
+  /// No description provided for @uiFeedbackDeleteMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن التراجع عن هذا الإجراء. سيتم حذف بيانات تقدم الطلاب والتحليلات المرتبطة باختبار فيزياء منتصف الفصل نهائيًا.'**
+  String get uiFeedbackDeleteMessage;
+
+  /// No description provided for @uiFeedbackDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف نهائي'**
+  String get uiFeedbackDeleteConfirm;
+
+  /// No description provided for @uiFeedbackSyncStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة المزامنة الحالية'**
+  String get uiFeedbackSyncStatus;
+
+  /// No description provided for @uiFeedbackPendingAlerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات معلّقة'**
+  String get uiFeedbackPendingAlerts;
+
+  /// No description provided for @uiFeedbackSafeStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'آمن'**
+  String get uiFeedbackSafeStatus;
+
+  /// No description provided for @uiFeedbackAccessLogged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل الوصول'**
+  String get uiFeedbackAccessLogged;
 }
 
 class _AppLocalizationsDelegate

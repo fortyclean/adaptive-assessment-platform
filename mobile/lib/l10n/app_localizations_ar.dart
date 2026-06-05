@@ -2371,4 +2371,47 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get supportTutorialDialogFooter =>
       'للوصول إلى المحتوى الكامل، يرجى زيارة مركز المساعدة.';
+
+  @override
+  String get uiFeedbackTitle => 'مكوّنات رسائل النظام';
+
+  @override
+  String get uiFeedbackSubtitle =>
+      'راجع تصميم التنبيهات والنوافذ المنبثقة داخل واجهة المنصة.';
+
+  @override
+  String get uiFeedbackSuccessTitle => 'تم استيراد البيانات بنجاح';
+
+  @override
+  String get uiFeedbackSuccessMessage =>
+      'تمت إضافة 32 سؤالًا تكيفيًا جديدًا إلى بنك الأحياء المتقدم.';
+
+  @override
+  String get uiFeedbackErrorTitle => 'فشل حفظ السؤال';
+
+  @override
+  String get uiFeedbackErrorMessage =>
+      'انقطع اتصال الشبكة. لم تتم مزامنة تقدمك في العنصر رقم 402.';
+
+  @override
+  String get uiFeedbackDeleteTitle => 'حذف اختبار';
+
+  @override
+  String get uiFeedbackDeleteMessage =>
+      'لا يمكن التراجع عن هذا الإجراء. سيتم حذف بيانات تقدم الطلاب والتحليلات المرتبطة باختبار فيزياء منتصف الفصل نهائيًا.';
+
+  @override
+  String get uiFeedbackDeleteConfirm => 'حذف نهائي';
+
+  @override
+  String get uiFeedbackSyncStatus => 'حالة المزامنة الحالية';
+
+  @override
+  String get uiFeedbackPendingAlerts => 'تنبيهات معلّقة';
+
+  @override
+  String get uiFeedbackSafeStatus => 'آمن';
+
+  @override
+  String get uiFeedbackAccessLogged => 'تم تسجيل الوصول';
 }

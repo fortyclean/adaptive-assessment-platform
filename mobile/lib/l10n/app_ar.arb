@@ -1026,5 +1026,18 @@
   "supportTutorialAdaptiveAssessment": "استخدام التقييم التكيفي",
   "supportMoreTutorialsSoon": "المزيد من الشروحات قريبًا...",
   "supportTutorialDialogMessage": "هذا الشرح التعليمي سيساعدك على فهم كيفية استخدام المنصة بشكل أفضل.",
-  "supportTutorialDialogFooter": "للوصول إلى المحتوى الكامل، يرجى زيارة مركز المساعدة."
+  "supportTutorialDialogFooter": "للوصول إلى المحتوى الكامل، يرجى زيارة مركز المساعدة.",
+  "uiFeedbackTitle": "مكوّنات رسائل النظام",
+  "uiFeedbackSubtitle": "راجع تصميم التنبيهات والنوافذ المنبثقة داخل واجهة المنصة.",
+  "uiFeedbackSuccessTitle": "تم استيراد البيانات بنجاح",
+  "uiFeedbackSuccessMessage": "تمت إضافة 32 سؤالًا تكيفيًا جديدًا إلى بنك الأحياء المتقدم.",
+  "uiFeedbackErrorTitle": "فشل حفظ السؤال",
+  "uiFeedbackErrorMessage": "انقطع اتصال الشبكة. لم تتم مزامنة تقدمك في العنصر رقم 402.",
+  "uiFeedbackDeleteTitle": "حذف اختبار",
+  "uiFeedbackDeleteMessage": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف بيانات تقدم الطلاب والتحليلات المرتبطة باختبار فيزياء منتصف الفصل نهائيًا.",
+  "uiFeedbackDeleteConfirm": "حذف نهائي",
+  "uiFeedbackSyncStatus": "حالة المزامنة الحالية",
+  "uiFeedbackPendingAlerts": "تنبيهات معلّقة",
+  "uiFeedbackSafeStatus": "آمن",
+  "uiFeedbackAccessLogged": "تم تسجيل الوصول"
 }
