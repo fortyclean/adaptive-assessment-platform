@@ -4809,6 +4809,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اكسب نقاطًا مقابل كل اختبار تكمله وحقق شارات الإنجاز عند تميزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان.'**
   String get onboardingRewardsDescription;
+
+  /// No description provided for @onboardingStepLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخطوة {current} من {total}'**
+  String onboardingStepLabel(int current, int total);
+
+  /// No description provided for @extendedOnboardingChooseRoleWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى اختيار أحد الأدوار للمتابعة'**
+  String get extendedOnboardingChooseRoleWarning;
+
+  /// No description provided for @extendedOnboardingWelcomeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحبًا بك في مستقبل التعليم الذكي'**
+  String get extendedOnboardingWelcomeTitle;
+
+  /// No description provided for @extendedOnboardingWelcomeDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتشف تجربة تعليمية مخصصة تعتمد على الذكاء الاصطناعي لتحقيق أفضل النتائج الدراسية.'**
+  String get extendedOnboardingWelcomeDescription;
+
+  /// No description provided for @extendedOnboardingAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييمات ذكية ومخصصة'**
+  String get extendedOnboardingAssessmentTitle;
+
+  /// No description provided for @extendedOnboardingAssessmentDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'خوارزميات متطورة تصمم اختبارات تناسب مستوى كل طالب وتحدد نقاط القوة والضعف بدقة.'**
+  String get extendedOnboardingAssessmentDescription;
+
+  /// No description provided for @extendedOnboardingAveragePerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط الأداء الأكاديمي'**
+  String get extendedOnboardingAveragePerformance;
+
+  /// No description provided for @extendedOnboardingStudentGrowth.
+  ///
+  /// In ar, this message translates to:
+  /// **'نمو الطلاب'**
+  String get extendedOnboardingStudentGrowth;
+
+  /// No description provided for @extendedOnboardingAnalyticsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير تحليلية عميقة'**
+  String get extendedOnboardingAnalyticsTitle;
+
+  /// No description provided for @extendedOnboardingAnalyticsDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'حوّل بيانات الطلاب إلى رؤى واضحة تساعدك على اتخاذ قرارات تعليمية أفضل وتتبع التطور لحظة بلحظة.'**
+  String get extendedOnboardingAnalyticsDescription;
+
+  /// No description provided for @extendedOnboardingRoleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لنبدأ رحلتك التعليمية'**
+  String get extendedOnboardingRoleTitle;
+
+  /// No description provided for @extendedOnboardingRoleSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر دورك للبدء في تخصيص تجربتك'**
+  String get extendedOnboardingRoleSubtitle;
+
+  /// No description provided for @extendedOnboardingTeacherRoleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا معلم'**
+  String get extendedOnboardingTeacherRoleTitle;
+
+  /// No description provided for @extendedOnboardingTeacherRoleSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء الاختبارات وإدارة الفصول'**
+  String get extendedOnboardingTeacherRoleSubtitle;
+
+  /// No description provided for @extendedOnboardingStudentRoleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا طالب'**
+  String get extendedOnboardingStudentRoleTitle;
+
+  /// No description provided for @extendedOnboardingStudentRoleSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خوض الاختبارات ومتابعة التقدم'**
+  String get extendedOnboardingStudentRoleSubtitle;
 }
 
 class _AppLocalizationsDelegate

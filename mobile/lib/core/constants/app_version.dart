@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.89';
-  static const int buildNumber = 89;
+  static const String current = '1.0.90';
+  static const int buildNumber = 90;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,19 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.90',
+      buildNumber: 90,
+      date: 'يونيو 2026',
+      title: 'ترجمة شاشة التعريف الممتدة',
+      changes: [
+        'نقل شاشة التعريف الممتدة إلى مفاتيح ترجمة عربية وإنجليزية.',
+        'ترجمة التخطي والتالي وابدأ الآن ومؤشر الخطوة ورسالة اختيار الدور.',
+        'ترجمة شرائح مستقبل التعليم الذكي والتقييمات الذكية والتقارير التحليلية.',
+        'ترجمة بطاقات اختيار دور المعلم والطالب وإضافة اختبار حماية لمفاتيح الشاشة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.89',
       buildNumber: 89,

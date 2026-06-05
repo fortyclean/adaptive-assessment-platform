@@ -2597,4 +2597,65 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboardingRewardsDescription =>
       'Earn points for every completed assessment and unlock achievement badges when you excel. Track your progress and challenge yourself toward higher mastery.';
+
+  @override
+  String onboardingStepLabel(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get extendedOnboardingChooseRoleWarning =>
+      'Please choose a role to continue';
+
+  @override
+  String get extendedOnboardingWelcomeTitle =>
+      'Welcome to the future of smart education';
+
+  @override
+  String get extendedOnboardingWelcomeDescription =>
+      'Discover a personalized learning experience powered by AI to achieve better academic outcomes.';
+
+  @override
+  String get extendedOnboardingAssessmentTitle =>
+      'Smart personalized assessments';
+
+  @override
+  String get extendedOnboardingAssessmentDescription =>
+      'Advanced algorithms design assessments that fit each student level and identify strengths and weaknesses accurately.';
+
+  @override
+  String get extendedOnboardingAveragePerformance =>
+      'Average academic performance';
+
+  @override
+  String get extendedOnboardingStudentGrowth => 'Student growth';
+
+  @override
+  String get extendedOnboardingAnalyticsTitle => 'Deep analytics reports';
+
+  @override
+  String get extendedOnboardingAnalyticsDescription =>
+      'Turn student data into clear insights that help you make better teaching decisions and track progress moment by moment.';
+
+  @override
+  String get extendedOnboardingRoleTitle =>
+      'Let us start your learning journey';
+
+  @override
+  String get extendedOnboardingRoleSubtitle =>
+      'Choose your role to personalize your experience';
+
+  @override
+  String get extendedOnboardingTeacherRoleTitle => 'I am a teacher';
+
+  @override
+  String get extendedOnboardingTeacherRoleSubtitle =>
+      'Create assessments and manage classes';
+
+  @override
+  String get extendedOnboardingStudentRoleTitle => 'I am a student';
+
+  @override
+  String get extendedOnboardingStudentRoleSubtitle =>
+      'Take assessments and track progress';
 }

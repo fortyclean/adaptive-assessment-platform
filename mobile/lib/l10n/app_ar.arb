@@ -1093,5 +1093,31 @@
   "onboardingAnalyticsDescription": "احصل على تقارير بيانية تفصيلية تظهر أداءك في كل مهارة وتصنف نقاط قوتك وضعفك بوضوح حتى تعرف ما الذي تحتاج إلى مراجعته.",
   "onboardingRewardsTitle": "نقاط وإنجازات",
   "onboardingRewardsSubtitle": "تعلّم وتحفّز في آنٍ واحد",
-  "onboardingRewardsDescription": "اكسب نقاطًا مقابل كل اختبار تكمله وحقق شارات الإنجاز عند تميزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان."
+  "onboardingRewardsDescription": "اكسب نقاطًا مقابل كل اختبار تكمله وحقق شارات الإنجاز عند تميزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان.",
+  "onboardingStepLabel": "الخطوة {current} من {total}",
+  "@onboardingStepLabel": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "extendedOnboardingChooseRoleWarning": "يرجى اختيار أحد الأدوار للمتابعة",
+  "extendedOnboardingWelcomeTitle": "مرحبًا بك في مستقبل التعليم الذكي",
+  "extendedOnboardingWelcomeDescription": "اكتشف تجربة تعليمية مخصصة تعتمد على الذكاء الاصطناعي لتحقيق أفضل النتائج الدراسية.",
+  "extendedOnboardingAssessmentTitle": "تقييمات ذكية ومخصصة",
+  "extendedOnboardingAssessmentDescription": "خوارزميات متطورة تصمم اختبارات تناسب مستوى كل طالب وتحدد نقاط القوة والضعف بدقة.",
+  "extendedOnboardingAveragePerformance": "متوسط الأداء الأكاديمي",
+  "extendedOnboardingStudentGrowth": "نمو الطلاب",
+  "extendedOnboardingAnalyticsTitle": "تقارير تحليلية عميقة",
+  "extendedOnboardingAnalyticsDescription": "حوّل بيانات الطلاب إلى رؤى واضحة تساعدك على اتخاذ قرارات تعليمية أفضل وتتبع التطور لحظة بلحظة.",
+  "extendedOnboardingRoleTitle": "لنبدأ رحلتك التعليمية",
+  "extendedOnboardingRoleSubtitle": "اختر دورك للبدء في تخصيص تجربتك",
+  "extendedOnboardingTeacherRoleTitle": "أنا معلم",
+  "extendedOnboardingTeacherRoleSubtitle": "إنشاء الاختبارات وإدارة الفصول",
+  "extendedOnboardingStudentRoleTitle": "أنا طالب",
+  "extendedOnboardingStudentRoleSubtitle": "خوض الاختبارات ومتابعة التقدم"
 }

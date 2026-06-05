@@ -723,6 +723,34 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('loads extended onboarding localization labels', (tester) async {
+    await tester.pumpWidget(
+      _LocalizedLabelApp(
+        locale: const Locale('en', 'US'),
+        labelBuilder: (context) {
+          final l10n = AppLocalizations.of(context);
+          return [
+            l10n.onboardingStepLabel(2, 4),
+            l10n.extendedOnboardingWelcomeTitle,
+            l10n.extendedOnboardingAssessmentTitle,
+            l10n.extendedOnboardingAnalyticsTitle,
+            l10n.extendedOnboardingTeacherRoleTitle,
+            l10n.extendedOnboardingStudentRoleTitle,
+          ].join(' / ');
+        },
+      ),
+    );
+
+    expect(
+      find.text(
+        'Step 2 of 4 / Welcome to the future of smart education / '
+        'Smart personalized assessments / Deep analytics reports / '
+        'I am a teacher / I am a student',
+      ),
+      findsOneWidget,
+    );
+  });
 }
 
 class _LocalizedLabelApp extends StatelessWidget {

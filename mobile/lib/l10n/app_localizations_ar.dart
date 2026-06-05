@@ -2567,4 +2567,62 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get onboardingRewardsDescription =>
       'اكسب نقاطًا مقابل كل اختبار تكمله وحقق شارات الإنجاز عند تميزك. تابع تقدمك وتنافس مع نفسك لتحقيق مستويات أعلى من الإتقان.';
+
+  @override
+  String onboardingStepLabel(int current, int total) {
+    return 'الخطوة $current من $total';
+  }
+
+  @override
+  String get extendedOnboardingChooseRoleWarning =>
+      'يرجى اختيار أحد الأدوار للمتابعة';
+
+  @override
+  String get extendedOnboardingWelcomeTitle =>
+      'مرحبًا بك في مستقبل التعليم الذكي';
+
+  @override
+  String get extendedOnboardingWelcomeDescription =>
+      'اكتشف تجربة تعليمية مخصصة تعتمد على الذكاء الاصطناعي لتحقيق أفضل النتائج الدراسية.';
+
+  @override
+  String get extendedOnboardingAssessmentTitle => 'تقييمات ذكية ومخصصة';
+
+  @override
+  String get extendedOnboardingAssessmentDescription =>
+      'خوارزميات متطورة تصمم اختبارات تناسب مستوى كل طالب وتحدد نقاط القوة والضعف بدقة.';
+
+  @override
+  String get extendedOnboardingAveragePerformance => 'متوسط الأداء الأكاديمي';
+
+  @override
+  String get extendedOnboardingStudentGrowth => 'نمو الطلاب';
+
+  @override
+  String get extendedOnboardingAnalyticsTitle => 'تقارير تحليلية عميقة';
+
+  @override
+  String get extendedOnboardingAnalyticsDescription =>
+      'حوّل بيانات الطلاب إلى رؤى واضحة تساعدك على اتخاذ قرارات تعليمية أفضل وتتبع التطور لحظة بلحظة.';
+
+  @override
+  String get extendedOnboardingRoleTitle => 'لنبدأ رحلتك التعليمية';
+
+  @override
+  String get extendedOnboardingRoleSubtitle =>
+      'اختر دورك للبدء في تخصيص تجربتك';
+
+  @override
+  String get extendedOnboardingTeacherRoleTitle => 'أنا معلم';
+
+  @override
+  String get extendedOnboardingTeacherRoleSubtitle =>
+      'إنشاء الاختبارات وإدارة الفصول';
+
+  @override
+  String get extendedOnboardingStudentRoleTitle => 'أنا طالب';
+
+  @override
+  String get extendedOnboardingStudentRoleSubtitle =>
+      'خوض الاختبارات ومتابعة التقدم';
 }

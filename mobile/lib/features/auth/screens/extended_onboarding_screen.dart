@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// ExtendedOnboardingScreen — Screens 51–54
 /// A 4-slide onboarding flow with:
@@ -26,6 +27,8 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
   String? _selectedRole; // 'teacher' or 'student' — used on slide 4
 
   static const int _totalPages = 4;
+
+  AppLocalizations get l10n => AppLocalizations.of(context);
 
   @override
   void dispose() {
@@ -108,9 +111,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
                     vertical: 8,
                   ),
                 ),
-                child: const Text(
-                  'تخطي',
-                  style: TextStyle(
+                child: Text(
+                  l10n.skip,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -176,7 +179,7 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      _isLastPage ? 'ابدأ الآن' : 'التالي',
+                      _isLastPage ? l10n.getStarted : l10n.next,
                       style: const TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 16,
@@ -192,7 +195,7 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             const SizedBox(height: 12),
             // Step label
             Text(
-              'الخطوة ${_currentPage + 1} من $_totalPages',
+              l10n.onboardingStepLabel(_currentPage + 1, _totalPages),
               style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 12,
@@ -202,9 +205,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             ),
             if (_isLastPage && _selectedRole == null) ...[
               const SizedBox(height: 4),
-              const Text(
-                'يرجى اختيار أحد الأدوار للمتابعة',
-                style: TextStyle(
+              Text(
+                l10n.extendedOnboardingChooseRoleWarning,
+                style: const TextStyle(
                   fontFamily: 'Almarai',
                   fontSize: 12,
                   color: AppColors.outline,
@@ -281,9 +284,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             ),
             const SizedBox(height: 40),
             // Title
-            const Text(
-              'مرحباً بك في مستقبل التعليم الذكي',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingWelcomeTitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
@@ -294,9 +297,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             ),
             const SizedBox(height: 16),
             // Description
-            const Text(
-              'اكتشف تجربة تعليمية مخصصة تعتمد على الذكاء الاصطناعي لتحقيق أفضل النتائج الدراسية.',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingWelcomeDescription,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -411,9 +414,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             ),
             const SizedBox(height: 48),
             // Title
-            const Text(
-              'تقييمات ذكية ومخصصة',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingAssessmentTitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
@@ -424,9 +427,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             ),
             const SizedBox(height: 16),
             // Description
-            const Text(
-              'خوارزميات متطورة تصمم اختبارات تناسب مستوى كل طالب وتحدد نقاط القوة والضعف بدقة.',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingAssessmentDescription,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -473,20 +476,20 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'متوسط الأداء الأكاديمي',
-                                  style: TextStyle(
+                                  l10n.extendedOnboardingAveragePerformance,
+                                  style: const TextStyle(
                                     fontFamily: 'Almarai',
                                     fontSize: 11,
                                     color: AppColors.onSurfaceVariant,
                                   ),
                                 ),
-                                SizedBox(height: 4),
-                                Text(
+                                const SizedBox(height: 4),
+                                const Text(
                                   '84%',
                                   style: TextStyle(
                                     fontFamily: 'Almarai',
@@ -536,10 +539,10 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
                               border:
                                   Border.all(color: AppColors.outlineVariant),
                             ),
-                            child: const Column(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   width: 48,
                                   height: 48,
                                   child: Stack(
@@ -567,10 +570,10 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
-                                  'الإتقان',
-                                  style: TextStyle(
+                                  l10n.mastery,
+                                  style: const TextStyle(
                                     fontFamily: 'Almarai',
                                     fontSize: 10,
                                     color: AppColors.onSurfaceVariant,
@@ -594,18 +597,18 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Column(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.trending_up_rounded,
                                   color: Colors.white,
                                   size: 24,
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
-                                  'نمو الطلاب',
-                                  style: TextStyle(
+                                  l10n.extendedOnboardingStudentGrowth,
+                                  style: const TextStyle(
                                     fontFamily: 'Almarai',
                                     fontSize: 10,
                                     color: Colors.white70,
@@ -623,9 +626,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             ),
             const SizedBox(height: 40),
             // Title
-            const Text(
-              'تقارير تحليلية عميقة',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingAnalyticsTitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
@@ -636,9 +639,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
             ),
             const SizedBox(height: 16),
             // Description
-            const Text(
-              'حول بيانات الطلاب إلى رؤى واضحة تساعدك على اتخاذ قرارات تعليمية أفضل وتتبع التطور لحظة بلحظة.',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingAnalyticsDescription,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -659,9 +662,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
           children: [
             const SizedBox(height: 16),
             // Header text
-            const Text(
-              'لنبدأ رحلتك التعليمية',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingRoleTitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
@@ -670,9 +673,9 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'اختر دورك للبدء في تخصيص تجربتك',
-              style: TextStyle(
+            Text(
+              l10n.extendedOnboardingRoleSubtitle,
+              style: const TextStyle(
                 fontFamily: 'Almarai',
                 fontSize: 16,
                 color: AppColors.onSurfaceVariant,
@@ -703,16 +706,16 @@ class _ExtendedOnboardingScreenState extends State<ExtendedOnboardingScreen> {
               role: 'teacher',
               icon: Icons.school_rounded,
               iconBgColor: AppColors.primaryContainer,
-              title: 'أنا معلم',
-              subtitle: 'إنشاء الاختبارات وإدارة الفصول',
+              title: l10n.extendedOnboardingTeacherRoleTitle,
+              subtitle: l10n.extendedOnboardingTeacherRoleSubtitle,
             ),
             const SizedBox(height: 12),
             _buildRoleCard(
               role: 'student',
               icon: Icons.person_search_rounded,
               iconBgColor: const Color(0xFF872D00),
-              title: 'أنا طالب',
-              subtitle: 'خوض الاختبارات ومتابعة التقدم',
+              title: l10n.extendedOnboardingStudentRoleTitle,
+              subtitle: l10n.extendedOnboardingStudentRoleSubtitle,
             ),
             const SizedBox(height: 16),
           ],

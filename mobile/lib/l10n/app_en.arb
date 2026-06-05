@@ -1093,5 +1093,31 @@
   "onboardingAnalyticsDescription": "Get detailed visual reports that show your performance in each skill and clearly classify strengths and weaknesses so you know exactly what to review.",
   "onboardingRewardsTitle": "Points and achievements",
   "onboardingRewardsSubtitle": "Learn and stay motivated at the same time",
-  "onboardingRewardsDescription": "Earn points for every completed assessment and unlock achievement badges when you excel. Track your progress and challenge yourself toward higher mastery."
+  "onboardingRewardsDescription": "Earn points for every completed assessment and unlock achievement badges when you excel. Track your progress and challenge yourself toward higher mastery.",
+  "onboardingStepLabel": "Step {current} of {total}",
+  "@onboardingStepLabel": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "extendedOnboardingChooseRoleWarning": "Please choose a role to continue",
+  "extendedOnboardingWelcomeTitle": "Welcome to the future of smart education",
+  "extendedOnboardingWelcomeDescription": "Discover a personalized learning experience powered by AI to achieve better academic outcomes.",
+  "extendedOnboardingAssessmentTitle": "Smart personalized assessments",
+  "extendedOnboardingAssessmentDescription": "Advanced algorithms design assessments that fit each student level and identify strengths and weaknesses accurately.",
+  "extendedOnboardingAveragePerformance": "Average academic performance",
+  "extendedOnboardingStudentGrowth": "Student growth",
+  "extendedOnboardingAnalyticsTitle": "Deep analytics reports",
+  "extendedOnboardingAnalyticsDescription": "Turn student data into clear insights that help you make better teaching decisions and track progress moment by moment.",
+  "extendedOnboardingRoleTitle": "Let us start your learning journey",
+  "extendedOnboardingRoleSubtitle": "Choose your role to personalize your experience",
+  "extendedOnboardingTeacherRoleTitle": "I am a teacher",
+  "extendedOnboardingTeacherRoleSubtitle": "Create assessments and manage classes",
+  "extendedOnboardingStudentRoleTitle": "I am a student",
+  "extendedOnboardingStudentRoleSubtitle": "Take assessments and track progress"
 }
