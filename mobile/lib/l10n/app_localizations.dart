@@ -920,6 +920,54 @@ abstract class AppLocalizations {
   /// **'تعذر تحميل التقرير'**
   String get teacherReportLoadFailed;
 
+  /// No description provided for @teacherReportSkillUnderstanding.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفهم والاستيعاب'**
+  String get teacherReportSkillUnderstanding;
+
+  /// No description provided for @teacherReportSkillApplication.
+  ///
+  /// In ar, this message translates to:
+  /// **'التطبيق'**
+  String get teacherReportSkillApplication;
+
+  /// No description provided for @teacherReportSkillAnalysisEvaluation.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحليل والتقييم'**
+  String get teacherReportSkillAnalysisEvaluation;
+
+  /// No description provided for @teacherReportDemoStudentOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحمد محمد'**
+  String get teacherReportDemoStudentOne;
+
+  /// No description provided for @teacherReportDemoStudentTwo.
+  ///
+  /// In ar, this message translates to:
+  /// **'سارة علي'**
+  String get teacherReportDemoStudentTwo;
+
+  /// No description provided for @teacherReportDemoStudentThree.
+  ///
+  /// In ar, this message translates to:
+  /// **'محمد خالد'**
+  String get teacherReportDemoStudentThree;
+
+  /// No description provided for @teacherReportDemoStudentFour.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاطمة أحمد'**
+  String get teacherReportDemoStudentFour;
+
+  /// No description provided for @teacherReportDemoStudentFive.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمر حسن'**
+  String get teacherReportDemoStudentFive;
+
   /// No description provided for @nameHeader.
   ///
   /// In ar, this message translates to:
@@ -1075,6 +1123,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذر تحميل جداول التقارير. تحقق من الاتصال ثم أعد المحاولة.'**
   String get reportSchedulesLoadFailed;
+
+  /// No description provided for @reportScheduleClassroomOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'أولى متوسط (أ)'**
+  String get reportScheduleClassroomOne;
+
+  /// No description provided for @reportScheduleClassroomTwo.
+  ///
+  /// In ar, this message translates to:
+  /// **'أولى متوسط (ب)'**
+  String get reportScheduleClassroomTwo;
+
+  /// No description provided for @reportScheduleClassroomThree.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثانية متوسط (أ)'**
+  String get reportScheduleClassroomThree;
+
+  /// No description provided for @reportScheduleClassroomFour.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثانية متوسط (ب)'**
+  String get reportScheduleClassroomFour;
+
+  /// No description provided for @reportScheduleClassroomFive.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثالثة متوسط (أ)'**
+  String get reportScheduleClassroomFive;
+
+  /// No description provided for @reportScheduleDemoStudentPerformanceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء الطلاب - المرحلة المتوسطة'**
+  String get reportScheduleDemoStudentPerformanceTitle;
+
+  /// No description provided for @reportScheduleDemoQuestionQualityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جودة الأسئلة - قسم العلوم'**
+  String get reportScheduleDemoQuestionQualityTitle;
+
+  /// No description provided for @reportScheduleDemoAnnualComparisonTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقرير المقارنة السنوي'**
+  String get reportScheduleDemoAnnualComparisonTitle;
 
   /// No description provided for @addAtLeastOneEmail.
   ///

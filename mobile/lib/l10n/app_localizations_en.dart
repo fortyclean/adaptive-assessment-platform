@@ -442,6 +442,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get teacherReportLoadFailed => 'Could not load the report';
 
   @override
+  String get teacherReportSkillUnderstanding =>
+      'Understanding and comprehension';
+
+  @override
+  String get teacherReportSkillApplication => 'Application';
+
+  @override
+  String get teacherReportSkillAnalysisEvaluation => 'Analysis and evaluation';
+
+  @override
+  String get teacherReportDemoStudentOne => 'Ahmed Mohammed';
+
+  @override
+  String get teacherReportDemoStudentTwo => 'Sarah Ali';
+
+  @override
+  String get teacherReportDemoStudentThree => 'Mohammed Khaled';
+
+  @override
+  String get teacherReportDemoStudentFour => 'Fatima Ahmed';
+
+  @override
+  String get teacherReportDemoStudentFive => 'Omar Hassan';
+
+  @override
   String get nameHeader => 'Name';
 
   @override
@@ -523,6 +548,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get reportSchedulesLoadFailed =>
       'Could not load report schedules. Check your connection and try again.';
+
+  @override
+  String get reportScheduleClassroomOne => 'Grade 7 (A)';
+
+  @override
+  String get reportScheduleClassroomTwo => 'Grade 7 (B)';
+
+  @override
+  String get reportScheduleClassroomThree => 'Grade 8 (A)';
+
+  @override
+  String get reportScheduleClassroomFour => 'Grade 8 (B)';
+
+  @override
+  String get reportScheduleClassroomFive => 'Grade 9 (A)';
+
+  @override
+  String get reportScheduleDemoStudentPerformanceTitle =>
+      'Student performance - middle grades';
+
+  @override
+  String get reportScheduleDemoQuestionQualityTitle =>
+      'Question quality - science department';
+
+  @override
+  String get reportScheduleDemoAnnualComparisonTitle =>
+      'Annual comparison report';
 
   @override
   String get addAtLeastOneEmail => 'Add at least one email address';

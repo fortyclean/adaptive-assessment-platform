@@ -441,6 +441,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get teacherReportLoadFailed => 'تعذر تحميل التقرير';
 
   @override
+  String get teacherReportSkillUnderstanding => 'الفهم والاستيعاب';
+
+  @override
+  String get teacherReportSkillApplication => 'التطبيق';
+
+  @override
+  String get teacherReportSkillAnalysisEvaluation => 'التحليل والتقييم';
+
+  @override
+  String get teacherReportDemoStudentOne => 'أحمد محمد';
+
+  @override
+  String get teacherReportDemoStudentTwo => 'سارة علي';
+
+  @override
+  String get teacherReportDemoStudentThree => 'محمد خالد';
+
+  @override
+  String get teacherReportDemoStudentFour => 'فاطمة أحمد';
+
+  @override
+  String get teacherReportDemoStudentFive => 'عمر حسن';
+
+  @override
   String get nameHeader => 'الاسم';
 
   @override
@@ -522,6 +546,32 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get reportSchedulesLoadFailed =>
       'تعذر تحميل جداول التقارير. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get reportScheduleClassroomOne => 'أولى متوسط (أ)';
+
+  @override
+  String get reportScheduleClassroomTwo => 'أولى متوسط (ب)';
+
+  @override
+  String get reportScheduleClassroomThree => 'ثانية متوسط (أ)';
+
+  @override
+  String get reportScheduleClassroomFour => 'ثانية متوسط (ب)';
+
+  @override
+  String get reportScheduleClassroomFive => 'ثالثة متوسط (أ)';
+
+  @override
+  String get reportScheduleDemoStudentPerformanceTitle =>
+      'أداء الطلاب - المرحلة المتوسطة';
+
+  @override
+  String get reportScheduleDemoQuestionQualityTitle =>
+      'جودة الأسئلة - قسم العلوم';
+
+  @override
+  String get reportScheduleDemoAnnualComparisonTitle => 'تقرير المقارنة السنوي';
 
   @override
   String get addAtLeastOneEmail => 'يرجى إضافة بريد إلكتروني واحد على الأقل';

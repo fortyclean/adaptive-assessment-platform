@@ -39,6 +39,7 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
         widget.assessmentId.startsWith('demo-') ||
         widget.assessmentId == '1' ||
         widget.assessmentId == '2') {
+      final l10n = _reportL10n(context);
       await Future.delayed(const Duration(milliseconds: 600));
       setState(() {
         _report = {
@@ -47,37 +48,46 @@ class _TeacherReportScreenState extends ConsumerState<TeacherReportScreen> {
           'lowestScore': 45.0,
           'scoreDistribution': {'90-100': 3, '70-89': 8, '50-69': 5, '0-49': 2},
           'skillHeatmap': [
-            {'mainSkill': 'الفهم والاستيعاب', 'averagePercentage': 82.0},
-            {'mainSkill': 'التطبيق', 'averagePercentage': 68.0},
-            {'mainSkill': 'التحليل والتقييم', 'averagePercentage': 55.0},
+            {
+              'mainSkill': l10n.teacherReportSkillUnderstanding,
+              'averagePercentage': 82.0
+            },
+            {
+              'mainSkill': l10n.teacherReportSkillApplication,
+              'averagePercentage': 68.0
+            },
+            {
+              'mainSkill': l10n.teacherReportSkillAnalysisEvaluation,
+              'averagePercentage': 55.0
+            },
           ],
           'studentResults': [
             {
-              'fullName': 'أحمد محمد',
+              'fullName': l10n.teacherReportDemoStudentOne,
               'scorePercentage': 95.0,
               'status': 'completed',
               'timeTakenSeconds': 1800
             },
             {
-              'fullName': 'سارة علي',
+              'fullName': l10n.teacherReportDemoStudentTwo,
               'scorePercentage': 88.0,
               'status': 'completed',
               'timeTakenSeconds': 2100
             },
             {
-              'fullName': 'محمد خالد',
+              'fullName': l10n.teacherReportDemoStudentThree,
               'scorePercentage': 76.0,
               'status': 'completed',
               'timeTakenSeconds': 2400
             },
             {
-              'fullName': 'فاطمة أحمد',
+              'fullName': l10n.teacherReportDemoStudentFour,
               'scorePercentage': 65.0,
               'status': 'completed',
               'timeTakenSeconds': 2700
             },
             {
-              'fullName': 'عمر حسن',
+              'fullName': l10n.teacherReportDemoStudentFive,
               'scorePercentage': 45.0,
               'status': 'timeout',
               'timeTakenSeconds': 2700

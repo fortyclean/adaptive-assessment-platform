@@ -205,15 +205,14 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
     return AppConstants.useMockData || token.startsWith('demo-token-');
   }
 
-  // Classroom chips (Screen 33 variant)
-  final List<String> _availableClassrooms = [
-    'أولى متوسط (أ)',
-    'أولى متوسط (ب)',
-    'ثانية متوسط (أ)',
-    'ثانية متوسط (ب)',
-    'ثالثة متوسط (أ)',
-  ];
-  final Set<String> _selectedClassrooms = {'أولى متوسط (أ)'};
+  List<String> _availableClassrooms(AppLocalizations l10n) => [
+        l10n.reportScheduleClassroomOne,
+        l10n.reportScheduleClassroomTwo,
+        l10n.reportScheduleClassroomThree,
+        l10n.reportScheduleClassroomFour,
+        l10n.reportScheduleClassroomFive,
+      ];
+  final Set<String> _selectedClassrooms = {};
 
   // Schedules list
   List<_ScheduleItem> _schedules = [];
@@ -234,41 +233,53 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
   }
 
   // ── Mock data fallback ────────────────────────────────────────────────────
-  static const List<Map<String, dynamic>> _mockSchedules = [
-    {
-      '_id': 'mock-sched-1',
-      'title': 'أداء الطلاب - المرحلة المتوسطة',
-      'reportType': 'student_performance',
-      'frequency': 'weekly',
-      'deliveryTime': '08:30',
-      'fileFormat': 'pdf',
-      'isActive': true,
-      'recipients': ['admin@edu.sa'],
-      'classroomIds': [],
-    },
-    {
-      '_id': 'mock-sched-2',
-      'title': 'جودة الأسئلة - قسم العلوم',
-      'reportType': 'question_quality',
-      'frequency': 'monthly',
-      'deliveryTime': '10:00',
-      'fileFormat': 'excel',
-      'isActive': true,
-      'recipients': ['science@edu.sa'],
-      'classroomIds': [],
-    },
-    {
-      '_id': 'mock-sched-3',
-      'title': 'تقرير المقارنة السنوي',
-      'reportType': 'classroom_comparison',
-      'frequency': 'monthly',
-      'deliveryTime': '09:00',
-      'fileFormat': 'excel',
-      'isActive': false,
-      'recipients': ['supervisor@edu.sa'],
-      'classroomIds': [],
-    },
-  ];
+  List<Map<String, dynamic>> _mockSchedules(AppLocalizations l10n) => [
+        {
+          '_id': 'mock-sched-1',
+          'title': l10n.reportScheduleDemoStudentPerformanceTitle,
+          'reportType': 'student_performance',
+          'frequency': 'weekly',
+          'deliveryTime': '08:30',
+          'fileFormat': 'pdf',
+          'isActive': true,
+          'recipients': ['admin@edu.sa'],
+          'classroomIds': [],
+        },
+        {
+          '_id': 'mock-sched-2',
+          'title': l10n.reportScheduleDemoQuestionQualityTitle,
+          'reportType': 'question_quality',
+          'frequency': 'monthly',
+          'deliveryTime': '10:00',
+          'fileFormat': 'excel',
+          'isActive': true,
+          'recipients': ['science@edu.sa'],
+          'classroomIds': [],
+        },
+        {
+          '_id': 'mock-sched-3',
+          'title': l10n.reportScheduleDemoAnnualComparisonTitle,
+          'reportType': 'classroom_comparison',
+          'frequency': 'monthly',
+          'deliveryTime': '09:00',
+          'fileFormat': 'excel',
+          'isActive': false,
+          'recipients': ['supervisor@edu.sa'],
+          'classroomIds': [],
+        },
+      ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final classrooms = _availableClassrooms(_scheduleL10n(context));
+    if (_selectedClassrooms.isEmpty ||
+        !_selectedClassrooms.any(classrooms.contains)) {
+      _selectedClassrooms
+        ..clear()
+        ..add(classrooms.first);
+    }
+  }
 
   Future<void> _loadSchedules() async {
     final l10n = _scheduleL10n(context);
@@ -285,7 +296,7 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
     } catch (_) {
       setState(() {
         _schedules = _shouldUseDemoFallback
-            ? _mockSchedules.map(_ScheduleItem.fromJson).toList()
+            ? _mockSchedules(l10n).map(_ScheduleItem.fromJson).toList()
             : [];
         // Explicit fallback marker for production guard tests:
         // _errorMessage = _shouldUseDemoFallback
@@ -482,65 +493,69 @@ class _ReportScheduleScreenState extends ConsumerState<ReportScheduleScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: _buildAppBar(context),
-          body: RefreshIndicator(
-            onRefresh: _loadSchedules,
-            color: AppColors.primary,
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
-              children: [
-                // ── Hero ──────────────────────────────────────────────────────
-                const _HeroSection(),
-                const SizedBox(height: 24),
+  Widget build(BuildContext context) {
+    final l10n = _scheduleL10n(context);
+    final classrooms = _availableClassrooms(l10n);
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        appBar: _buildAppBar(context),
+        body: RefreshIndicator(
+          onRefresh: _loadSchedules,
+          color: AppColors.primary,
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+            children: [
+              // ── Hero ──────────────────────────────────────────────────────
+              const _HeroSection(),
+              const SizedBox(height: 24),
 
-                // ── Create Form ───────────────────────────────────────────────
-                _CreateFormCard(
-                  isActive: _isActive,
-                  reportType: _reportType,
-                  frequency: _frequency,
-                  fileFormat: _fileFormat,
-                  deliveryTime: _deliveryTime,
-                  recipients: _recipients,
-                  emailController: _emailController,
-                  availableClassrooms: _availableClassrooms,
-                  selectedClassrooms: _selectedClassrooms,
-                  saving: _saving,
-                  onActiveChanged: (v) => setState(() => _isActive = v),
-                  onReportTypeChanged: (v) => setState(() => _reportType = v),
-                  onFrequencyChanged: (v) => setState(() => _frequency = v),
-                  onFileFormatChanged: (v) => setState(() => _fileFormat = v),
-                  onPickTime: _pickTime,
-                  onAddEmail: _addEmail,
-                  onRemoveEmail: (e) => setState(() => _recipients.remove(e)),
-                  onToggleClassroom: (c) => setState(() {
-                    if (_selectedClassrooms.contains(c)) {
-                      _selectedClassrooms.remove(c);
-                    } else {
-                      _selectedClassrooms.add(c);
-                    }
-                  }),
-                  onSave: _saveSchedule,
-                ),
-                const SizedBox(height: 24),
+              // ── Create Form ───────────────────────────────────────────────
+              _CreateFormCard(
+                isActive: _isActive,
+                reportType: _reportType,
+                frequency: _frequency,
+                fileFormat: _fileFormat,
+                deliveryTime: _deliveryTime,
+                recipients: _recipients,
+                emailController: _emailController,
+                availableClassrooms: classrooms,
+                selectedClassrooms: _selectedClassrooms,
+                saving: _saving,
+                onActiveChanged: (v) => setState(() => _isActive = v),
+                onReportTypeChanged: (v) => setState(() => _reportType = v),
+                onFrequencyChanged: (v) => setState(() => _frequency = v),
+                onFileFormatChanged: (v) => setState(() => _fileFormat = v),
+                onPickTime: _pickTime,
+                onAddEmail: _addEmail,
+                onRemoveEmail: (e) => setState(() => _recipients.remove(e)),
+                onToggleClassroom: (c) => setState(() {
+                  if (_selectedClassrooms.contains(c)) {
+                    _selectedClassrooms.remove(c);
+                  } else {
+                    _selectedClassrooms.add(c);
+                  }
+                }),
+                onSave: _saveSchedule,
+              ),
+              const SizedBox(height: 24),
 
-                // ── Active Schedules ──────────────────────────────────────────
-                _ActiveSchedulesSection(
-                  schedules: _schedules,
-                  loading: _loadingSchedules,
-                  errorMessage: _errorMessage,
-                  onDelete: _deleteSchedule,
-                  onToggle: _toggleSchedule,
-                  onRetry: _loadSchedules,
-                ),
-              ],
-            ),
+              // ── Active Schedules ──────────────────────────────────────────
+              _ActiveSchedulesSection(
+                schedules: _schedules,
+                loading: _loadingSchedules,
+                errorMessage: _errorMessage,
+                onDelete: _deleteSchedule,
+                onToggle: _toggleSchedule,
+                onRetry: _loadSchedules,
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
