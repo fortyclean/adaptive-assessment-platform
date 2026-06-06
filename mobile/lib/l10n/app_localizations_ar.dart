@@ -712,6 +712,42 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.';
 
   @override
+  String get demoMathAssessmentTitle => 'اختبار الرياضيات التجريبي';
+
+  @override
+  String get demoArabicAssessmentTitle => 'اختبار اللغة العربية التجريبي';
+
+  @override
+  String get demoEnglishAssessmentTitle => 'اختبار اللغة الإنجليزية التجريبي';
+
+  @override
+  String get demoBiologyAssessmentTitle => 'اختبار الأحياء التجريبي';
+
+  @override
+  String get demoHistoryAssessmentTitle => 'اختبار التاريخ التجريبي';
+
+  @override
+  String get demoChemistryAssessmentTitle => 'اختبار الكيمياء التجريبي';
+
+  @override
+  String get demoPeriodicMathAssessmentTitle => 'اختبار الرياضيات الدوري';
+
+  @override
+  String get demoArabicGrammarAssessmentTitle => 'اختبار قواعد اللغة العربية';
+
+  @override
+  String get demoBiologyAssessmentShortTitle => 'اختبار الأحياء';
+
+  @override
+  String get subjectBiology => 'الأحياء';
+
+  @override
+  String get subjectHistory => 'التاريخ';
+
+  @override
+  String get subjectChemistry => 'الكيمياء';
+
+  @override
   String studentAssessmentsGreeting(Object name) {
     return 'مرحباً بك، $name';
   }

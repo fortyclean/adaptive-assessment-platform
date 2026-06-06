@@ -1412,6 +1412,78 @@ abstract class AppLocalizations {
   /// **'تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.'**
   String get studentAssessmentsLoadFailed;
 
+  /// No description provided for @demoMathAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الرياضيات التجريبي'**
+  String get demoMathAssessmentTitle;
+
+  /// No description provided for @demoArabicAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار اللغة العربية التجريبي'**
+  String get demoArabicAssessmentTitle;
+
+  /// No description provided for @demoEnglishAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار اللغة الإنجليزية التجريبي'**
+  String get demoEnglishAssessmentTitle;
+
+  /// No description provided for @demoBiologyAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الأحياء التجريبي'**
+  String get demoBiologyAssessmentTitle;
+
+  /// No description provided for @demoHistoryAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار التاريخ التجريبي'**
+  String get demoHistoryAssessmentTitle;
+
+  /// No description provided for @demoChemistryAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الكيمياء التجريبي'**
+  String get demoChemistryAssessmentTitle;
+
+  /// No description provided for @demoPeriodicMathAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الرياضيات الدوري'**
+  String get demoPeriodicMathAssessmentTitle;
+
+  /// No description provided for @demoArabicGrammarAssessmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار قواعد اللغة العربية'**
+  String get demoArabicGrammarAssessmentTitle;
+
+  /// No description provided for @demoBiologyAssessmentShortTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الأحياء'**
+  String get demoBiologyAssessmentShortTitle;
+
+  /// No description provided for @subjectBiology.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحياء'**
+  String get subjectBiology;
+
+  /// No description provided for @subjectHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get subjectHistory;
+
+  /// No description provided for @subjectChemistry.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكيمياء'**
+  String get subjectChemistry;
+
   /// No description provided for @studentAssessmentsGreeting.
   ///
   /// In ar, this message translates to:

@@ -5,10 +5,10 @@ class AppValidators {
   /// Validates a username field.
   static String? validateUsername(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'اسم المستخدم مطلوب';
+      return 'Username is required';
     }
     if (value.trim().length < 3) {
-      return 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+      return 'Username must be at least 3 characters';
     }
     return null;
   }
@@ -16,19 +16,19 @@ class AppValidators {
   /// Validates a password field.
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'كلمة المرور مطلوبة';
+      return 'Password is required';
     }
     if (value.length < 8) {
-      return 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
+      return 'Password must be at least 8 characters';
     }
     if (!value.contains(RegExp('[A-Z]'))) {
-      return 'كلمة المرور يجب أن تحتوي على حرف كبير';
+      return 'Password must contain an uppercase letter';
     }
     if (!value.contains(RegExp('[a-z]'))) {
-      return 'كلمة المرور يجب أن تحتوي على حرف صغير';
+      return 'Password must contain a lowercase letter';
     }
     if (!value.contains(RegExp('[0-9]'))) {
-      return 'كلمة المرور يجب أن تحتوي على رقم';
+      return 'Password must contain a number';
     }
     return null;
   }
@@ -36,10 +36,10 @@ class AppValidators {
   /// Validates that a confirmation password matches the original.
   static String? validateConfirmPassword(String? value, String original) {
     if (value == null || value.isEmpty) {
-      return 'تأكيد كلمة المرور مطلوب';
+      return 'Password confirmation is required';
     }
     if (value != original) {
-      return 'كلمتا المرور غير متطابقتين';
+      return 'Passwords do not match';
     }
     return null;
   }
@@ -47,20 +47,20 @@ class AppValidators {
   /// Validates an email address.
   static String? validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'البريد الإلكتروني مطلوب';
+      return 'Email is required';
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value.trim())) {
-      return 'البريد الإلكتروني غير صحيح';
+      return 'Invalid email address';
     }
     return null;
   }
 
   /// Validates a required text field.
   static String? validateRequired(String? value,
-      {String fieldName = 'هذا الحقل'}) {
+      {String fieldName = 'This field'}) {
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName مطلوب';
+      return '$fieldName is required';
     }
     return null;
   }
@@ -68,14 +68,14 @@ class AppValidators {
   /// Validates question count (5-50).
   static String? validateQuestionCount(String? value) {
     if (value == null || value.isEmpty) {
-      return 'عدد الأسئلة مطلوب';
+      return 'Question count is required';
     }
     final count = int.tryParse(value);
     if (count == null) {
-      return 'يجب أن يكون رقماً صحيحاً';
+      return 'Enter a valid whole number';
     }
     if (count < 5 || count > 50) {
-      return 'عدد الأسئلة يجب أن يكون بين 5 و 50';
+      return 'Question count must be between 5 and 50';
     }
     return null;
   }
@@ -83,14 +83,14 @@ class AppValidators {
   /// Validates time limit in minutes (5-120).
   static String? validateTimeLimit(String? value) {
     if (value == null || value.isEmpty) {
-      return 'الوقت المحدد مطلوب';
+      return 'Time limit is required';
     }
     final minutes = int.tryParse(value);
     if (minutes == null) {
-      return 'يجب أن يكون رقماً صحيحاً';
+      return 'Enter a valid whole number';
     }
     if (minutes < 5 || minutes > 120) {
-      return 'الوقت يجب أن يكون بين 5 و 120 دقيقة';
+      return 'Time limit must be between 5 and 120 minutes';
     }
     return null;
   }

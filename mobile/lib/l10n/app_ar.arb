@@ -306,6 +306,18 @@
   "yourAnswer": "إجابتك",
   "correctAnswer": "الإجابة الصحيحة",
   "studentAssessmentsLoadFailed": "تعذر تحميل الاختبارات. تحقق من الاتصال ثم أعد المحاولة.",
+  "demoMathAssessmentTitle": "اختبار الرياضيات التجريبي",
+  "demoArabicAssessmentTitle": "اختبار اللغة العربية التجريبي",
+  "demoEnglishAssessmentTitle": "اختبار اللغة الإنجليزية التجريبي",
+  "demoBiologyAssessmentTitle": "اختبار الأحياء التجريبي",
+  "demoHistoryAssessmentTitle": "اختبار التاريخ التجريبي",
+  "demoChemistryAssessmentTitle": "اختبار الكيمياء التجريبي",
+  "demoPeriodicMathAssessmentTitle": "اختبار الرياضيات الدوري",
+  "demoArabicGrammarAssessmentTitle": "اختبار قواعد اللغة العربية",
+  "demoBiologyAssessmentShortTitle": "اختبار الأحياء",
+  "subjectBiology": "الأحياء",
+  "subjectHistory": "التاريخ",
+  "subjectChemistry": "الكيمياء",
   "studentAssessmentsGreeting": "مرحباً بك، {name}",
   "@studentAssessmentsGreeting": {
     "placeholders": {

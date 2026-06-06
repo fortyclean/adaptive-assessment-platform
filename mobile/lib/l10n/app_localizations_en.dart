@@ -713,6 +713,43 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not load assessments. Check your connection and try again.';
 
   @override
+  String get demoMathAssessmentTitle => 'Demo mathematics assessment';
+
+  @override
+  String get demoArabicAssessmentTitle => 'Demo Arabic assessment';
+
+  @override
+  String get demoEnglishAssessmentTitle => 'Demo English assessment';
+
+  @override
+  String get demoBiologyAssessmentTitle => 'Demo biology assessment';
+
+  @override
+  String get demoHistoryAssessmentTitle => 'Demo history assessment';
+
+  @override
+  String get demoChemistryAssessmentTitle => 'Demo chemistry assessment';
+
+  @override
+  String get demoPeriodicMathAssessmentTitle =>
+      'Periodic mathematics assessment';
+
+  @override
+  String get demoArabicGrammarAssessmentTitle => 'Arabic grammar assessment';
+
+  @override
+  String get demoBiologyAssessmentShortTitle => 'Biology assessment';
+
+  @override
+  String get subjectBiology => 'Biology';
+
+  @override
+  String get subjectHistory => 'History';
+
+  @override
+  String get subjectChemistry => 'Chemistry';
+
+  @override
   String studentAssessmentsGreeting(Object name) {
     return 'Welcome, $name';
   }

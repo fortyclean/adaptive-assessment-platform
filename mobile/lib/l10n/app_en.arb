@@ -306,6 +306,18 @@
   "yourAnswer": "Your answer",
   "correctAnswer": "Correct answer",
   "studentAssessmentsLoadFailed": "Could not load assessments. Check your connection and try again.",
+  "demoMathAssessmentTitle": "Demo mathematics assessment",
+  "demoArabicAssessmentTitle": "Demo Arabic assessment",
+  "demoEnglishAssessmentTitle": "Demo English assessment",
+  "demoBiologyAssessmentTitle": "Demo biology assessment",
+  "demoHistoryAssessmentTitle": "Demo history assessment",
+  "demoChemistryAssessmentTitle": "Demo chemistry assessment",
+  "demoPeriodicMathAssessmentTitle": "Periodic mathematics assessment",
+  "demoArabicGrammarAssessmentTitle": "Arabic grammar assessment",
+  "demoBiologyAssessmentShortTitle": "Biology assessment",
+  "subjectBiology": "Biology",
+  "subjectHistory": "History",
+  "subjectChemistry": "Chemistry",
   "studentAssessmentsGreeting": "Welcome, {name}",
   "@studentAssessmentsGreeting": {
     "placeholders": {

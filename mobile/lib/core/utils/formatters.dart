@@ -16,39 +16,37 @@ class AppFormatters {
   static String formatPercentage(double value) =>
       '${value.toStringAsFixed(1)}%';
 
-  /// Formats a date to a localized Arabic string.
+  /// Formats a date to a localized string.
   static String formatDate(DateTime date, {String locale = 'ar'}) {
     final formatter = DateFormat('dd/MM/yyyy', locale);
     return formatter.format(date);
   }
 
-  /// Formats a date-time to a relative string (e.g., "منذ ساعتين").
+  /// Formats a date-time to a relative string.
   static String formatRelativeTime(DateTime dateTime, {String locale = 'ar'}) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
     if (difference.inMinutes < 1) {
-      return locale == 'ar' ? 'الآن' : 'Just now';
+      return 'Just now';
     } else if (difference.inMinutes < 60) {
       final minutes = difference.inMinutes;
-      return locale == 'ar' ? 'منذ $minutes دقيقة' : '$minutes minutes ago';
+      return '$minutes minutes ago';
     } else if (difference.inHours < 24) {
       final hours = difference.inHours;
-      return locale == 'ar' ? 'منذ $hours ساعة' : '$hours hours ago';
+      return '$hours hours ago';
     } else {
       final days = difference.inDays;
-      return locale == 'ar' ? 'منذ $days يوم' : '$days days ago';
+      return '$days days ago';
     }
   }
 
   /// Formats a score as Arabic numerals for student-facing UI.
   static String formatArabicNumber(int number) {
-    const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-    return number
-        .toString()
-        .split('')
-        .map((d) => int.tryParse(d) != null ? arabicDigits[int.parse(d)] : d)
-        .join();
+    return number.toString().split('').map((d) {
+      final digit = int.tryParse(d);
+      return digit == null ? d : String.fromCharCode(0x0660 + digit);
+    }).join();
   }
 
   /// Formats points with Arabic number formatting.

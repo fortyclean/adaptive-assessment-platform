@@ -95,52 +95,53 @@ class _StudentAssessmentsScreenState
           });
           return;
         }
+        final l10n = AppLocalizations.of(context);
         setState(() {
           _available = [
             {
               '_id': 'demo-math',
-              'title': 'اختبار الرياضيات التجريبي',
-              'subject': 'الرياضيات',
+              'title': l10n.demoMathAssessmentTitle,
+              'subject': l10n.subjectMathematics,
               'questionCount': 20,
               'timeLimitMinutes': 45,
               'status': 'active'
             },
             {
               '_id': 'demo-arabic',
-              'title': 'اختبار اللغة العربية التجريبي',
-              'subject': 'اللغة العربية',
+              'title': l10n.demoArabicAssessmentTitle,
+              'subject': l10n.subjectArabic,
               'questionCount': 20,
               'timeLimitMinutes': 30,
               'status': 'active'
             },
             {
               '_id': 'demo-english',
-              'title': 'اختبار اللغة الإنجليزية التجريبي',
-              'subject': 'الإنجليزية',
+              'title': l10n.demoEnglishAssessmentTitle,
+              'subject': l10n.subjectEnglish,
               'questionCount': 20,
               'timeLimitMinutes': 30,
               'status': 'active'
             },
             {
               '_id': 'demo-biology',
-              'title': 'اختبار الأحياء التجريبي',
-              'subject': 'الأحياء',
+              'title': l10n.demoBiologyAssessmentTitle,
+              'subject': l10n.subjectBiology,
               'questionCount': 20,
               'timeLimitMinutes': 35,
               'status': 'active'
             },
             {
               '_id': 'demo-history',
-              'title': 'اختبار التاريخ التجريبي',
-              'subject': 'التاريخ',
+              'title': l10n.demoHistoryAssessmentTitle,
+              'subject': l10n.subjectHistory,
               'questionCount': 20,
               'timeLimitMinutes': 40,
               'status': 'active'
             },
             {
               '_id': 'demo-chemistry',
-              'title': 'اختبار الكيمياء التجريبي',
-              'subject': 'الكيمياء',
+              'title': l10n.demoChemistryAssessmentTitle,
+              'subject': l10n.subjectChemistry,
               'questionCount': 20,
               'timeLimitMinutes': 40,
               'status': 'active'
@@ -150,8 +151,8 @@ class _StudentAssessmentsScreenState
             {
               '_id': 'demo-attempt-1',
               'assessmentId': {
-                'title': 'اختبار الرياضيات الدوري',
-                'subject': 'رياضيات'
+                'title': l10n.demoPeriodicMathAssessmentTitle,
+                'subject': l10n.subjectMathematics
               },
               'scorePercentage': 85.0,
               'status': 'completed',
@@ -162,8 +163,8 @@ class _StudentAssessmentsScreenState
             {
               '_id': 'demo-attempt-2',
               'assessmentId': {
-                'title': 'اختبار قواعد اللغة العربية',
-                'subject': 'لغة عربية'
+                'title': l10n.demoArabicGrammarAssessmentTitle,
+                'subject': l10n.subjectArabic
               },
               'scorePercentage': 72.0,
               'status': 'completed',
@@ -173,7 +174,10 @@ class _StudentAssessmentsScreenState
             },
             {
               '_id': 'demo-attempt-3',
-              'assessmentId': {'title': 'اختبار الأحياء', 'subject': 'أحياء'},
+              'assessmentId': {
+                'title': l10n.demoBiologyAssessmentShortTitle,
+                'subject': l10n.subjectBiology
+              },
               'scorePercentage': 91.0,
               'status': 'completed',
               'submittedAt': DateTime.now()
