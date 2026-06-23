@@ -2,9 +2,10 @@ import 'package:adaptive_assessment/core/network/api_service.dart';
 import 'package:adaptive_assessment/features/auth/repositories/admin_repository.dart';
 import 'package:adaptive_assessment/features/auth/screens/institution_settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../support/localized_test_app.dart';
 
 class InstitutionAuditFakeRepository extends AdminRepository {
   InstitutionAuditFakeRepository({
@@ -44,13 +45,9 @@ Future<void> _pumpScreen(
   addTearDown(tester.view.resetDevicePixelRatio);
 
   await tester.pumpWidget(
-    ProviderScope(
-      overrides: [
-        adminRepositoryProvider.overrideWithValue(repository),
-      ],
-      child: const MaterialApp(
-        home: InstitutionSettingsScreen(),
-      ),
+    pumpLocalizedApp(
+      const InstitutionSettingsScreen(),
+      overrides: [adminRepositoryProvider.overrideWithValue(repository)],
     ),
   );
   await tester.pumpAndSettle();

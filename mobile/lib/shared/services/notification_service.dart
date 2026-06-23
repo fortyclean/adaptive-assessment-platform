@@ -47,7 +47,7 @@ class NotificationService {
   Dio? _pushDio;
   AuthUser? _pushUser;
 
-  Future<void> init() async {
+  Future<void> init({bool requestPermission = false}) async {
     if (_initialized) return;
 
     tz_data.initializeTimeZones();
@@ -59,12 +59,15 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        debugPrint('Notification tapped: ${response.payload ?? 'no-payload'}');
+        _debugLog('Local notification tapped.');
       },
     );
 
-    await requestNotificationPermission();
     _initialized = true;
+
+    if (requestPermission) {
+      await requestNotificationPermission();
+    }
 
     await _initOneSignalIfConfigured();
   }
@@ -76,6 +79,7 @@ class NotificationService {
   }
 
   Future<bool?> requestNotificationPermission() async {
+    await _ensureInitialized();
     final androidImplementation =
         _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
@@ -159,8 +163,8 @@ class NotificationService {
       });
       await OneSignal.User.pushSubscription.optIn();
       await _registerCurrentOneSignalSubscription();
-    } catch (error, stackTrace) {
-      debugPrint('OneSignal user identification failed: $error');
+    } catch (_, stackTrace) {
+      _debugLog('OneSignal user identification failed.');
       if (kDebugMode) {
         debugPrintStack(stackTrace: stackTrace);
       }
@@ -177,8 +181,8 @@ class NotificationService {
     try {
       await OneSignal.User.pushSubscription.optOut();
       await OneSignal.logout();
-    } catch (error) {
-      debugPrint('OneSignal logout failed: $error');
+    } catch (_) {
+      _debugLog('OneSignal logout failed.');
     }
   }
 
@@ -207,17 +211,14 @@ class NotificationService {
       }
 
       await OneSignal.initialize(_oneSignalAppId.trim());
-      OneSignal.Notifications.addClickListener((event) {
-        debugPrint(
-          'OneSignal notification tapped: '
-          '${event.notification.additionalData ?? event.notification.title}',
-        );
+      OneSignal.Notifications.addClickListener((_) {
+        _debugLog('OneSignal notification tapped.');
       });
       await OneSignal.Notifications.requestPermission(false);
       _attachPushSubscriptionObserver();
       _remoteInitialized = true;
-    } catch (error, stackTrace) {
-      debugPrint('OneSignal initialization failed: $error');
+    } catch (_, stackTrace) {
+      _debugLog('OneSignal initialization failed.');
       if (kDebugMode) {
         debugPrintStack(stackTrace: stackTrace);
       }
@@ -252,9 +253,9 @@ class NotificationService {
     try {
       await registerPushToken(dio: dio, deviceToken: id);
       _lastRegisteredSubscriptionId = id;
-      debugPrint('Registered OneSignal subscription for ${user.role.name}.');
-    } catch (error, stackTrace) {
-      debugPrint('Registering OneSignal subscription failed: $error');
+      _debugLog('OneSignal subscription registered.');
+    } catch (_, stackTrace) {
+      _debugLog('OneSignal subscription registration failed.');
       if (kDebugMode) {
         debugPrintStack(stackTrace: stackTrace);
       }
@@ -268,13 +269,17 @@ class NotificationService {
     required String subject,
     required String body,
   }) async {
-    debugPrint('Email notification queued for $email: $subject');
+    _debugLog('Email notification queued.');
   }
 
   Future<void> sendSmsNotification({
     required String phoneNumber,
     required String message,
   }) async {
-    debugPrint('SMS notification queued for $phoneNumber: $message');
+    _debugLog('SMS notification queued.');
+  }
+
+  void _debugLog(String message) {
+    if (kDebugMode) debugPrint(message);
   }
 }

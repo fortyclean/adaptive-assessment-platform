@@ -62,6 +62,15 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
   ];
 
   // ── Classroom Comparison (Req 19.2) ───────────────────────────────────────
+  List<String> _subjectOptions(AppLocalizations l10n) => [
+        l10n.subjectMathematics,
+        l10n.subjectEnglish,
+        l10n.subjectArabic,
+        l10n.subjectPhysics,
+        l10n.subjectChemistry,
+        l10n.subjectBiology,
+      ];
+
   bool _comparisonLoading = false;
   List<Map<String, dynamic>> _comparisonData = [];
   String? _comparisonError;
@@ -1012,7 +1021,7 @@ class _SchoolReportsScreenState extends ConsumerState<SchoolReportsScreen> {
               final subjectDropdown = _FilterDropdown(
                 hint: l10n.subject,
                 value: _selectedSubject,
-                items: AppConstants.subjects,
+                items: _subjectOptions(l10n),
                 allLabel: l10n.filterAll,
                 onChanged: (v) {
                   setState(() => _selectedSubject = v);
@@ -1179,28 +1188,31 @@ class _FilterDropdown extends StatelessWidget {
   final ValueChanged<String?> onChanged;
 
   @override
-  Widget build(BuildContext context) => DropdownButtonFormField<String>(
-        initialValue: value,
-        isExpanded: true,
-        decoration: InputDecoration(
-          hintText: hint,
-          isDense: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AppColors.outlineVariant),
-          ),
+  Widget build(BuildContext context) {
+    final distinctItems = <String>{...items}.toList(growable: false);
+    final selectedValue = distinctItems.contains(value) ? value : null;
+    return DropdownButtonFormField<String>(
+      initialValue: selectedValue,
+      isExpanded: true,
+      decoration: InputDecoration(
+        hintText: hint,
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.outlineVariant),
         ),
-        items: [
-          DropdownMenuItem<String>(
-            child: Text(allLabel,
-                style: const TextStyle(color: AppColors.onSurfaceVariant)),
-          ),
-          ...items.map(
-            (s) => DropdownMenuItem<String>(value: s, child: Text(s)),
-          ),
-        ],
-        onChanged: onChanged,
-      );
+      ),
+      items: [
+        DropdownMenuItem<String>(
+          child: Text(allLabel,
+              style: const TextStyle(color: AppColors.onSurfaceVariant)),
+        ),
+        ...distinctItems.map(
+          (s) => DropdownMenuItem<String>(value: s, child: Text(s)),
+        ),
+      ],
+      onChanged: onChanged,
+    );
+  }
 }

@@ -70,7 +70,7 @@ void main() {
 
       expect(plan.lessons.single.status, MicroLessonStatus.completed);
       expect(plan.lessons.single.isCompleted, isTrue);
-      expect(plan.lessons.single.subtitle, contains('مكتمل'));
+      expect(plan.lessons.single.subtitle, contains('Completed'));
     });
 
     test('ignores incomplete attempts and malformed skill entries', () {
@@ -99,7 +99,7 @@ void main() {
       ]);
 
       expect(plan.xpPoints, 20);
-      expect(plan.focusAreas.single.title, 'اختبار تشخيصي');
+      expect(plan.focusAreas.single.title, 'Diagnostic assessment');
       expect(plan.lessons.first.status, MicroLessonStatus.available);
     });
   });

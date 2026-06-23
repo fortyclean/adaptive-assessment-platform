@@ -58,14 +58,4 @@ class AppConstants {
   static const Duration shortAnimation = Duration(milliseconds: 150);
   static const Duration mediumAnimation = Duration(milliseconds: 300);
   static const Duration longAnimation = Duration(milliseconds: 500);
-
-  // ─── Subjects ─────────────────────────────────────────────────────────────
-  static const List<String> subjects = [
-    'الرياضيات',
-    'اللغة الإنجليزية',
-    'اللغة العربية',
-    'الفيزياء',
-    'الكيمياء',
-    'الأحياء',
-  ];
 }

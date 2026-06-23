@@ -27,32 +27,31 @@ class TeacherDashboardScreen extends ConsumerStatefulWidget {
 
 class _TeacherDashboardScreenState
     extends ConsumerState<TeacherDashboardScreen> {
-  static const List<Map<String, dynamic>> _demoAssessments = [
-    {
-      '_id': 'demo-teacher-assessment-1',
-      'title': 'اختبار الوحدة الأولى',
-      'subject': 'رياضيات',
-      'status': 'active',
-      'averageScore': 82,
-      'studentCount': 28,
-    },
-    {
-      '_id': 'demo-teacher-assessment-2',
-      'title': 'اختبار النحو',
-      'subject': 'لغة عربية',
-      'status': 'completed',
-      'averageScore': 75,
-      'studentCount': 24,
-    },
-    {
-      '_id': 'demo-teacher-assessment-3',
-      'title': 'اختبار الفيزياء',
-      'subject': 'فيزياء',
-      'status': 'draft',
-      'studentCount': 20,
-    },
-  ];
-
+  List<Map<String, dynamic>> get _demoAssessments => [
+        {
+          '_id': 'demo-teacher-assessment-1',
+          'title': _l10n(context).teacherDashboardDemoUnitOneTitle,
+          'subject': _l10n(context).subjectMathematics,
+          'status': 'active',
+          'averageScore': 82,
+          'studentCount': 28,
+        },
+        {
+          '_id': 'demo-teacher-assessment-2',
+          'title': _l10n(context).teacherDashboardDemoGrammarTitle,
+          'subject': _l10n(context).subjectArabic,
+          'status': 'completed',
+          'averageScore': 75,
+          'studentCount': 24,
+        },
+        {
+          '_id': 'demo-teacher-assessment-3',
+          'title': _l10n(context).teacherDashboardDemoPhysicsTitle,
+          'subject': _l10n(context).subjectPhysics,
+          'status': 'draft',
+          'studentCount': 20,
+        },
+      ];
   bool _isLoading = true;
   List<Map<String, dynamic>> _assessments = [];
   String? _errorMessage;

@@ -38,17 +38,27 @@ class CreateAssessmentDraft {
           'availableUntil': availableUntil!.toIso8601String(),
       };
 
-  String? validateForPublish() {
+  String? validateForPublish({
+    String classroomRequiredMessage =
+        'Choose at least one classroom before publishing the assessment.',
+    String invalidAvailabilityWindowMessage =
+        'The assessment end date must be after the start date.',
+  }) {
     if (classroomIds.isEmpty) {
-      return 'اختر فصلًا واحدًا على الأقل قبل نشر الاختبار.';
+      return classroomRequiredMessage;
     }
-    return validateAvailabilityWindow();
+    return validateAvailabilityWindow(
+      invalidAvailabilityWindowMessage: invalidAvailabilityWindowMessage,
+    );
   }
 
-  String? validateAvailabilityWindow() {
+  String? validateAvailabilityWindow({
+    String invalidAvailabilityWindowMessage =
+        'The assessment end date must be after the start date.',
+  }) {
     if (availableFrom == null || availableUntil == null) return null;
     if (!availableUntil!.isAfter(availableFrom!)) {
-      return 'تاريخ نهاية الاختبار يجب أن يكون بعد تاريخ البداية.';
+      return invalidAvailabilityWindowMessage;
     }
     return null;
   }

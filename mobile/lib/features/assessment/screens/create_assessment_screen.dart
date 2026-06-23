@@ -44,27 +44,27 @@ class _CreateAssessmentScreenState
       Localizations.of<AppLocalizations>(context, AppLocalizations) ??
       AppLocalizationsAr();
 
-  final List<String> _gradeLevels = [
-    'الصف السابع',
-    'الصف الثامن',
-    'الصف التاسع',
-    'الصف العاشر',
-    'الصف الحادي عشر',
-    'الصف الثاني عشر',
-  ];
+  List<String> get _gradeLevels => [
+        _l10n.gradeSeven,
+        _l10n.gradeEight,
+        _l10n.gradeNine,
+        _l10n.gradeTen,
+        _l10n.gradeEleven,
+        _l10n.gradeTwelve,
+      ];
 
-  static const List<String> _arabicSubjects = [
-    'الرياضيات',
-    'اللغة الإنجليزية',
-    'اللغة العربية',
-    'الفيزياء',
-    'الكيمياء',
-    'الأحياء',
-    'التاريخ',
-    'الجغرافيا',
-    'التربية الإسلامية',
-    'الحاسب الآلي',
-  ];
+  List<String> get _subjectOptions => [
+        _l10n.subjectMathematics,
+        _l10n.subjectEnglish,
+        _l10n.subjectArabic,
+        _l10n.subjectPhysics,
+        _l10n.subjectChemistry,
+        _l10n.subjectBiology,
+        _l10n.subjectHistory,
+        _l10n.subjectGeography,
+        _l10n.subjectIslamicEducation,
+        _l10n.subjectComputerScience,
+      ];
 
   @override
   void initState() {
@@ -110,8 +110,15 @@ class _CreateAssessmentScreenState
         availableUntil: _availableUntil,
       );
       final validationMessage = _publishImmediately
-          ? draft.validateForPublish()
-          : draft.validateAvailabilityWindow();
+          ? draft.validateForPublish(
+              classroomRequiredMessage: _l10n.selectClassroomBeforePublish,
+              invalidAvailabilityWindowMessage:
+                  _l10n.invalidAssessmentAvailabilityWindow,
+            )
+          : draft.validateAvailabilityWindow(
+              invalidAvailabilityWindowMessage:
+                  _l10n.invalidAssessmentAvailabilityWindow,
+            );
       if (validationMessage != null) {
         setState(() {
           _warningMessage = validationMessage;
@@ -246,7 +253,7 @@ class _CreateAssessmentScreenState
             _StyledDropdown<String>(
               hint: l10n.chooseSubject,
               value: _subject,
-              items: _arabicSubjects
+              items: _subjectOptions
                   .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                   .toList(),
               onChanged: (v) => setState(() => _subject = v),

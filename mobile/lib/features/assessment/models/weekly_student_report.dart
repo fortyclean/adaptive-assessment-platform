@@ -21,7 +21,11 @@ class WeeklyStudentReport {
 class WeeklyStudentReportSource {
   const WeeklyStudentReportSource();
 
-  WeeklyStudentReport fromAttemptHistory(List<Map<String, dynamic>> history) {
+  WeeklyStudentReport fromAttemptHistory(
+    List<Map<String, dynamic>> history, {
+    String Function(int attempts, double average, String? focusSkill)?
+        summaryBuilder,
+  }) {
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, now.day)
         .subtract(const Duration(days: 6));
@@ -59,6 +63,7 @@ class WeeklyStudentReportSource {
         attempts: completed.length,
         average: average,
         focusSkill: focusSkill,
+        summaryBuilder: summaryBuilder,
       ),
     );
   }
@@ -67,17 +72,22 @@ class WeeklyStudentReportSource {
     required int attempts,
     required double average,
     required String? focusSkill,
+    required String Function(int attempts, double average, String? focusSkill)?
+        summaryBuilder,
   }) {
+    if (summaryBuilder != null) {
+      return summaryBuilder(attempts, average, focusSkill);
+    }
     if (attempts == 0) {
-      return 'لا توجد نتائج هذا الأسبوع بعد. ابدأ باختبار قصير لفتح تقريرك الأسبوعي.';
+      return 'No results this week yet. Start a short assessment to unlock your weekly report.';
     }
     if (average >= 85) {
-      return 'أسبوع قوي. حافظ على وتيرتك وراجع ${focusSkill ?? 'أضعف مهارة'} للحفاظ على المستوى.';
+      return 'Strong week. Keep your pace and review ${focusSkill ?? 'your weakest skill'} to maintain your level.';
     }
     if (average >= 70) {
-      return 'تقدمك جيد. جلسة تعلم مصغر واحدة على ${focusSkill ?? 'أضعف مهارة'} سترفع ثباتك.';
+      return 'Good progress. One micro-learning session on ${focusSkill ?? 'your weakest skill'} will improve consistency.';
     }
-    return 'هذا الأسبوع يحتاج تركيزًا أكبر. ابدأ بخطة قصيرة على ${focusSkill ?? 'المهارة الأضعف'} ثم أعد اختبارًا واحدًا.';
+    return 'This week needs more focus. Start a short plan on ${focusSkill ?? 'your weakest skill'}, then retake one assessment.';
   }
 
   List<MapEntry<String, double>> _rankSkills(

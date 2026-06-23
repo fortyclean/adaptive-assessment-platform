@@ -62,37 +62,40 @@ class StudentLearningInsightsSource {
   }
 
   LearningRecommendation recommendationFor(
-    List<Map<String, dynamic>> history,
-  ) {
+    List<Map<String, dynamic>> history, {
+    LearningRecommendation Function(SkillInsight? weakest)? builder,
+  }) {
     final latestSkills = latestSkillBreakdown(history);
     if (latestSkills.isEmpty) {
+      if (builder != null) return builder(null);
       return const LearningRecommendation(
-        title: 'ابدأ ببناء توصياتك',
+        title: 'Start building your recommendations',
         message:
-            'أكمل اختبارًا قصيرًا حتى تظهر توصيات مبنية على أحدث تفصيل مهاراتك.',
-        actionLabel: 'ابدأ اختبارًا',
+            'Complete a short assessment so recommendations can use your latest skill breakdown.',
+        actionLabel: 'Start assessment',
         route: '/student/assessments-list',
       );
     }
 
     final weakest = latestSkills.first;
+    if (builder != null) return builder(weakest);
     final percent = (weakest.mastery * 100).round();
     if (weakest.mastery < 0.7) {
       return LearningRecommendation(
-        title: 'ركز على ${weakest.skill}',
+        title: 'Focus on ${weakest.skill}',
         message:
-            'آخر نتيجة أظهرت إتقان $percent% في ${weakest.skill}. ابدأ بدرس قصير ثم جرّب بطاقات التدريب.',
-        actionLabel: 'افتح خطة التعلم',
+            'Your latest result showed $percent% mastery in ${weakest.skill}. Start with a short lesson, then try practice cards.',
+        actionLabel: 'Open learning plan',
         route: '/student/micro-learning',
         focusSkill: weakest.skill,
       );
     }
 
     return LearningRecommendation(
-      title: 'حافظ على مستواك',
+      title: 'Keep your level',
       message:
-          'أضعف مهارة في آخر اختبار هي ${weakest.skill} بنسبة $percent%. تدريب قصير يكفي للحفاظ على الإتقان.',
-      actionLabel: 'تدريب بطاقات',
+          'The weakest skill in your latest assessment is ${weakest.skill} at $percent%. A short practice is enough to maintain mastery.',
+      actionLabel: 'Practice cards',
       route: '/student/micro-learning/flashcards',
       focusSkill: weakest.skill,
     );

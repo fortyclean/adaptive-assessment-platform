@@ -272,6 +272,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noMatchingSubjects => 'No matching subjects';
 
   @override
+  String get studentSubjectAdvancedMath => 'Advanced mathematics';
+
+  @override
+  String get studentSubjectMolecularBiology => 'Molecular biology';
+
+  @override
+  String get studentSubjectArabicLiterature => 'Arabic literature';
+
+  @override
+  String get studentSubjectQuantumPhysics => 'Quantum physics';
+
+  @override
+  String get studentSubjectOrganicChemistry => 'Organic chemistry';
+
+  @override
+  String get studentSubjectEnglishLanguage => 'English language';
+
+  @override
+  String get studentSubjectTeacherMohammed => 'Dr. Mohammed Al-Qahtani';
+
+  @override
+  String get studentSubjectTeacherSarah => 'Ms. Sarah Al-Otaibi';
+
+  @override
+  String get studentSubjectTeacherIbrahim => 'Dr. Ibrahim Al-Fayez';
+
+  @override
+  String get studentSubjectTeacherKhaled => 'Mr. Khaled Mansour';
+
+  @override
+  String get studentSubjectTeacherLaila => 'Dr. Laila Al-Shammari';
+
+  @override
+  String get studentSubjectTeacherNoura => 'Ms. Noura Al-Omari';
+
+  @override
   String get progressAchieved => 'Progress achieved';
 
   @override
@@ -289,6 +325,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
+
+  @override
+  String get refresh => 'Refresh';
 
   @override
   String get home => 'Home';
@@ -328,6 +367,78 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get flashcardEmptyMessage =>
       'Complete one assessment so we can build cards based on your performance.';
+
+  @override
+  String get flashcardDiagnosticDeckTitle => 'Quick diagnostic practice';
+
+  @override
+  String get flashcardDiagnosticDeckSubtitle =>
+      'Start with these cards so recommendations become more precise after your first assessment.';
+
+  @override
+  String get flashcardDiagnosticSkill => 'Diagnostic';
+
+  @override
+  String get flashcardDiagnosticGoalPrompt =>
+      'What is the goal of the first diagnostic assessment?';
+
+  @override
+  String get flashcardDiagnosticGoalAnswer =>
+      'Identify your current mastery level and discover the skills that need a short review.';
+
+  @override
+  String get flashcardDiagnosticGoalHint =>
+      'Think about why a personal learning plan appears after the assessment.';
+
+  @override
+  String get flashcardLearningPlanSkill => 'Learning plan';
+
+  @override
+  String get flashcardDiagnosticNextStepPrompt =>
+      'What should you do after the first result appears?';
+
+  @override
+  String get flashcardDiagnosticNextStepAnswer =>
+      'Review the weakest skill in micro-learning, then complete a short practice to measure improvement.';
+
+  @override
+  String get flashcardDiagnosticNextStepHint =>
+      'Improvement starts with the weakest skill, not the highest score.';
+
+  @override
+  String flashcardConceptPrompt(Object skill) {
+    return 'What is the first step to improve $skill?';
+  }
+
+  @override
+  String get flashcardConceptAnswer =>
+      'Start with one simple question that identifies the reason for the mistake, then review the related rule before practicing.';
+
+  @override
+  String get flashcardConceptHint =>
+      'Do not start by solving many questions before knowing the reason for the mistake.';
+
+  @override
+  String flashcardReviewPrompt(Object skill, Object mastery) {
+    return 'Your current mastery in $skill is $mastery%. What does that mean?';
+  }
+
+  @override
+  String get flashcardReviewAnswer =>
+      'This skill needs focused review today, then a short assessment to confirm improvement.';
+
+  @override
+  String get flashcardReviewHint =>
+      'The lower percentage means higher priority in the learning plan.';
+
+  @override
+  String flashcardDeckTitle(Object skill) {
+    return '$skill booster cards';
+  }
+
+  @override
+  String get flashcardDeckSubtitle =>
+      'Short practice built from your weakest skills in the latest results.';
 
   @override
   String flashcardSemanticsAnswerVisible(Object skill) {
@@ -390,6 +501,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not load the teacher dashboard. Check your connection and try again.';
 
   @override
+  String get teacherDashboardDemoUnitOneTitle => 'Unit one assessment';
+
+  @override
+  String get teacherDashboardDemoGrammarTitle => 'Grammar assessment';
+
+  @override
+  String get teacherDashboardDemoPhysicsTitle => 'Physics assessment';
+
+  @override
   String get totalStudents => 'Total students';
 
   @override
@@ -403,6 +523,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get average => 'Average';
+
+  @override
+  String get points => 'Points';
+
+  @override
+  String get studentChallengeTwoDayStreakLocked =>
+      'This challenge unlocks after keeping a two-day streak.';
+
+  @override
+  String get startAssessment => 'Start assessment';
 
   @override
   String get createNewAssessment => 'Create new assessment';
@@ -690,6 +820,77 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noPendingEssaysMessage => 'All essay sessions have been graded';
 
   @override
+  String get essayGradingLoadFailed => 'Could not load the attempt data';
+
+  @override
+  String get essayGradingConfirmTitle => 'Confirm final grading';
+
+  @override
+  String get essayGradingConfirmMessage =>
+      'Are you sure you want to finish grading? The student\'s final result will be calculated.';
+
+  @override
+  String get essayGradingSaved =>
+      'Grading finished and the student result was updated';
+
+  @override
+  String get essayGradingSaveFailed =>
+      'Could not save grades. Please try again.';
+
+  @override
+  String essayGradingTitle(Object studentName) {
+    return 'Essay grading — $studentName';
+  }
+
+  @override
+  String get essayGradingNoEssays => 'No essay questions need grading';
+
+  @override
+  String get essayGradingSaving => 'Saving...';
+
+  @override
+  String get essayGradingFinish => 'Finish grading and update result';
+
+  @override
+  String get essayGradingAllComplete =>
+      'All essay questions are graded — you can finish grading';
+
+  @override
+  String essayGradingRemaining(Object count) {
+    return '$count essay questions still need a grade';
+  }
+
+  @override
+  String get essayQuestionUnavailable => 'Question text is unavailable';
+
+  @override
+  String get essayNoStudentAnswer => '(The student did not answer)';
+
+  @override
+  String essayQuestionNumber(Object index) {
+    return 'Question $index';
+  }
+
+  @override
+  String get studentAnswerSection => 'Student answer';
+
+  @override
+  String essayScoreRange(Object maxMarks) {
+    return 'Score (0 – $maxMarks)';
+  }
+
+  @override
+  String get scoreInvalidNumber => 'Enter a valid number';
+
+  @override
+  String get scoreNegative => 'Score cannot be negative';
+
+  @override
+  String scoreMax(Object maxMarks) {
+    return 'Maximum score is $maxMarks';
+  }
+
+  @override
   String get assessmentFallbackTitle => 'Assessment';
 
   @override
@@ -730,10 +931,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scoreExcellent => 'Excellent';
 
   @override
+  String get scoreVeryGood => 'Very good';
+
+  @override
   String get scoreGood => 'Good';
 
   @override
+  String get needsSupport => 'Needs support';
+
+  @override
   String get scoreNeedsImprovement => 'Needs improvement';
+
+  @override
+  String get moreDetails => 'More details';
 
   @override
   String get greatAchievement => 'Great achievement!';
@@ -783,6 +993,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoChemistryAssessmentTitle => 'Demo chemistry assessment';
 
   @override
+  String get manageDemoMidtermMathTitle => 'Midterm assessment - mathematics';
+
+  @override
+  String get manageDemoSecondUnitScienceTitle => 'Unit 2 assessment - science';
+
+  @override
+  String get manageDemoArabicBasicsTitle => 'Core grammar - Arabic';
+
+  @override
+  String get manageDemoAndalusHistoryTitle =>
+      'History of Al-Andalus - social studies';
+
+  @override
+  String get manageDemoFinalPhysicsTitle => 'Final assessment - physics';
+
+  @override
+  String get manageSubjectSocialStudies => 'Social studies';
+
+  @override
+  String get manageSubjectPhysics => 'Physics';
+
+  @override
+  String get manageSubjectHistory => 'History';
+
+  @override
+  String get manageSubjectBiology => 'Biology';
+
+  @override
+  String get manageSubjectChemistry => 'Chemistry';
+
+  @override
   String get demoPeriodicMathAssessmentTitle =>
       'Periodic mathematics assessment';
 
@@ -800,6 +1041,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get subjectChemistry => 'Chemistry';
+
+  @override
+  String get subjectPhysics => 'Physics';
+
+  @override
+  String get subjectGeography => 'Geography';
+
+  @override
+  String get subjectIslamicEducation => 'Islamic education';
+
+  @override
+  String get subjectComputerScience => 'Computer science';
 
   @override
   String studentAssessmentsGreeting(Object name) {
@@ -933,6 +1186,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get assessmentStartFailed =>
       'Could not start the assessment. Please try again.';
+
+  @override
+  String get assessmentStartDemoUnitAlgebra => 'Unit 3: Algebra';
 
   @override
   String get assessmentTypeAdaptive => 'Adaptive';
@@ -1288,6 +1544,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Start by creating a class to organize your students and manage their assessments.';
 
   @override
+  String get demoClassroomGradeSevenA => 'Grade 7 (A)';
+
+  @override
+  String get demoClassroomGradeEightB => 'Grade 8 (B)';
+
+  @override
+  String get demoGradeLevelSeven => 'Grade seven';
+
+  @override
+  String get demoGradeLevelEight => 'Grade eight';
+
+  @override
   String get manageAssessmentsLoadFailed =>
       'Could not load assessments from the server. Check your connection and try again.';
 
@@ -1381,6 +1649,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get assessmentCreateFailed =>
       'Could not create the assessment. Check your connection and data, then try again.';
+
+  @override
+  String get selectClassroomBeforePublish =>
+      'Choose at least one classroom before publishing the assessment.';
+
+  @override
+  String get invalidAssessmentAvailabilityWindow =>
+      'The assessment end date must be after the start date.';
 
   @override
   String get assessmentTitleHint => 'Example: Unit 1 assessment';
@@ -1547,6 +1823,43 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get taskManagementLocalOnlyMessage =>
       'Task management currently uses clear local state. Permanent saving and student sync require connecting the task API in a later phase.';
+
+  @override
+  String get demoTaskClassroomGradeSevenB => 'Grade 7 - B';
+
+  @override
+  String get demoTaskClassroomGradeNineA => 'Grade 9 - A';
+
+  @override
+  String get demoTaskClassroomGradeTenA => 'Grade 10 - A';
+
+  @override
+  String get demoTaskClassroomGradeTenB => 'Grade 10 - B';
+
+  @override
+  String get demoTaskClassroomGradeElevenC => 'Grade 11 - C';
+
+  @override
+  String get demoTaskAlgebraTitle => 'Advanced algebra: quadratic equations';
+
+  @override
+  String get demoTaskNewtonTitle => 'Introduction to Newton\'s laws';
+
+  @override
+  String get demoTaskStatisticsTitle =>
+      'Probability and descriptive statistics';
+
+  @override
+  String get demoTaskArabicReviewTitle => 'Rhetoric and simile review';
+
+  @override
+  String get demoTaskDueOctober15 => 'Due: October 15';
+
+  @override
+  String get demoTaskDueTomorrow => 'Due: tomorrow';
+
+  @override
+  String get demoTaskDueOctober20 => 'Due: October 20';
 
   @override
   String get deleteTaskTitle => 'Delete task?';
@@ -4385,4 +4698,653 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studentDashboardStartTraining => 'Start training';
+
+  @override
+  String get studentAnalyticsLoadFailed =>
+      'Could not load your analytics right now. Check your connection and try again.';
+
+  @override
+  String get studentAnalyticsNoClearTrend => 'No clear change yet';
+
+  @override
+  String studentAnalyticsTrendFromLast(Object percent) {
+    return '$percent% from the last assessment';
+  }
+
+  @override
+  String get studentAnalyticsStrongestSkill => 'Strongest skill';
+
+  @override
+  String get studentAnalyticsNeedsReview => 'Needs review';
+
+  @override
+  String get studentAnalyticsCompletedAssessmentsBadge =>
+      'Completed assessments';
+
+  @override
+  String get studentAnalyticsHighPerformanceBadge => 'High performance';
+
+  @override
+  String get studentAnalyticsCommittedBadge => 'Committed';
+
+  @override
+  String get studentAnalyticsErrorTitle => 'Could not load analytics';
+
+  @override
+  String get studentAnalyticsEmptyTitle => 'No analytics yet';
+
+  @override
+  String get studentAnalyticsEmptyMessage =>
+      'Performance and skill indicators will appear after you complete your first assessment.';
+
+  @override
+  String get studentAnalyticsAppBarTitle => 'EduAssess analytics';
+
+  @override
+  String studentAnalyticsGreeting(Object name) {
+    return 'Welcome, $name!';
+  }
+
+  @override
+  String get studentAnalyticsOverviewSubtitle =>
+      'Here is a complete view of your learning performance this term.';
+
+  @override
+  String get studentAnalyticsCompletedAssessmentMetric =>
+      'Completed assessment';
+
+  @override
+  String get studentAnalyticsEarnedPointMetric => 'Earned point';
+
+  @override
+  String get studentAnalyticsSubjectProgress => 'Subject progress';
+
+  @override
+  String get studentAnalyticsSkillInsights => 'Skill insights from assessments';
+
+  @override
+  String get studentAnalyticsAchievements => 'Badges and achievements';
+
+  @override
+  String get learningRecommendationStartTitle =>
+      'Start building your recommendations';
+
+  @override
+  String get learningRecommendationStartMessage =>
+      'Complete a short assessment so recommendations can use your latest skill breakdown.';
+
+  @override
+  String learningRecommendationFocusTitle(Object skill) {
+    return 'Focus on $skill';
+  }
+
+  @override
+  String learningRecommendationFocusMessage(Object percent, Object skill) {
+    return 'Your latest result showed $percent% mastery in $skill. Start with a short lesson, then try practice cards.';
+  }
+
+  @override
+  String get learningRecommendationOpenPlan => 'Open learning plan';
+
+  @override
+  String get learningRecommendationMaintainTitle => 'Keep your level';
+
+  @override
+  String learningRecommendationMaintainMessage(Object skill, Object percent) {
+    return 'The weakest skill in your latest assessment is $skill at $percent%. A short practice is enough to maintain mastery.';
+  }
+
+  @override
+  String get learningRecommendationPracticeCards => 'Practice cards';
+
+  @override
+  String get microLearningDiagnosticAssessment => 'Diagnostic assessment';
+
+  @override
+  String get microLearningTitle => 'Micro-learning';
+
+  @override
+  String get microLearningSmartTitle => 'Smart micro-learning';
+
+  @override
+  String get microLearningLoadFailedTitle => 'Could not load the learning plan';
+
+  @override
+  String get microLearningLoadFailedMessage =>
+      'Could not load the micro-learning plan. Check your connection and try again.';
+
+  @override
+  String get microLearningLessonCompletionSaved => 'Lesson completion saved';
+
+  @override
+  String microLearningWelcomeBack(Object name) {
+    return 'Welcome back, $name';
+  }
+
+  @override
+  String get microLearningCurrentStreakTitle => 'Your current learning streak';
+
+  @override
+  String microLearningStreakMessage(Object days) {
+    return 'You are on day $days in a row. Keep your activity going.';
+  }
+
+  @override
+  String microLearningPercentComplete(Object percent) {
+    return '$percent% complete';
+  }
+
+  @override
+  String get microLearningDailyGoal => 'Today\'s goal';
+
+  @override
+  String get microLearningTodaysQuickLessons => 'Today\'s quick lessons';
+
+  @override
+  String microLearningLockedLessonSemantics(Object title) {
+    return '$title. Lesson locked until you finish the previous lesson.';
+  }
+
+  @override
+  String microLearningCompletedLessonSemantics(Object title) {
+    return '$title. Lesson completed and saved.';
+  }
+
+  @override
+  String microLearningOpenLessonSemantics(Object title) {
+    return '$title. Open a short practice for this lesson.';
+  }
+
+  @override
+  String get microLearningLessonCompletedTooltip => 'Lesson completed';
+
+  @override
+  String get microLearningMarkLessonCompleted => 'Mark lesson as completed';
+
+  @override
+  String get microLearningAiRecommendationsTitle =>
+      'AI recommendations for you';
+
+  @override
+  String get microLearningFlashcardChallengeTitle =>
+      'Flashcard sprint challenge';
+
+  @override
+  String get microLearningBasedOnLatestResults =>
+      'Based on your latest results';
+
+  @override
+  String microLearningBasedOnFocus(Object focus) {
+    return 'Based on $focus';
+  }
+
+  @override
+  String get microLearningStartFlashcardChallenge =>
+      'Start challenge (10 cards)';
+
+  @override
+  String get microLearningWeakestSkillFallback => 'the weakest skill';
+
+  @override
+  String get microLearningSuggestedPathTitle => 'Suggested learning path';
+
+  @override
+  String microLearningReviewFocusStep(Object focus) {
+    return 'Review $focus';
+  }
+
+  @override
+  String get microLearningShortestLessonStep =>
+      'Start with the shortest available lesson before moving to the assessment.';
+
+  @override
+  String get microLearningSolveShortPracticeStep => 'Solve a short practice';
+
+  @override
+  String get microLearningOneAssessmentStep =>
+      'One assessment is enough to see whether understanding improved.';
+
+  @override
+  String get microLearningOpenAnalyticsStep => 'Open analytics';
+
+  @override
+  String get microLearningCompareLatestResultStep =>
+      'Compare the new result with your latest attempt and choose the next step.';
+
+  @override
+  String get microLearningReviewAnalytics => 'Review your analytics';
+
+  @override
+  String get microLearningDiagnosticDescription =>
+      'Start an assessment to unlock recommendations based on your performance';
+
+  @override
+  String get microLearningStrongSkillDescription =>
+      'Strong skill. Keep your level';
+
+  @override
+  String get microLearningNeedsReviewDescription =>
+      'Needs a short review today';
+
+  @override
+  String get microLearningDiagnosticLessonTitle =>
+      'Start with your first diagnostic assessment';
+
+  @override
+  String get microLearningDiagnosticLessonSubtitle =>
+      '3 minutes - unlocks your personal recommendations';
+
+  @override
+  String get microLearningDiagnosticSkill => 'Diagnostic';
+
+  @override
+  String get microLearningReviewResultsTitle =>
+      'Review your results after the assessment';
+
+  @override
+  String get microLearningReviewResultsSubtitle =>
+      'Locked until your first result appears';
+
+  @override
+  String get microLearningResultsAnalysisSkill => 'Results analysis';
+
+  @override
+  String microLearningSkillReviewTitleTemplate(Object skill) {
+    return 'Short review: $skill';
+  }
+
+  @override
+  String microLearningSkillReviewSubtitleTemplate(Object percent) {
+    return '4 minutes - mastery level $percent%';
+  }
+
+  @override
+  String get studentProgressLoadFailed =>
+      'Could not load your progress right now. Check your connection and try again.';
+
+  @override
+  String get studentProgressWeakestSkillFallback => 'your weakest skill';
+
+  @override
+  String get studentProgressWeeklyReportTitle => 'Your weekly report';
+
+  @override
+  String get studentProgressFocusLabel => 'Focus';
+
+  @override
+  String get studentProgressWeeklySummaryEmpty =>
+      'No results this week yet. Start a short assessment to unlock your weekly report.';
+
+  @override
+  String studentProgressWeeklySummaryStrong(Object skill) {
+    return 'Strong week. Keep your pace and review $skill to maintain your level.';
+  }
+
+  @override
+  String studentProgressWeeklySummaryGood(Object skill) {
+    return 'Good progress. One micro-learning session on $skill will improve consistency.';
+  }
+
+  @override
+  String studentProgressWeeklySummaryNeedsFocus(Object skill) {
+    return 'This week needs more focus. Start a short plan on $skill, then retake one assessment.';
+  }
+
+  @override
+  String get studentChallengesTitle => 'Challenges';
+
+  @override
+  String get studentChallengesNew => 'New challenge';
+
+  @override
+  String get studentChallengesStreakDays => 'day streak';
+
+  @override
+  String get studentChallengesAssessmentsThisWeek => 'assessments this week';
+
+  @override
+  String get studentChallengesUnlocked =>
+      'New challenges are open based on your activity.';
+
+  @override
+  String get studentChallengesUnlockHint =>
+      'Complete two assessments on consecutive days to unlock more challenges.';
+
+  @override
+  String get studentChallengesNotifications => 'Notifications';
+
+  @override
+  String get studentChallengesLive => 'Live challenges';
+
+  @override
+  String get studentChallengesCurrentWeek => 'This week';
+
+  @override
+  String get studentChallengesLeaderboard => 'Leaderboard';
+
+  @override
+  String get studentChallengesMovedUp => 'You moved up 3 places';
+
+  @override
+  String get studentChallengesCurrentRank => 'Your current rank';
+
+  @override
+  String get studentChallengesMyChallenges => 'My challenges';
+
+  @override
+  String get studentChallengesCompleted => 'Completed challenges';
+
+  @override
+  String get studentChallengesActiveUpcoming => 'Active and upcoming';
+
+  @override
+  String studentChallengesLocalCreated(Object count) {
+    return 'You created $count local challenge(s) for this session. Permanent saving will need an API later.';
+  }
+
+  @override
+  String get studentChallengesEarnedBadges => 'Earned badges';
+
+  @override
+  String get studentChallengesBadgeLegend => 'Legend';
+
+  @override
+  String get studentChallengesBadgeFast => 'Fast competitor';
+
+  @override
+  String get studentChallengesBadgeThinker => 'Thinker';
+
+  @override
+  String get studentChallengesBadgeRisingStar => 'Rising star';
+
+  @override
+  String get studentChallengesCompletedTitle => 'Challenge completed';
+
+  @override
+  String studentChallengesCompletedMessage(Object title) {
+    return 'You have already completed \"$title\". You can track your rank on the leaderboard.';
+  }
+
+  @override
+  String get studentChallengesLockedTitle => 'Challenge not available yet';
+
+  @override
+  String get studentChallengesLockedMessage =>
+      'This challenge will unlock when the participation requirements are met.';
+
+  @override
+  String studentChallengesJoinTitle(Object title) {
+    return 'Join $title';
+  }
+
+  @override
+  String studentChallengesJoinMessage(Object points) {
+    return 'You will earn $points points when you complete this challenge. Add it to your challenges?';
+  }
+
+  @override
+  String get studentChallengesJoinNow => 'Join now';
+
+  @override
+  String get studentChallengesJoinedTitle => 'Joined';
+
+  @override
+  String studentChallengesJoinedMessage(Object title) {
+    return '\"$title\" was added to your challenges. Start it from My challenges.';
+  }
+
+  @override
+  String get studentChallengesCreateTitle => 'Create a new challenge';
+
+  @override
+  String get studentChallengesCreateDescription =>
+      'The challenge will be added locally for this session until an API is available to save student challenges.';
+
+  @override
+  String get studentChallengesTitleLabel => 'Challenge title';
+
+  @override
+  String get studentChallengesSubjectLabel => 'Subject or skill';
+
+  @override
+  String get studentChallengesAddToMine => 'Add to my challenges';
+
+  @override
+  String get studentChallengesDefaultTitle => 'New personal challenge';
+
+  @override
+  String get studentChallengesDefaultSubject => 'Selected skill';
+
+  @override
+  String get studentChallengesThisWeek => 'This week';
+
+  @override
+  String get studentChallengesCreatedTitle => 'Challenge created';
+
+  @override
+  String studentChallengesCreatedMessage(Object title) {
+    return '\"$title\" was added to your local challenges and is ready to start.';
+  }
+
+  @override
+  String get studentChallengesDone => 'Done';
+
+  @override
+  String studentChallengesParticipants(Object count) {
+    return '$count participants';
+  }
+
+  @override
+  String get studentChallengesJoinAction => 'Join challenge';
+
+  @override
+  String get studentChallengesStartAction => 'Start challenge';
+
+  @override
+  String get studentChallengesViewResultAction => 'View result';
+
+  @override
+  String get studentChallengesNotOpenAction => 'Not open yet';
+
+  @override
+  String studentChallengesPoints(Object points) {
+    return '$points points';
+  }
+
+  @override
+  String studentChallengesCompleteProgress(Object percent) {
+    return 'Completed • $percent%';
+  }
+
+  @override
+  String get studentChallengesLiveNow => 'Live now';
+
+  @override
+  String get studentAcademicFallbackName => 'Ahmed Khalid Al-Mansouri';
+
+  @override
+  String studentAcademicId(Object id) {
+    return 'Academic ID: $id';
+  }
+
+  @override
+  String get studentAcademicGrade => 'Grade 10 - A';
+
+  @override
+  String get studentAcademicAdvancedTrack => 'Advanced track';
+
+  @override
+  String get studentAcademicReport => 'Report';
+
+  @override
+  String get studentAcademicContact => 'Contact';
+
+  @override
+  String studentAcademicReportFor(Object name) {
+    return 'Report: $name';
+  }
+
+  @override
+  String get studentAcademicChooseReport => 'Choose report type:';
+
+  @override
+  String get studentAcademicExportingAcademic => 'Exporting academic report...';
+
+  @override
+  String get studentAcademicAcademicReport => 'Academic report';
+
+  @override
+  String get studentAcademicExportingPerformance =>
+      'Exporting performance report...';
+
+  @override
+  String get studentAcademicPerformanceReport => 'Performance report';
+
+  @override
+  String studentAcademicSendMessageTo(Object name) {
+    return 'Send a message to: $name';
+  }
+
+  @override
+  String get studentAcademicMessageHint => 'Write your message here...';
+
+  @override
+  String studentAcademicMessageSent(Object name) {
+    return 'Message sent to $name';
+  }
+
+  @override
+  String get studentAcademicSend => 'Send';
+
+  @override
+  String get studentAcademicActive => 'Active';
+
+  @override
+  String get studentAcademicCumulativeGpa => 'Cumulative GPA';
+
+  @override
+  String get studentAcademicPreviousMonth => '+0.12 last month';
+
+  @override
+  String get studentAcademicAttendance => 'Attendance rate';
+
+  @override
+  String get studentAcademicCompletedAssessments => 'Completed assessments';
+
+  @override
+  String get studentAcademicAwaitingAssessments => 'Two assessments pending';
+
+  @override
+  String get studentAcademicGeneralBehavior => 'General behavior';
+
+  @override
+  String get studentAcademicExcellent => 'Excellent';
+
+  @override
+  String get studentAcademicInteractionStats => 'Interaction statistics';
+
+  @override
+  String get studentAcademicClassParticipation => 'Class participation';
+
+  @override
+  String get studentAcademicHighComparedPeers => 'High compared with peers';
+
+  @override
+  String get studentAcademicGroupWork => 'Group work';
+
+  @override
+  String get studentAcademicNeedsImprovement => 'Needs slight improvement';
+
+  @override
+  String get studentAcademicHomework => 'Homework';
+
+  @override
+  String get studentAcademicFullCommitment => 'Fully meets deadlines';
+
+  @override
+  String get studentAcademicFirstTerm => 'First term';
+
+  @override
+  String get studentAcademicSubjectPerformance => 'Subject performance';
+
+  @override
+  String get studentAcademicMath => 'Mathematics';
+
+  @override
+  String get studentAcademicScience => 'Science';
+
+  @override
+  String get studentAcademicArabic => 'Arabic language';
+
+  @override
+  String get studentAcademicHistory => 'History';
+
+  @override
+  String get studentAcademicPhysics => 'Physics';
+
+  @override
+  String get studentAcademicViewAll => 'View all';
+
+  @override
+  String get studentAcademicViewingAllResults =>
+      'Showing all assessment results';
+
+  @override
+  String get studentAcademicLatestResults => 'Latest assessment results';
+
+  @override
+  String get studentAcademicCalculusExam => 'Calculus exam';
+
+  @override
+  String get studentAcademicCalculusExamDate => '12 October 2024';
+
+  @override
+  String get studentAcademicOrganicChemistryLab => 'Organic chemistry - lab';
+
+  @override
+  String get studentAcademicChemistryLabDate => '08 October 2024';
+
+  @override
+  String get studentAcademicOutstanding => 'Outstanding';
+
+  @override
+  String get studentAcademicVeryGood => 'Very good';
+
+  @override
+  String get studentAcademicAddNote => 'Add note';
+
+  @override
+  String get studentAcademicTeacherNotes => 'Teacher behavioral notes';
+
+  @override
+  String get studentAcademicAddBehaviorNote => 'Add a behavioral note';
+
+  @override
+  String get studentAcademicNoteHint => 'Write your note here...';
+
+  @override
+  String get studentAcademicNoteAdded => 'Note added successfully';
+
+  @override
+  String get studentAcademicSaveNote => 'Save note';
+
+  @override
+  String get studentAcademicTeacherSara => 'Ms. Sara Al-Ahmad';
+
+  @override
+  String get studentAcademicTwoDaysAgo => '2 days ago';
+
+  @override
+  String get studentAcademicLeadershipNote =>
+      'The student demonstrated strong leadership skills during last week\'s group project. They can explain complex concepts clearly to classmates.';
+
+  @override
+  String get studentAcademicTeacherMohammed => 'Mr. Mohammed Omar';
+
+  @override
+  String get studentAcademicWeekAgo => 'A week ago';
+
+  @override
+  String get studentAcademicReviewNote =>
+      'The student needs to focus more on reviewing small details in mathematical solutions to avoid simple mistakes.';
 }

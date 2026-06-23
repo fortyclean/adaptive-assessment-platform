@@ -16,13 +16,13 @@ class ClassScheduleScreen extends StatefulWidget {
 class _ClassScheduleScreenState extends State<ClassScheduleScreen> {
   int _selectedDayIndex = 0;
 
-  final List<_DayItem> _days = const [
-    _DayItem(name: 'الأحد', date: '15'),
-    _DayItem(name: 'الاثنين', date: '16'),
-    _DayItem(name: 'الثلاثاء', date: '17'),
-    _DayItem(name: 'الأربعاء', date: '18'),
-    _DayItem(name: 'الخميس', date: '19'),
-  ];
+  List<_DayItem> get _days => [
+        _DayItem(name: _l10n.weekdaySunday, date: '15'),
+        _DayItem(name: _l10n.weekdayMonday, date: '16'),
+        _DayItem(name: _l10n.weekdayTuesday, date: '17'),
+        _DayItem(name: _l10n.weekdayWednesday, date: '18'),
+        _DayItem(name: _l10n.weekdayThursday, date: '19'),
+      ];
 
   final Map<int, List<_ScheduleItem>> _scheduleByDay = {
     for (var i = 0; i < 5; i++) i: <_ScheduleItem>[],

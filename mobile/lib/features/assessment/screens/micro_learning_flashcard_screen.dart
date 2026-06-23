@@ -32,6 +32,30 @@ class _MicroLearningFlashcardScreenState
   int _correctCount = 0;
   int _reviewCount = 0;
 
+  MicroLearningFlashcardCopy get _flashcardCopy {
+    final l10n = AppLocalizations.of(context);
+    return MicroLearningFlashcardCopy(
+      diagnosticDeckTitle: l10n.flashcardDiagnosticDeckTitle,
+      diagnosticDeckSubtitle: l10n.flashcardDiagnosticDeckSubtitle,
+      diagnosticSkill: l10n.flashcardDiagnosticSkill,
+      diagnosticGoalPrompt: l10n.flashcardDiagnosticGoalPrompt,
+      diagnosticGoalAnswer: l10n.flashcardDiagnosticGoalAnswer,
+      diagnosticGoalHint: l10n.flashcardDiagnosticGoalHint,
+      learningPlanSkill: l10n.flashcardLearningPlanSkill,
+      diagnosticNextStepPrompt: l10n.flashcardDiagnosticNextStepPrompt,
+      diagnosticNextStepAnswer: l10n.flashcardDiagnosticNextStepAnswer,
+      diagnosticNextStepHint: l10n.flashcardDiagnosticNextStepHint,
+      conceptPromptTemplate: l10n.flashcardConceptPrompt('{skill}'),
+      conceptAnswer: l10n.flashcardConceptAnswer,
+      conceptHint: l10n.flashcardConceptHint,
+      reviewPromptTemplate: l10n.flashcardReviewPrompt('{skill}', '{mastery}'),
+      reviewAnswer: l10n.flashcardReviewAnswer,
+      reviewHint: l10n.flashcardReviewHint,
+      deckTitleTemplate: l10n.flashcardDeckTitle('{skill}'),
+      deckSubtitle: l10n.flashcardDeckSubtitle,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +78,7 @@ class _MicroLearningFlashcardScreenState
           await ref.read(assessmentRepositoryProvider).getAttemptHistory();
       final deck = const MicroLearningFlashcardSource().fromAttemptHistory(
         history,
+        copy: _flashcardCopy,
       );
       if (!mounted) return;
       setState(() {

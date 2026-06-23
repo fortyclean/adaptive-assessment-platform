@@ -659,7 +659,7 @@ class _AdvancedQuestionEditorScreenState
 
   Widget _buildAIFAB(AppLocalizations l10n) => FloatingActionButton.extended(
         onPressed: () => _showAiAssistantPlannedSheet(l10n),
-        tooltip: 'AI question assistant planned',
+        tooltip: l10n.autoGenerationPlanned,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
         elevation: 2,

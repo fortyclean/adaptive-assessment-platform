@@ -100,12 +100,25 @@
   "filterAcademic": "أكاديمي",
   "filterPractical": "عملي",
   "noMatchingSubjects": "لا توجد مواد مطابقة",
+  "studentSubjectAdvancedMath": "الرياضيات المتقدمة",
+  "studentSubjectMolecularBiology": "الأحياء الجزيئية",
+  "studentSubjectArabicLiterature": "الأدب العربي",
+  "studentSubjectQuantumPhysics": "فيزياء الكم",
+  "studentSubjectOrganicChemistry": "الكيمياء العضوية",
+  "studentSubjectEnglishLanguage": "اللغة الإنجليزية",
+  "studentSubjectTeacherMohammed": "د. محمد القحطاني",
+  "studentSubjectTeacherSarah": "أ. سارة العتيبي",
+  "studentSubjectTeacherIbrahim": "د. إبراهيم الفايز",
+  "studentSubjectTeacherKhaled": "أ. خالد منصور",
+  "studentSubjectTeacherLaila": "د. ليلى الشمري",
+  "studentSubjectTeacherNoura": "أ. نورة العمري",
   "progressAchieved": "التقدم المحرز",
   "finalExamsPrepTitle": "استعد للاختبارات النهائية!",
   "finalExamsPrepSubtitle": "راجع دروسك السابقة وقم بتقييم مستواك الآن من خلال قسم الاختبارات الذكية.",
   "startNow": "ابدأ الآن",
   "back": "رجوع",
   "retry": "إعادة المحاولة",
+  "refresh": "تحديث",
   "home": "الرئيسية",
   "adminAccount": "حساب المشرف",
   "fillBlankAnswerSemantics": "أدخل إجابتك",
@@ -118,7 +131,40 @@
   "flashcardLoadFailedMessage": "تعذر تجهيز بطاقات التدريب. تحقق من الاتصال ثم حاول مرة أخرى.",
   "flashcardEmptyTitle": "لا توجد بطاقات بعد",
   "flashcardEmptyMessage": "أكمل اختبارًا واحدًا حتى نبني لك بطاقات مبنية على أدائك.",
-  "flashcardSemanticsAnswerVisible": "بطاقة {skill}. الإجابة ظاهرة.",
+  "flashcardDiagnosticDeckTitle": "تدريب تشخيصي سريع",
+  "flashcardDiagnosticDeckSubtitle": "ابدأ بهذه البطاقات حتى تظهر توصيات أدق بعد أول اختبار.",
+  "flashcardDiagnosticSkill": "تشخيص",
+  "flashcardDiagnosticGoalPrompt": "ما هدف الاختبار التشخيصي الأول؟",
+  "flashcardDiagnosticGoalAnswer": "تحديد مستوى الإتقان الحالي واكتشاف المهارات التي تحتاج مراجعة قصيرة.",
+  "flashcardDiagnosticGoalHint": "فكر في سبب ظهور خطة تعلم شخصية بعد الاختبار.",
+  "flashcardLearningPlanSkill": "خطة التعلم",
+  "flashcardDiagnosticNextStepPrompt": "ماذا تفعل بعد ظهور أول نتيجة؟",
+  "flashcardDiagnosticNextStepAnswer": "راجع المهارة الأضعف في التعلم المصغر، ثم حل تدريبًا قصيرًا لقياس التحسن.",
+  "flashcardDiagnosticNextStepHint": "التحسين يبدأ من أضعف مهارة، وليس من أعلى نتيجة.",
+  "flashcardConceptPrompt": "ما أول خطوة لتحسين مهارة {skill}؟",
+  "@flashcardConceptPrompt": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "flashcardConceptAnswer": "ابدأ بسؤال واحد بسيط يحدد سبب الخطأ، ثم راجع القاعدة المرتبطة به قبل التدريب.",
+  "flashcardConceptHint": "لا تبدأ بحل كثير من الأسئلة قبل معرفة سبب الخطأ.",
+  "flashcardReviewPrompt": "إتقانك الحالي في {skill} هو {mastery}%. ماذا يعني ذلك؟",
+  "@flashcardReviewPrompt": {
+    "placeholders": {
+      "skill": {},
+      "mastery": {}
+    }
+  },
+  "flashcardReviewAnswer": "هذه مهارة تحتاج مراجعة مركزة اليوم، ثم اختبارًا قصيرًا للتأكد من التحسن.",
+  "flashcardReviewHint": "النسبة الأقل تعني أولوية أعلى في خطة التعلم.",
+  "flashcardDeckTitle": "بطاقات تقوية {skill}",
+  "@flashcardDeckTitle": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "flashcardDeckSubtitle": "تدريب قصير مبني على أضعف مهاراتك في آخر النتائج.",  "flashcardSemanticsAnswerVisible": "بطاقة {skill}. الإجابة ظاهرة.",
   "@flashcardSemanticsAnswerVisible": {
     "placeholders": {
       "skill": {}
@@ -156,11 +202,17 @@
   "dashboard": "لوحة التحكم",
   "search": "بحث",
   "teacherDashboardLoadFailed": "تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.",
+  "teacherDashboardDemoUnitOneTitle": "اختبار الوحدة الأولى",
+  "teacherDashboardDemoGrammarTitle": "اختبار النحو",
+  "teacherDashboardDemoPhysicsTitle": "اختبار الفيزياء",
   "totalStudents": "إجمالي الطلاب",
   "active": "نشط",
   "completed": "مكتمل",
   "draft": "مسودة",
   "average": "المتوسط",
+  "points": "النقاط",
+  "studentChallengeTwoDayStreakLocked": "يفتح هذا التحدي بعد الحفاظ على سلسلة يومين.",
+  "startAssessment": "ابدأ اختبارًا",
   "createNewAssessment": "إنشاء اختبار جديد",
   "recentAssessments": "آخر الاختبارات",
   "viewAll": "عرض الكل",
@@ -280,6 +332,50 @@
   "pendingEssaysLoadFailed": "تعذر تحميل الجلسات المعلقة",
   "noPendingEssaysTitle": "لا توجد أسئلة مقالية بانتظار التصحيح",
   "noPendingEssaysMessage": "جميع الجلسات المقالية تم تصحيحها",
+  "essayGradingLoadFailed": "تعذر تحميل بيانات الجلسة",
+  "essayGradingConfirmTitle": "تأكيد إنهاء التصحيح",
+  "essayGradingConfirmMessage": "هل أنت متأكد من إنهاء التصحيح؟ سيتم احتساب النتيجة النهائية للطالب.",
+  "essayGradingSaved": "تم إنهاء التصحيح وتحديث نتيجة الطالب",
+  "essayGradingSaveFailed": "تعذر حفظ الدرجات، يرجى المحاولة مجدداً",
+  "essayGradingTitle": "تصحيح مقالات — {studentName}",
+  "@essayGradingTitle": {
+    "placeholders": {
+      "studentName": {}
+    }
+  },
+  "essayGradingNoEssays": "لا توجد أسئلة مقالية تحتاج تصحيحاً",
+  "essayGradingSaving": "جاري الحفظ...",
+  "essayGradingFinish": "إنهاء التصحيح وتحديث النتيجة",
+  "essayGradingAllComplete": "تم تصحيح جميع الأسئلة المقالية — يمكنك إنهاء التصحيح",
+  "essayGradingRemaining": "تبقّى {count} سؤال مقالي بدون درجة",
+  "@essayGradingRemaining": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "essayQuestionUnavailable": "نص السؤال غير متاح",
+  "essayNoStudentAnswer": "(لم يُجب الطالب)",
+  "essayQuestionNumber": "السؤال {index}",
+  "@essayQuestionNumber": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "studentAnswerSection": "إجابة الطالب",
+  "essayScoreRange": "الدرجة (0 – {maxMarks})",
+  "@essayScoreRange": {
+    "placeholders": {
+      "maxMarks": {}
+    }
+  },
+  "scoreInvalidNumber": "يرجى إدخال رقم صحيح",
+  "scoreNegative": "الدرجة لا يمكن أن تكون سالبة",
+  "scoreMax": "الحد الأقصى هو {maxMarks}",
+  "@scoreMax": {
+    "placeholders": {
+      "maxMarks": {}
+    }
+  },
   "assessmentFallbackTitle": "اختبار",
   "startGrading": "بدء التصحيح",
   "questionsCount": "{count} سؤال",
@@ -302,8 +398,11 @@
   "someQuestions": "بعض",
   "backToHome": "العودة للرئيسية",
   "scoreExcellent": "ممتاز",
+  "scoreVeryGood": "جيد جداً",
   "scoreGood": "جيد",
+  "needsSupport": "يحتاج دعم",
   "scoreNeedsImprovement": "يحتاج تحسين",
+  "moreDetails": "تفاصيل أكثر",
   "greatAchievement": "إنجاز رائع!",
   "earnedExcellenceBadge": "حصلت على شارة التميز",
   "pointsEarnedLabel": "+{points} نقطة",
@@ -328,12 +427,26 @@
   "demoBiologyAssessmentTitle": "اختبار الأحياء التجريبي",
   "demoHistoryAssessmentTitle": "اختبار التاريخ التجريبي",
   "demoChemistryAssessmentTitle": "اختبار الكيمياء التجريبي",
+  "manageDemoMidtermMathTitle": "اختبار منتصف الفصل - رياضيات",
+  "manageDemoSecondUnitScienceTitle": "اختبار الوحدة الثانية - علوم",
+  "manageDemoArabicBasicsTitle": "القواعد الأساسية - لغة عربية",
+  "manageDemoAndalusHistoryTitle": "تاريخ الأندلس - دراسات اجتماعية",
+  "manageDemoFinalPhysicsTitle": "اختبار نهاية الفصل - فيزياء",
+  "manageSubjectSocialStudies": "الدراسات الاجتماعية",
+  "manageSubjectPhysics": "الفيزياء",
+  "manageSubjectHistory": "التاريخ",
+  "manageSubjectBiology": "الأحياء",
+  "manageSubjectChemistry": "الكيمياء",
   "demoPeriodicMathAssessmentTitle": "اختبار الرياضيات الدوري",
   "demoArabicGrammarAssessmentTitle": "اختبار قواعد اللغة العربية",
   "demoBiologyAssessmentShortTitle": "اختبار الأحياء",
   "subjectBiology": "الأحياء",
   "subjectHistory": "التاريخ",
   "subjectChemistry": "الكيمياء",
+  "subjectPhysics": "الفيزياء",
+  "subjectGeography": "الجغرافيا",
+  "subjectIslamicEducation": "التربية الإسلامية",
+  "subjectComputerScience": "الحاسب الآلي",
   "studentAssessmentsGreeting": "مرحباً بك، {name}",
   "@studentAssessmentsGreeting": {
     "placeholders": {
@@ -400,6 +513,7 @@
   "assessmentStartTitle": "بدء الاختبار",
   "assessmentLoadFailed": "تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.",
   "assessmentStartFailed": "تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.",
+  "assessmentStartDemoUnitAlgebra": "الوحدة الثالثة: الجبر",
   "assessmentTypeAdaptive": "تكيفي",
   "assessmentTypeRandom": "عشوائي",
   "questionCount": "عدد الأسئلة",
@@ -555,7 +669,10 @@
   "assessment": "اختبار",
   "noClassesYet": "لا توجد فصول دراسية بعد",
   "noClassesMessage": "ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم.",
-  "manageAssessmentsLoadFailed": "تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.",
+  "demoClassroomGradeSevenA": "الصف السابع (أ)",
+  "demoClassroomGradeEightB": "الصف الثامن (ب)",
+  "demoGradeLevelSeven": "الصف السابع",
+  "demoGradeLevelEight": "الصف الثامن",  "manageAssessmentsLoadFailed": "تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.",
   "editAssessment": "تعديل الاختبار",
   "assessmentTitle": "عنوان الاختبار",
   "subject": "المادة",
@@ -583,6 +700,8 @@
   "insufficientQuestionsWarning": "تحذير: عدد الأسئلة المتاحة أقل من المطلوب",
   "assessmentCreatedDemoMode": "تم إنشاء الاختبار بنجاح (وضع تجريبي)",
   "assessmentCreateFailed": "تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.",
+  "selectClassroomBeforePublish": "اختر فصلًا واحدًا على الأقل قبل نشر الاختبار.",
+  "invalidAssessmentAvailabilityWindow": "تاريخ نهاية الاختبار يجب أن يكون بعد تاريخ البداية.",
   "assessmentTitleHint": "مثال: اختبار الوحدة الأولى",
   "requiredField": "مطلوب",
   "chooseSubject": "اختر المادة",
@@ -648,7 +767,18 @@
   "taskManagementTitle": "إدارة المهام",
   "taskManagementSubtitle": "تابع واجبات طلابك ونسب الإنجاز، وأنشئ مهامًا محلية قابلة للمراجعة أثناء الاختبار.",
   "taskManagementLocalOnlyMessage": "إدارة المهام تعمل الآن بحالة محلية واضحة. للحفظ الدائم والمزامنة مع الطلاب يجب ربط API المهام في المرحلة القادمة.",
-  "deleteTaskTitle": "حذف المهمة؟",
+  "demoTaskClassroomGradeSevenB": "الصف السابع - ب",
+  "demoTaskClassroomGradeNineA": "الصف التاسع - أ",
+  "demoTaskClassroomGradeTenA": "الصف العاشر - أ",
+  "demoTaskClassroomGradeTenB": "الصف العاشر - ب",
+  "demoTaskClassroomGradeElevenC": "الصف الحادي عشر - ج",
+  "demoTaskAlgebraTitle": "الجبر المتطور: المعادلات التربيعية",
+  "demoTaskNewtonTitle": "مقدمة في قوانين نيوتن",
+  "demoTaskStatisticsTitle": "الاحتمالات والإحصاء الوصفي",
+  "demoTaskArabicReviewTitle": "مراجعة البلاغة والتشبيه",
+  "demoTaskDueOctober15": "تسليم: 15 أكتوبر",
+  "demoTaskDueTomorrow": "تسليم: غدًا",
+  "demoTaskDueOctober20": "تسليم: 20 أكتوبر",  "deleteTaskTitle": "حذف المهمة؟",
   "deleteTaskConfirmation": "سيتم حذف \"{title}\" من القائمة المحلية فقط. لا توجد مزامنة خلفية حتى يتوفر API المهام.",
   "@deleteTaskConfirmation": {
     "placeholders": {
@@ -1851,5 +1981,285 @@
   "studentDashboardEveningDeadlineTime": "الساعة 11:59 مساءً",
   "studentDashboardUpcomingExams": "الاختبارات القادمة",
   "studentDashboardMyResources": "مصادري",
-  "studentDashboardStartTraining": "ابدأ التدريب"
+  "studentDashboardStartTraining": "ابدأ التدريب",
+  "studentAnalyticsLoadFailed": "تعذر تحميل تحليلاتك الآن. تحقق من الاتصال ثم حاول مرة أخرى.",
+  "studentAnalyticsNoClearTrend": "لا يوجد تغير واضح بعد",
+  "studentAnalyticsTrendFromLast": "{percent}% عن آخر اختبار",
+  "@studentAnalyticsTrendFromLast": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "studentAnalyticsStrongestSkill": "أقوى مهارة",
+  "studentAnalyticsNeedsReview": "تحتاج مراجعة",
+  "studentAnalyticsCompletedAssessmentsBadge": "اختبارات مكتملة",
+  "studentAnalyticsHighPerformanceBadge": "أداء مرتفع",
+  "studentAnalyticsCommittedBadge": "ملتزم",
+  "studentAnalyticsErrorTitle": "تعذر تحميل التحليلات",
+  "studentAnalyticsEmptyTitle": "لا توجد تحليلات بعد",
+  "studentAnalyticsEmptyMessage": "ستظهر مؤشرات الأداء والمهارات بعد إكمال أول اختبار.",
+  "studentAnalyticsAppBarTitle": "إحصائيات EduAssess",
+  "studentAnalyticsGreeting": "مرحباً، {name}!",
+  "@studentAnalyticsGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "studentAnalyticsOverviewSubtitle": "إليك نظرة شاملة على أدائك التعليمي لهذا الفصل.",
+  "studentAnalyticsCompletedAssessmentMetric": "اختبار مكتمل",
+  "studentAnalyticsEarnedPointMetric": "نقطة مكتسبة",
+  "studentAnalyticsSubjectProgress": "تقدم المواد الدراسية",
+  "studentAnalyticsSkillInsights": "رؤى المهارات من الاختبارات",
+  "studentAnalyticsAchievements": "الأوسمة والإنجازات",
+    "learningRecommendationStartTitle": "ابدأ ببناء توصياتك",
+  "learningRecommendationStartMessage": "أكمل اختبارًا قصيرًا حتى تظهر توصيات مبنية على أحدث تفصيل مهاراتك.",
+  "learningRecommendationFocusTitle": "ركز على {skill}",
+  "@learningRecommendationFocusTitle": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "learningRecommendationFocusMessage": "آخر نتيجة أظهرت إتقان {percent}% في {skill}. ابدأ بدرس قصير ثم جرّب بطاقات التدريب.",
+  "@learningRecommendationFocusMessage": {
+    "placeholders": {
+      "percent": {},
+      "skill": {}
+    }
+  },
+  "learningRecommendationOpenPlan": "افتح خطة التعلم",
+  "learningRecommendationMaintainTitle": "حافظ على مستواك",
+  "learningRecommendationMaintainMessage": "أضعف مهارة في آخر اختبار هي {skill} بنسبة {percent}%. تدريب قصير يكفي للحفاظ على الإتقان.",
+  "@learningRecommendationMaintainMessage": {
+    "placeholders": {
+      "skill": {},
+      "percent": {}
+    }
+  },
+  "learningRecommendationPracticeCards": "تدريب بطاقات",
+  "microLearningDiagnosticAssessment": "اختبار تشخيصي",
+  "microLearningTitle": "التعلم المصغر",
+  "microLearningSmartTitle": "التعلم المصغر الذكي",
+  "microLearningLoadFailedTitle": "تعذر تحميل خطة التعلم",
+  "microLearningLoadFailedMessage": "تعذر تحميل خطة التعلم المصغر. تحقق من الاتصال ثم حاول مرة أخرى.",
+  "microLearningLessonCompletionSaved": "تم حفظ إكمال الدرس",
+  "microLearningWelcomeBack": "أهلًا بك مجددًا، {name}",
+  "@microLearningWelcomeBack": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "microLearningCurrentStreakTitle": "سلسلة تعلمك الحالية",
+  "microLearningStreakMessage": "أنت في اليوم {days} على التوالي. حافظ على نشاطك.",
+  "@microLearningStreakMessage": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "microLearningPercentComplete": "{percent}% مكتمل",
+  "@microLearningPercentComplete": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "microLearningDailyGoal": "هدف اليوم",
+  "microLearningTodaysQuickLessons": "دروس اليوم السريعة",
+  "microLearningLockedLessonSemantics": "{title}. درس مغلق حتى تنهي الدرس السابق.",
+  "@microLearningLockedLessonSemantics": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "microLearningCompletedLessonSemantics": "{title}. درس مكتمل ومحفوظ.",
+  "@microLearningCompletedLessonSemantics": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "microLearningOpenLessonSemantics": "{title}. افتح تدريبًا قصيرًا لهذا الدرس.",
+  "@microLearningOpenLessonSemantics": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "microLearningLessonCompletedTooltip": "درس مكتمل",
+  "microLearningMarkLessonCompleted": "تعليم الدرس كمكتمل",
+  "microLearningAiRecommendationsTitle": "توصيات الذكاء الاصطناعي لك",
+  "microLearningFlashcardChallengeTitle": "تحدي البطاقات الخاطفة",
+  "microLearningBasedOnLatestResults": "بناءً على آخر نتائجك",
+  "microLearningBasedOnFocus": "بناءً على {focus}",
+  "@microLearningBasedOnFocus": {
+    "placeholders": {
+      "focus": {}
+    }
+  },
+  "microLearningStartFlashcardChallenge": "ابدأ التحدي (10 بطاقات)",
+  "microLearningWeakestSkillFallback": "المهارة الأضعف",
+  "microLearningSuggestedPathTitle": "مسار تعلم مقترح",
+  "microLearningReviewFocusStep": "راجع {focus}",
+  "@microLearningReviewFocusStep": {
+    "placeholders": {
+      "focus": {}
+    }
+  },
+  "microLearningShortestLessonStep": "ابدأ بأقصر درس متاح قبل الانتقال للاختبار.",
+  "microLearningSolveShortPracticeStep": "حل تدريبًا قصيرًا",
+  "microLearningOneAssessmentStep": "اختبار واحد كافٍ لمعرفة إن كان الفهم تحسن.",
+  "microLearningOpenAnalyticsStep": "افتح التحليلات",
+  "microLearningCompareLatestResultStep": "قارن النتيجة الجديدة مع آخر محاولة وحدد الخطوة التالية.",
+  "microLearningReviewAnalytics": "راجع تحليلاتك",
+  "microLearningDiagnosticDescription": "ابدأ اختبارًا لفتح توصيات مبنية على أدائك",
+  "microLearningStrongSkillDescription": "مهارة قوية، حافظ على مستواك",
+  "microLearningNeedsReviewDescription": "تحتاج مراجعة قصيرة اليوم",
+  "microLearningDiagnosticLessonTitle": "ابدأ بأول اختبار تشخيصي",
+  "microLearningDiagnosticLessonSubtitle": "3 دقائق - يفتح توصياتك الشخصية",
+  "microLearningDiagnosticSkill": "تشخيص",
+  "microLearningReviewResultsTitle": "راجع نتائجك بعد الاختبار",
+  "microLearningReviewResultsSubtitle": "مغلق حتى تظهر أول نتيجة",
+  "microLearningResultsAnalysisSkill": "تحليل النتائج",
+  "microLearningSkillReviewTitleTemplate": "مراجعة قصيرة: {skill}",
+  "microLearningSkillReviewSubtitleTemplate": "4 دقائق - مستوى الإتقان {percent}%",
+  "studentProgressLoadFailed": "تعذر تحميل تقدمك الآن. تحقق من الاتصال ثم أعد المحاولة.",
+  "studentProgressWeakestSkillFallback": "أضعف مهارة",
+  "studentProgressWeeklyReportTitle": "تقريرك الأسبوعي",
+  "studentProgressFocusLabel": "للتركيز",
+  "studentProgressWeeklySummaryEmpty": "لا توجد نتائج هذا الأسبوع بعد. ابدأ باختبار قصير لفتح تقريرك الأسبوعي.",
+  "studentProgressWeeklySummaryStrong": "أسبوع قوي. حافظ على وتيرتك وراجع {skill} للحفاظ على المستوى.",
+  "@studentProgressWeeklySummaryStrong": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "studentProgressWeeklySummaryGood": "تقدمك جيد. جلسة تعلم مصغر واحدة على {skill} سترفع ثباتك.",
+  "@studentProgressWeeklySummaryGood": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "studentProgressWeeklySummaryNeedsFocus": "هذا الأسبوع يحتاج تركيزًا أكبر. ابدأ بخطة قصيرة على {skill} ثم أعد اختبارًا واحدًا.",
+  "@studentProgressWeeklySummaryNeedsFocus": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "studentChallengesTitle": "التحديات",
+  "studentChallengesNew": "تحدي جديد",
+  "studentChallengesStreakDays": "سلسلة أيام",
+  "studentChallengesAssessmentsThisWeek": "اختبارات هذا الأسبوع",
+  "studentChallengesUnlocked": "تحديات جديدة مفتوحة حسب نشاطك.",
+  "studentChallengesUnlockHint": "أكمل اختبارين في يومين متتاليين لفتح تحديات أكثر.",
+  "studentChallengesNotifications": "الإشعارات",
+  "studentChallengesLive": "تحديات مباشرة",
+  "studentChallengesCurrentWeek": "الأسبوع الحالي",
+  "studentChallengesLeaderboard": "لوحة المتصدرين",
+  "studentChallengesMovedUp": "تقدمت 3 مراكز",
+  "studentChallengesCurrentRank": "مركزك الحالي",
+  "studentChallengesMyChallenges": "تحدياتي",
+  "studentChallengesCompleted": "تحديات مكتملة",
+  "studentChallengesActiveUpcoming": "نشطة وقادمة",
+  "studentChallengesLocalCreated": "أنشأت {count} تحدٍ محليًا لهذه الجلسة. سيحتاج الحفظ الدائم إلى API لاحقًا.",
+  "@studentChallengesLocalCreated": {"placeholders": {"count": {}}},
+  "studentChallengesEarnedBadges": "الأوسمة المحققة",
+  "studentChallengesBadgeLegend": "الخارق",
+  "studentChallengesBadgeFast": "المتسابق السريع",
+  "studentChallengesBadgeThinker": "المفكر",
+  "studentChallengesBadgeRisingStar": "النجم الصاعد",
+  "studentChallengesCompletedTitle": "تحدي مكتمل",
+  "studentChallengesCompletedMessage": "أكملت \"{title}\" بالفعل. يمكنك متابعة ترتيبك من لوحة المتصدرين.",
+  "@studentChallengesCompletedMessage": {"placeholders": {"title": {}}},
+  "studentChallengesLockedTitle": "التحدي غير متاح بعد",
+  "studentChallengesLockedMessage": "سيفتح هذا التحدي بعد توفر شروط المشاركة.",
+  "studentChallengesJoinTitle": "الانضمام إلى {title}",
+  "@studentChallengesJoinTitle": {"placeholders": {"title": {}}},
+  "studentChallengesJoinMessage": "ستحصل على {points} نقطة عند إكمال التحدي. هل تريد إضافته إلى تحدياتك؟",
+  "@studentChallengesJoinMessage": {"placeholders": {"points": {}}},
+  "studentChallengesJoinNow": "انضم الآن",
+  "studentChallengesJoinedTitle": "تم الانضمام",
+  "studentChallengesJoinedMessage": "أضيف \"{title}\" إلى تحدياتك. ابدأه من قائمة تحدياتي.",
+  "@studentChallengesJoinedMessage": {"placeholders": {"title": {}}},
+  "studentChallengesCreateTitle": "إنشاء تحدي جديد",
+  "studentChallengesCreateDescription": "سيُضاف التحدي محليًا لهذه الجلسة إلى أن يتوفر API لحفظ تحديات الطلاب.",
+  "studentChallengesTitleLabel": "عنوان التحدي",
+  "studentChallengesSubjectLabel": "المادة أو المهارة",
+  "studentChallengesAddToMine": "إضافة إلى تحدياتي",
+  "studentChallengesDefaultTitle": "تحدي شخصي جديد",
+  "studentChallengesDefaultSubject": "مهارة مختارة",
+  "studentChallengesThisWeek": "هذا الأسبوع",
+  "studentChallengesCreatedTitle": "تم إنشاء التحدي",
+  "studentChallengesCreatedMessage": "أضيف \"{title}\" إلى تحدياتك المحلية ويمكنك البدء به الآن.",
+  "@studentChallengesCreatedMessage": {"placeholders": {"title": {}}},
+  "studentChallengesDone": "تم",
+  "studentChallengesParticipants": "{count} مشارك",
+  "@studentChallengesParticipants": {"placeholders": {"count": {}}},
+  "studentChallengesJoinAction": "انضم للتحدي",
+  "studentChallengesStartAction": "ابدأ التحدي",
+  "studentChallengesViewResultAction": "عرض النتيجة",
+  "studentChallengesNotOpenAction": "لم يفتح بعد",
+  "studentChallengesPoints": "{points} نقطة",
+  "@studentChallengesPoints": {"placeholders": {"points": {}}},
+  "studentChallengesCompleteProgress": "اكتمل • {percent}%",
+  "@studentChallengesCompleteProgress": {"placeholders": {"percent": {}}},
+  "studentChallengesLiveNow": "مباشر الآن",
+  "studentAcademicFallbackName": "أحمد خالد المنصوري",
+  "studentAcademicId": "الرقم الأكاديمي: {id}",
+  "@studentAcademicId": {"placeholders": {"id": {}}},
+  "studentAcademicGrade": "الصف العاشر - أ",
+  "studentAcademicAdvancedTrack": "مسار متقدم",
+  "studentAcademicReport": "تقرير",
+  "studentAcademicContact": "تواصل",
+  "studentAcademicReportFor": "تقرير: {name}",
+  "@studentAcademicReportFor": {"placeholders": {"name": {}}},
+  "studentAcademicChooseReport": "اختر نوع التقرير:",
+  "studentAcademicExportingAcademic": "جاري تصدير التقرير الأكاديمي...",
+  "studentAcademicAcademicReport": "التقرير الأكاديمي",
+  "studentAcademicExportingPerformance": "جاري تصدير تقرير الأداء...",
+  "studentAcademicPerformanceReport": "تقرير الأداء",
+  "studentAcademicSendMessageTo": "إرسال رسالة إلى: {name}",
+  "@studentAcademicSendMessageTo": {"placeholders": {"name": {}}},
+  "studentAcademicMessageHint": "اكتب رسالتك هنا...",
+  "studentAcademicMessageSent": "تم إرسال الرسالة إلى {name}",
+  "@studentAcademicMessageSent": {"placeholders": {"name": {}}},
+  "studentAcademicSend": "إرسال",
+  "studentAcademicActive": "نشط",
+  "studentAcademicCumulativeGpa": "المعدل التراكمي",
+  "studentAcademicPreviousMonth": "+0.12 الشهر الماضي",
+  "studentAcademicAttendance": "نسبة الحضور",
+  "studentAcademicCompletedAssessments": "الاختبارات المكتملة",
+  "studentAcademicAwaitingAssessments": "بانتظار اختبارين",
+  "studentAcademicGeneralBehavior": "السلوك العام",
+  "studentAcademicExcellent": "ممتاز جدًا",
+  "studentAcademicInteractionStats": "إحصائيات التفاعل",
+  "studentAcademicClassParticipation": "المشاركة الصفية",
+  "studentAcademicHighComparedPeers": "مرتفع مقارنة بالأقران",
+  "studentAcademicGroupWork": "العمل الجماعي",
+  "studentAcademicNeedsImprovement": "يحتاج إلى تحسين بسيط",
+  "studentAcademicHomework": "الواجبات المنزلية",
+  "studentAcademicFullCommitment": "التزام تام بالمواعيد",
+  "studentAcademicFirstTerm": "الفصل الدراسي الأول",
+  "studentAcademicSubjectPerformance": "أداء المواد الدراسية",
+  "studentAcademicMath": "الرياضيات",
+  "studentAcademicScience": "العلوم",
+  "studentAcademicArabic": "اللغة العربية",
+  "studentAcademicHistory": "التاريخ",
+  "studentAcademicPhysics": "الفيزياء",
+  "studentAcademicViewAll": "عرض الكل",
+  "studentAcademicViewingAllResults": "عرض جميع نتائج الاختبارات",
+  "studentAcademicLatestResults": "آخر نتائج الاختبارات",
+  "studentAcademicCalculusExam": "اختبار التفاضل والتكامل",
+  "studentAcademicCalculusExamDate": "12 أكتوبر 2024",
+  "studentAcademicOrganicChemistryLab": "كيمياء عضوية - عملي",
+  "studentAcademicChemistryLabDate": "08 أكتوبر 2024",
+  "studentAcademicOutstanding": "متفوق",
+  "studentAcademicVeryGood": "جيد جدًا",
+  "studentAcademicAddNote": "إضافة ملاحظة",
+  "studentAcademicTeacherNotes": "ملاحظات المعلم السلوكية",
+  "studentAcademicAddBehaviorNote": "إضافة ملاحظة سلوكية",
+  "studentAcademicNoteHint": "اكتب ملاحظتك هنا...",
+  "studentAcademicNoteAdded": "تم إضافة الملاحظة بنجاح",
+  "studentAcademicSaveNote": "حفظ الملاحظة",
+  "studentAcademicTeacherSara": "أ. سارة الأحمد",
+  "studentAcademicTwoDaysAgo": "منذ يومين",
+  "studentAcademicLeadershipNote": "أظهر الطالب مهارات قيادية متميزة خلال المشروع الجماعي الأسبوع الماضي. لديه قدرة عالية على تبسيط المفاهيم المعقدة لزملائه.",
+  "studentAcademicTeacherMohammed": "أ. محمد عمر",
+  "studentAcademicWeekAgo": "منذ أسبوع",
+  "studentAcademicReviewNote": "يحتاج الطالب إلى التركيز أكثر على مراجعة التفاصيل الصغيرة في حلول المسائل الرياضية لتفادي الأخطاء البسيطة."
 }

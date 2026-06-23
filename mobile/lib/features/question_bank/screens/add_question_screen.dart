@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_constants.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
@@ -34,6 +33,15 @@ class _AddQuestionScreenState extends ConsumerState<AddQuestionScreen> {
 
   final List<String> _optionKeys = ['A', 'B', 'C', 'D'];
   final List<String> _optionLabels = ['A', 'B', 'C', 'D'];
+
+  List<String> _subjectOptions(AppLocalizations l10n) => [
+        l10n.subjectMathematics,
+        l10n.subjectEnglish,
+        l10n.subjectArabic,
+        l10n.subjectPhysics,
+        l10n.subjectChemistry,
+        l10n.subjectBiology,
+      ];
 
   @override
   void dispose() {
@@ -146,7 +154,7 @@ class _AddQuestionScreenState extends ConsumerState<AddQuestionScreen> {
                     hint: l10n.chooseSubject,
                     value: _subject,
                     icon: Icons.book_outlined,
-                    items: AppConstants.subjects
+                    items: _subjectOptions(l10n)
                         .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                         .toList(),
                     onChanged: (v) => setState(() => _subject = v),

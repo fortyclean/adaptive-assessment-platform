@@ -46,8 +46,10 @@ void main() {
       );
 
       expect(
-        draft.validateForPublish(),
-        'اختر فصلًا واحدًا على الأقل قبل نشر الاختبار.',
+        draft.validateForPublish(
+          classroomRequiredMessage: 'Select one class first',
+        ),
+        'Select one class first',
       );
     });
 
@@ -67,8 +69,10 @@ void main() {
       );
 
       expect(
-        draft.validateAvailabilityWindow(),
-        'تاريخ نهاية الاختبار يجب أن يكون بعد تاريخ البداية.',
+        draft.validateAvailabilityWindow(
+          invalidAvailabilityWindowMessage: 'End date must be after start',
+        ),
+        'End date must be after start',
       );
     });
 

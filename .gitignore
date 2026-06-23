@@ -2,6 +2,13 @@
 client_secret*.json
 **/client_secret*.json
 
+# Environment files may contain production credentials. Keep only sanitized examples tracked.
+backend/.env.production
+
+# Local QA captures and machine-readable test event streams are retained locally.
+qa-artifacts/
+audit-results/*-events*.json
+
 # Android release signing secrets
 mobile/android/app/key.properties
 mobile/android/app/*.jks

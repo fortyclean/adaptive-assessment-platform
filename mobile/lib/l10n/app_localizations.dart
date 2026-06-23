@@ -608,6 +608,78 @@ abstract class AppLocalizations {
   /// **'لا توجد مواد مطابقة'**
   String get noMatchingSubjects;
 
+  /// No description provided for @studentSubjectAdvancedMath.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات المتقدمة'**
+  String get studentSubjectAdvancedMath;
+
+  /// No description provided for @studentSubjectMolecularBiology.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحياء الجزيئية'**
+  String get studentSubjectMolecularBiology;
+
+  /// No description provided for @studentSubjectArabicLiterature.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأدب العربي'**
+  String get studentSubjectArabicLiterature;
+
+  /// No description provided for @studentSubjectQuantumPhysics.
+  ///
+  /// In ar, this message translates to:
+  /// **'فيزياء الكم'**
+  String get studentSubjectQuantumPhysics;
+
+  /// No description provided for @studentSubjectOrganicChemistry.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكيمياء العضوية'**
+  String get studentSubjectOrganicChemistry;
+
+  /// No description provided for @studentSubjectEnglishLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة الإنجليزية'**
+  String get studentSubjectEnglishLanguage;
+
+  /// No description provided for @studentSubjectTeacherMohammed.
+  ///
+  /// In ar, this message translates to:
+  /// **'د. محمد القحطاني'**
+  String get studentSubjectTeacherMohammed;
+
+  /// No description provided for @studentSubjectTeacherSarah.
+  ///
+  /// In ar, this message translates to:
+  /// **'أ. سارة العتيبي'**
+  String get studentSubjectTeacherSarah;
+
+  /// No description provided for @studentSubjectTeacherIbrahim.
+  ///
+  /// In ar, this message translates to:
+  /// **'د. إبراهيم الفايز'**
+  String get studentSubjectTeacherIbrahim;
+
+  /// No description provided for @studentSubjectTeacherKhaled.
+  ///
+  /// In ar, this message translates to:
+  /// **'أ. خالد منصور'**
+  String get studentSubjectTeacherKhaled;
+
+  /// No description provided for @studentSubjectTeacherLaila.
+  ///
+  /// In ar, this message translates to:
+  /// **'د. ليلى الشمري'**
+  String get studentSubjectTeacherLaila;
+
+  /// No description provided for @studentSubjectTeacherNoura.
+  ///
+  /// In ar, this message translates to:
+  /// **'أ. نورة العمري'**
+  String get studentSubjectTeacherNoura;
+
   /// No description provided for @progressAchieved.
   ///
   /// In ar, this message translates to:
@@ -643,6 +715,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إعادة المحاولة'**
   String get retry;
+
+  /// No description provided for @refresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث'**
+  String get refresh;
 
   /// No description provided for @home.
   ///
@@ -715,6 +793,114 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أكمل اختبارًا واحدًا حتى نبني لك بطاقات مبنية على أدائك.'**
   String get flashcardEmptyMessage;
+
+  /// No description provided for @flashcardDiagnosticDeckTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تدريب تشخيصي سريع'**
+  String get flashcardDiagnosticDeckTitle;
+
+  /// No description provided for @flashcardDiagnosticDeckSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ بهذه البطاقات حتى تظهر توصيات أدق بعد أول اختبار.'**
+  String get flashcardDiagnosticDeckSubtitle;
+
+  /// No description provided for @flashcardDiagnosticSkill.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشخيص'**
+  String get flashcardDiagnosticSkill;
+
+  /// No description provided for @flashcardDiagnosticGoalPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما هدف الاختبار التشخيصي الأول؟'**
+  String get flashcardDiagnosticGoalPrompt;
+
+  /// No description provided for @flashcardDiagnosticGoalAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد مستوى الإتقان الحالي واكتشاف المهارات التي تحتاج مراجعة قصيرة.'**
+  String get flashcardDiagnosticGoalAnswer;
+
+  /// No description provided for @flashcardDiagnosticGoalHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'فكر في سبب ظهور خطة تعلم شخصية بعد الاختبار.'**
+  String get flashcardDiagnosticGoalHint;
+
+  /// No description provided for @flashcardLearningPlanSkill.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطة التعلم'**
+  String get flashcardLearningPlanSkill;
+
+  /// No description provided for @flashcardDiagnosticNextStepPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'ماذا تفعل بعد ظهور أول نتيجة؟'**
+  String get flashcardDiagnosticNextStepPrompt;
+
+  /// No description provided for @flashcardDiagnosticNextStepAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع المهارة الأضعف في التعلم المصغر، ثم حل تدريبًا قصيرًا لقياس التحسن.'**
+  String get flashcardDiagnosticNextStepAnswer;
+
+  /// No description provided for @flashcardDiagnosticNextStepHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحسين يبدأ من أضعف مهارة، وليس من أعلى نتيجة.'**
+  String get flashcardDiagnosticNextStepHint;
+
+  /// No description provided for @flashcardConceptPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما أول خطوة لتحسين مهارة {skill}؟'**
+  String flashcardConceptPrompt(Object skill);
+
+  /// No description provided for @flashcardConceptAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ بسؤال واحد بسيط يحدد سبب الخطأ، ثم راجع القاعدة المرتبطة به قبل التدريب.'**
+  String get flashcardConceptAnswer;
+
+  /// No description provided for @flashcardConceptHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تبدأ بحل كثير من الأسئلة قبل معرفة سبب الخطأ.'**
+  String get flashcardConceptHint;
+
+  /// No description provided for @flashcardReviewPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'إتقانك الحالي في {skill} هو {mastery}%. ماذا يعني ذلك؟'**
+  String flashcardReviewPrompt(Object skill, Object mastery);
+
+  /// No description provided for @flashcardReviewAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه مهارة تحتاج مراجعة مركزة اليوم، ثم اختبارًا قصيرًا للتأكد من التحسن.'**
+  String get flashcardReviewAnswer;
+
+  /// No description provided for @flashcardReviewHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'النسبة الأقل تعني أولوية أعلى في خطة التعلم.'**
+  String get flashcardReviewHint;
+
+  /// No description provided for @flashcardDeckTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بطاقات تقوية {skill}'**
+  String flashcardDeckTitle(Object skill);
+
+  /// No description provided for @flashcardDeckSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تدريب قصير مبني على أضعف مهاراتك في آخر النتائج.'**
+  String get flashcardDeckSubtitle;
 
   /// No description provided for @flashcardSemanticsAnswerVisible.
   ///
@@ -818,6 +1004,24 @@ abstract class AppLocalizations {
   /// **'تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.'**
   String get teacherDashboardLoadFailed;
 
+  /// No description provided for @teacherDashboardDemoUnitOneTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الوحدة الأولى'**
+  String get teacherDashboardDemoUnitOneTitle;
+
+  /// No description provided for @teacherDashboardDemoGrammarTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار النحو'**
+  String get teacherDashboardDemoGrammarTitle;
+
+  /// No description provided for @teacherDashboardDemoPhysicsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الفيزياء'**
+  String get teacherDashboardDemoPhysicsTitle;
+
   /// No description provided for @totalStudents.
   ///
   /// In ar, this message translates to:
@@ -847,6 +1051,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المتوسط'**
   String get average;
+
+  /// No description provided for @points.
+  ///
+  /// In ar, this message translates to:
+  /// **'النقاط'**
+  String get points;
+
+  /// No description provided for @studentChallengeTwoDayStreakLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'يفتح هذا التحدي بعد الحفاظ على سلسلة يومين.'**
+  String get studentChallengeTwoDayStreakLocked;
+
+  /// No description provided for @startAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ اختبارًا'**
+  String get startAssessment;
 
   /// No description provided for @createNewAssessment.
   ///
@@ -1376,6 +1598,120 @@ abstract class AppLocalizations {
   /// **'جميع الجلسات المقالية تم تصحيحها'**
   String get noPendingEssaysMessage;
 
+  /// No description provided for @essayGradingLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات الجلسة'**
+  String get essayGradingLoadFailed;
+
+  /// No description provided for @essayGradingConfirmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد إنهاء التصحيح'**
+  String get essayGradingConfirmTitle;
+
+  /// No description provided for @essayGradingConfirmMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل أنت متأكد من إنهاء التصحيح؟ سيتم احتساب النتيجة النهائية للطالب.'**
+  String get essayGradingConfirmMessage;
+
+  /// No description provided for @essayGradingSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنهاء التصحيح وتحديث نتيجة الطالب'**
+  String get essayGradingSaved;
+
+  /// No description provided for @essayGradingSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حفظ الدرجات، يرجى المحاولة مجدداً'**
+  String get essayGradingSaveFailed;
+
+  /// No description provided for @essayGradingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصحيح مقالات — {studentName}'**
+  String essayGradingTitle(Object studentName);
+
+  /// No description provided for @essayGradingNoEssays.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أسئلة مقالية تحتاج تصحيحاً'**
+  String get essayGradingNoEssays;
+
+  /// No description provided for @essayGradingSaving.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري الحفظ...'**
+  String get essayGradingSaving;
+
+  /// No description provided for @essayGradingFinish.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنهاء التصحيح وتحديث النتيجة'**
+  String get essayGradingFinish;
+
+  /// No description provided for @essayGradingAllComplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تصحيح جميع الأسئلة المقالية — يمكنك إنهاء التصحيح'**
+  String get essayGradingAllComplete;
+
+  /// No description provided for @essayGradingRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبقّى {count} سؤال مقالي بدون درجة'**
+  String essayGradingRemaining(Object count);
+
+  /// No description provided for @essayQuestionUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص السؤال غير متاح'**
+  String get essayQuestionUnavailable;
+
+  /// No description provided for @essayNoStudentAnswer.
+  ///
+  /// In ar, this message translates to:
+  /// **'(لم يُجب الطالب)'**
+  String get essayNoStudentAnswer;
+
+  /// No description provided for @essayQuestionNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'السؤال {index}'**
+  String essayQuestionNumber(Object index);
+
+  /// No description provided for @studentAnswerSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجابة الطالب'**
+  String get studentAnswerSection;
+
+  /// No description provided for @essayScoreRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدرجة (0 – {maxMarks})'**
+  String essayScoreRange(Object maxMarks);
+
+  /// No description provided for @scoreInvalidNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال رقم صحيح'**
+  String get scoreInvalidNumber;
+
+  /// No description provided for @scoreNegative.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدرجة لا يمكن أن تكون سالبة'**
+  String get scoreNegative;
+
+  /// No description provided for @scoreMax.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى هو {maxMarks}'**
+  String scoreMax(Object maxMarks);
+
   /// No description provided for @assessmentFallbackTitle.
   ///
   /// In ar, this message translates to:
@@ -1448,17 +1784,35 @@ abstract class AppLocalizations {
   /// **'ممتاز'**
   String get scoreExcellent;
 
+  /// No description provided for @scoreVeryGood.
+  ///
+  /// In ar, this message translates to:
+  /// **'جيد جداً'**
+  String get scoreVeryGood;
+
   /// No description provided for @scoreGood.
   ///
   /// In ar, this message translates to:
   /// **'جيد'**
   String get scoreGood;
 
+  /// No description provided for @needsSupport.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحتاج دعم'**
+  String get needsSupport;
+
   /// No description provided for @scoreNeedsImprovement.
   ///
   /// In ar, this message translates to:
   /// **'يحتاج تحسين'**
   String get scoreNeedsImprovement;
+
+  /// No description provided for @moreDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل أكثر'**
+  String get moreDetails;
 
   /// No description provided for @greatAchievement.
   ///
@@ -1544,6 +1898,66 @@ abstract class AppLocalizations {
   /// **'اختبار الكيمياء التجريبي'**
   String get demoChemistryAssessmentTitle;
 
+  /// No description provided for @manageDemoMidtermMathTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار منتصف الفصل - رياضيات'**
+  String get manageDemoMidtermMathTitle;
+
+  /// No description provided for @manageDemoSecondUnitScienceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار الوحدة الثانية - علوم'**
+  String get manageDemoSecondUnitScienceTitle;
+
+  /// No description provided for @manageDemoArabicBasicsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'القواعد الأساسية - لغة عربية'**
+  String get manageDemoArabicBasicsTitle;
+
+  /// No description provided for @manageDemoAndalusHistoryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الأندلس - دراسات اجتماعية'**
+  String get manageDemoAndalusHistoryTitle;
+
+  /// No description provided for @manageDemoFinalPhysicsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار نهاية الفصل - فيزياء'**
+  String get manageDemoFinalPhysicsTitle;
+
+  /// No description provided for @manageSubjectSocialStudies.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدراسات الاجتماعية'**
+  String get manageSubjectSocialStudies;
+
+  /// No description provided for @manageSubjectPhysics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفيزياء'**
+  String get manageSubjectPhysics;
+
+  /// No description provided for @manageSubjectHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get manageSubjectHistory;
+
+  /// No description provided for @manageSubjectBiology.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحياء'**
+  String get manageSubjectBiology;
+
+  /// No description provided for @manageSubjectChemistry.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكيمياء'**
+  String get manageSubjectChemistry;
+
   /// No description provided for @demoPeriodicMathAssessmentTitle.
   ///
   /// In ar, this message translates to:
@@ -1579,6 +1993,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الكيمياء'**
   String get subjectChemistry;
+
+  /// No description provided for @subjectPhysics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفيزياء'**
+  String get subjectPhysics;
+
+  /// No description provided for @subjectGeography.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجغرافيا'**
+  String get subjectGeography;
+
+  /// No description provided for @subjectIslamicEducation.
+  ///
+  /// In ar, this message translates to:
+  /// **'التربية الإسلامية'**
+  String get subjectIslamicEducation;
+
+  /// No description provided for @subjectComputerScience.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحاسب الآلي'**
+  String get subjectComputerScience;
 
   /// No description provided for @studentAssessmentsGreeting.
   ///
@@ -1813,6 +2251,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.'**
   String get assessmentStartFailed;
+
+  /// No description provided for @assessmentStartDemoUnitAlgebra.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة الثالثة: الجبر'**
+  String get assessmentStartDemoUnitAlgebra;
 
   /// No description provided for @assessmentTypeAdaptive.
   ///
@@ -2450,6 +2894,30 @@ abstract class AppLocalizations {
   /// **'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم.'**
   String get noClassesMessage;
 
+  /// No description provided for @demoClassroomGradeSevenA.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف السابع (أ)'**
+  String get demoClassroomGradeSevenA;
+
+  /// No description provided for @demoClassroomGradeEightB.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الثامن (ب)'**
+  String get demoClassroomGradeEightB;
+
+  /// No description provided for @demoGradeLevelSeven.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف السابع'**
+  String get demoGradeLevelSeven;
+
+  /// No description provided for @demoGradeLevelEight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الثامن'**
+  String get demoGradeLevelEight;
+
   /// No description provided for @manageAssessmentsLoadFailed.
   ///
   /// In ar, this message translates to:
@@ -2617,6 +3085,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.'**
   String get assessmentCreateFailed;
+
+  /// No description provided for @selectClassroomBeforePublish.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر فصلًا واحدًا على الأقل قبل نشر الاختبار.'**
+  String get selectClassroomBeforePublish;
+
+  /// No description provided for @invalidAssessmentAvailabilityWindow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ نهاية الاختبار يجب أن يكون بعد تاريخ البداية.'**
+  String get invalidAssessmentAvailabilityWindow;
 
   /// No description provided for @assessmentTitleHint.
   ///
@@ -2917,6 +3397,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إدارة المهام تعمل الآن بحالة محلية واضحة. للحفظ الدائم والمزامنة مع الطلاب يجب ربط API المهام في المرحلة القادمة.'**
   String get taskManagementLocalOnlyMessage;
+
+  /// No description provided for @demoTaskClassroomGradeSevenB.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف السابع - ب'**
+  String get demoTaskClassroomGradeSevenB;
+
+  /// No description provided for @demoTaskClassroomGradeNineA.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف التاسع - أ'**
+  String get demoTaskClassroomGradeNineA;
+
+  /// No description provided for @demoTaskClassroomGradeTenA.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف العاشر - أ'**
+  String get demoTaskClassroomGradeTenA;
+
+  /// No description provided for @demoTaskClassroomGradeTenB.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف العاشر - ب'**
+  String get demoTaskClassroomGradeTenB;
+
+  /// No description provided for @demoTaskClassroomGradeElevenC.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف الحادي عشر - ج'**
+  String get demoTaskClassroomGradeElevenC;
+
+  /// No description provided for @demoTaskAlgebraTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجبر المتطور: المعادلات التربيعية'**
+  String get demoTaskAlgebraTitle;
+
+  /// No description provided for @demoTaskNewtonTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدمة في قوانين نيوتن'**
+  String get demoTaskNewtonTitle;
+
+  /// No description provided for @demoTaskStatisticsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاحتمالات والإحصاء الوصفي'**
+  String get demoTaskStatisticsTitle;
+
+  /// No description provided for @demoTaskArabicReviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة البلاغة والتشبيه'**
+  String get demoTaskArabicReviewTitle;
+
+  /// No description provided for @demoTaskDueOctober15.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم: 15 أكتوبر'**
+  String get demoTaskDueOctober15;
+
+  /// No description provided for @demoTaskDueTomorrow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم: غدًا'**
+  String get demoTaskDueTomorrow;
+
+  /// No description provided for @demoTaskDueOctober20.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم: 20 أكتوبر'**
+  String get demoTaskDueOctober20;
 
   /// No description provided for @deleteTaskTitle.
   ///
@@ -8009,6 +8561,1116 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ابدأ التدريب'**
   String get studentDashboardStartTraining;
+
+  /// No description provided for @studentAnalyticsLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل تحليلاتك الآن. تحقق من الاتصال ثم حاول مرة أخرى.'**
+  String get studentAnalyticsLoadFailed;
+
+  /// No description provided for @studentAnalyticsNoClearTrend.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد تغير واضح بعد'**
+  String get studentAnalyticsNoClearTrend;
+
+  /// No description provided for @studentAnalyticsTrendFromLast.
+  ///
+  /// In ar, this message translates to:
+  /// **'{percent}% عن آخر اختبار'**
+  String studentAnalyticsTrendFromLast(Object percent);
+
+  /// No description provided for @studentAnalyticsStrongestSkill.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقوى مهارة'**
+  String get studentAnalyticsStrongestSkill;
+
+  /// No description provided for @studentAnalyticsNeedsReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج مراجعة'**
+  String get studentAnalyticsNeedsReview;
+
+  /// No description provided for @studentAnalyticsCompletedAssessmentsBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبارات مكتملة'**
+  String get studentAnalyticsCompletedAssessmentsBadge;
+
+  /// No description provided for @studentAnalyticsHighPerformanceBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء مرتفع'**
+  String get studentAnalyticsHighPerformanceBadge;
+
+  /// No description provided for @studentAnalyticsCommittedBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملتزم'**
+  String get studentAnalyticsCommittedBadge;
+
+  /// No description provided for @studentAnalyticsErrorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل التحليلات'**
+  String get studentAnalyticsErrorTitle;
+
+  /// No description provided for @studentAnalyticsEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تحليلات بعد'**
+  String get studentAnalyticsEmptyTitle;
+
+  /// No description provided for @studentAnalyticsEmptyMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر مؤشرات الأداء والمهارات بعد إكمال أول اختبار.'**
+  String get studentAnalyticsEmptyMessage;
+
+  /// No description provided for @studentAnalyticsAppBarTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحصائيات EduAssess'**
+  String get studentAnalyticsAppBarTitle;
+
+  /// No description provided for @studentAnalyticsGreeting.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحباً، {name}!'**
+  String studentAnalyticsGreeting(Object name);
+
+  /// No description provided for @studentAnalyticsOverviewSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إليك نظرة شاملة على أدائك التعليمي لهذا الفصل.'**
+  String get studentAnalyticsOverviewSubtitle;
+
+  /// No description provided for @studentAnalyticsCompletedAssessmentMetric.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار مكتمل'**
+  String get studentAnalyticsCompletedAssessmentMetric;
+
+  /// No description provided for @studentAnalyticsEarnedPointMetric.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة مكتسبة'**
+  String get studentAnalyticsEarnedPointMetric;
+
+  /// No description provided for @studentAnalyticsSubjectProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدم المواد الدراسية'**
+  String get studentAnalyticsSubjectProgress;
+
+  /// No description provided for @studentAnalyticsSkillInsights.
+  ///
+  /// In ar, this message translates to:
+  /// **'رؤى المهارات من الاختبارات'**
+  String get studentAnalyticsSkillInsights;
+
+  /// No description provided for @studentAnalyticsAchievements.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأوسمة والإنجازات'**
+  String get studentAnalyticsAchievements;
+
+  /// No description provided for @learningRecommendationStartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ ببناء توصياتك'**
+  String get learningRecommendationStartTitle;
+
+  /// No description provided for @learningRecommendationStartMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل اختبارًا قصيرًا حتى تظهر توصيات مبنية على أحدث تفصيل مهاراتك.'**
+  String get learningRecommendationStartMessage;
+
+  /// No description provided for @learningRecommendationFocusTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ركز على {skill}'**
+  String learningRecommendationFocusTitle(Object skill);
+
+  /// No description provided for @learningRecommendationFocusMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر نتيجة أظهرت إتقان {percent}% في {skill}. ابدأ بدرس قصير ثم جرّب بطاقات التدريب.'**
+  String learningRecommendationFocusMessage(Object percent, Object skill);
+
+  /// No description provided for @learningRecommendationOpenPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح خطة التعلم'**
+  String get learningRecommendationOpenPlan;
+
+  /// No description provided for @learningRecommendationMaintainTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حافظ على مستواك'**
+  String get learningRecommendationMaintainTitle;
+
+  /// No description provided for @learningRecommendationMaintainMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضعف مهارة في آخر اختبار هي {skill} بنسبة {percent}%. تدريب قصير يكفي للحفاظ على الإتقان.'**
+  String learningRecommendationMaintainMessage(Object skill, Object percent);
+
+  /// No description provided for @learningRecommendationPracticeCards.
+  ///
+  /// In ar, this message translates to:
+  /// **'تدريب بطاقات'**
+  String get learningRecommendationPracticeCards;
+
+  /// No description provided for @microLearningDiagnosticAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار تشخيصي'**
+  String get microLearningDiagnosticAssessment;
+
+  /// No description provided for @microLearningTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التعلم المصغر'**
+  String get microLearningTitle;
+
+  /// No description provided for @microLearningSmartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التعلم المصغر الذكي'**
+  String get microLearningSmartTitle;
+
+  /// No description provided for @microLearningLoadFailedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل خطة التعلم'**
+  String get microLearningLoadFailedTitle;
+
+  /// No description provided for @microLearningLoadFailedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل خطة التعلم المصغر. تحقق من الاتصال ثم حاول مرة أخرى.'**
+  String get microLearningLoadFailedMessage;
+
+  /// No description provided for @microLearningLessonCompletionSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ إكمال الدرس'**
+  String get microLearningLessonCompletionSaved;
+
+  /// No description provided for @microLearningWelcomeBack.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلًا بك مجددًا، {name}'**
+  String microLearningWelcomeBack(Object name);
+
+  /// No description provided for @microLearningCurrentStreakTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلسلة تعلمك الحالية'**
+  String get microLearningCurrentStreakTitle;
+
+  /// No description provided for @microLearningStreakMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت في اليوم {days} على التوالي. حافظ على نشاطك.'**
+  String microLearningStreakMessage(Object days);
+
+  /// No description provided for @microLearningPercentComplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'{percent}% مكتمل'**
+  String microLearningPercentComplete(Object percent);
+
+  /// No description provided for @microLearningDailyGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'هدف اليوم'**
+  String get microLearningDailyGoal;
+
+  /// No description provided for @microLearningTodaysQuickLessons.
+  ///
+  /// In ar, this message translates to:
+  /// **'دروس اليوم السريعة'**
+  String get microLearningTodaysQuickLessons;
+
+  /// No description provided for @microLearningLockedLessonSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'{title}. درس مغلق حتى تنهي الدرس السابق.'**
+  String microLearningLockedLessonSemantics(Object title);
+
+  /// No description provided for @microLearningCompletedLessonSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'{title}. درس مكتمل ومحفوظ.'**
+  String microLearningCompletedLessonSemantics(Object title);
+
+  /// No description provided for @microLearningOpenLessonSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'{title}. افتح تدريبًا قصيرًا لهذا الدرس.'**
+  String microLearningOpenLessonSemantics(Object title);
+
+  /// No description provided for @microLearningLessonCompletedTooltip.
+  ///
+  /// In ar, this message translates to:
+  /// **'درس مكتمل'**
+  String get microLearningLessonCompletedTooltip;
+
+  /// No description provided for @microLearningMarkLessonCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليم الدرس كمكتمل'**
+  String get microLearningMarkLessonCompleted;
+
+  /// No description provided for @microLearningAiRecommendationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'توصيات الذكاء الاصطناعي لك'**
+  String get microLearningAiRecommendationsTitle;
+
+  /// No description provided for @microLearningFlashcardChallengeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحدي البطاقات الخاطفة'**
+  String get microLearningFlashcardChallengeTitle;
+
+  /// No description provided for @microLearningBasedOnLatestResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'بناءً على آخر نتائجك'**
+  String get microLearningBasedOnLatestResults;
+
+  /// No description provided for @microLearningBasedOnFocus.
+  ///
+  /// In ar, this message translates to:
+  /// **'بناءً على {focus}'**
+  String microLearningBasedOnFocus(Object focus);
+
+  /// No description provided for @microLearningStartFlashcardChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ التحدي (10 بطاقات)'**
+  String get microLearningStartFlashcardChallenge;
+
+  /// No description provided for @microLearningWeakestSkillFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'المهارة الأضعف'**
+  String get microLearningWeakestSkillFallback;
+
+  /// No description provided for @microLearningSuggestedPathTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسار تعلم مقترح'**
+  String get microLearningSuggestedPathTitle;
+
+  /// No description provided for @microLearningReviewFocusStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع {focus}'**
+  String microLearningReviewFocusStep(Object focus);
+
+  /// No description provided for @microLearningShortestLessonStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ بأقصر درس متاح قبل الانتقال للاختبار.'**
+  String get microLearningShortestLessonStep;
+
+  /// No description provided for @microLearningSolveShortPracticeStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'حل تدريبًا قصيرًا'**
+  String get microLearningSolveShortPracticeStep;
+
+  /// No description provided for @microLearningOneAssessmentStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار واحد كافٍ لمعرفة إن كان الفهم تحسن.'**
+  String get microLearningOneAssessmentStep;
+
+  /// No description provided for @microLearningOpenAnalyticsStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح التحليلات'**
+  String get microLearningOpenAnalyticsStep;
+
+  /// No description provided for @microLearningCompareLatestResultStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'قارن النتيجة الجديدة مع آخر محاولة وحدد الخطوة التالية.'**
+  String get microLearningCompareLatestResultStep;
+
+  /// No description provided for @microLearningReviewAnalytics.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع تحليلاتك'**
+  String get microLearningReviewAnalytics;
+
+  /// No description provided for @microLearningDiagnosticDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ اختبارًا لفتح توصيات مبنية على أدائك'**
+  String get microLearningDiagnosticDescription;
+
+  /// No description provided for @microLearningStrongSkillDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'مهارة قوية، حافظ على مستواك'**
+  String get microLearningStrongSkillDescription;
+
+  /// No description provided for @microLearningNeedsReviewDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج مراجعة قصيرة اليوم'**
+  String get microLearningNeedsReviewDescription;
+
+  /// No description provided for @microLearningDiagnosticLessonTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ بأول اختبار تشخيصي'**
+  String get microLearningDiagnosticLessonTitle;
+
+  /// No description provided for @microLearningDiagnosticLessonSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'3 دقائق - يفتح توصياتك الشخصية'**
+  String get microLearningDiagnosticLessonSubtitle;
+
+  /// No description provided for @microLearningDiagnosticSkill.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشخيص'**
+  String get microLearningDiagnosticSkill;
+
+  /// No description provided for @microLearningReviewResultsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع نتائجك بعد الاختبار'**
+  String get microLearningReviewResultsTitle;
+
+  /// No description provided for @microLearningReviewResultsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق حتى تظهر أول نتيجة'**
+  String get microLearningReviewResultsSubtitle;
+
+  /// No description provided for @microLearningResultsAnalysisSkill.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحليل النتائج'**
+  String get microLearningResultsAnalysisSkill;
+
+  /// No description provided for @microLearningSkillReviewTitleTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة قصيرة: {skill}'**
+  String microLearningSkillReviewTitleTemplate(Object skill);
+
+  /// No description provided for @microLearningSkillReviewSubtitleTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'4 دقائق - مستوى الإتقان {percent}%'**
+  String microLearningSkillReviewSubtitleTemplate(Object percent);
+
+  /// No description provided for @studentProgressLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل تقدمك الآن. تحقق من الاتصال ثم أعد المحاولة.'**
+  String get studentProgressLoadFailed;
+
+  /// No description provided for @studentProgressWeakestSkillFallback.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضعف مهارة'**
+  String get studentProgressWeakestSkillFallback;
+
+  /// No description provided for @studentProgressWeeklyReportTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقريرك الأسبوعي'**
+  String get studentProgressWeeklyReportTitle;
+
+  /// No description provided for @studentProgressFocusLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'للتركيز'**
+  String get studentProgressFocusLabel;
+
+  /// No description provided for @studentProgressWeeklySummaryEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج هذا الأسبوع بعد. ابدأ باختبار قصير لفتح تقريرك الأسبوعي.'**
+  String get studentProgressWeeklySummaryEmpty;
+
+  /// No description provided for @studentProgressWeeklySummaryStrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوع قوي. حافظ على وتيرتك وراجع {skill} للحفاظ على المستوى.'**
+  String studentProgressWeeklySummaryStrong(Object skill);
+
+  /// No description provided for @studentProgressWeeklySummaryGood.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدمك جيد. جلسة تعلم مصغر واحدة على {skill} سترفع ثباتك.'**
+  String studentProgressWeeklySummaryGood(Object skill);
+
+  /// No description provided for @studentProgressWeeklySummaryNeedsFocus.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الأسبوع يحتاج تركيزًا أكبر. ابدأ بخطة قصيرة على {skill} ثم أعد اختبارًا واحدًا.'**
+  String studentProgressWeeklySummaryNeedsFocus(Object skill);
+
+  /// No description provided for @studentChallengesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحديات'**
+  String get studentChallengesTitle;
+
+  /// No description provided for @studentChallengesNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحدي جديد'**
+  String get studentChallengesNew;
+
+  /// No description provided for @studentChallengesStreakDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلسلة أيام'**
+  String get studentChallengesStreakDays;
+
+  /// No description provided for @studentChallengesAssessmentsThisWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبارات هذا الأسبوع'**
+  String get studentChallengesAssessmentsThisWeek;
+
+  /// No description provided for @studentChallengesUnlocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديات جديدة مفتوحة حسب نشاطك.'**
+  String get studentChallengesUnlocked;
+
+  /// No description provided for @studentChallengesUnlockHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل اختبارين في يومين متتاليين لفتح تحديات أكثر.'**
+  String get studentChallengesUnlockHint;
+
+  /// No description provided for @studentChallengesNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get studentChallengesNotifications;
+
+  /// No description provided for @studentChallengesLive.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديات مباشرة'**
+  String get studentChallengesLive;
+
+  /// No description provided for @studentChallengesCurrentWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع الحالي'**
+  String get studentChallengesCurrentWeek;
+
+  /// No description provided for @studentChallengesLeaderboard.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة المتصدرين'**
+  String get studentChallengesLeaderboard;
+
+  /// No description provided for @studentChallengesMovedUp.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدمت 3 مراكز'**
+  String get studentChallengesMovedUp;
+
+  /// No description provided for @studentChallengesCurrentRank.
+  ///
+  /// In ar, this message translates to:
+  /// **'مركزك الحالي'**
+  String get studentChallengesCurrentRank;
+
+  /// No description provided for @studentChallengesMyChallenges.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحدياتي'**
+  String get studentChallengesMyChallenges;
+
+  /// No description provided for @studentChallengesCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديات مكتملة'**
+  String get studentChallengesCompleted;
+
+  /// No description provided for @studentChallengesActiveUpcoming.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشطة وقادمة'**
+  String get studentChallengesActiveUpcoming;
+
+  /// No description provided for @studentChallengesLocalCreated.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنشأت {count} تحدٍ محليًا لهذه الجلسة. سيحتاج الحفظ الدائم إلى API لاحقًا.'**
+  String studentChallengesLocalCreated(Object count);
+
+  /// No description provided for @studentChallengesEarnedBadges.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأوسمة المحققة'**
+  String get studentChallengesEarnedBadges;
+
+  /// No description provided for @studentChallengesBadgeLegend.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخارق'**
+  String get studentChallengesBadgeLegend;
+
+  /// No description provided for @studentChallengesBadgeFast.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتسابق السريع'**
+  String get studentChallengesBadgeFast;
+
+  /// No description provided for @studentChallengesBadgeThinker.
+  ///
+  /// In ar, this message translates to:
+  /// **'المفكر'**
+  String get studentChallengesBadgeThinker;
+
+  /// No description provided for @studentChallengesBadgeRisingStar.
+  ///
+  /// In ar, this message translates to:
+  /// **'النجم الصاعد'**
+  String get studentChallengesBadgeRisingStar;
+
+  /// No description provided for @studentChallengesCompletedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحدي مكتمل'**
+  String get studentChallengesCompletedTitle;
+
+  /// No description provided for @studentChallengesCompletedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكملت \"{title}\" بالفعل. يمكنك متابعة ترتيبك من لوحة المتصدرين.'**
+  String studentChallengesCompletedMessage(Object title);
+
+  /// No description provided for @studentChallengesLockedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحدي غير متاح بعد'**
+  String get studentChallengesLockedTitle;
+
+  /// No description provided for @studentChallengesLockedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيفتح هذا التحدي بعد توفر شروط المشاركة.'**
+  String get studentChallengesLockedMessage;
+
+  /// No description provided for @studentChallengesJoinTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانضمام إلى {title}'**
+  String studentChallengesJoinTitle(Object title);
+
+  /// No description provided for @studentChallengesJoinMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستحصل على {points} نقطة عند إكمال التحدي. هل تريد إضافته إلى تحدياتك؟'**
+  String studentChallengesJoinMessage(Object points);
+
+  /// No description provided for @studentChallengesJoinNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضم الآن'**
+  String get studentChallengesJoinNow;
+
+  /// No description provided for @studentChallengesJoinedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الانضمام'**
+  String get studentChallengesJoinedTitle;
+
+  /// No description provided for @studentChallengesJoinedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضيف \"{title}\" إلى تحدياتك. ابدأه من قائمة تحدياتي.'**
+  String studentChallengesJoinedMessage(Object title);
+
+  /// No description provided for @studentChallengesCreateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء تحدي جديد'**
+  String get studentChallengesCreateTitle;
+
+  /// No description provided for @studentChallengesCreateDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيُضاف التحدي محليًا لهذه الجلسة إلى أن يتوفر API لحفظ تحديات الطلاب.'**
+  String get studentChallengesCreateDescription;
+
+  /// No description provided for @studentChallengesTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان التحدي'**
+  String get studentChallengesTitleLabel;
+
+  /// No description provided for @studentChallengesSubjectLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المادة أو المهارة'**
+  String get studentChallengesSubjectLabel;
+
+  /// No description provided for @studentChallengesAddToMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة إلى تحدياتي'**
+  String get studentChallengesAddToMine;
+
+  /// No description provided for @studentChallengesDefaultTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحدي شخصي جديد'**
+  String get studentChallengesDefaultTitle;
+
+  /// No description provided for @studentChallengesDefaultSubject.
+  ///
+  /// In ar, this message translates to:
+  /// **'مهارة مختارة'**
+  String get studentChallengesDefaultSubject;
+
+  /// No description provided for @studentChallengesThisWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الأسبوع'**
+  String get studentChallengesThisWeek;
+
+  /// No description provided for @studentChallengesCreatedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء التحدي'**
+  String get studentChallengesCreatedTitle;
+
+  /// No description provided for @studentChallengesCreatedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضيف \"{title}\" إلى تحدياتك المحلية ويمكنك البدء به الآن.'**
+  String studentChallengesCreatedMessage(Object title);
+
+  /// No description provided for @studentChallengesDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get studentChallengesDone;
+
+  /// No description provided for @studentChallengesParticipants.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} مشارك'**
+  String studentChallengesParticipants(Object count);
+
+  /// No description provided for @studentChallengesJoinAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضم للتحدي'**
+  String get studentChallengesJoinAction;
+
+  /// No description provided for @studentChallengesStartAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ التحدي'**
+  String get studentChallengesStartAction;
+
+  /// No description provided for @studentChallengesViewResultAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض النتيجة'**
+  String get studentChallengesViewResultAction;
+
+  /// No description provided for @studentChallengesNotOpenAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يفتح بعد'**
+  String get studentChallengesNotOpenAction;
+
+  /// No description provided for @studentChallengesPoints.
+  ///
+  /// In ar, this message translates to:
+  /// **'{points} نقطة'**
+  String studentChallengesPoints(Object points);
+
+  /// No description provided for @studentChallengesCompleteProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتمل • {percent}%'**
+  String studentChallengesCompleteProgress(Object percent);
+
+  /// No description provided for @studentChallengesLiveNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مباشر الآن'**
+  String get studentChallengesLiveNow;
+
+  /// No description provided for @studentAcademicFallbackName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحمد خالد المنصوري'**
+  String get studentAcademicFallbackName;
+
+  /// No description provided for @studentAcademicId.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم الأكاديمي: {id}'**
+  String studentAcademicId(Object id);
+
+  /// No description provided for @studentAcademicGrade.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف العاشر - أ'**
+  String get studentAcademicGrade;
+
+  /// No description provided for @studentAcademicAdvancedTrack.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسار متقدم'**
+  String get studentAcademicAdvancedTrack;
+
+  /// No description provided for @studentAcademicReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقرير'**
+  String get studentAcademicReport;
+
+  /// No description provided for @studentAcademicContact.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواصل'**
+  String get studentAcademicContact;
+
+  /// No description provided for @studentAcademicReportFor.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقرير: {name}'**
+  String studentAcademicReportFor(Object name);
+
+  /// No description provided for @studentAcademicChooseReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نوع التقرير:'**
+  String get studentAcademicChooseReport;
+
+  /// No description provided for @studentAcademicExportingAcademic.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تصدير التقرير الأكاديمي...'**
+  String get studentAcademicExportingAcademic;
+
+  /// No description provided for @studentAcademicAcademicReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقرير الأكاديمي'**
+  String get studentAcademicAcademicReport;
+
+  /// No description provided for @studentAcademicExportingPerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تصدير تقرير الأداء...'**
+  String get studentAcademicExportingPerformance;
+
+  /// No description provided for @studentAcademicPerformanceReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقرير الأداء'**
+  String get studentAcademicPerformanceReport;
+
+  /// No description provided for @studentAcademicSendMessageTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال رسالة إلى: {name}'**
+  String studentAcademicSendMessageTo(Object name);
+
+  /// No description provided for @studentAcademicMessageHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب رسالتك هنا...'**
+  String get studentAcademicMessageHint;
+
+  /// No description provided for @studentAcademicMessageSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الرسالة إلى {name}'**
+  String studentAcademicMessageSent(Object name);
+
+  /// No description provided for @studentAcademicSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال'**
+  String get studentAcademicSend;
+
+  /// No description provided for @studentAcademicActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get studentAcademicActive;
+
+  /// No description provided for @studentAcademicCumulativeGpa.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعدل التراكمي'**
+  String get studentAcademicCumulativeGpa;
+
+  /// No description provided for @studentAcademicPreviousMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'+0.12 الشهر الماضي'**
+  String get studentAcademicPreviousMonth;
+
+  /// No description provided for @studentAcademicAttendance.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الحضور'**
+  String get studentAcademicAttendance;
+
+  /// No description provided for @studentAcademicCompletedAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختبارات المكتملة'**
+  String get studentAcademicCompletedAssessments;
+
+  /// No description provided for @studentAcademicAwaitingAssessments.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار اختبارين'**
+  String get studentAcademicAwaitingAssessments;
+
+  /// No description provided for @studentAcademicGeneralBehavior.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلوك العام'**
+  String get studentAcademicGeneralBehavior;
+
+  /// No description provided for @studentAcademicExcellent.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممتاز جدًا'**
+  String get studentAcademicExcellent;
+
+  /// No description provided for @studentAcademicInteractionStats.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحصائيات التفاعل'**
+  String get studentAcademicInteractionStats;
+
+  /// No description provided for @studentAcademicClassParticipation.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشاركة الصفية'**
+  String get studentAcademicClassParticipation;
+
+  /// No description provided for @studentAcademicHighComparedPeers.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتفع مقارنة بالأقران'**
+  String get studentAcademicHighComparedPeers;
+
+  /// No description provided for @studentAcademicGroupWork.
+  ///
+  /// In ar, this message translates to:
+  /// **'العمل الجماعي'**
+  String get studentAcademicGroupWork;
+
+  /// No description provided for @studentAcademicNeedsImprovement.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحتاج إلى تحسين بسيط'**
+  String get studentAcademicNeedsImprovement;
+
+  /// No description provided for @studentAcademicHomework.
+  ///
+  /// In ar, this message translates to:
+  /// **'الواجبات المنزلية'**
+  String get studentAcademicHomework;
+
+  /// No description provided for @studentAcademicFullCommitment.
+  ///
+  /// In ar, this message translates to:
+  /// **'التزام تام بالمواعيد'**
+  String get studentAcademicFullCommitment;
+
+  /// No description provided for @studentAcademicFirstTerm.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفصل الدراسي الأول'**
+  String get studentAcademicFirstTerm;
+
+  /// No description provided for @studentAcademicSubjectPerformance.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء المواد الدراسية'**
+  String get studentAcademicSubjectPerformance;
+
+  /// No description provided for @studentAcademicMath.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياضيات'**
+  String get studentAcademicMath;
+
+  /// No description provided for @studentAcademicScience.
+  ///
+  /// In ar, this message translates to:
+  /// **'العلوم'**
+  String get studentAcademicScience;
+
+  /// No description provided for @studentAcademicArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة العربية'**
+  String get studentAcademicArabic;
+
+  /// No description provided for @studentAcademicHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get studentAcademicHistory;
+
+  /// No description provided for @studentAcademicPhysics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفيزياء'**
+  String get studentAcademicPhysics;
+
+  /// No description provided for @studentAcademicViewAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الكل'**
+  String get studentAcademicViewAll;
+
+  /// No description provided for @studentAcademicViewingAllResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض جميع نتائج الاختبارات'**
+  String get studentAcademicViewingAllResults;
+
+  /// No description provided for @studentAcademicLatestResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر نتائج الاختبارات'**
+  String get studentAcademicLatestResults;
+
+  /// No description provided for @studentAcademicCalculusExam.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختبار التفاضل والتكامل'**
+  String get studentAcademicCalculusExam;
+
+  /// No description provided for @studentAcademicCalculusExamDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'12 أكتوبر 2024'**
+  String get studentAcademicCalculusExamDate;
+
+  /// No description provided for @studentAcademicOrganicChemistryLab.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيمياء عضوية - عملي'**
+  String get studentAcademicOrganicChemistryLab;
+
+  /// No description provided for @studentAcademicChemistryLabDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'08 أكتوبر 2024'**
+  String get studentAcademicChemistryLabDate;
+
+  /// No description provided for @studentAcademicOutstanding.
+  ///
+  /// In ar, this message translates to:
+  /// **'متفوق'**
+  String get studentAcademicOutstanding;
+
+  /// No description provided for @studentAcademicVeryGood.
+  ///
+  /// In ar, this message translates to:
+  /// **'جيد جدًا'**
+  String get studentAcademicVeryGood;
+
+  /// No description provided for @studentAcademicAddNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة ملاحظة'**
+  String get studentAcademicAddNote;
+
+  /// No description provided for @studentAcademicTeacherNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات المعلم السلوكية'**
+  String get studentAcademicTeacherNotes;
+
+  /// No description provided for @studentAcademicAddBehaviorNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة ملاحظة سلوكية'**
+  String get studentAcademicAddBehaviorNote;
+
+  /// No description provided for @studentAcademicNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب ملاحظتك هنا...'**
+  String get studentAcademicNoteHint;
+
+  /// No description provided for @studentAcademicNoteAdded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إضافة الملاحظة بنجاح'**
+  String get studentAcademicNoteAdded;
+
+  /// No description provided for @studentAcademicSaveNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الملاحظة'**
+  String get studentAcademicSaveNote;
+
+  /// No description provided for @studentAcademicTeacherSara.
+  ///
+  /// In ar, this message translates to:
+  /// **'أ. سارة الأحمد'**
+  String get studentAcademicTeacherSara;
+
+  /// No description provided for @studentAcademicTwoDaysAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ يومين'**
+  String get studentAcademicTwoDaysAgo;
+
+  /// No description provided for @studentAcademicLeadershipNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر الطالب مهارات قيادية متميزة خلال المشروع الجماعي الأسبوع الماضي. لديه قدرة عالية على تبسيط المفاهيم المعقدة لزملائه.'**
+  String get studentAcademicLeadershipNote;
+
+  /// No description provided for @studentAcademicTeacherMohammed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أ. محمد عمر'**
+  String get studentAcademicTeacherMohammed;
+
+  /// No description provided for @studentAcademicWeekAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ أسبوع'**
+  String get studentAcademicWeekAgo;
+
+  /// No description provided for @studentAcademicReviewNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحتاج الطالب إلى التركيز أكثر على مراجعة التفاصيل الصغيرة في حلول المسائل الرياضية لتفادي الأخطاء البسيطة.'**
+  String get studentAcademicReviewNote;
 }
 
 class _AppLocalizationsDelegate

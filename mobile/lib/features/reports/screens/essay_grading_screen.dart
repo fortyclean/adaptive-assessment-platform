@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../assessment/repositories/teacher_repository.dart';
 
 /// Essay Grading Screen — Teacher grades pending essay answers
@@ -43,6 +44,8 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
 
   /// Map of questionId → TextEditingController for the score input.
   final Map<String, TextEditingController> _controllers = {};
+
+  AppLocalizations get l10n => AppLocalizations.of(context);
 
   @override
   void initState() {
@@ -94,7 +97,7 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = 'تعذر تحميل بيانات الجلسة';
+        _error = l10n.essayGradingLoadFailed;
         _isLoading = false;
       });
     }
@@ -128,21 +131,19 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('تأكيد إنهاء التصحيح'),
-        content: const Text(
-          'هل أنت متأكد من إنهاء التصحيح؟ سيتم احتساب النتيجة النهائية للطالب.',
-        ),
+        title: Text(l10n.essayGradingConfirmTitle),
+        content: Text(l10n.essayGradingConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('إلغاء'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primary,
             ),
-            child: const Text('تأكيد'),
+            child: Text(l10n.confirm),
           ),
         ],
       ),
@@ -160,8 +161,8 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تم إنهاء التصحيح وتحديث نتيجة الطالب'),
+          SnackBar(
+            content: Text(l10n.essayGradingSaved),
             backgroundColor: AppColors.success,
           ),
         );
@@ -170,8 +171,8 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تعذر حفظ الدرجات، يرجى المحاولة مجدداً'),
+          SnackBar(
+            content: Text(l10n.essayGradingSaveFailed),
             backgroundColor: AppColors.error,
           ),
         );
@@ -184,11 +185,11 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('تصحيح مقالات — ${widget.studentName}'),
+          title: Text(l10n.essayGradingTitle(widget.studentName)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () => context.pop(),
-            tooltip: 'رجوع',
+            tooltip: l10n.back,
           ),
         ),
         body: _isLoading
@@ -211,7 +212,7 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
             ElevatedButton.icon(
               onPressed: _loadAttempt,
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text('إعادة المحاولة'),
+              label: Text(l10n.retry),
             ),
           ],
         ),
@@ -227,7 +228,7 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
                 size: 64, color: AppColors.success),
             const SizedBox(height: 16),
             Text(
-              'لا توجد أسئلة مقالية تحتاج تصحيحاً',
+              l10n.essayGradingNoEssays,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
@@ -242,6 +243,7 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
         _StatusBanner(
           gradedCount: _scores.length,
           totalCount: _essayAnswers.length,
+          l10n: l10n,
         ),
         const SizedBox(height: 16),
 
@@ -255,6 +257,7 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
             controller: _controllers[answer['questionId'] as String? ?? ''] ??
                 TextEditingController(),
             currentScore: _scores[answer['questionId'] as String? ?? ''],
+            l10n: l10n,
             onScoreChanged: (value) => _onScoreChanged(
               answer['questionId'] as String? ?? '',
               value,
@@ -326,8 +329,8 @@ class _EssayGradingScreenState extends ConsumerState<EssayGradingScreen> {
                     : const Icon(Icons.check_circle_rounded),
                 label: Text(
                   _isSubmitting
-                      ? 'جاري الحفظ...'
-                      : 'إنهاء التصحيح وتحديث النتيجة',
+                      ? l10n.essayGradingSaving
+                      : l10n.essayGradingFinish,
                 ),
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -354,10 +357,12 @@ class _StatusBanner extends StatelessWidget {
   const _StatusBanner({
     required this.gradedCount,
     required this.totalCount,
+    required this.l10n,
   });
 
   final int gradedCount;
   final int totalCount;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -368,8 +373,8 @@ class _StatusBanner extends StatelessWidget {
     final icon =
         isComplete ? Icons.check_circle_rounded : Icons.pending_actions_rounded;
     final message = isComplete
-        ? 'تم تصحيح جميع الأسئلة المقالية — يمكنك إنهاء التصحيح'
-        : 'تبقّى ${totalCount - gradedCount} سؤال مقالي بدون درجة';
+        ? l10n.essayGradingAllComplete
+        : l10n.essayGradingRemaining(totalCount - gradedCount);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -406,6 +411,7 @@ class _EssayGradingCard extends StatelessWidget {
     required this.answer,
     required this.controller,
     required this.onScoreChanged,
+    required this.l10n,
     this.currentScore,
   });
 
@@ -413,14 +419,15 @@ class _EssayGradingCard extends StatelessWidget {
   final Map<String, dynamic> answer;
   final TextEditingController controller;
   final void Function(String) onScoreChanged;
+  final AppLocalizations l10n;
   final int? currentScore;
 
   @override
   Widget build(BuildContext context) {
     final questionText =
-        answer['questionText'] as String? ?? 'نص السؤال غير متاح';
+        answer['questionText'] as String? ?? l10n.essayQuestionUnavailable;
     final studentAnswer =
-        answer['selectedAnswer'] as String? ?? '(لم يُجب الطالب)';
+        answer['selectedAnswer'] as String? ?? l10n.essayNoStudentAnswer;
     final maxMarks = answer['maxMarks'] as int? ?? 10;
     final isGraded = currentScore != null;
 
@@ -445,7 +452,7 @@ class _EssayGradingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'السؤال $index',
+                  l10n.essayQuestionNumber(index),
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -458,7 +465,7 @@ class _EssayGradingCard extends StatelessWidget {
             const SizedBox(height: 12),
 
             // Question text
-            const _SectionLabel(label: 'نص السؤال'),
+            _SectionLabel(label: l10n.questionTextLabel),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.all(12),
@@ -479,7 +486,7 @@ class _EssayGradingCard extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Student answer
-            const _SectionLabel(label: 'إجابة الطالب'),
+            _SectionLabel(label: l10n.studentAnswerSection),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.all(12),
@@ -500,11 +507,12 @@ class _EssayGradingCard extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Score input
-            _SectionLabel(label: 'الدرجة (0 – $maxMarks)'),
+            _SectionLabel(label: l10n.essayScoreRange(maxMarks)),
             const SizedBox(height: 6),
             _ScoreInput(
               controller: controller,
               maxMarks: maxMarks,
+              l10n: l10n,
               onChanged: onScoreChanged,
             ),
           ],
@@ -567,11 +575,13 @@ class _ScoreInput extends StatefulWidget {
   const _ScoreInput({
     required this.controller,
     required this.maxMarks,
+    required this.l10n,
     required this.onChanged,
   });
 
   final TextEditingController controller;
   final int maxMarks;
+  final AppLocalizations l10n;
   final void Function(String) onChanged;
 
   @override
@@ -587,11 +597,11 @@ class _ScoreInputState extends State<_ScoreInput> {
       if (value.trim().isEmpty) {
         _validationError = null;
       } else if (parsed == null) {
-        _validationError = 'يرجى إدخال رقم صحيح';
+        _validationError = widget.l10n.scoreInvalidNumber;
       } else if (parsed < 0) {
-        _validationError = 'الدرجة لا يمكن أن تكون سالبة';
+        _validationError = widget.l10n.scoreNegative;
       } else if (parsed > widget.maxMarks) {
-        _validationError = 'الحد الأقصى هو ${widget.maxMarks}';
+        _validationError = widget.l10n.scoreMax(widget.maxMarks);
       } else {
         _validationError = null;
       }

@@ -8,7 +8,7 @@ import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../repositories/teacher_repository.dart';
 
-/// My Classes Screen — فصولي الدراسية
+/// My classes screen.
 /// Fully connected to backend — loads real classrooms and students
 class MyClassesScreen extends ConsumerStatefulWidget {
   const MyClassesScreen({super.key});
@@ -50,8 +50,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
           _classrooms = [
             {
               '_id': 'cls-001',
-              'name': 'أولى متوسط (أ)',
-              'gradeLevel': 'الصف الأول المتوسط',
+              'name': _l10n.demoClassroomGradeSevenA,
+              'gradeLevel': _l10n.demoGradeLevelSeven,
               'academicYear': '2024-2025',
               'studentIds': ['s1', 's2', 's3'],
               'activeAssessments': 2,
@@ -59,8 +59,8 @@ class _MyClassesScreenState extends ConsumerState<MyClassesScreen> {
             },
             {
               '_id': 'cls-002',
-              'name': 'ثانية متوسط (ب)',
-              'gradeLevel': 'الصف الثاني المتوسط',
+              'name': _l10n.demoClassroomGradeEightB,
+              'gradeLevel': _l10n.demoGradeLevelEight,
               'academicYear': '2024-2025',
               'studentIds': ['s4', 's5'],
               'activeAssessments': 1,

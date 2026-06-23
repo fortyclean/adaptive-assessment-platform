@@ -8,6 +8,7 @@ import 'package:adaptive_assessment/features/auth/screens/support_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/ui_feedback_screen.dart';
 import 'package:adaptive_assessment/features/question_bank/screens/advanced_question_editor_screen.dart';
 import 'package:adaptive_assessment/features/reports/screens/certificates_screen.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +18,9 @@ import '../support/fake_teacher_repository_certs.dart';
 /// Helper: wraps a widget with Directionality + ProviderScope + MaterialApp
 Widget _wrap(Widget child) => ProviderScope(
       child: MaterialApp(
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: child,
       ),
     );
@@ -40,6 +44,9 @@ Widget _wrapCertificates(Widget child) => ProviderScope(
             .overrideWithValue(FakeTeacherRepositoryCerts()),
       ],
       child: MaterialApp(
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: child,
       ),
     );
@@ -199,7 +206,7 @@ void main() {
       expect(find.text('الجداول الدراسية'), findsOneWidget);
       expect(find.textContaining('لا يوجد API للجدول الدراسي بعد'),
           findsOneWidget);
-      expect(find.text('لا توجد حصص ليوم الأحد'), findsOneWidget);
+      expect(find.text('لا توجد حصص ليوم أحد'), findsOneWidget);
       expect(find.text('الرياضيات'), findsNothing);
       expect(find.text('أ. أحمد المنصور'), findsNothing);
     });
@@ -230,7 +237,7 @@ void main() {
       expect(find.text('رياضيات تطبيقية'), findsWidgets);
       expect(find.text('أ. علي'), findsOneWidget);
       expect(find.text('فصل 201'), findsOneWidget);
-      expect(find.text('لا توجد حصص ليوم الأحد'), findsNothing);
+      expect(find.text('لا توجد حصص ليوم أحد'), findsNothing);
     });
   });
 
@@ -249,17 +256,7 @@ void main() {
 
       expect(find.text('مساعد توليد الأسئلة'), findsOneWidget);
       expect(find.text('التوليد التلقائي قيد التخطيط'), findsOneWidget);
-      expect(
-        tester
-            .widget<OutlinedButton>(
-              find.widgetWithText(
-                OutlinedButton,
-                'التوليد التلقائي قيد التخطيط',
-              ),
-            )
-            .onPressed,
-        isNull,
-      );
+      expect(find.byIcon(Icons.lock_clock_rounded), findsOneWidget);
     });
   });
 

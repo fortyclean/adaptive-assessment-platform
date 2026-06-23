@@ -100,12 +100,25 @@
   "filterAcademic": "Academic",
   "filterPractical": "Practical",
   "noMatchingSubjects": "No matching subjects",
+  "studentSubjectAdvancedMath": "Advanced mathematics",
+  "studentSubjectMolecularBiology": "Molecular biology",
+  "studentSubjectArabicLiterature": "Arabic literature",
+  "studentSubjectQuantumPhysics": "Quantum physics",
+  "studentSubjectOrganicChemistry": "Organic chemistry",
+  "studentSubjectEnglishLanguage": "English language",
+  "studentSubjectTeacherMohammed": "Dr. Mohammed Al-Qahtani",
+  "studentSubjectTeacherSarah": "Ms. Sarah Al-Otaibi",
+  "studentSubjectTeacherIbrahim": "Dr. Ibrahim Al-Fayez",
+  "studentSubjectTeacherKhaled": "Mr. Khaled Mansour",
+  "studentSubjectTeacherLaila": "Dr. Laila Al-Shammari",
+  "studentSubjectTeacherNoura": "Ms. Noura Al-Omari",
   "progressAchieved": "Progress achieved",
   "finalExamsPrepTitle": "Get ready for final exams!",
   "finalExamsPrepSubtitle": "Review previous lessons and assess your level through smart assessments.",
   "startNow": "Start now",
   "back": "Back",
   "retry": "Retry",
+  "refresh": "Refresh",
   "home": "Home",
   "adminAccount": "Admin account",
   "fillBlankAnswerSemantics": "Enter your answer",
@@ -118,6 +131,40 @@
   "flashcardLoadFailedMessage": "Could not prepare practice cards. Check your connection and try again.",
   "flashcardEmptyTitle": "No flashcards yet",
   "flashcardEmptyMessage": "Complete one assessment so we can build cards based on your performance.",
+  "flashcardDiagnosticDeckTitle": "Quick diagnostic practice",
+  "flashcardDiagnosticDeckSubtitle": "Start with these cards so recommendations become more precise after your first assessment.",
+  "flashcardDiagnosticSkill": "Diagnostic",
+  "flashcardDiagnosticGoalPrompt": "What is the goal of the first diagnostic assessment?",
+  "flashcardDiagnosticGoalAnswer": "Identify your current mastery level and discover the skills that need a short review.",
+  "flashcardDiagnosticGoalHint": "Think about why a personal learning plan appears after the assessment.",
+  "flashcardLearningPlanSkill": "Learning plan",
+  "flashcardDiagnosticNextStepPrompt": "What should you do after the first result appears?",
+  "flashcardDiagnosticNextStepAnswer": "Review the weakest skill in micro-learning, then complete a short practice to measure improvement.",
+  "flashcardDiagnosticNextStepHint": "Improvement starts with the weakest skill, not the highest score.",
+  "flashcardConceptPrompt": "What is the first step to improve {skill}?",
+  "@flashcardConceptPrompt": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "flashcardConceptAnswer": "Start with one simple question that identifies the reason for the mistake, then review the related rule before practicing.",
+  "flashcardConceptHint": "Do not start by solving many questions before knowing the reason for the mistake.",
+  "flashcardReviewPrompt": "Your current mastery in {skill} is {mastery}%. What does that mean?",
+  "@flashcardReviewPrompt": {
+    "placeholders": {
+      "skill": {},
+      "mastery": {}
+    }
+  },
+  "flashcardReviewAnswer": "This skill needs focused review today, then a short assessment to confirm improvement.",
+  "flashcardReviewHint": "The lower percentage means higher priority in the learning plan.",
+  "flashcardDeckTitle": "{skill} booster cards",
+  "@flashcardDeckTitle": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "flashcardDeckSubtitle": "Short practice built from your weakest skills in the latest results.",
   "flashcardSemanticsAnswerVisible": "{skill} card. The answer is visible.",
   "@flashcardSemanticsAnswerVisible": {
     "placeholders": {
@@ -156,11 +203,17 @@
   "dashboard": "Dashboard",
   "search": "Search",
   "teacherDashboardLoadFailed": "Could not load the teacher dashboard. Check your connection and try again.",
+  "teacherDashboardDemoUnitOneTitle": "Unit one assessment",
+  "teacherDashboardDemoGrammarTitle": "Grammar assessment",
+  "teacherDashboardDemoPhysicsTitle": "Physics assessment",
   "totalStudents": "Total students",
   "active": "Active",
   "completed": "Completed",
   "draft": "Draft",
   "average": "Average",
+  "points": "Points",
+  "studentChallengeTwoDayStreakLocked": "This challenge unlocks after keeping a two-day streak.",
+  "startAssessment": "Start assessment",
   "createNewAssessment": "Create new assessment",
   "recentAssessments": "Recent assessments",
   "viewAll": "View all",
@@ -280,6 +333,50 @@
   "pendingEssaysLoadFailed": "Could not load pending sessions",
   "noPendingEssaysTitle": "No essay questions pending grading",
   "noPendingEssaysMessage": "All essay sessions have been graded",
+  "essayGradingLoadFailed": "Could not load the attempt data",
+  "essayGradingConfirmTitle": "Confirm final grading",
+  "essayGradingConfirmMessage": "Are you sure you want to finish grading? The student's final result will be calculated.",
+  "essayGradingSaved": "Grading finished and the student result was updated",
+  "essayGradingSaveFailed": "Could not save grades. Please try again.",
+  "essayGradingTitle": "Essay grading — {studentName}",
+  "@essayGradingTitle": {
+    "placeholders": {
+      "studentName": {}
+    }
+  },
+  "essayGradingNoEssays": "No essay questions need grading",
+  "essayGradingSaving": "Saving...",
+  "essayGradingFinish": "Finish grading and update result",
+  "essayGradingAllComplete": "All essay questions are graded — you can finish grading",
+  "essayGradingRemaining": "{count} essay questions still need a grade",
+  "@essayGradingRemaining": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "essayQuestionUnavailable": "Question text is unavailable",
+  "essayNoStudentAnswer": "(The student did not answer)",
+  "essayQuestionNumber": "Question {index}",
+  "@essayQuestionNumber": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "studentAnswerSection": "Student answer",
+  "essayScoreRange": "Score (0 – {maxMarks})",
+  "@essayScoreRange": {
+    "placeholders": {
+      "maxMarks": {}
+    }
+  },
+  "scoreInvalidNumber": "Enter a valid number",
+  "scoreNegative": "Score cannot be negative",
+  "scoreMax": "Maximum score is {maxMarks}",
+  "@scoreMax": {
+    "placeholders": {
+      "maxMarks": {}
+    }
+  },
   "assessmentFallbackTitle": "Assessment",
   "startGrading": "Start grading",
   "questionsCount": "{count} questions",
@@ -302,8 +399,11 @@
   "someQuestions": "some",
   "backToHome": "Back to home",
   "scoreExcellent": "Excellent",
+  "scoreVeryGood": "Very good",
   "scoreGood": "Good",
+  "needsSupport": "Needs support",
   "scoreNeedsImprovement": "Needs improvement",
+  "moreDetails": "More details",
   "greatAchievement": "Great achievement!",
   "earnedExcellenceBadge": "You earned the excellence badge",
   "pointsEarnedLabel": "+{points} points",
@@ -328,12 +428,26 @@
   "demoBiologyAssessmentTitle": "Demo biology assessment",
   "demoHistoryAssessmentTitle": "Demo history assessment",
   "demoChemistryAssessmentTitle": "Demo chemistry assessment",
+  "manageDemoMidtermMathTitle": "Midterm assessment - mathematics",
+  "manageDemoSecondUnitScienceTitle": "Unit 2 assessment - science",
+  "manageDemoArabicBasicsTitle": "Core grammar - Arabic",
+  "manageDemoAndalusHistoryTitle": "History of Al-Andalus - social studies",
+  "manageDemoFinalPhysicsTitle": "Final assessment - physics",
+  "manageSubjectSocialStudies": "Social studies",
+  "manageSubjectPhysics": "Physics",
+  "manageSubjectHistory": "History",
+  "manageSubjectBiology": "Biology",
+  "manageSubjectChemistry": "Chemistry",
   "demoPeriodicMathAssessmentTitle": "Periodic mathematics assessment",
   "demoArabicGrammarAssessmentTitle": "Arabic grammar assessment",
   "demoBiologyAssessmentShortTitle": "Biology assessment",
   "subjectBiology": "Biology",
   "subjectHistory": "History",
   "subjectChemistry": "Chemistry",
+  "subjectPhysics": "Physics",
+  "subjectGeography": "Geography",
+  "subjectIslamicEducation": "Islamic education",
+  "subjectComputerScience": "Computer science",
   "studentAssessmentsGreeting": "Welcome, {name}",
   "@studentAssessmentsGreeting": {
     "placeholders": {
@@ -400,6 +514,7 @@
   "assessmentStartTitle": "Start assessment",
   "assessmentLoadFailed": "Could not load assessment details. Check your connection and try again.",
   "assessmentStartFailed": "Could not start the assessment. Please try again.",
+  "assessmentStartDemoUnitAlgebra": "Unit 3: Algebra",
   "assessmentTypeAdaptive": "Adaptive",
   "assessmentTypeRandom": "Random",
   "questionCount": "Question count",
@@ -555,6 +670,10 @@
   "assessment": "Assessment",
   "noClassesYet": "No classes yet",
   "noClassesMessage": "Start by creating a class to organize your students and manage their assessments.",
+  "demoClassroomGradeSevenA": "Grade 7 (A)",
+  "demoClassroomGradeEightB": "Grade 8 (B)",
+  "demoGradeLevelSeven": "Grade seven",
+  "demoGradeLevelEight": "Grade eight",
   "manageAssessmentsLoadFailed": "Could not load assessments from the server. Check your connection and try again.",
   "editAssessment": "Edit assessment",
   "assessmentTitle": "Assessment title",
@@ -583,6 +702,8 @@
   "insufficientQuestionsWarning": "Warning: available questions are fewer than requested",
   "assessmentCreatedDemoMode": "Assessment created successfully (demo mode)",
   "assessmentCreateFailed": "Could not create the assessment. Check your connection and data, then try again.",
+  "selectClassroomBeforePublish": "Choose at least one classroom before publishing the assessment.",
+  "invalidAssessmentAvailabilityWindow": "The assessment end date must be after the start date.",
   "assessmentTitleHint": "Example: Unit 1 assessment",
   "requiredField": "Required",
   "chooseSubject": "Choose subject",
@@ -648,6 +769,18 @@
   "taskManagementTitle": "Task management",
   "taskManagementSubtitle": "Track student assignments and completion rates, and create local tasks for review during testing.",
   "taskManagementLocalOnlyMessage": "Task management currently uses clear local state. Permanent saving and student sync require connecting the task API in a later phase.",
+  "demoTaskClassroomGradeSevenB": "Grade 7 - B",
+  "demoTaskClassroomGradeNineA": "Grade 9 - A",
+  "demoTaskClassroomGradeTenA": "Grade 10 - A",
+  "demoTaskClassroomGradeTenB": "Grade 10 - B",
+  "demoTaskClassroomGradeElevenC": "Grade 11 - C",
+  "demoTaskAlgebraTitle": "Advanced algebra: quadratic equations",
+  "demoTaskNewtonTitle": "Introduction to Newton's laws",
+  "demoTaskStatisticsTitle": "Probability and descriptive statistics",
+  "demoTaskArabicReviewTitle": "Rhetoric and simile review",
+  "demoTaskDueOctober15": "Due: October 15",
+  "demoTaskDueTomorrow": "Due: tomorrow",
+  "demoTaskDueOctober20": "Due: October 20",
   "deleteTaskTitle": "Delete task?",
   "deleteTaskConfirmation": "\"{title}\" will be removed from the local list only. Background sync is not available until the task API is connected.",
   "@deleteTaskConfirmation": {
@@ -1851,5 +1984,285 @@
   "studentDashboardEveningDeadlineTime": "11:59 PM",
   "studentDashboardUpcomingExams": "Upcoming exams",
   "studentDashboardMyResources": "My resources",
-  "studentDashboardStartTraining": "Start training"
+  "studentDashboardStartTraining": "Start training",
+  "studentAnalyticsLoadFailed": "Could not load your analytics right now. Check your connection and try again.",
+  "studentAnalyticsNoClearTrend": "No clear change yet",
+  "studentAnalyticsTrendFromLast": "{percent}% from the last assessment",
+  "@studentAnalyticsTrendFromLast": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "studentAnalyticsStrongestSkill": "Strongest skill",
+  "studentAnalyticsNeedsReview": "Needs review",
+  "studentAnalyticsCompletedAssessmentsBadge": "Completed assessments",
+  "studentAnalyticsHighPerformanceBadge": "High performance",
+  "studentAnalyticsCommittedBadge": "Committed",
+  "studentAnalyticsErrorTitle": "Could not load analytics",
+  "studentAnalyticsEmptyTitle": "No analytics yet",
+  "studentAnalyticsEmptyMessage": "Performance and skill indicators will appear after you complete your first assessment.",
+  "studentAnalyticsAppBarTitle": "EduAssess analytics",
+  "studentAnalyticsGreeting": "Welcome, {name}!",
+  "@studentAnalyticsGreeting": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "studentAnalyticsOverviewSubtitle": "Here is a complete view of your learning performance this term.",
+  "studentAnalyticsCompletedAssessmentMetric": "Completed assessment",
+  "studentAnalyticsEarnedPointMetric": "Earned point",
+  "studentAnalyticsSubjectProgress": "Subject progress",
+  "studentAnalyticsSkillInsights": "Skill insights from assessments",
+  "studentAnalyticsAchievements": "Badges and achievements",
+  "learningRecommendationStartTitle": "Start building your recommendations",
+  "learningRecommendationStartMessage": "Complete a short assessment so recommendations can use your latest skill breakdown.",
+  "learningRecommendationFocusTitle": "Focus on {skill}",
+  "@learningRecommendationFocusTitle": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "learningRecommendationFocusMessage": "Your latest result showed {percent}% mastery in {skill}. Start with a short lesson, then try practice cards.",
+  "@learningRecommendationFocusMessage": {
+    "placeholders": {
+      "percent": {},
+      "skill": {}
+    }
+  },
+  "learningRecommendationOpenPlan": "Open learning plan",
+  "learningRecommendationMaintainTitle": "Keep your level",
+  "learningRecommendationMaintainMessage": "The weakest skill in your latest assessment is {skill} at {percent}%. A short practice is enough to maintain mastery.",
+  "@learningRecommendationMaintainMessage": {
+    "placeholders": {
+      "skill": {},
+      "percent": {}
+    }
+  },
+  "learningRecommendationPracticeCards": "Practice cards",
+  "microLearningDiagnosticAssessment": "Diagnostic assessment",
+  "microLearningTitle": "Micro-learning",
+  "microLearningSmartTitle": "Smart micro-learning",
+  "microLearningLoadFailedTitle": "Could not load the learning plan",
+  "microLearningLoadFailedMessage": "Could not load the micro-learning plan. Check your connection and try again.",
+  "microLearningLessonCompletionSaved": "Lesson completion saved",
+  "microLearningWelcomeBack": "Welcome back, {name}",
+  "@microLearningWelcomeBack": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "microLearningCurrentStreakTitle": "Your current learning streak",
+  "microLearningStreakMessage": "You are on day {days} in a row. Keep your activity going.",
+  "@microLearningStreakMessage": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "microLearningPercentComplete": "{percent}% complete",
+  "@microLearningPercentComplete": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "microLearningDailyGoal": "Today's goal",
+  "microLearningTodaysQuickLessons": "Today's quick lessons",
+  "microLearningLockedLessonSemantics": "{title}. Lesson locked until you finish the previous lesson.",
+  "@microLearningLockedLessonSemantics": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "microLearningCompletedLessonSemantics": "{title}. Lesson completed and saved.",
+  "@microLearningCompletedLessonSemantics": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "microLearningOpenLessonSemantics": "{title}. Open a short practice for this lesson.",
+  "@microLearningOpenLessonSemantics": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "microLearningLessonCompletedTooltip": "Lesson completed",
+  "microLearningMarkLessonCompleted": "Mark lesson as completed",
+  "microLearningAiRecommendationsTitle": "AI recommendations for you",
+  "microLearningFlashcardChallengeTitle": "Flashcard sprint challenge",
+  "microLearningBasedOnLatestResults": "Based on your latest results",
+  "microLearningBasedOnFocus": "Based on {focus}",
+  "@microLearningBasedOnFocus": {
+    "placeholders": {
+      "focus": {}
+    }
+  },
+  "microLearningStartFlashcardChallenge": "Start challenge (10 cards)",
+  "microLearningWeakestSkillFallback": "the weakest skill",
+  "microLearningSuggestedPathTitle": "Suggested learning path",
+  "microLearningReviewFocusStep": "Review {focus}",
+  "@microLearningReviewFocusStep": {
+    "placeholders": {
+      "focus": {}
+    }
+  },
+  "microLearningShortestLessonStep": "Start with the shortest available lesson before moving to the assessment.",
+  "microLearningSolveShortPracticeStep": "Solve a short practice",
+  "microLearningOneAssessmentStep": "One assessment is enough to see whether understanding improved.",
+  "microLearningOpenAnalyticsStep": "Open analytics",
+  "microLearningCompareLatestResultStep": "Compare the new result with your latest attempt and choose the next step.",
+  "microLearningReviewAnalytics": "Review your analytics",
+  "microLearningDiagnosticDescription": "Start an assessment to unlock recommendations based on your performance",
+  "microLearningStrongSkillDescription": "Strong skill. Keep your level",
+  "microLearningNeedsReviewDescription": "Needs a short review today",
+  "microLearningDiagnosticLessonTitle": "Start with your first diagnostic assessment",
+  "microLearningDiagnosticLessonSubtitle": "3 minutes - unlocks your personal recommendations",
+  "microLearningDiagnosticSkill": "Diagnostic",
+  "microLearningReviewResultsTitle": "Review your results after the assessment",
+  "microLearningReviewResultsSubtitle": "Locked until your first result appears",
+  "microLearningResultsAnalysisSkill": "Results analysis",
+  "microLearningSkillReviewTitleTemplate": "Short review: {skill}",
+  "microLearningSkillReviewSubtitleTemplate": "4 minutes - mastery level {percent}%",
+  "studentProgressLoadFailed": "Could not load your progress right now. Check your connection and try again.",
+  "studentProgressWeakestSkillFallback": "your weakest skill",
+  "studentProgressWeeklyReportTitle": "Your weekly report",
+  "studentProgressFocusLabel": "Focus",
+  "studentProgressWeeklySummaryEmpty": "No results this week yet. Start a short assessment to unlock your weekly report.",
+  "studentProgressWeeklySummaryStrong": "Strong week. Keep your pace and review {skill} to maintain your level.",
+  "@studentProgressWeeklySummaryStrong": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "studentProgressWeeklySummaryGood": "Good progress. One micro-learning session on {skill} will improve consistency.",
+  "@studentProgressWeeklySummaryGood": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "studentProgressWeeklySummaryNeedsFocus": "This week needs more focus. Start a short plan on {skill}, then retake one assessment.",
+  "@studentProgressWeeklySummaryNeedsFocus": {
+    "placeholders": {
+      "skill": {}
+    }
+  },
+  "studentChallengesTitle": "Challenges",
+  "studentChallengesNew": "New challenge",
+  "studentChallengesStreakDays": "day streak",
+  "studentChallengesAssessmentsThisWeek": "assessments this week",
+  "studentChallengesUnlocked": "New challenges are open based on your activity.",
+  "studentChallengesUnlockHint": "Complete two assessments on consecutive days to unlock more challenges.",
+  "studentChallengesNotifications": "Notifications",
+  "studentChallengesLive": "Live challenges",
+  "studentChallengesCurrentWeek": "This week",
+  "studentChallengesLeaderboard": "Leaderboard",
+  "studentChallengesMovedUp": "You moved up 3 places",
+  "studentChallengesCurrentRank": "Your current rank",
+  "studentChallengesMyChallenges": "My challenges",
+  "studentChallengesCompleted": "Completed challenges",
+  "studentChallengesActiveUpcoming": "Active and upcoming",
+  "studentChallengesLocalCreated": "You created {count} local challenge(s) for this session. Permanent saving will need an API later.",
+  "@studentChallengesLocalCreated": {"placeholders": {"count": {}}},
+  "studentChallengesEarnedBadges": "Earned badges",
+  "studentChallengesBadgeLegend": "Legend",
+  "studentChallengesBadgeFast": "Fast competitor",
+  "studentChallengesBadgeThinker": "Thinker",
+  "studentChallengesBadgeRisingStar": "Rising star",
+  "studentChallengesCompletedTitle": "Challenge completed",
+  "studentChallengesCompletedMessage": "You have already completed \"{title}\". You can track your rank on the leaderboard.",
+  "@studentChallengesCompletedMessage": {"placeholders": {"title": {}}},
+  "studentChallengesLockedTitle": "Challenge not available yet",
+  "studentChallengesLockedMessage": "This challenge will unlock when the participation requirements are met.",
+  "studentChallengesJoinTitle": "Join {title}",
+  "@studentChallengesJoinTitle": {"placeholders": {"title": {}}},
+  "studentChallengesJoinMessage": "You will earn {points} points when you complete this challenge. Add it to your challenges?",
+  "@studentChallengesJoinMessage": {"placeholders": {"points": {}}},
+  "studentChallengesJoinNow": "Join now",
+  "studentChallengesJoinedTitle": "Joined",
+  "studentChallengesJoinedMessage": "\"{title}\" was added to your challenges. Start it from My challenges.",
+  "@studentChallengesJoinedMessage": {"placeholders": {"title": {}}},
+  "studentChallengesCreateTitle": "Create a new challenge",
+  "studentChallengesCreateDescription": "The challenge will be added locally for this session until an API is available to save student challenges.",
+  "studentChallengesTitleLabel": "Challenge title",
+  "studentChallengesSubjectLabel": "Subject or skill",
+  "studentChallengesAddToMine": "Add to my challenges",
+  "studentChallengesDefaultTitle": "New personal challenge",
+  "studentChallengesDefaultSubject": "Selected skill",
+  "studentChallengesThisWeek": "This week",
+  "studentChallengesCreatedTitle": "Challenge created",
+  "studentChallengesCreatedMessage": "\"{title}\" was added to your local challenges and is ready to start.",
+  "@studentChallengesCreatedMessage": {"placeholders": {"title": {}}},
+  "studentChallengesDone": "Done",
+  "studentChallengesParticipants": "{count} participants",
+  "@studentChallengesParticipants": {"placeholders": {"count": {}}},
+  "studentChallengesJoinAction": "Join challenge",
+  "studentChallengesStartAction": "Start challenge",
+  "studentChallengesViewResultAction": "View result",
+  "studentChallengesNotOpenAction": "Not open yet",
+  "studentChallengesPoints": "{points} points",
+  "@studentChallengesPoints": {"placeholders": {"points": {}}},
+  "studentChallengesCompleteProgress": "Completed • {percent}%",
+  "@studentChallengesCompleteProgress": {"placeholders": {"percent": {}}},
+  "studentChallengesLiveNow": "Live now",
+  "studentAcademicFallbackName": "Ahmed Khalid Al-Mansouri",
+  "studentAcademicId": "Academic ID: {id}",
+  "@studentAcademicId": {"placeholders": {"id": {}}},
+  "studentAcademicGrade": "Grade 10 - A",
+  "studentAcademicAdvancedTrack": "Advanced track",
+  "studentAcademicReport": "Report",
+  "studentAcademicContact": "Contact",
+  "studentAcademicReportFor": "Report: {name}",
+  "@studentAcademicReportFor": {"placeholders": {"name": {}}},
+  "studentAcademicChooseReport": "Choose report type:",
+  "studentAcademicExportingAcademic": "Exporting academic report...",
+  "studentAcademicAcademicReport": "Academic report",
+  "studentAcademicExportingPerformance": "Exporting performance report...",
+  "studentAcademicPerformanceReport": "Performance report",
+  "studentAcademicSendMessageTo": "Send a message to: {name}",
+  "@studentAcademicSendMessageTo": {"placeholders": {"name": {}}},
+  "studentAcademicMessageHint": "Write your message here...",
+  "studentAcademicMessageSent": "Message sent to {name}",
+  "@studentAcademicMessageSent": {"placeholders": {"name": {}}},
+  "studentAcademicSend": "Send",
+  "studentAcademicActive": "Active",
+  "studentAcademicCumulativeGpa": "Cumulative GPA",
+  "studentAcademicPreviousMonth": "+0.12 last month",
+  "studentAcademicAttendance": "Attendance rate",
+  "studentAcademicCompletedAssessments": "Completed assessments",
+  "studentAcademicAwaitingAssessments": "Two assessments pending",
+  "studentAcademicGeneralBehavior": "General behavior",
+  "studentAcademicExcellent": "Excellent",
+  "studentAcademicInteractionStats": "Interaction statistics",
+  "studentAcademicClassParticipation": "Class participation",
+  "studentAcademicHighComparedPeers": "High compared with peers",
+  "studentAcademicGroupWork": "Group work",
+  "studentAcademicNeedsImprovement": "Needs slight improvement",
+  "studentAcademicHomework": "Homework",
+  "studentAcademicFullCommitment": "Fully meets deadlines",
+  "studentAcademicFirstTerm": "First term",
+  "studentAcademicSubjectPerformance": "Subject performance",
+  "studentAcademicMath": "Mathematics",
+  "studentAcademicScience": "Science",
+  "studentAcademicArabic": "Arabic language",
+  "studentAcademicHistory": "History",
+  "studentAcademicPhysics": "Physics",
+  "studentAcademicViewAll": "View all",
+  "studentAcademicViewingAllResults": "Showing all assessment results",
+  "studentAcademicLatestResults": "Latest assessment results",
+  "studentAcademicCalculusExam": "Calculus exam",
+  "studentAcademicCalculusExamDate": "12 October 2024",
+  "studentAcademicOrganicChemistryLab": "Organic chemistry - lab",
+  "studentAcademicChemistryLabDate": "08 October 2024",
+  "studentAcademicOutstanding": "Outstanding",
+  "studentAcademicVeryGood": "Very good",
+  "studentAcademicAddNote": "Add note",
+  "studentAcademicTeacherNotes": "Teacher behavioral notes",
+  "studentAcademicAddBehaviorNote": "Add a behavioral note",
+  "studentAcademicNoteHint": "Write your note here...",
+  "studentAcademicNoteAdded": "Note added successfully",
+  "studentAcademicSaveNote": "Save note",
+  "studentAcademicTeacherSara": "Ms. Sara Al-Ahmad",
+  "studentAcademicTwoDaysAgo": "2 days ago",
+  "studentAcademicLeadershipNote": "The student demonstrated strong leadership skills during last week's group project. They can explain complex concepts clearly to classmates.",
+  "studentAcademicTeacherMohammed": "Mr. Mohammed Omar",
+  "studentAcademicWeekAgo": "A week ago",
+  "studentAcademicReviewNote": "The student needs to focus more on reviewing small details in mathematical solutions to avoid simple mistakes."
 }

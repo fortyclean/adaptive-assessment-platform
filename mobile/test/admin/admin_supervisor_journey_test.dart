@@ -4,6 +4,7 @@ import 'package:adaptive_assessment/features/auth/repositories/admin_repository.
 import 'package:adaptive_assessment/features/auth/screens/classroom_management_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/supervisor_dashboard_screen.dart';
 import 'package:adaptive_assessment/features/reports/screens/school_reports_screen.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -107,7 +108,12 @@ Future<GoRouter> _pumpJourney(
       overrides: [
         adminRepositoryProvider.overrideWithValue(repository),
       ],
-      child: MaterialApp.router(routerConfig: router),
+      child: MaterialApp.router(
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        routerConfig: router,
+      ),
     ),
   );
   await tester.pumpAndSettle();

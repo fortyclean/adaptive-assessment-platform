@@ -25,70 +25,63 @@ class _StudentSubjectsScreenState extends ConsumerState<StudentSubjectsScreen> {
 
   final List<String> _filters = ['all', 'firstTerm', 'science', 'literary'];
 
-  // Subject data — in production this would come from the API
-  final List<Map<String, dynamic>> _subjects = [
-    {
-      'title': 'الرياضيات المتقدمة',
-      'teacher': 'د. محمد القحطاني',
-      'progress': 0.75,
-      'category': 'أكاديمي',
-      'categoryCode': 'academic',
-      'icon': Icons.functions_rounded,
-      'iconBg': const Color(0xFFEFF6FF),
-      'iconColor': const Color(0xFF1E40AF),
-    },
-    {
-      'title': 'الأحياء الجزيئية',
-      'teacher': 'أ. سارة العتيبي',
-      'progress': 0.42,
-      'category': 'عملي',
-      'categoryCode': 'practical',
-      'icon': Icons.biotech_rounded,
-      'iconBg': const Color(0xFFFFF7ED),
-      'iconColor': const Color(0xFF611E00),
-    },
-    {
-      'title': 'الأدب العربي',
-      'teacher': 'د. إبراهيم الفايز',
-      'progress': 0.90,
-      'category': 'أدبي',
-      'categoryCode': 'literary',
-      'icon': Icons.history_edu_rounded,
-      'iconBg': const Color(0xFFEFF6FF),
-      'iconColor': const Color(0xFF38485D),
-    },
-    {
-      'title': 'فيزياء الكم',
-      'teacher': 'أ. خالد منصور',
-      'progress': 0.15,
-      'category': 'علمي',
-      'categoryCode': 'science',
-      'icon': Icons.rocket_launch_rounded,
-      'iconBg': const Color(0xFFEFF6FF),
-      'iconColor': const Color(0xFF1E3A8A),
-    },
-    {
-      'title': 'الكيمياء العضوية',
-      'teacher': 'د. ليلى الشمري',
-      'progress': 0.60,
-      'category': 'علمي',
-      'categoryCode': 'science',
-      'icon': Icons.science_rounded,
-      'iconBg': const Color(0xFFF0FDF4),
-      'iconColor': const Color(0xFF047857),
-    },
-    {
-      'title': 'اللغة الإنجليزية',
-      'teacher': 'أ. نورا العمري',
-      'progress': 0.55,
-      'category': 'أكاديمي',
-      'categoryCode': 'academic',
-      'icon': Icons.translate_rounded,
-      'iconBg': const Color(0xFFFFF7ED),
-      'iconColor': const Color(0xFFD97706),
-    },
-  ];
-
+  // Subject data - in production this would come from the API.
+  List<Map<String, dynamic>> get _subjects => [
+        {
+          'title': AppLocalizations.of(context).studentSubjectAdvancedMath,
+          'teacher': AppLocalizations.of(context).studentSubjectTeacherMohammed,
+          'progress': 0.75,
+          'categoryCode': 'academic',
+          'icon': Icons.functions_rounded,
+          'iconBg': const Color(0xFFEFF6FF),
+          'iconColor': const Color(0xFF1E40AF),
+        },
+        {
+          'title': AppLocalizations.of(context).studentSubjectMolecularBiology,
+          'teacher': AppLocalizations.of(context).studentSubjectTeacherSarah,
+          'progress': 0.42,
+          'categoryCode': 'practical',
+          'icon': Icons.biotech_rounded,
+          'iconBg': const Color(0xFFFFF7ED),
+          'iconColor': const Color(0xFF611E00),
+        },
+        {
+          'title': AppLocalizations.of(context).studentSubjectArabicLiterature,
+          'teacher': AppLocalizations.of(context).studentSubjectTeacherIbrahim,
+          'progress': 0.90,
+          'categoryCode': 'literary',
+          'icon': Icons.history_edu_rounded,
+          'iconBg': const Color(0xFFEFF6FF),
+          'iconColor': const Color(0xFF38485D),
+        },
+        {
+          'title': AppLocalizations.of(context).studentSubjectQuantumPhysics,
+          'teacher': AppLocalizations.of(context).studentSubjectTeacherKhaled,
+          'progress': 0.15,
+          'categoryCode': 'science',
+          'icon': Icons.rocket_launch_rounded,
+          'iconBg': const Color(0xFFEFF6FF),
+          'iconColor': const Color(0xFF1E3A8A),
+        },
+        {
+          'title': AppLocalizations.of(context).studentSubjectOrganicChemistry,
+          'teacher': AppLocalizations.of(context).studentSubjectTeacherLaila,
+          'progress': 0.60,
+          'categoryCode': 'science',
+          'icon': Icons.science_rounded,
+          'iconBg': const Color(0xFFF0FDF4),
+          'iconColor': const Color(0xFF047857),
+        },
+        {
+          'title': AppLocalizations.of(context).studentSubjectEnglishLanguage,
+          'teacher': AppLocalizations.of(context).studentSubjectTeacherNoura,
+          'progress': 0.55,
+          'categoryCode': 'academic',
+          'icon': Icons.translate_rounded,
+          'iconBg': const Color(0xFFFFF7ED),
+          'iconColor': const Color(0xFFD97706),
+        },
+      ];
   @override
   void initState() {
     super.initState();

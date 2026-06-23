@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../shared/services/notification_service.dart';
 
 const _notificationSettingsPrefix = 'notification_settings.';
 
@@ -89,6 +90,14 @@ class _NotificationSettingsScreenState
 
     setState(() => _isSaving = true);
     try {
+      if (_studentPerfPush || _questionBankPush) {
+        try {
+          await NotificationService.instance.requestNotificationPermission();
+        } catch (_) {
+          // Permission availability must not prevent saving local preferences.
+        }
+      }
+
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(
         '${_notificationSettingsPrefix}studentPerfPush',

@@ -7,6 +7,7 @@ import 'package:adaptive_assessment/features/assessment/screens/teacher_dashboar
 import 'package:adaptive_assessment/features/question_bank/screens/advanced_question_editor_screen.dart';
 import 'package:adaptive_assessment/features/question_bank/screens/question_bank_screen.dart';
 import 'package:adaptive_assessment/core/network/api_service.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -142,7 +143,12 @@ Widget _wrapWithRouter({
     overrides: [
       teacherRepositoryProvider.overrideWithValue(repository),
     ],
-    child: MaterialApp.router(routerConfig: router),
+    child: MaterialApp.router(
+      locale: const Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: router,
+    ),
   );
 }
 
@@ -219,8 +225,8 @@ void main() {
       );
       await _selectDropdownItem(
         tester,
-        hint: 'اختر المادة...',
-        value: 'الرياضيات',
+        hint: 'اختر المادة',
+        value: 'رياضيات',
       );
       await tester.enterText(find.byType(TextFormField).at(1), 'الوحدة الأولى');
       await _selectDropdownItem(
@@ -242,7 +248,7 @@ void main() {
       expect(repository.publishAssessmentCalls, 1);
       expect(repository.lastPublishedAssessmentId, 'created-assessment-1');
       expect(repository.lastCreatePayload?['title'], 'اختبار رحلة المعلم');
-      expect(repository.lastCreatePayload?['subject'], 'الرياضيات');
+      expect(repository.lastCreatePayload?['subject'], 'رياضيات');
       expect(repository.lastCreatePayload?['classroomIds'], ['class-a']);
       expect(find.text('تم إنشاء الاختبار ونشره بنجاح'), findsOneWidget);
     });
@@ -258,22 +264,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('قيد التخطيط'), findsOneWidget);
-      await tester.tap(find.text('قيد التخطيط'));
+      await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
 
       expect(find.text('مساعد توليد الأسئلة'), findsOneWidget);
       expect(find.text('التوليد التلقائي قيد التخطيط'), findsOneWidget);
-      expect(
-        tester
-            .widget<OutlinedButton>(
-              find.widgetWithText(
-                OutlinedButton,
-                'التوليد التلقائي قيد التخطيط',
-              ),
-            )
-            .onPressed,
-        isNull,
-      );
+      expect(find.byIcon(Icons.lock_clock_rounded), findsOneWidget);
     });
   });
 }

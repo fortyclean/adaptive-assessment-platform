@@ -2,8 +2,9 @@ import 'package:adaptive_assessment/core/network/api_service.dart';
 import 'package:adaptive_assessment/features/auth/repositories/admin_repository.dart';
 import 'package:adaptive_assessment/features/auth/screens/user_management_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../support/localized_test_app.dart';
 
 class UserManagementFakeRepository extends AdminRepository {
   UserManagementFakeRepository() : super(ApiService.instance);
@@ -130,11 +131,9 @@ Widget _wrap(
   UserManagementFakeRepository repository, {
   String? initialFilter,
 }) =>
-    ProviderScope(
+    pumpLocalizedApp(
+      UserManagementScreen(initialFilter: initialFilter),
       overrides: [adminRepositoryProvider.overrideWithValue(repository)],
-      child: MaterialApp(
-        home: UserManagementScreen(initialFilter: initialFilter),
-      ),
     );
 
 Future<void> _pumpUserManagement(

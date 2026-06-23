@@ -3,6 +3,8 @@ import 'package:adaptive_assessment/shared/widgets/mcq_option.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../support/localized_test_app.dart';
+
 /// Widget tests for Student Screens
 /// Requirements: 7.2, 7.3, 7.4, 7.5, 8.3
 void main() {
@@ -15,8 +17,8 @@ void main() {
       bool? isIncorrect,
       bool isDisabled = false,
     }) =>
-        MaterialApp(
-          home: Scaffold(
+        pumpLocalizedApp(
+          Scaffold(
             body: McqOption(
               optionKey: 'A',
               value: 'الإجابة الأولى',
@@ -82,8 +84,7 @@ void main() {
 
     testWidgets('tapping option calls onTap callback', (tester) async {
       var tapped = false;
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
+      await tester.pumpWidget(pumpLocalizedApp(Scaffold(
           body: McqOption(
             optionKey: 'B',
             value: 'Option B',
@@ -99,8 +100,7 @@ void main() {
 
     testWidgets('disabled option does not call onTap', (tester) async {
       var tapped = false;
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
+      await tester.pumpWidget(pumpLocalizedApp(Scaffold(
           body: McqOption(
             optionKey: 'C',
             value: 'Option C',

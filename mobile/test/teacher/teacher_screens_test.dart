@@ -40,10 +40,17 @@ void main() {
     });
 
     test('subject must be one of the 6 MVP subjects', () {
-      bool isValidSubject(String subject) =>
-          AppConstants.subjects.contains(subject);
+      const validSubjects = [
+        'Mathematics',
+        'English',
+        'Arabic',
+        'Physics',
+        'Chemistry',
+        'Biology',
+      ];
+      bool isValidSubject(String subject) => validSubjects.contains(subject);
 
-      for (final s in AppConstants.subjects) {
+      for (final s in validSubjects) {
         expect(isValidSubject(s), isTrue);
       }
       expect(isValidSubject('History'), isFalse);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
@@ -33,21 +34,23 @@ class _StudentAnalyticsScreenState
   List<_SubjectProgress> _subjects = const [];
 
   List<double> _weeklyData = const [0, 0, 0, 0, 0, 0, 0];
-  final List<String> _weekDays = const [
-    'أحد',
-    'اثنين',
-    'ثلاثاء',
-    'أربعاء',
-    'خميس',
-    'جمعة',
-    'سبت',
-  ];
+  List<String> get _weekDays => [
+        l10n.weekdaySunday,
+        l10n.weekdayMonday,
+        l10n.weekdayTuesday,
+        l10n.weekdayWednesday,
+        l10n.weekdayThursday,
+        l10n.weekdayFriday,
+        l10n.weekdaySaturday,
+      ];
 
   List<_AttachmentStat> _attachments = const [];
 
   List<_Badge> _badges = const [];
   LearningRecommendation _recommendation =
       const StudentLearningInsightsSource().recommendationFor([]);
+
+  AppLocalizations get l10n => AppLocalizations.of(context);
 
   @override
   void initState() {
@@ -76,8 +79,7 @@ class _StudentAnalyticsScreenState
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _errorMessage =
-            'تعذر تحميل تحليلاتك الآن. تحقق من الاتصال ثم حاول مرة أخرى.';
+        _errorMessage = l10n.studentAnalyticsLoadFailed;
         _isLoading = false;
       });
     }
@@ -101,9 +103,47 @@ class _StudentAnalyticsScreenState
     _subjects = _buildSubjectProgressFromHistory(history);
     _weeklyData = _buildWeeklyData(history);
     _attachments = _buildSkillInsights(history);
-    _recommendation =
-        const StudentLearningInsightsSource().recommendationFor(history);
+    _recommendation = const StudentLearningInsightsSource().recommendationFor(
+      history,
+      builder: _buildLearningRecommendation,
+    );
     _badges = _buildEarnedBadges();
+  }
+
+  LearningRecommendation _buildLearningRecommendation(SkillInsight? weakest) {
+    if (weakest == null) {
+      return LearningRecommendation(
+        title: l10n.learningRecommendationStartTitle,
+        message: l10n.learningRecommendationStartMessage,
+        actionLabel: l10n.startAssessment,
+        route: '/student/assessments-list',
+      );
+    }
+
+    final percent = (weakest.mastery * 100).round();
+    if (weakest.mastery < 0.7) {
+      return LearningRecommendation(
+        title: l10n.learningRecommendationFocusTitle(weakest.skill),
+        message: l10n.learningRecommendationFocusMessage(
+          percent,
+          weakest.skill,
+        ),
+        actionLabel: l10n.learningRecommendationOpenPlan,
+        route: '/student/micro-learning',
+        focusSkill: weakest.skill,
+      );
+    }
+
+    return LearningRecommendation(
+      title: l10n.learningRecommendationMaintainTitle,
+      message: l10n.learningRecommendationMaintainMessage(
+        weakest.skill,
+        percent,
+      ),
+      actionLabel: l10n.learningRecommendationPracticeCards,
+      route: '/student/micro-learning/flashcards',
+      focusSkill: weakest.skill,
+    );
   }
 
   List<Map<String, dynamic>> _sortAttemptsByDate(
@@ -129,18 +169,20 @@ class _StudentAnalyticsScreenState
   }
 
   String get _performanceLabel {
-    if (_overallPerformance >= 90) return 'ممتاز';
-    if (_overallPerformance >= 75) return 'جيد جداً';
-    if (_overallPerformance >= 60) return 'جيد';
-    return 'يحتاج دعم';
+    if (_overallPerformance >= 90) return l10n.scoreExcellent;
+    if (_overallPerformance >= 75) return l10n.scoreVeryGood;
+    if (_overallPerformance >= 60) return l10n.scoreGood;
+    return l10n.needsSupport;
   }
 
   String get _trendText {
     if (_completedAttempts < 2 || _trendPercent.abs() < 0.1) {
-      return 'لا يوجد تغير واضح بعد';
+      return l10n.studentAnalyticsNoClearTrend;
     }
     final sign = _trendPercent > 0 ? '+' : '';
-    return '$sign${_trendPercent.toStringAsFixed(1)}% عن آخر اختبار';
+    return l10n.studentAnalyticsTrendFromLast(
+      '$sign${_trendPercent.toStringAsFixed(1)}',
+    );
   }
 
   List<_SubjectProgress> _buildSubjectProgressFromHistory(
@@ -218,7 +260,7 @@ class _StudentAnalyticsScreenState
         iconColor: AppColors.success,
         bgColor: const Color(0xFFECFDF5),
         borderColor: const Color(0xFFA7F3D0),
-        title: 'أقوى مهارة',
+        title: l10n.studentAnalyticsStrongestSkill,
         subtitle: strongest.key,
         percentage: (strongest.value * 100).round(),
         percentageColor: AppColors.success,
@@ -228,7 +270,7 @@ class _StudentAnalyticsScreenState
         iconColor: AppColors.warning,
         bgColor: const Color(0xFFFFF7ED),
         borderColor: const Color(0xFFFFDBC8),
-        title: 'تحتاج مراجعة',
+        title: l10n.studentAnalyticsNeedsReview,
         subtitle: weakest.key,
         percentage: (weakest.value * 100).round(),
         percentageColor: AppColors.warning,
@@ -242,7 +284,7 @@ class _StudentAnalyticsScreenState
           iconColor: const Color(0xFFD97706),
           bgColor: const Color(0xFFFEF3C7),
           borderColor: const Color(0xFFFDE68A),
-          label: 'اختبارات مكتملة',
+          label: l10n.studentAnalyticsCompletedAssessmentsBadge,
           isEarned: _completedAttempts > 0,
           count: _completedAttempts == 0 ? null : _completedAttempts,
         ),
@@ -251,7 +293,7 @@ class _StudentAnalyticsScreenState
           iconColor: AppColors.primary,
           bgColor: const Color(0xFFEFF6FF),
           borderColor: const Color(0xFFBFDBFE),
-          label: 'أداء مرتفع',
+          label: l10n.studentAnalyticsHighPerformanceBadge,
           isEarned: _overallPerformance >= 85,
         ),
         _Badge(
@@ -259,7 +301,7 @@ class _StudentAnalyticsScreenState
           iconColor: AppColors.success,
           bgColor: const Color(0xFFECFDF5),
           borderColor: const Color(0xFFA7F3D0),
-          label: 'ملتزم',
+          label: l10n.studentAnalyticsCommittedBadge,
           isEarned: _completedAttempts >= 3,
         ),
       ];
@@ -282,7 +324,8 @@ class _StudentAnalyticsScreenState
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final firstName = user?.fullName.split(' ').first ?? 'طالب';
+    final firstName =
+        user?.fullName.split(' ').first ?? l10n.studentFallbackName;
     final colorScheme = Theme.of(context).colorScheme;
 
     if (_isLoading) {
@@ -299,9 +342,9 @@ class _StudentAnalyticsScreenState
         backgroundColor: colorScheme.surface,
         body: StudentStateView(
           icon: Icons.wifi_off_rounded,
-          title: 'تعذر تحميل التحليلات',
+          title: l10n.studentAnalyticsErrorTitle,
           message: _errorMessage!,
-          actionLabel: 'إعادة المحاولة',
+          actionLabel: l10n.retry,
           onAction: _loadAnalytics,
         ),
         bottomNavigationBar:
@@ -314,9 +357,9 @@ class _StudentAnalyticsScreenState
         backgroundColor: colorScheme.surface,
         body: StudentStateView(
           icon: Icons.insights_outlined,
-          title: 'لا توجد تحليلات بعد',
-          message: 'ستظهر مؤشرات الأداء والمهارات بعد إكمال أول اختبار.',
-          actionLabel: 'عرض الاختبارات',
+          title: l10n.studentAnalyticsEmptyTitle,
+          message: l10n.studentAnalyticsEmptyMessage,
+          actionLabel: l10n.openAssessments,
           onAction: () => context.go('/student/assessments-list'),
         ),
         bottomNavigationBar:
@@ -349,9 +392,9 @@ class _StudentAnalyticsScreenState
                 // Logo + Avatar (RTL: right)
                 Row(
                   children: [
-                    const Text(
-                      'إحصائيات EduAssess',
-                      style: TextStyle(
+                    Text(
+                      l10n.studentAnalyticsAppBarTitle,
+                      style: const TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -412,7 +455,7 @@ class _StudentAnalyticsScreenState
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            'مرحباً، $name!',
+            l10n.studentAnalyticsGreeting(name),
             style: const TextStyle(
               fontFamily: 'Almarai',
               fontSize: 24,
@@ -422,9 +465,9 @@ class _StudentAnalyticsScreenState
             textAlign: TextAlign.right,
           ),
           const SizedBox(height: 4),
-          const Text(
-            'إليك نظرة شاملة على أدائك التعليمي لهذا الفصل.',
-            style: TextStyle(
+          Text(
+            l10n.studentAnalyticsOverviewSubtitle,
+            style: const TextStyle(
               fontFamily: 'Almarai',
               fontSize: 14,
               color: AppColors.onSurfaceVariant,
@@ -449,7 +492,7 @@ class _StudentAnalyticsScreenState
                 icon: Icons.schedule_outlined,
                 iconColor: const Color(0xFF611E00),
                 value: '$_completedAttempts',
-                label: 'اختبار مكتمل',
+                label: l10n.studentAnalyticsCompletedAssessmentMetric,
               )),
               const SizedBox(width: 12),
               Expanded(
@@ -457,7 +500,7 @@ class _StudentAnalyticsScreenState
                 icon: Icons.description_outlined,
                 iconColor: AppColors.primary,
                 value: '$_totalPoints',
-                label: 'نقطة مكتسبة',
+                label: l10n.studentAnalyticsEarnedPointMetric,
               )),
             ],
           ),
@@ -521,9 +564,9 @@ class _StudentAnalyticsScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
-                      'معدل الأداء العام',
-                      style: TextStyle(
+                    Text(
+                      l10n.overallPerformance,
+                      style: const TextStyle(
                         fontFamily: 'Almarai',
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -638,9 +681,9 @@ class _StudentAnalyticsScreenState
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Text(
-                  'تفاصيل أكثر',
-                  style: TextStyle(
+                child: Text(
+                  l10n.moreDetails,
+                  style: const TextStyle(
                     fontFamily: 'Almarai',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -648,9 +691,9 @@ class _StudentAnalyticsScreenState
                   ),
                 ),
               ),
-              const Text(
-                'تقدم المواد الدراسية',
-                style: TextStyle(
+              Text(
+                l10n.studentAnalyticsSubjectProgress,
+                style: const TextStyle(
                   fontFamily: 'Almarai',
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -791,9 +834,9 @@ class _StudentAnalyticsScreenState
   Widget _buildAttachmentStats() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Text(
-            'رؤى المهارات من الاختبارات',
-            style: TextStyle(
+          Text(
+            l10n.studentAnalyticsSkillInsights,
+            style: const TextStyle(
               fontFamily: 'Almarai',
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -948,9 +991,9 @@ class _StudentAnalyticsScreenState
   Widget _buildAchievements() => Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Text(
-            'الأوسمة والإنجازات',
-            style: TextStyle(
+          Text(
+            l10n.studentAnalyticsAchievements,
+            style: const TextStyle(
               fontFamily: 'Almarai',
               fontSize: 18,
               fontWeight: FontWeight.w600,

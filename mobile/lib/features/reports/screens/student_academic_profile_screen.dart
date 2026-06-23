@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/app_section_card.dart';
 
@@ -27,7 +28,8 @@ class _StudentAcademicProfileScreenState
     extends ConsumerState<StudentAcademicProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final name = widget.studentName ?? 'أحمد خالد المنصوري';
+    final name = widget.studentName ??
+        AppLocalizations.of(context).studentAcademicFallbackName;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -82,29 +84,34 @@ class _StudentAcademicProfileScreenState
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Notifications + avatar (RTL: left)
-          Row(
-            children: [
-              Icon(Icons.notifications_outlined,
-                  color: colorScheme.onSurfaceVariant, size: 24),
-              const SizedBox(width: 8),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: colorScheme.primaryContainer,
-                    width: 2,
+          Expanded(
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.notifications_outlined,
+                      color: colorScheme.onSurfaceVariant, size: 24),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: colorScheme.primaryContainer,
+                        width: 2,
+                      ),
+                      color: colorScheme.surfaceContainerHighest,
+                    ),
+                    child: Icon(Icons.person,
+                        size: 22, color: colorScheme.onSurfaceVariant),
                   ),
-                  color: colorScheme.surfaceContainerHighest,
-                ),
-                child: Icon(Icons.person,
-                    size: 22, color: colorScheme.onSurfaceVariant),
+                ],
               ),
-            ],
+            ),
           ),
           // Back + title (RTL: right)
           Row(
@@ -148,7 +155,7 @@ class _StudentAcademicProfileScreenState
         ),
         const SizedBox(height: 4),
         Text(
-          'الرقم الأكاديمي: #EDU-2024-0891',
+          AppLocalizations.of(context).studentAcademicId('#EDU-2024-0891'),
           style: TextStyle(
             fontSize: 14,
             color: colorScheme.onSurfaceVariant,
@@ -162,10 +169,16 @@ class _StudentAcademicProfileScreenState
           spacing: 8,
           runSpacing: 8,
           children: [
-            _buildTag('الصف العاشر - أ', const Color(0xFFEFF6FF),
-                const Color(0xFF1E40AF), const Color(0xFFBFDBFE)),
-            _buildTag('مسار متقدم', colorScheme.surfaceContainerHighest,
-                colorScheme.onSurfaceVariant, colorScheme.outlineVariant),
+            _buildTag(
+                AppLocalizations.of(context).studentAcademicGrade,
+                const Color(0xFFEFF6FF),
+                const Color(0xFF1E40AF),
+                const Color(0xFFBFDBFE)),
+            _buildTag(
+                AppLocalizations.of(context).studentAcademicAdvancedTrack,
+                colorScheme.surfaceContainerHighest,
+                colorScheme.onSurfaceVariant,
+                colorScheme.outlineVariant),
           ],
         ),
       ],
@@ -178,7 +191,7 @@ class _StudentAcademicProfileScreenState
         OutlinedButton.icon(
           onPressed: () => _showReportDialog(name),
           icon: const Icon(Icons.description_outlined, size: 16),
-          label: const Text('تقرير'),
+          label: Text(AppLocalizations.of(context).studentAcademicReport),
           style: OutlinedButton.styleFrom(
             foregroundColor: colorScheme.primary,
             side: BorderSide(color: colorScheme.primary),
@@ -192,7 +205,7 @@ class _StudentAcademicProfileScreenState
         ElevatedButton.icon(
           onPressed: () => _showMessageSheet(name),
           icon: const Icon(Icons.mail_outline, size: 16),
-          label: const Text('تواصل'),
+          label: Text(AppLocalizations.of(context).studentAcademicContact),
           style: ElevatedButton.styleFrom(
             backgroundColor: colorScheme.primary,
             foregroundColor: colorScheme.onPrimary,
@@ -210,7 +223,7 @@ class _StudentAcademicProfileScreenState
     final avatar = _buildStudentAvatar(name);
 
     return AppSectionCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth < 520) {
@@ -247,46 +260,50 @@ class _StudentAcademicProfileScreenState
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('تقرير: $name'),
+        title: Text(AppLocalizations.of(ctx).studentAcademicReportFor(name)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('اختر نوع التقرير:'),
+            Text(AppLocalizations.of(ctx).studentAcademicChooseReport),
             const SizedBox(height: 12),
             OutlinedButton.icon(
               onPressed: () {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('جاري تصدير التقرير الأكاديمي...'),
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)
+                        .studentAcademicExportingAcademic),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               },
               icon: const Icon(Icons.school_outlined),
-              label: const Text('التقرير الأكاديمي'),
+              label:
+                  Text(AppLocalizations.of(ctx).studentAcademicAcademicReport),
             ),
             const SizedBox(height: 8),
             OutlinedButton.icon(
               onPressed: () {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('جاري تصدير تقرير الأداء...'),
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)
+                        .studentAcademicExportingPerformance),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               },
               icon: const Icon(Icons.bar_chart_outlined),
-              label: const Text('تقرير الأداء'),
+              label: Text(
+                  AppLocalizations.of(ctx).studentAcademicPerformanceReport),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('إغلاق'),
+            child: Text(AppLocalizations.of(ctx).close),
           ),
         ],
       ),
@@ -326,7 +343,7 @@ class _StudentAcademicProfileScreenState
             ),
             const SizedBox(height: 16),
             Text(
-              'إرسال رسالة إلى: $name',
+              AppLocalizations.of(ctx).studentAcademicSendMessageTo(name),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -337,9 +354,8 @@ class _StudentAcademicProfileScreenState
             TextField(
               controller: msgController,
               maxLines: 4,
-              textDirection: TextDirection.rtl,
               decoration: InputDecoration(
-                hintText: 'اكتب رسالتك هنا...',
+                hintText: AppLocalizations.of(ctx).studentAcademicMessageHint,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -351,13 +367,14 @@ class _StudentAcademicProfileScreenState
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('تم إرسال الرسالة إلى $name'),
+                    content: Text(AppLocalizations.of(context)
+                        .studentAcademicMessageSent(name)),
                     behavior: SnackBarBehavior.floating,
                     backgroundColor: AppColors.success,
                   ),
                 );
               },
-              child: const Text('إرسال'),
+              child: Text(AppLocalizations.of(ctx).studentAcademicSend),
             ),
           ],
         ),
@@ -397,9 +414,9 @@ class _StudentAcademicProfileScreenState
               color: AppColors.success,
               borderRadius: BorderRadius.circular(999),
             ),
-            child: const Text(
-              'نشط',
-              style: TextStyle(
+            child: Text(
+              AppLocalizations.of(context).studentAcademicActive,
+              style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -435,17 +452,16 @@ class _StudentAcademicProfileScreenState
   Widget _buildAcademicSummary() {
     final cards = [
       _buildSummaryBentoCard(
-        label: 'المعدل التراكمي',
+        label: AppLocalizations.of(context).studentAcademicCumulativeGpa,
         value: '3.85',
-        trailing: const Row(
-          mainAxisSize: MainAxisSize.min,
+        trailing: Row(
           children: [
-            Icon(Icons.trending_up, size: 14, color: Color(0xFF10B981)),
-            SizedBox(width: 2),
-            Flexible(
+            const Icon(Icons.trending_up, size: 14, color: Color(0xFF10B981)),
+            const SizedBox(width: 2),
+            Expanded(
               child: Text(
-                '+0.12 الشهر الماضي',
-                style: TextStyle(fontSize: 11, color: Color(0xFF10B981)),
+                AppLocalizations.of(context).studentAcademicPreviousMonth,
+                style: const TextStyle(fontSize: 11, color: Color(0xFF10B981)),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -453,7 +469,7 @@ class _StudentAcademicProfileScreenState
         ),
       ),
       _buildSummaryBentoCard(
-        label: 'نسبة الحضور',
+        label: AppLocalizations.of(context).studentAcademicAttendance,
         value: '94%',
         trailing: ClipRRect(
           borderRadius: BorderRadius.circular(4),
@@ -466,15 +482,15 @@ class _StudentAcademicProfileScreenState
         ),
       ),
       _buildSummaryBentoCard(
-        label: 'الاختبارات المكتملة',
+        label: AppLocalizations.of(context).studentAcademicCompletedAssessments,
         value: '24/26',
-        trailing: const Text(
-          'بانتظار اختبارين',
-          style: TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
+        trailing: Text(
+          AppLocalizations.of(context).studentAcademicAwaitingAssessments,
+          style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
         ),
       ),
       _buildSummaryBentoCard(
-        label: 'السلوك العام',
+        label: AppLocalizations.of(context).studentAcademicGeneralBehavior,
         value: '',
         trailing: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -486,7 +502,7 @@ class _StudentAcademicProfileScreenState
             const Icon(Icons.star_border, size: 18, color: Color(0xFF1E40AF)),
           ],
         ),
-        extraLabel: 'ممتاز جداً',
+        extraLabel: AppLocalizations.of(context).studentAcademicExcellent,
       ),
     ];
 
@@ -554,9 +570,9 @@ class _StudentAcademicProfileScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Text(
-                  'إحصائيات التفاعل',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).studentAcademicInteractionStats,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF1A1B22),
@@ -566,22 +582,26 @@ class _StudentAcademicProfileScreenState
                 const SizedBox(height: 16),
                 _buildInteractionStat(
                   percentage: 88,
-                  label: 'المشاركة الصفية',
-                  sublabel: 'مرتفع مقارنة بالأقران',
+                  label: AppLocalizations.of(context)
+                      .studentAcademicClassParticipation,
+                  sublabel: AppLocalizations.of(context)
+                      .studentAcademicHighComparedPeers,
                   color: const Color(0xFF1E40AF),
                 ),
                 const SizedBox(height: 12),
                 _buildInteractionStat(
                   percentage: 62,
-                  label: 'العمل الجماعي',
-                  sublabel: 'يحتاج إلى تحسين بسيط',
+                  label: AppLocalizations.of(context).studentAcademicGroupWork,
+                  sublabel: AppLocalizations.of(context)
+                      .studentAcademicNeedsImprovement,
                   color: const Color(0xFFFB923C),
                 ),
                 const SizedBox(height: 12),
                 _buildInteractionStat(
                   percentage: 95,
-                  label: 'الواجبات المنزلية',
-                  sublabel: 'التزام تام بالمواعيد',
+                  label: AppLocalizations.of(context).studentAcademicHomework,
+                  sublabel: AppLocalizations.of(context)
+                      .studentAcademicFullCommitment,
                   color: const Color(0xFFA855F7),
                 ),
               ],
@@ -605,15 +625,16 @@ class _StudentAcademicProfileScreenState
                         borderRadius: BorderRadius.circular(6),
                         border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
-                      child: const Text(
-                        'الفصل الدراسي الأول',
-                        style:
-                            TextStyle(fontSize: 12, color: Color(0xFF475569)),
+                      child: Text(
+                        AppLocalizations.of(context).studentAcademicFirstTerm,
+                        style: const TextStyle(
+                            fontSize: 12, color: Color(0xFF475569)),
                       ),
                     ),
-                    const Text(
-                      'أداء المواد الدراسية',
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)
+                          .studentAcademicSubjectPerformance,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF1A1B22),
@@ -622,16 +643,30 @@ class _StudentAcademicProfileScreenState
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildSubjectBar('الرياضيات', 0.92, const Color(0xFF1E40AF)),
-                const SizedBox(height: 8),
-                _buildSubjectBar('العلوم', 0.85, const Color(0xFF10B981)),
+                _buildSubjectBar(
+                    AppLocalizations.of(context).studentAcademicMath,
+                    0.92,
+                    const Color(0xFF1E40AF)),
                 const SizedBox(height: 8),
                 _buildSubjectBar(
-                    'اللغة العربية', 0.78, const Color(0xFFF59E0B)),
+                    AppLocalizations.of(context).studentAcademicScience,
+                    0.85,
+                    const Color(0xFF10B981)),
                 const SizedBox(height: 8),
-                _buildSubjectBar('التاريخ', 0.70, const Color(0xFFA855F7)),
+                _buildSubjectBar(
+                    AppLocalizations.of(context).studentAcademicArabic,
+                    0.78,
+                    const Color(0xFFF59E0B)),
                 const SizedBox(height: 8),
-                _buildSubjectBar('الفيزياء', 0.88, const Color(0xFF06B6D4)),
+                _buildSubjectBar(
+                    AppLocalizations.of(context).studentAcademicHistory,
+                    0.70,
+                    const Color(0xFFA855F7)),
+                const SizedBox(height: 8),
+                _buildSubjectBar(
+                    AppLocalizations.of(context).studentAcademicPhysics,
+                    0.88,
+                    const Color(0xFF06B6D4)),
               ],
             ),
           );
@@ -773,23 +808,24 @@ class _StudentAcademicProfileScreenState
                   TextButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('عرض جميع نتائج الاختبارات'),
+                        SnackBar(
+                            content: Text(AppLocalizations.of(context)
+                                .studentAcademicViewingAllResults),
                             behavior: SnackBarBehavior.floating),
                       );
                     },
-                    child: const Text(
-                      'عرض الكل',
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context).studentAcademicViewAll,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Color(0xFF1E40AF),
                       ),
                     ),
                   ),
-                  const Text(
-                    'آخر نتائج الاختبارات',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context).studentAcademicLatestResults,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF1A1B22),
@@ -803,11 +839,12 @@ class _StudentAcademicProfileScreenState
               icon: Icons.functions,
               iconBg: const Color(0xFFEFF6FF),
               iconColor: const Color(0xFF1E40AF),
-              title: 'اختبار التفاضل والتكامل',
-              date: '12 أكتوبر 2024',
+              title: AppLocalizations.of(context).studentAcademicCalculusExam,
+              date:
+                  AppLocalizations.of(context).studentAcademicCalculusExamDate,
               score: '98/100',
               scoreColor: const Color(0xFF1E40AF),
-              badge: 'متفوق',
+              badge: AppLocalizations.of(context).studentAcademicOutstanding,
               badgeBg: const Color(0xFFD1FAE5).withValues(alpha: 0.5),
               badgeColor: const Color(0xFF10B981),
             ),
@@ -816,11 +853,13 @@ class _StudentAcademicProfileScreenState
               icon: Icons.science_outlined,
               iconBg: const Color(0xFFF5F3FF),
               iconColor: const Color(0xFF7C3AED),
-              title: 'كيمياء عضوية - عملي',
-              date: '08 أكتوبر 2024',
+              title: AppLocalizations.of(context)
+                  .studentAcademicOrganicChemistryLab,
+              date:
+                  AppLocalizations.of(context).studentAcademicChemistryLabDate,
               score: '85/100',
               scoreColor: const Color(0xFF1A1B22),
-              badge: 'جيد جداً',
+              badge: AppLocalizations.of(context).studentAcademicVeryGood,
               badgeBg: const Color(0xFFEFF6FF),
               badgeColor: const Color(0xFF2563EB),
             ),
@@ -959,16 +998,18 @@ class _StudentAcademicProfileScreenState
                                         borderRadius:
                                             BorderRadius.circular(2)))),
                             const SizedBox(height: 16),
-                            const Text('إضافة ملاحظة سلوكية',
-                                style: TextStyle(
+                            Text(
+                                AppLocalizations.of(ctx)
+                                    .studentAcademicAddBehaviorNote,
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 16),
                             TextField(
                               controller: noteController,
                               maxLines: 4,
-                              textDirection: TextDirection.rtl,
                               decoration: InputDecoration(
-                                hintText: 'اكتب ملاحظتك هنا...',
+                                hintText: AppLocalizations.of(ctx)
+                                    .studentAcademicNoteHint,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8)),
                               ),
@@ -978,10 +1019,11 @@ class _StudentAcademicProfileScreenState
                               onPressed: () {
                                 Navigator.pop(ctx);
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('تم إضافة الملاحظة بنجاح'),
+                                  SnackBar(
+                                      content: Text(AppLocalizations.of(context)
+                                          .studentAcademicNoteAdded),
                                       behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Color(0xFF2E7D32)),
+                                      backgroundColor: const Color(0xFF2E7D32)),
                                 );
                               },
                               style: ElevatedButton.styleFrom(
@@ -991,8 +1033,10 @@ class _StudentAcademicProfileScreenState
                                       const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8))),
-                              child: const Text('حفظ الملاحظة',
-                                  style: TextStyle(
+                              child: Text(
+                                  AppLocalizations.of(ctx)
+                                      .studentAcademicSaveNote,
+                                  style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600)),
                             ),
@@ -1002,14 +1046,15 @@ class _StudentAcademicProfileScreenState
                     );
                   },
                   icon: const Icon(Icons.add_circle_outline, size: 18),
-                  label: const Text('إضافة ملاحظة'),
+                  label:
+                      Text(AppLocalizations.of(context).studentAcademicAddNote),
                   style: TextButton.styleFrom(
                     foregroundColor: const Color(0xFF1E40AF),
                   ),
                 ),
-                const Text(
-                  'ملاحظات المعلم السلوكية',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).studentAcademicTeacherNotes,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF1A1B22),
@@ -1019,18 +1064,18 @@ class _StudentAcademicProfileScreenState
             ),
             const SizedBox(height: 16),
             _buildNoteCard(
-              teacherName: 'أ. سارة الأحمد',
-              timeAgo: 'منذ يومين',
-              note:
-                  'أظهر الطالب مهارات قيادية متميزة خلال المشروع الجماعي الأسبوع الماضي. لديه قدرة عالية على تبسيط المفاهيم المعقدة لزملائه.',
+              teacherName:
+                  AppLocalizations.of(context).studentAcademicTeacherSara,
+              timeAgo: AppLocalizations.of(context).studentAcademicTwoDaysAgo,
+              note: AppLocalizations.of(context).studentAcademicLeadershipNote,
               accentColor: const Color(0xFF1E40AF),
             ),
             const SizedBox(height: 12),
             _buildNoteCard(
-              teacherName: 'أ. محمد عمر',
-              timeAgo: 'منذ أسبوع',
-              note:
-                  'يحتاج الطالب إلى التركيز أكثر على مراجعة التفاصيل الصغيرة في حلول المسائل الرياضية لتفادي الأخطاء البسيطة.',
+              teacherName:
+                  AppLocalizations.of(context).studentAcademicTeacherMohammed,
+              timeAgo: AppLocalizations.of(context).studentAcademicWeekAgo,
+              note: AppLocalizations.of(context).studentAcademicReviewNote,
               accentColor: const Color(0xFFFB923C),
             ),
           ],
@@ -1056,21 +1101,25 @@ class _StudentAcademicProfileScreenState
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Expanded(
+                  child: Text(
+                    teacherName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF1A1B22),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
                 Text(
                   timeAgo,
                   style: const TextStyle(
                     fontSize: 10,
                     color: Color(0xFF94A3B8),
-                  ),
-                ),
-                Text(
-                  teacherName,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF1A1B22),
                   ),
                 ),
               ],

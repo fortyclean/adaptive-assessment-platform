@@ -27,7 +27,12 @@ class StudentChallengePlan {
 }
 
 class StudentChallengePlanSource {
-  const StudentChallengePlanSource();
+  const StudentChallengePlanSource({
+    this.twoDayStreakLockedReason =
+        'This challenge unlocks after keeping a two-day streak.',
+  });
+
+  final String twoDayStreakLockedReason;
 
   StudentChallengePlan fromAttemptHistory(List<Map<String, dynamic>> history) {
     final completed = history
@@ -62,7 +67,7 @@ class StudentChallengePlanSource {
               ? StudentChallengeStatus.joinable
               : StudentChallengeStatus.locked,
           progress: (streak / 2).clamp(0.0, 1.0),
-          lockedReason: 'يفتح هذا التحدي بعد الحفاظ على سلسلة يومين.',
+          lockedReason: twoDayStreakLockedReason,
         ),
         'chemistry-weekly': StudentChallengeState(
           id: 'chemistry-weekly',

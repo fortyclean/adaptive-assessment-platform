@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../repositories/assessment_repository.dart';
 
 /// Exam With Bookmark Screen — Design _42
@@ -175,16 +176,16 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('تأكيد الخروج'),
-        content: const Text('هل تريد الخروج من الاختبار؟ سيتم حفظ إجاباتك.'),
+        title: Text(AppLocalizations.of(ctx).confirmExit),
+        content: Text(AppLocalizations.of(ctx).exitAssessmentPrompt),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('إلغاء')),
+              child: Text(AppLocalizations.of(ctx).cancel)),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child:
-                  const Text('خروج', style: TextStyle(color: AppColors.error))),
+              child: Text(AppLocalizations.of(ctx).exit,
+                  style: const TextStyle(color: AppColors.error))),
         ],
       ),
     );
@@ -553,7 +554,7 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
               child: OutlinedButton.icon(
                 onPressed: _questionNumber > 1 ? _goToPrevious : null,
                 icon: const Icon(Icons.chevron_right_rounded),
-                label: const Text('السابق'),
+                label: Text(AppLocalizations.of(context).previous),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.onSurface,
                   side: const BorderSide(color: Color(0xFFC4C5D5)),
@@ -570,7 +571,7 @@ class _ExamWithBookmarkScreenState extends ConsumerState<ExamWithBookmarkScreen>
               child: FilledButton.icon(
                 onPressed: _goToNext,
                 icon: const Icon(Icons.chevron_left_rounded),
-                label: const Text('التالي'),
+                label: Text(AppLocalizations.of(context).next),
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   padding: const EdgeInsets.symmetric(vertical: 16),

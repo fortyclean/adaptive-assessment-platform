@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.98';
-  static const int buildNumber = 98;
+  static const String current = '1.0.100';
+  static const int buildNumber = 100;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,30 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.100',
+      buildNumber: 100,
+      date: 'يونيو 2026',
+      title: 'اكتمال ربط مسارات الاختبار المتخصصة',
+      changes: [
+        'ربط مسار أسئلة الصور بشاشة الاختبار التي تعرض الوسائط.',
+        'ربط مسار التحديد للمراجعة بشاشة الاختبار المخصصة له.',
+        'ربط مسار إخفاء وإظهار المؤقت بشاشة الاختبار المخصصة له.',
+      ],
+      type: VersionType.fix,
+    ),
+    VersionEntry(
+      version: '1.0.99',
+      buildNumber: 99,
+      date: 'يونيو 2026',
+      title: 'دعم الترجمة الكامل وتحسينات الاستجابة',
+      changes: [
+        'إكمال نقل النصوص الظاهرة إلى مفاتيح العربية والإنجليزية في شاشات الطالب والمعلم والإدارة والتقارير.',
+        'تحسين دعم الاتجاهين RTL وLTR في التحديات والملف الأكاديمي والاختبارات البديلة.',
+        'إصلاح قوائم فلترة تقارير المدرسة وعرض ملاحظات المعلم على الشاشات الصغيرة.',
+      ],
+      type: VersionType.feature,
+    ),
     VersionEntry(
       version: '1.0.98',
       buildNumber: 98,

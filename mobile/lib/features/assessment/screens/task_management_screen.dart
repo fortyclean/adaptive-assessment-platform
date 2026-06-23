@@ -28,65 +28,88 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
       Localizations.of<AppLocalizations>(context, AppLocalizations) ??
       AppLocalizationsAr();
 
-  static const List<_LocalClassroom> _localClassrooms = [
-    _LocalClassroom(name: 'الصف السابع - ب', studentCount: 24),
-    _LocalClassroom(name: 'الصف التاسع - أ', studentCount: 27),
-    _LocalClassroom(name: 'الصف العاشر - أ', studentCount: 28),
-    _LocalClassroom(name: 'الصف العاشر - ب', studentCount: 25),
-    _LocalClassroom(name: 'الصف الحادي عشر - ج', studentCount: 22),
-  ];
+  List<_LocalClassroom> get _localClassrooms => [
+        _LocalClassroom(
+            name: _l10n.demoTaskClassroomGradeSevenB, studentCount: 24),
+        _LocalClassroom(
+            name: _l10n.demoTaskClassroomGradeNineA, studentCount: 27),
+        _LocalClassroom(
+            name: _l10n.demoTaskClassroomGradeTenA, studentCount: 28),
+        _LocalClassroom(
+            name: _l10n.demoTaskClassroomGradeTenB, studentCount: 25),
+        _LocalClassroom(
+            name: _l10n.demoTaskClassroomGradeElevenC, studentCount: 22),
+      ];
 
-  final List<_TeacherTask> _tasks = [
-    const _TeacherTask(
-      id: 'algebra-10-a',
-      subject: 'رياضيات',
-      title: 'الجبر المتطور: المعادلات التربيعية',
-      className: 'الصف العاشر - أ',
-      assignedStudentCount: 28,
-      dueDate: 'تسليم: 15 أكتوبر',
-      completionRate: 0.85,
-      status: _TaskStatus.active,
-      subjectColor: Color(0xFFD0E1FB),
-      subjectTextColor: Color(0xFF1E40AF),
-    ),
-    const _TeacherTask(
-      id: 'physics-11-c',
-      subject: 'فيزياء',
-      title: 'مقدمة في قوانين نيوتن',
-      className: 'الصف الحادي عشر - ج',
-      assignedStudentCount: 22,
-      dueDate: 'تسليم: غدًا',
-      completionRate: 0.42,
-      status: _TaskStatus.active,
-      isUrgent: true,
-      subjectColor: Color(0xFFFFDBCE),
-      subjectTextColor: Color(0xFF802A00),
-    ),
-    const _TeacherTask(
-      id: 'stats-10-b',
-      subject: 'رياضيات',
-      title: 'الاحتمالات والإحصاء الوصفي',
-      className: 'الصف العاشر - ب',
-      assignedStudentCount: 25,
-      dueDate: 'تسليم: 20 أكتوبر',
-      completionRate: 0.12,
-      status: _TaskStatus.draft,
-      subjectColor: Color(0xFFD0E1FB),
-      subjectTextColor: Color(0xFF1E40AF),
-    ),
-    const _TeacherTask(
-      id: 'arabic-review',
-      subject: 'لغة عربية',
-      title: 'مراجعة البلاغة والتشبيه',
-      className: 'الصف التاسع - أ',
-      assignedStudentCount: 27,
-      dueDate: 'مكتملة',
-      completionRate: 1,
-      status: _TaskStatus.completed,
-      subjectColor: Color(0xFFEADDFF),
-      subjectTextColor: Color(0xFF4F378B),
-    ),
-  ];
+  List<_TeacherTask> _tasks = [];
+  bool _seededTasks = false;
+
+  List<_TeacherTask> get _initialTasks => [
+        _TeacherTask(
+          id: 'algebra-10-a',
+          subject: _l10n.subjectMathematics,
+          title: _l10n.demoTaskAlgebraTitle,
+          className: _l10n.demoTaskClassroomGradeTenA,
+          assignedStudentCount: 28,
+          dueDate: _l10n.demoTaskDueOctober15,
+          completionRate: 0.85,
+          status: _TaskStatus.active,
+          subjectColor: const Color(0xFFD0E1FB),
+          subjectTextColor: const Color(0xFF1E40AF),
+        ),
+        _TeacherTask(
+          id: 'physics-11-c',
+          subject: _l10n.subjectPhysics,
+          title: _l10n.demoTaskNewtonTitle,
+          className: _l10n.demoTaskClassroomGradeElevenC,
+          assignedStudentCount: 22,
+          dueDate: _l10n.demoTaskDueTomorrow,
+          completionRate: 0.42,
+          status: _TaskStatus.active,
+          isUrgent: true,
+          subjectColor: const Color(0xFFFFDBCE),
+          subjectTextColor: const Color(0xFF802A00),
+        ),
+        _TeacherTask(
+          id: 'stats-10-b',
+          subject: _l10n.subjectMathematics,
+          title: _l10n.demoTaskStatisticsTitle,
+          className: _l10n.demoTaskClassroomGradeTenB,
+          assignedStudentCount: 25,
+          dueDate: _l10n.demoTaskDueOctober20,
+          completionRate: 0.12,
+          status: _TaskStatus.draft,
+          subjectColor: const Color(0xFFD0E1FB),
+          subjectTextColor: const Color(0xFF1E40AF),
+        ),
+        _TeacherTask(
+          id: 'arabic-review',
+          subject: _l10n.subjectArabic,
+          title: _l10n.demoTaskArabicReviewTitle,
+          className: _l10n.demoTaskClassroomGradeNineA,
+          assignedStudentCount: 27,
+          dueDate: _l10n.completed,
+          completionRate: 1,
+          status: _TaskStatus.completed,
+          subjectColor: const Color(0xFFEADDFF),
+          subjectTextColor: const Color(0xFF4F378B),
+        ),
+      ];
+
+  List<String> get _subjectOptions => [
+        _l10n.subjectMathematics,
+        _l10n.subjectPhysics,
+        _l10n.subjectArabic,
+      ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_seededTasks) {
+      _tasks = _initialTasks;
+      _seededTasks = true;
+    }
+  }
 
   List<String> get _tabs => [
         _l10n.activeTasks,
@@ -96,9 +119,7 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
 
   List<String> get _filters => [
         _l10n.filterAll,
-        'رياضيات',
-        'فيزياء',
-        'لغة عربية',
+        ..._subjectOptions,
       ];
 
   List<_TeacherTask> get _visibleTasks {
@@ -453,16 +474,22 @@ class _TaskManagementScreenState extends State<TaskManagementScreen> {
   }
 
   Color _subjectColor(String subject) => switch (subject) {
-        'رياضيات' => const Color(0xFFD0E1FB),
-        'فيزياء' => const Color(0xFFFFDBCE),
-        'لغة عربية' => const Color(0xFFEADDFF),
+        final value when value == _l10n.subjectMathematics =>
+          const Color(0xFFD0E1FB),
+        final value when value == _l10n.subjectPhysics =>
+          const Color(0xFFFFDBCE),
+        final value when value == _l10n.subjectArabic =>
+          const Color(0xFFEADDFF),
         _ => AppColors.surfaceContainer,
       };
 
   Color _subjectTextColor(String subject) => switch (subject) {
-        'رياضيات' => const Color(0xFF1E40AF),
-        'فيزياء' => const Color(0xFF802A00),
-        'لغة عربية' => const Color(0xFF4F378B),
+        final value when value == _l10n.subjectMathematics =>
+          const Color(0xFF1E40AF),
+        final value when value == _l10n.subjectPhysics =>
+          const Color(0xFF802A00),
+        final value when value == _l10n.subjectArabic =>
+          const Color(0xFF4F378B),
         _ => AppColors.onSurfaceVariant,
       };
 }
@@ -661,7 +688,7 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
     _titleController = TextEditingController(text: task?.title ?? '');
     _classController = TextEditingController(text: task?.className ?? '');
     _dueDateController = TextEditingController(text: task?.dueDate ?? '');
-    _subject = task?.subject ?? 'رياضيات';
+    _subject = task?.subject ?? '';
     _status = task?.status ?? _TaskStatus.active;
   }
 
@@ -676,6 +703,9 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = _taskManagementL10n(context);
+    if (_subject.isEmpty) {
+      _subject = l10n.subjectMathematics;
+    }
     if (_dueDateController.text.isEmpty) {
       _dueDateController.text = l10n.dueWithinWeek;
     }
@@ -715,12 +745,16 @@ class _TaskEditorSheetState extends State<_TaskEditorSheet> {
                 DropdownButtonFormField<String>(
                   initialValue: _subject,
                   decoration: InputDecoration(labelText: l10n.subject),
-                  items: const [
-                    DropdownMenuItem(value: 'رياضيات', child: Text('رياضيات')),
-                    DropdownMenuItem(value: 'فيزياء', child: Text('فيزياء')),
-                    DropdownMenuItem(
-                        value: 'لغة عربية', child: Text('لغة عربية')),
-                  ],
+                  items: [
+                    l10n.subjectMathematics,
+                    l10n.subjectPhysics,
+                    l10n.subjectArabic,
+                  ]
+                      .map((subject) => DropdownMenuItem(
+                            value: subject,
+                            child: Text(subject),
+                          ))
+                      .toList(),
                   onChanged: (value) {
                     if (value != null) setState(() => _subject = value);
                   },

@@ -1,6 +1,7 @@
 import 'package:adaptive_assessment/core/network/api_service.dart';
 import 'package:adaptive_assessment/features/auth/repositories/admin_repository.dart';
 import 'package:adaptive_assessment/features/auth/screens/classroom_management_screen.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -186,6 +187,9 @@ Future<void> _pumpScreen(
         adminRepositoryProvider.overrideWithValue(repository),
       ],
       child: MaterialApp.router(
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         routerConfig: router,
       ),
     ),

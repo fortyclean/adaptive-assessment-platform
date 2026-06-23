@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
@@ -12,7 +13,7 @@ import '../repositories/assessment_repository.dart';
 import '../repositories/micro_learning_progress_store.dart';
 
 /// Micro-Learning Screen — Design _62
-/// "التعلم المصغر الذكي" — Smart Micro-Learning
+/// Smart micro-learning.
 /// Short learning cards per skill weakness with progress tracking.
 class MicroLearningScreen extends ConsumerStatefulWidget {
   const MicroLearningScreen({super.key});
@@ -37,46 +38,30 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
   Set<String> _completedLessonIds = {};
 
   // Daily micro-lessons
-  List<MicroLearningLesson> _lessons = const [
-    MicroLearningLesson(
-      id: 'initial-diagnostic',
-      title: 'ابدأ بأول اختبار تشخيصي',
-      subtitle: '3 دقائق • يفتح توصياتك الشخصية',
-      icon: Icons.psychology_outlined,
-      status: MicroLessonStatus.available,
-      skill: 'تشخيص',
-      estimatedMinutes: 3,
-      mastery: 0,
-    ),
-    MicroLearningLesson(
-      id: 'locked-review',
-      title: 'التفاعلات الكيميائية',
-      subtitle: '3 دقيقة • مراجعة',
-      icon: Icons.science_outlined,
-      status: MicroLessonStatus.locked,
-      skill: 'تحليل النتائج',
-      estimatedMinutes: 4,
-      mastery: 0,
-    ),
-  ];
+  List<MicroLearningLesson> _lessons = const [];
 
   // AI-recommended weak areas
-  List<MicroLearningFocusArea> _weakAreas = const [
-    MicroLearningFocusArea(
-      title: 'قواعد اللغة',
-      description: 'تحتاج لتعزيز مهاراتك هنا',
-      progress: 0.33,
-      color: Color(0xFFF59E0B),
-      icon: Icons.trending_down_rounded,
-    ),
-    MicroLearningFocusArea(
-      title: 'المنطق الصوري',
-      description: 'أداء متميز في التطور',
-      progress: 0.85,
-      color: Color(0xFF10B981),
-      icon: Icons.auto_awesome_rounded,
-    ),
-  ];
+  List<MicroLearningFocusArea> _weakAreas = const [];
+
+  AppLocalizations get _l10n => AppLocalizations.of(context);
+
+  MicroLearningPlanCopy get _planCopy => MicroLearningPlanCopy(
+        completedSuffix: _l10n.completed,
+        emptyFocusTitle: _l10n.microLearningDiagnosticAssessment,
+        emptyFocusDescription: _l10n.microLearningDiagnosticDescription,
+        strongSkillDescription: _l10n.microLearningStrongSkillDescription,
+        needsReviewDescription: _l10n.microLearningNeedsReviewDescription,
+        diagnosticLessonTitle: _l10n.microLearningDiagnosticLessonTitle,
+        diagnosticLessonSubtitle: _l10n.microLearningDiagnosticLessonSubtitle,
+        diagnosticSkill: _l10n.microLearningDiagnosticSkill,
+        reviewResultsTitle: _l10n.microLearningReviewResultsTitle,
+        reviewResultsSubtitle: _l10n.microLearningReviewResultsSubtitle,
+        resultsAnalysisSkill: _l10n.microLearningResultsAnalysisSkill,
+        skillReviewTitleTemplate:
+            _l10n.microLearningSkillReviewTitleTemplate('{skill}'),
+        skillReviewSubtitleTemplate:
+            _l10n.microLearningSkillReviewSubtitleTemplate('{percent}'),
+      );
 
   @override
   void initState() {
@@ -96,6 +81,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
       final plan = const MicroLearningPlanSource().fromAttemptHistory(
         history,
         completedLessonIds: _completedLessonIds,
+        copy: _planCopy,
       );
       final completionProgress = plan.lessons.isEmpty
           ? 0.0
@@ -115,8 +101,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _errorMessage =
-            'تعذر تحميل خطة التعلم المصغر. تحقق من الاتصال ثم حاول مرة أخرى.';
+        _errorMessage = _l10n.microLearningLoadFailedMessage;
         _isLoading = false;
       });
     }
@@ -137,7 +122,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
           .map((item) => item.id == lesson.id
               ? item.copyWith(
                   status: MicroLessonStatus.completed,
-                  subtitle: '${item.subtitle} - مكتمل',
+                  subtitle: _planCopy.completedSubtitle(item.subtitle),
                 )
               : item)
           .toList();
@@ -145,8 +130,8 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
           (_completedLessonIds.length / _lessons.length).clamp(0.0, 1.0);
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('تم حفظ إكمال الدرس'),
+      SnackBar(
+        content: Text(_l10n.microLearningLessonCompletionSaved),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -176,9 +161,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         backgroundColor: colorScheme.surface,
         body: StudentStateView(
           icon: Icons.wifi_off_rounded,
-          title: 'تعذر تحميل خطة التعلم',
+          title: _l10n.microLearningLoadFailedTitle,
           message: _errorMessage!,
-          actionLabel: 'إعادة المحاولة',
+          actionLabel: _l10n.retry,
           onAction: _loadLearningPlan,
         ),
         bottomNavigationBar:
@@ -208,9 +193,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
                   TextButton.icon(
                     onPressed: _isLoading ? null : _loadLearningPlan,
                     icon: const Icon(Icons.refresh_rounded, size: 18),
-                    label: const Text(
-                      'تحديث',
-                      style: TextStyle(
+                    label: Text(
+                      _l10n.refresh,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
                       ),
@@ -219,9 +204,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
                   // Title + back (RTL: right)
                   Row(
                     children: [
-                      const Text(
-                        'التعلم المصغر',
-                        style: TextStyle(
+                      Text(
+                        _l10n.microLearningTitle,
+                        style: const TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w700,
                           fontSize: 18,
@@ -325,7 +310,10 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'أهلاً بك مجدداً، ${ref.watch(authProvider).user?.fullName.split(' ').first ?? 'طالب'}',
+                    _l10n.microLearningWelcomeBack(
+                      ref.watch(authProvider).user?.fullName.split(' ').first ??
+                          _l10n.studentFallbackName,
+                    ),
                     semanticsLabel:
                         ref.watch(authProvider).user?.fullName ?? 'student',
                     style: const TextStyle(
@@ -335,9 +323,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'التعلم المصغر الذكي',
-                    style: TextStyle(
+                  Text(
+                    _l10n.microLearningSmartTitle,
+                    style: const TextStyle(
                       color: AppColors.primary,
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -371,13 +359,12 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         ),
         child: Row(
           children: [
-            // Text (RTL: right)
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'سلسلة تعلمك الحالية',
+                    _l10n.microLearningCurrentStreakTitle,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -385,31 +372,18 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  RichText(
+                  Text(
+                    _l10n.microLearningStreakMessage(_streakDays),
                     textAlign: TextAlign.right,
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                      children: [
-                        const TextSpan(text: 'أنت في اليوم الـ '),
-                        TextSpan(
-                          text: '$_streakDays',
-                          style: const TextStyle(
-                            color: Color(0xFFEA580C),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const TextSpan(text: ' على التوالي! حافظ على نشاطك.'),
-                      ],
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
             ),
             const SizedBox(width: 16),
-            // Fire icon (RTL: left)
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -426,9 +400,6 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
           ],
         ),
       );
-
-  // ─── Daily Goal ────────────────────────────────────────────────────────
-
   Widget _buildDailyGoal() {
     final colorScheme = Theme.of(context).colorScheme;
     final percent = (_dailyGoalProgress * 100).round();
@@ -439,7 +410,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '$percent% مكتمل',
+              _l10n.microLearningPercentComplete(percent),
               style: const TextStyle(
                 color: AppColors.primary,
                 fontSize: 12,
@@ -447,7 +418,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
               ),
             ),
             Text(
-              'هدف اليوم',
+              _l10n.microLearningDailyGoal,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -472,13 +443,11 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
     );
   }
 
-  // ─── Daily Micro-lessons ───────────────────────────────────────────────
-
   Widget _buildDailyLessons() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'دروس اليوم السريعة',
+            _l10n.microLearningTodaysQuickLessons,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -497,10 +466,10 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
       button: !lesson.isLocked,
       enabled: !lesson.isLocked,
       label: lesson.isLocked
-          ? '${lesson.title}. درس مغلق حتى تنهي الدرس السابق.'
+          ? _l10n.microLearningLockedLessonSemantics(lesson.title)
           : lesson.isCompleted
-              ? '${lesson.title}. درس مكتمل ومحفوظ.'
-              : '${lesson.title}. افتح تدريبًا قصيرًا لهذا الدرس.',
+              ? _l10n.microLearningCompletedLessonSemantics(lesson.title)
+              : _l10n.microLearningOpenLessonSemantics(lesson.title),
       child: Opacity(
         opacity: lesson.isLocked ? 0.62 : 1.0,
         child: InkWell(
@@ -529,10 +498,10 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             ),
             child: Row(
               children: [
-                // Lock / Play icon (RTL: left)
                 IconButton(
-                  tooltip:
-                      lesson.isCompleted ? 'درس مكتمل' : 'تعليم الدرس كمكتمل',
+                  tooltip: lesson.isCompleted
+                      ? _l10n.microLearningLessonCompletedTooltip
+                      : _l10n.microLearningMarkLessonCompleted,
                   onPressed: lesson.isLocked || lesson.isCompleted
                       ? null
                       : () => _markLessonCompleted(lesson),
@@ -552,7 +521,6 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                // Info (RTL: right)
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -617,13 +585,11 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
     );
   }
 
-  // ─── AI Recommendations ────────────────────────────────────────────────
-
   Widget _buildAIRecommendations() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'توصيات الذكاء الاصطناعي لك',
+            _l10n.microLearningAiRecommendationsTitle,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -632,12 +598,8 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             textAlign: TextAlign.right,
           ),
           const SizedBox(height: 12),
-
-          // Flashcard challenge (full width)
           _buildFlashcardChallenge(),
           const SizedBox(height: 12),
-
-          // Weak areas grid
           Row(
             children: _weakAreas
                 .map((area) => Expanded(
@@ -673,7 +635,6 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
         ),
         child: Column(
           children: [
-            // Icon
             Container(
               width: 64,
               height: 64,
@@ -696,7 +657,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'تحدي البطاقات الخاطفة',
+              _l10n.microLearningFlashcardChallengeTitle,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -706,7 +667,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              'بناءً على ${_weakAreas.isEmpty ? 'آخر نتائجك' : _weakAreas.first.title}',
+              _weakAreas.isEmpty
+                  ? _l10n.microLearningBasedOnLatestResults
+                  : _l10n.microLearningBasedOnFocus(_weakAreas.first.title),
               style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.onSurfaceVariant,
@@ -728,9 +691,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
                   ),
                   elevation: 2,
                 ),
-                child: const Text(
-                  'ابدأ التحدي (10 بطاقات)',
-                  style: TextStyle(
+                child: Text(
+                  _l10n.microLearningStartFlashcardChallenge,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -740,7 +703,6 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
           ],
         ),
       );
-
   Widget _buildWeakAreaCard(MicroLearningFocusArea area) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
@@ -799,8 +761,9 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
 
   Widget _buildLearningPathCard() {
     final colorScheme = Theme.of(context).colorScheme;
-    final focusArea =
-        _weakAreas.isEmpty ? 'المهارة الأضعف' : _weakAreas.first.title;
+    final focusArea = _weakAreas.isEmpty
+        ? _l10n.microLearningWeakestSkillFallback
+        : _weakAreas.first.title;
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -817,7 +780,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
               Icon(Icons.route_rounded, color: colorScheme.primary),
               const Spacer(),
               Text(
-                'مسار تعلم مقترح',
+                _l10n.microLearningSuggestedPathTitle,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -830,18 +793,18 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
           const SizedBox(height: 12),
           _buildLearningStep(
             number: '1',
-            title: 'راجع $focusArea',
-            subtitle: 'ابدأ بأقصر درس متاح قبل الانتقال للاختبار.',
+            title: _l10n.microLearningReviewFocusStep(focusArea),
+            subtitle: _l10n.microLearningShortestLessonStep,
           ),
           _buildLearningStep(
             number: '2',
-            title: 'حل تدريبًا قصيرًا',
-            subtitle: 'اختبار واحد كافٍ لمعرفة إن كان الفهم تحسن.',
+            title: _l10n.microLearningSolveShortPracticeStep,
+            subtitle: _l10n.microLearningOneAssessmentStep,
           ),
           _buildLearningStep(
             number: '3',
-            title: 'افتح التحليلات',
-            subtitle: 'قارن النتيجة الجديدة مع آخر محاولة وحدد الخطوة التالية.',
+            title: _l10n.microLearningOpenAnalyticsStep,
+            subtitle: _l10n.microLearningCompareLatestResultStep,
           ),
           const SizedBox(height: 14),
           SizedBox(
@@ -849,7 +812,7 @@ class _MicroLearningScreenState extends ConsumerState<MicroLearningScreen> {
             child: OutlinedButton.icon(
               onPressed: () => context.push('/student/analytics'),
               icon: const Icon(Icons.insights_rounded),
-              label: const Text('راجع تحليلاتك'),
+              label: Text(_l10n.microLearningReviewAnalytics),
             ),
           ),
         ],

@@ -7,8 +7,8 @@ void main() {
       final deck = const MicroLearningFlashcardSource().fromAttemptHistory([]);
 
       expect(deck.cards, hasLength(2));
-      expect(deck.title, contains('تشخيصي'));
-      expect(deck.cards.first.skill, 'تشخيص');
+      expect(deck.title, contains('diagnostic'));
+      expect(deck.cards.first.skill, 'Diagnostic');
     });
 
     test('builds cards from weakest skills first', () {
@@ -18,12 +18,12 @@ void main() {
           'scorePercentage': 70,
           'skillBreakdown': [
             {
-              'mainSkill': 'الجبر',
+              'mainSkill': 'Algebra',
               'correctAnswers': 1,
               'totalQuestions': 5,
             },
             {
-              'mainSkill': 'الهندسة',
+              'mainSkill': 'Geometry',
               'correctAnswers': 4,
               'totalQuestions': 5,
             },
@@ -31,9 +31,9 @@ void main() {
         },
       ]);
 
-      expect(deck.title, contains('الجبر'));
-      expect(deck.cards.first.skill, 'الجبر');
-      expect(deck.cards.first.prompt, contains('الجبر'));
+      expect(deck.title, contains('Algebra'));
+      expect(deck.cards.first.skill, 'Algebra');
+      expect(deck.cards.first.prompt, contains('Algebra'));
       expect(deck.cards, hasLength(4));
     });
 
@@ -43,7 +43,7 @@ void main() {
           'status': 'in_progress',
           'skillBreakdown': [
             {
-              'mainSkill': 'القراءة',
+              'mainSkill': 'Reading',
               'correctAnswers': 1,
               'totalQuestions': 5,
             },
@@ -53,13 +53,13 @@ void main() {
           'status': 'completed',
           'skillBreakdown': [
             {'mainSkill': '', 'correctAnswers': 1, 'totalQuestions': 5},
-            {'mainSkill': 'النحو', 'correctAnswers': 0, 'totalQuestions': 0},
+            {'mainSkill': 'Grammar', 'correctAnswers': 0, 'totalQuestions': 0},
           ],
         },
       ]);
 
-      expect(deck.title, contains('تشخيصي'));
-      expect(deck.cards.first.skill, 'تشخيص');
+      expect(deck.title, contains('diagnostic'));
+      expect(deck.cards.first.skill, 'Diagnostic');
     });
   });
 }

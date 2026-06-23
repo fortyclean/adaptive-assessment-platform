@@ -24,21 +24,20 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
   Map<String, dynamic>? _assessment;
   String? _error;
 
-  static final Map<String, dynamic> _mockAssessment = {
-    '_id': 'mock1',
-    'title': 'اختبار منتصف الفصل - رياضيات',
-    'subject': 'الرياضيات',
-    'unit': 'الوحدة الثالثة: الجبر',
-    'assessmentType': 'adaptive',
-    // 20 أسئلة تتطابق مع عدد الأسئلة الفعلي في بيانات demo المحلية
-    'questionCount': 20,
-    'timeLimitMinutes': 45,
-    'status': 'active',
-    'availableFrom': null,
-    'availableUntil': null,
-    'createdBy': {'fullName': 'أ. محمد أحمد'},
-    'previousScore': null,
-  };
+  Map<String, dynamic> _mockAssessment(AppLocalizations l10n) => {
+        '_id': 'mock1',
+        'title': l10n.demoPeriodicMathAssessmentTitle,
+        'subject': l10n.subjectMathematics,
+        'unit': l10n.assessmentStartDemoUnitAlgebra,
+        'assessmentType': 'adaptive',
+        'questionCount': 20,
+        'timeLimitMinutes': 45,
+        'status': 'active',
+        'availableFrom': null,
+        'availableUntil': null,
+        'createdBy': {'fullName': l10n.demoTeacherFullName},
+        'previousScore': null,
+      };
 
   AppLocalizations? _l10nOrNull(BuildContext context) =>
       Localizations.of<AppLocalizations>(context, AppLocalizations);
@@ -76,7 +75,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
     } catch (e) {
       if (_shouldUseDemoFallback) {
         setState(() {
-          _assessment = _mockAssessment;
+          _assessment = _mockAssessment(AppLocalizations.of(context));
           _error = null;
           _isLoading = false;
         });
@@ -85,7 +84,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         setState(() {
           _assessment = null;
           _error = _l10nOrNull(context)?.assessmentLoadFailed ??
-              'تعذر تحميل بيانات الاختبار. تحقق من الاتصال ثم أعد المحاولة.';
+              'Could not load assessment details. Check your connection and try again.';
           _isLoading = false;
         });
       }
@@ -160,7 +159,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n?.assessmentStartFailed ??
-              'تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.'),
+              'Could not start the assessment. Please try again.'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -180,7 +179,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          l10n?.assessmentStartTitle ?? 'بدء الاختبار',
+          l10n?.assessmentStartTitle ?? 'Start assessment',
           style: TextStyle(
             color: cs.onSurface,
             fontWeight: FontWeight.w700,
@@ -224,7 +223,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
               const SizedBox(height: 24),
               OutlinedButton(
                 onPressed: _loadAssessment,
-                child: Text(_l10nOrNull(context)?.retry ?? 'إعادة المحاولة'),
+                child: Text(_l10nOrNull(context)?.retry ?? 'Retry'),
               ),
             ],
           ),
@@ -235,8 +234,8 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
     final a = _assessment!;
     final l10n = _l10nOrNull(context);
     final type = a['assessmentType'] == 'adaptive'
-        ? l10n?.assessmentTypeAdaptive ?? 'تكيفي'
-        : l10n?.assessmentTypeRandom ?? 'عشوائي';
+        ? l10n?.assessmentTypeAdaptive ?? 'Adaptive'
+        : l10n?.assessmentTypeRandom ?? 'Random';
     final isAdaptive = a['assessmentType'] == 'adaptive';
     final teacherName = (a['createdBy'] as Map?)?['fullName'] as String? ?? '';
     final previousScore = a['previousScore'] as num?;
@@ -358,7 +357,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                     Expanded(
                       child: _DetailItem(
                         icon: Icons.quiz_outlined,
-                        label: l10n?.questionCount ?? 'عدد الأسئلة',
+                        label: l10n?.questionCount ?? 'Question count',
                         value: _questionCountValue(a['questionCount']),
                       ),
                     ),
@@ -367,7 +366,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                     Expanded(
                       child: _DetailItem(
                         icon: Icons.timer_outlined,
-                        label: l10n?.timeLimit ?? 'الوقت المحدد',
+                        label: l10n?.timeLimit ?? 'Time limit',
                         value: _minuteValue(a['timeLimitMinutes']),
                       ),
                     ),
@@ -377,7 +376,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                   const Divider(height: 24, color: AppColors.outlineVariant),
                   _DetailRow(
                     icon: Icons.person_outline_rounded,
-                    label: l10n?.teacher ?? 'المعلم',
+                    label: l10n?.teacher ?? 'Teacher',
                     value: teacherName,
                   ),
                 ],
@@ -405,7 +404,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        l10n?.previousScore ?? 'نتيجتك السابقة',
+                        l10n?.previousScore ?? 'Previous score',
                         style: const TextStyle(
                           color: AppColors.success,
                           fontSize: 12,
@@ -447,7 +446,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                 Expanded(
                   child: Text(
                     l10n?.navigationWarning ??
-                        'سيتم تسجيل أي محاولة للخروج من شاشة الاختبار',
+                        'Any attempt to leave the assessment screen will be logged',
                     style: const TextStyle(
                       color: Color(0xFF92400E),
                       fontSize: 13,
@@ -493,9 +492,10 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                         const SizedBox(width: 8),
                         Text(
                           _isAvailable
-                              ? l10n?.startAssessmentNow ?? 'ابدأ الاختبار الآن'
+                              ? l10n?.startAssessmentNow ??
+                                  'Start assessment now'
                               : l10n?.assessmentUnavailable ??
-                                  'الاختبار غير متاح',
+                                  'Assessment unavailable',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -521,7 +521,7 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
                 ),
               ),
               child: Text(
-                l10n?.back ?? 'رجوع',
+                l10n?.back ?? 'Back',
                 style:
                     const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               ),
@@ -537,17 +537,20 @@ class _AssessmentStartScreenState extends ConsumerState<AssessmentStartScreen> {
   String _questionCountValue(Object? count) {
     final l10n = _l10nOrNull(context);
     if (count is num) {
-      return l10n?.questionCountLabel(count.toInt()) ?? '${count.toInt()} سؤال';
+      return l10n?.questionCountLabel(count.toInt()) ??
+          '${count.toInt()} questions';
     }
-    return l10n?.questionCountLabel(0).replaceFirst('0', '--') ?? '-- سؤال';
+    return l10n?.questionCountLabel(0).replaceFirst('0', '--') ??
+        '-- questions';
   }
 
   String _minuteValue(Object? count) {
     final l10n = _l10nOrNull(context);
     if (count is num) {
-      return l10n?.minuteCountLabel(count.toInt()) ?? '${count.toInt()} دقيقة';
+      return l10n?.minuteCountLabel(count.toInt()) ??
+          '${count.toInt()} minutes';
     }
-    return l10n?.minuteCountLabel(0).replaceFirst('0', '--') ?? '-- دقيقة';
+    return l10n?.minuteCountLabel(0).replaceFirst('0', '--') ?? '-- minutes';
   }
 }
 

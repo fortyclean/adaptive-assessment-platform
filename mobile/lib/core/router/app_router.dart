@@ -9,6 +9,9 @@ import '../../features/assessment/screens/assessment_start_screen.dart';
 import '../../features/assessment/screens/class_schedule_screen.dart';
 import '../../features/assessment/screens/create_assessment_screen.dart';
 import '../../features/assessment/screens/edu_assess_student_dashboard_screen.dart';
+import '../../features/assessment/screens/exam_with_bookmark_screen.dart';
+import '../../features/assessment/screens/exam_with_image_screen.dart';
+import '../../features/assessment/screens/exam_with_timer_toggle_screen.dart';
 import '../../features/assessment/screens/exam_screen.dart';
 import '../../features/assessment/screens/manage_assessments_screen.dart';
 // Screens 66–69, 71–73
@@ -591,7 +594,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'studentExamWithImage',
             builder: (_, state) {
               final extra = state.extra as Map<String, dynamic>?;
-              return ExamScreen(
+              return ExamWithImageScreen(
                 assessmentId: state.pathParameters['id'] ?? '',
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
@@ -604,7 +607,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'studentExamWithBookmark',
             builder: (_, state) {
               final extra = state.extra as Map<String, dynamic>?;
-              return ExamScreen(
+              return ExamWithBookmarkScreen(
                 assessmentId: state.pathParameters['id'] ?? '',
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,
@@ -617,7 +620,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'studentExamWithTimerToggle',
             builder: (_, state) {
               final extra = state.extra as Map<String, dynamic>?;
-              return ExamScreen(
+              return ExamWithTimerToggleScreen(
                 assessmentId: state.pathParameters['id'] ?? '',
                 attemptId: extra?['attemptId'] as String? ?? '',
                 questionCount: extra?['questionCount'] as int? ?? 10,

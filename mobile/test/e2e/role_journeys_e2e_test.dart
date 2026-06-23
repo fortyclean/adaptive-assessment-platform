@@ -17,6 +17,7 @@ import 'package:adaptive_assessment/features/auth/screens/classroom_management_s
 import 'package:adaptive_assessment/features/auth/screens/login_screen.dart';
 import 'package:adaptive_assessment/features/auth/screens/user_management_screen.dart';
 import 'package:adaptive_assessment/features/reports/screens/school_reports_screen.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -350,7 +351,12 @@ Widget _buildStudentE2EApp(E2EAssessmentRepository repository) {
 
   return ProviderScope(
     overrides: [assessmentRepositoryProvider.overrideWithValue(repository)],
-    child: MaterialApp.router(routerConfig: router),
+    child: MaterialApp.router(
+      locale: const Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: router,
+    ),
   );
 }
 
@@ -373,7 +379,12 @@ Widget _buildTeacherE2EApp(E2ETeacherRepository repository) {
 
   return ProviderScope(
     overrides: [teacherRepositoryProvider.overrideWithValue(repository)],
-    child: MaterialApp.router(routerConfig: router),
+    child: MaterialApp.router(
+      locale: const Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: router,
+    ),
   );
 }
 
@@ -397,7 +408,12 @@ Widget _buildAdminE2EApp(E2EAdminRepository repository) {
 
   return ProviderScope(
     overrides: [adminRepositoryProvider.overrideWithValue(repository)],
-    child: MaterialApp.router(routerConfig: router),
+    child: MaterialApp.router(
+      locale: const Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: router,
+    ),
   );
 }
 
@@ -481,6 +497,9 @@ void main() {
               assessmentRepositoryProvider.overrideWithValue(repository),
             ],
             child: const MaterialApp(
+              locale: Locale('ar'),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               home: ResultScreen(attemptId: 'e2e-attempt-1'),
             ),
           ),
@@ -493,7 +512,12 @@ void main() {
             overrides: [
               assessmentRepositoryProvider.overrideWithValue(repository),
             ],
-            child: const MaterialApp(home: StudentAnalyticsScreen()),
+            child: const MaterialApp(
+              locale: Locale('ar'),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: StudentAnalyticsScreen(),
+            ),
           ),
         );
         await tester.pumpAndSettle();
@@ -504,7 +528,12 @@ void main() {
             overrides: [
               assessmentRepositoryProvider.overrideWithValue(repository),
             ],
-            child: const MaterialApp(home: MicroLearningScreen()),
+            child: const MaterialApp(
+              locale: Locale('ar'),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: MicroLearningScreen(),
+            ),
           ),
         );
         await tester.pumpAndSettle();
@@ -524,8 +553,8 @@ void main() {
       await tester.enterText(find.byType(TextFormField).at(0), 'اختبار E2E');
       await _selectDropdownItem(
         tester,
-        hint: 'اختر المادة...',
-        value: 'الرياضيات',
+        hint: 'اختر المادة',
+        value: 'رياضيات',
       );
       await tester.enterText(find.byType(TextFormField).at(1), 'الوحدة الأولى');
       await _selectDropdownItem(

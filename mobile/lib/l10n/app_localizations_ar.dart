@@ -272,6 +272,42 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noMatchingSubjects => 'لا توجد مواد مطابقة';
 
   @override
+  String get studentSubjectAdvancedMath => 'الرياضيات المتقدمة';
+
+  @override
+  String get studentSubjectMolecularBiology => 'الأحياء الجزيئية';
+
+  @override
+  String get studentSubjectArabicLiterature => 'الأدب العربي';
+
+  @override
+  String get studentSubjectQuantumPhysics => 'فيزياء الكم';
+
+  @override
+  String get studentSubjectOrganicChemistry => 'الكيمياء العضوية';
+
+  @override
+  String get studentSubjectEnglishLanguage => 'اللغة الإنجليزية';
+
+  @override
+  String get studentSubjectTeacherMohammed => 'د. محمد القحطاني';
+
+  @override
+  String get studentSubjectTeacherSarah => 'أ. سارة العتيبي';
+
+  @override
+  String get studentSubjectTeacherIbrahim => 'د. إبراهيم الفايز';
+
+  @override
+  String get studentSubjectTeacherKhaled => 'أ. خالد منصور';
+
+  @override
+  String get studentSubjectTeacherLaila => 'د. ليلى الشمري';
+
+  @override
+  String get studentSubjectTeacherNoura => 'أ. نورة العمري';
+
+  @override
   String get progressAchieved => 'التقدم المحرز';
 
   @override
@@ -289,6 +325,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get retry => 'إعادة المحاولة';
+
+  @override
+  String get refresh => 'تحديث';
 
   @override
   String get home => 'الرئيسية';
@@ -328,6 +367,77 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get flashcardEmptyMessage =>
       'أكمل اختبارًا واحدًا حتى نبني لك بطاقات مبنية على أدائك.';
+
+  @override
+  String get flashcardDiagnosticDeckTitle => 'تدريب تشخيصي سريع';
+
+  @override
+  String get flashcardDiagnosticDeckSubtitle =>
+      'ابدأ بهذه البطاقات حتى تظهر توصيات أدق بعد أول اختبار.';
+
+  @override
+  String get flashcardDiagnosticSkill => 'تشخيص';
+
+  @override
+  String get flashcardDiagnosticGoalPrompt => 'ما هدف الاختبار التشخيصي الأول؟';
+
+  @override
+  String get flashcardDiagnosticGoalAnswer =>
+      'تحديد مستوى الإتقان الحالي واكتشاف المهارات التي تحتاج مراجعة قصيرة.';
+
+  @override
+  String get flashcardDiagnosticGoalHint =>
+      'فكر في سبب ظهور خطة تعلم شخصية بعد الاختبار.';
+
+  @override
+  String get flashcardLearningPlanSkill => 'خطة التعلم';
+
+  @override
+  String get flashcardDiagnosticNextStepPrompt =>
+      'ماذا تفعل بعد ظهور أول نتيجة؟';
+
+  @override
+  String get flashcardDiagnosticNextStepAnswer =>
+      'راجع المهارة الأضعف في التعلم المصغر، ثم حل تدريبًا قصيرًا لقياس التحسن.';
+
+  @override
+  String get flashcardDiagnosticNextStepHint =>
+      'التحسين يبدأ من أضعف مهارة، وليس من أعلى نتيجة.';
+
+  @override
+  String flashcardConceptPrompt(Object skill) {
+    return 'ما أول خطوة لتحسين مهارة $skill؟';
+  }
+
+  @override
+  String get flashcardConceptAnswer =>
+      'ابدأ بسؤال واحد بسيط يحدد سبب الخطأ، ثم راجع القاعدة المرتبطة به قبل التدريب.';
+
+  @override
+  String get flashcardConceptHint =>
+      'لا تبدأ بحل كثير من الأسئلة قبل معرفة سبب الخطأ.';
+
+  @override
+  String flashcardReviewPrompt(Object skill, Object mastery) {
+    return 'إتقانك الحالي في $skill هو $mastery%. ماذا يعني ذلك؟';
+  }
+
+  @override
+  String get flashcardReviewAnswer =>
+      'هذه مهارة تحتاج مراجعة مركزة اليوم، ثم اختبارًا قصيرًا للتأكد من التحسن.';
+
+  @override
+  String get flashcardReviewHint =>
+      'النسبة الأقل تعني أولوية أعلى في خطة التعلم.';
+
+  @override
+  String flashcardDeckTitle(Object skill) {
+    return 'بطاقات تقوية $skill';
+  }
+
+  @override
+  String get flashcardDeckSubtitle =>
+      'تدريب قصير مبني على أضعف مهاراتك في آخر النتائج.';
 
   @override
   String flashcardSemanticsAnswerVisible(Object skill) {
@@ -390,6 +500,15 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذر تحميل بيانات لوحة المعلم. تحقق من الاتصال ثم أعد المحاولة.';
 
   @override
+  String get teacherDashboardDemoUnitOneTitle => 'اختبار الوحدة الأولى';
+
+  @override
+  String get teacherDashboardDemoGrammarTitle => 'اختبار النحو';
+
+  @override
+  String get teacherDashboardDemoPhysicsTitle => 'اختبار الفيزياء';
+
+  @override
   String get totalStudents => 'إجمالي الطلاب';
 
   @override
@@ -403,6 +522,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get average => 'المتوسط';
+
+  @override
+  String get points => 'النقاط';
+
+  @override
+  String get studentChallengeTwoDayStreakLocked =>
+      'يفتح هذا التحدي بعد الحفاظ على سلسلة يومين.';
+
+  @override
+  String get startAssessment => 'ابدأ اختبارًا';
 
   @override
   String get createNewAssessment => 'إنشاء اختبار جديد';
@@ -687,6 +816,75 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noPendingEssaysMessage => 'جميع الجلسات المقالية تم تصحيحها';
 
   @override
+  String get essayGradingLoadFailed => 'تعذر تحميل بيانات الجلسة';
+
+  @override
+  String get essayGradingConfirmTitle => 'تأكيد إنهاء التصحيح';
+
+  @override
+  String get essayGradingConfirmMessage =>
+      'هل أنت متأكد من إنهاء التصحيح؟ سيتم احتساب النتيجة النهائية للطالب.';
+
+  @override
+  String get essayGradingSaved => 'تم إنهاء التصحيح وتحديث نتيجة الطالب';
+
+  @override
+  String get essayGradingSaveFailed => 'تعذر حفظ الدرجات، يرجى المحاولة مجدداً';
+
+  @override
+  String essayGradingTitle(Object studentName) {
+    return 'تصحيح مقالات — $studentName';
+  }
+
+  @override
+  String get essayGradingNoEssays => 'لا توجد أسئلة مقالية تحتاج تصحيحاً';
+
+  @override
+  String get essayGradingSaving => 'جاري الحفظ...';
+
+  @override
+  String get essayGradingFinish => 'إنهاء التصحيح وتحديث النتيجة';
+
+  @override
+  String get essayGradingAllComplete =>
+      'تم تصحيح جميع الأسئلة المقالية — يمكنك إنهاء التصحيح';
+
+  @override
+  String essayGradingRemaining(Object count) {
+    return 'تبقّى $count سؤال مقالي بدون درجة';
+  }
+
+  @override
+  String get essayQuestionUnavailable => 'نص السؤال غير متاح';
+
+  @override
+  String get essayNoStudentAnswer => '(لم يُجب الطالب)';
+
+  @override
+  String essayQuestionNumber(Object index) {
+    return 'السؤال $index';
+  }
+
+  @override
+  String get studentAnswerSection => 'إجابة الطالب';
+
+  @override
+  String essayScoreRange(Object maxMarks) {
+    return 'الدرجة (0 – $maxMarks)';
+  }
+
+  @override
+  String get scoreInvalidNumber => 'يرجى إدخال رقم صحيح';
+
+  @override
+  String get scoreNegative => 'الدرجة لا يمكن أن تكون سالبة';
+
+  @override
+  String scoreMax(Object maxMarks) {
+    return 'الحد الأقصى هو $maxMarks';
+  }
+
+  @override
   String get assessmentFallbackTitle => 'اختبار';
 
   @override
@@ -727,10 +925,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get scoreExcellent => 'ممتاز';
 
   @override
+  String get scoreVeryGood => 'جيد جداً';
+
+  @override
   String get scoreGood => 'جيد';
 
   @override
+  String get needsSupport => 'يحتاج دعم';
+
+  @override
   String get scoreNeedsImprovement => 'يحتاج تحسين';
+
+  @override
+  String get moreDetails => 'تفاصيل أكثر';
 
   @override
   String get greatAchievement => 'إنجاز رائع!';
@@ -780,6 +987,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get demoChemistryAssessmentTitle => 'اختبار الكيمياء التجريبي';
 
   @override
+  String get manageDemoMidtermMathTitle => 'اختبار منتصف الفصل - رياضيات';
+
+  @override
+  String get manageDemoSecondUnitScienceTitle => 'اختبار الوحدة الثانية - علوم';
+
+  @override
+  String get manageDemoArabicBasicsTitle => 'القواعد الأساسية - لغة عربية';
+
+  @override
+  String get manageDemoAndalusHistoryTitle => 'تاريخ الأندلس - دراسات اجتماعية';
+
+  @override
+  String get manageDemoFinalPhysicsTitle => 'اختبار نهاية الفصل - فيزياء';
+
+  @override
+  String get manageSubjectSocialStudies => 'الدراسات الاجتماعية';
+
+  @override
+  String get manageSubjectPhysics => 'الفيزياء';
+
+  @override
+  String get manageSubjectHistory => 'التاريخ';
+
+  @override
+  String get manageSubjectBiology => 'الأحياء';
+
+  @override
+  String get manageSubjectChemistry => 'الكيمياء';
+
+  @override
   String get demoPeriodicMathAssessmentTitle => 'اختبار الرياضيات الدوري';
 
   @override
@@ -796,6 +1033,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get subjectChemistry => 'الكيمياء';
+
+  @override
+  String get subjectPhysics => 'الفيزياء';
+
+  @override
+  String get subjectGeography => 'الجغرافيا';
+
+  @override
+  String get subjectIslamicEducation => 'التربية الإسلامية';
+
+  @override
+  String get subjectComputerScience => 'الحاسب الآلي';
 
   @override
   String studentAssessmentsGreeting(Object name) {
@@ -928,6 +1177,9 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get assessmentStartFailed =>
       'تعذر بدء الاختبار. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get assessmentStartDemoUnitAlgebra => 'الوحدة الثالثة: الجبر';
 
   @override
   String get assessmentTypeAdaptive => 'تكيفي';
@@ -1281,6 +1533,18 @@ class AppLocalizationsAr extends AppLocalizations {
       'ابدأ بإنشاء فصل دراسي لتنظيم طلابك وإدارة اختباراتهم.';
 
   @override
+  String get demoClassroomGradeSevenA => 'الصف السابع (أ)';
+
+  @override
+  String get demoClassroomGradeEightB => 'الصف الثامن (ب)';
+
+  @override
+  String get demoGradeLevelSeven => 'الصف السابع';
+
+  @override
+  String get demoGradeLevelEight => 'الصف الثامن';
+
+  @override
   String get manageAssessmentsLoadFailed =>
       'تعذر تحميل الاختبارات من الخادم. تحقق من الاتصال ثم أعد المحاولة.';
 
@@ -1371,6 +1635,14 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get assessmentCreateFailed =>
       'تعذر إنشاء الاختبار. تحقق من الاتصال والبيانات ثم حاول مرة أخرى.';
+
+  @override
+  String get selectClassroomBeforePublish =>
+      'اختر فصلًا واحدًا على الأقل قبل نشر الاختبار.';
+
+  @override
+  String get invalidAssessmentAvailabilityWindow =>
+      'تاريخ نهاية الاختبار يجب أن يكون بعد تاريخ البداية.';
 
   @override
   String get assessmentTitleHint => 'مثال: اختبار الوحدة الأولى';
@@ -1535,6 +1807,42 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get taskManagementLocalOnlyMessage =>
       'إدارة المهام تعمل الآن بحالة محلية واضحة. للحفظ الدائم والمزامنة مع الطلاب يجب ربط API المهام في المرحلة القادمة.';
+
+  @override
+  String get demoTaskClassroomGradeSevenB => 'الصف السابع - ب';
+
+  @override
+  String get demoTaskClassroomGradeNineA => 'الصف التاسع - أ';
+
+  @override
+  String get demoTaskClassroomGradeTenA => 'الصف العاشر - أ';
+
+  @override
+  String get demoTaskClassroomGradeTenB => 'الصف العاشر - ب';
+
+  @override
+  String get demoTaskClassroomGradeElevenC => 'الصف الحادي عشر - ج';
+
+  @override
+  String get demoTaskAlgebraTitle => 'الجبر المتطور: المعادلات التربيعية';
+
+  @override
+  String get demoTaskNewtonTitle => 'مقدمة في قوانين نيوتن';
+
+  @override
+  String get demoTaskStatisticsTitle => 'الاحتمالات والإحصاء الوصفي';
+
+  @override
+  String get demoTaskArabicReviewTitle => 'مراجعة البلاغة والتشبيه';
+
+  @override
+  String get demoTaskDueOctober15 => 'تسليم: 15 أكتوبر';
+
+  @override
+  String get demoTaskDueTomorrow => 'تسليم: غدًا';
+
+  @override
+  String get demoTaskDueOctober20 => 'تسليم: 20 أكتوبر';
 
   @override
   String get deleteTaskTitle => 'حذف المهمة؟';
@@ -4328,4 +4636,642 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studentDashboardStartTraining => 'ابدأ التدريب';
+
+  @override
+  String get studentAnalyticsLoadFailed =>
+      'تعذر تحميل تحليلاتك الآن. تحقق من الاتصال ثم حاول مرة أخرى.';
+
+  @override
+  String get studentAnalyticsNoClearTrend => 'لا يوجد تغير واضح بعد';
+
+  @override
+  String studentAnalyticsTrendFromLast(Object percent) {
+    return '$percent% عن آخر اختبار';
+  }
+
+  @override
+  String get studentAnalyticsStrongestSkill => 'أقوى مهارة';
+
+  @override
+  String get studentAnalyticsNeedsReview => 'تحتاج مراجعة';
+
+  @override
+  String get studentAnalyticsCompletedAssessmentsBadge => 'اختبارات مكتملة';
+
+  @override
+  String get studentAnalyticsHighPerformanceBadge => 'أداء مرتفع';
+
+  @override
+  String get studentAnalyticsCommittedBadge => 'ملتزم';
+
+  @override
+  String get studentAnalyticsErrorTitle => 'تعذر تحميل التحليلات';
+
+  @override
+  String get studentAnalyticsEmptyTitle => 'لا توجد تحليلات بعد';
+
+  @override
+  String get studentAnalyticsEmptyMessage =>
+      'ستظهر مؤشرات الأداء والمهارات بعد إكمال أول اختبار.';
+
+  @override
+  String get studentAnalyticsAppBarTitle => 'إحصائيات EduAssess';
+
+  @override
+  String studentAnalyticsGreeting(Object name) {
+    return 'مرحباً، $name!';
+  }
+
+  @override
+  String get studentAnalyticsOverviewSubtitle =>
+      'إليك نظرة شاملة على أدائك التعليمي لهذا الفصل.';
+
+  @override
+  String get studentAnalyticsCompletedAssessmentMetric => 'اختبار مكتمل';
+
+  @override
+  String get studentAnalyticsEarnedPointMetric => 'نقطة مكتسبة';
+
+  @override
+  String get studentAnalyticsSubjectProgress => 'تقدم المواد الدراسية';
+
+  @override
+  String get studentAnalyticsSkillInsights => 'رؤى المهارات من الاختبارات';
+
+  @override
+  String get studentAnalyticsAchievements => 'الأوسمة والإنجازات';
+
+  @override
+  String get learningRecommendationStartTitle => 'ابدأ ببناء توصياتك';
+
+  @override
+  String get learningRecommendationStartMessage =>
+      'أكمل اختبارًا قصيرًا حتى تظهر توصيات مبنية على أحدث تفصيل مهاراتك.';
+
+  @override
+  String learningRecommendationFocusTitle(Object skill) {
+    return 'ركز على $skill';
+  }
+
+  @override
+  String learningRecommendationFocusMessage(Object percent, Object skill) {
+    return 'آخر نتيجة أظهرت إتقان $percent% في $skill. ابدأ بدرس قصير ثم جرّب بطاقات التدريب.';
+  }
+
+  @override
+  String get learningRecommendationOpenPlan => 'افتح خطة التعلم';
+
+  @override
+  String get learningRecommendationMaintainTitle => 'حافظ على مستواك';
+
+  @override
+  String learningRecommendationMaintainMessage(Object skill, Object percent) {
+    return 'أضعف مهارة في آخر اختبار هي $skill بنسبة $percent%. تدريب قصير يكفي للحفاظ على الإتقان.';
+  }
+
+  @override
+  String get learningRecommendationPracticeCards => 'تدريب بطاقات';
+
+  @override
+  String get microLearningDiagnosticAssessment => 'اختبار تشخيصي';
+
+  @override
+  String get microLearningTitle => 'التعلم المصغر';
+
+  @override
+  String get microLearningSmartTitle => 'التعلم المصغر الذكي';
+
+  @override
+  String get microLearningLoadFailedTitle => 'تعذر تحميل خطة التعلم';
+
+  @override
+  String get microLearningLoadFailedMessage =>
+      'تعذر تحميل خطة التعلم المصغر. تحقق من الاتصال ثم حاول مرة أخرى.';
+
+  @override
+  String get microLearningLessonCompletionSaved => 'تم حفظ إكمال الدرس';
+
+  @override
+  String microLearningWelcomeBack(Object name) {
+    return 'أهلًا بك مجددًا، $name';
+  }
+
+  @override
+  String get microLearningCurrentStreakTitle => 'سلسلة تعلمك الحالية';
+
+  @override
+  String microLearningStreakMessage(Object days) {
+    return 'أنت في اليوم $days على التوالي. حافظ على نشاطك.';
+  }
+
+  @override
+  String microLearningPercentComplete(Object percent) {
+    return '$percent% مكتمل';
+  }
+
+  @override
+  String get microLearningDailyGoal => 'هدف اليوم';
+
+  @override
+  String get microLearningTodaysQuickLessons => 'دروس اليوم السريعة';
+
+  @override
+  String microLearningLockedLessonSemantics(Object title) {
+    return '$title. درس مغلق حتى تنهي الدرس السابق.';
+  }
+
+  @override
+  String microLearningCompletedLessonSemantics(Object title) {
+    return '$title. درس مكتمل ومحفوظ.';
+  }
+
+  @override
+  String microLearningOpenLessonSemantics(Object title) {
+    return '$title. افتح تدريبًا قصيرًا لهذا الدرس.';
+  }
+
+  @override
+  String get microLearningLessonCompletedTooltip => 'درس مكتمل';
+
+  @override
+  String get microLearningMarkLessonCompleted => 'تعليم الدرس كمكتمل';
+
+  @override
+  String get microLearningAiRecommendationsTitle =>
+      'توصيات الذكاء الاصطناعي لك';
+
+  @override
+  String get microLearningFlashcardChallengeTitle => 'تحدي البطاقات الخاطفة';
+
+  @override
+  String get microLearningBasedOnLatestResults => 'بناءً على آخر نتائجك';
+
+  @override
+  String microLearningBasedOnFocus(Object focus) {
+    return 'بناءً على $focus';
+  }
+
+  @override
+  String get microLearningStartFlashcardChallenge => 'ابدأ التحدي (10 بطاقات)';
+
+  @override
+  String get microLearningWeakestSkillFallback => 'المهارة الأضعف';
+
+  @override
+  String get microLearningSuggestedPathTitle => 'مسار تعلم مقترح';
+
+  @override
+  String microLearningReviewFocusStep(Object focus) {
+    return 'راجع $focus';
+  }
+
+  @override
+  String get microLearningShortestLessonStep =>
+      'ابدأ بأقصر درس متاح قبل الانتقال للاختبار.';
+
+  @override
+  String get microLearningSolveShortPracticeStep => 'حل تدريبًا قصيرًا';
+
+  @override
+  String get microLearningOneAssessmentStep =>
+      'اختبار واحد كافٍ لمعرفة إن كان الفهم تحسن.';
+
+  @override
+  String get microLearningOpenAnalyticsStep => 'افتح التحليلات';
+
+  @override
+  String get microLearningCompareLatestResultStep =>
+      'قارن النتيجة الجديدة مع آخر محاولة وحدد الخطوة التالية.';
+
+  @override
+  String get microLearningReviewAnalytics => 'راجع تحليلاتك';
+
+  @override
+  String get microLearningDiagnosticDescription =>
+      'ابدأ اختبارًا لفتح توصيات مبنية على أدائك';
+
+  @override
+  String get microLearningStrongSkillDescription =>
+      'مهارة قوية، حافظ على مستواك';
+
+  @override
+  String get microLearningNeedsReviewDescription => 'تحتاج مراجعة قصيرة اليوم';
+
+  @override
+  String get microLearningDiagnosticLessonTitle => 'ابدأ بأول اختبار تشخيصي';
+
+  @override
+  String get microLearningDiagnosticLessonSubtitle =>
+      '3 دقائق - يفتح توصياتك الشخصية';
+
+  @override
+  String get microLearningDiagnosticSkill => 'تشخيص';
+
+  @override
+  String get microLearningReviewResultsTitle => 'راجع نتائجك بعد الاختبار';
+
+  @override
+  String get microLearningReviewResultsSubtitle => 'مغلق حتى تظهر أول نتيجة';
+
+  @override
+  String get microLearningResultsAnalysisSkill => 'تحليل النتائج';
+
+  @override
+  String microLearningSkillReviewTitleTemplate(Object skill) {
+    return 'مراجعة قصيرة: $skill';
+  }
+
+  @override
+  String microLearningSkillReviewSubtitleTemplate(Object percent) {
+    return '4 دقائق - مستوى الإتقان $percent%';
+  }
+
+  @override
+  String get studentProgressLoadFailed =>
+      'تعذر تحميل تقدمك الآن. تحقق من الاتصال ثم أعد المحاولة.';
+
+  @override
+  String get studentProgressWeakestSkillFallback => 'أضعف مهارة';
+
+  @override
+  String get studentProgressWeeklyReportTitle => 'تقريرك الأسبوعي';
+
+  @override
+  String get studentProgressFocusLabel => 'للتركيز';
+
+  @override
+  String get studentProgressWeeklySummaryEmpty =>
+      'لا توجد نتائج هذا الأسبوع بعد. ابدأ باختبار قصير لفتح تقريرك الأسبوعي.';
+
+  @override
+  String studentProgressWeeklySummaryStrong(Object skill) {
+    return 'أسبوع قوي. حافظ على وتيرتك وراجع $skill للحفاظ على المستوى.';
+  }
+
+  @override
+  String studentProgressWeeklySummaryGood(Object skill) {
+    return 'تقدمك جيد. جلسة تعلم مصغر واحدة على $skill سترفع ثباتك.';
+  }
+
+  @override
+  String studentProgressWeeklySummaryNeedsFocus(Object skill) {
+    return 'هذا الأسبوع يحتاج تركيزًا أكبر. ابدأ بخطة قصيرة على $skill ثم أعد اختبارًا واحدًا.';
+  }
+
+  @override
+  String get studentChallengesTitle => 'التحديات';
+
+  @override
+  String get studentChallengesNew => 'تحدي جديد';
+
+  @override
+  String get studentChallengesStreakDays => 'سلسلة أيام';
+
+  @override
+  String get studentChallengesAssessmentsThisWeek => 'اختبارات هذا الأسبوع';
+
+  @override
+  String get studentChallengesUnlocked => 'تحديات جديدة مفتوحة حسب نشاطك.';
+
+  @override
+  String get studentChallengesUnlockHint =>
+      'أكمل اختبارين في يومين متتاليين لفتح تحديات أكثر.';
+
+  @override
+  String get studentChallengesNotifications => 'الإشعارات';
+
+  @override
+  String get studentChallengesLive => 'تحديات مباشرة';
+
+  @override
+  String get studentChallengesCurrentWeek => 'الأسبوع الحالي';
+
+  @override
+  String get studentChallengesLeaderboard => 'لوحة المتصدرين';
+
+  @override
+  String get studentChallengesMovedUp => 'تقدمت 3 مراكز';
+
+  @override
+  String get studentChallengesCurrentRank => 'مركزك الحالي';
+
+  @override
+  String get studentChallengesMyChallenges => 'تحدياتي';
+
+  @override
+  String get studentChallengesCompleted => 'تحديات مكتملة';
+
+  @override
+  String get studentChallengesActiveUpcoming => 'نشطة وقادمة';
+
+  @override
+  String studentChallengesLocalCreated(Object count) {
+    return 'أنشأت $count تحدٍ محليًا لهذه الجلسة. سيحتاج الحفظ الدائم إلى API لاحقًا.';
+  }
+
+  @override
+  String get studentChallengesEarnedBadges => 'الأوسمة المحققة';
+
+  @override
+  String get studentChallengesBadgeLegend => 'الخارق';
+
+  @override
+  String get studentChallengesBadgeFast => 'المتسابق السريع';
+
+  @override
+  String get studentChallengesBadgeThinker => 'المفكر';
+
+  @override
+  String get studentChallengesBadgeRisingStar => 'النجم الصاعد';
+
+  @override
+  String get studentChallengesCompletedTitle => 'تحدي مكتمل';
+
+  @override
+  String studentChallengesCompletedMessage(Object title) {
+    return 'أكملت \"$title\" بالفعل. يمكنك متابعة ترتيبك من لوحة المتصدرين.';
+  }
+
+  @override
+  String get studentChallengesLockedTitle => 'التحدي غير متاح بعد';
+
+  @override
+  String get studentChallengesLockedMessage =>
+      'سيفتح هذا التحدي بعد توفر شروط المشاركة.';
+
+  @override
+  String studentChallengesJoinTitle(Object title) {
+    return 'الانضمام إلى $title';
+  }
+
+  @override
+  String studentChallengesJoinMessage(Object points) {
+    return 'ستحصل على $points نقطة عند إكمال التحدي. هل تريد إضافته إلى تحدياتك؟';
+  }
+
+  @override
+  String get studentChallengesJoinNow => 'انضم الآن';
+
+  @override
+  String get studentChallengesJoinedTitle => 'تم الانضمام';
+
+  @override
+  String studentChallengesJoinedMessage(Object title) {
+    return 'أضيف \"$title\" إلى تحدياتك. ابدأه من قائمة تحدياتي.';
+  }
+
+  @override
+  String get studentChallengesCreateTitle => 'إنشاء تحدي جديد';
+
+  @override
+  String get studentChallengesCreateDescription =>
+      'سيُضاف التحدي محليًا لهذه الجلسة إلى أن يتوفر API لحفظ تحديات الطلاب.';
+
+  @override
+  String get studentChallengesTitleLabel => 'عنوان التحدي';
+
+  @override
+  String get studentChallengesSubjectLabel => 'المادة أو المهارة';
+
+  @override
+  String get studentChallengesAddToMine => 'إضافة إلى تحدياتي';
+
+  @override
+  String get studentChallengesDefaultTitle => 'تحدي شخصي جديد';
+
+  @override
+  String get studentChallengesDefaultSubject => 'مهارة مختارة';
+
+  @override
+  String get studentChallengesThisWeek => 'هذا الأسبوع';
+
+  @override
+  String get studentChallengesCreatedTitle => 'تم إنشاء التحدي';
+
+  @override
+  String studentChallengesCreatedMessage(Object title) {
+    return 'أضيف \"$title\" إلى تحدياتك المحلية ويمكنك البدء به الآن.';
+  }
+
+  @override
+  String get studentChallengesDone => 'تم';
+
+  @override
+  String studentChallengesParticipants(Object count) {
+    return '$count مشارك';
+  }
+
+  @override
+  String get studentChallengesJoinAction => 'انضم للتحدي';
+
+  @override
+  String get studentChallengesStartAction => 'ابدأ التحدي';
+
+  @override
+  String get studentChallengesViewResultAction => 'عرض النتيجة';
+
+  @override
+  String get studentChallengesNotOpenAction => 'لم يفتح بعد';
+
+  @override
+  String studentChallengesPoints(Object points) {
+    return '$points نقطة';
+  }
+
+  @override
+  String studentChallengesCompleteProgress(Object percent) {
+    return 'اكتمل • $percent%';
+  }
+
+  @override
+  String get studentChallengesLiveNow => 'مباشر الآن';
+
+  @override
+  String get studentAcademicFallbackName => 'أحمد خالد المنصوري';
+
+  @override
+  String studentAcademicId(Object id) {
+    return 'الرقم الأكاديمي: $id';
+  }
+
+  @override
+  String get studentAcademicGrade => 'الصف العاشر - أ';
+
+  @override
+  String get studentAcademicAdvancedTrack => 'مسار متقدم';
+
+  @override
+  String get studentAcademicReport => 'تقرير';
+
+  @override
+  String get studentAcademicContact => 'تواصل';
+
+  @override
+  String studentAcademicReportFor(Object name) {
+    return 'تقرير: $name';
+  }
+
+  @override
+  String get studentAcademicChooseReport => 'اختر نوع التقرير:';
+
+  @override
+  String get studentAcademicExportingAcademic =>
+      'جاري تصدير التقرير الأكاديمي...';
+
+  @override
+  String get studentAcademicAcademicReport => 'التقرير الأكاديمي';
+
+  @override
+  String get studentAcademicExportingPerformance =>
+      'جاري تصدير تقرير الأداء...';
+
+  @override
+  String get studentAcademicPerformanceReport => 'تقرير الأداء';
+
+  @override
+  String studentAcademicSendMessageTo(Object name) {
+    return 'إرسال رسالة إلى: $name';
+  }
+
+  @override
+  String get studentAcademicMessageHint => 'اكتب رسالتك هنا...';
+
+  @override
+  String studentAcademicMessageSent(Object name) {
+    return 'تم إرسال الرسالة إلى $name';
+  }
+
+  @override
+  String get studentAcademicSend => 'إرسال';
+
+  @override
+  String get studentAcademicActive => 'نشط';
+
+  @override
+  String get studentAcademicCumulativeGpa => 'المعدل التراكمي';
+
+  @override
+  String get studentAcademicPreviousMonth => '+0.12 الشهر الماضي';
+
+  @override
+  String get studentAcademicAttendance => 'نسبة الحضور';
+
+  @override
+  String get studentAcademicCompletedAssessments => 'الاختبارات المكتملة';
+
+  @override
+  String get studentAcademicAwaitingAssessments => 'بانتظار اختبارين';
+
+  @override
+  String get studentAcademicGeneralBehavior => 'السلوك العام';
+
+  @override
+  String get studentAcademicExcellent => 'ممتاز جدًا';
+
+  @override
+  String get studentAcademicInteractionStats => 'إحصائيات التفاعل';
+
+  @override
+  String get studentAcademicClassParticipation => 'المشاركة الصفية';
+
+  @override
+  String get studentAcademicHighComparedPeers => 'مرتفع مقارنة بالأقران';
+
+  @override
+  String get studentAcademicGroupWork => 'العمل الجماعي';
+
+  @override
+  String get studentAcademicNeedsImprovement => 'يحتاج إلى تحسين بسيط';
+
+  @override
+  String get studentAcademicHomework => 'الواجبات المنزلية';
+
+  @override
+  String get studentAcademicFullCommitment => 'التزام تام بالمواعيد';
+
+  @override
+  String get studentAcademicFirstTerm => 'الفصل الدراسي الأول';
+
+  @override
+  String get studentAcademicSubjectPerformance => 'أداء المواد الدراسية';
+
+  @override
+  String get studentAcademicMath => 'الرياضيات';
+
+  @override
+  String get studentAcademicScience => 'العلوم';
+
+  @override
+  String get studentAcademicArabic => 'اللغة العربية';
+
+  @override
+  String get studentAcademicHistory => 'التاريخ';
+
+  @override
+  String get studentAcademicPhysics => 'الفيزياء';
+
+  @override
+  String get studentAcademicViewAll => 'عرض الكل';
+
+  @override
+  String get studentAcademicViewingAllResults => 'عرض جميع نتائج الاختبارات';
+
+  @override
+  String get studentAcademicLatestResults => 'آخر نتائج الاختبارات';
+
+  @override
+  String get studentAcademicCalculusExam => 'اختبار التفاضل والتكامل';
+
+  @override
+  String get studentAcademicCalculusExamDate => '12 أكتوبر 2024';
+
+  @override
+  String get studentAcademicOrganicChemistryLab => 'كيمياء عضوية - عملي';
+
+  @override
+  String get studentAcademicChemistryLabDate => '08 أكتوبر 2024';
+
+  @override
+  String get studentAcademicOutstanding => 'متفوق';
+
+  @override
+  String get studentAcademicVeryGood => 'جيد جدًا';
+
+  @override
+  String get studentAcademicAddNote => 'إضافة ملاحظة';
+
+  @override
+  String get studentAcademicTeacherNotes => 'ملاحظات المعلم السلوكية';
+
+  @override
+  String get studentAcademicAddBehaviorNote => 'إضافة ملاحظة سلوكية';
+
+  @override
+  String get studentAcademicNoteHint => 'اكتب ملاحظتك هنا...';
+
+  @override
+  String get studentAcademicNoteAdded => 'تم إضافة الملاحظة بنجاح';
+
+  @override
+  String get studentAcademicSaveNote => 'حفظ الملاحظة';
+
+  @override
+  String get studentAcademicTeacherSara => 'أ. سارة الأحمد';
+
+  @override
+  String get studentAcademicTwoDaysAgo => 'منذ يومين';
+
+  @override
+  String get studentAcademicLeadershipNote =>
+      'أظهر الطالب مهارات قيادية متميزة خلال المشروع الجماعي الأسبوع الماضي. لديه قدرة عالية على تبسيط المفاهيم المعقدة لزملائه.';
+
+  @override
+  String get studentAcademicTeacherMohammed => 'أ. محمد عمر';
+
+  @override
+  String get studentAcademicWeekAgo => 'منذ أسبوع';
+
+  @override
+  String get studentAcademicReviewNote =>
+      'يحتاج الطالب إلى التركيز أكثر على مراجعة التفاصيل الصغيرة في حلول المسائل الرياضية لتفادي الأخطاء البسيطة.';
 }

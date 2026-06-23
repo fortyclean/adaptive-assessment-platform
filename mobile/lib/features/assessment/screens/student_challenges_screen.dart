@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/app_section_card.dart';
 import '../models/student_challenge_plan.dart';
@@ -95,9 +96,13 @@ class _StudentChallengesScreenState
 
   Future<void> _loadChallengePlan() async {
     try {
+      final twoDayStreakLockedReason =
+          AppLocalizations.of(context).studentChallengeTwoDayStreakLocked;
       final history =
           await ref.read(assessmentRepositoryProvider).getAttemptHistory();
-      final plan = const StudentChallengePlanSource().fromAttemptHistory(
+      final plan = StudentChallengePlanSource(
+        twoDayStreakLockedReason: twoDayStreakLockedReason,
+      ).fromAttemptHistory(
         history,
       );
       if (!mounted) return;
@@ -133,42 +138,40 @@ class _StudentChallengesScreenState
   }
 
   @override
-  Widget build(BuildContext context) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: _buildAppBar(),
-          body: RefreshIndicator(
-            onRefresh: () async => setState(() {}),
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-              children: [
-                _buildStreakSummary(),
-                const SizedBox(height: 24),
-                _buildLiveChallenges(),
-                const SizedBox(height: 24),
-                _buildLeaderboard(),
-                const SizedBox(height: 24),
-                _buildMyChallenges(),
-                const SizedBox(height: 24),
-                _buildBadges(),
-              ],
-            ),
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        appBar: _buildAppBar(),
+        body: RefreshIndicator(
+          onRefresh: () async => setState(() {}),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+            children: [
+              _buildStreakSummary(),
+              const SizedBox(height: 24),
+              _buildLiveChallenges(),
+              const SizedBox(height: 24),
+              _buildLeaderboard(),
+              const SizedBox(height: 24),
+              _buildMyChallenges(),
+              const SizedBox(height: 24),
+              _buildBadges(),
+            ],
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: _showCreateChallengeSheet,
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            icon: const Icon(Icons.add),
-            label: const Text('تحدي جديد'),
-          ),
-          bottomNavigationBar:
-              const AppBottomNav(currentIndex: 1, role: 'student'),
         ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: _showCreateChallengeSheet,
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          icon: const Icon(Icons.add),
+          label: Text(AppLocalizations.of(context).studentChallengesNew),
+        ),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 1, role: 'student'),
       );
 
   Widget _buildStreakSummary() {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -181,19 +184,19 @@ class _StudentChallengesScreenState
           _MiniMetric(
             icon: Icons.local_fire_department_rounded,
             value: '$_streakDays',
-            label: 'سلسلة أيام',
+            label: l10n.studentChallengesStreakDays,
           ),
           const SizedBox(width: 12),
           _MiniMetric(
             icon: Icons.task_alt_rounded,
             value: '$_completedThisWeek',
-            label: 'اختبارات هذا الأسبوع',
+            label: l10n.studentChallengesAssessmentsThisWeek,
           ),
           const Spacer(),
           Text(
             _streakDays >= 2
-                ? 'تحديات جديدة مفتوحة حسب نشاطك.'
-                : 'أكمل اختبارين في يومين متتاليين لفتح تحديات أكثر.',
+                ? l10n.studentChallengesUnlocked
+                : l10n.studentChallengesUnlockHint,
             textAlign: TextAlign.right,
             style: TextStyle(
               color: colorScheme.onSurface,
@@ -211,14 +214,14 @@ class _StudentChallengesScreenState
       automaticallyImplyLeading: false,
       backgroundColor: colorScheme.surface,
       scrolledUnderElevation: 1,
-      title: const Text(
-        'التحديات',
-        style: TextStyle(fontWeight: FontWeight.w800),
+      title: Text(
+        AppLocalizations.of(context).studentChallengesTitle,
+        style: const TextStyle(fontWeight: FontWeight.w800),
       ),
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications_outlined),
-          tooltip: 'الإشعارات',
+          tooltip: AppLocalizations.of(context).studentChallengesNotifications,
           onPressed: () => context.push(AppRoutes.studentNotifications),
         ),
       ],
@@ -229,7 +232,7 @@ class _StudentChallengesScreenState
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildSectionHeader(
-            title: 'تحديات مباشرة',
+            title: AppLocalizations.of(context).studentChallengesLive,
             icon: Icons.rocket_launch_outlined,
             trailing: const _LiveBadge(),
           ),
@@ -269,25 +272,26 @@ class _StudentChallengesScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'الأسبوع الحالي',
-                style: TextStyle(fontSize: 14, color: Colors.white70),
+                AppLocalizations.of(context).studentChallengesCurrentWeek,
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
               ),
               Row(
                 children: [
                   Text(
-                    'لوحة المتصدرين',
-                    style: TextStyle(
+                    AppLocalizations.of(context).studentChallengesLeaderboard,
+                    style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Icon(Icons.emoji_events, color: Color(0xFFFFDBCE), size: 28),
+                  const SizedBox(width: 8),
+                  const Icon(Icons.emoji_events,
+                      color: Color(0xFFFFDBCE), size: 28),
                 ],
               ),
             ],
@@ -304,19 +308,21 @@ class _StudentChallengesScreenState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.trending_up, color: Color(0xFFFFDBCE), size: 20),
-                  SizedBox(width: 4),
-                  Text('تقدمت 3 مراكز',
-                      style: TextStyle(fontSize: 14, color: Colors.white)),
+                  const Icon(Icons.trending_up,
+                      color: Color(0xFFFFDBCE), size: 20),
+                  const SizedBox(width: 4),
+                  Text(AppLocalizations.of(context).studentChallengesMovedUp,
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.white)),
                 ],
               ),
               Row(
                 children: [
-                  const Text(
-                    'مركزك الحالي',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context).studentChallengesCurrentRank,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -352,7 +358,7 @@ class _StudentChallengesScreenState
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildSectionHeader(
-            title: 'تحدياتي',
+            title: AppLocalizations.of(context).studentChallengesMyChallenges,
             icon: Icons.assignment_outlined,
           ),
           const SizedBox(height: 12),
@@ -363,7 +369,8 @@ class _StudentChallengesScreenState
                   icon: Icons.check_circle_outline,
                   iconColor: AppColors.primary,
                   value: '$_completedCount',
-                  label: 'تحديات مكتملة',
+                  label:
+                      AppLocalizations.of(context).studentChallengesCompleted,
                 ),
               ),
               const SizedBox(width: 12),
@@ -372,7 +379,8 @@ class _StudentChallengesScreenState
                   icon: Icons.event_outlined,
                   iconColor: AppColors.onSurfaceVariant,
                   value: '${_myChallenges.length}',
-                  label: 'نشطة وقادمة',
+                  label: AppLocalizations.of(context)
+                      .studentChallengesActiveUpcoming,
                 ),
               ),
             ],
@@ -381,8 +389,8 @@ class _StudentChallengesScreenState
             const SizedBox(height: 12),
             _InfoBanner(
               icon: Icons.add_task_outlined,
-              text:
-                  'أنشأت $_createdCount تحدٍ محليًا للتجربة. سيحتاج الحفظ الدائم إلى API لاحقًا.',
+              text: AppLocalizations.of(context)
+                  .studentChallengesLocalCreated(_createdCount),
             ),
           ],
           const SizedBox(height: 12),
@@ -408,7 +416,7 @@ class _StudentChallengesScreenState
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'الأوسمة المحققة',
+              AppLocalizations.of(context).studentChallengesEarnedBadges,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -417,17 +425,27 @@ class _StudentChallengesScreenState
               textAlign: TextAlign.right,
             ),
             const SizedBox(height: 16),
-            const Wrap(
+            Wrap(
               alignment: WrapAlignment.spaceAround,
               runSpacing: 16,
               children: [
                 _Badge(
                     icon: Icons.workspace_premium_outlined,
-                    label: 'الخارق',
+                    label: AppLocalizations.of(context)
+                        .studentChallengesBadgeLegend,
                     isLocked: true),
-                _Badge(icon: Icons.bolt, label: 'المتسابق السريع'),
-                _Badge(icon: Icons.psychology, label: 'المفكر'),
-                _Badge(icon: Icons.star, label: 'النجم الصاعد'),
+                _Badge(
+                    icon: Icons.bolt,
+                    label: AppLocalizations.of(context)
+                        .studentChallengesBadgeFast),
+                _Badge(
+                    icon: Icons.psychology,
+                    label: AppLocalizations.of(context)
+                        .studentChallengesBadgeThinker),
+                _Badge(
+                    icon: Icons.star,
+                    label: AppLocalizations.of(context)
+                        .studentChallengesBadgeRisingStar),
               ],
             ),
           ],
@@ -468,15 +486,15 @@ class _StudentChallengesScreenState
         context.push(AppRoutes.studentAssessmentsList);
       case ChallengeStatus.completed:
         await _showInfoDialog(
-          title: 'تحدي مكتمل',
-          message:
-              'أكملت "${challenge.title}" بالفعل. يمكنك متابعة ترتيبك من لوحة المتصدرين.',
+          title: AppLocalizations.of(context).studentChallengesCompletedTitle,
+          message: AppLocalizations.of(context)
+              .studentChallengesCompletedMessage(challenge.title),
         );
       case ChallengeStatus.locked:
         await _showInfoDialog(
-          title: 'التحدي غير متاح بعد',
+          title: AppLocalizations.of(context).studentChallengesLockedTitle,
           message: challenge.lockedReason ??
-              'هذا التحدي سيفتح بعد توفر شروط المشاركة.',
+              AppLocalizations.of(context).studentChallengesLockedMessage,
         );
     }
   }
@@ -484,24 +502,23 @@ class _StudentChallengesScreenState
   Future<void> _joinChallenge(_Challenge challenge) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: AlertDialog(
-          title: Text('الانضمام إلى ${challenge.title}'),
-          content: Text(
-            'ستحصل على ${challenge.reward} نقطة عند إكمال التحدي. هل تريد إضافته إلى تحدياتك؟',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text('إلغاء'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: const Text('انضم الآن'),
-            ),
-          ],
+      builder: (ctx) => AlertDialog(
+        title: Text(AppLocalizations.of(ctx)
+            .studentChallengesJoinTitle(challenge.title)),
+        content: Text(
+          AppLocalizations.of(ctx)
+              .studentChallengesJoinMessage(challenge.reward),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(AppLocalizations.of(ctx).cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(AppLocalizations.of(ctx).studentChallengesJoinNow),
+          ),
+        ],
       ),
     );
 
@@ -514,8 +531,9 @@ class _StudentChallengesScreenState
     });
 
     await _showInfoDialog(
-      title: 'تم الانضمام',
-      message: 'أضيف "${challenge.title}" إلى تحدياتك. ابدأه من قائمة تحدياتي.',
+      title: AppLocalizations.of(context).studentChallengesJoinedTitle,
+      message: AppLocalizations.of(context)
+          .studentChallengesJoinedMessage(challenge.title),
     );
   }
 
@@ -527,56 +545,55 @@ class _StudentChallengesScreenState
         context: context,
         isScrollControlled: true,
         showDragHandle: true,
-        builder: (ctx) => Directionality(
-          textDirection: TextDirection.rtl,
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                8,
-                16,
-                MediaQuery.of(ctx).viewInsets.bottom + 16,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    'إنشاء تحدي جديد',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                    textAlign: TextAlign.right,
+        builder: (ctx) => SafeArea(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              16,
+              8,
+              16,
+              MediaQuery.of(ctx).viewInsets.bottom + 16,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  AppLocalizations.of(ctx).studentChallengesCreateTitle,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.right,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalizations.of(ctx).studentChallengesCreateDescription,
+                  textAlign: TextAlign.right,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    labelText:
+                        AppLocalizations.of(ctx).studentChallengesTitleLabel,
+                    border: const OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'سيُضاف التحدي محليًا لهذه الجلسة إلى أن يتوفر API لحفظ تحديات الطلاب.',
-                    textAlign: TextAlign.right,
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: subjectController,
+                  decoration: InputDecoration(
+                    labelText:
+                        AppLocalizations.of(ctx).studentChallengesSubjectLabel,
+                    border: const OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: titleController,
-                    textDirection: TextDirection.rtl,
-                    decoration: const InputDecoration(
-                      labelText: 'عنوان التحدي',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: subjectController,
-                    textDirection: TextDirection.rtl,
-                    decoration: const InputDecoration(
-                      labelText: 'المادة أو المهارة',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  FilledButton.icon(
-                    onPressed: () => Navigator.of(ctx).pop(true),
-                    icon: const Icon(Icons.add_task_outlined),
-                    label: const Text('إضافة إلى تحدياتي'),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  icon: const Icon(Icons.add_task_outlined),
+                  label:
+                      Text(AppLocalizations.of(ctx).studentChallengesAddToMine),
+                ),
+              ],
             ),
           ),
         ),
@@ -585,10 +602,10 @@ class _StudentChallengesScreenState
       if (created != true || !mounted) return;
 
       final title = titleController.text.trim().isEmpty
-          ? 'تحدي شخصي جديد'
+          ? AppLocalizations.of(context).studentChallengesDefaultTitle
           : titleController.text.trim();
       final subject = subjectController.text.trim().isEmpty
-          ? 'مهارة مختارة'
+          ? AppLocalizations.of(context).studentChallengesDefaultSubject
           : subjectController.text.trim();
 
       setState(() {
@@ -601,7 +618,7 @@ class _StudentChallengesScreenState
             subtitle: subject,
             reward: 150,
             participants: 1,
-            timeLeft: 'هذا الأسبوع',
+            timeLeft: AppLocalizations.of(context).studentChallengesThisWeek,
             progress: 0,
             status: ChallengeStatus.joined,
             accentColor: AppColors.primary,
@@ -611,8 +628,9 @@ class _StudentChallengesScreenState
       });
 
       await _showInfoDialog(
-        title: 'تم إنشاء التحدي',
-        message: 'أضيف "$title" إلى تحدياتك المحلية ويمكنك البدء به الآن.',
+        title: AppLocalizations.of(context).studentChallengesCreatedTitle,
+        message:
+            AppLocalizations.of(context).studentChallengesCreatedMessage(title),
       );
     } finally {
       subjectController.dispose();
@@ -626,18 +644,15 @@ class _StudentChallengesScreenState
   }) =>
       showDialog<void>(
         context: context,
-        builder: (ctx) => Directionality(
-          textDirection: TextDirection.rtl,
-          child: AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              FilledButton(
-                onPressed: () => Navigator.of(ctx).pop(),
-                child: const Text('تم'),
-              ),
-            ],
-          ),
+        builder: (ctx) => AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(AppLocalizations.of(ctx).studentChallengesDone),
+            ),
+          ],
         ),
       );
 }
@@ -769,7 +784,8 @@ class _ChallengeCard extends StatelessWidget {
                   size: 18, color: colorScheme.onSurfaceVariant),
               const SizedBox(width: 4),
               Text(
-                '${challenge.participants} مشارك',
+                AppLocalizations.of(context)
+                    .studentChallengesParticipants(challenge.participants),
                 style: TextStyle(color: colorScheme.onSurfaceVariant),
               ),
             ],
@@ -790,7 +806,7 @@ class _ChallengeCard extends StatelessWidget {
           FilledButton.icon(
             onPressed: onPrimaryAction,
             icon: Icon(_actionIcon(challenge.status)),
-            label: Text(_actionLabel(challenge.status)),
+            label: Text(_actionLabel(context, challenge.status)),
           ),
         ],
       ),
@@ -810,16 +826,17 @@ class _ChallengeCard extends StatelessWidget {
     }
   }
 
-  String _actionLabel(ChallengeStatus status) {
+  String _actionLabel(BuildContext context, ChallengeStatus status) {
+    final l10n = AppLocalizations.of(context);
     switch (status) {
       case ChallengeStatus.joinable:
-        return 'انضم للتحدي';
+        return l10n.studentChallengesJoinAction;
       case ChallengeStatus.joined:
-        return 'ابدأ التحدي';
+        return l10n.studentChallengesStartAction;
       case ChallengeStatus.completed:
-        return 'عرض النتيجة';
+        return l10n.studentChallengesViewResultAction;
       case ChallengeStatus.locked:
-        return 'لم يفتح بعد';
+        return l10n.studentChallengesNotOpenAction;
     }
   }
 }
@@ -839,7 +856,7 @@ class _RewardBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        '$points نقطة',
+        AppLocalizations.of(context).studentChallengesPoints(points),
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w700,
@@ -897,8 +914,9 @@ class _LeaderRow extends StatelessWidget {
                 ),
               ),
               if (highlighted)
-                const Text('نقطة',
-                    style: TextStyle(fontSize: 12, color: Colors.white70)),
+                Text(AppLocalizations.of(context).studentChallengesPoints(1),
+                    style:
+                        const TextStyle(fontSize: 12, color: Colors.white70)),
             ],
           ),
           const Spacer(),
@@ -1036,7 +1054,9 @@ class _MyChallengeTile extends StatelessWidget {
                   ),
                   Text(
                     completed
-                        ? 'اكتمل • ${challenge.progress * 100 ~/ 1}%'
+                        ? AppLocalizations.of(context)
+                            .studentChallengesCompleteProgress(
+                                challenge.progress * 100 ~/ 1)
                         : challenge.subtitle,
                     style: TextStyle(
                       fontSize: 12,
@@ -1164,9 +1184,9 @@ class _LiveBadge extends StatelessWidget {
           color: AppColors.error,
           borderRadius: BorderRadius.circular(999),
         ),
-        child: const Text(
-          'مباشر الآن',
-          style: TextStyle(
+        child: Text(
+          AppLocalizations.of(context).studentChallengesLiveNow,
+          style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
             color: Colors.white,

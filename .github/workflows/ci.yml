@@ -9,6 +9,21 @@ on:
       - main
 
 jobs:
+  secrets:
+    name: Production secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify tracked files contain no configured production secrets
+        run: node scripts/verify-no-production-secrets.mjs
+
   mobile:
     name: Flutter analyze and test
     runs-on: ubuntu-latest

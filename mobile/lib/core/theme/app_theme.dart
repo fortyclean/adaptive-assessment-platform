@@ -29,9 +29,13 @@ class AppTheme {
           onErrorContainer: AppColors.onErrorContainer,
           surface: AppColors.surface,
           onSurface: AppColors.onSurface,
+          onSurfaceVariant: AppColors.onSurfaceVariant,
+          surfaceContainer: AppColors.surfaceContainer,
+          surfaceContainerHigh: AppColors.surfaceContainerHigh,
           surfaceContainerHighest: AppColors.surfaceContainerHigh,
           outline: AppColors.outline,
           outlineVariant: AppColors.outlineVariant,
+          surfaceTint: AppColors.primary,
         ),
         fontFamily: 'Almarai',
         textTheme: const TextTheme(
@@ -153,38 +157,59 @@ class AppTheme {
           surface: Color(0xFF0F172A),
           onSurface: Color(0xFFF1F5F9),
           onSurfaceVariant: Color(0xFFCBD5E1),
+          surfaceContainer: Color(0xFF111827),
+          surfaceContainerHigh: Color(0xFF1E293B),
           surfaceContainerHighest: Color(0xFF1E293B),
           outline: Color(0xFF64748B),
           outlineVariant: Color(0xFF475569),
+          surfaceTint: Color(0xFF93B4FF),
         ),
         fontFamily: 'Almarai',
         textTheme: const TextTheme(
           displayLarge: TextStyle(
-            fontSize: 32, fontWeight: FontWeight.w700, color: Color(0xFFF1F5F9),
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFFF1F5F9),
           ),
           displayMedium: TextStyle(
-            fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFFF1F5F9),
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFFF1F5F9),
           ),
           titleLarge: TextStyle(
-            fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFFF1F5F9),
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFFF1F5F9),
           ),
           titleMedium: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFFF1F5F9),
           ),
           bodyLarge: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w400, color: Color(0xFFE2E8F0),
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFE2E8F0),
           ),
           bodyMedium: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFFE2E8F0),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFE2E8F0),
           ),
           labelLarge: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFFF1F5F9),
           ),
           labelMedium: TextStyle(
-            fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1),
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFFCBD5E1),
           ),
           labelSmall: TextStyle(
-            fontSize: 11, fontWeight: FontWeight.w400, color: Color(0xFFCBD5E1),
+            fontSize: 11,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFCBD5E1),
           ),
         ),
         appBarTheme: const AppBarTheme(
@@ -194,7 +219,9 @@ class AppTheme {
           scrolledUnderElevation: 1,
           centerTitle: true,
           titleTextStyle: TextStyle(
-            fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFFF1F5F9),
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFFF1F5F9),
           ),
         ),
         cardTheme: CardThemeData(
@@ -214,7 +241,9 @@ class AppTheme {
               borderRadius: BorderRadius.circular(12),
             ),
             textStyle: const TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Almarai',
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Almarai',
             ),
           ),
         ),
@@ -227,7 +256,9 @@ class AppTheme {
               borderRadius: BorderRadius.circular(12),
             ),
             textStyle: const TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Almarai',
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Almarai',
             ),
           ),
         ),
@@ -253,10 +284,14 @@ class AppTheme {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           labelStyle: const TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF9CA3AF),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF9CA3AF),
           ),
           hintStyle: const TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF9CA3AF),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF9CA3AF),
           ),
         ),
         scaffoldBackgroundColor: const Color(0xFF0F172A),
@@ -271,7 +306,9 @@ class AppTheme {
         chipTheme: ChipThemeData(
           backgroundColor: const Color(0xFF1E293B),
           labelStyle: const TextStyle(
-            fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xFFE5E7EB),
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFFE5E7EB),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -294,7 +331,9 @@ class AppTheme {
         snackBarTheme: SnackBarThemeData(
           backgroundColor: const Color(0xFF1E293B),
           contentTextStyle: const TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFFF1F5F9),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFF1F5F9),
           ),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(

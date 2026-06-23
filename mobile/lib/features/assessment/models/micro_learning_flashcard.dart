@@ -34,35 +34,99 @@ class MicroLearningFlashcardDeck {
   final List<MicroLearningFlashcard> cards;
 }
 
+class MicroLearningFlashcardCopy {
+  const MicroLearningFlashcardCopy({
+    this.diagnosticDeckTitle = 'Quick diagnostic practice',
+    this.diagnosticDeckSubtitle =
+        'Start with these cards so recommendations become more precise after your first assessment.',
+    this.diagnosticSkill = 'Diagnostic',
+    this.diagnosticGoalPrompt =
+        'What is the goal of the first diagnostic assessment?',
+    this.diagnosticGoalAnswer =
+        'Identify your current mastery level and discover the skills that need a short review.',
+    this.diagnosticGoalHint =
+        'Think about why a personal learning plan appears after the assessment.',
+    this.learningPlanSkill = 'Learning plan',
+    this.diagnosticNextStepPrompt =
+        'What should you do after the first result appears?',
+    this.diagnosticNextStepAnswer =
+        'Review the weakest skill in micro-learning, then complete a short practice to measure improvement.',
+    this.diagnosticNextStepHint =
+        'Improvement starts with the weakest skill, not the highest score.',
+    this.conceptPromptTemplate = 'What is the first step to improve {skill}?',
+    this.conceptAnswer =
+        'Start with one simple question that identifies the reason for the mistake, then review the related rule before practicing.',
+    this.conceptHint =
+        'Do not start by solving many questions before knowing the reason for the mistake.',
+    this.reviewPromptTemplate =
+        'Your current mastery in {skill} is {mastery}%. What does that mean?',
+    this.reviewAnswer =
+        'This skill needs focused review today, then a short assessment to confirm improvement.',
+    this.reviewHint =
+        'The lower percentage means higher priority in the learning plan.',
+    this.deckTitleTemplate = '{skill} booster cards',
+    this.deckSubtitle =
+        'Short practice built from your weakest skills in the latest results.',
+  });
+
+  final String diagnosticDeckTitle;
+  final String diagnosticDeckSubtitle;
+  final String diagnosticSkill;
+  final String diagnosticGoalPrompt;
+  final String diagnosticGoalAnswer;
+  final String diagnosticGoalHint;
+  final String learningPlanSkill;
+  final String diagnosticNextStepPrompt;
+  final String diagnosticNextStepAnswer;
+  final String diagnosticNextStepHint;
+  final String conceptPromptTemplate;
+  final String conceptAnswer;
+  final String conceptHint;
+  final String reviewPromptTemplate;
+  final String reviewAnswer;
+  final String reviewHint;
+  final String deckTitleTemplate;
+  final String deckSubtitle;
+
+  String conceptPrompt(String skill) =>
+      conceptPromptTemplate.replaceAll('{skill}', skill);
+
+  String reviewPrompt(String skill, int mastery) => reviewPromptTemplate
+      .replaceAll('{skill}', skill)
+      .replaceAll('{mastery}', mastery.toString());
+
+  String deckTitle(String skill) =>
+      deckTitleTemplate.replaceAll('{skill}', skill);
+}
+
 class MicroLearningFlashcardSource {
   const MicroLearningFlashcardSource();
 
   MicroLearningFlashcardDeck fromAttemptHistory(
-    List<Map<String, dynamic>> history,
-  ) {
+    List<Map<String, dynamic>> history, {
+    MicroLearningFlashcardCopy copy = const MicroLearningFlashcardCopy(),
+  }) {
     final rankedSkills = _rankWeakSkills(history);
     if (rankedSkills.isEmpty) {
-      return const MicroLearningFlashcardDeck(
-        title: 'تدريب تشخيصي سريع',
-        subtitle: 'ابدأ بهذه البطاقات حتى تظهر توصيات أدق بعد أول اختبار.',
+      return MicroLearningFlashcardDeck(
+        title: copy.diagnosticDeckTitle,
+        subtitle: copy.diagnosticDeckSubtitle,
         cards: [
           MicroLearningFlashcard(
             id: 'diagnostic-goal',
-            skill: 'تشخيص',
-            prompt: 'ما هدف الاختبار التشخيصي الأول؟',
-            answer:
-                'تحديد مستوى الإتقان الحالي واكتشاف المهارات التي تحتاج مراجعة قصيرة.',
-            hint: 'فكر في سبب ظهور خطة تعلم شخصية بعد الاختبار.',
+            skill: copy.diagnosticSkill,
+            prompt: copy.diagnosticGoalPrompt,
+            answer: copy.diagnosticGoalAnswer,
+            hint: copy.diagnosticGoalHint,
             color: AppColors.primary,
             icon: Icons.psychology_outlined,
           ),
           MicroLearningFlashcard(
             id: 'diagnostic-next-step',
-            skill: 'خطة التعلم',
-            prompt: 'ماذا تفعل بعد ظهور أول نتيجة؟',
-            answer:
-                'راجع المهارة الأضعف في التعلم المصغر، ثم حل تدريبًا قصيرًا لقياس التحسن.',
-            hint: 'التحسين يبدأ من أضعف مهارة، وليس من أعلى نتيجة.',
+            skill: copy.learningPlanSkill,
+            prompt: copy.diagnosticNextStepPrompt,
+            answer: copy.diagnosticNextStepAnswer,
+            hint: copy.diagnosticNextStepHint,
             color: AppColors.success,
             icon: Icons.route_outlined,
           ),
@@ -79,20 +143,18 @@ class MicroLearningFlashcardSource {
         MicroLearningFlashcard(
           id: 'concept-$skill',
           skill: skill,
-          prompt: 'ما أول خطوة لتحسين مهارة $skill؟',
-          answer:
-              'ابدأ بسؤال واحد بسيط يحدد سبب الخطأ، ثم راجع القاعدة المرتبطة به قبل التدريب.',
-          hint: 'لا تبدأ بحل كثير من الأسئلة قبل معرفة سبب الخطأ.',
+          prompt: copy.conceptPrompt(skill),
+          answer: copy.conceptAnswer,
+          hint: copy.conceptHint,
           color: color,
           icon: Icons.lightbulb_outline_rounded,
         ),
         MicroLearningFlashcard(
           id: 'review-$skill',
           skill: skill,
-          prompt: 'إتقانك الحالي في $skill هو $mastery%. ماذا يعني ذلك؟',
-          answer:
-              'هذه مهارة تحتاج مراجعة مركزة اليوم، ثم اختبارًا قصيرًا للتأكد من التحسن.',
-          hint: 'النسبة الأقل تعني أولوية أعلى في خطة التعلم.',
+          prompt: copy.reviewPrompt(skill, mastery),
+          answer: copy.reviewAnswer,
+          hint: copy.reviewHint,
           color: color,
           icon: Icons.trending_down_rounded,
         ),
@@ -101,8 +163,8 @@ class MicroLearningFlashcardSource {
 
     final weakest = rankedSkills.first.key;
     return MicroLearningFlashcardDeck(
-      title: 'بطاقات تقوية $weakest',
-      subtitle: 'تدريب قصير مبني على أضعف مهاراتك في آخر النتائج.',
+      title: copy.deckTitle(weakest),
+      subtitle: copy.deckSubtitle,
       cards: cards,
     );
   }

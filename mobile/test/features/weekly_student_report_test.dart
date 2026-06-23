@@ -36,7 +36,7 @@ void main() {
       final report = const WeeklyStudentReportSource().fromAttemptHistory([]);
 
       expect(report.completedAttempts, 0);
-      expect(report.summary, contains('لا توجد نتائج'));
+      expect(report.summary, contains('No results this week yet'));
     });
   });
 }

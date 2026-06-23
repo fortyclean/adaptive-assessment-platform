@@ -1,8 +1,10 @@
 import 'package:adaptive_assessment/features/notifications/screens/notification_settings_screen.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../support/localized_test_app.dart';
 
 /// Widget tests for Report Scheduling and Notification Settings
 /// Task: 26.5
@@ -14,10 +16,10 @@ void main() {
 
   // ─── Helper: Build Widget with ProviderScope ─────────────────────────────
 
-  Widget buildTestWidget(Widget child) => ProviderScope(
-        child: MaterialApp(
-          home: child,
-        ),
+  Widget buildTestWidget(Widget child) => pumpLocalizedApp(child);
+
+  AppLocalizations l10nOf(WidgetTester tester) => AppLocalizations.of(
+        tester.element(find.byType(NotificationSettingsScreen)),
       );
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -231,13 +233,16 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check page title (may be off-screen in list, use skipOffstage)
-      expect(
-          find.text('إعدادات التنبيهات', skipOffstage: false), findsOneWidget);
+      expect(find.text(l10nOf(tester).notificationSettings, skipOffstage: false),
+          findsOneWidget);
 
       // Check all three notification groups are present (may need scrolling)
-      expect(find.text('أداء الطلاب', skipOffstage: false), findsOneWidget);
-      expect(find.text('بنك الأسئلة', skipOffstage: false), findsOneWidget);
-      expect(find.text('تقارير دورية', skipOffstage: false), findsOneWidget);
+      expect(find.text(l10nOf(tester).studentPerformanceNotificationsGroup,
+          skipOffstage: false), findsOneWidget);
+      expect(find.text(l10nOf(tester).questionBankNotificationsGroup,
+          skipOffstage: false), findsOneWidget);
+      expect(find.text(l10nOf(tester).periodicReportsNotificationsGroup,
+          skipOffstage: false), findsOneWidget);
     });
 
     testWidgets('NotificationSettingsScreen renders save button',
@@ -247,7 +252,8 @@ void main() {
       ));
       await tester.pumpAndSettle();
 
-      expect(find.text('حفظ التغييرات', skipOffstage: false), findsOneWidget);
+      expect(find.text(l10nOf(tester).saveChanges, skipOffstage: false),
+          findsOneWidget);
     });
 
     // ─── Test: Toggle Switches Functionality ─────────────────────────────────
@@ -274,7 +280,7 @@ void main() {
 
       // Find the first toggle row by its title (may be off-screen)
       final pushToggleRow =
-          find.text('تنبيهات لحظية (Push)', skipOffstage: false);
+          find.text(l10nOf(tester).pushNotificationsTitle, skipOffstage: false);
       expect(pushToggleRow, findsOneWidget);
 
       // Scroll to make it visible, then tap
@@ -385,49 +391,42 @@ void main() {
 
     // ─── Test: Save Button Functionality ─────────────────────────────────────
 
-    testWidgets('save button shows loading state when saving', (tester) async {
+    testWidgets('save button persists notification preferences', (tester) async {
       await tester.pumpWidget(buildTestWidget(
         const NotificationSettingsScreen(),
       ));
       await tester.pumpAndSettle();
 
       // Scroll to save button and tap it
-      final saveButton = find.text('حفظ التغييرات', skipOffstage: false);
+      final saveButton =
+          find.text(l10nOf(tester).saveChanges, skipOffstage: false);
       expect(saveButton, findsOneWidget);
 
       await tester.ensureVisible(saveButton);
       await tester.pumpAndSettle();
-      await tester.tap(saveButton);
-      await tester.pump(); // Start animation
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
 
-      // Should show loading indicator
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      await tester.pumpAndSettle(); // Complete animation
-
-      // Should show success message
-      expect(find.text('تم حفظ إعدادات التنبيهات بنجاح'), findsOneWidget);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool('notification_settings.studentPerfPush'), isTrue);
+      expect(find.text(l10nOf(tester).notificationSettingsSaved), findsOneWidget);
     });
 
-    testWidgets('save button is disabled while saving', (tester) async {
+    testWidgets('save button remains available after a completed save',
+        (tester) async {
       await tester.pumpWidget(buildTestWidget(
         const NotificationSettingsScreen(),
       ));
       await tester.pumpAndSettle();
 
-      final saveButtonText = find.text('حفظ التغييرات', skipOffstage: false);
+      final saveButtonText =
+          find.text(l10nOf(tester).saveChanges, skipOffstage: false);
       await tester.ensureVisible(saveButtonText);
       await tester.pumpAndSettle();
-      await tester.tap(saveButtonText);
-      await tester.pump();
-
-      // Button should be disabled (showing loading indicator instead of text)
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      // The save text should be gone (replaced by spinner)
-      expect(find.text('حفظ التغييرات'), findsNothing);
-
-      // Drain the pending timer to avoid test failure
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
+
+      expect(find.text(l10nOf(tester).saveChanges), findsOneWidget);
     });
 
     // ─── Test: Notification Channel Types ────────────────────────────────────

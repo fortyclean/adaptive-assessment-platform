@@ -39,7 +39,7 @@ class AppBottomNav extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 64,
+          height: 72,
           child: Row(
             textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -49,47 +49,65 @@ class AppBottomNav extends StatelessWidget {
               final isActive = index == currentIndex;
 
               return Expanded(
-                child: GestureDetector(
-                  onTap: () => _onTap(context, index, role),
-                  behavior: HitTestBehavior.opaque,
+                child: Semantics(
+                  label: item.label,
+                  button: true,
+                  selected: isActive,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
                     margin:
-                        const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
                     decoration: BoxDecoration(
                       color: isActive
                           ? colorScheme.primaryContainer.withValues(alpha: 0.18)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          isActive ? item.activeIcon : item.icon,
-                          color: isActive
-                              ? colorScheme.primary
-                              : colorScheme.onSurface.withValues(alpha: 0.72),
-                          size: 24,
+                    child: GestureDetector(
+                      onTap: () => _onTap(context, index, role),
+                      behavior: HitTestBehavior.opaque,
+                      excludeFromSemantics: true,
+                      child: ExcludeSemantics(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              isActive ? item.activeIcon : item.icon,
+                              color: isActive
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurface
+                                      .withValues(alpha: 0.72),
+                              size: 23,
+                            ),
+                            const SizedBox(height: 2),
+                            SizedBox(
+                              width: double.infinity,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  item.label,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: isActive
+                                        ? colorScheme.primary
+                                        : colorScheme.onSurface
+                                            .withValues(alpha: 0.72),
+                                    fontFamily: 'Almarai',
+                                    fontSize: 10,
+                                    fontWeight: isActive
+                                        ? FontWeight.w700
+                                        : FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          item.label,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight:
-                                isActive ? FontWeight.w600 : FontWeight.w500,
-                            color: isActive
-                                ? colorScheme.primary
-                                : colorScheme.onSurface.withValues(alpha: 0.72),
-                            fontFamily: 'Almarai',
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

@@ -1,16 +1,13 @@
 import 'package:adaptive_assessment/features/auth/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../support/localized_test_app.dart';
 
 /// Widget tests for Login Screen
 /// Requirements: 1.2, 1.3
 void main() {
-  Widget buildLoginScreen() => const ProviderScope(
-        child: MaterialApp(
-          home: LoginScreen(),
-        ),
-      );
+  Widget buildLoginScreen() => pumpLocalizedApp(const LoginScreen());
 
   group('LoginScreen — Form Validation (Req 1.2)', () {
     testWidgets('renders username and password fields', (tester) async {

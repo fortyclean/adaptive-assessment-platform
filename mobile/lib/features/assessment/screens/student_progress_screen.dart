@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 import '../../../shared/widgets/student_state_view.dart';
@@ -79,15 +80,17 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
       const WeeklyStudentReportSource().fromAttemptHistory([]);
   // Weekly performance data (0.0–1.0 per day)
   List<double> _weeklyData = const [0, 0, 0, 0, 0, 0, 0];
-  final List<String> _weekDays = [
-    'أحد',
-    'اثنين',
-    'ثلاثاء',
-    'أربعاء',
-    'خميس',
-    'جمعة',
-    'سبت',
-  ];
+  List<String> get _weekDays => [
+        _l10n.weekdaySunday,
+        _l10n.weekdayMonday,
+        _l10n.weekdayTuesday,
+        _l10n.weekdayWednesday,
+        _l10n.weekdayThursday,
+        _l10n.weekdayFriday,
+        _l10n.weekdaySaturday,
+      ];
+
+  AppLocalizations get _l10n => AppLocalizations.of(context);
 
   @override
   void initState() {
@@ -124,8 +127,10 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
           _attemptCount = completed.length;
           _masteryPercent = avg;
           _weeklyData = _buildWeeklyData(completed);
-          _weeklyReport =
-              const WeeklyStudentReportSource().fromAttemptHistory(history);
+          _weeklyReport = const WeeklyStudentReportSource().fromAttemptHistory(
+            history,
+            summaryBuilder: _buildWeeklyReportSummary,
+          );
           _streakDays = _calculateStreakDays(completed);
           _isLoading = false;
           _leaderboard = leaderboard;
@@ -135,12 +140,23 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage =
-              'تعذر تحميل تقدمك الآن. تحقق من الاتصال ثم أعد المحاولة.';
+          _errorMessage = _l10n.studentProgressLoadFailed;
           _leaderboard = [];
         });
       }
     }
+  }
+
+  String _buildWeeklyReportSummary(
+    int attempts,
+    double average,
+    String? focusSkill,
+  ) {
+    final skill = focusSkill ?? _l10n.studentProgressWeakestSkillFallback;
+    if (attempts == 0) return _l10n.studentProgressWeeklySummaryEmpty;
+    if (average >= 85) return _l10n.studentProgressWeeklySummaryStrong(skill);
+    if (average >= 70) return _l10n.studentProgressWeeklySummaryGood(skill);
+    return _l10n.studentProgressWeeklySummaryNeedsFocus(skill);
   }
 
   Future<List<Map<String, dynamic>>> _loadLeaderboardFallback(
@@ -443,7 +459,7 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
               Icon(Icons.summarize_outlined, color: colorScheme.primary),
               const Spacer(),
               Text(
-                'تقريرك الأسبوعي',
+                _l10n.studentProgressWeeklyReportTitle,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
@@ -468,20 +484,20 @@ class _StudentProgressScreenState extends ConsumerState<StudentProgressScreen> {
             runSpacing: 10,
             children: [
               _WeeklyReportChip(
-                label: 'اختبارات',
+                label: _l10n.assessments,
                 value: '${_weeklyReport.completedAttempts}',
               ),
               _WeeklyReportChip(
-                label: 'المتوسط',
+                label: _l10n.average,
                 value: '${_weeklyReport.averageScore.round()}%',
               ),
               _WeeklyReportChip(
-                label: 'النقاط',
+                label: _l10n.points,
                 value: '${_weeklyReport.pointsEarned}',
               ),
               _WeeklyReportChip(
-                label: 'للتركيز',
-                value: _weeklyReport.focusSkill ?? 'ابدأ اختبارًا',
+                label: _l10n.studentProgressFocusLabel,
+                value: _weeklyReport.focusSkill ?? _l10n.startAssessment,
               ),
             ],
           ),
