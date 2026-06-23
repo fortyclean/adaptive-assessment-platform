@@ -22,12 +22,11 @@ It is **not accurate** to claim that every reference is independently routed and
 
 1. **Fixed:** `studentExamWithImage`, `studentExamWithBookmark`, and `studentExamWithTimerToggle` previously opened the generic `ExamScreen`. They now open `ExamWithImageScreen`, `ExamWithBookmarkScreen`, and `ExamWithTimerToggleScreen` respectively. A regression test protects these mappings.
 2. **Consolidated variants:** several Stitch reference images are alternatives/states of one Flutter screen rather than separate routes. This is acceptable only when the matching interaction remains available; it is not proof of pixel-perfect parity.
-3. **Unreachable or legacy screen classes:** `EssayGradingScreen`, `PendingEssaysScreen`, `QualityIndicatorScreen`, and the legacy `NotificationsScreen` have no direct `GoRouter` mapping in the current router. They should either be linked from their owner journeys or explicitly retired/merged to avoid dead product surface.
-4. **Visual verification gap:** the Android smoke test covers the login flow and the three role dashboards plus one primary action each. It does not provide screen-by-screen screenshot comparison against all Stitch references.
+3. **Resolved routing:** `PendingEssaysScreen`, `EssayGradingScreen`, and `QualityIndicatorScreen` now have canonical routes. The teacher dashboard exposes pending grading, pending attempts open the grading screen with the student context, and a question-card action opens quality analysis only when it has subject, grade, and unit data.
+4. **Remaining legacy surface:** `NotificationsScreen` remains an un-routed legacy implementation while `AdvancedNotificationCenterScreen` is the active notification experience. It should be explicitly retired or converted to an alias in a later cleanup.
+5. **Visual verification gap:** the Android smoke test covers the login flow and the three role dashboards plus one primary action each. It does not provide screen-by-screen screenshot comparison against all Stitch references.
 
 ## Recommended next batch
 
-1. Add accessible routes and entry points for pending essays and essay grading.
-2. Add a quality-indicator entry point from question-bank workflows with explicit subject/grade/unit parameters.
-3. Retire or route the legacy notifications implementation after deciding which notification UI is canonical.
-4. Add screenshot-golden checks for the high-traffic Stitch screens before claiming pixel-perfect completion.
+1. Retire or convert the legacy notifications implementation into an alias after confirming the advanced center is canonical.
+2. Add screenshot-golden checks for the high-traffic Stitch screens before claiming pixel-perfect completion.

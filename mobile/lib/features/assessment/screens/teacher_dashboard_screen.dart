@@ -439,6 +439,11 @@ class _TeacherDashboardScreenState
           label: l10n.myClasses,
           onTap: () => context.push(AppRoutes.myClasses),
         ),
+        _buildQuickLink(
+          icon: Icons.rate_review_rounded,
+          label: l10n.pendingEssaysTitle,
+          onTap: () => context.push(AppRoutes.teacherPendingEssays),
+        ),
         const SizedBox(height: 24),
       ],
     );

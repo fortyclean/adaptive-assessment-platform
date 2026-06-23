@@ -347,6 +347,37 @@ class _QuestionBankScreenState extends ConsumerState<QuestionBankScreen> {
                               question: _questions[i],
                               onEdit: () => _editQuestion(_questions[i]),
                               onDelete: () => _deleteQuestion(_questions[i]),
+                              onQuality: () {
+                                final question = _questions[i];
+                                final subject = question['subject'] as String?;
+                                final gradeLevel =
+                                    question['gradeLevel'] as String?;
+                                final unit = question['unit'] as String?;
+                                if (subject == null ||
+                                    gradeLevel == null ||
+                                    unit == null ||
+                                    subject.isEmpty ||
+                                    gradeLevel.isEmpty ||
+                                    unit.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        l10n.qualityDataLoadFailed,
+                                      ),
+                                      backgroundColor: AppColors.error,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                context.push(
+                                  AppRoutes.teacherQuestionQuality,
+                                  extra: {
+                                    'subject': subject,
+                                    'gradeLevel': gradeLevel,
+                                    'unit': unit,
+                                  },
+                                );
+                              },
                             );
                           },
                         ),
@@ -616,11 +647,17 @@ class _ActionButton extends StatelessWidget {
 }
 
 class _QuestionCard extends StatelessWidget {
-  const _QuestionCard({required this.question, this.onEdit, this.onDelete});
+  const _QuestionCard({
+    required this.question,
+    this.onEdit,
+    this.onDelete,
+    this.onQuality,
+  });
 
   final Map<String, dynamic> question;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onQuality;
 
   Color get _difficultyColor {
     switch (question['difficulty']) {
@@ -734,6 +771,9 @@ class _QuestionCard extends StatelessWidget {
                     onSelected: (value) {
                       if (value == 'edit' && onEdit != null) onEdit!();
                       if (value == 'delete' && onDelete != null) onDelete!();
+                      if (value == 'quality' && onQuality != null) {
+                        onQuality!();
+                      }
                     },
                     itemBuilder: (_) => [
                       PopupMenuItem(
@@ -763,6 +803,17 @@ class _QuestionCard extends StatelessWidget {
                           ],
                         ),
                       ),
+                      if (onQuality != null)
+                        PopupMenuItem(
+                          value: 'quality',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.analytics_outlined, size: 16),
+                              const SizedBox(width: 8),
+                              Text(l10n.questionBankQualityTitle),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.100';
-  static const int buildNumber = 100;
+  static const String current = '1.0.101';
+  static const int buildNumber = 101;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.101',
+      buildNumber: 101,
+      date: 'يونيو 2026',
+      title: 'تكامل شاشات التصحيح وجودة الأسئلة',
+      changes: [
+        'إتاحة قائمة المقالات المعلقة من لوحة المعلم.',
+        'ربط المقالة المعلقة بشاشة التصحيح مع بيانات الطالب.',
+        'إتاحة تحليل جودة بنك الأسئلة من إجراءات بطاقة السؤال.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.100',
       buildNumber: 100,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/router/app_router.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../l10n/app_localizations_ar.dart';
 import '../../assessment/repositories/teacher_repository.dart';
@@ -138,7 +139,10 @@ class _PendingEssaysScreenState extends ConsumerState<PendingEssaysScreen> {
               final studentName = attempt['studentName'] as String? ??
                   _pendingEssaysL10n(context).studentFallbackName;
               context.push(
-                '/teacher/pending-essays/$attemptId',
+                AppRoutes.teacherEssayGrading.replaceFirst(
+                  ':attemptId',
+                  attemptId,
+                ),
                 extra: {'studentName': studentName},
               );
             },

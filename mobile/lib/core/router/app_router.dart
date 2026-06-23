@@ -58,7 +58,10 @@ import '../../features/question_bank/screens/add_question_screen.dart';
 import '../../features/question_bank/screens/advanced_question_editor_screen.dart';
 import '../../features/question_bank/screens/import_excel_screen.dart';
 import '../../features/question_bank/screens/question_bank_screen.dart';
+import '../../features/question_bank/screens/quality_indicator_screen.dart';
 import '../../features/reports/screens/certificates_screen.dart';
+import '../../features/reports/screens/essay_grading_screen.dart';
+import '../../features/reports/screens/pending_essays_screen.dart';
 import '../../features/reports/screens/performance_alert_screen.dart';
 import '../../features/reports/screens/report_schedule_screen.dart';
 import '../../features/reports/screens/school_reports_screen.dart';
@@ -101,6 +104,10 @@ class AppRoutes {
   static const String teacherReports = '/teacher/reports';
   static const String teacherSettings = '/teacher/settings';
   static const String teacherNotifications = '/teacher/notifications';
+  static const String teacherPendingEssays = '/teacher/pending-essays';
+  static const String teacherEssayGrading =
+      '/teacher/pending-essays/:attemptId';
+  static const String teacherQuestionQuality = '/teacher/questions/quality';
 
   // Account Settings (Screen 49)
   static const String accountSettings = '/account-settings';
@@ -422,11 +429,41 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
+            path: 'questions/quality',
+            name: 'teacherQuestionQuality',
+            builder: (_, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return QualityIndicatorScreen(
+                subject: extra?['subject'] as String? ?? '',
+                gradeLevel: extra?['gradeLevel'] as String? ?? '',
+                unit: extra?['unit'] as String? ?? '',
+              );
+            },
+          ),
+          GoRoute(
             path: 'reports/:assessmentId',
             name: 'teacherReportDetail',
             builder: (_, state) => TeacherReportScreen(
               assessmentId: state.pathParameters['assessmentId'] ?? '',
             ),
+          ),
+          GoRoute(
+            path: 'pending-essays',
+            name: 'teacherPendingEssays',
+            builder: (_, __) => const PendingEssaysScreen(),
+            routes: [
+              GoRoute(
+                path: ':attemptId',
+                name: 'teacherEssayGrading',
+                builder: (_, state) {
+                  final extra = state.extra as Map<String, dynamic>?;
+                  return EssayGradingScreen(
+                    attemptId: state.pathParameters['attemptId'] ?? '',
+                    studentName: extra?['studentName'] as String? ?? '',
+                  );
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: 'settings',
