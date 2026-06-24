@@ -14,8 +14,12 @@ class NotificationService {
   NotificationService._internal();
   static final NotificationService instance = NotificationService._internal();
 
-  static const String _oneSignalAppId =
-      String.fromEnvironment('ONESIGNAL_APP_ID');
+  // A OneSignal app ID identifies a mobile app; it is not a server credential.
+  // Keep the compile-time override so staging builds can target a separate app.
+  static const String _oneSignalAppId = String.fromEnvironment(
+    'ONESIGNAL_APP_ID',
+    defaultValue: '50eef038-322d-47e2-8fe5-f7820ec98734',
+  );
 
   static const AndroidNotificationDetails _instantAndroidDetails =
       AndroidNotificationDetails(
@@ -83,7 +87,15 @@ class NotificationService {
     final androidImplementation =
         _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
-    return androidImplementation?.requestNotificationsPermission();
+    final localPermission =
+        await androidImplementation?.requestNotificationsPermission();
+
+    if (isRemotePushConfigured) {
+      await _initOneSignalIfConfigured();
+      await OneSignal.Notifications.requestPermission(true);
+    }
+
+    return localPermission;
   }
 
   Future<void> showInstantNotification({
@@ -157,10 +169,7 @@ class NotificationService {
 
     try {
       await OneSignal.login(user.id);
-      await OneSignal.User.addTags({
-        'role': user.role.name,
-        'username': user.username,
-      });
+      await OneSignal.User.addTags({'role': user.role.name});
       await OneSignal.User.pushSubscription.optIn();
       await _registerCurrentOneSignalSubscription();
     } catch (_, stackTrace) {

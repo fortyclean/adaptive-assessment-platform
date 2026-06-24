@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.102';
-  static const int buildNumber = 102;
+  static const String current = '1.0.103';
+  static const int buildNumber = 103;
   static const String releaseDate = 'يونيو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.103',
+      buildNumber: 103,
+      date: 'يونيو 2026',
+      title: 'تكامل إشعارات OneSignal على Android',
+      changes: [
+        'تفعيل معرف تطبيق OneSignal للإصدار الافتراضي مع دعم بناءات الاختبار المنفصلة.',
+        'إضافة إذن إشعارات Android 13+ وربط الطلب من إعدادات التطبيق.',
+        'ربط الاشتراك بحساب المستخدم دون إضافة اسم المستخدم إلى وسوم الإشعارات.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.102',
       buildNumber: 102,
