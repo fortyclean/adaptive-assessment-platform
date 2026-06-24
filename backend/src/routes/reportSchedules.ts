@@ -63,9 +63,7 @@ router.post(
         deliveryTime,
         recipients,
         fileFormat,
-        classroomIds: (classroomIds ?? []).map(
-          (id) => new mongoose.Types.ObjectId(id),
-        ),
+        classroomIds: (classroomIds ?? []).map((id) => new mongoose.Types.ObjectId(id)),
         isActive: isActive ?? true,
         createdBy: new mongoose.Types.ObjectId(req.user!.userId),
       });

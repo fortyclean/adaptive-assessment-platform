@@ -23,16 +23,17 @@ export const config = {
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379',
     ttl: {
-      questions: 3600,        // 1 hour
-      assessment: 86400,      // 24 hours
-      userSession: 28800,     // 8 hours
+      questions: 3600, // 1 hour
+      assessment: 86400, // 24 hours
+      userSession: 28800, // 8 hours
       classroomStudents: 1800, // 30 minutes
     },
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'fallback_dev_secret_change_in_production',
     expiresIn: process.env.JWT_EXPIRES_IN || '8h',
-    refreshSecret: process.env.REFRESH_TOKEN_SECRET || 'fallback_refresh_secret_change_in_production',
+    refreshSecret:
+      process.env.REFRESH_TOKEN_SECRET || 'fallback_refresh_secret_change_in_production',
     refreshExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '7d',
   },
   bcrypt: {

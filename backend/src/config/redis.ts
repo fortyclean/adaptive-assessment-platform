@@ -40,7 +40,9 @@ export async function connectRedis(): Promise<Redis> {
     });
 
     client.on('error', (error) => {
-      logger.warn('Redis connection error — app will run without cache', { message: (error as Error).message });
+      logger.warn('Redis connection error — app will run without cache', {
+        message: (error as Error).message,
+      });
       // Resolve anyway so the app starts — Redis is optional for basic functionality
       if (!redisClient) {
         resolve(client);

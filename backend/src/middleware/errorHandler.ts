@@ -53,12 +53,7 @@ export class TooManyRequestsError extends AppError {
 
 // Global error handler middleware
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function errorHandler(
-  err: Error,
-  req: Request,
-  res: Response,
-  _next: NextFunction,
-): void {
+export function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction): void {
   const requestId = uuidv4();
 
   // Log the error with request context

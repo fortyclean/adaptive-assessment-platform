@@ -108,15 +108,19 @@ router.post(
 
 // ─── GET /api/v1/media/:key — Get signed URL ─────────────────────────────────
 
-router.get('/:key(*)', authorize('teacher', 'admin', 'student'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const key = req.params.key;
-    const signedUrl = await getSignedDownloadUrl(key);
-    res.status(200).json({ url: signedUrl });
-  } catch (error) {
-    logger.warn('Image URL generation failed', { error });
-    res.status(404).json({ error: 'Image not found' });
-  }
-});
+router.get(
+  '/:key(*)',
+  authorize('teacher', 'admin', 'student'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const key = req.params.key;
+      const signedUrl = await getSignedDownloadUrl(key);
+      res.status(200).json({ url: signedUrl });
+    } catch (error) {
+      logger.warn('Image URL generation failed', { error });
+      res.status(404).json({ error: 'Image not found' });
+    }
+  },
+);
 
 export default router;

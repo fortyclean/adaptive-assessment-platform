@@ -90,7 +90,10 @@ export async function validateIndexes(): Promise<void> {
     const collections = ['users', 'questions', 'assessments', 'studentattempts', 'classrooms'];
     for (const col of collections) {
       const indexes = await db.collection(col).indexes();
-      logger.info(`Indexes for ${col}`, { count: indexes.length, indexes: indexes.map((i) => i.name) });
+      logger.info(`Indexes for ${col}`, {
+        count: indexes.length,
+        indexes: indexes.map((i) => i.name),
+      });
     }
   } catch (error) {
     logger.warn('Index validation failed (non-critical)', { error });

@@ -23,7 +23,7 @@ It is **not accurate** to claim that every reference is independently routed and
 1. **Fixed:** `studentExamWithImage`, `studentExamWithBookmark`, and `studentExamWithTimerToggle` previously opened the generic `ExamScreen`. They now open `ExamWithImageScreen`, `ExamWithBookmarkScreen`, and `ExamWithTimerToggleScreen` respectively. A regression test protects these mappings.
 2. **Consolidated variants:** several Stitch reference images are alternatives/states of one Flutter screen rather than separate routes. This is acceptable only when the matching interaction remains available; it is not proof of pixel-perfect parity.
 3. **Resolved routing:** `PendingEssaysScreen`, `EssayGradingScreen`, and `QualityIndicatorScreen` now have canonical routes. The teacher dashboard exposes pending grading, pending attempts open the grading screen with the student context, and a question-card action opens quality analysis only when it has subject, grade, and unit data.
-4. **Remaining legacy surface:** `NotificationsScreen` remains an un-routed legacy implementation while `AdvancedNotificationCenterScreen` is the active notification experience. It should be explicitly retired or converted to an alias in a later cleanup.
+4. **Resolved notification ownership:** `AdvancedNotificationCenterScreen` is the canonical notification experience. `NotificationsScreen` is now a deprecated compatibility alias, so no stale import can revive a second flow.
 5. **Visual verification gap:** the Android smoke test covers the login flow and the three role dashboards plus one primary action each. It does not provide screen-by-screen screenshot comparison against all Stitch references.
 
 ## Recommended next batch

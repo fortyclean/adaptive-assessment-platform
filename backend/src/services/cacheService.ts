@@ -15,9 +15,9 @@ import { cache } from '../config/redis';
 import { logger } from '../utils/logger';
 
 const TTL = {
-  QUESTIONS: 3600,        // 1 hour
-  ASSESSMENT: 86400,      // 24 hours
-  USER_SESSION: 28800,    // 8 hours
+  QUESTIONS: 3600, // 1 hour
+  ASSESSMENT: 86400, // 24 hours
+  USER_SESSION: 28800, // 8 hours
   CLASSROOM_STUDENTS: 1800, // 30 minutes
 } as const;
 

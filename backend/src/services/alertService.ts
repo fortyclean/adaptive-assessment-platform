@@ -47,9 +47,7 @@ function average(values: number[]): number {
  * Index 0 = 6 days ago, index 6 = today.
  * Days with no attempts get a value of 0.
  */
-function buildWeeklyTrend(
-  attempts: { submittedAt?: Date; scorePercentage?: number }[],
-): number[] {
+function buildWeeklyTrend(attempts: { submittedAt?: Date; scorePercentage?: number }[]): number[] {
   const trend: number[] = new Array(7).fill(0);
   const now = new Date();
 

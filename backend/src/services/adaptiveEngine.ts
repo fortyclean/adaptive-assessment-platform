@@ -88,9 +88,7 @@ export function selectNextQuestion<T extends QuestionCandidate>(
   }
 
   // Find candidates at the target difficulty first.
-  const targetCandidates = available.filter(
-    (q) => q.difficulty === session.currentDifficulty,
-  );
+  const targetCandidates = available.filter((q) => q.difficulty === session.currentDifficulty);
 
   let candidates = targetCandidates;
 
@@ -243,10 +241,7 @@ export async function clearSessionCache(attemptId: string): Promise<void> {
  * @param acceptedAnswers - One or more accepted correct answers defined by the teacher.
  * @returns true if the student's answer matches at least one accepted answer.
  */
-export function checkFillBlankAnswer(
-  studentAnswer: string,
-  acceptedAnswers: string[],
-): boolean {
+export function checkFillBlankAnswer(studentAnswer: string, acceptedAnswers: string[]): boolean {
   if (!studentAnswer || acceptedAnswers.length === 0) return false;
   const normalised = studentAnswer.trim().toLowerCase();
   return acceptedAnswers.some((a) => a.trim().toLowerCase() === normalised);

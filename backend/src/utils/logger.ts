@@ -10,19 +10,13 @@ const developmentFormat = combine(
   simple(),
 );
 
-const productionFormat = combine(
-  timestamp(),
-  errors({ stack: true }),
-  json(),
-);
+const productionFormat = combine(timestamp(), errors({ stack: true }), json());
 
 export const logger = winston.createLogger({
   level: config.app.isDevelopment ? 'debug' : 'info',
   format: config.app.isDevelopment ? developmentFormat : productionFormat,
   defaultMeta: { service: 'adaptive-assessment-api' },
-  transports: [
-    new winston.transports.Console(),
-  ],
+  transports: [new winston.transports.Console()],
   // Do not exit on handled exceptions
   exitOnError: false,
 });

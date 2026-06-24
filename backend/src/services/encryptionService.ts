@@ -19,14 +19,16 @@ import crypto from 'crypto';
 import { logger } from '../utils/logger';
 
 const ALGORITHM = 'aes-256-gcm';
-const IV_LENGTH = 12;   // 96-bit IV recommended for GCM
-const TAG_LENGTH = 16;  // 128-bit auth tag
+const IV_LENGTH = 12; // 96-bit IV recommended for GCM
+const TAG_LENGTH = 16; // 128-bit auth tag
 
 function getEncryptionKey(): Buffer | null {
   const keyHex = process.env.ENCRYPTION_KEY;
   if (!keyHex) {
     if (process.env.NODE_ENV === 'production') {
-      logger.error('ENCRYPTION_KEY is not set in production — sensitive data will NOT be encrypted');
+      logger.error(
+        'ENCRYPTION_KEY is not set in production — sensitive data will NOT be encrypted',
+      );
     }
     return null;
   }
@@ -53,11 +55,9 @@ export function encrypt(plaintext: string): string {
   const authTag = cipher.getAuthTag();
 
   // Format: base64(iv):base64(authTag):base64(ciphertext)
-  return [
-    iv.toString('base64'),
-    authTag.toString('base64'),
-    encrypted.toString('base64'),
-  ].join(':');
+  return [iv.toString('base64'), authTag.toString('base64'), encrypted.toString('base64')].join(
+    ':',
+  );
 }
 
 /**
@@ -107,10 +107,7 @@ export function isEncryptionEnabled(): boolean {
  * Encrypts an object's specified fields in-place.
  * Useful for encrypting sensitive MongoDB document fields before save.
  */
-export function encryptFields<T extends Record<string, unknown>>(
-  obj: T,
-  fields: (keyof T)[],
-): T {
+export function encryptFields<T extends Record<string, unknown>>(obj: T, fields: (keyof T)[]): T {
   const result = { ...obj };
   for (const field of fields) {
     if (typeof result[field] === 'string') {
@@ -124,10 +121,7 @@ export function encryptFields<T extends Record<string, unknown>>(
  * Decrypts an object's specified fields in-place.
  * Useful for decrypting sensitive MongoDB document fields after read.
  */
-export function decryptFields<T extends Record<string, unknown>>(
-  obj: T,
-  fields: (keyof T)[],
-): T {
+export function decryptFields<T extends Record<string, unknown>>(obj: T, fields: (keyof T)[]): T {
   const result = { ...obj };
   for (const field of fields) {
     if (typeof result[field] === 'string') {

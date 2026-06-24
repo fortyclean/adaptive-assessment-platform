@@ -23,7 +23,7 @@ Use this checklist before creating any new signed APK or App Bundle. A version c
 ## Artifact and approval gates
 
 - [ ] The target package ID, versionCode/versionName, signing certificate, and SHA-256 are independently verified.
-- [ ] The artifact-size decision (APK, App Bundle, or ABI split) is based on a measured result.
+- [x] App Bundle is the preferred Play distribution format: the measured `1.0.101` bundle was 52.57 MiB versus 69.32 MiB for the prior APK (about 24% smaller). Reconfirm the measurement for a future production artifact.
 - [ ] The release evidence report contains only completed checks and known blockers.
 - [ ] An authorized release owner has approved the new distributable.
 

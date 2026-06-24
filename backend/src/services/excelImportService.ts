@@ -42,9 +42,19 @@ export interface ImportResult {
 // ─── Required columns ─────────────────────────────────────────────────────────
 
 const REQUIRED_COLUMNS = [
-  'subject', 'gradeLevel', 'academicTerm', 'unit',
-  'mainSkill', 'subSkill', 'difficulty', 'questionType',
-  'questionText', 'optionA', 'optionB', 'optionC', 'optionD',
+  'subject',
+  'gradeLevel',
+  'academicTerm',
+  'unit',
+  'mainSkill',
+  'subSkill',
+  'difficulty',
+  'questionType',
+  'questionText',
+  'optionA',
+  'optionB',
+  'optionC',
+  'optionD',
   'correctAnswer',
 ];
 
@@ -85,7 +95,7 @@ const validateRow = (
   if (errors.length > 0) return { valid: false, errors };
 
   // Validate subject
-  if (!SUBJECTS.includes(row.subject as typeof SUBJECTS[number])) {
+  if (!SUBJECTS.includes(row.subject as (typeof SUBJECTS)[number])) {
     errors.push({
       row: rowIndex,
       field: 'subject',
@@ -126,8 +136,9 @@ const validateRow = (
   }
 
   // Validate no duplicate option values
-  const optionValues = [row.optionA, row.optionB, row.optionC, row.optionD]
-    .map((v) => v.trim().toLowerCase());
+  const optionValues = [row.optionA, row.optionB, row.optionC, row.optionD].map((v) =>
+    v.trim().toLowerCase(),
+  );
   const uniqueValues = new Set(optionValues);
   if (uniqueValues.size !== optionValues.length) {
     errors.push({

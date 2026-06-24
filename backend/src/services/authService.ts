@@ -30,7 +30,9 @@ export const verifyPassword = async (password: string, hash: string): Promise<bo
   return bcrypt.compare(password, hash);
 };
 
-export const validatePasswordStrength = (password: string): { valid: boolean; message?: string } => {
+export const validatePasswordStrength = (
+  password: string,
+): { valid: boolean; message?: string } => {
   if (password.length < 8) {
     return { valid: false, message: 'Password must be at least 8 characters long' };
   }
@@ -86,8 +88,9 @@ export const loginUser = async (
   password: string,
   ipAddress: string,
 ): Promise<LoginResult> => {
-  const user = await User.findOne({ username: username.toLowerCase().trim() })
-    .select('+passwordHash +failedLoginAttempts +lockedUntil +activeSessions') as IUserDocument | null;
+  const user = (await User.findOne({ username: username.toLowerCase().trim() }).select(
+    '+passwordHash +failedLoginAttempts +lockedUntil +activeSessions',
+  )) as IUserDocument | null;
 
   if (!user) {
     // Return generic error to prevent username enumeration
@@ -158,9 +161,7 @@ export const loginUser = async (
   }
 
   // Reset failed attempts on successful login
-  const activeSessions = Array.isArray(user.activeSessions)
-    ? [...user.activeSessions]
-    : [];
+  const activeSessions = Array.isArray(user.activeSessions) ? [...user.activeSessions] : [];
 
   // Generate session ID
   const sessionId = `${user._id}-${Date.now()}-${Math.random().toString(36).substring(7)}`;

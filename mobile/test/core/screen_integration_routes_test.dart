@@ -13,4 +13,14 @@ void main() {
     expect(router, contains("name: 'teacherQuestionQuality'"));
     expect(router, contains('QualityIndicatorScreen'));
   });
+
+  test('all active notification routes use the canonical advanced center', () {
+    expect(router, contains("name: 'notificationCenter'"));
+    expect(router, contains("name: 'teacherNotifications'"));
+    expect(router, contains("name: 'studentNotifications'"));
+    expect(
+      RegExp('AdvancedNotificationCenterScreen').allMatches(router).length,
+      greaterThanOrEqualTo(3),
+    );
+  });
 }

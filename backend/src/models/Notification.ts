@@ -1,6 +1,12 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export type NotificationType = 'new_assessment' | 'result_ready' | 'reminder' | 'achievement' | 'session_completed' | 'essay_grading_required';
+export type NotificationType =
+  | 'new_assessment'
+  | 'result_ready'
+  | 'reminder'
+  | 'achievement'
+  | 'session_completed'
+  | 'essay_grading_required';
 export type RelatedType = 'assessment' | 'attempt';
 
 export interface INotification {
@@ -25,7 +31,14 @@ const notificationSchema = new Schema<INotificationDocument>(
     },
     type: {
       type: String,
-      enum: ['new_assessment', 'result_ready', 'reminder', 'achievement', 'session_completed', 'essay_grading_required'],
+      enum: [
+        'new_assessment',
+        'result_ready',
+        'reminder',
+        'achievement',
+        'session_completed',
+        'essay_grading_required',
+      ],
       required: [true, 'Notification type is required'],
     },
     title: {

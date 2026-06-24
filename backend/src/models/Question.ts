@@ -118,14 +118,12 @@ const questionSchema = new Schema<IQuestionDocument>(
           if (typeof value === 'string') return value.trim().length > 0;
           if (Array.isArray(value)) {
             return (
-              value.length > 0 &&
-              value.every((v) => typeof v === 'string' && v.trim().length > 0)
+              value.length > 0 && value.every((v) => typeof v === 'string' && v.trim().length > 0)
             );
           }
           return false;
         },
-        message:
-          'correctAnswer must be a non-empty string or a non-empty array of strings',
+        message: 'correctAnswer must be a non-empty string or a non-empty array of strings',
       },
     },
     imageUrl: {
@@ -159,9 +157,6 @@ questionSchema.index({ mainSkill: 1, subSkill: 1 });
 questionSchema.index({ questionText: 'text' });
 
 // Uniqueness constraint: no duplicate question text within same subject/grade/unit
-questionSchema.index(
-  { subject: 1, gradeLevel: 1, unit: 1, questionText: 1 },
-  { unique: true },
-);
+questionSchema.index({ subject: 1, gradeLevel: 1, unit: 1, questionText: 1 }, { unique: true });
 
 export const Question = mongoose.model<IQuestionDocument>('Question', questionSchema);

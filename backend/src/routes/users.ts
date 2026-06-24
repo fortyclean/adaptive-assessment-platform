@@ -3,7 +3,11 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import { User } from '../models/User';
 import { authenticate, authorize } from '../middleware/authenticate';
-import { invalidateAllSessions, hashPassword, validatePasswordStrength } from '../services/authService';
+import {
+  invalidateAllSessions,
+  hashPassword,
+  validatePasswordStrength,
+} from '../services/authService';
 import { logger } from '../utils/logger';
 import { env } from '../config/env';
 import mongoose from 'mongoose';
@@ -35,7 +39,10 @@ const paginationSchema = z.object({
   limit: z.string().default('20').transform(Number),
   role: z.enum(['admin', 'teacher', 'student']).optional(),
   search: z.string().optional(),
-  isActive: z.string().optional().transform((v) => (v === 'true' ? true : v === 'false' ? false : undefined)),
+  isActive: z
+    .string()
+    .optional()
+    .transform((v) => (v === 'true' ? true : v === 'false' ? false : undefined)),
 });
 
 // ─── GET /api/v1/users ────────────────────────────────────────────────────────
@@ -83,7 +90,9 @@ router.post('/', authorize('admin'), async (req: Request, res: Response): Promis
   try {
     const validation = createUserSchema.safeParse(req.body);
     if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+      res
+        .status(400)
+        .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
       return;
     }
 
@@ -141,7 +150,11 @@ router.post('/', authorize('admin'), async (req: Request, res: Response): Promis
 
     res.status(201).json(response);
   } catch (error) {
-    if (error instanceof mongoose.Error && 'code' in error && (error as { code?: number }).code === 11000) {
+    if (
+      error instanceof mongoose.Error &&
+      'code' in error &&
+      (error as { code?: number }).code === 11000
+    ) {
       res.status(409).json({ error: 'Username or email already exists' });
       return;
     }
@@ -172,20 +185,32 @@ router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Pr
   try {
     const validation = updateUserSchema.safeParse(req.body);
     if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+      res
+        .status(400)
+        .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
       return;
     }
 
-    const user = await User.findByIdAndUpdate(req.params.id, validation.data, { new: true, runValidators: true });
+    const user = await User.findByIdAndUpdate(req.params.id, validation.data, {
+      new: true,
+      runValidators: true,
+    });
     if (!user) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
 
-    logger.info('User updated by admin', { adminId: req.user!.userId, targetUserId: req.params.id });
+    logger.info('User updated by admin', {
+      adminId: req.user!.userId,
+      targetUserId: req.params.id,
+    });
     res.status(200).json({ user });
   } catch (error) {
-    if (error instanceof mongoose.Error && 'code' in error && (error as { code?: number }).code === 11000) {
+    if (
+      error instanceof mongoose.Error &&
+      'code' in error &&
+      (error as { code?: number }).code === 11000
+    ) {
       res.status(409).json({ error: 'Username or email already exists' });
       return;
     }
@@ -196,59 +221,72 @@ router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Pr
 
 // ─── PATCH /api/v1/users/:id/deactivate ──────────────────────────────────────
 
-router.patch('/:id/deactivate', authorize('admin'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      res.status(404).json({ error: 'User not found' });
-      return;
+router.patch(
+  '/:id/deactivate',
+  authorize('admin'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
+
+      if (user._id.toString() === req.user!.userId) {
+        res.status(400).json({ error: 'You cannot deactivate your own account' });
+        return;
+      }
+
+      // Immediately invalidate all active sessions (within 30 seconds per requirement 1.10)
+      await invalidateAllSessions(req.params.id);
+
+      user.isActive = false;
+      await user.save();
+
+      logger.info('User deactivated by admin', {
+        adminId: req.user!.userId,
+        targetUserId: req.params.id,
+        role: user.role,
+      });
+
+      res.status(200).json({
+        message: 'Account deactivated successfully. All active sessions have been invalidated.',
+      });
+    } catch (error) {
+      logger.error('Deactivate user error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
     }
-
-    if (user._id.toString() === req.user!.userId) {
-      res.status(400).json({ error: 'You cannot deactivate your own account' });
-      return;
-    }
-
-    // Immediately invalidate all active sessions (within 30 seconds per requirement 1.10)
-    await invalidateAllSessions(req.params.id);
-
-    user.isActive = false;
-    await user.save();
-
-    logger.info('User deactivated by admin', {
-      adminId: req.user!.userId,
-      targetUserId: req.params.id,
-      role: user.role,
-    });
-
-    res.status(200).json({ message: 'Account deactivated successfully. All active sessions have been invalidated.' });
-  } catch (error) {
-    logger.error('Deactivate user error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+  },
+);
 
 // ─── PATCH /api/v1/users/:id/reactivate ──────────────────────────────────────
 
-router.patch('/:id/reactivate', authorize('admin'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      { isActive: true, failedLoginAttempts: 0, lockedUntil: null },
-      { new: true },
-    );
+router.patch(
+  '/:id/reactivate',
+  authorize('admin'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.params.id,
+        { isActive: true, failedLoginAttempts: 0, lockedUntil: null },
+        { new: true },
+      );
 
-    if (!user) {
-      res.status(404).json({ error: 'User not found' });
-      return;
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
+
+      logger.info('User reactivated by admin', {
+        adminId: req.user!.userId,
+        targetUserId: req.params.id,
+      });
+      res.status(200).json({ message: 'Account reactivated successfully', user });
+    } catch (error) {
+      logger.error('Reactivate user error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
     }
-
-    logger.info('User reactivated by admin', { adminId: req.user!.userId, targetUserId: req.params.id });
-    res.status(200).json({ message: 'Account reactivated successfully', user });
-  } catch (error) {
-    logger.error('Reactivate user error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+  },
+);
 
 export default router;

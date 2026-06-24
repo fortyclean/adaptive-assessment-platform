@@ -4,12 +4,10 @@ import { User } from '../models/User';
 import { UserRole } from '../models/User';
 import { logger } from '../utils/logger';
 
-// Extend Express Request to include authenticated user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: TokenPayload;
-    }
+// Extend Express Request to include the authenticated user.
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: TokenPayload;
   }
 }
 

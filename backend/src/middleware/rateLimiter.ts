@@ -23,6 +23,8 @@ export const authRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, _res, next) => {
-    next(new TooManyRequestsError('Too many authentication attempts. Please try again in 15 minutes.'));
+    next(
+      new TooManyRequestsError('Too many authentication attempts. Please try again in 15 minutes.'),
+    );
   },
 });

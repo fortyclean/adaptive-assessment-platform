@@ -57,12 +57,15 @@ const antiCheatSchema = z.object({
 
 // ─── Helper: build AdaptiveSessionState from a StudentAttempt document ────────
 
-function buildSessionState(attempt: InstanceType<typeof StudentAttempt>, questionCount: number): AdaptiveSessionState {
+function buildSessionState(
+  attempt: InstanceType<typeof StudentAttempt>,
+  questionCount: number,
+): AdaptiveSessionState {
   return {
     sessionId: attempt._id.toString(),
     assessmentId: attempt.assessmentId.toString(),
     studentId: attempt.studentId.toString(),
-    subject: '',   // not needed for selectNextQuestion — filtering already done at session start
+    subject: '', // not needed for selectNextQuestion — filtering already done at session start
     units: [],
     questionCount,
     presentedQuestionIds: attempt.presentedQuestionIds.map((id) => id.toString()),
@@ -77,7 +80,9 @@ router.post('/', authorize('student'), async (req: Request, res: Response): Prom
   try {
     const validation = startAttemptSchema.safeParse(req.body);
     if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+      res
+        .status(400)
+        .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
       return;
     }
 
@@ -94,11 +99,17 @@ router.post('/', authorize('student'), async (req: Request, res: Response): Prom
     // Validate availability window (Req 5.7, 5.8)
     const now = new Date();
     if (assessment.availableFrom && now < assessment.availableFrom) {
-      res.status(403).json({ error: 'Assessment is not yet available', availableFrom: assessment.availableFrom });
+      res.status(403).json({
+        error: 'Assessment is not yet available',
+        availableFrom: assessment.availableFrom,
+      });
       return;
     }
     if (assessment.availableUntil && now > assessment.availableUntil) {
-      res.status(403).json({ error: 'Assessment availability window has closed', availableUntil: assessment.availableUntil });
+      res.status(403).json({
+        error: 'Assessment availability window has closed',
+        availableUntil: assessment.availableUntil,
+      });
       return;
     }
     if (assessment.status !== 'active') {
@@ -125,7 +136,9 @@ router.post('/', authorize('student'), async (req: Request, res: Response): Prom
       status: 'in_progress',
     });
     if (existing) {
-      res.status(409).json({ error: 'An in-progress attempt already exists', attemptId: existing._id });
+      res
+        .status(409)
+        .json({ error: 'An in-progress attempt already exists', attemptId: existing._id });
       return;
     }
 
@@ -151,10 +164,16 @@ router.post('/', authorize('student'), async (req: Request, res: Response): Prom
         gradeLevel: assessment.gradeLevel,
         unit: { $in: assessment.units },
         isArchived: false,
-      }).select('_id difficulty subject unit mainSkill subSkill questionText options correctAnswer').lean();
+      })
+        .select('_id difficulty subject unit mainSkill subSkill questionText options correctAnswer')
+        .lean();
 
       const ttlSeconds = assessment.timeLimitMinutes * 60 + 300; // session duration + 5 min buffer
-      await initializeSession(attempt._id.toString(), questions as unknown as QuestionCandidate[], ttlSeconds);
+      await initializeSession(
+        attempt._id.toString(),
+        questions as unknown as QuestionCandidate[],
+        ttlSeconds,
+      );
     }
 
     logger.info('Attempt started', { studentId, assessmentId, attemptId: attempt._id });
@@ -191,358 +210,396 @@ router.get('/', authorize('student'), async (req: Request, res: Response): Promi
 
 // ─── GET /api/v1/attempts/:id/next-question ───────────────────────────────────
 
-router.get('/:id/next-question', authorize('student'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const attempt = await StudentAttempt.findById(req.params.id);
-    if (!attempt) {
-      res.status(404).json({ error: 'Attempt not found' });
-      return;
-    }
-    if (attempt.studentId.toString() !== req.user!.userId) {
-      res.status(403).json({ error: 'Access denied' });
-      return;
-    }
-    if (attempt.status !== 'in_progress') {
-      res.status(400).json({ error: 'Attempt is not in progress' });
-      return;
-    }
-
-    const assessment = await Assessment.findById(attempt.assessmentId);
-    if (!assessment) {
-      res.status(404).json({ error: 'Assessment not found' });
-      return;
-    }
-
-    // Check session completion
-    if (attempt.answers.length >= assessment.questionCount) {
-      res.status(200).json({ complete: true, message: 'All questions have been answered' });
-      return;
-    }
-
-    let nextQuestion: QuestionCandidate | null = null;
-    const answeredCount = attempt.answers.length;
-    const presentedCount = attempt.presentedQuestionIds.length;
-
-    // If a question was already served but not yet answered, return it again.
-    // This prevents session drift on retries/network glitches.
-    if (presentedCount > answeredCount) {
-      const pendingQuestionId = attempt.presentedQuestionIds[presentedCount - 1];
-      const pendingQuestion = await Question.findById(pendingQuestionId)
-        .select('_id difficulty subject unit mainSkill subSkill questionText options')
-        .lean();
-      if (pendingQuestion) {
-        res.status(200).json({
-          complete: false,
-          question: pendingQuestion,
-          questionNumber: answeredCount + 1,
-          totalQuestions: assessment.questionCount,
-        });
+router.get(
+  '/:id/next-question',
+  authorize('student'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const attempt = await StudentAttempt.findById(req.params.id);
+      if (!attempt) {
+        res.status(404).json({ error: 'Attempt not found' });
         return;
       }
-    }
-
-    if (assessment.assessmentType === 'adaptive') {
-      // Retrieve from Redis cache (100ms SLA)
-      let questionBank = await getSessionQuestions<QuestionCandidate & Record<string, unknown>>(attempt._id.toString());
-
-      if (!questionBank) {
-        // Cache miss — reload from DB and re-cache
-        const questions = await Question.find({
-          subject: assessment.subject,
-          gradeLevel: assessment.gradeLevel,
-          unit: { $in: assessment.units },
-          isArchived: false,
-        }).select('_id difficulty subject unit mainSkill subSkill questionText options').lean();
-        questionBank = questions as unknown as (QuestionCandidate & Record<string, unknown>)[];
-        const ttlSeconds = assessment.timeLimitMinutes * 60 + 300;
-        await initializeSession(attempt._id.toString(), questionBank, ttlSeconds);
-      }
-
-      const sessionState = buildSessionState(attempt, assessment.questionCount);
-      nextQuestion = selectNextQuestion(sessionState, questionBank);
-    } else {
-      // Random assessment: serve questions from pre-selected list in order
-      const presentedSet = new Set(attempt.presentedQuestionIds.map((id) => id.toString()));
-      const remaining = assessment.questionIds.filter((id) => !presentedSet.has(id.toString()));
-      if (remaining.length === 0) {
-        res.status(200).json({ complete: true });
+      if (attempt.studentId.toString() !== req.user!.userId) {
+        res.status(403).json({ error: 'Access denied' });
         return;
       }
-      const questionDoc = await Question.findById(remaining[0]).select('_id difficulty subject unit mainSkill subSkill questionText options').lean();
-      nextQuestion = questionDoc as unknown as QuestionCandidate;
+      if (attempt.status !== 'in_progress') {
+        res.status(400).json({ error: 'Attempt is not in progress' });
+        return;
+      }
+
+      const assessment = await Assessment.findById(attempt.assessmentId);
+      if (!assessment) {
+        res.status(404).json({ error: 'Assessment not found' });
+        return;
+      }
+
+      // Check session completion
+      if (attempt.answers.length >= assessment.questionCount) {
+        res.status(200).json({ complete: true, message: 'All questions have been answered' });
+        return;
+      }
+
+      let nextQuestion: QuestionCandidate | null = null;
+      const answeredCount = attempt.answers.length;
+      const presentedCount = attempt.presentedQuestionIds.length;
+
+      // If a question was already served but not yet answered, return it again.
+      // This prevents session drift on retries/network glitches.
+      if (presentedCount > answeredCount) {
+        const pendingQuestionId = attempt.presentedQuestionIds[presentedCount - 1];
+        const pendingQuestion = await Question.findById(pendingQuestionId)
+          .select('_id difficulty subject unit mainSkill subSkill questionText options')
+          .lean();
+        if (pendingQuestion) {
+          res.status(200).json({
+            complete: false,
+            question: pendingQuestion,
+            questionNumber: answeredCount + 1,
+            totalQuestions: assessment.questionCount,
+          });
+          return;
+        }
+      }
+
+      if (assessment.assessmentType === 'adaptive') {
+        // Retrieve from Redis cache (100ms SLA)
+        let questionBank = await getSessionQuestions<QuestionCandidate & Record<string, unknown>>(
+          attempt._id.toString(),
+        );
+
+        if (!questionBank) {
+          // Cache miss — reload from DB and re-cache
+          const questions = await Question.find({
+            subject: assessment.subject,
+            gradeLevel: assessment.gradeLevel,
+            unit: { $in: assessment.units },
+            isArchived: false,
+          })
+            .select('_id difficulty subject unit mainSkill subSkill questionText options')
+            .lean();
+          questionBank = questions as unknown as (QuestionCandidate & Record<string, unknown>)[];
+          const ttlSeconds = assessment.timeLimitMinutes * 60 + 300;
+          await initializeSession(attempt._id.toString(), questionBank, ttlSeconds);
+        }
+
+        const sessionState = buildSessionState(attempt, assessment.questionCount);
+        nextQuestion = selectNextQuestion(sessionState, questionBank);
+      } else {
+        // Random assessment: serve questions from pre-selected list in order
+        const presentedSet = new Set(attempt.presentedQuestionIds.map((id) => id.toString()));
+        const remaining = assessment.questionIds.filter((id) => !presentedSet.has(id.toString()));
+        if (remaining.length === 0) {
+          res.status(200).json({ complete: true });
+          return;
+        }
+        const questionDoc = await Question.findById(remaining[0])
+          .select('_id difficulty subject unit mainSkill subSkill questionText options')
+          .lean();
+        nextQuestion = questionDoc as unknown as QuestionCandidate;
+      }
+
+      if (!nextQuestion) {
+        res.status(200).json({ complete: true, message: 'No more questions available' });
+        return;
+      }
+
+      // Persist served question inside the session before sending it to client.
+      attempt.presentedQuestionIds.push(new mongoose.Types.ObjectId(nextQuestion._id.toString()));
+      await attempt.save();
+
+      // Never send correctAnswer to client before session ends (Req 7.14)
+      const { correctAnswer: _hidden, ...safeQuestion } = nextQuestion as QuestionCandidate & {
+        correctAnswer?: string;
+      };
+
+      res.status(200).json({
+        complete: false,
+        question: safeQuestion,
+        questionNumber: attempt.answers.length + 1,
+        totalQuestions: assessment.questionCount,
+      });
+    } catch (error) {
+      logger.error('Next question error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
     }
-
-    if (!nextQuestion) {
-      res.status(200).json({ complete: true, message: 'No more questions available' });
-      return;
-    }
-
-    // Persist served question inside the session before sending it to client.
-    attempt.presentedQuestionIds.push(new mongoose.Types.ObjectId(nextQuestion._id.toString()));
-    await attempt.save();
-
-    // Never send correctAnswer to client before session ends (Req 7.14)
-    const { correctAnswer: _hidden, ...safeQuestion } = nextQuestion as QuestionCandidate & { correctAnswer?: string };
-
-    res.status(200).json({
-      complete: false,
-      question: safeQuestion,
-      questionNumber: attempt.answers.length + 1,
-      totalQuestions: assessment.questionCount,
-    });
-  } catch (error) {
-    logger.error('Next question error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+  },
+);
 
 // ─── POST /api/v1/attempts/:id/answer — Submit answer ────────────────────────
 
-router.post('/:id/answer', authorize('student'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const validation = submitAnswerSchema.safeParse(req.body);
-    if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
-      return;
-    }
-
-    const { questionId, selectedAnswer } = validation.data;
-
-    const attempt = await StudentAttempt.findById(req.params.id);
-    if (!attempt) {
-      res.status(404).json({ error: 'Attempt not found' });
-      return;
-    }
-    if (attempt.studentId.toString() !== req.user!.userId) {
-      res.status(403).json({ error: 'Access denied' });
-      return;
-    }
-    if (attempt.status !== 'in_progress') {
-      res.status(400).json({ error: 'Attempt is not in progress' });
-      return;
-    }
-
-    const assessment = await Assessment.findById(attempt.assessmentId);
-    if (!assessment) {
-      res.status(404).json({ error: 'Assessment not found' });
-      return;
-    }
-
-    // Validate question belongs to this session (Req 7.14)
-    const questionObjId = new mongoose.Types.ObjectId(questionId);
-    const alreadyPresented = attempt.presentedQuestionIds.some((id) => id.equals(questionObjId));
-    if (!alreadyPresented) {
-      res.status(403).json({ error: 'Question does not belong to this session' });
-      return;
-    }
-
-    // Prevent re-answering the same question
-    const alreadyAnswered = attempt.answers.some((a) => a.questionId.equals(questionObjId));
-    if (alreadyAnswered) {
-      res.status(409).json({ error: 'Question has already been answered' });
-      return;
-    }
-
-    // Load question to validate answer server-side (Req 7.14)
-    const question = await Question.findById(questionId);
-    if (!question) {
-      res.status(404).json({ error: 'Question not found' });
-      return;
-    }
-
-    const isEssay = question.questionType === 'essay';
-    let isCorrect = false;
-
-    if (!isEssay) {
-      // For MCQ, True/False, Fill-in-the-Blank: validate server-side
-      if (question.questionType === 'fill_blank') {
-        const accepted = Array.isArray(question.correctAnswer)
-          ? question.correctAnswer
-          : [question.correctAnswer as string];
-        isCorrect = checkFillBlankAnswer(selectedAnswer, accepted);
-      } else {
-        isCorrect = question.correctAnswer === selectedAnswer;
+router.post(
+  '/:id/answer',
+  authorize('student'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const validation = submitAnswerSchema.safeParse(req.body);
+      if (!validation.success) {
+        res
+          .status(400)
+          .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+        return;
       }
+
+      const { questionId, selectedAnswer } = validation.data;
+
+      const attempt = await StudentAttempt.findById(req.params.id);
+      if (!attempt) {
+        res.status(404).json({ error: 'Attempt not found' });
+        return;
+      }
+      if (attempt.studentId.toString() !== req.user!.userId) {
+        res.status(403).json({ error: 'Access denied' });
+        return;
+      }
+      if (attempt.status !== 'in_progress') {
+        res.status(400).json({ error: 'Attempt is not in progress' });
+        return;
+      }
+
+      const assessment = await Assessment.findById(attempt.assessmentId);
+      if (!assessment) {
+        res.status(404).json({ error: 'Assessment not found' });
+        return;
+      }
+
+      // Validate question belongs to this session (Req 7.14)
+      const questionObjId = new mongoose.Types.ObjectId(questionId);
+      const alreadyPresented = attempt.presentedQuestionIds.some((id) => id.equals(questionObjId));
+      if (!alreadyPresented) {
+        res.status(403).json({ error: 'Question does not belong to this session' });
+        return;
+      }
+
+      // Prevent re-answering the same question
+      const alreadyAnswered = attempt.answers.some((a) => a.questionId.equals(questionObjId));
+      if (alreadyAnswered) {
+        res.status(409).json({ error: 'Question has already been answered' });
+        return;
+      }
+
+      // Load question to validate answer server-side (Req 7.14)
+      const question = await Question.findById(questionId);
+      if (!question) {
+        res.status(404).json({ error: 'Question not found' });
+        return;
+      }
+
+      const isEssay = question.questionType === 'essay';
+      let isCorrect = false;
+
+      if (!isEssay) {
+        // For MCQ, True/False, Fill-in-the-Blank: validate server-side
+        if (question.questionType === 'fill_blank') {
+          const accepted = Array.isArray(question.correctAnswer)
+            ? question.correctAnswer
+            : [question.correctAnswer as string];
+          isCorrect = checkFillBlankAnswer(selectedAnswer, accepted);
+        } else {
+          isCorrect = question.correctAnswer === selectedAnswer;
+        }
+      }
+      // Essay answers are always marked isCorrect=false until teacher grades them (Req 18.5, 18.6)
+
+      // Record answer
+      attempt.answers.push({
+        questionId: questionObjId,
+        questionText: question.questionText,
+        selectedAnswer,
+        correctAnswer: isEssay
+          ? ''
+          : Array.isArray(question.correctAnswer)
+            ? question.correctAnswer.join(', ')
+            : question.correctAnswer,
+        isCorrect,
+        difficultyLevel: question.difficulty,
+        mainSkill: question.mainSkill,
+        subSkill: question.subSkill,
+        answeredAt: new Date(),
+        isEssay,
+        maxMarks: isEssay ? 10 : undefined, // default max marks for essay; teacher can adjust when grading
+      });
+
+      // Update adaptive difficulty for next question
+      attempt.currentDifficultyLevel = getNextDifficulty(attempt.currentDifficultyLevel, isCorrect);
+
+      // Check if session is now complete
+      if (attempt.answers.length >= assessment.questionCount) {
+        await finaliseAttempt(attempt, assessment);
+      } else {
+        await attempt.save();
+      }
+
+      res.status(200).json({
+        isCorrect: undefined, // never reveal correctness during session
+        answeredCount: attempt.answers.length,
+        totalQuestions: assessment.questionCount,
+        sessionComplete: attempt.status !== 'in_progress',
+      });
+    } catch (error) {
+      logger.error('Submit answer error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
     }
-    // Essay answers are always marked isCorrect=false until teacher grades them (Req 18.5, 18.6)
-
-    // Record answer
-    attempt.answers.push({
-      questionId: questionObjId,
-      questionText: question.questionText,
-      selectedAnswer,
-      correctAnswer: isEssay ? '' : (Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer),
-      isCorrect,
-      difficultyLevel: question.difficulty,
-      mainSkill: question.mainSkill,
-      subSkill: question.subSkill,
-      answeredAt: new Date(),
-      isEssay,
-      maxMarks: isEssay ? 10 : undefined, // default max marks for essay; teacher can adjust when grading
-    });
-
-    // Update adaptive difficulty for next question
-    attempt.currentDifficultyLevel = getNextDifficulty(
-      attempt.currentDifficultyLevel,
-      isCorrect,
-    );
-
-    // Check if session is now complete
-    if (attempt.answers.length >= assessment.questionCount) {
-      await finaliseAttempt(attempt, assessment);
-    } else {
-      await attempt.save();
-    }
-
-    res.status(200).json({
-      isCorrect: undefined, // never reveal correctness during session
-      answeredCount: attempt.answers.length,
-      totalQuestions: assessment.questionCount,
-      sessionComplete: attempt.status !== 'in_progress',
-    });
-  } catch (error) {
-    logger.error('Submit answer error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+  },
+);
 
 // ─── POST /api/v1/attempts/:id/submit — Finalise session ─────────────────────
 
-router.post('/:id/submit', authorize('student'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const attempt = await StudentAttempt.findById(req.params.id);
-    if (!attempt) {
-      res.status(404).json({ error: 'Attempt not found' });
-      return;
-    }
-    if (attempt.studentId.toString() !== req.user!.userId) {
-      res.status(403).json({ error: 'Access denied' });
-      return;
-    }
-    if (attempt.status !== 'in_progress') {
-      res.status(400).json({ error: 'Attempt is already finalised' });
-      return;
-    }
+router.post(
+  '/:id/submit',
+  authorize('student'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const attempt = await StudentAttempt.findById(req.params.id);
+      if (!attempt) {
+        res.status(404).json({ error: 'Attempt not found' });
+        return;
+      }
+      if (attempt.studentId.toString() !== req.user!.userId) {
+        res.status(403).json({ error: 'Access denied' });
+        return;
+      }
+      if (attempt.status !== 'in_progress') {
+        res.status(400).json({ error: 'Attempt is already finalised' });
+        return;
+      }
 
-    const assessment = await Assessment.findById(attempt.assessmentId);
-    if (!assessment) {
-      res.status(404).json({ error: 'Assessment not found' });
-      return;
+      const assessment = await Assessment.findById(attempt.assessmentId);
+      if (!assessment) {
+        res.status(404).json({ error: 'Assessment not found' });
+        return;
+      }
+
+      await finaliseAttempt(attempt, assessment);
+
+      logger.info('Attempt submitted', { attemptId: attempt._id, studentId: req.user!.userId });
+      res.status(200).json({
+        message: 'Session submitted successfully',
+        attemptId: attempt._id,
+        status: attempt.status,
+      });
+    } catch (error) {
+      logger.error('Submit attempt error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
     }
-
-    await finaliseAttempt(attempt, assessment);
-
-    logger.info('Attempt submitted', { attemptId: attempt._id, studentId: req.user!.userId });
-    res.status(200).json({
-      message: 'Session submitted successfully',
-      attemptId: attempt._id,
-      status: attempt.status,
-    });
-  } catch (error) {
-    logger.error('Submit attempt error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+  },
+);
 
 // ─── POST /api/v1/attempts/:id/anti-cheat — Log navigation event ─────────────
 
-router.post('/:id/anti-cheat', authorize('student'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const validation = antiCheatSchema.safeParse(req.body);
-    if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
-      return;
-    }
+router.post(
+  '/:id/anti-cheat',
+  authorize('student'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const validation = antiCheatSchema.safeParse(req.body);
+      if (!validation.success) {
+        res
+          .status(400)
+          .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+        return;
+      }
 
-    const attempt = await StudentAttempt.findById(req.params.id);
-    if (!attempt) {
-      res.status(404).json({ error: 'Attempt not found' });
-      return;
-    }
-    if (attempt.studentId.toString() !== req.user!.userId) {
-      res.status(403).json({ error: 'Access denied' });
-      return;
-    }
+      const attempt = await StudentAttempt.findById(req.params.id);
+      if (!attempt) {
+        res.status(404).json({ error: 'Attempt not found' });
+        return;
+      }
+      if (attempt.studentId.toString() !== req.user!.userId) {
+        res.status(403).json({ error: 'Access denied' });
+        return;
+      }
 
-    // Append anti-cheat event with timestamp (Req 7.9)
-    attempt.antiCheatLog.push({ event: validation.data.event, timestamp: new Date() });
-    await attempt.save();
+      // Append anti-cheat event with timestamp (Req 7.9)
+      attempt.antiCheatLog.push({ event: validation.data.event, timestamp: new Date() });
+      await attempt.save();
 
-    res.status(200).json({ logged: true });
-  } catch (error) {
-    logger.error('Anti-cheat log error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+      res.status(200).json({ logged: true });
+    } catch (error) {
+      logger.error('Anti-cheat log error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
+    }
+  },
+);
 
 // ─── GET /api/v1/attempts/:id/result — Retrieve result ───────────────────────
 
-router.get('/:id/result', authorize('student', 'teacher', 'admin'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const attempt = await StudentAttempt.findById(req.params.id)
-      .populate('assessmentId', 'title subject gradeLevel assessmentType questionCount timeLimitMinutes')
-      .populate('studentId', 'fullName username');
+router.get(
+  '/:id/result',
+  authorize('student', 'teacher', 'admin'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const attempt = await StudentAttempt.findById(req.params.id)
+        .populate(
+          'assessmentId',
+          'title subject gradeLevel assessmentType questionCount timeLimitMinutes',
+        )
+        .populate('studentId', 'fullName username');
 
-    if (!attempt) {
-      res.status(404).json({ error: 'Attempt not found' });
-      return;
+      if (!attempt) {
+        res.status(404).json({ error: 'Attempt not found' });
+        return;
+      }
+
+      // Students can only view their own results
+      if (req.user!.role === 'student' && attempt.studentId.toString() !== req.user!.userId) {
+        res.status(403).json({ error: 'Access denied' });
+        return;
+      }
+
+      if (attempt.status === 'in_progress') {
+        res.status(400).json({ error: 'Session is still in progress' });
+        return;
+      }
+
+      // Build result response — include correct answers for wrong responses (Req 8.4)
+      const wrongAnswers = attempt.answers
+        .filter((a) => !a.isCorrect && !a.isEssay)
+        .map((a) => ({
+          questionId: a.questionId,
+          questionText: a.questionText,
+          selectedAnswer: a.selectedAnswer,
+          correctAnswer: a.correctAnswer,
+          mainSkill: a.mainSkill,
+          subSkill: a.subSkill,
+          difficultyLevel: a.difficultyLevel,
+        }));
+
+      // Essay answers for teacher review
+      const essayAnswers = attempt.answers
+        .filter((a) => a.isEssay)
+        .map((a) => ({
+          questionId: a.questionId,
+          questionText: a.questionText,
+          studentAnswer: a.selectedAnswer,
+          teacherScore: a.teacherScore,
+          maxMarks: a.maxMarks,
+          isGraded: a.teacherScore !== undefined,
+        }));
+
+      res.status(200).json({
+        attemptId: attempt._id,
+        status: attempt.status,
+        scorePercentage: attempt.scorePercentage,
+        pointsEarned: attempt.pointsEarned,
+        skillBreakdown: attempt.skillBreakdown,
+        timeTakenSeconds: attempt.timeTakenSeconds,
+        submittedAt: attempt.submittedAt,
+        wrongAnswers,
+        essayAnswers,
+        totalQuestions: attempt.answers.length,
+        correctAnswers: attempt.answers.filter((a) => a.isCorrect).length,
+        pendingEssayGrading: attempt.answers.filter(
+          (a) => a.isEssay && a.teacherScore === undefined,
+        ).length,
+      });
+    } catch (error) {
+      logger.error('Get result error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
     }
-
-    // Students can only view their own results
-    if (req.user!.role === 'student' && attempt.studentId.toString() !== req.user!.userId) {
-      res.status(403).json({ error: 'Access denied' });
-      return;
-    }
-
-    if (attempt.status === 'in_progress') {
-      res.status(400).json({ error: 'Session is still in progress' });
-      return;
-    }
-
-    // Build result response — include correct answers for wrong responses (Req 8.4)
-    const wrongAnswers = attempt.answers
-      .filter((a) => !a.isCorrect && !a.isEssay)
-      .map((a) => ({
-        questionId: a.questionId,
-        questionText: a.questionText,
-        selectedAnswer: a.selectedAnswer,
-        correctAnswer: a.correctAnswer,
-        mainSkill: a.mainSkill,
-        subSkill: a.subSkill,
-        difficultyLevel: a.difficultyLevel,
-      }));
-
-    // Essay answers for teacher review
-    const essayAnswers = attempt.answers
-      .filter((a) => a.isEssay)
-      .map((a) => ({
-        questionId: a.questionId,
-        questionText: a.questionText,
-        studentAnswer: a.selectedAnswer,
-        teacherScore: a.teacherScore,
-        maxMarks: a.maxMarks,
-        isGraded: a.teacherScore !== undefined,
-      }));
-
-    res.status(200).json({
-      attemptId: attempt._id,
-      status: attempt.status,
-      scorePercentage: attempt.scorePercentage,
-      pointsEarned: attempt.pointsEarned,
-      skillBreakdown: attempt.skillBreakdown,
-      timeTakenSeconds: attempt.timeTakenSeconds,
-      submittedAt: attempt.submittedAt,
-      wrongAnswers,
-      essayAnswers,
-      totalQuestions: attempt.answers.length,
-      correctAnswers: attempt.answers.filter((a) => a.isCorrect).length,
-      pendingEssayGrading: attempt.answers.filter((a) => a.isEssay && a.teacherScore === undefined).length,
-    });
-  } catch (error) {
-    logger.error('Get result error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+  },
+);
 
 // ─── PATCH /api/v1/attempts/:id/grade-essay — Teacher grades essay answer ─────
 //
@@ -556,150 +613,158 @@ const gradeEssaySchema = z.object({
   maxScore: z.number().min(1),
 });
 
-router.patch('/:id/grade-essay', authorize('teacher', 'admin'), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const validation = gradeEssaySchema.safeParse(req.body);
-    if (!validation.success) {
-      res.status(400).json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
-      return;
-    }
-
-    const { questionId, score, maxScore } = validation.data;
-
-    if (score > maxScore) {
-      res.status(400).json({ error: 'Score cannot exceed maxScore' });
-      return;
-    }
-
-    const attempt = await StudentAttempt.findById(req.params.id);
-    if (!attempt) {
-      res.status(404).json({ error: 'Attempt not found' });
-      return;
-    }
-    if (attempt.status !== 'pending_review') {
-      res.status(400).json({ error: 'Attempt is not pending review' });
-      return;
-    }
-
-    const assessment = await Assessment.findById(attempt.assessmentId);
-    if (!assessment) {
-      res.status(404).json({ error: 'Assessment not found' });
-      return;
-    }
-
-    // Verify the teacher owns this assessment
-    if (req.user!.role === 'teacher' && assessment.createdBy.toString() !== req.user!.userId) {
-      res.status(403).json({ error: 'Access denied: you did not create this assessment' });
-      return;
-    }
-
-    // Find the essay answer record
-    const questionObjId = new mongoose.Types.ObjectId(questionId);
-    const answerRecord = attempt.answers.find(
-      (a) => a.questionId.equals(questionObjId) && a.isEssay,
-    );
-    if (!answerRecord) {
-      res.status(404).json({ error: 'Essay answer not found for this question' });
-      return;
-    }
-
-    // Apply teacher score (Req 18.6)
-    answerRecord.teacherScore = score;
-    answerRecord.maxMarks = maxScore;
-    // Mark as correct if score > 0 (partial credit counts as correct for skill analysis)
-    answerRecord.isCorrect = score > 0;
-
-    // Check if all essay questions have been graded
-    const ungradedEssays = attempt.answers.filter(
-      (a) => a.isEssay && a.teacherScore === undefined,
-    );
-
-    if (ungradedEssays.length === 0) {
-      // All essays graded — finalise the session (Req 18.6)
-      const now = new Date();
-
-      // Calculate final score including essay marks
-      const totalMarks = attempt.answers.reduce((sum, a) => {
-        if (a.isEssay) {
-          return sum + (a.maxMarks ?? 0);
-        }
-        return sum + 1; // non-essay questions worth 1 mark each
-      }, 0);
-
-      const earnedMarks = attempt.answers.reduce((sum, a) => {
-        if (a.isEssay) {
-          return sum + (a.teacherScore ?? 0);
-        }
-        return sum + (a.isCorrect ? 1 : 0);
-      }, 0);
-
-      const scorePercentage = totalMarks > 0
-        ? Math.round((earnedMarks / totalMarks) * 100 * 100) / 100
-        : 0;
-
-      const { points: pointsEarned, bonusAwarded } = calculatePointsEarned(scorePercentage, assessment.questionCount);
-      const skillBreakdown = calculateSkillBreakdown(
-        attempt.answers.map((a) => ({ mainSkill: a.mainSkill, isCorrect: a.isCorrect })),
-      );
-
-      attempt.status = 'completed';
-      attempt.scorePercentage = scorePercentage;
-      attempt.pointsEarned = pointsEarned;
-      attempt.skillBreakdown = skillBreakdown;
-
-      await attempt.save();
-
-      // Notify student that results are ready
-      try {
-        await Notification.create({
-          userId: attempt.studentId,
-          type: 'result_ready',
-          title: 'نتيجة اختبارك جاهزة',
-          body: `تم تصحيح اختبار "${assessment.title}" ونتيجتك ${scorePercentage.toFixed(1)}%`,
-          relatedId: attempt._id,
-          relatedType: 'attempt',
-          isRead: false,
-        });
-      } catch (notifError) {
-        logger.warn('Failed to send result_ready notification', { error: notifError });
+router.patch(
+  '/:id/grade-essay',
+  authorize('teacher', 'admin'),
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const validation = gradeEssaySchema.safeParse(req.body);
+      if (!validation.success) {
+        res
+          .status(400)
+          .json({ error: 'Invalid request', details: validation.error.flatten().fieldErrors });
+        return;
       }
 
-      logger.info('Essay attempt finalised after grading', {
-        attemptId: attempt._id,
-        score: scorePercentage,
-        points: pointsEarned,
-        bonus: bonusAwarded,
-      });
+      const { questionId, score, maxScore } = validation.data;
 
-      res.status(200).json({
-        message: 'Essay graded and session finalised',
-        attemptId: attempt._id,
-        status: attempt.status,
-        scorePercentage,
-        pointsEarned,
-        bonusAwarded,
-      });
-    } else {
-      await attempt.save();
-      logger.info('Essay answer graded', {
-        attemptId: attempt._id,
-        questionId,
-        score,
-        remainingUngradedEssays: ungradedEssays.length,
-      });
+      if (score > maxScore) {
+        res.status(400).json({ error: 'Score cannot exceed maxScore' });
+        return;
+      }
 
-      res.status(200).json({
-        message: 'Essay answer graded',
-        attemptId: attempt._id,
-        status: attempt.status,
-        remainingUngradedEssays: ungradedEssays.length,
-      });
+      const attempt = await StudentAttempt.findById(req.params.id);
+      if (!attempt) {
+        res.status(404).json({ error: 'Attempt not found' });
+        return;
+      }
+      if (attempt.status !== 'pending_review') {
+        res.status(400).json({ error: 'Attempt is not pending review' });
+        return;
+      }
+
+      const assessment = await Assessment.findById(attempt.assessmentId);
+      if (!assessment) {
+        res.status(404).json({ error: 'Assessment not found' });
+        return;
+      }
+
+      // Verify the teacher owns this assessment
+      if (req.user!.role === 'teacher' && assessment.createdBy.toString() !== req.user!.userId) {
+        res.status(403).json({ error: 'Access denied: you did not create this assessment' });
+        return;
+      }
+
+      // Find the essay answer record
+      const questionObjId = new mongoose.Types.ObjectId(questionId);
+      const answerRecord = attempt.answers.find(
+        (a) => a.questionId.equals(questionObjId) && a.isEssay,
+      );
+      if (!answerRecord) {
+        res.status(404).json({ error: 'Essay answer not found for this question' });
+        return;
+      }
+
+      // Apply teacher score (Req 18.6)
+      answerRecord.teacherScore = score;
+      answerRecord.maxMarks = maxScore;
+      // Mark as correct if score > 0 (partial credit counts as correct for skill analysis)
+      answerRecord.isCorrect = score > 0;
+
+      // Check if all essay questions have been graded
+      const ungradedEssays = attempt.answers.filter(
+        (a) => a.isEssay && a.teacherScore === undefined,
+      );
+
+      if (ungradedEssays.length === 0) {
+        // All essays graded — finalise the session (Req 18.6)
+        const now = new Date();
+
+        // Calculate final score including essay marks
+        const totalMarks = attempt.answers.reduce((sum, a) => {
+          if (a.isEssay) {
+            return sum + (a.maxMarks ?? 0);
+          }
+          return sum + 1; // non-essay questions worth 1 mark each
+        }, 0);
+
+        const earnedMarks = attempt.answers.reduce((sum, a) => {
+          if (a.isEssay) {
+            return sum + (a.teacherScore ?? 0);
+          }
+          return sum + (a.isCorrect ? 1 : 0);
+        }, 0);
+
+        const scorePercentage =
+          totalMarks > 0 ? Math.round((earnedMarks / totalMarks) * 100 * 100) / 100 : 0;
+
+        const { points: pointsEarned, bonusAwarded } = calculatePointsEarned(
+          scorePercentage,
+          assessment.questionCount,
+        );
+        const skillBreakdown = calculateSkillBreakdown(
+          attempt.answers.map((a) => ({ mainSkill: a.mainSkill, isCorrect: a.isCorrect })),
+        );
+
+        attempt.status = 'completed';
+        attempt.scorePercentage = scorePercentage;
+        attempt.pointsEarned = pointsEarned;
+        attempt.skillBreakdown = skillBreakdown;
+
+        await attempt.save();
+
+        // Notify student that results are ready
+        try {
+          await Notification.create({
+            userId: attempt.studentId,
+            type: 'result_ready',
+            title: 'نتيجة اختبارك جاهزة',
+            body: `تم تصحيح اختبار "${assessment.title}" ونتيجتك ${scorePercentage.toFixed(1)}%`,
+            relatedId: attempt._id,
+            relatedType: 'attempt',
+            isRead: false,
+          });
+        } catch (notifError) {
+          logger.warn('Failed to send result_ready notification', { error: notifError });
+        }
+
+        logger.info('Essay attempt finalised after grading', {
+          attemptId: attempt._id,
+          score: scorePercentage,
+          points: pointsEarned,
+          bonus: bonusAwarded,
+        });
+
+        res.status(200).json({
+          message: 'Essay graded and session finalised',
+          attemptId: attempt._id,
+          status: attempt.status,
+          scorePercentage,
+          pointsEarned,
+          bonusAwarded,
+        });
+      } else {
+        await attempt.save();
+        logger.info('Essay answer graded', {
+          attemptId: attempt._id,
+          questionId,
+          score,
+          remainingUngradedEssays: ungradedEssays.length,
+        });
+
+        res.status(200).json({
+          message: 'Essay answer graded',
+          attemptId: attempt._id,
+          status: attempt.status,
+          remainingUngradedEssays: ungradedEssays.length,
+        });
+      }
+    } catch (error) {
+      logger.error('Grade essay error', { error });
+      res.status(500).json({ error: 'An internal server error occurred' });
     }
-  } catch (error) {
-    logger.error('Grade essay error', { error });
-    res.status(500).json({ error: 'An internal server error occurred' });
-  }
-});
+  },
+);
 
 // ─── Helper: finalise an attempt (calculate results, notify teacher) ──────────
 

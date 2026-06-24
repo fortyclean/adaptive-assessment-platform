@@ -1,9 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import {
-  InstitutionSettings,
-  IInstitutionSettingsDocument,
-} from '../models/InstitutionSettings';
+import { InstitutionSettings, IInstitutionSettingsDocument } from '../models/InstitutionSettings';
 import { authenticate, authorize } from '../middleware/authenticate';
 import { logger } from '../utils/logger';
 
