@@ -15,6 +15,7 @@ mobile/android/app/*.jks
 
 # Generated release artifacts
 adaptive-mastery-v*.apk
+adaptive-mastery-v*.aab
 
 # Local Flutter analyzer output
 mobile/analyze*.log
