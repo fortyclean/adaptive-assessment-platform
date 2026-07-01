@@ -23,7 +23,12 @@ class ApiService {
 
     _dio.interceptors.add(_AuthInterceptor(_storage, _dio));
     if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor());
+      _dio.interceptors.add(LogInterceptor(
+        requestHeader: false,
+        requestBody: false,
+        responseHeader: false,
+        responseBody: false,
+      ));
     }
   }
 

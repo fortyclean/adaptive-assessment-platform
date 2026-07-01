@@ -94,9 +94,34 @@ class AuthRepository {
           await _apiService.dio.get<Map<String, dynamic>>('/auth/me');
       final body = response.data ?? <String, dynamic>{};
       return AuthUser.fromJson(body['user'] as Map<String, dynamic>);
-    } on DioException {
+    } on DioException catch (e) {
+      if (_isOfflineRestoreError(e)) {
+        final cachedUser = await _readCachedUser();
+        if (cachedUser != null) {
+          _apiService.setToken(token);
+          return cachedUser;
+        }
+      }
+
       await _storage.delete(key: AppConstants.accessTokenKey);
       _apiService.clearToken();
+      return null;
+    }
+  }
+
+  bool _isOfflineRestoreError(DioException e) =>
+      e.type == DioExceptionType.connectionError ||
+      e.type == DioExceptionType.connectionTimeout ||
+      e.type == DioExceptionType.receiveTimeout ||
+      e.type == DioExceptionType.sendTimeout;
+
+  Future<AuthUser?> _readCachedUser() async {
+    final userJson = await _storage.read(key: AppConstants.userDataKey);
+    if (userJson == null || userJson.isEmpty) return null;
+
+    try {
+      return AuthUser.fromJson(jsonDecode(userJson) as Map<String, dynamic>);
+    } on Object {
       return null;
     }
   }
