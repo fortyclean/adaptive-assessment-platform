@@ -231,8 +231,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ],
                           const SizedBox(height: 8),
                           // ── Remember me + Forgot password row ──────────
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 16,
+                            runSpacing: 8,
                             children: [
                               // Forgot password (RTL: left)
                               TextButton(
