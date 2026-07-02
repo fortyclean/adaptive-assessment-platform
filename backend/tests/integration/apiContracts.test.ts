@@ -22,9 +22,16 @@ jest.mock('../../src/models/User', () => ({
     findById: jest.fn((id: string) => ({
       select: jest.fn(async () => ({
         _id: id,
-        role: id.includes('teacher') ? 'teacher' : id.includes('admin') ? 'admin' : 'student',
+        role: id.includes('teacher')
+          ? 'teacher'
+          : id.includes('admin')
+            ? 'admin'
+            : id.includes('parent')
+              ? 'parent'
+              : 'student',
         isActive: true,
         activeSessions: [...activeSessions],
+        childIds: [],
       })),
     })),
   },
@@ -35,7 +42,7 @@ describe('API contract smoke tests', () => {
     activeSessions.clear();
   });
 
-  function authHeader(role: 'student' | 'teacher' | 'admin' = 'student') {
+  function authHeader(role: 'student' | 'teacher' | 'admin' | 'parent' = 'student') {
     const sessionId = `${role}-session`;
     activeSessions.add(sessionId);
     const { accessToken, refreshToken } = generateTokens({
@@ -56,7 +63,12 @@ describe('API contract smoke tests', () => {
     expect([200, 503]).toContain(health.status);
     expect(health.body).toHaveProperty('status');
 
-    for (const path of ['/api/v1/assessments', '/api/v1/attempts', '/api/v1/reports/school']) {
+    for (const path of [
+      '/api/v1/assessments',
+      '/api/v1/attempts',
+      '/api/v1/reports/school',
+      '/api/v1/parents/me/children',
+    ]) {
       const response = await request(app).get(path);
       expect(response.status).toBe(401);
       expect(response.body.error).toContain('Authentication required');
@@ -98,6 +110,23 @@ describe('API contract smoke tests', () => {
 
     expect(response.status).toBe(403);
     expect(response.body.error).toContain('permission');
+  });
+
+  it('protects parent portal contracts behind the parent role', async () => {
+    const student = authHeader('student');
+    await request(app)
+      .get('/api/v1/parents/me/children')
+      .set('Authorization', student.authorization)
+      .expect(403);
+
+    const parent = authHeader('parent');
+    await request(app)
+      .get('/api/v1/parents/me/children')
+      .set('Authorization', parent.authorization)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.children).toEqual([]);
+      });
   });
 
   it('refreshes mobile sessions from a body refresh token', async () => {

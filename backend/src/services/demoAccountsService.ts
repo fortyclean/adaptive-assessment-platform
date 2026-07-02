@@ -65,6 +65,7 @@ export async function ensureDemoAccounts(): Promise<void> {
         $setOnInsert: {
           username: account.username,
           classroomIds: [],
+          childIds: [],
           createdAt: new Date(),
         },
       },

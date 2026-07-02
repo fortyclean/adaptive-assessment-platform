@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/network/api_service.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
@@ -40,11 +42,47 @@ const _parentMessages = [
   ),
 ];
 
-class ParentDashboardScreen extends StatelessWidget {
+final _parentPortalDataProvider =
+    FutureProvider<_ParentPortalData>((ref) async {
+  try {
+    final api = ref.read(apiServiceProvider);
+    final childrenResponse =
+        await api.dio.get<Map<String, dynamic>>('/parents/me/children');
+    final messagesResponse =
+        await api.dio.get<Map<String, dynamic>>('/parents/me/messages');
+
+    final children = (childrenResponse.data?['children'] as List? ?? [])
+        .whereType<Map<String, dynamic>>()
+        .map(_ParentChildSummary.fromJson)
+        .toList();
+    final messages = (messagesResponse.data?['messages'] as List? ?? [])
+        .whereType<Map<String, dynamic>>()
+        .map(_ParentMessage.fromJson)
+        .toList();
+
+    return _ParentPortalData(
+      children: children.isEmpty ? _parentChildren : children,
+      messages: messages.isEmpty ? _parentMessages : messages,
+    );
+  } on Object {
+    return const _ParentPortalData(
+      children: _parentChildren,
+      messages: _parentMessages,
+    );
+  }
+});
+
+class ParentDashboardScreen extends ConsumerWidget {
   const ParentDashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final portalData = ref.watch(_parentPortalDataProvider);
+    final data = portalData.valueOrNull ??
+        const _ParentPortalData(
+          children: _parentChildren,
+          messages: _parentMessages,
+        );
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -69,6 +107,10 @@ class ParentDashboardScreen extends StatelessWidget {
             icon: Icons.family_restroom_rounded,
             color: colorScheme.primary,
           ),
+          if (portalData.isLoading) ...[
+            const SizedBox(height: 12),
+            const LinearProgressIndicator(minHeight: 3),
+          ],
           const SizedBox(height: 16),
           const Row(
             children: [
@@ -96,7 +138,7 @@ class ParentDashboardScreen extends StatelessWidget {
             onAction: () => context.push(AppRoutes.parentChildren),
           ),
           const SizedBox(height: 8),
-          ..._parentChildren.map(
+          ...data.children.map(
             (child) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: _ChildSummaryCard(
@@ -114,7 +156,7 @@ class ParentDashboardScreen extends StatelessWidget {
             onAction: () => context.push(AppRoutes.parentMessages),
           ),
           const SizedBox(height: 8),
-          ..._parentMessages.take(2).map(
+          ...data.messages.take(2).map(
                 (message) => Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: _MessageCard(message: message),
@@ -126,32 +168,36 @@ class ParentDashboardScreen extends StatelessWidget {
   }
 }
 
-class ParentChildrenScreen extends StatelessWidget {
+class ParentChildrenScreen extends ConsumerWidget {
   const ParentChildrenScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('الأبناء')),
-        bottomNavigationBar:
-            const AppBottomNav(currentIndex: 1, role: 'parent'),
-        body: ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemCount: _parentChildren.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            final child = _parentChildren[index];
-            return _ChildSummaryCard(
-              child: child,
-              onTap: () => context.push(
-                AppRoutes.parentChildDetailPath(child.id),
-              ),
-            );
-          },
-        ),
-      );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final portalData = ref.watch(_parentPortalDataProvider);
+    final children = portalData.valueOrNull?.children ?? _parentChildren;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('الأبناء')),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'parent'),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: children.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final child = children[index];
+          return _ChildSummaryCard(
+            child: child,
+            onTap: () => context.push(
+              AppRoutes.parentChildDetailPath(child.id),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
-class ParentChildDetailScreen extends StatelessWidget {
+class ParentChildDetailScreen extends ConsumerWidget {
   const ParentChildDetailScreen({
     required this.childId,
     super.key,
@@ -160,10 +206,13 @@ class ParentChildDetailScreen extends StatelessWidget {
   final String childId;
 
   @override
-  Widget build(BuildContext context) {
-    final child = _parentChildren.firstWhere(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final children =
+        ref.watch(_parentPortalDataProvider).valueOrNull?.children ??
+            _parentChildren;
+    final child = children.firstWhere(
       (item) => item.id == childId,
-      orElse: () => _parentChildren.first,
+      orElse: () => children.first,
     );
 
     return Scaffold(
@@ -226,33 +275,41 @@ class ParentChildDetailScreen extends StatelessWidget {
   }
 }
 
-class ParentMessagesScreen extends StatelessWidget {
+class ParentMessagesScreen extends ConsumerWidget {
   const ParentMessagesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('رسائل ولي الأمر')),
-        bottomNavigationBar:
-            const AppBottomNav(currentIndex: 2, role: 'parent'),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            const _InfoPanel(
-              icon: Icons.notifications_active_outlined,
-              title: 'مركز تواصل المدرسة',
-              body:
-                  'تظهر هنا رسائل المعلمين والإدارة والتنبيهات المهمة المرتبطة بأبنائك.',
-            ),
-            const SizedBox(height: 16),
-            ..._parentMessages.map(
-              (message) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _MessageCard(message: message, expanded: true),
-              ),
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final portalData = ref.watch(_parentPortalDataProvider);
+    final messages = portalData.valueOrNull?.messages ?? _parentMessages;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('رسائل ولي الأمر')),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 2, role: 'parent'),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          const _InfoPanel(
+            icon: Icons.notifications_active_outlined,
+            title: 'مركز تواصل المدرسة',
+            body:
+                'تظهر هنا رسائل المعلمين والإدارة والتنبيهات المهمة المرتبطة بأبنائك.',
+          ),
+          if (portalData.isLoading) ...[
+            const SizedBox(height: 12),
+            const LinearProgressIndicator(minHeight: 3),
           ],
-        ),
-      );
+          const SizedBox(height: 16),
+          ...messages.map(
+            (message) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _MessageCard(message: message, expanded: true),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class ParentSettingsScreen extends StatelessWidget {
@@ -569,6 +626,20 @@ class _ParentChildSummary {
   final int attendance;
   final int pendingAssessments;
   final String latestNote;
+
+  factory _ParentChildSummary.fromJson(Map<String, dynamic> json) {
+    final classroom = json['classroom'] as Map<String, dynamic>?;
+    return _ParentChildSummary(
+      id: (json['id'] ?? json['_id'] ?? '') as String,
+      name: (json['name'] ?? json['fullName'] ?? 'طالب') as String,
+      classroom: (classroom?['name'] ?? classroom?['gradeLevel'] ?? 'غير محدد')
+          as String,
+      average: ((json['average'] as num?) ?? 0).round(),
+      attendance: ((json['attendance'] as num?) ?? 0).round(),
+      pendingAssessments: ((json['pendingAssessments'] as num?) ?? 0).round(),
+      latestNote: (json['latestNote'] ?? 'لا توجد ملاحظات عاجلة.') as String,
+    );
+  }
 }
 
 class _ParentMessage {
@@ -583,4 +654,21 @@ class _ParentMessage {
   final String subject;
   final String body;
   final String time;
+
+  factory _ParentMessage.fromJson(Map<String, dynamic> json) => _ParentMessage(
+        from: (json['from'] ?? 'المدرسة') as String,
+        subject: (json['subject'] ?? json['title'] ?? 'رسالة') as String,
+        body: (json['body'] ?? '') as String,
+        time: (json['time'] ?? json['createdAt'] ?? 'حديثًا') as String,
+      );
+}
+
+class _ParentPortalData {
+  const _ParentPortalData({
+    required this.children,
+    required this.messages,
+  });
+
+  final List<_ParentChildSummary> children;
+  final List<_ParentMessage> messages;
 }

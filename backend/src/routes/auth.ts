@@ -116,6 +116,7 @@ async function loginDemoAccount(username: string, password: string) {
       },
       $setOnInsert: {
         classroomIds: [],
+        childIds: [],
         createdAt: new Date(),
       },
     },

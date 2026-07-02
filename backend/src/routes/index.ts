@@ -14,6 +14,7 @@ import alertsRouter from './alerts';
 import studentsRouter from './students';
 import institutionSettingsRouter from './institutionSettings';
 import pushSubscriptionsRouter from './pushSubscriptions';
+import parentsRouter from './parents';
 
 const router = Router();
 
@@ -58,6 +59,9 @@ router.use('/alerts', alertsRouter);
 
 // Student profile routes (skill radar, behavior log, weekly trend)
 router.use('/students', studentsRouter);
+
+// Parent portal routes
+router.use('/parents', parentsRouter);
 
 // Institution settings routes
 router.use('/institution-settings', institutionSettingsRouter);

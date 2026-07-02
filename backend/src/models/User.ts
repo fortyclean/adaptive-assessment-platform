@@ -12,6 +12,7 @@ export interface IUser {
   role: UserRole;
   isActive: boolean;
   classroomIds: mongoose.Types.ObjectId[];
+  childIds: mongoose.Types.ObjectId[];
   failedLoginAttempts: number;
   lockedUntil?: Date;
   activeSessions: string[];
@@ -80,6 +81,12 @@ const userSchema = new Schema<IUserDocument>(
         ref: 'Classroom',
       },
     ],
+    childIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
     failedLoginAttempts: {
       type: Number,
       default: 0,
@@ -115,6 +122,7 @@ const userSchema = new Schema<IUserDocument>(
 userSchema.index({ email: 1 });
 userSchema.index({ googleId: 1 }, { sparse: true });
 userSchema.index({ role: 1, isActive: 1 });
+userSchema.index({ childIds: 1 });
 
 // Static methods
 userSchema.statics.findByUsername = function (username: string) {

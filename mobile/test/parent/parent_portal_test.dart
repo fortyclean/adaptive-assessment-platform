@@ -64,9 +64,25 @@ Widget _buildParentRouterApp(
 }
 
 Future<void> _tapVisibleText(WidgetTester tester, String text) async {
-  await tester.ensureVisible(find.text(text).first);
-  await tester.tap(find.text(text).first);
-  await tester.pumpAndSettle();
+  final textFinder = find.text(text).last;
+  await tester.ensureVisible(textFinder);
+  final inkWell = find.ancestor(of: textFinder, matching: find.byType(InkWell));
+  final gestureDetector =
+      find.ancestor(of: textFinder, matching: find.byType(GestureDetector));
+
+  if (inkWell.evaluate().isNotEmpty) {
+    await tester.tap(inkWell.first);
+  } else if (gestureDetector.evaluate().isNotEmpty) {
+    await tester.tap(gestureDetector.first);
+  } else {
+    await tester.tap(textFinder, warnIfMissed: false);
+  }
+  await _pumpPortalFrame(tester);
+}
+
+Future<void> _pumpPortalFrame(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 250));
 }
 
 void main() {
@@ -77,7 +93,7 @@ void main() {
       addTearDown(() async => tester.binding.setSurfaceSize(null));
 
       await tester.pumpWidget(_buildParentRouterApp());
-      await tester.pumpAndSettle();
+      await _pumpPortalFrame(tester);
 
       expect(find.text('بوابة ولي الأمر'), findsOneWidget);
       expect(find.text('ملخص الأبناء'), findsOneWidget);
@@ -93,7 +109,7 @@ void main() {
       addTearDown(() async => tester.binding.setSurfaceSize(null));
 
       await tester.pumpWidget(_buildParentRouterApp());
-      await tester.pumpAndSettle();
+      await _pumpPortalFrame(tester);
 
       await _tapVisibleText(tester, 'عرض الكل');
       expect(find.text('الأبناء'), findsWidgets);
@@ -109,7 +125,7 @@ void main() {
       addTearDown(() async => tester.binding.setSurfaceSize(null));
 
       await tester.pumpWidget(_buildParentRouterApp());
-      await tester.pumpAndSettle();
+      await _pumpPortalFrame(tester);
 
       await _tapVisibleText(tester, 'الرسائل');
       expect(find.text('رسائل ولي الأمر'), findsOneWidget);

@@ -35,6 +35,14 @@ type DemoQuestionFixture = {
 
 export const demoUsers: DemoUserFixture[] = [
   {
+    username: 'parent_fatima',
+    password: 'Parent@123',
+    email: 'fatima.parent@school.edu',
+    fullName: 'Fatima Demo Parent',
+    role: 'parent',
+    avatarUrl: 'https://api.dicebear.com/8.x/initials/png?seed=Fatima%20Parent',
+  },
+  {
     username: 'teacher_science',
     password: 'Teacher@123',
     email: 'science.teacher@school.edu',
@@ -152,7 +160,7 @@ export const demoAssessments = [
 
 export function getDemoSeedSummary() {
   return {
-    users: demoUsers.length + 3,
+    users: demoUsers.length + 4,
     classrooms: demoClassrooms.length,
     questions: demoQuestions.length,
     assessments: demoAssessments.length,
@@ -233,6 +241,7 @@ async function ensureExtraUsers(): Promise<void> {
         $setOnInsert: {
           username: user.username,
           classroomIds: [],
+          childIds: [],
           activeSessions: [],
           createdAt: new Date(),
         },
@@ -245,6 +254,8 @@ async function ensureExtraUsers(): Promise<void> {
 async function loadDemoUsers() {
   const usernames = [
     'admin',
+    'parent',
+    'parent_fatima',
     'teacher',
     'teacher_science',
     'student',
@@ -263,6 +274,8 @@ async function loadDemoUsers() {
 
   return {
     admin: byUsername.get('admin')!,
+    parent: byUsername.get('parent')!,
+    parentFatima: byUsername.get('parent_fatima')!,
     teacher: byUsername.get('teacher')!,
     teacherScience: byUsername.get('teacher_science')!,
     students: [
@@ -314,6 +327,17 @@ async function ensureClassrooms(
       { $addToSet: { classroomIds: classroom._id } },
     );
   }
+
+  await User.updateMany(
+    { username: { $in: ['parent', 'parent_fatima'] } },
+    {
+      $set: {
+        childIds: users.students
+          .slice(0, 2)
+          .map((student) => student._id as mongoose.Types.ObjectId),
+      },
+    },
+  );
 
   return classroomIds;
 }
