@@ -54,6 +54,7 @@ import '../../features/auth/screens/ui_feedback_screen.dart';
 import '../../features/auth/screens/user_management_screen.dart';
 import '../../features/notifications/screens/advanced_notification_center_screen.dart';
 import '../../features/notifications/screens/notification_settings_screen.dart';
+import '../../features/parent/screens/parent_portal_screens.dart';
 import '../../features/question_bank/screens/add_question_screen.dart';
 import '../../features/question_bank/screens/advanced_question_editor_screen.dart';
 import '../../features/question_bank/screens/import_excel_screen.dart';
@@ -189,6 +190,16 @@ class AppRoutes {
   static const String studentProgress = '/student/progress';
   static const String studentSubjects = '/student/subjects';
   static const String studentAnalytics = '/student/analytics';
+
+  // Parent
+  static const String parentDashboard = '/parent';
+  static const String parentChildren = '/parent/children';
+  static const String parentChildDetail = '/parent/children/:childId';
+  static const String parentMessages = '/parent/messages';
+  static const String parentSettings = '/parent/settings';
+
+  static String parentChildDetailPath(String childId) =>
+      '/parent/children/$childId';
 }
 
 /// GoRouter configuration with role-based route guards.
@@ -295,6 +306,39 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.marketplace,
         name: 'marketplace',
         builder: (_, __) => const MarketplaceScreen(),
+      ),
+
+      // Parent Stack
+      GoRoute(
+        path: AppRoutes.parentDashboard,
+        name: 'parentDashboard',
+        builder: (_, __) => const ParentDashboardScreen(),
+        routes: [
+          GoRoute(
+            path: 'children',
+            name: 'parentChildren',
+            builder: (_, __) => const ParentChildrenScreen(),
+            routes: [
+              GoRoute(
+                path: ':childId',
+                name: 'parentChildDetail',
+                builder: (_, state) => ParentChildDetailScreen(
+                  childId: state.pathParameters['childId'] ?? '',
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'messages',
+            name: 'parentMessages',
+            builder: (_, __) => const ParentMessagesScreen(),
+          ),
+          GoRoute(
+            path: 'settings',
+            name: 'parentSettings',
+            builder: (_, __) => const ParentSettingsScreen(),
+          ),
+        ],
       ),
 
       // Screen 68 — Supervisor Dashboard
@@ -739,6 +783,8 @@ String _getDashboardRoute(UserRole? role) {
       return AppRoutes.teacherDashboard;
     case UserRole.student:
       return AppRoutes.studentDashboard;
+    case UserRole.parent:
+      return AppRoutes.parentDashboard;
     case null:
       return AppRoutes.login;
   }
@@ -751,12 +797,16 @@ String? _guardRouteForRole(String location, UserRole? role) {
       location == AppRoutes.supervisorDashboard;
   final isTeacherRoute = location.startsWith('/teacher');
   final isStudentRoute = location.startsWith('/student');
+  final isParentRoute = location.startsWith('/parent');
 
   if (isAdminRoute && role != UserRole.admin) return _getDashboardRoute(role);
   if (isTeacherRoute && role != UserRole.teacher) {
     return _getDashboardRoute(role);
   }
   if (isStudentRoute && role != UserRole.student) {
+    return _getDashboardRoute(role);
+  }
+  if (isParentRoute && role != UserRole.parent) {
     return _getDashboardRoute(role);
   }
 

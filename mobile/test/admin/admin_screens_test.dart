@@ -122,10 +122,11 @@ void main() {
       expect(validatePassword('12345678'), isNull);
     });
 
-    test('role must be teacher or student', () {
-      const validRoles = ['teacher', 'student'];
+    test('role must be teacher, student, or parent', () {
+      const validRoles = ['teacher', 'student', 'parent'];
       expect(validRoles.contains('teacher'), isTrue);
       expect(validRoles.contains('student'), isTrue);
+      expect(validRoles.contains('parent'), isTrue);
       expect(validRoles.contains('admin'), isFalse);
     });
   });

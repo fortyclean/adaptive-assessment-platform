@@ -155,5 +155,12 @@ describe('AuthService — JWT Token Utilities', () => {
       const decoded = verifyAccessToken(tokens.accessToken);
       expect(decoded.role).toBe('teacher');
     });
+
+    it('should encode parent role correctly in token', () => {
+      const parentPayload = { ...mockPayload, role: 'parent' as const };
+      const tokens = generateTokens(parentPayload);
+      const decoded = verifyAccessToken(tokens.accessToken);
+      expect(decoded.role).toBe('parent');
+    });
   });
 });

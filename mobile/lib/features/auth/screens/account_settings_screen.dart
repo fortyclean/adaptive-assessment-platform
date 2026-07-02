@@ -225,6 +225,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
       UserRole.admin => l10n.adminRole,
       UserRole.teacher => l10n.teacherRole,
       UserRole.student => l10n.studentRole,
+      UserRole.parent => 'ولي الأمر',
       null => l10n.userRole,
     };
 
@@ -460,6 +461,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
       UserRole.admin => const AppBottomNav(currentIndex: 4, role: 'admin'),
       UserRole.student => const AppBottomNav(currentIndex: 3, role: 'student'),
       UserRole.teacher => const AppBottomNav(currentIndex: 4, role: 'teacher'),
+      UserRole.parent => const AppBottomNav(currentIndex: 3, role: 'parent'),
     };
   }
 

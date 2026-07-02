@@ -22,6 +22,13 @@ class UserManagementScreen extends ConsumerStatefulWidget {
       _UserManagementScreenState();
 }
 
+String _localizedRoleLabel(AppLocalizations l10n, String role) {
+  if (role == 'teacher') return l10n.teacherRole;
+  if (role == 'student') return l10n.studentRole;
+  if (role == 'parent') return 'ولي الأمر';
+  return l10n.adminRole;
+}
+
 class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
   bool _isLoading = false;
   List<Map<String, dynamic>> _users = [];
@@ -579,11 +586,10 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                     children: [
                       Chip(
                         label: Text(
-                          (user['role'] as String? ?? 'user') == 'teacher'
-                              ? l10n.teacherRole
-                              : (user['role'] as String? ?? 'user') == 'student'
-                                  ? l10n.studentRole
-                                  : l10n.adminRole,
+                          _localizedRoleLabel(
+                            l10n,
+                            user['role'] as String? ?? 'user',
+                          ),
                         ),
                         backgroundColor:
                             AppColors.primary.withValues(alpha: 0.08),
@@ -934,6 +940,15 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         selected: _roleFilter == 'student',
                         onTap: () {
                           setState(() => _roleFilter = 'student');
+                          _loadUsers();
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      _RoleChip(
+                        label: 'ولي الأمر',
+                        selected: _roleFilter == 'parent',
+                        onTap: () {
+                          setState(() => _roleFilter = 'parent');
                           _loadUsers();
                         },
                       ),
@@ -1316,21 +1331,34 @@ class _RoleBadge extends StatelessWidget {
     }
 
     final isTeacher = role == 'teacher';
+    final isParent = role == 'parent';
+    final backgroundColor = isTeacher
+        ? const Color(0xFFFFDBCE)
+        : isParent
+            ? const Color(0xFFFEF3C7)
+            : const Color(0xFFD0E1FB);
+    final borderColor = isTeacher
+        ? const Color(0xFFFFB59A).withValues(alpha: 0.3)
+        : isParent
+            ? const Color(0xFFF59E0B).withValues(alpha: 0.3)
+            : const Color(0xFFB7C8E1).withValues(alpha: 0.3);
+    final textColor = isTeacher
+        ? const Color(0xFF611E00)
+        : isParent
+            ? const Color(0xFF92400E)
+            : const Color(0xFF54647A);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: isTeacher ? const Color(0xFFFFDBCE) : const Color(0xFFD0E1FB),
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: isTeacher
-              ? const Color(0xFFFFB59A).withValues(alpha: 0.3)
-              : const Color(0xFFB7C8E1).withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: borderColor),
       ),
       child: Text(
-        isTeacher ? l10n.teacherRole : l10n.studentRole,
+        _localizedRoleLabel(l10n, role),
         style: TextStyle(
-          color: isTeacher ? const Color(0xFF611E00) : const Color(0xFF54647A),
+          color: textColor,
           fontSize: 11,
           fontWeight: FontWeight.w500,
         ),
@@ -1524,6 +1552,8 @@ class _CreateUserDialogState extends ConsumerState<_CreateUserDialog> {
                       value: 'teacher', child: Text(l10n.teacherRole)),
                   DropdownMenuItem(
                       value: 'student', child: Text(l10n.studentRole)),
+                  const DropdownMenuItem(
+                      value: 'parent', child: Text('ولي الأمر')),
                 ],
                 onChanged: (v) => setState(() => _role = v!),
               ),

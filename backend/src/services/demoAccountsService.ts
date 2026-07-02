@@ -30,6 +30,13 @@ const demoAccounts: Array<{
     fullName: 'أحمد محمد الطالب',
     role: 'student',
   },
+  {
+    username: 'parent',
+    password: 'Parent@123',
+    email: 'parent@school.edu',
+    fullName: 'Fatima Demo Parent',
+    role: 'parent',
+  },
 ];
 
 export async function ensureDemoAccounts(): Promise<void> {

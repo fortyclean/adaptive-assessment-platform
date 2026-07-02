@@ -70,6 +70,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         email: 'admin@demo.edu',
         role: UserRole.admin,
       ),
+      UserRole.parent: const AuthUser(
+        id: 'demo-parent-001',
+        username: 'parent_demo',
+        fullName: 'فاطمة ولي الأمر',
+        email: 'parent@demo.edu',
+        role: UserRole.parent,
+        classroomIds: ['cls-001', 'cls-002'],
+      ),
     };
 
     final user = demoUsers[role]!;
@@ -90,6 +98,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context.go(AppRoutes.teacherDashboard);
       case UserRole.student:
         context.go(AppRoutes.studentDashboard);
+      case UserRole.parent:
+        context.go(AppRoutes.parentDashboard);
     }
   }
 
@@ -149,6 +159,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           context.go(AppRoutes.teacherDashboard);
         case UserRole.student:
           context.go(AppRoutes.studentDashboard);
+        case UserRole.parent:
+          context.go(AppRoutes.parentDashboard);
       }
     } on DioException catch (e) {
       if (!mounted) return;
@@ -679,6 +691,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           context.go(AppRoutes.teacherDashboard);
         case UserRole.student:
           context.go(AppRoutes.studentDashboard);
+        case UserRole.parent:
+          context.go(AppRoutes.parentDashboard);
       }
     } on DioException catch (e) {
       if (!mounted) return;
@@ -727,38 +741,56 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _DemoButton(
-                  label: l10n.studentRole,
-                  icon: Icons.school_rounded,
-                  color: const Color(0xFF047857),
-                  bgColor: const Color(0xFFD1FAE5),
-                  onTap: () => _demoLogin(UserRole.student),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _DemoButton(
-                  label: l10n.teacherRole,
-                  icon: Icons.person_rounded,
-                  color: const Color(0xFF1E40AF),
-                  bgColor: const Color(0xFFDDE1FF),
-                  onTap: () => _demoLogin(UserRole.teacher),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _DemoButton(
-                  label: l10n.adminRole,
-                  icon: Icons.admin_panel_settings_rounded,
-                  color: const Color(0xFF7C3AED),
-                  bgColor: const Color(0xFFEDE9FE),
-                  onTap: () => _demoLogin(UserRole.admin),
-                ),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final buttonWidth = (constraints.maxWidth - 8) / 2;
+              return Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  SizedBox(
+                    width: buttonWidth,
+                    child: _DemoButton(
+                      label: l10n.studentRole,
+                      icon: Icons.school_rounded,
+                      color: const Color(0xFF047857),
+                      bgColor: const Color(0xFFD1FAE5),
+                      onTap: () => _demoLogin(UserRole.student),
+                    ),
+                  ),
+                  SizedBox(
+                    width: buttonWidth,
+                    child: _DemoButton(
+                      label: l10n.teacherRole,
+                      icon: Icons.person_rounded,
+                      color: const Color(0xFF1E40AF),
+                      bgColor: const Color(0xFFDDE1FF),
+                      onTap: () => _demoLogin(UserRole.teacher),
+                    ),
+                  ),
+                  SizedBox(
+                    width: buttonWidth,
+                    child: _DemoButton(
+                      label: l10n.adminRole,
+                      icon: Icons.admin_panel_settings_rounded,
+                      color: const Color(0xFF7C3AED),
+                      bgColor: const Color(0xFFEDE9FE),
+                      onTap: () => _demoLogin(UserRole.admin),
+                    ),
+                  ),
+                  SizedBox(
+                    width: buttonWidth,
+                    child: _DemoButton(
+                      label: 'ولي الأمر',
+                      icon: Icons.family_restroom_rounded,
+                      color: const Color(0xFFB45309),
+                      bgColor: const Color(0xFFFEF3C7),
+                      onTap: () => _demoLogin(UserRole.parent),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 8),
           Center(

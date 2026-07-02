@@ -1,0 +1,124 @@
+import 'package:adaptive_assessment/core/router/app_router.dart';
+import 'package:adaptive_assessment/core/theme/app_theme.dart';
+import 'package:adaptive_assessment/features/parent/screens/parent_portal_screens.dart';
+import 'package:adaptive_assessment/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+
+Widget _buildParentRouterApp(
+    {String initialLocation = AppRoutes.parentDashboard}) {
+  final router = GoRouter(
+    initialLocation: initialLocation,
+    routes: [
+      GoRoute(
+        path: AppRoutes.parentDashboard,
+        builder: (_, __) => const ParentDashboardScreen(),
+        routes: [
+          GoRoute(
+            path: 'children',
+            builder: (_, __) => const ParentChildrenScreen(),
+            routes: [
+              GoRoute(
+                path: ':childId',
+                builder: (_, state) => ParentChildDetailScreen(
+                  childId: state.pathParameters['childId'] ?? '',
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'messages',
+            builder: (_, __) => const ParentMessagesScreen(),
+          ),
+          GoRoute(
+            path: 'settings',
+            builder: (_, __) => const ParentSettingsScreen(),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: AppRoutes.notificationSettings,
+        builder: (_, __) =>
+            const Scaffold(body: Center(child: Text('notification-settings'))),
+      ),
+      GoRoute(
+        path: AppRoutes.accountSettings,
+        builder: (_, __) =>
+            const Scaffold(body: Center(child: Text('account-settings'))),
+      ),
+    ],
+  );
+
+  return ProviderScope(
+    child: MaterialApp.router(
+      locale: const Locale('ar'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      routerConfig: router,
+    ),
+  );
+}
+
+Future<void> _tapVisibleText(WidgetTester tester, String text) async {
+  await tester.ensureVisible(find.text(text).first);
+  await tester.tap(find.text(text).first);
+  await tester.pumpAndSettle();
+}
+
+void main() {
+  group('Parent portal integration', () {
+    testWidgets('renders the parent dashboard with children and messages',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(420, 1200));
+      addTearDown(() async => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(_buildParentRouterApp());
+      await tester.pumpAndSettle();
+
+      expect(find.text('بوابة ولي الأمر'), findsOneWidget);
+      expect(find.text('ملخص الأبناء'), findsOneWidget);
+      expect(find.text('سارة أحمد'), findsOneWidget);
+      expect(find.text('آخر الرسائل'), findsOneWidget);
+      expect(find.text('الأبناء'), findsWidgets);
+      expect(find.text('الرسائل'), findsWidgets);
+    });
+
+    testWidgets('navigates from dashboard to children and child detail',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(420, 1200));
+      addTearDown(() async => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(_buildParentRouterApp());
+      await tester.pumpAndSettle();
+
+      await _tapVisibleText(tester, 'عرض الكل');
+      expect(find.text('الأبناء'), findsWidgets);
+
+      await _tapVisibleText(tester, 'سارة أحمد');
+      expect(find.text('توصية المتابعة'), findsOneWidget);
+      expect(find.text('اختبار قريب'), findsOneWidget);
+    });
+
+    testWidgets('bottom navigation opens messages and settings',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(420, 1200));
+      addTearDown(() async => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(_buildParentRouterApp());
+      await tester.pumpAndSettle();
+
+      await _tapVisibleText(tester, 'الرسائل');
+      expect(find.text('رسائل ولي الأمر'), findsOneWidget);
+
+      await _tapVisibleText(tester, 'الإعدادات');
+      expect(find.text('إعدادات ولي الأمر'), findsOneWidget);
+
+      await _tapVisibleText(tester, 'إعدادات الإشعارات');
+      expect(find.text('notification-settings'), findsOneWidget);
+    });
+  });
+}

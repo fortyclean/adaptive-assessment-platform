@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// User roles matching the backend RBAC system.
-enum UserRole { admin, teacher, student }
+enum UserRole { admin, teacher, student, parent }
 
 /// Represents the authenticated user's data.
 class AuthUser {

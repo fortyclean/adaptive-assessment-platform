@@ -215,11 +215,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     final fullName = user?.fullName ?? l10n.userRole;
     final email = user?.username ?? '';
-    final roleLabel = user?.role.name == 'teacher'
-        ? l10n.teacherRole
-        : user?.role.name == 'admin'
-            ? l10n.adminRole
-            : l10n.studentRole;
+    final roleLabel = switch (user?.role) {
+      UserRole.teacher => l10n.teacherRole,
+      UserRole.admin => l10n.adminRole,
+      UserRole.parent => 'ولي الأمر',
+      UserRole.student || null => l10n.studentRole,
+    };
 
     // Initials
     final parts = fullName.trim().split(' ');
@@ -261,7 +262,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ? const AppBottomNav(currentIndex: 3, role: 'student')
           : user?.role == UserRole.teacher
               ? const AppBottomNav(currentIndex: 4, role: 'teacher')
-              : null,
+              : user?.role == UserRole.parent
+                  ? const AppBottomNav(currentIndex: 3, role: 'parent')
+                  : null,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

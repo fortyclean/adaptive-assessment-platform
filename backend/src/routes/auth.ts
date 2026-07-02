@@ -40,6 +40,12 @@ const demoLoginAccounts: Record<
     fullName: 'أحمد محمد الطالب',
     role: 'student',
   },
+  parent: {
+    password: 'Parent@123',
+    email: 'parent@school.edu',
+    fullName: 'Fatima Demo Parent',
+    role: 'parent',
+  },
 };
 
 // ─── Validation Schemas ───────────────────────────────────────────────────────
@@ -63,7 +69,7 @@ const registerSchema = z.object({
     .toLowerCase(),
   email: z.string().email('Valid email is required').trim().toLowerCase(),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  role: z.enum(['student', 'teacher']).optional(),
+  role: z.enum(['student', 'teacher', 'parent']).optional(),
 });
 
 const refreshSchema = z.object({

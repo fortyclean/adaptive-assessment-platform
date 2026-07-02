@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../l10n/app_localizations.dart';
 
-/// Shared bottom navigation bar for Teacher, Student, and Admin dashboards.
+/// Shared bottom navigation bar for Teacher, Student, Parent, and Admin dashboards.
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({
     required this.currentIndex,
@@ -13,7 +13,7 @@ class AppBottomNav extends StatelessWidget {
 
   final int currentIndex;
 
-  /// 'teacher', 'student', or 'admin'
+  /// 'teacher', 'student', 'parent', or 'admin'
   final String role;
 
   @override
@@ -171,6 +171,21 @@ class AppBottomNav extends StatelessWidget {
           context.go('/admin/institution-settings');
           return;
       }
+    } else if (role == 'parent') {
+      switch (index) {
+        case 0:
+          context.go('/parent');
+          return;
+        case 1:
+          context.go('/parent/children');
+          return;
+        case 2:
+          context.go('/parent/messages');
+          return;
+        case 3:
+          context.go('/parent/settings');
+          return;
+      }
     }
   }
 
@@ -219,6 +234,29 @@ class AppBottomNav extends StatelessWidget {
           label: l10n.navReports,
           icon: Icons.bar_chart_outlined,
           activeIcon: Icons.bar_chart_rounded,
+        ),
+        _NavItem(
+          label: l10n.navSettings,
+          icon: Icons.settings_outlined,
+          activeIcon: Icons.settings_rounded,
+        ),
+      ];
+    } else if (role == 'parent') {
+      return [
+        _NavItem(
+          label: l10n.navHome,
+          icon: Icons.home_outlined,
+          activeIcon: Icons.home_rounded,
+        ),
+        const _NavItem(
+          label: 'الأبناء',
+          icon: Icons.family_restroom_outlined,
+          activeIcon: Icons.family_restroom_rounded,
+        ),
+        const _NavItem(
+          label: 'الرسائل',
+          icon: Icons.chat_bubble_outline_rounded,
+          activeIcon: Icons.chat_bubble_rounded,
         ),
         _NavItem(
           label: l10n.navSettings,

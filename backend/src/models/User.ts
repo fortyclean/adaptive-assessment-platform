@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 
-export type UserRole = 'admin' | 'teacher' | 'student';
+export type UserRole = 'admin' | 'teacher' | 'student' | 'parent';
 
 export interface IUser {
   username: string;
@@ -65,8 +65,8 @@ const userSchema = new Schema<IUserDocument>(
     role: {
       type: String,
       enum: {
-        values: ['admin', 'teacher', 'student'],
-        message: 'Role must be admin, teacher, or student',
+        values: ['admin', 'teacher', 'student', 'parent'],
+        message: 'Role must be admin, teacher, student, or parent',
       },
       required: [true, 'Role is required'],
     },

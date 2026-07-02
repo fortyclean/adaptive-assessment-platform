@@ -1,14 +1,19 @@
 import { roleSeedAccounts } from '../fixtures/roleSeedAccounts';
 
 describe('Role seed accounts fixture', () => {
-  it('provides reproducible admin, teacher, and student accounts for smoke journeys', () => {
-    expect(Object.keys(roleSeedAccounts).sort()).toEqual(['admin', 'student', 'teacher']);
+  it('provides reproducible admin, teacher, student, and parent accounts for smoke journeys', () => {
+    expect(Object.keys(roleSeedAccounts).sort()).toEqual([
+      'admin',
+      'parent',
+      'student',
+      'teacher',
+    ]);
 
     for (const account of Object.values(roleSeedAccounts)) {
       expect(account.username).toEqual(expect.any(String));
       expect(account.password).toMatch(/^(?=.*[A-Z])(?=.*\d).{8,}$/);
       expect(account.email).toContain('@');
-      expect(['admin', 'teacher', 'student']).toContain(account.role);
+      expect(['admin', 'teacher', 'student', 'parent']).toContain(account.role);
     }
   });
 

@@ -60,6 +60,11 @@ Widget _buildLoginRouterApp({
         path: AppRoutes.adminDashboard,
         builder: (_, __) => const Scaffold(body: Text('admin-dashboard-route')),
       ),
+      GoRoute(
+        path: AppRoutes.parentDashboard,
+        builder: (_, __) =>
+            const Scaffold(body: Text('parent-dashboard-route')),
+      ),
     ],
   );
 
@@ -138,6 +143,11 @@ void main() {
       l10n = _l10n(tester);
       await _tapDemoRole(tester, l10n.adminRole);
       expect(find.text('admin-dashboard-route'), findsOneWidget);
+
+      await tester.pumpWidget(_buildLoginRouterApp());
+      await tester.pumpAndSettle();
+      await _tapDemoRole(tester, 'ولي الأمر');
+      expect(find.text('parent-dashboard-route'), findsOneWidget);
     });
 
     testWidgets('shows a localized no-internet message on connection failure',

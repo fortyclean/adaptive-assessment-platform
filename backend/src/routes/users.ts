@@ -23,7 +23,7 @@ const createUserSchema = z.object({
   username: z.string().min(3).max(50).trim().toLowerCase(),
   email: z.string().email().trim().toLowerCase(),
   fullName: z.string().min(2).max(100).trim(),
-  role: z.enum(['teacher', 'student']),
+  role: z.enum(['teacher', 'student', 'parent']),
   password: z.string().min(8).optional(),
   classroomIds: z.array(z.string()).optional(),
 });
@@ -37,7 +37,7 @@ const updateUserSchema = z.object({
 const paginationSchema = z.object({
   page: z.string().default('1').transform(Number),
   limit: z.string().default('20').transform(Number),
-  role: z.enum(['admin', 'teacher', 'student']).optional(),
+  role: z.enum(['admin', 'teacher', 'student', 'parent']).optional(),
   search: z.string().optional(),
   isActive: z
     .string()
@@ -140,7 +140,7 @@ router.post('/', authorize('admin'), async (req: Request, res: Response): Promis
 
     // In production, send OTP via email
     const response: Record<string, unknown> = {
-      message: `${role === 'teacher' ? 'Teacher' : 'Student'} account created successfully`,
+      message: `${role === 'teacher' ? 'Teacher' : role === 'parent' ? 'Parent' : 'Student'} account created successfully`,
       user,
     };
 

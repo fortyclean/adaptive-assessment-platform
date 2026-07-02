@@ -17,6 +17,12 @@ export const roleSeedAccounts = {
     email: 'student@school.edu',
     role: 'student',
   },
+  parent: {
+    username: 'parent',
+    password: 'Parent@123',
+    email: 'parent@school.edu',
+    role: 'parent',
+  },
 } as const;
 
 export type SeedRole = keyof typeof roleSeedAccounts;
