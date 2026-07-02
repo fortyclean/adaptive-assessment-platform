@@ -32,13 +32,21 @@ and device checks pass.
 
 ## Release evidence gate
 
-1. Copy `release/release-evidence-template.json` to:
+1. Initialize the local evidence file:
+
+   ```powershell
+   node scripts/init-release-evidence.mjs
+   ```
+
+   This fills the latest successful CI result automatically when GitHub Actions
+   is reachable. If offline, copy `release/release-evidence-template.json` to:
 
    ```text
    qa-artifacts/release-validation/release-evidence.json
    ```
 
-2. Fill the copied file with non-sensitive evidence only.
+2. Fill the remaining OneSignal, Sentry, Android, and internal Beta fields with
+   non-sensitive evidence only.
 3. Run the non-blocking preview:
 
    ```powershell
