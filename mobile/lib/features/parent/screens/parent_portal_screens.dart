@@ -72,6 +72,21 @@ final _parentPortalDataProvider =
   }
 });
 
+final _parentChildDetailProvider =
+    FutureProvider.family<_ParentChildSummary, String>((ref, childId) async {
+  final api = ref.read(apiServiceProvider);
+  final response = await api.dio.get<Map<String, dynamic>>(
+    '/parents/me/children/$childId',
+  );
+  final child = response.data?['child'] as Map<String, dynamic>?;
+  if (child == null) {
+    throw StateError(
+        'Parent child detail response did not include child data.');
+  }
+
+  return _ParentChildSummary.fromJson(child);
+});
+
 class ParentDashboardScreen extends ConsumerWidget {
   const ParentDashboardScreen({super.key});
 
@@ -207,13 +222,15 @@ class ParentChildDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final children =
+    final portalChildren =
         ref.watch(_parentPortalDataProvider).valueOrNull?.children ??
             _parentChildren;
-    final child = children.firstWhere(
-      (item) => item.id == childId,
-      orElse: () => children.first,
-    );
+    final detailState = ref.watch(_parentChildDetailProvider(childId));
+    final child = detailState.valueOrNull ??
+        portalChildren.firstWhere(
+          (item) => item.id == childId,
+          orElse: () => portalChildren.first,
+        );
 
     return Scaffold(
       appBar: AppBar(title: Text(child.name)),
@@ -221,6 +238,10 @@ class ParentChildDetailScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (detailState.isLoading) ...[
+            const LinearProgressIndicator(minHeight: 3),
+            const SizedBox(height: 12),
+          ],
           _HeroCard(
             title: child.name,
             subtitle: '${child.classroom} • حضور ${child.attendance}%',

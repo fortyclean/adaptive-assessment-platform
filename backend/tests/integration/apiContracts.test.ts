@@ -7,6 +7,8 @@ import { errorHandler, notFoundHandler } from '../../src/middleware/errorHandler
 import { generateTokens } from '../../src/services/authService';
 
 const activeSessions = new Set<string>();
+let mockParentChildIds: string[] = [];
+const linkedChildId = '64f000000000000000000111';
 
 jest.mock('../../src/utils/logger', () => ({
   logger: {
@@ -31,7 +33,93 @@ jest.mock('../../src/models/User', () => ({
               : 'student',
         isActive: true,
         activeSessions: [...activeSessions],
-        childIds: [],
+        childIds: id.includes('parent') ? mockParentChildIds : [],
+      })),
+    })),
+    find: jest.fn(() => ({
+      select: jest.fn(async () =>
+        mockParentChildIds.map((id) => ({
+          _id: { toString: () => id },
+          fullName: 'Linked Demo Student',
+          username: 'linked.student',
+          email: 'linked.student@school.edu',
+          classroomIds: [],
+          avatarUrl: undefined,
+        })),
+      ),
+    })),
+    findOne: jest.fn(({ _id }: { _id: string }) => ({
+      select: jest.fn(async () =>
+        mockParentChildIds.includes(_id)
+          ? {
+              _id: { toString: () => _id },
+              fullName: 'Linked Demo Student',
+              username: 'linked.student',
+              email: 'linked.student@school.edu',
+              classroomIds: [],
+              avatarUrl: undefined,
+            }
+          : null,
+      ),
+    })),
+  },
+}));
+
+jest.mock('../../src/models/Classroom', () => ({
+  Classroom: {
+    findOne: jest.fn(() => ({
+      sort: jest.fn(() => ({
+        select: jest.fn(async () => ({
+          _id: { toString: () => '64f000000000000000000222' },
+          name: 'Grade 5 - A',
+          gradeLevel: '5',
+        })),
+      })),
+    })),
+  },
+}));
+
+jest.mock('../../src/models/StudentAttempt', () => ({
+  StudentAttempt: {
+    find: jest.fn(() => ({
+      sort: jest.fn(() => ({
+        limit: jest.fn(() => ({
+          select: jest.fn(async () => [
+            {
+              scorePercentage: 80,
+              submittedAt: new Date('2026-07-01T10:00:00.000Z'),
+              updatedAt: new Date('2026-07-01T10:00:00.000Z'),
+              skillBreakdown: [
+                {
+                  mainSkill: 'Fractions',
+                  percentage: 55,
+                  classification: 'weakness',
+                },
+              ],
+            },
+          ]),
+        })),
+      })),
+    })),
+  },
+}));
+
+jest.mock('../../src/models/Notification', () => ({
+  Notification: {
+    find: jest.fn(() => ({
+      sort: jest.fn(() => ({
+        limit: jest.fn(() => ({
+          select: jest.fn(async () => [
+            {
+              _id: 'notification-001',
+              title: 'Assessment update',
+              body: 'A new assessment is available.',
+              isRead: false,
+              type: 'assessment_published',
+              createdAt: new Date('2026-07-01T11:00:00.000Z'),
+            },
+          ]),
+        })),
       })),
     })),
   },
@@ -40,6 +128,7 @@ jest.mock('../../src/models/User', () => ({
 describe('API contract smoke tests', () => {
   beforeEach(() => {
     activeSessions.clear();
+    mockParentChildIds = [];
   });
 
   function authHeader(role: 'student' | 'teacher' | 'admin' | 'parent' = 'student') {
@@ -126,6 +215,76 @@ describe('API contract smoke tests', () => {
       .expect(200)
       .expect((response) => {
         expect(response.body.children).toEqual([]);
+      });
+  });
+
+  it('returns parent-linked child summaries and message contracts', async () => {
+    mockParentChildIds = [linkedChildId];
+    const parent = authHeader('parent');
+
+    await request(app)
+      .get('/api/v1/parents/me/children')
+      .set('Authorization', parent.authorization)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.children).toHaveLength(1);
+        expect(response.body.children[0]).toMatchObject({
+          id: linkedChildId,
+          name: 'Linked Demo Student',
+          username: 'linked.student',
+          classroom: {
+            name: 'Grade 5 - A',
+            gradeLevel: '5',
+          },
+          average: 80,
+          pendingAssessments: 0,
+        });
+        expect(response.body.children[0].latestNote).toContain('Fractions');
+      });
+
+    await request(app)
+      .get(`/api/v1/parents/me/children/${linkedChildId}`)
+      .set('Authorization', parent.authorization)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.child).toMatchObject({
+          id: linkedChildId,
+          name: 'Linked Demo Student',
+          average: 80,
+        });
+      });
+
+    await request(app)
+      .get('/api/v1/parents/me/messages')
+      .set('Authorization', parent.authorization)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.messages).toHaveLength(1);
+        expect(response.body.messages[0]).toMatchObject({
+          subject: 'Assessment update',
+          isRead: false,
+          type: 'assessment_published',
+        });
+      });
+  });
+
+  it('rejects invalid or unlinked parent child detail requests safely', async () => {
+    const parent = authHeader('parent');
+
+    await request(app)
+      .get('/api/v1/parents/me/children/not-a-valid-object-id')
+      .set('Authorization', parent.authorization)
+      .expect(400)
+      .expect((response) => {
+        expect(response.body.error).toContain('Invalid child ID');
+      });
+
+    await request(app)
+      .get(`/api/v1/parents/me/children/${linkedChildId}`)
+      .set('Authorization', parent.authorization)
+      .expect(403)
+      .expect((response) => {
+        expect(response.body.error).toContain('permission');
       });
   });
 

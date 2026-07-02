@@ -121,5 +121,24 @@ void main() {
 
       expect(find.byIcon(Icons.school_rounded), findsOneWidget);
     });
+
+    testWidgets('shows parent demo role on a narrow phone viewport',
+        (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(buildLoginScreen());
+      await tester.pumpAndSettle();
+
+      await tester.scrollUntilVisible(
+        find.byIcon(Icons.family_restroom_rounded),
+        120,
+        scrollable: find.byType(Scrollable).first,
+      );
+
+      expect(find.byIcon(Icons.family_restroom_rounded), findsOneWidget);
+    });
   });
 }

@@ -743,7 +743,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           const SizedBox(height: 12),
           LayoutBuilder(
             builder: (context, constraints) {
-              final buttonWidth = (constraints.maxWidth - 8) / 2;
+              final buttonWidth = constraints.maxWidth <= 1000
+                  ? constraints.maxWidth
+                  : (constraints.maxWidth - 8) / 2;
               return Wrap(
                 spacing: 8,
                 runSpacing: 8,
