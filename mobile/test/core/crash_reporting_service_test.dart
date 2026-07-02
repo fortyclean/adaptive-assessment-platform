@@ -11,5 +11,18 @@ void main() {
       StateError('test exception'),
       stackTrace: StackTrace.current,
     );
+    await service.captureSyntheticValidationEvent();
+  });
+
+  test('synthetic validation event uses a static non-sensitive message', () {
+    expect(
+      CrashReportingService.syntheticValidationMessage,
+      'release-validation-synthetic-event',
+    );
+    expect(CrashReportingService.syntheticValidationMessage, isNot(contains('@')));
+    expect(
+      CrashReportingService.syntheticValidationMessage,
+      isNot(contains(RegExp(r'\d{6,}'))),
+    );
   });
 }

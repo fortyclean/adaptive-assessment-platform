@@ -12,6 +12,9 @@ class CrashReportingService {
 
   static final CrashReportingService instance = CrashReportingService._();
 
+  static const String syntheticValidationMessage =
+      'release-validation-synthetic-event';
+
   static const String _dsn = String.fromEnvironment('SENTRY_DSN');
   static const String _environment =
       String.fromEnvironment('APP_ENV', defaultValue: 'production');
@@ -60,5 +63,17 @@ class CrashReportingService {
   }) async {
     if (!isEnabled) return;
     await Sentry.captureException(error, stackTrace: stackTrace);
+  }
+
+  /// Sends a privacy-safe event that can be used to validate a Beta DSN.
+  ///
+  /// The event intentionally uses a static non-user message and no custom
+  /// payload, email, phone number, username, token, or request data.
+  Future<void> captureSyntheticValidationEvent() async {
+    if (!isEnabled) return;
+    await Sentry.captureException(
+      StateError(syntheticValidationMessage),
+      stackTrace: StackTrace.current,
+    );
   }
 }
