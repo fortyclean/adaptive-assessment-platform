@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/app_colors.dart';
 import '../../../core/network/api_service.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
@@ -98,8 +99,10 @@ class ParentDashboardScreen extends ConsumerWidget {
           children: _parentChildren,
           messages: _parentMessages,
         );
-    final colorScheme = Theme.of(context).colorScheme;
-
+    final pendingAssessments = data.children.fold<int>(
+      0,
+      (total, child) => total + child.pendingAssessments,
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('بوابة ولي الأمر'),
@@ -115,32 +118,32 @@ class ParentDashboardScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _HeroCard(
+          const _HeroCard(
             title: 'مرحبًا بك',
             subtitle:
                 'تابع تقدم الأبناء، الاختبارات القادمة، ورسائل المدرسة من مكان واحد.',
             icon: Icons.family_restroom_rounded,
-            color: colorScheme.primary,
+            color: AppColors.primary,
           ),
           if (portalData.isLoading) ...[
             const SizedBox(height: 12),
             const LinearProgressIndicator(minHeight: 3),
           ],
           const SizedBox(height: 16),
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: _MetricCard(
                   label: 'الأبناء',
-                  value: '2',
+                  value: '${data.children.length}',
                   icon: Icons.child_care_rounded,
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: _MetricCard(
                   label: 'اختبارات قادمة',
-                  value: '3',
+                  value: '$pendingAssessments',
                   icon: Icons.assignment_rounded,
                 ),
               ),
@@ -246,7 +249,7 @@ class ParentChildDetailScreen extends ConsumerWidget {
             title: child.name,
             subtitle: '${child.classroom} • حضور ${child.attendance}%',
             icon: Icons.account_circle_rounded,
-            color: Theme.of(context).colorScheme.secondary,
+            color: AppColors.primaryContainer,
           ),
           const SizedBox(height: 16),
           Row(
@@ -379,8 +382,6 @@ class _ChildSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -392,11 +393,11 @@ class _ChildSummaryCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: colorScheme.primaryContainer,
+                  const CircleAvatar(
+                    backgroundColor: AppColors.primaryContainer,
                     child: Icon(
                       Icons.school_rounded,
-                      color: colorScheme.onPrimaryContainer,
+                      color: AppColors.onPrimaryContainer,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -492,7 +493,7 @@ class _MetricCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: Theme.of(context).colorScheme.primary),
+              Icon(icon, color: AppColors.primary),
               const SizedBox(height: 10),
               Text(value, style: Theme.of(context).textTheme.headlineSmall),
               Text(label),
@@ -543,7 +544,7 @@ class _InfoPanel extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: Theme.of(context).colorScheme.primary),
+              Icon(icon, color: AppColors.primary),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

@@ -1,4 +1,5 @@
 import 'package:adaptive_assessment/core/router/app_router.dart';
+import 'package:adaptive_assessment/core/constants/app_colors.dart';
 import 'package:adaptive_assessment/core/theme/app_theme.dart';
 import 'package:adaptive_assessment/features/parent/screens/parent_portal_screens.dart';
 import 'package:adaptive_assessment/l10n/app_localizations.dart';
@@ -101,6 +102,26 @@ void main() {
       expect(find.text('آخر الرسائل'), findsOneWidget);
       expect(find.text('الأبناء'), findsWidgets);
       expect(find.text('الرسائل'), findsWidgets);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text('3'), findsOneWidget);
+    });
+
+    testWidgets('uses the shared product color system on parent cards',
+        (tester) async {
+      await tester.binding.setSurfaceSize(const Size(420, 1200));
+      addTearDown(() async => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(_buildParentRouterApp());
+      await _pumpPortalFrame(tester);
+
+      final brandedHeroCard = find.byWidgetPredicate((widget) {
+        if (widget is! Container) return false;
+        final decoration = widget.decoration;
+        if (decoration is! BoxDecoration) return false;
+        return decoration.color == AppColors.primary.withValues(alpha: 0.10);
+      });
+
+      expect(brandedHeroCard, findsOneWidget);
     });
 
     testWidgets('navigates from dashboard to children and child detail',
