@@ -30,6 +30,30 @@ and device checks pass.
    - Logout.
 6. Record non-sensitive evidence in `qa-artifacts/release-validation/`.
 
+## Release evidence gate
+
+1. Copy `release/release-evidence-template.json` to:
+
+   ```text
+   qa-artifacts/release-validation/release-evidence.json
+   ```
+
+2. Fill the copied file with non-sensitive evidence only.
+3. Run the non-blocking preview:
+
+   ```powershell
+   node scripts/verify-release-evidence.mjs
+   ```
+
+4. Run the strict release gate before promoting the Beta:
+
+   ```powershell
+   node scripts/verify-release-evidence.mjs --strict
+   ```
+
+The strict gate must pass before the release owner approval is considered
+complete.
+
 ## Rollback plan
 
 - Stop rollout from the store console.

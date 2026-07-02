@@ -1,0 +1,39 @@
+{
+  "release": "1.0.103",
+  "packageId": "com.adaptivemastery.app",
+  "ci": {
+    "runNumber": "",
+    "commit": "",
+    "backendBuildAndTest": false,
+    "flutterAnalyzeAndTest": false,
+    "productionSecretScan": false
+  },
+  "android": {
+    "physicalDeviceModel": "",
+    "apkInstalled": false,
+    "roleSmokeJourneysPassed": false,
+    "notificationPermissionGranted": false
+  },
+  "oneSignal": {
+    "dashboardPushSent": false,
+    "dashboardPushReceivedOnDevice": false,
+    "notificationTapOpenedApp": false,
+    "evidencePath": "",
+    "containsNoSecretsOrPii": false
+  },
+  "sentry": {
+    "authorizedBetaDsnUsed": false,
+    "syntheticEventSent": false,
+    "syntheticEventReceived": false,
+    "evidencePath": "",
+    "containsNoSecretsOrPii": false
+  },
+  "internalBeta": {
+    "distributionChannel": "",
+    "releaseOwner": "",
+    "releaseOwnerApproved": false,
+    "rollbackPlanReviewed": false,
+    "supportContactReady": false,
+    "evidencePath": ""
+  }
+}
