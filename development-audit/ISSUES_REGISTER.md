@@ -107,3 +107,21 @@
 | Acceptance | No production-like credentials in tracked compose files |
 | Tests | Secret scan and manual compose review |
 | Status | Discovered |
+
+## ISSUE-007
+
+| Field | Value |
+|---|---|
+| Title | npm audit reports dependency vulnerabilities |
+| Priority | P2 |
+| Area | Dependency security |
+| Severity | Medium/High pending package triage |
+| User value | Reduces known dependency risk before Beta |
+| Location | `backend/package-lock.json` |
+| Current result | `npm install --package-lock-only` reported 11 vulnerabilities: 1 low, 6 moderate, 4 high |
+| Expected result | Dependency vulnerabilities are triaged and fixed without breaking backend behavior |
+| Root cause | Transitive dependency versions need review/upgrades |
+| Proposed fix | Run `npm audit --json`, identify direct vs transitive sources, apply non-breaking upgrades first, and avoid `--force` unless a breaking-change review is approved |
+| Acceptance | Audit report reduced to an approved risk level with backend build/tests passing |
+| Tests | `npm audit`, `npm run build`, `npm test -- --runInBand` |
+| Status | Discovered |

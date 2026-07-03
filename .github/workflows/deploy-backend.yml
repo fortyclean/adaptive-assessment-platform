@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
 
@@ -35,10 +35,10 @@ jobs:
         working-directory: backend
         run: |
           ls -la dist/
-          echo "✅ Build successful"
+          echo "Build successful"
 
       - name: Notify success
         run: |
-          echo "✅ Backend build verified - ready for Render deployment"
-          echo "🔗 Deploy URL: https://eduassess-backend.onrender.com"
-          echo "🔗 Health: https://eduassess-backend.onrender.com/api/v1/health"
+          echo "Backend build verified - ready for Render deployment"
+          echo "Deploy URL: https://eduassess-backend.onrender.com"
+          echo "Health: https://eduassess-backend.onrender.com/api/v1/health"

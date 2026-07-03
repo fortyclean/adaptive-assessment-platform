@@ -25,7 +25,7 @@ Scope: Phase 0 discovery and Phase 1 stable baseline only. No production deploym
 | Dart | 3.12.2 |
 | Flutter in CI | 3.44.4 |
 | Node local | 24.17.0 |
-| Node in CI | 22 |
+| Node in CI | 22 LTS |
 | npm | 11.13.0 |
 | Java shell | 26.0.1 |
 | Java used by Flutter/Gradle | Temurin 17.0.19 |
@@ -44,7 +44,7 @@ Scope: Phase 0 discovery and Phase 1 stable baseline only. No production deploym
 
 ## Primary risks
 
-- Node toolchain drift remains: local Node is 24.17.0 while CI uses Node 22.
+- Node policy is now explicit: CI/release use Node 22 LTS, while local Node 24 is acceptable for smoke checks until a newer LTS is adopted.
 - Release workflow still contains demo credentials in generated release notes.
 - Universal release APK failed locally because Windows Application Control blocked `gen_snapshot.exe` for android-x64.
 - Backend lint passes with warnings, but 98 warnings remain.

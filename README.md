@@ -25,8 +25,8 @@ adaptive-assessment-platform/
 ## Quick Start
 
 ### Prerequisites
-- Node.js >= 18
-- Flutter >= 3.19
+- Node.js 22 LTS for CI/release parity; Node 24 is acceptable for local smoke checks until all tooling is pinned to a newer LTS.
+- Flutter 3.44.4 for CI/release parity.
 - Docker & Docker Compose
 
 ### Backend

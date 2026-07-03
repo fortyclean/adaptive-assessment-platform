@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.104';
-  static const int buildNumber = 104;
+  static const String current = '1.0.105';
+  static const int buildNumber = 105;
   static const String releaseDate = 'يوليو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.105',
+      buildNumber: 105,
+      date: 'يوليو 2026',
+      title: 'توحيد أدوات البناء والاختبار',
+      changes: [
+        'توحيد إصدار Node في فحوص GitHub Actions على Node 22 لتقليل اختلافات البناء.',
+        'إضافة ملفات ضبط Node المحلية لتسهيل استخدام نفس نسخة CI أثناء التطوير.',
+        'تحديث وثائق التشغيل لتوضيح نسخ Flutter وNode المعتمدة للإصدار.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.104',
       buildNumber: 104,

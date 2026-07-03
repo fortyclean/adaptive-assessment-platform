@@ -2,6 +2,8 @@
 
 ## Code/config changes
 
+- Bumped local mobile/backend version to `1.0.105+105`.
+- Added Node 22 toolchain policy files and aligned the backend deploy-check workflow with CI.
 - Bumped local mobile version to `1.0.104+104`.
 - Bumped local backend package version to `1.0.104`.
 - Added `1.0.104` changelog entry for parent portal stabilization.

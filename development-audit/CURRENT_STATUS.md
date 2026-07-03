@@ -20,7 +20,7 @@
 
 ## Version state
 
-The local working tree currently bumps the app/backend version to `1.0.104+104` and adds a changelog entry for the parent portal stabilization release. This has not been pushed.
+The app/backend version is being advanced to `1.0.105+105` for toolchain policy alignment after the `1.0.104` release baseline.
 
 ## Local artifacts
 
@@ -42,4 +42,6 @@ APK package verification: `com.adaptivemastery.app`, versionCode `104`, versionN
 - `.github/workflows/build-apk.yml` — release notes cleaned to remove demo credentials and mojibake text.
 - `.github/workflows/ci.yml` — release-notes safety check added to CI and Flutter pin aligned to 3.44.4.
 - `.github/workflows/build-apk.yml` — Flutter pin aligned to 3.44.4.
+- `.github/workflows/deploy-backend.yml` — Node pin aligned to Node 22 and mojibake status text cleaned.
+- `.nvmrc` / `.node-version` — Node 22 policy files added.
 - `scripts/verify-release-notes-safe.mjs` — new guard against publishing demo credentials in release notes.
