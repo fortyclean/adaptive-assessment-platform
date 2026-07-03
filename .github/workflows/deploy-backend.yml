@@ -31,6 +31,18 @@ jobs:
         working-directory: backend
         run: npm run build
 
+      - name: Backend test suite
+        working-directory: backend
+        run: npm test -- --silent
+
+      - name: Backend lint
+        working-directory: backend
+        run: npm run lint
+
+      - name: Backend dependency audit
+        working-directory: backend
+        run: npm audit --audit-level=moderate
+
       - name: Verify dist output
         working-directory: backend
         run: |

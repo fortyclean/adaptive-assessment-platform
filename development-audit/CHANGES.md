@@ -2,6 +2,7 @@
 
 ## Code/config changes
 
+- Hardened `.github/workflows/deploy-backend.yml` so backend deployment validation now runs build, tests, lint, and dependency audit before reporting deployment readiness.
 - Bumped local mobile/backend version to `1.0.111+111`.
 - Added API-level coverage for the question-bank `.xlsx` import upload route.
 - Added rejection coverage to ensure legacy `.xls` uploads are blocked before the import service runs.
