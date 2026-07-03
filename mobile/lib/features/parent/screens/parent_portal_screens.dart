@@ -78,7 +78,7 @@ final _parentPortalDataProvider =
       );
     }
 
-    return const _ParentPortalData(children: [], messages: []);
+    rethrow;
   }
 });
 
@@ -114,6 +114,7 @@ class ParentDashboardScreen extends ConsumerWidget {
     final portalData = ref.watch(_parentPortalDataProvider);
     final shouldUseDemoData =
         _shouldUseParentDemoData(ref.read(authProvider).accessToken);
+    final hasLoadError = portalData.hasError && !shouldUseDemoData;
     final data = portalData.valueOrNull ??
         (shouldUseDemoData
             ? const _ParentPortalData(
@@ -150,6 +151,17 @@ class ParentDashboardScreen extends ConsumerWidget {
           if (portalData.isLoading) ...[
             const SizedBox(height: 12),
             const LinearProgressIndicator(minHeight: 3),
+          ],
+          if (hasLoadError) ...[
+            const SizedBox(height: 12),
+            _RetryableStateCard(
+              icon: Icons.cloud_off_outlined,
+              title: 'تعذر تحميل بيانات ولي الأمر',
+              body:
+                  'تحقق من الاتصال أو حاول مرة أخرى. لن نعرض بيانات تجريبية أثناء الجلسة الحقيقية.',
+              actionLabel: 'إعادة المحاولة',
+              onRetry: () => ref.invalidate(_parentPortalDataProvider),
+            ),
           ],
           const SizedBox(height: 16),
           Row(
@@ -229,40 +241,55 @@ class ParentChildrenScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final portalData = ref.watch(_parentPortalDataProvider);
+    final shouldUseDemoData =
+        _shouldUseParentDemoData(ref.read(authProvider).accessToken);
     final children = portalData.valueOrNull?.children ??
-        (_shouldUseParentDemoData(ref.read(authProvider).accessToken)
-            ? _parentChildren
-            : const []);
+        (shouldUseDemoData ? _parentChildren : const []);
+    final hasLoadError = portalData.hasError && !shouldUseDemoData;
 
     return Scaffold(
       appBar: AppBar(title: const Text('الأبناء')),
       bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'parent'),
-      body: children.isEmpty
+      body: hasLoadError
           ? ListView(
               padding: const EdgeInsets.all(16),
-              children: const [
-                _EmptyStateCard(
-                  icon: Icons.link_off_rounded,
-                  title: 'لا يوجد أبناء مرتبطون بعد',
+              children: [
+                _RetryableStateCard(
+                  icon: Icons.cloud_off_outlined,
+                  title: 'تعذر تحميل الأبناء',
                   body:
-                      'اطلب من إدارة المدرسة ربط حسابك بحسابات الأبناء لعرض التقدم والرسائل.',
+                      'لم نتمكن من جلب الأبناء المرتبطين بهذا الحساب. حاول مرة أخرى بعد التحقق من الاتصال.',
+                  actionLabel: 'إعادة المحاولة',
+                  onRetry: () => ref.invalidate(_parentPortalDataProvider),
                 ),
               ],
             )
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: children.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final child = children[index];
-                return _ChildSummaryCard(
-                  child: child,
-                  onTap: () => context.push(
-                    AppRoutes.parentChildDetailPath(child.id),
-                  ),
-                );
-              },
-            ),
+          : children.isEmpty
+              ? ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: const [
+                    _EmptyStateCard(
+                      icon: Icons.link_off_rounded,
+                      title: 'لا يوجد أبناء مرتبطون بعد',
+                      body:
+                          'اطلب من إدارة المدرسة ربط حسابك بحسابات الأبناء لعرض التقدم والرسائل.',
+                    ),
+                  ],
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: children.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final child = children[index];
+                    return _ChildSummaryCard(
+                      child: child,
+                      onTap: () => context.push(
+                        AppRoutes.parentChildDetailPath(child.id),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 }
@@ -277,12 +304,33 @@ class ParentChildDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final shouldUseDemoData =
+        _shouldUseParentDemoData(ref.read(authProvider).accessToken);
     final portalChildren =
         ref.watch(_parentPortalDataProvider).valueOrNull?.children ??
-            (_shouldUseParentDemoData(ref.read(authProvider).accessToken)
-                ? _parentChildren
-                : const []);
+            (shouldUseDemoData ? _parentChildren : const []);
     final detailState = ref.watch(_parentChildDetailProvider(childId));
+    if (detailState.hasError && detailState.valueOrNull == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('تفاصيل الابن')),
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 1, role: 'parent'),
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _RetryableStateCard(
+              icon: Icons.cloud_off_outlined,
+              title: 'تعذر تحميل تفاصيل الابن',
+              body:
+                  'لم نتمكن من تحديث تفاصيل هذا الابن الآن. يمكنك إعادة المحاولة أو الرجوع لقائمة الأبناء.',
+              actionLabel: 'إعادة المحاولة',
+              onRetry: () =>
+                  ref.invalidate(_parentChildDetailProvider(childId)),
+            ),
+          ],
+        ),
+      );
+    }
     if (portalChildren.isEmpty && detailState.valueOrNull == null) {
       return Scaffold(
         bottomNavigationBar:
@@ -379,10 +427,11 @@ class ParentMessagesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final portalData = ref.watch(_parentPortalDataProvider);
+    final shouldUseDemoData =
+        _shouldUseParentDemoData(ref.read(authProvider).accessToken);
     final messages = portalData.valueOrNull?.messages ??
-        (_shouldUseParentDemoData(ref.read(authProvider).accessToken)
-            ? _parentMessages
-            : const []);
+        (shouldUseDemoData ? _parentMessages : const []);
+    final hasLoadError = portalData.hasError && !shouldUseDemoData;
 
     return Scaffold(
       appBar: AppBar(title: const Text('رسائل ولي الأمر')),
@@ -401,7 +450,16 @@ class ParentMessagesScreen extends ConsumerWidget {
             const LinearProgressIndicator(minHeight: 3),
           ],
           const SizedBox(height: 16),
-          if (messages.isEmpty)
+          if (hasLoadError)
+            _RetryableStateCard(
+              icon: Icons.cloud_off_outlined,
+              title: 'تعذر تحميل الرسائل',
+              body:
+                  'لم نتمكن من جلب رسائل المدرسة الآن. حاول مرة أخرى بعد التحقق من الاتصال.',
+              actionLabel: 'إعادة المحاولة',
+              onRetry: () => ref.invalidate(_parentPortalDataProvider),
+            )
+          else if (messages.isEmpty)
             const _EmptyStateCard(
               icon: Icons.mark_email_read_outlined,
               title: 'لا توجد رسائل',
@@ -682,6 +740,58 @@ class _EmptyStateCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+class _RetryableStateCard extends StatelessWidget {
+  const _RetryableStateCard({
+    required this.icon,
+    required this.title,
+    required this.body,
+    required this.actionLabel,
+    required this.onRetry,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+  final String actionLabel;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: AppColors.errorContainer,
+                child: Icon(icon, color: AppColors.error, size: 28),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                body,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+              ),
+              const SizedBox(height: 14),
+              FilledButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh_rounded),
+                label: Text(actionLabel),
               ),
             ],
           ),
