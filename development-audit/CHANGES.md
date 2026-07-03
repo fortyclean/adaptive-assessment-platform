@@ -2,6 +2,8 @@
 
 ## Code/config changes
 
+- Bumped local mobile/backend version to `1.0.106+106`.
+- Reduced backend dependency audit findings with non-forced npm remediation and `bcrypt` upgrade.
 - Bumped local mobile/backend version to `1.0.105+105`.
 - Added Node 22 toolchain policy files and aligned the backend deploy-check workflow with CI.
 - Bumped local mobile version to `1.0.104+104`.

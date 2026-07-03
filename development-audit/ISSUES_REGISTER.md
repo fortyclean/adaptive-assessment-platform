@@ -118,10 +118,10 @@
 | Severity | Medium/High pending package triage |
 | User value | Reduces known dependency risk before Beta |
 | Location | `backend/package-lock.json` |
-| Current result | `npm install --package-lock-only` reported 11 vulnerabilities: 1 low, 6 moderate, 4 high |
+| Current result | Non-forced remediation reduced findings from 11 vulnerabilities to 2 remaining: `uuid` requires a SemVer-major upgrade and `xlsx` has no npm audit fix available |
 | Expected result | Dependency vulnerabilities are triaged and fixed without breaking backend behavior |
 | Root cause | Transitive dependency versions need review/upgrades |
-| Proposed fix | Run `npm audit --json`, identify direct vs transitive sources, apply non-breaking upgrades first, and avoid `--force` unless a breaking-change review is approved |
+| Proposed fix | Plan a focused `uuid` major-compatibility test and replace or sandbox `xlsx` import handling before Beta |
 | Acceptance | Audit report reduced to an approved risk level with backend build/tests passing |
-| Tests | `npm audit`, `npm run build`, `npm test -- --runInBand` |
-| Status | Discovered |
+| Tests | `npm audit --json`, `npm run build`, `npm test -- --runInBand` |
+| Status | Partially fixed and locally verified |

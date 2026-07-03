@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.105';
-  static const int buildNumber = 105;
+  static const String current = '1.0.106';
+  static const int buildNumber = 106;
   static const String releaseDate = 'يوليو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.106',
+      buildNumber: 106,
+      date: 'يوليو 2026',
+      title: 'تقليل مخاطر اعتماديات الخادم',
+      changes: [
+        'تطبيق إصلاحات npm audit غير القسرية لتقليل ثغرات الاعتماديات.',
+        'ترقية bcrypt لإزالة سلسلة node-pre-gyp وtar المصنفة عالية الخطورة.',
+        'توثيق الثغرات المتبقية التي تحتاج ترقية كبرى أو بديل آمن قبل Beta.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.105',
       buildNumber: 105,

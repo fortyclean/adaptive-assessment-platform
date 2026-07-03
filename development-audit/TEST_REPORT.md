@@ -22,6 +22,8 @@
 | `rg "3\.35\.7\|flutter-version" -n .github development-audit` | Passed — workflow pins now show Flutter 3.44.4; historical note remains only in audit change log |
 | `npm.cmd run build` after Node policy update | Passed |
 | `npm.cmd test -- --runInBand` after Node policy update | Passed — 20 suites / 470 tests |
+| `npm.cmd audit fix` without `--force` | Reduced dependency findings from 11 to 4 |
+| `npm.cmd install bcrypt@^6.0.0` | Reduced dependency findings from 4 to 2 |
 
 ## Build evidence
 
