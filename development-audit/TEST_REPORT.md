@@ -42,6 +42,15 @@
 | `flutter build apk --debug` for `1.0.108+108` | Passed |
 | `adb install -r ...app-debug.apk` on `STK L21` for `1.0.108+108` | Passed |
 | `adb shell monkey -p com.adaptivemastery.app ...` for `1.0.108+108` | Passed; app launched without Logcat fatal exception |
+| `npm.cmd run lint` after `1.0.108` push | Failed with one Prettier error in `backend/src/routes/questions.ts`; fixed in `1.0.109+109` |
+| `npm.cmd run lint` for `1.0.109` | Passed with existing warnings only; 0 errors |
+| `npm.cmd run build` for `1.0.109` | Passed |
+| `npm.cmd test -- --runInBand` for `1.0.109` | Passed — 20 suites / 470 tests |
+| `npm.cmd audit --json` for `1.0.109` | Passed — 0 vulnerabilities |
+| `flutter analyze` for `1.0.109+109` | Passed |
+| `flutter test --reporter compact` for `1.0.109+109` | Passed — 346 tests |
+| `flutter build apk --debug` for `1.0.109+109` | Passed |
+| `adb install` for `1.0.109+109` | Blocked — connected Android phone disappeared from ADB/Flutter during install; empty evidence files were removed |
 
 ## Build evidence
 

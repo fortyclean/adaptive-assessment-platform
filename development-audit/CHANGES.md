@@ -2,6 +2,9 @@
 
 ## Code/config changes
 
+- Bumped local mobile/backend version to `1.0.109+109`.
+- Fixed backend Prettier lint formatting in the `.xlsx` upload MIME allow-list after CI reported the backend lint failure.
+- Rebuilt the `1.0.109+109` debug APK locally; physical install is pending because the Android device disappeared from ADB/Flutter during install.
 - Bumped local mobile/backend version to `1.0.108+108`.
 - Replaced backend spreadsheet import parsing from vulnerable `xlsx` to `read-excel-file`.
 - Limited question-bank spreadsheet uploads to `.xlsx` only and removed legacy `.xls` acceptance to avoid reintroducing the vulnerable parser surface.
@@ -38,7 +41,7 @@
 
 ## Not done
 
-- No signed release APK/AAB was generated for `1.0.108+108`; only a debug device validation build was installed.
+- No signed release APK/AAB was generated for `1.0.109+109`; only debug device validation builds are being used during stabilization.
 - No GitHub release.
 - No production deployment.
 - No production secret values added or printed.

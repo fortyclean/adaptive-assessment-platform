@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.108';
-  static const int buildNumber = 108;
+  static const String current = '1.0.109';
+  static const int buildNumber = 109;
   static const String releaseDate = 'يوليو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.109',
+      buildNumber: 109,
+      date: 'يوليو 2026',
+      title: 'تثبيت فحص تنسيق الخادم',
+      changes: [
+        'تصحيح تنسيق قائمة نوع ملف XLSX في مسار استيراد الأسئلة.',
+        'مواءمة التحقق المحلي مع فحص lint المستخدم في GitHub Actions.',
+        'إعادة تشغيل بوابات البناء والاختبار بعد إصلاح CI.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.108',
       buildNumber: 108,

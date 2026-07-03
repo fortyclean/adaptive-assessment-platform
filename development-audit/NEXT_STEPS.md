@@ -1,10 +1,10 @@
 # Next steps
 
-1. Push the `1.0.108` spreadsheet-import hardening, then verify GitHub Actions.
-2. Accept Android SDK licenses to remove the remaining Android toolchain warning.
-3. Add API-level tests for generated `.xlsx` question import fixtures.
-4. Plan a signed release APK/AAB only after the next release gate passes.
-5. Start Phase 2 only after the Phase 1 reports are accepted.
+1. Push the `1.0.109` CI lint follow-up fix, then verify GitHub Actions.
+2. Reconnect or re-authorize the Android phone, then install/launch `1.0.109+109`.
+3. Accept Android SDK licenses to remove the remaining Android toolchain warning.
+4. Add API-level tests for generated `.xlsx` question import fixtures.
+5. Plan a signed release APK/AAB only after the next release gate passes.
 
 ## Recommended next implementation batch
 
