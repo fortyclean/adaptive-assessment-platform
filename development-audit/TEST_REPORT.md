@@ -71,6 +71,10 @@
 | `flutter build apk --debug` for `1.0.111+111` | Passed |
 | `flutter run -d 78KNW19A25007947 --debug --no-resident` for `1.0.111+111` | Passed — debug APK installed/launched on `STK L21`; replaced incompatible prior signed build |
 | `adb logcat` crash scan for `1.0.111+111` | Passed — no `FATAL EXCEPTION`, `E/flutter`, or `Unhandled Exception` markers found |
+| Backend lint cleanup batch 73 | Passed — `npm.cmd run lint` warning count reduced from 98 to 90 with 0 errors |
+| `npm.cmd run build` after lint cleanup batch 73 | Passed |
+| `npm.cmd test -- --silent` after lint cleanup batch 73 | Passed — 21 suites / 473 tests |
+| `npm.cmd audit --audit-level=moderate` after lint cleanup batch 73 | Passed — 0 vulnerabilities |
 
 ## Build evidence
 

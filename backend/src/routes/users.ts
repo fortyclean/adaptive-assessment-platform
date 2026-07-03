@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import bcrypt from 'bcrypt';
 import { User } from '../models/User';
 import { authenticate, authorize } from '../middleware/authenticate';
 import {
@@ -9,7 +8,6 @@ import {
   validatePasswordStrength,
 } from '../services/authService';
 import { logger } from '../utils/logger';
-import { env } from '../config/env';
 import mongoose from 'mongoose';
 
 const router = Router();

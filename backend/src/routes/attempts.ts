@@ -30,7 +30,6 @@ import {
   calculateResults,
   calculatePointsEarned,
   calculateSkillBreakdown,
-  isSessionComplete,
   checkFillBlankAnswer,
   AdaptiveSessionState,
   QuestionCandidate,
@@ -309,10 +308,11 @@ router.get(
       attempt.presentedQuestionIds.push(new mongoose.Types.ObjectId(nextQuestion._id.toString()));
       await attempt.save();
 
-      // Never send correctAnswer to client before session ends (Req 7.14)
-      const { correctAnswer: _hidden, ...safeQuestion } = nextQuestion as QuestionCandidate & {
+      const safeQuestion = { ...nextQuestion } as QuestionCandidate & {
         correctAnswer?: string;
       };
+      // Never send correctAnswer to client before session ends (Req 7.14)
+      delete safeQuestion.correctAnswer;
 
       res.status(200).json({
         complete: false,
@@ -678,8 +678,6 @@ router.patch(
 
       if (ungradedEssays.length === 0) {
         // All essays graded — finalise the session (Req 18.6)
-        const now = new Date();
-
         // Calculate final score including essay marks
         const totalMarks = attempt.answers.reduce((sum, a) => {
           if (a.isEssay) {

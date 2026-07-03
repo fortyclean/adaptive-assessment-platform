@@ -2,6 +2,7 @@
 
 ## Code/config changes
 
+- Reduced backend lint warning debt from 98 to 90 by removing unused imports, an unused encryption constant, and unused temporary variables without changing runtime behavior.
 - Hardened `.github/workflows/deploy-backend.yml` so backend deployment validation now runs build, tests, lint, and dependency audit before reporting deployment readiness.
 - Added the backend deployment workflow file to its own path trigger so changes to the gate are validated immediately.
 - Bumped local mobile/backend version to `1.0.111+111`.

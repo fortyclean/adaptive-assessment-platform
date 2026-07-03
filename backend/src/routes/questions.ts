@@ -2,7 +2,6 @@ import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import multer from 'multer';
 import { Question, SUBJECTS } from '../models/Question';
-import { StudentAttempt } from '../models/StudentAttempt';
 import { authenticate, authorize } from '../middleware/authenticate';
 import { importQuestionsFromBuffer } from '../services/excelImportService';
 import { logger } from '../utils/logger';

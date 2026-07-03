@@ -17,7 +17,6 @@
 
 import mongoose from 'mongoose';
 import { StudentAttempt } from '../models/StudentAttempt';
-import { Assessment } from '../models/Assessment';
 import { Classroom } from '../models/Classroom';
 import { PerformanceAlert } from '../models/PerformanceAlert';
 import { logger } from '../utils/logger';
