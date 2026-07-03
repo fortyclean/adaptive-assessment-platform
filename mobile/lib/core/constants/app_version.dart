@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.109';
-  static const int buildNumber = 109;
+  static const String current = '1.0.110';
+  static const int buildNumber = 110;
   static const String releaseDate = 'يوليو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.110',
+      buildNumber: 110,
+      date: 'يوليو 2026',
+      title: 'اختبار فعلي لاستيراد XLSX',
+      changes: [
+        'إضافة اختبار يولد ملف XLSX مصغرًا ويتحقق من قراءة صفوف بنك الأسئلة.',
+        'تغطية تجاهل الصفوف الفارغة أثناء تحليل ملف الاستيراد.',
+        'تثبيت ضمان جودة مسار استيراد الأسئلة بعد استبدال مكتبة القراءة.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.109',
       buildNumber: 109,

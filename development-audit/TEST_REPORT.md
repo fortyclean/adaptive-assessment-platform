@@ -51,6 +51,15 @@
 | `flutter test --reporter compact` for `1.0.109+109` | Passed — 346 tests |
 | `flutter build apk --debug` for `1.0.109+109` | Passed |
 | `adb install` for `1.0.109+109` | Blocked — connected Android phone disappeared from ADB/Flutter during install; empty evidence files were removed |
+| `backend/tests/unit/excelImport.test.ts` generated `.xlsx` fixture | Passed — generated workbook parsed and empty row ignored |
+| `npm.cmd run build` for `1.0.110` | Passed |
+| `npm.cmd test -- --runInBand` for `1.0.110` | Passed — 20 suites / 471 tests |
+| `npm.cmd run lint` for `1.0.110` | Passed with existing warnings only; 0 errors |
+| `npm.cmd audit --json` for `1.0.110` | Passed — 0 vulnerabilities |
+| `flutter analyze` for `1.0.110+110` | Passed |
+| `flutter test --reporter compact` for `1.0.110+110` | Passed — 346 tests |
+| `flutter build apk --debug` for `1.0.110+110` | Passed |
+| Android install for `1.0.110+110` | Blocked — Android phone is not visible in ADB/Flutter |
 
 ## Build evidence
 
@@ -65,3 +74,4 @@
   - `qa-artifacts/release-validation/screenshot-1.0.107-debug-launch.png`
   - `qa-artifacts/release-validation/logcat-1.0.108-debug-launch.txt`
   - `qa-artifacts/release-validation/screenshot-1.0.108-debug-launch.png`
+  - `release-artifacts/adaptive-mastery-v1.0.110-debug.apk`

@@ -2,6 +2,10 @@
 
 ## Code/config changes
 
+- Bumped local mobile/backend version to `1.0.110+110`.
+- Added a generated `.xlsx` workbook parsing test for the question-bank import service.
+- Added direct dev dependency coverage for `fflate` to create minimal XLSX fixtures in tests.
+- Built `release-artifacts/adaptive-mastery-v1.0.110-debug.apk`; Android install remains pending because no phone is visible in ADB/Flutter.
 - Bumped local mobile/backend version to `1.0.109+109`.
 - Fixed backend Prettier lint formatting in the `.xlsx` upload MIME allow-list after CI reported the backend lint failure.
 - Rebuilt the `1.0.109+109` debug APK locally; physical install is pending because the Android device disappeared from ADB/Flutter during install.
@@ -41,7 +45,7 @@
 
 ## Not done
 
-- No signed release APK/AAB was generated for `1.0.109+109`; only debug device validation builds are being used during stabilization.
+- No signed release APK/AAB was generated for `1.0.110+110`; only debug device validation builds are being used during stabilization.
 - No GitHub release.
 - No production deployment.
 - No production secret values added or printed.
