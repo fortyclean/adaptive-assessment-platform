@@ -2,6 +2,10 @@
 
 ## Code/config changes
 
+- Bumped local mobile/backend version to `1.0.111+111`.
+- Added API-level coverage for the question-bank `.xlsx` import upload route.
+- Added rejection coverage to ensure legacy `.xls` uploads are blocked before the import service runs.
+- Built, installed, and launched the `1.0.111+111` debug APK on the connected `STK L21` Android device with Logcat and screenshot evidence.
 - Bumped local mobile/backend version to `1.0.110+110`.
 - Added a generated `.xlsx` workbook parsing test for the question-bank import service.
 - Added direct dev dependency coverage for `fflate` to create minimal XLSX fixtures in tests.

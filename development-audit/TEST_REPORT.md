@@ -60,6 +60,17 @@
 | `flutter test --reporter compact` for `1.0.110+110` | Passed — 346 tests |
 | `flutter build apk --debug` for `1.0.110+110` | Passed |
 | Android install for `1.0.110+110` | Blocked — Android phone is not visible in ADB/Flutter |
+| `backend/tests/integration/questionImportRoute.test.ts` for `1.0.111` | Passed — `.xlsx` upload accepted and legacy `.xls` rejected |
+| `npm.cmd run lint` for `1.0.111` | Passed with existing warnings only; 0 errors |
+| `npm.cmd run build` for `1.0.111` | Passed |
+| `npm.cmd test -- --runInBand` for `1.0.111` | Passed — 21 suites / 473 tests |
+| `npm.cmd audit --json` for `1.0.111` | Passed — 0 vulnerabilities |
+| `flutter analyze` for `1.0.111+111` | Passed |
+| `flutter test test/core/app_version_test.dart --reporter compact` for `1.0.111+111` | Passed — 3 tests |
+| `flutter test --reporter compact` for `1.0.111+111` | Passed — 346 tests |
+| `flutter build apk --debug` for `1.0.111+111` | Passed |
+| `flutter run -d 78KNW19A25007947 --debug --no-resident` for `1.0.111+111` | Passed — debug APK installed/launched on `STK L21`; replaced incompatible prior signed build |
+| `adb logcat` crash scan for `1.0.111+111` | Passed — no `FATAL EXCEPTION`, `E/flutter`, or `Unhandled Exception` markers found |
 
 ## Build evidence
 
@@ -75,3 +86,6 @@
   - `qa-artifacts/release-validation/logcat-1.0.108-debug-launch.txt`
   - `qa-artifacts/release-validation/screenshot-1.0.108-debug-launch.png`
   - `release-artifacts/adaptive-mastery-v1.0.110-debug.apk`
+  - `release-artifacts/adaptive-mastery-v1.0.111-debug.apk`
+  - `qa-artifacts/release-validation/logcat-1.0.111-debug-launch.txt`
+  - `qa-artifacts/release-validation/screenshot-1.0.111-debug-launch.png`
