@@ -24,6 +24,9 @@ jobs:
       - name: Verify tracked files contain no configured production secrets
         run: node scripts/verify-no-production-secrets.mjs
 
+      - name: Verify release notes do not publish demo credentials
+        run: node scripts/verify-release-notes-safe.mjs
+
   release-evidence:
     name: Release evidence preview
     runs-on: ubuntu-latest
@@ -60,7 +63,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.35.7
+          flutter-version: 3.44.4
           cache: true
 
       - name: Install dependencies

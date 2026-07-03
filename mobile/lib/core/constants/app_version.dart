@@ -3,15 +3,27 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.103';
-  static const int buildNumber = 103;
-  static const String releaseDate = 'يونيو 2026';
+  static const String current = '1.0.104';
+  static const int buildNumber = 104;
+  static const String releaseDate = 'يوليو 2026';
 
   /// Full version string shown in UI
   static String get display => 'الإصدار $current ($buildNumber)';
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.104',
+      buildNumber: 104,
+      date: 'يوليو 2026',
+      title: 'تثبيت تجربة بوابة ولي الأمر',
+      changes: [
+        'إكمال ربط دور ولي الأمر مع التنقل والحماية وتجربة الدخول التجريبية.',
+        'تحسين حالات البيانات الفارغة وأخطاء الاتصال مع أزرار إعادة المحاولة.',
+        'توسيع تغطية الاختبارات لحماية تكامل بوابة ولي الأمر وسلوك الفشل القابل للاسترداد.',
+      ],
+      type: VersionType.release,
+    ),
     VersionEntry(
       version: '1.0.103',
       buildNumber: 103,

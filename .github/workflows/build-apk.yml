@@ -23,7 +23,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.7'
+          flutter-version: '3.44.4'
           cache: true
 
       - name: Get Flutter dependencies
@@ -59,20 +59,18 @@ jobs:
           files: adaptive-mastery-v${{ steps.version.outputs.value }}.apk
           name: "EduAssess ${{ github.ref_name }}"
           body: |
-            ## 📱 EduAssess - منصة التقييم التكيفي الذكي
+            ## EduAssess — Adaptive Assessment Platform
 
-            ### تحميل التطبيق
-            قم بتحميل ملف `adaptive-mastery-v${{ steps.version.outputs.value }}.apk` وتثبيته على هاتفك الأندرويد.
+            ### Android package
 
-            ### بيانات الدخول التجريبية
-            | الدور | اسم المستخدم | كلمة المرور |
-            |-------|-------------|-------------|
-            | مشرف | admin | Admin@123 |
-            | معلم | teacher | Teacher@123 |
-            | طالب | student | Student@123 |
+            Download `adaptive-mastery-v${{ steps.version.outputs.value }}.apk` from this release and install it on an Android test device.
 
-            ### ملاحظة
-            - يعمل التطبيق في وضع Demo بدون إنترنت
-            - للاتصال بالـ Backend الحقيقي: https://eduassess-backend.onrender.com
+            ### Tester access
+
+            Test accounts and environment-specific access details are not published in release notes. Share them only through the approved private tester channel.
+
+            ### Validation reminder
+
+            Before promoting this build, verify the matching release checklist, Android smoke tests, notification behavior, and crash-reporting privacy checks.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
