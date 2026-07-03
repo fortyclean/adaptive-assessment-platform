@@ -1,5 +1,7 @@
-import 'package:adaptive_assessment/core/router/app_router.dart';
+import 'dart:io';
+
 import 'package:adaptive_assessment/core/constants/app_colors.dart';
+import 'package:adaptive_assessment/core/router/app_router.dart';
 import 'package:adaptive_assessment/core/theme/app_theme.dart';
 import 'package:adaptive_assessment/features/parent/screens/parent_portal_screens.dart';
 import 'package:adaptive_assessment/l10n/app_localizations.dart';
@@ -8,8 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
-Widget _buildParentRouterApp(
-    {String initialLocation = AppRoutes.parentDashboard}) {
+Widget _buildParentRouterApp({
+  String initialLocation = AppRoutes.parentDashboard,
+}) {
   final router = GoRouter(
     initialLocation: initialLocation,
     routes: [
@@ -128,6 +131,25 @@ void main() {
       });
 
       expect(brandedHeroCard, findsOneWidget);
+    });
+
+    test(
+        'keeps real parent API failures retryable instead of silent empty data',
+        () {
+      final source = File(
+        'lib/features/parent/screens/parent_portal_screens.dart',
+      ).readAsStringSync();
+
+      expect(source, contains('rethrow;'));
+      expect(source, contains('class _RetryableStateCard'));
+      expect(source, contains('portalData.hasError && !shouldUseDemoData'));
+      expect(source, contains('ref.invalidate(_parentPortalDataProvider)'));
+      expect(
+        source,
+        isNot(contains(
+          'return const _ParentPortalData(children: [], messages: []);',
+        )),
+      );
     });
 
     testWidgets('navigates from dashboard to children and child detail',
