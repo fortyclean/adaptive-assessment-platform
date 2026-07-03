@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import {
   loginUser,
@@ -535,8 +536,7 @@ router.post('/google', async (req: Request, res: Response): Promise<void> => {
     }
 
     // Generate session
-    const { v4: uuidv4 } = await import('uuid');
-    const sessionId = uuidv4();
+    const sessionId = randomUUID();
     const activeSessions = Array.isArray(user.activeSessions) ? [...user.activeSessions] : [];
     activeSessions.push(sessionId);
     await User.updateOne(

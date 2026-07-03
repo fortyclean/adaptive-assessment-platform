@@ -24,6 +24,15 @@
 | `npm.cmd test -- --runInBand` after Node policy update | Passed — 20 suites / 470 tests |
 | `npm.cmd audit fix` without `--force` | Reduced dependency findings from 11 to 4 |
 | `npm.cmd install bcrypt@^6.0.0` | Reduced dependency findings from 4 to 2 |
+| `npm.cmd uninstall uuid @types/uuid` | Removed deprecated UUID dependency; audit now reports only the documented `xlsx` advisory |
+| `flutter analyze` for `1.0.107+107` | Passed |
+| `flutter test --reporter compact` for `1.0.107+107` | Passed — 346 tests |
+| `npm.cmd run build` for `1.0.107` | Passed |
+| `npm.cmd test -- --runInBand` for `1.0.107` | Passed — 20 suites / 470 tests |
+| `npm.cmd audit --json` for `1.0.107` | Reports only the documented direct `xlsx` high advisory with no npm fix available |
+| `flutter build apk --debug` for `1.0.107+107` | Passed |
+| `adb install -r ...app-debug.apk` on `STK L21` | Passed |
+| `adb shell monkey -p com.adaptivemastery.app ...` | Passed; app launched |
 
 ## Build evidence
 
@@ -33,3 +42,6 @@
 - APK versionCode/versionName: `104` / `1.0.104`
 - APK signing: v2 verified
 - AAB signing: `jarsigner` verified
+- Debug launch evidence:
+  - `qa-artifacts/release-validation/logcat-1.0.107-debug-launch.txt`
+  - `qa-artifacts/release-validation/screenshot-1.0.107-debug-launch.png`

@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.106';
-  static const int buildNumber = 106;
+  static const String current = '1.0.107';
+  static const int buildNumber = 107;
   static const String releaseDate = 'يوليو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.107',
+      buildNumber: 107,
+      date: 'يوليو 2026',
+      title: 'Backend UUID dependency removal',
+      changes: [
+        'Replaced the backend uuid dependency with Node randomUUID.',
+        'Removed uuid and its type package from backend dependencies.',
+        'Reduced backend dependency audit exposure before release validation.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.106',
       buildNumber: 106,

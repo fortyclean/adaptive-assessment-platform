@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import { randomUUID } from 'crypto';
 import { logger } from '../utils/logger';
-import { v4 as uuidv4 } from 'uuid';
 
 export class AppError extends Error {
   public readonly statusCode: number;
@@ -54,7 +54,7 @@ export class TooManyRequestsError extends AppError {
 // Global error handler middleware
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction): void {
-  const requestId = uuidv4();
+  const requestId = randomUUID();
 
   // Log the error with request context
   logger.error('Unhandled error', {

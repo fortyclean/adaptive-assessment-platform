@@ -2,6 +2,10 @@
 
 ## Code/config changes
 
+- Bumped local mobile/backend version to `1.0.107+107`.
+- Replaced backend `uuid` usage with Node `crypto.randomUUID()` and removed `uuid` / `@types/uuid` from backend dependencies.
+- Reduced backend dependency audit findings to the remaining documented `xlsx` advisory.
+- Built, installed, and launched the `1.0.107+107` debug APK on the connected `STK L21` Android device with Logcat and screenshot evidence.
 - Bumped local mobile/backend version to `1.0.106+106`.
 - Reduced backend dependency audit findings with non-forced npm remediation and `bcrypt` upgrade.
 - Bumped local mobile/backend version to `1.0.105+105`.
@@ -29,7 +33,7 @@
 
 ## Not done
 
-- No GitHub push.
+- No release APK/AAB was generated for `1.0.107+107`; only a debug device validation build was installed.
 - No GitHub release.
 - No production deployment.
 - No production secret values added or printed.
