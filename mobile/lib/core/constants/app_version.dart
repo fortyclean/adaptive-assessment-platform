@@ -3,8 +3,8 @@
 class AppVersion {
   AppVersion._();
 
-  static const String current = '1.0.107';
-  static const int buildNumber = 107;
+  static const String current = '1.0.108';
+  static const int buildNumber = 108;
   static const String releaseDate = 'يوليو 2026';
 
   /// Full version string shown in UI
@@ -12,6 +12,18 @@ class AppVersion {
 
   /// Complete changelog — newest first
   static const List<VersionEntry> changelog = [
+    VersionEntry(
+      version: '1.0.108',
+      buildNumber: 108,
+      date: 'يوليو 2026',
+      title: 'تأمين استيراد ملفات الأسئلة',
+      changes: [
+        'استبدال مكتبة xlsx بمسار قراءة XLSX أخف ومحدود النطاق.',
+        'حصر رفع ملفات بنك الأسئلة بصيغة .xlsx لتقليل مخاطر الصيغ القديمة.',
+        'إغلاق نتائج npm audit في الخادم إلى صفر ثغرات معروفة.',
+      ],
+      type: VersionType.fix,
+    ),
     VersionEntry(
       version: '1.0.107',
       buildNumber: 107,

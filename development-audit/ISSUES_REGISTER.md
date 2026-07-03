@@ -118,10 +118,10 @@
 | Severity | Medium/High pending package triage |
 | User value | Reduces known dependency risk before Beta |
 | Location | `backend/package-lock.json` |
-| Current result | Non-forced remediation plus `uuid` removal reduced findings from 11 vulnerabilities to 1 remaining: `xlsx` has no npm audit fix available |
+| Current result | Non-forced remediation plus `uuid` removal and `xlsx` replacement reduced backend npm audit findings from 11 vulnerabilities to 0 |
 | Expected result | Dependency vulnerabilities are triaged and fixed without breaking backend behavior |
-| Root cause | Transitive dependency versions need review/upgrades |
-| Proposed fix | Replace or sandbox `xlsx` import handling before Beta |
-| Acceptance | Audit report reduced to an approved risk level with backend build/tests passing |
+| Root cause | Transitive dependency versions needed review/upgrades and spreadsheet parsing used a package with no audit fix |
+| Proposed fix | Completed: use `crypto.randomUUID()` and `read-excel-file`; keep spreadsheet uploads limited to `.xlsx` |
+| Acceptance | Audit report is clean with backend build/tests passing |
 | Tests | `npm audit --json`, `npm run build`, `npm test -- --runInBand` |
-| Status | Partially fixed; `uuid` fixed locally, `xlsx` remains documented |
+| Status | Fixed locally; pending CI verification after push |

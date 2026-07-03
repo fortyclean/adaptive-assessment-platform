@@ -10,19 +10,18 @@ import { logger } from '../utils/logger';
 const router = Router();
 router.use(authenticate);
 
-// Multer config: memory storage, max 10MB, xlsx/xls only
+// Multer config: memory storage, max 10MB, xlsx only
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
   fileFilter: (_req, file, cb) => {
     const allowed = [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/vnd.ms-excel',
     ];
     if (allowed.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only .xlsx and .xls files are allowed'));
+      cb(new Error('Only .xlsx files are allowed'));
     }
   },
 });

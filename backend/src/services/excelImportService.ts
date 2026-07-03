@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx';
+import { readSheet } from 'read-excel-file/node';
 import { Question, SUBJECTS, DifficultyLevel, QuestionType } from '../models/Question';
 import mongoose from 'mongoose';
 import { logger } from '../utils/logger';
@@ -63,12 +63,27 @@ const VALID_QUESTION_TYPES: QuestionType[] = ['mcq', 'true_false', 'fill_blank',
 
 // ─── Parse Excel Buffer ───────────────────────────────────────────────────────
 
-export const parseExcelBuffer = (buffer: Buffer): ImportRow[] => {
-  const workbook = XLSX.read(buffer, { type: 'buffer' });
-  const sheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[sheetName];
-  const rows = XLSX.utils.sheet_to_json<ImportRow>(worksheet, { defval: '' });
-  return rows;
+export const parseExcelBuffer = async (buffer: Buffer): Promise<ImportRow[]> => {
+  const worksheetRows = await readSheet(buffer);
+  const [headerRow, ...dataRows] = worksheetRows;
+
+  if (!headerRow) {
+    return [];
+  }
+
+  const headers = headerRow.map((cell) => String(cell ?? '').trim());
+
+  return dataRows
+    .filter((row) => row.some((cell) => String(cell ?? '').trim() !== ''))
+    .map((row) => {
+      const record: Record<string, string> = {};
+      headers.forEach((header, index) => {
+        if (header) {
+          record[header] = String(row[index] ?? '');
+        }
+      });
+      return record as unknown as ImportRow;
+    });
 };
 
 // ─── Validate a Single Row ────────────────────────────────────────────────────
@@ -169,10 +184,10 @@ export const importQuestionsFromBuffer = async (
 
   let rows: ImportRow[];
   try {
-    rows = parseExcelBuffer(buffer);
+    rows = await parseExcelBuffer(buffer);
   } catch (error) {
     logger.error('Excel parse error', { error });
-    throw new Error('Failed to parse Excel file. Please ensure it is a valid .xlsx or .xls file.');
+    throw new Error('Failed to parse Excel file. Please ensure it is a valid .xlsx file.');
   }
 
   result.totalRows = rows.length;

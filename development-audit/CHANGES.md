@@ -2,6 +2,11 @@
 
 ## Code/config changes
 
+- Bumped local mobile/backend version to `1.0.108+108`.
+- Replaced backend spreadsheet import parsing from vulnerable `xlsx` to `read-excel-file`.
+- Limited question-bank spreadsheet uploads to `.xlsx` only and removed legacy `.xls` acceptance to avoid reintroducing the vulnerable parser surface.
+- Reduced backend `npm audit` findings to zero known vulnerabilities.
+- Built, installed, and launched the `1.0.108+108` debug APK on the connected `STK L21` Android device with Logcat and screenshot evidence.
 - Bumped local mobile/backend version to `1.0.107+107`.
 - Replaced backend `uuid` usage with Node `crypto.randomUUID()` and removed `uuid` / `@types/uuid` from backend dependencies.
 - Reduced backend dependency audit findings to the remaining documented `xlsx` advisory.
@@ -33,7 +38,7 @@
 
 ## Not done
 
-- No release APK/AAB was generated for `1.0.107+107`; only a debug device validation build was installed.
+- No signed release APK/AAB was generated for `1.0.108+108`; only a debug device validation build was installed.
 - No GitHub release.
 - No production deployment.
 - No production secret values added or printed.

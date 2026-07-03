@@ -33,6 +33,15 @@
 | `flutter build apk --debug` for `1.0.107+107` | Passed |
 | `adb install -r ...app-debug.apk` on `STK L21` | Passed |
 | `adb shell monkey -p com.adaptivemastery.app ...` | Passed; app launched |
+| `npm.cmd uninstall xlsx` + `npm.cmd install read-excel-file@^9.2.0` | Passed; backend audit reports 0 vulnerabilities |
+| `npm.cmd run build` for `1.0.108` | Passed |
+| `npm.cmd test -- --runInBand` for `1.0.108` | Passed — 20 suites / 470 tests |
+| `npm.cmd audit --json` for `1.0.108` | Passed — 0 vulnerabilities |
+| `flutter analyze` for `1.0.108+108` | Passed |
+| `flutter test --reporter compact` for `1.0.108+108` | Passed — 346 tests |
+| `flutter build apk --debug` for `1.0.108+108` | Passed |
+| `adb install -r ...app-debug.apk` on `STK L21` for `1.0.108+108` | Passed |
+| `adb shell monkey -p com.adaptivemastery.app ...` for `1.0.108+108` | Passed; app launched without Logcat fatal exception |
 
 ## Build evidence
 
@@ -45,3 +54,5 @@
 - Debug launch evidence:
   - `qa-artifacts/release-validation/logcat-1.0.107-debug-launch.txt`
   - `qa-artifacts/release-validation/screenshot-1.0.107-debug-launch.png`
+  - `qa-artifacts/release-validation/logcat-1.0.108-debug-launch.txt`
+  - `qa-artifacts/release-validation/screenshot-1.0.108-debug-launch.png`
