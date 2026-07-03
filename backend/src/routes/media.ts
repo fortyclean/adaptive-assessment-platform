@@ -83,9 +83,14 @@ router.post(
 
       // For development: return a local URL
       const imageUrl = await getSignedDownloadUrl(key);
+      const teacherId = req.user?.userId;
+      if (!teacherId) {
+        res.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
 
       logger.info('Image uploaded', {
-        teacherId: req.user!.userId,
+        teacherId,
         questionId,
         key,
         size: req.file.size,

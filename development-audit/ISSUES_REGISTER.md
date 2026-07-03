@@ -64,13 +64,13 @@
 | Severity | Low/Medium |
 | User value | Improves maintainability and reduces future bug risk |
 | Location | Backend routes/services |
-| Current result | `npm run lint` passes with 90 warnings after the first cleanup batch; previous baseline was 98 warnings |
+| Current result | `npm run lint` passes with 85 warnings after the second cleanup batch; previous baselines were 98 then 90 warnings |
 | Expected result | Lint warning budget is reduced or enforced |
 | Root cause | Non-null assertions, unused variables, and console usage remain in legacy routes/services |
 | Proposed fix | Fix warnings in small route/service batches with tests |
 | Acceptance | Warning count reduced and no behavior regression |
 | Tests | `npm run lint`, `npm run build`, `npm test -- --runInBand` |
-| Status | In progress — first cleanup batch locally reduced warning count by 8 |
+| Status | In progress — cleanup batches locally reduced warning count by 13 |
 
 ## ISSUE-005
 

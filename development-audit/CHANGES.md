@@ -2,6 +2,7 @@
 
 ## Code/config changes
 
+- Reduced backend lint warning debt from 90 to 85 by replacing `req.user!` with explicit authenticated-user guards in media, alerts, and push subscription routes.
 - Reduced backend lint warning debt from 98 to 90 by removing unused imports, an unused encryption constant, and unused temporary variables without changing runtime behavior.
 - Hardened `.github/workflows/deploy-backend.yml` so backend deployment validation now runs build, tests, lint, and dependency audit before reporting deployment readiness.
 - Added the backend deployment workflow file to its own path trigger so changes to the gate are validated immediately.

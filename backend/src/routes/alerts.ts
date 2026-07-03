@@ -24,7 +24,13 @@ router.post(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const teacherId = new mongoose.Types.ObjectId(req.user!.userId);
+      const userId = req.user?.userId;
+      if (!userId) {
+        res.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
+
+      const teacherId = new mongoose.Types.ObjectId(userId);
 
       const result = await detectPerformanceAlerts(teacherId);
 
@@ -43,7 +49,13 @@ router.get(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const teacherId = new mongoose.Types.ObjectId(req.user!.userId);
+      const userId = req.user?.userId;
+      if (!userId) {
+        res.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
+
+      const teacherId = new mongoose.Types.ObjectId(userId);
 
       const alerts = await getActiveAlertsForTeacher(teacherId);
 

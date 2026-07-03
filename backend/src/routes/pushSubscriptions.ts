@@ -23,11 +23,17 @@ router.post('/', authenticate, async (req: Request, res: Response): Promise<void
     }
 
     const { provider, deviceToken, platform } = validation.data;
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: 'Authentication required.' });
+      return;
+    }
+
     const subscription = await PushSubscription.findOneAndUpdate(
       { provider, deviceToken },
       {
         $set: {
-          userId: req.user!.userId,
+          userId,
           provider,
           deviceToken,
           platform,
@@ -46,8 +52,14 @@ router.post('/', authenticate, async (req: Request, res: Response): Promise<void
 
 router.delete('/:deviceToken', authenticate, async (req: Request, res: Response): Promise<void> => {
   try {
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: 'Authentication required.' });
+      return;
+    }
+
     await PushSubscription.updateMany(
-      { userId: req.user!.userId, deviceToken: req.params.deviceToken },
+      { userId, deviceToken: req.params.deviceToken },
       { $set: { isActive: false } },
     );
     res.status(204).send();
