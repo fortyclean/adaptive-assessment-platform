@@ -652,37 +652,41 @@ class _SettingsTile extends StatelessWidget {
   final Widget? trailing;
 
   @override
-  Widget build(BuildContext context) => ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        leading: Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            color: iconColor.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) => Material(
+        color: Colors.transparent,
+        child: ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          leading: Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: iconColor, size: 18),
           ),
-          child: Icon(icon, color: iconColor, size: 18),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: AppColors.onSurface,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
+          title: Text(
+            title,
+            style: const TextStyle(
+              color: AppColors.onSurface,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(
-            color: AppColors.onSurfaceVariant,
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
+          subtitle: Text(
+            subtitle,
+            style: const TextStyle(
+              color: AppColors.onSurfaceVariant,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+            ),
           ),
+          trailing: trailing ??
+              const Icon(Icons.arrow_forward_ios_rounded,
+                  size: 14, color: AppColors.onSurfaceVariant),
+          onTap: onTap,
         ),
-        trailing: trailing ??
-            const Icon(Icons.arrow_forward_ios_rounded,
-                size: 14, color: AppColors.onSurfaceVariant),
-        onTap: onTap,
       );
 }
 

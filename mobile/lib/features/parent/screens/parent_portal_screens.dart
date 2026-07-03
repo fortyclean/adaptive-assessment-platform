@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/network/api_service.dart';
 import '../../../core/router/app_router.dart';
+import '../../../shared/providers/auth_provider.dart';
 import '../../../shared/widgets/app_bottom_nav.dart';
 
 const _parentChildren = [
@@ -45,6 +47,9 @@ const _parentMessages = [
 
 final _parentPortalDataProvider =
     FutureProvider<_ParentPortalData>((ref) async {
+  final shouldUseDemoData =
+      _shouldUseParentDemoData(ref.read(authProvider).accessToken);
+
   try {
     final api = ref.read(apiServiceProvider);
     final childrenResponse =
@@ -62,16 +67,29 @@ final _parentPortalDataProvider =
         .toList();
 
     return _ParentPortalData(
-      children: children.isEmpty ? _parentChildren : children,
-      messages: messages.isEmpty ? _parentMessages : messages,
+      children: children,
+      messages: messages,
     );
   } on Object {
-    return const _ParentPortalData(
-      children: _parentChildren,
-      messages: _parentMessages,
-    );
+    if (shouldUseDemoData) {
+      return const _ParentPortalData(
+        children: _parentChildren,
+        messages: _parentMessages,
+      );
+    }
+
+    return const _ParentPortalData(children: [], messages: []);
   }
 });
+
+bool _shouldUseParentDemoData(String? accessToken) {
+  final token = accessToken ?? '';
+  return AppConstants.useMockData ||
+      token.isEmpty ||
+      token.startsWith('demo-token-');
+}
+
+const _emptyParentPortalData = _ParentPortalData(children: [], messages: []);
 
 final _parentChildDetailProvider =
     FutureProvider.family<_ParentChildSummary, String>((ref, childId) async {
@@ -94,11 +112,15 @@ class ParentDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final portalData = ref.watch(_parentPortalDataProvider);
+    final shouldUseDemoData =
+        _shouldUseParentDemoData(ref.read(authProvider).accessToken);
     final data = portalData.valueOrNull ??
-        const _ParentPortalData(
-          children: _parentChildren,
-          messages: _parentMessages,
-        );
+        (shouldUseDemoData
+            ? const _ParentPortalData(
+                children: _parentChildren,
+                messages: _parentMessages,
+              )
+            : _emptyParentPortalData);
     final pendingAssessments = data.children.fold<int>(
       0,
       (total, child) => total + child.pendingAssessments,
@@ -156,17 +178,25 @@ class ParentDashboardScreen extends ConsumerWidget {
             onAction: () => context.push(AppRoutes.parentChildren),
           ),
           const SizedBox(height: 8),
-          ...data.children.map(
-            (child) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _ChildSummaryCard(
-                child: child,
-                onTap: () => context.push(
-                  AppRoutes.parentChildDetailPath(child.id),
+          if (data.children.isEmpty)
+            const _EmptyStateCard(
+              icon: Icons.link_off_rounded,
+              title: 'لا يوجد أبناء مرتبطون بعد',
+              body:
+                  'ستظهر هنا بيانات الأبناء بعد ربط حساب ولي الأمر من إدارة المدرسة.',
+            )
+          else
+            ...data.children.map(
+              (child) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _ChildSummaryCard(
+                  child: child,
+                  onTap: () => context.push(
+                    AppRoutes.parentChildDetailPath(child.id),
+                  ),
                 ),
               ),
             ),
-          ),
           const SizedBox(height: 12),
           _SectionHeader(
             title: 'آخر الرسائل',
@@ -174,12 +204,19 @@ class ParentDashboardScreen extends ConsumerWidget {
             onAction: () => context.push(AppRoutes.parentMessages),
           ),
           const SizedBox(height: 8),
-          ...data.messages.take(2).map(
-                (message) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _MessageCard(message: message),
+          if (data.messages.isEmpty)
+            const _EmptyStateCard(
+              icon: Icons.mark_email_read_outlined,
+              title: 'لا توجد رسائل جديدة',
+              body: 'ستظهر هنا رسائل المدرسة والتنبيهات المهمة عند وصولها.',
+            )
+          else
+            ...data.messages.take(2).map(
+                  (message) => Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _MessageCard(message: message),
+                  ),
                 ),
-              ),
         ],
       ),
     );
@@ -192,25 +229,40 @@ class ParentChildrenScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final portalData = ref.watch(_parentPortalDataProvider);
-    final children = portalData.valueOrNull?.children ?? _parentChildren;
+    final children = portalData.valueOrNull?.children ??
+        (_shouldUseParentDemoData(ref.read(authProvider).accessToken)
+            ? _parentChildren
+            : const []);
 
     return Scaffold(
       appBar: AppBar(title: const Text('الأبناء')),
       bottomNavigationBar: const AppBottomNav(currentIndex: 1, role: 'parent'),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: children.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final child = children[index];
-          return _ChildSummaryCard(
-            child: child,
-            onTap: () => context.push(
-              AppRoutes.parentChildDetailPath(child.id),
+      body: children.isEmpty
+          ? ListView(
+              padding: const EdgeInsets.all(16),
+              children: const [
+                _EmptyStateCard(
+                  icon: Icons.link_off_rounded,
+                  title: 'لا يوجد أبناء مرتبطون بعد',
+                  body:
+                      'اطلب من إدارة المدرسة ربط حسابك بحسابات الأبناء لعرض التقدم والرسائل.',
+                ),
+              ],
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: children.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final child = children[index];
+                return _ChildSummaryCard(
+                  child: child,
+                  onTap: () => context.push(
+                    AppRoutes.parentChildDetailPath(child.id),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
@@ -227,8 +279,30 @@ class ParentChildDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final portalChildren =
         ref.watch(_parentPortalDataProvider).valueOrNull?.children ??
-            _parentChildren;
+            (_shouldUseParentDemoData(ref.read(authProvider).accessToken)
+                ? _parentChildren
+                : const []);
     final detailState = ref.watch(_parentChildDetailProvider(childId));
+    if (portalChildren.isEmpty && detailState.valueOrNull == null) {
+      return Scaffold(
+        bottomNavigationBar:
+            const AppBottomNav(currentIndex: 1, role: 'parent'),
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: const [
+              _EmptyStateCard(
+                icon: Icons.person_off_outlined,
+                title: 'تعذر عرض بيانات الابن',
+                body:
+                    'هذا الابن غير مرتبط بحساب ولي الأمر الحالي أو لم تعد البيانات متاحة.',
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     final child = detailState.valueOrNull ??
         portalChildren.firstWhere(
           (item) => item.id == childId,
@@ -305,7 +379,10 @@ class ParentMessagesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final portalData = ref.watch(_parentPortalDataProvider);
-    final messages = portalData.valueOrNull?.messages ?? _parentMessages;
+    final messages = portalData.valueOrNull?.messages ??
+        (_shouldUseParentDemoData(ref.read(authProvider).accessToken)
+            ? _parentMessages
+            : const []);
 
     return Scaffold(
       appBar: AppBar(title: const Text('رسائل ولي الأمر')),
@@ -324,12 +401,20 @@ class ParentMessagesScreen extends ConsumerWidget {
             const LinearProgressIndicator(minHeight: 3),
           ],
           const SizedBox(height: 16),
-          ...messages.map(
-            (message) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _MessageCard(message: message, expanded: true),
+          if (messages.isEmpty)
+            const _EmptyStateCard(
+              icon: Icons.mark_email_read_outlined,
+              title: 'لا توجد رسائل',
+              body:
+                  'عند إرسال المدرسة أو المعلمين أي رسالة ستظهر هنا بترتيب زمني واضح.',
+            )
+          else
+            ...messages.map(
+              (message) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _MessageCard(message: message, expanded: true),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -555,6 +640,48 @@ class _InfoPanel extends StatelessWidget {
                     Text(body),
                   ],
                 ),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+class _EmptyStateCard extends StatelessWidget {
+  const _EmptyStateCard({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: AppColors.surfaceContainer,
+                child: Icon(icon, color: AppColors.primary, size: 28),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                body,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
               ),
             ],
           ),

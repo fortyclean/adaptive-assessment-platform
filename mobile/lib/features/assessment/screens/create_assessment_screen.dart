@@ -379,32 +379,35 @@ class _CreateAssessmentScreenState
                     final isLast = i == _classrooms.length - 1;
                     return Column(
                       children: [
-                        CheckboxListTile(
-                          title: Text(
-                            c['name'] as String? ?? '',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.onSurface,
+                        Material(
+                          color: Colors.transparent,
+                          child: CheckboxListTile(
+                            title: Text(
+                              c['name'] as String? ?? '',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.onSurface,
+                              ),
                             ),
-                          ),
-                          subtitle: Text(
-                            c['gradeLevel'] as String? ?? '',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.onSurfaceVariant,
+                            subtitle: Text(
+                              c['gradeLevel'] as String? ?? '',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: AppColors.onSurfaceVariant,
+                              ),
                             ),
+                            value: _classroomIds.contains(c['_id'] as String),
+                            activeColor: AppColors.primaryContainer,
+                            onChanged: (checked) {
+                              setState(() {
+                                if (checked ?? false) {
+                                  _classroomIds.add(c['_id'] as String);
+                                } else {
+                                  _classroomIds.remove(c['_id'] as String);
+                                }
+                              });
+                            },
                           ),
-                          value: _classroomIds.contains(c['_id'] as String),
-                          activeColor: AppColors.primaryContainer,
-                          onChanged: (checked) {
-                            setState(() {
-                              if (checked ?? false) {
-                                _classroomIds.add(c['_id'] as String);
-                              } else {
-                                _classroomIds.remove(c['_id'] as String);
-                              }
-                            });
-                          },
                         ),
                         if (!isLast)
                           const Divider(
