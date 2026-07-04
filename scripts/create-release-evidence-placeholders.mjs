@@ -8,17 +8,21 @@ const repoRoot = path.resolve(__dirname, '..');
 const evidenceDir = path.join(repoRoot, 'qa-artifacts', 'release-validation');
 
 const args = new Map();
+const booleanArgs = new Set(['overwrite']);
 for (let index = 2; index < process.argv.length; index += 1) {
   const arg = process.argv[index];
   if (!arg.startsWith('--')) continue;
   const [key, inlineValue] = arg.slice(2).split('=', 2);
-  const value = inlineValue ?? process.argv[index + 1];
+  const nextArg = process.argv[index + 1];
+  const value =
+    inlineValue ??
+    (booleanArgs.has(key) || nextArg === undefined || nextArg.startsWith('--') ? 'true' : nextArg);
   args.set(key, value);
-  if (inlineValue === undefined) index += 1;
+  if (inlineValue === undefined && value === nextArg) index += 1;
 }
 
 const release = sanitizeFilePart(args.get('release') ?? 'current');
-const overwrite = process.argv.includes('--overwrite');
+const overwrite = args.get('overwrite') === 'true';
 
 function sanitizeFilePart(value) {
   return String(value)

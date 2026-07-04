@@ -8,17 +8,22 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 
 const args = new Map();
+const booleanArgs = new Set(['no-ci']);
 for (let i = 2; i < process.argv.length; i += 1) {
   const arg = process.argv[i];
   if (!arg.startsWith('--')) continue;
   const [key, inlineValue] = arg.slice(2).split('=', 2);
-  const value = inlineValue ?? process.argv[i + 1];
+  const nextArg = process.argv[i + 1];
+  const value =
+    inlineValue ??
+    (booleanArgs.has(key) || nextArg === undefined || nextArg.startsWith('--') ? 'true' : nextArg);
   args.set(key, value);
-  if (inlineValue === undefined) i += 1;
+  if (inlineValue === undefined && value === nextArg) i += 1;
 }
 
 const repo = args.get('repo') ?? 'fortyclean/adaptive-assessment-platform';
 const branch = args.get('branch') ?? 'main';
+const skipCi = args.get('no-ci') === 'true';
 const templatePath = path.resolve(
   repoRoot,
   args.get('template') ?? 'release/release-evidence-template.json',
@@ -27,6 +32,26 @@ const outputPath = path.resolve(
   repoRoot,
   args.get('out') ?? 'qa-artifacts/release-validation/release-evidence.json',
 );
+
+function readCurrentMobileVersion() {
+  const pubspec = readFileSync(path.join(repoRoot, 'mobile', 'pubspec.yaml'), 'utf8');
+  const versionLine = pubspec.match(/^version:\s*(?<version>[^\s#]+)/m);
+  const version = versionLine?.groups?.version?.split('+')[0];
+  if (!version) {
+    throw new Error('Could not read version from mobile/pubspec.yaml');
+  }
+  return version;
+}
+
+function readAndroidApplicationId() {
+  const gradle = readFileSync(path.join(repoRoot, 'mobile', 'android', 'app', 'build.gradle.kts'), 'utf8');
+  const applicationIdLine = gradle.match(/applicationId\s*=\s*"(?<applicationId>[^"]+)"/);
+  const applicationId = applicationIdLine?.groups?.applicationId;
+  if (!applicationId) {
+    throw new Error('Could not read applicationId from mobile/android/app/build.gradle.kts');
+  }
+  return applicationId;
+}
 
 function requestJson(url) {
   return new Promise((resolve, reject) => {
@@ -90,7 +115,10 @@ async function latestSuccessfulCiRun() {
 }
 
 const evidence = JSON.parse(readFileSync(templatePath, 'utf8'));
-const ci = await latestSuccessfulCiRun();
+evidence.release = args.get('release') ?? readCurrentMobileVersion();
+evidence.packageId = args.get('package-id') ?? readAndroidApplicationId();
+
+const ci = skipCi ? null : await latestSuccessfulCiRun();
 
 if (ci) {
   evidence.ci.runNumber = ci.runNumber;
@@ -114,7 +142,11 @@ if (ci) {
     );
   }
 } else {
-  console.log('No successful CI run was found; CI fields remain empty.');
+  console.log(
+    skipCi
+      ? 'Skipped CI lookup; CI fields remain from the template.'
+      : 'No successful CI run was found; CI fields remain empty.',
+  );
 }
 console.log(
   'Next: complete OneSignal, Sentry, Android, and internal Beta fields after the external checks are executed.',

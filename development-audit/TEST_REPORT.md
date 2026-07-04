@@ -108,6 +108,11 @@
 | `node --check scripts/create-release-evidence-placeholders.mjs` | Passed |
 | `node --check scripts/test-release-evidence-placeholders.mjs` | Passed |
 | `node scripts/test-release-evidence-placeholders.mjs` | Passed — OneSignal, Sentry, and internal Beta placeholders are generated under `qa-artifacts/release-validation/` with redaction checklists and without DSN/email placeholders |
+| `node --check scripts/init-release-evidence.mjs` after current-version initialization update | Passed |
+| `node --check scripts/test-init-release-evidence.mjs` | Passed |
+| `node scripts/test-init-release-evidence.mjs` | Passed — `--no-ci` writes to the requested output path and reads release `1.0.111` plus package `com.adaptivemastery.app` from project files |
+| `node scripts/init-release-evidence.mjs` after parser fix | Passed — regenerated local ignored evidence from CI #98 / commit `5bacb39` |
+| `node scripts/verify-release-evidence.mjs` after restoring Android evidence | Passed as a preview command — remaining blockers are unchanged and limited to external OneSignal, Sentry, and internal Beta evidence |
 
 ## Build evidence
 
