@@ -2,6 +2,7 @@
 
 ## Code/config changes
 
+- Completed physical-device role smoke evidence for student, teacher, admin, and parent on `STK L21`; release evidence now marks Android role smoke as passed while notification permission remains unverified after the device disappeared from ADB.
 - Refreshed local release evidence from the latest successful CI run and verified the current debug APK installs and launches on physical Android device `STK L21`.
 - Eliminated the remaining backend lint warning debt by replacing `req.user!` and fixture map non-null assertions with explicit guards/lookups, adding a defensive login-token check, and replacing the final startup `console.error` with `process.stderr.write`.
 - Reduced backend lint warning debt from 77 to 38 by replacing `req.user!` with explicit authenticated-user guards in classrooms, users, report schedules, notifications, assessments, and questions routes.

@@ -95,6 +95,8 @@
 | `flutter run -d 78KNW19A25007947 --debug --no-resident` after final backend lint cleanup | Passed — debug APK built, installed, and launched on `STK L21` |
 | `flutter screenshot -d 78KNW19A25007947` after Android launch | Passed — `qa-artifacts/release-validation/android-smoke-1.0.111-stk-l21.png` |
 | `node scripts/verify-release-evidence.mjs` after Android install evidence update | Passed as a preview command — remaining blockers are role-smoke, notification permission, OneSignal dashboard push, Sentry event, and internal Beta approval evidence |
+| Physical-device role smoke journeys for student/teacher/admin/parent | Passed — each role exited login/onboarding after demo role selection and skip; screenshots/XML saved under `qa-artifacts/release-validation/role-smoke-*-dashboard-1.0.111.*` |
+| `node scripts/verify-release-evidence.mjs` after role-smoke evidence update | Passed as a preview command — remaining blockers are notification permission, OneSignal dashboard push, Sentry event, and internal Beta approval evidence |
 
 ## Build evidence
 
