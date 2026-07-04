@@ -46,7 +46,12 @@ and device checks pass.
    ```
 
 2. Fill the remaining OneSignal, Sentry, Android, and internal Beta fields with
-   non-sensitive evidence only.
+   non-sensitive evidence only. For Android notification permission, set
+   `notificationPermissionGranted: true` only after verifying the runtime
+   permission on Android 13/API 33 or newer. On Android 12/API 32 and older,
+   set `notificationPermissionStatus: not_applicable_android_below_33` and add a
+   non-sensitive ADB evidence path, because `POST_NOTIFICATIONS` is not a
+   runtime permission on those Android versions.
 3. Run the non-blocking preview:
 
    ```powershell

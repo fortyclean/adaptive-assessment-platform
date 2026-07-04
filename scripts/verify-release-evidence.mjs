@@ -54,6 +54,24 @@ function requireText(pathLabel, value) {
   }
 }
 
+function requireAndroidNotificationEvidence(android) {
+  if (android?.notificationPermissionGranted === true) return;
+
+  if (
+    android?.notificationPermissionStatus === 'not_applicable_android_below_33' &&
+    typeof android?.notificationPermissionEvidencePath === 'string' &&
+    android.notificationPermissionEvidencePath.trim().length > 0
+  ) {
+    return;
+  }
+
+  blockers.push(
+    'android.notificationPermissionGranted must be true, or ' +
+      'android.notificationPermissionStatus must be not_applicable_android_below_33 ' +
+      'with android.notificationPermissionEvidencePath filled',
+  );
+}
+
 if (evidence) {
   requireText('ci.runNumber', evidence.ci?.runNumber);
   requireText('ci.commit', evidence.ci?.commit);
@@ -64,10 +82,7 @@ if (evidence) {
   requireText('android.physicalDeviceModel', evidence.android?.physicalDeviceModel);
   requireTrue('android.apkInstalled', evidence.android?.apkInstalled);
   requireTrue('android.roleSmokeJourneysPassed', evidence.android?.roleSmokeJourneysPassed);
-  requireTrue(
-    'android.notificationPermissionGranted',
-    evidence.android?.notificationPermissionGranted,
-  );
+  requireAndroidNotificationEvidence(evidence.android);
 
   requireTrue('oneSignal.dashboardPushSent', evidence.oneSignal?.dashboardPushSent);
   requireTrue(

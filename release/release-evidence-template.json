@@ -12,7 +12,9 @@
     "physicalDeviceModel": "",
     "apkInstalled": false,
     "roleSmokeJourneysPassed": false,
-    "notificationPermissionGranted": false
+    "notificationPermissionGranted": false,
+    "notificationPermissionStatus": "",
+    "notificationPermissionEvidencePath": ""
   },
   "oneSignal": {
     "dashboardPushSent": false,

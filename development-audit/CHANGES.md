@@ -2,6 +2,8 @@
 
 ## Code/config changes
 
+- Updated release evidence validation so Android notification permission is handled accurately: Android 13/API 33+ still requires a verified runtime permission, while Android 12/API 32 and below can be documented as `not_applicable_android_below_33` with non-sensitive ADB evidence.
+- Captured Android 10 / SDK 29 notification-permission evidence for `STK L21`; the release gate now leaves only OneSignal dashboard push, Sentry Beta event, and internal Beta approval evidence as blockers.
 - Completed physical-device role smoke evidence for student, teacher, admin, and parent on `STK L21`; release evidence now marks Android role smoke as passed while notification permission remains unverified after the device disappeared from ADB.
 - Refreshed local release evidence from the latest successful CI run and verified the current debug APK installs and launches on physical Android device `STK L21`.
 - Eliminated the remaining backend lint warning debt by replacing `req.user!` and fixture map non-null assertions with explicit guards/lookups, adding a defensive login-token check, and replacing the final startup `console.error` with `process.stderr.write`.

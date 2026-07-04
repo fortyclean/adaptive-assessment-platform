@@ -97,6 +97,9 @@
 | `node scripts/verify-release-evidence.mjs` after Android install evidence update | Passed as a preview command — remaining blockers are role-smoke, notification permission, OneSignal dashboard push, Sentry event, and internal Beta approval evidence |
 | Physical-device role smoke journeys for student/teacher/admin/parent | Passed — each role exited login/onboarding after demo role selection and skip; screenshots/XML saved under `qa-artifacts/release-validation/role-smoke-*-dashboard-1.0.111.*` |
 | `node scripts/verify-release-evidence.mjs` after role-smoke evidence update | Passed as a preview command — remaining blockers are notification permission, OneSignal dashboard push, Sentry event, and internal Beta approval evidence |
+| Android notification permission check on `STK L21` / SDK 29 | Passed as not applicable for runtime permission — `POST_NOTIFICATIONS` is not a runtime permission before Android 13/API 33; ADB evidence saved at `qa-artifacts/release-validation/android-notification-permission-sdk29.txt` |
+| `node scripts/verify-release-evidence.mjs` after Android notification evidence update | Passed as a preview command — remaining blockers are OneSignal dashboard push, Sentry event, and internal Beta approval evidence |
+| `node scripts/verify-release-evidence.mjs --strict` after Android notification evidence update | Failed as expected — external OneSignal, Sentry, and internal Beta evidence are still missing |
 
 ## Build evidence
 
