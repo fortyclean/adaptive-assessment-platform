@@ -45,7 +45,17 @@ and device checks pass.
    qa-artifacts/release-validation/release-evidence.json
    ```
 
-2. Fill the remaining OneSignal, Sentry, Android, and internal Beta fields with
+2. Create local redacted evidence placeholders if they do not already exist:
+
+   ```powershell
+   node scripts/create-release-evidence-placeholders.mjs --release 1.0.111
+   ```
+
+   These files are local QA artifacts. They are templates for the human
+   OneSignal, Sentry, and internal Beta checks; do not mark their booleans true
+   until the real external validation is complete.
+
+3. Fill the remaining OneSignal, Sentry, Android, and internal Beta fields with
    non-sensitive evidence only. For Android notification permission, set
    `notificationPermissionGranted: true` only after verifying the runtime
    permission on Android 13/API 33 or newer. On Android 12/API 32 and older,
@@ -55,13 +65,13 @@ and device checks pass.
    Every `evidencePath` must point to an existing file under
    `qa-artifacts/release-validation/`. Text evidence is automatically scanned for
    obvious secrets and personal data before the strict gate can pass.
-3. Run the non-blocking preview:
+4. Run the non-blocking preview:
 
    ```powershell
    node scripts/verify-release-evidence.mjs
    ```
 
-4. Run the strict release gate before promoting the Beta:
+5. Run the strict release gate before promoting the Beta:
 
    ```powershell
    node scripts/verify-release-evidence.mjs --strict

@@ -42,6 +42,9 @@ jobs:
       - name: Test release evidence gate
         run: node scripts/test-release-evidence-gate.mjs
 
+      - name: Test release evidence placeholders
+        run: node scripts/test-release-evidence-placeholders.mjs
+
       - name: Preview release evidence gate
         run: |
           node scripts/verify-release-evidence.mjs | tee release-evidence-preview.txt

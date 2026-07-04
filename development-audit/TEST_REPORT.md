@@ -105,6 +105,9 @@
 | `node scripts/verify-release-evidence.mjs --strict` after evidence-path hardening | Failed as expected — strict gate still blocks until external evidence files and approvals are present |
 | `node --check scripts/test-release-evidence-gate.mjs` | Passed |
 | `node scripts/test-release-evidence-gate.mjs` | Passed — valid fixture accepted; outside evidence path, missing evidence file, and sensitive text evidence rejected |
+| `node --check scripts/create-release-evidence-placeholders.mjs` | Passed |
+| `node --check scripts/test-release-evidence-placeholders.mjs` | Passed |
+| `node scripts/test-release-evidence-placeholders.mjs` | Passed — OneSignal, Sentry, and internal Beta placeholders are generated under `qa-artifacts/release-validation/` with redaction checklists and without DSN/email placeholders |
 
 ## Build evidence
 

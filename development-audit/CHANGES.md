@@ -2,6 +2,7 @@
 
 ## Code/config changes
 
+- Added a safe local placeholder generator for OneSignal, Sentry, and internal Beta evidence files, plus CI self-tests so placeholder content stays redaction-focused and does not mark unverified release booleans as complete.
 - Added CI self-tests for the release evidence gate so valid evidence passes while outside paths, missing evidence files, and obvious sensitive text evidence are rejected automatically.
 - Hardened the release evidence gate so every populated evidence path must point to an existing file under `qa-artifacts/release-validation/`, and text evidence is scanned for obvious secrets/PII before strict approval.
 - Updated release evidence validation so Android notification permission is handled accurately: Android 13/API 33+ still requires a verified runtime permission, while Android 12/API 32 and below can be documented as `not_applicable_android_below_33` with non-sensitive ADB evidence.
