@@ -100,6 +100,9 @@
 | Android notification permission check on `STK L21` / SDK 29 | Passed as not applicable for runtime permission — `POST_NOTIFICATIONS` is not a runtime permission before Android 13/API 33; ADB evidence saved at `qa-artifacts/release-validation/android-notification-permission-sdk29.txt` |
 | `node scripts/verify-release-evidence.mjs` after Android notification evidence update | Passed as a preview command — remaining blockers are OneSignal dashboard push, Sentry event, and internal Beta approval evidence |
 | `node scripts/verify-release-evidence.mjs --strict` after Android notification evidence update | Failed as expected — external OneSignal, Sentry, and internal Beta evidence are still missing |
+| `node --check scripts/verify-release-evidence.mjs` after evidence-path hardening | Passed |
+| `node scripts/verify-release-evidence.mjs` after evidence-path hardening | Passed as a preview command — remaining blockers are unchanged and limited to external OneSignal, Sentry, and internal Beta evidence |
+| `node scripts/verify-release-evidence.mjs --strict` after evidence-path hardening | Failed as expected — strict gate still blocks until external evidence files and approvals are present |
 
 ## Build evidence
 

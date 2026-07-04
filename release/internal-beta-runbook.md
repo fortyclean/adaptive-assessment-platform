@@ -52,6 +52,9 @@ and device checks pass.
    set `notificationPermissionStatus: not_applicable_android_below_33` and add a
    non-sensitive ADB evidence path, because `POST_NOTIFICATIONS` is not a
    runtime permission on those Android versions.
+   Every `evidencePath` must point to an existing file under
+   `qa-artifacts/release-validation/`. Text evidence is automatically scanned for
+   obvious secrets and personal data before the strict gate can pass.
 3. Run the non-blocking preview:
 
    ```powershell

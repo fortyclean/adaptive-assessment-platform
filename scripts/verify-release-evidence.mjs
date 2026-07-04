@@ -23,6 +23,44 @@ const requiredDocs = [
 
 const blockers = [];
 const warnings = [];
+const evidenceDir = path.join(repoRoot, 'qa-artifacts', 'release-validation');
+const textEvidenceExtensions = new Set([
+  '.csv',
+  '.json',
+  '.log',
+  '.md',
+  '.txt',
+  '.xml',
+  '.yaml',
+  '.yml',
+]);
+const sensitiveEvidencePatterns = [
+  { label: 'email address', pattern: /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i },
+  {
+    label: 'phone number',
+    pattern: /(?:\+?\d[\s().-]*){9,}\d/,
+  },
+  {
+    label: 'OpenAI/GitHub/Slack-style token',
+    pattern: /\b(?:sk|sk-proj|ghp|github_pat|xoxb|xoxp)_[A-Za-z0-9_-]{10,}\b/,
+  },
+  {
+    label: 'bearer token',
+    pattern: /\bAuthorization\s*:\s*Bearer\s+[A-Za-z0-9._~+/=-]{10,}/i,
+  },
+  {
+    label: 'JWT-like token',
+    pattern: /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/,
+  },
+  {
+    label: 'Sentry DSN assignment',
+    pattern: /\bSENTRY_DSN\b\s*[:=]\s*\S+/i,
+  },
+  {
+    label: 'OneSignal secret key',
+    pattern: /\bONESIGNAL_(?:REST_API_KEY|USER_AUTH_KEY|API_KEY)\b\s*[:=]/i,
+  },
+];
 
 for (const doc of requiredDocs) {
   if (!existsSync(path.join(repoRoot, doc))) {
@@ -54,6 +92,43 @@ function requireText(pathLabel, value) {
   }
 }
 
+function requireEvidenceFile(pathLabel, value, options = {}) {
+  requireText(pathLabel, value);
+  if (typeof value !== 'string' || value.trim().length === 0) return;
+
+  const normalizedValue = value.replaceAll('\\', '/');
+  const absolutePath = path.resolve(repoRoot, normalizedValue);
+  const relativePath = path.relative(repoRoot, absolutePath);
+  const relativeToEvidenceDir = path.relative(evidenceDir, absolutePath);
+
+  if (relativeToEvidenceDir.startsWith('..') || path.isAbsolute(relativeToEvidenceDir)) {
+    blockers.push(`${pathLabel} must point inside qa-artifacts/release-validation`);
+    return;
+  }
+
+  if (!existsSync(absolutePath)) {
+    blockers.push(`${pathLabel} file does not exist: ${relativePath}`);
+    return;
+  }
+
+  if (!options.scanForSensitiveData) return;
+
+  const extension = path.extname(absolutePath).toLowerCase();
+  if (!textEvidenceExtensions.has(extension)) {
+    warnings.push(
+      `${pathLabel} uses a non-text evidence file; verify manually that it is redacted: ${relativePath}`,
+    );
+    return;
+  }
+
+  const content = readFileSync(absolutePath, 'utf8');
+  for (const { label, pattern } of sensitiveEvidencePatterns) {
+    if (pattern.test(content)) {
+      blockers.push(`${pathLabel} appears to contain sensitive data (${label}): ${relativePath}`);
+    }
+  }
+}
+
 function requireAndroidNotificationEvidence(android) {
   if (android?.notificationPermissionGranted === true) return;
 
@@ -62,6 +137,11 @@ function requireAndroidNotificationEvidence(android) {
     typeof android?.notificationPermissionEvidencePath === 'string' &&
     android.notificationPermissionEvidencePath.trim().length > 0
   ) {
+    requireEvidenceFile(
+      'android.notificationPermissionEvidencePath',
+      android.notificationPermissionEvidencePath,
+      { scanForSensitiveData: true },
+    );
     return;
   }
 
@@ -90,13 +170,17 @@ if (evidence) {
     evidence.oneSignal?.dashboardPushReceivedOnDevice,
   );
   requireTrue('oneSignal.notificationTapOpenedApp', evidence.oneSignal?.notificationTapOpenedApp);
-  requireText('oneSignal.evidencePath', evidence.oneSignal?.evidencePath);
+  requireEvidenceFile('oneSignal.evidencePath', evidence.oneSignal?.evidencePath, {
+    scanForSensitiveData: evidence.oneSignal?.containsNoSecretsOrPii === true,
+  });
   requireTrue('oneSignal.containsNoSecretsOrPii', evidence.oneSignal?.containsNoSecretsOrPii);
 
   requireTrue('sentry.authorizedBetaDsnUsed', evidence.sentry?.authorizedBetaDsnUsed);
   requireTrue('sentry.syntheticEventSent', evidence.sentry?.syntheticEventSent);
   requireTrue('sentry.syntheticEventReceived', evidence.sentry?.syntheticEventReceived);
-  requireText('sentry.evidencePath', evidence.sentry?.evidencePath);
+  requireEvidenceFile('sentry.evidencePath', evidence.sentry?.evidencePath, {
+    scanForSensitiveData: evidence.sentry?.containsNoSecretsOrPii === true,
+  });
   requireTrue('sentry.containsNoSecretsOrPii', evidence.sentry?.containsNoSecretsOrPii);
 
   requireText('internalBeta.distributionChannel', evidence.internalBeta?.distributionChannel);
@@ -104,7 +188,9 @@ if (evidence) {
   requireTrue('internalBeta.releaseOwnerApproved', evidence.internalBeta?.releaseOwnerApproved);
   requireTrue('internalBeta.rollbackPlanReviewed', evidence.internalBeta?.rollbackPlanReviewed);
   requireTrue('internalBeta.supportContactReady', evidence.internalBeta?.supportContactReady);
-  requireText('internalBeta.evidencePath', evidence.internalBeta?.evidencePath);
+  requireEvidenceFile('internalBeta.evidencePath', evidence.internalBeta?.evidencePath, {
+    scanForSensitiveData: true,
+  });
 }
 
 console.log('Release evidence gate');

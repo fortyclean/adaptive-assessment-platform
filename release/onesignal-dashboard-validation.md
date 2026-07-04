@@ -40,6 +40,11 @@ player IDs, subscription IDs, emails, or phone numbers into release notes.
 - redacted screenshot/photo of the received notification;
 - logcat excerpt showing app open/tap handling with payloads and IDs redacted.
 
+Save the evidence file under `qa-artifacts/release-validation/` and reference
+that path in `oneSignal.evidencePath`. Text evidence is scanned by
+`node scripts/verify-release-evidence.mjs`; screenshots/photos still require
+manual redaction before the evidence field is marked safe.
+
 ## Acceptance criteria
 
 - permission is user-controlled and granted;

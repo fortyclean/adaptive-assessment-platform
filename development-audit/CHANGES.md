@@ -2,6 +2,7 @@
 
 ## Code/config changes
 
+- Hardened the release evidence gate so every populated evidence path must point to an existing file under `qa-artifacts/release-validation/`, and text evidence is scanned for obvious secrets/PII before strict approval.
 - Updated release evidence validation so Android notification permission is handled accurately: Android 13/API 33+ still requires a verified runtime permission, while Android 12/API 32 and below can be documented as `not_applicable_android_below_33` with non-sensitive ADB evidence.
 - Captured Android 10 / SDK 29 notification-permission evidence for `STK L21`; the release gate now leaves only OneSignal dashboard push, Sentry Beta event, and internal Beta approval evidence as blockers.
 - Completed physical-device role smoke evidence for student, teacher, admin, and parent on `STK L21`; release evidence now marks Android role smoke as passed while notification permission remains unverified after the device disappeared from ADB.

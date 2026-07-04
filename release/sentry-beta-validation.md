@@ -49,3 +49,8 @@ non-sensitive proof to the release evidence.
 - release = configured `APP_RELEASE`;
 - screenshot with project/event IDs redacted if needed;
 - statement that no PII, payloads, or tokens were present.
+
+Save the evidence file under `qa-artifacts/release-validation/` and reference
+that path in `sentry.evidencePath`. Text evidence is scanned by
+`node scripts/verify-release-evidence.mjs`; screenshots still require manual
+redaction before `containsNoSecretsOrPii` is marked true.
