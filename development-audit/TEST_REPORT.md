@@ -81,6 +81,11 @@
 | `npm.cmd run build` after lint cleanup batch 75 | Passed |
 | Backend lint cleanup batch 76 | Passed — `npm.cmd run lint` warning count reduced from 79 to 77 with 0 errors |
 | `npm.cmd run build` after lint cleanup batch 76 | Passed |
+| Backend lint cleanup batch 77 | Passed — `npm.cmd run lint` warning count reduced from 77 to 38 with 0 errors |
+| `npm.cmd run build` after lint cleanup batch 77 | Passed |
+| `npm.cmd test -- --silent` after lint cleanup batch 77 | Passed — 21 suites / 473 tests |
+| `npm.cmd audit --audit-level=moderate` after lint cleanup batch 77 | Passed — 0 vulnerabilities |
+| Secret/release-note/diff checks after lint cleanup batch 77 | Passed |
 
 ## Build evidence
 

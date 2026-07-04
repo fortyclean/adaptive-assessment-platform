@@ -15,6 +15,16 @@ router.use(authenticate);
 
 // ─── Validation Schemas ───────────────────────────────────────────────────────
 
+const getCurrentUser = (req: Request, res: Response): NonNullable<Request['user']> | null => {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+};
+
 const createAssessmentSchema = z.object({
   title: z.string().min(1).max(200).trim(),
   assessmentType: z.enum(['random', 'adaptive']),
@@ -35,11 +45,14 @@ router.get(
   authorize('teacher', 'admin', 'student'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const filter: Record<string, unknown> = {};
 
-      if (req.user!.role === 'teacher') {
-        filter.createdBy = new mongoose.Types.ObjectId(req.user!.userId);
-      } else if (req.user!.role === 'student') {
+      if (currentUser.role === 'teacher') {
+        filter.createdBy = new mongoose.Types.ObjectId(currentUser.userId);
+      } else if (currentUser.role === 'student') {
         // Students see assessments assigned to their classrooms that are active and within window
         const now = new Date();
         filter.status = 'active';
@@ -68,6 +81,9 @@ router.post(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = createAssessmentSchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -120,7 +136,7 @@ router.post(
 
       const assessment = new Assessment({
         title,
-        createdBy: new mongoose.Types.ObjectId(req.user!.userId),
+        createdBy: new mongoose.Types.ObjectId(currentUser.userId),
         assessmentType,
         subject,
         gradeLevel,
@@ -137,7 +153,7 @@ router.post(
       await assessment.save();
 
       logger.info('Assessment created', {
-        teacherId: req.user!.userId,
+        teacherId: currentUser.userId,
         assessmentId: assessment._id,
         type: assessmentType,
       });
@@ -181,6 +197,9 @@ router.patch(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const assessment = await Assessment.findById(req.params.id);
       if (!assessment) {
         res.status(404).json({ error: 'Assessment not found' });
@@ -219,6 +238,9 @@ router.post(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const assessment = await Assessment.findById(req.params.id);
       if (!assessment) {
         res.status(404).json({ error: 'Assessment not found' });
@@ -270,7 +292,7 @@ router.post(
       }
 
       logger.info('Assessment published', {
-        teacherId: req.user!.userId,
+        teacherId: currentUser.userId,
         assessmentId: assessment._id,
       });
       res.status(200).json({ message: 'Assessment published successfully', assessment });

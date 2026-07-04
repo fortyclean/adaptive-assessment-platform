@@ -32,16 +32,29 @@ const assignUsersSchema = z.object({
 
 // ─── GET /api/v1/classrooms ───────────────────────────────────────────────────
 
+const getCurrentUser = (req: Request, res: Response): NonNullable<Request['user']> | null => {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+};
+
 router.get(
   '/',
   authorize('admin', 'teacher'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       let filter: Record<string, unknown> = {};
 
       // Teachers only see their own classrooms
-      if (req.user!.role === 'teacher') {
-        filter = { teacherIds: new mongoose.Types.ObjectId(req.user!.userId) };
+      if (currentUser.role === 'teacher') {
+        filter = { teacherIds: new mongoose.Types.ObjectId(currentUser.userId) };
       }
 
       const classrooms = await Classroom.find(filter)
@@ -79,6 +92,9 @@ router.post(
   authorize('admin', 'teacher'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = createClassroomSchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -90,23 +106,23 @@ router.post(
       const classroomData: Record<string, unknown> = { ...validation.data };
 
       // Teachers automatically become the teacher of the classroom they create
-      if (req.user!.role === 'teacher') {
-        classroomData.teacherIds = [new mongoose.Types.ObjectId(req.user!.userId)];
+      if (currentUser.role === 'teacher') {
+        classroomData.teacherIds = [new mongoose.Types.ObjectId(currentUser.userId)];
       }
 
       const classroom = new Classroom(classroomData);
       await classroom.save();
 
       // Associate classroom with teacher's classroomIds
-      if (req.user!.role === 'teacher') {
-        await User.findByIdAndUpdate(req.user!.userId, {
+      if (currentUser.role === 'teacher') {
+        await User.findByIdAndUpdate(currentUser.userId, {
           $addToSet: { classroomIds: classroom._id },
         });
       }
 
       logger.info('Classroom created', {
-        userId: req.user!.userId,
-        role: req.user!.role,
+        userId: currentUser.userId,
+        role: currentUser.role,
         classroomId: classroom._id,
       });
       res.status(201).json({ classroom });
@@ -121,6 +137,9 @@ router.post(
 
 router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Promise<void> => {
   try {
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
     const validation = updateClassroomSchema.safeParse(req.body);
     if (!validation.success) {
       res
@@ -139,7 +158,7 @@ router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Pr
       return;
     }
 
-    logger.info('Classroom updated', { adminId: req.user!.userId, classroomId: req.params.id });
+    logger.info('Classroom updated', { adminId: currentUser.userId, classroomId: req.params.id });
     res.status(200).json({ classroom });
   } catch (error) {
     logger.error('Update classroom error', { error });
@@ -151,6 +170,9 @@ router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Pr
 
 router.delete('/:id', authorize('admin'), async (req: Request, res: Response): Promise<void> => {
   try {
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
     const classroom = await Classroom.findById(req.params.id);
     if (!classroom) {
       res.status(404).json({ error: 'Classroom not found' });
@@ -178,7 +200,7 @@ router.delete('/:id', authorize('admin'), async (req: Request, res: Response): P
 
     await Classroom.findByIdAndDelete(req.params.id);
 
-    logger.info('Classroom deleted', { adminId: req.user!.userId, classroomId: req.params.id });
+    logger.info('Classroom deleted', { adminId: currentUser.userId, classroomId: req.params.id });
     res.status(200).json({ message: 'Classroom deleted successfully' });
   } catch (error) {
     logger.error('Delete classroom error', { error });
@@ -193,6 +215,9 @@ router.post(
   authorize('admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = assignUsersSchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -234,7 +259,7 @@ router.post(
       );
 
       logger.info('Students assigned to classroom', {
-        adminId: req.user!.userId,
+        adminId: currentUser.userId,
         classroomId: req.params.id,
         studentCount: userIds.length,
       });
@@ -256,6 +281,9 @@ router.post(
   authorize('admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = assignUsersSchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -296,7 +324,7 @@ router.post(
       );
 
       logger.info('Teachers assigned to classroom', {
-        adminId: req.user!.userId,
+        adminId: currentUser.userId,
         classroomId: req.params.id,
         teacherCount: userIds.length,
       });

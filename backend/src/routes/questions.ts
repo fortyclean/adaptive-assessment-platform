@@ -9,6 +9,16 @@ import { logger } from '../utils/logger';
 const router = Router();
 router.use(authenticate);
 
+const getCurrentUser = (req: Request, res: Response): NonNullable<Request['user']> | null => {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+};
+
 // Multer config: memory storage, max 10MB, xlsx only
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -137,6 +147,9 @@ router.post(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = questionSchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -153,12 +166,12 @@ router.post(
 
       const question = new Question({
         ...validation.data,
-        createdBy: req.user!.userId,
+        createdBy: currentUser.userId,
       });
 
       await question.save();
 
-      logger.info('Question created', { teacherId: req.user!.userId, questionId: question._id });
+      logger.info('Question created', { teacherId: currentUser.userId, questionId: question._id });
       res.status(201).json({ question });
     } catch (error: unknown) {
       if ((error as { code?: number }).code === 11000) {
@@ -180,6 +193,9 @@ router.get(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const question = await Question.findById(req.params.id);
       if (!question) {
         res.status(404).json({ error: 'Question not found' });
@@ -200,6 +216,9 @@ router.patch(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const question = await Question.findById(req.params.id);
       if (!question) {
         res.status(404).json({ error: 'Question not found' });
@@ -220,7 +239,10 @@ router.patch(
       Object.assign(question, validation.data);
       await question.save();
 
-      logger.info('Question updated', { teacherId: req.user!.userId, questionId: req.params.id });
+      logger.info('Question updated', {
+        teacherId: currentUser.userId,
+        questionId: req.params.id,
+      });
       res.status(200).json({ question });
     } catch (error) {
       logger.error('Update question error', { error });
@@ -238,6 +260,9 @@ router.delete(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const question = await Question.findById(req.params.id);
       if (!question) {
         res.status(404).json({ error: 'Question not found' });
@@ -263,7 +288,10 @@ router.delete(
 
       await question.deleteOne();
 
-      logger.info('Question deleted', { teacherId: req.user!.userId, questionId: req.params.id });
+      logger.info('Question deleted', {
+        teacherId: currentUser.userId,
+        questionId: req.params.id,
+      });
       res.status(200).json({ message: 'Question deleted successfully' });
     } catch (error) {
       logger.error('Delete question error', { error });
@@ -279,6 +307,9 @@ router.patch(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const question = await Question.findByIdAndUpdate(
         req.params.id,
         { isArchived: true },
@@ -290,7 +321,10 @@ router.patch(
         return;
       }
 
-      logger.info('Question archived', { teacherId: req.user!.userId, questionId: req.params.id });
+      logger.info('Question archived', {
+        teacherId: currentUser.userId,
+        questionId: req.params.id,
+      });
       res.status(200).json({ message: 'Question archived successfully', question });
     } catch (error) {
       logger.error('Archive question error', { error });
@@ -439,15 +473,18 @@ router.post(
   upload.single('file'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       if (!req.file) {
         res.status(400).json({ error: 'No file uploaded. Please attach an Excel file.' });
         return;
       }
 
-      const result = await importQuestionsFromBuffer(req.file.buffer, req.user!.userId);
+      const result = await importQuestionsFromBuffer(req.file.buffer, currentUser.userId);
 
       logger.info('Excel import completed by teacher', {
-        teacherId: req.user!.userId,
+        teacherId: currentUser.userId,
         imported: result.imported,
         skipped: result.skippedDuplicates,
         failed: result.failed,

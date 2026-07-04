@@ -19,11 +19,24 @@ router.use(authenticate);
 
 // ─── POST /api/v1/report-schedules — Create schedule ─────────────────────────
 
+const getCurrentUser = (req: Request, res: Response): NonNullable<Request['user']> | null => {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+};
+
 router.post(
   '/',
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const {
         title,
         reportType,
@@ -65,7 +78,7 @@ router.post(
         fileFormat,
         classroomIds: (classroomIds ?? []).map((id) => new mongoose.Types.ObjectId(id)),
         isActive: isActive ?? true,
-        createdBy: new mongoose.Types.ObjectId(req.user!.userId),
+        createdBy: new mongoose.Types.ObjectId(currentUser.userId),
       });
 
       res.status(201).json({ schedule });
@@ -87,8 +100,11 @@ router.get(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const schedules = await ReportSchedule.find({
-        createdBy: new mongoose.Types.ObjectId(req.user!.userId),
+        createdBy: new mongoose.Types.ObjectId(currentUser.userId),
       })
         .sort({ createdAt: -1 })
         .lean();
@@ -108,9 +124,12 @@ router.patch(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const schedule = await ReportSchedule.findOne({
         _id: new mongoose.Types.ObjectId(req.params.id),
-        createdBy: new mongoose.Types.ObjectId(req.user!.userId),
+        createdBy: new mongoose.Types.ObjectId(currentUser.userId),
       });
 
       if (!schedule) {
@@ -162,9 +181,12 @@ router.delete(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const schedule = await ReportSchedule.findOneAndDelete({
         _id: new mongoose.Types.ObjectId(req.params.id),
-        createdBy: new mongoose.Types.ObjectId(req.user!.userId),
+        createdBy: new mongoose.Types.ObjectId(currentUser.userId),
       });
 
       if (!schedule) {
@@ -187,9 +209,12 @@ router.patch(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const schedule = await ReportSchedule.findOne({
         _id: new mongoose.Types.ObjectId(req.params.id),
-        createdBy: new mongoose.Types.ObjectId(req.user!.userId),
+        createdBy: new mongoose.Types.ObjectId(currentUser.userId),
       });
 
       if (!schedule) {

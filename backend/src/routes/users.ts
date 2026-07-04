@@ -17,6 +17,16 @@ router.use(authenticate);
 
 // ─── Validation Schemas ───────────────────────────────────────────────────────
 
+const getCurrentUser = (req: Request, res: Response): NonNullable<Request['user']> | null => {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+};
+
 const createUserSchema = z.object({
   username: z.string().min(3).max(50).trim().toLowerCase(),
   email: z.string().email().trim().toLowerCase(),
@@ -86,6 +96,9 @@ router.get('/', authorize('admin'), async (req: Request, res: Response): Promise
 
 router.post('/', authorize('admin'), async (req: Request, res: Response): Promise<void> => {
   try {
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
     const validation = createUserSchema.safeParse(req.body);
     if (!validation.success) {
       res
@@ -131,7 +144,7 @@ router.post('/', authorize('admin'), async (req: Request, res: Response): Promis
     await user.save();
 
     logger.info('User created by admin', {
-      adminId: req.user!.userId,
+      adminId: currentUser.userId,
       newUserId: user._id,
       role,
     });
@@ -181,6 +194,9 @@ router.get('/:id', authorize('admin'), async (req: Request, res: Response): Prom
 
 router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Promise<void> => {
   try {
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
     const validation = updateUserSchema.safeParse(req.body);
     if (!validation.success) {
       res
@@ -199,7 +215,7 @@ router.patch('/:id', authorize('admin'), async (req: Request, res: Response): Pr
     }
 
     logger.info('User updated by admin', {
-      adminId: req.user!.userId,
+      adminId: currentUser.userId,
       targetUserId: req.params.id,
     });
     res.status(200).json({ user });
@@ -224,13 +240,16 @@ router.patch(
   authorize('admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const user = await User.findById(req.params.id);
       if (!user) {
         res.status(404).json({ error: 'User not found' });
         return;
       }
 
-      if (user._id.toString() === req.user!.userId) {
+      if (user._id.toString() === currentUser.userId) {
         res.status(400).json({ error: 'You cannot deactivate your own account' });
         return;
       }
@@ -242,7 +261,7 @@ router.patch(
       await user.save();
 
       logger.info('User deactivated by admin', {
-        adminId: req.user!.userId,
+        adminId: currentUser.userId,
         targetUserId: req.params.id,
         role: user.role,
       });
@@ -264,6 +283,9 @@ router.patch(
   authorize('admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const user = await User.findByIdAndUpdate(
         req.params.id,
         { isActive: true, failedLoginAttempts: 0, lockedUntil: null },
@@ -276,7 +298,7 @@ router.patch(
       }
 
       logger.info('User reactivated by admin', {
-        adminId: req.user!.userId,
+        adminId: currentUser.userId,
         targetUserId: req.params.id,
       });
       res.status(200).json({ message: 'Account reactivated successfully', user });

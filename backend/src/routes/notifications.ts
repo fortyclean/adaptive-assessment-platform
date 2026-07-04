@@ -22,6 +22,16 @@ import { logger } from '../utils/logger';
 const router = Router();
 router.use(authenticate);
 
+const getCurrentUser = (req: Request, res: Response): NonNullable<Request['user']> | null => {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+};
+
 // Maximum notifications retained per user (Req 21.7)
 const MAX_NOTIFICATIONS = 50;
 
@@ -32,7 +42,10 @@ router.get(
   authorize('student', 'teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = new mongoose.Types.ObjectId(req.user!.userId);
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
+      const userId = new mongoose.Types.ObjectId(currentUser.userId);
 
       const notifications = await Notification.find({ userId })
         .sort({ createdAt: -1 })
@@ -53,7 +66,10 @@ router.get(
 
 router.get('/points', authorize('student'), async (req: Request, res: Response): Promise<void> => {
   try {
-    const studentId = new mongoose.Types.ObjectId(req.user!.userId);
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
+    const studentId = new mongoose.Types.ObjectId(currentUser.userId);
 
     // Aggregate points history from completed attempts (Req 15.3, 15.5, 15.6)
     const attempts = await StudentAttempt.find({
@@ -130,7 +146,10 @@ router.patch(
   authorize('student', 'teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = new mongoose.Types.ObjectId(req.user!.userId);
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
+      const userId = new mongoose.Types.ObjectId(currentUser.userId);
 
       const result = await Notification.updateMany(
         { userId, isRead: false },
@@ -152,7 +171,10 @@ router.patch(
   authorize('student', 'teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = new mongoose.Types.ObjectId(req.user!.userId);
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
+      const userId = new mongoose.Types.ObjectId(currentUser.userId);
 
       const notification = await Notification.findOneAndUpdate(
         { _id: req.params.id, userId },
