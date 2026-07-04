@@ -208,7 +208,10 @@ export async function detectPerformanceAlerts(
   for (const a of recentAttempts) {
     const key = `${a.studentId.toString()}::${a.subject}`;
     if (!trendMap.has(key)) trendMap.set(key, []);
-    trendMap.get(key)!.push({ submittedAt: a.submittedAt, scorePercentage: a.scorePercentage });
+    const trendAttempts = trendMap.get(key);
+    if (trendAttempts) {
+      trendAttempts.push({ submittedAt: a.submittedAt, scorePercentage: a.scorePercentage });
+    }
   }
 
   // 5. Process each student+subject combination
@@ -237,7 +240,10 @@ export async function detectPerformanceAlerts(
         ? Math.round(((previousAverage - currentAverage) / previousAverage) * 100 * 100) / 100
         : 0;
 
-    const classroomId = studentClassroomMap.get(studentId.toString())!;
+    const classroomId = studentClassroomMap.get(studentId.toString());
+    if (!classroomId) {
+      continue;
+    }
     const trendKey = `${studentId.toString()}::${subject}`;
     const weeklyTrend = buildWeeklyTrend(trendMap.get(trendKey) ?? []);
 

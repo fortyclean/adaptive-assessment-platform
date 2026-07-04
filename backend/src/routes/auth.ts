@@ -159,6 +159,16 @@ async function getUniqueUsername(email: string): Promise<string> {
 
 // ─── POST /api/v1/auth/login ──────────────────────────────────────────────────
 
+function getCurrentUser(req: Request, res: Response): NonNullable<Request['user']> | null {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+}
+
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const startTime = Date.now();
 
@@ -211,8 +221,14 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (!result.tokens) {
+      logger.error('Login succeeded without tokens', { username });
+      res.status(500).json({ error: 'An internal server error occurred' });
+      return;
+    }
+
     // Set refresh token as HttpOnly Secure cookie
-    res.cookie('refreshToken', result.tokens!.refreshToken, {
+    res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -222,8 +238,8 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     logger.info('Login successful', { username, elapsed: `${elapsed}ms` });
 
     res.status(200).json({
-      accessToken: result.tokens!.accessToken,
-      refreshToken: result.tokens!.refreshToken,
+      accessToken: result.tokens.accessToken,
+      refreshToken: result.tokens.refreshToken,
       user: result.user,
     });
   } catch (error) {
@@ -306,7 +322,10 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
 
 router.post('/logout', authenticate, async (req: Request, res: Response): Promise<void> => {
   try {
-    await logoutUser(req.user!.userId, req.user!.sessionId);
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
+    await logoutUser(currentUser.userId, currentUser.sessionId);
 
     res.clearCookie('refreshToken');
     res.status(200).json({ message: 'Logged out successfully' });
@@ -397,8 +416,11 @@ router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
 
 router.post('/reset-password', authenticate, async (req: Request, res: Response): Promise<void> => {
   try {
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
     // Only admins can reset passwords
-    if (req.user!.role !== 'admin') {
+    if (currentUser.role !== 'admin') {
       res.status(403).json({ error: 'Only administrators can reset passwords.' });
       return;
     }
@@ -428,7 +450,7 @@ router.post('/reset-password', authenticate, async (req: Request, res: Response)
     await user.save();
 
     logger.info('Password reset by admin', {
-      adminId: req.user!.userId,
+      adminId: currentUser.userId,
       targetUserId: userId,
     });
 
@@ -451,7 +473,10 @@ router.post('/reset-password', authenticate, async (req: Request, res: Response)
 
 router.get('/me', authenticate, async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findById(req.user!.userId).select(
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
+    const user = await User.findById(currentUser.userId).select(
       '-passwordHash -activeSessions -failedLoginAttempts',
     );
 

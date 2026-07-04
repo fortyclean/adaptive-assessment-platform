@@ -75,8 +75,21 @@ function buildSessionState(
 
 // ─── POST /api/v1/attempts — Start session ────────────────────────────────────
 
+function getCurrentUser(req: Request, res: Response): NonNullable<Request['user']> | null {
+  const currentUser = req.user;
+  if (!currentUser) {
+    res.status(401).json({ error: 'Authentication required.' });
+    return null;
+  }
+
+  return currentUser;
+}
+
 router.post('/', authorize('student'), async (req: Request, res: Response): Promise<void> => {
   try {
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
     const validation = startAttemptSchema.safeParse(req.body);
     if (!validation.success) {
       res
@@ -86,7 +99,7 @@ router.post('/', authorize('student'), async (req: Request, res: Response): Prom
     }
 
     const { assessmentId, classroomId } = validation.data;
-    const studentId = req.user!.userId;
+    const studentId = currentUser.userId;
 
     // Load assessment
     const assessment = await Assessment.findById(assessmentId);
@@ -193,7 +206,10 @@ router.post('/', authorize('student'), async (req: Request, res: Response): Prom
 
 router.get('/', authorize('student'), async (req: Request, res: Response): Promise<void> => {
   try {
-    const studentId = new mongoose.Types.ObjectId(req.user!.userId);
+    const currentUser = getCurrentUser(req, res);
+    if (!currentUser) return;
+
+    const studentId = new mongoose.Types.ObjectId(currentUser.userId);
 
     const attempts = await StudentAttempt.find({ studentId })
       .populate('assessmentId', 'title subject gradeLevel assessmentType')
@@ -214,12 +230,15 @@ router.get(
   authorize('student'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const attempt = await StudentAttempt.findById(req.params.id);
       if (!attempt) {
         res.status(404).json({ error: 'Attempt not found' });
         return;
       }
-      if (attempt.studentId.toString() !== req.user!.userId) {
+      if (attempt.studentId.toString() !== currentUser.userId) {
         res.status(403).json({ error: 'Access denied' });
         return;
       }
@@ -334,6 +353,9 @@ router.post(
   authorize('student'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = submitAnswerSchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -349,7 +371,7 @@ router.post(
         res.status(404).json({ error: 'Attempt not found' });
         return;
       }
-      if (attempt.studentId.toString() !== req.user!.userId) {
+      if (attempt.studentId.toString() !== currentUser.userId) {
         res.status(403).json({ error: 'Access denied' });
         return;
       }
@@ -451,12 +473,15 @@ router.post(
   authorize('student'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const attempt = await StudentAttempt.findById(req.params.id);
       if (!attempt) {
         res.status(404).json({ error: 'Attempt not found' });
         return;
       }
-      if (attempt.studentId.toString() !== req.user!.userId) {
+      if (attempt.studentId.toString() !== currentUser.userId) {
         res.status(403).json({ error: 'Access denied' });
         return;
       }
@@ -473,7 +498,7 @@ router.post(
 
       await finaliseAttempt(attempt, assessment);
 
-      logger.info('Attempt submitted', { attemptId: attempt._id, studentId: req.user!.userId });
+      logger.info('Attempt submitted', { attemptId: attempt._id, studentId: currentUser.userId });
       res.status(200).json({
         message: 'Session submitted successfully',
         attemptId: attempt._id,
@@ -493,6 +518,9 @@ router.post(
   authorize('student'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = antiCheatSchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -506,7 +534,7 @@ router.post(
         res.status(404).json({ error: 'Attempt not found' });
         return;
       }
-      if (attempt.studentId.toString() !== req.user!.userId) {
+      if (attempt.studentId.toString() !== currentUser.userId) {
         res.status(403).json({ error: 'Access denied' });
         return;
       }
@@ -530,6 +558,9 @@ router.get(
   authorize('student', 'teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const attempt = await StudentAttempt.findById(req.params.id)
         .populate(
           'assessmentId',
@@ -543,7 +574,7 @@ router.get(
       }
 
       // Students can only view their own results
-      if (req.user!.role === 'student' && attempt.studentId.toString() !== req.user!.userId) {
+      if (currentUser.role === 'student' && attempt.studentId.toString() !== currentUser.userId) {
         res.status(403).json({ error: 'Access denied' });
         return;
       }
@@ -618,6 +649,9 @@ router.patch(
   authorize('teacher', 'admin'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = getCurrentUser(req, res);
+      if (!currentUser) return;
+
       const validation = gradeEssaySchema.safeParse(req.body);
       if (!validation.success) {
         res
@@ -650,7 +684,10 @@ router.patch(
       }
 
       // Verify the teacher owns this assessment
-      if (req.user!.role === 'teacher' && assessment.createdBy.toString() !== req.user!.userId) {
+      if (
+        currentUser.role === 'teacher' &&
+        assessment.createdBy.toString() !== currentUser.userId
+      ) {
         res.status(403).json({ error: 'Access denied: you did not create this assessment' });
         return;
       }

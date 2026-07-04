@@ -33,6 +33,15 @@ type DemoQuestionFixture = {
   correctAnswer: string;
 };
 
+function getRequiredMapValue<K, V>(map: Map<K, V>, key: K, label: string): V {
+  const value = map.get(key);
+  if (!value) {
+    throw new Error(`Missing demo ${label}: ${String(key)}`);
+  }
+
+  return value;
+}
+
 export const demoUsers: DemoUserFixture[] = [
   {
     username: 'parent_fatima',
@@ -273,17 +282,17 @@ async function loadDemoUsers() {
   }
 
   return {
-    admin: byUsername.get('admin')!,
-    parent: byUsername.get('parent')!,
-    parentFatima: byUsername.get('parent_fatima')!,
-    teacher: byUsername.get('teacher')!,
-    teacherScience: byUsername.get('teacher_science')!,
+    admin: getRequiredMapValue(byUsername, 'admin', 'user'),
+    parent: getRequiredMapValue(byUsername, 'parent', 'user'),
+    parentFatima: getRequiredMapValue(byUsername, 'parent_fatima', 'user'),
+    teacher: getRequiredMapValue(byUsername, 'teacher', 'user'),
+    teacherScience: getRequiredMapValue(byUsername, 'teacher_science', 'user'),
     students: [
-      byUsername.get('student')!,
-      byUsername.get('student_mona')!,
-      byUsername.get('student_omar')!,
-      byUsername.get('student_lina')!,
-      byUsername.get('student_yousef')!,
+      getRequiredMapValue(byUsername, 'student', 'user'),
+      getRequiredMapValue(byUsername, 'student_mona', 'user'),
+      getRequiredMapValue(byUsername, 'student_omar', 'user'),
+      getRequiredMapValue(byUsername, 'student_lina', 'user'),
+      getRequiredMapValue(byUsername, 'student_yousef', 'user'),
     ],
     byUsername,
   };
@@ -295,12 +304,14 @@ async function ensureClassrooms(
   const classroomIds = new Map<string, mongoose.Types.ObjectId>();
 
   for (const fixture of demoClassrooms) {
-    const teacherIds = fixture.teachers.map(
-      (username) => users.byUsername.get(username)!._id as mongoose.Types.ObjectId,
-    );
-    const studentIds = fixture.students.map(
-      (username) => users.byUsername.get(username)!._id as mongoose.Types.ObjectId,
-    );
+    const teacherIds = fixture.teachers.map((username) => {
+      const teacher = getRequiredMapValue(users.byUsername, username, 'classroom teacher');
+      return teacher._id as mongoose.Types.ObjectId;
+    });
+    const studentIds = fixture.students.map((username) => {
+      const student = getRequiredMapValue(users.byUsername, username, 'classroom student');
+      return student._id as mongoose.Types.ObjectId;
+    });
 
     const classroom = await Classroom.findOneAndUpdate(
       { name: fixture.name, academicYear: fixture.academicYear },
@@ -440,11 +451,19 @@ async function ensureAttempts(
     assessmentId: { $in: assessmentIds },
   });
 
-  const mathAssessment = assessments.get('Demo Adaptive Mathematics Check')!;
-  const englishAssessment = assessments.get('Demo Reading Skills Quiz')!;
+  const mathAssessment = getRequiredMapValue(
+    assessments,
+    'Demo Adaptive Mathematics Check',
+    'assessment',
+  );
+  const englishAssessment = getRequiredMapValue(
+    assessments,
+    'Demo Reading Skills Quiz',
+    'assessment',
+  );
   const mathQuestions = questions.get('Mathematics:Grade 7:Linear Equations') ?? [];
   const englishQuestions = questions.get('English:Grade 7:Reading Skills') ?? [];
-  const classroomId = classrooms.get('grade-7-a')!;
+  const classroomId = getRequiredMapValue(classrooms, 'grade-7-a', 'classroom');
   const scores = [92, 84, 76, 68, 58];
 
   const attempts = users.students.flatMap((student, studentIndex) => {
@@ -577,7 +596,7 @@ async function ensureReportsAndAlerts(
   users: Awaited<ReturnType<typeof loadDemoUsers>>,
   classrooms: Map<string, mongoose.Types.ObjectId>,
 ): Promise<void> {
-  const classroomId = classrooms.get('grade-7-a')!;
+  const classroomId = getRequiredMapValue(classrooms, 'grade-7-a', 'classroom');
   await PerformanceAlert.deleteMany({ teacherId: users.teacher._id });
   await PerformanceAlert.create({
     teacherId: users.teacher._id,
