@@ -39,6 +39,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Test release evidence gate
+        run: node scripts/test-release-evidence-gate.mjs
+
       - name: Preview release evidence gate
         run: |
           node scripts/verify-release-evidence.mjs | tee release-evidence-preview.txt

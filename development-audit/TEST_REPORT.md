@@ -103,6 +103,8 @@
 | `node --check scripts/verify-release-evidence.mjs` after evidence-path hardening | Passed |
 | `node scripts/verify-release-evidence.mjs` after evidence-path hardening | Passed as a preview command — remaining blockers are unchanged and limited to external OneSignal, Sentry, and internal Beta evidence |
 | `node scripts/verify-release-evidence.mjs --strict` after evidence-path hardening | Failed as expected — strict gate still blocks until external evidence files and approvals are present |
+| `node --check scripts/test-release-evidence-gate.mjs` | Passed |
+| `node scripts/test-release-evidence-gate.mjs` | Passed — valid fixture accepted; outside evidence path, missing evidence file, and sensitive text evidence rejected |
 
 ## Build evidence
 
