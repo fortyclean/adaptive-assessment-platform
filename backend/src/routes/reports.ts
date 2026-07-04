@@ -202,8 +202,14 @@ router.get(
   authorize('teacher', 'admin', 'student'),
   async (req: Request, res: Response): Promise<void> => {
     try {
+      const currentUser = req.user;
+      if (!currentUser) {
+        res.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
+
       // Students can only view their own history
-      if (req.user!.role === 'student' && req.params.id !== req.user!.userId) {
+      if (currentUser.role === 'student' && req.params.id !== currentUser.userId) {
         res.status(403).json({ error: 'Access denied' });
         return;
       }

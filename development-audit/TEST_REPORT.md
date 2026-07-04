@@ -79,6 +79,8 @@
 | `npm.cmd run build` after lint cleanup batch 74 | Passed |
 | Backend lint cleanup batch 75 | Passed — `npm.cmd run lint` warning count reduced from 85 to 79 with 0 errors |
 | `npm.cmd run build` after lint cleanup batch 75 | Passed |
+| Backend lint cleanup batch 76 | Passed — `npm.cmd run lint` warning count reduced from 79 to 77 with 0 errors |
+| `npm.cmd run build` after lint cleanup batch 76 | Passed |
 
 ## Build evidence
 

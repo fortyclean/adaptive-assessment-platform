@@ -2,6 +2,7 @@
 
 ## Code/config changes
 
+- Reduced backend lint warning debt from 79 to 77 by replacing `req.user!` with an explicit authenticated-user guard in the per-student report route.
 - Reduced backend lint warning debt from 85 to 79 by replacing `req.user!` with explicit authenticated-user guards in parent and student routes.
 - Reduced backend lint warning debt from 90 to 85 by replacing `req.user!` with explicit authenticated-user guards in media, alerts, and push subscription routes.
 - Reduced backend lint warning debt from 98 to 90 by removing unused imports, an unused encryption constant, and unused temporary variables without changing runtime behavior.
