@@ -76,7 +76,13 @@ router.get(
         },
       ]);
 
-      const response = buildLeaderboardResponse(rows as LeaderboardRow[], req.user!.userId, limit);
+      const currentUserId = req.user?.userId;
+      if (!currentUserId) {
+        res.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
+
+      const response = buildLeaderboardResponse(rows as LeaderboardRow[], currentUserId, limit);
 
       res.status(200).json(response);
     } catch (error) {
@@ -99,9 +105,14 @@ router.get(
   async (req: Request, res: Response): Promise<void> => {
     try {
       const { id } = req.params;
+      const currentUser = req.user;
+      if (!currentUser) {
+        res.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
 
       // Students may only view their own profile
-      if (req.user!.role === 'student' && id !== req.user!.userId) {
+      if (currentUser.role === 'student' && id !== currentUser.userId) {
         res.status(403).json({ error: 'Access denied' });
         return;
       }

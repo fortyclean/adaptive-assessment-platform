@@ -14,7 +14,13 @@ router.use(authorize('parent'));
 
 router.get('/me/children', async (req: Request, res: Response): Promise<void> => {
   try {
-    const parent = await User.findById(req.user!.userId).select('childIds');
+    const parentUserId = req.user?.userId;
+    if (!parentUserId) {
+      res.status(401).json({ error: 'Authentication required.' });
+      return;
+    }
+
+    const parent = await User.findById(parentUserId).select('childIds');
     const childIds = parent?.childIds ?? [];
 
     if (childIds.length === 0) {
@@ -41,13 +47,19 @@ router.get('/me/children', async (req: Request, res: Response): Promise<void> =>
 
 router.get('/me/children/:childId', async (req: Request, res: Response): Promise<void> => {
   try {
+    const parentUserId = req.user?.userId;
+    if (!parentUserId) {
+      res.status(401).json({ error: 'Authentication required.' });
+      return;
+    }
+
     const childId = req.params.childId;
     if (!mongoose.Types.ObjectId.isValid(childId)) {
       res.status(400).json({ error: 'Invalid child ID' });
       return;
     }
 
-    const parent = await User.findById(req.user!.userId).select('childIds');
+    const parent = await User.findById(parentUserId).select('childIds');
     const isLinked = (parent?.childIds ?? []).some((id) => id.toString() === childId);
     if (!isLinked) {
       res.status(403).json({ error: 'You do not have permission to view this child.' });
@@ -75,7 +87,13 @@ router.get('/me/children/:childId', async (req: Request, res: Response): Promise
 
 router.get('/me/messages', async (req: Request, res: Response): Promise<void> => {
   try {
-    const notifications = await Notification.find({ userId: req.user!.userId })
+    const parentUserId = req.user?.userId;
+    if (!parentUserId) {
+      res.status(401).json({ error: 'Authentication required.' });
+      return;
+    }
+
+    const notifications = await Notification.find({ userId: parentUserId })
       .sort({ createdAt: -1 })
       .limit(25)
       .select('title body isRead createdAt type');

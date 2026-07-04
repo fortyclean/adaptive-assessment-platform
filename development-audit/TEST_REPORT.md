@@ -77,6 +77,8 @@
 | `npm.cmd audit --audit-level=moderate` after lint cleanup batch 73 | Passed — 0 vulnerabilities |
 | Backend lint cleanup batch 74 | Passed — `npm.cmd run lint` warning count reduced from 90 to 85 with 0 errors |
 | `npm.cmd run build` after lint cleanup batch 74 | Passed |
+| Backend lint cleanup batch 75 | Passed — `npm.cmd run lint` warning count reduced from 85 to 79 with 0 errors |
+| `npm.cmd run build` after lint cleanup batch 75 | Passed |
 
 ## Build evidence
 
